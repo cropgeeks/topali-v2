@@ -1,0 +1,71 @@
+<project name="TOPALi" default="jar" basedir=".">
+  <description>TOPALi Ant Build Script</description>
+  
+  <property name="src" location="src"/>
+  <property name="classes" location="classes"/>
+  <property name="lib" location="web/WEB-INF/lib"/>
+
+
+  <target name="init">
+    <mkdir dir="${classes}"/>
+  </target>
+
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${src}" destdir="${classes}">
+    	<classpath>
+	      <pathelement path="${classpath}"/>
+	      <pathelement path="C:/Java/Tomcat/common/lib/servlet-api.jar"/>
+	      <fileset dir="${lib}">
+	        <include name="**/*.jar"/>
+	      </fileset>
+        </classpath>
+    </javac>
+  </target>
+
+
+	<!-- keytool -selfcert -genkey -alias topali -validity 365 -->
+	<!-- jarsigner -storepass keystore topali.jar topali -->
+
+	<target name="jar">
+		<delete file="${lib}/topali.jar"/>
+		<jar jarfile="${lib}/topali.jar">
+			<!-- JAR up the TOPALi classes -->
+			<fileset dir="classes"/>
+			<!-- JAR up the TOPALi resources -->
+			<zipfileset dir="res" prefix="res"/>
+			<!-- Create the manifest file -->
+			<manifest>
+				<attribute name="Main-Class" value="topali.gui.TOPALi"/>
+				<attribute name="Class-Path" value="res axis.jar castor-1.0M2-xml.jar commons-discovery-0.2.jar commons-logging-1.0.4.jar doe.jar jaxrpc.jar jcommon-1.0.0.jar jfreechart-1.0.1.jar jh.jar looks-1.3.2.jar office-2.0.jar pal.jar saaj.jar swing-layout-0.9.jar vamsas.jar xercesImpl.jar"/>				
+			</manifest>
+		</jar>
+		<!-- Sign the JAR -->
+		<signjar jar="${lib}/topali.jar" alias="topali" storepass="keystore"/>
+	</target>
+	
+	
+	<target name="sign">
+		<signjar alias="topali" storepass="keystore">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</signjar>
+	</target>
+	
+	
+	<target name="war">
+		<war destfile="topali.war" webxml="web/WEB-INF/web.xml">
+			<zipfileset dir="web/scripts" prefix="scripts"/>
+			<lib dir="${lib}"/>
+		</war>
+	</target>
+	
+	
+	<target name="tomcat">
+		<exec executable="scp">
+			<arg line="web/WEB-INF/lib/topali.jar tomcat@gruffalo:webapps/topali/WEB-INF/lib"/>
+		</exec>
+	</target>
+
+</project>

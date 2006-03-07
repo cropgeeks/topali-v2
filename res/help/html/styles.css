@@ -1,0 +1,16 @@
+BODY,TD,P
+{
+	color: #000000;
+	font-family: Tahoma, Univers, Arial;
+	font-size: 13px;
+}
+			 
+BODY
+{
+	background: #FFFFFF;
+}
+
+UL
+{
+	list-style-image: url(images/button.png);
+}

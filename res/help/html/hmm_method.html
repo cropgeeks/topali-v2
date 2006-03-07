@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Hidden Markov Model</title
+</title>
+
+<body>
+
+<h1>Hidden Markov Model</h1>
+
+<p>An HMM approach can be applied to the problem
+of detecting recombination in small alignments (number of sequences =
+4). The mean distance between recombination breakpoints is modelled by
+the probability of a recombination event as we move along the sequence
+alignment. For the four sequences, there are three possible tree
+(unrooted) topologies.</p>
+
+<p>The transitions between the three topologies are assigned
+probabilities. The hidden states of the HMM represent the different
+phylogenetic tree topologies: we observe the sequences but cannot
+directly see the "hidden" tree topologies. The parameters of the model,
+namely the branch lengths associated with each topology and the
+recombination probability, are optimized in a maximum likelihood sense
+by applying the expectation maximization (EM) algorithm. The HMM method
+focuses only on topology changes in the alignment, and attempts to
+reduce rate heterogeneity effects. Statistical significance is assessed
+by (posterior) probabilities assigned to each topology for each
+position in the alignment.</p>
+
+<p>More information on the HMM method is available in:</p>
+<ul>
+  <li>Husmeier D and McGuire G (2003), <i>Detecting Recombination in
+4-Taxa DNA Sequence Alignments with Bayesian Hidden Markov Models and
+Markov Chain Monte Carlo</i>, Molecular Biology and Evolution 20 (3),
+315-337.</li>
+</ul>
+</p>
+
+</body>
+</html>

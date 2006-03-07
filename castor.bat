@@ -1,0 +1,1 @@
+java -cp classes;web\WEB-INF\lib\castor-1.0M2-xml.jar;web\WEB-INF\lib\commons-logging-1.0.4.jar;web\WEB-INF\lib\xercesImpl.jar org.exolab.castor.tools.MappingTool -i %1 -o %2

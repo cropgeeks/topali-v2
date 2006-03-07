@@ -1,0 +1,33 @@
+5
+
+Release History:
+
+[NF] = New Feature
+[BF] = Bug Fix
+[SC] = Source Code
+
+03-03-2006 - Release 2.05
+  - [SC] Refactoring of the internal data structures for XML (required for a lot
+    of bug fixes but unfortunately not backwards compatible).
+  - [BF] The Partitions Dialog and the Overview Dialog both now correctly update
+    their state when datasets are added or removed.
+  - [NF] The status of each alignment within a project is shown as the project
+    loads.
+
+08-02-2006 - Release 2.04
+  - [BF] Saved projects containing trees will now reload OK.
+  - [BF] Trees were not being created as mid-point rooted.
+
+03-02-2006 - Release 2.03
+  - [BF] Fix for non-English users (resource bundles not loading).
+
+31-01-2006 - Release 2.02
+  - [BF] HMM graphs now have their topologies labelled properly.
+  - [NF] Added the ability to view "live" phylogenetic tree previews as the
+    mouse cursor is moved over a result graph. Enable the setting from the
+    toolbar on the right.
+  - [SC] Graph-related result objects now extend from AlignmentResult rather
+    than AnalysisResult.
+
+16-01-2006 - Release 2.01
+  - Initial public release.
