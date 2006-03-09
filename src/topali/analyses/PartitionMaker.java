@@ -90,9 +90,9 @@ public class PartitionMaker
 	public void autoPartitionHMM(float[][] data1, float[][] data2, float[][] data3, float threshold)
 	{	
 //		int start = (int) data1[0][0], end = (int) data1[0][0];
-		int start = 1, end = 1;
+		int start = 1, end = 0;
 		
-		int break1 = -1, break2 = -1;
+		int break1 = 1, break2 = -1;
 		
 		// What (initial) state are we in (0 indeterminate, or 1, 2, or 3)
 		int state = 0;
@@ -102,6 +102,8 @@ public class PartitionMaker
 			state = 2;
 		else if (data3[0][1] >= threshold)
 			state = 3;
+		
+		System.out.println("INITIAL STATE=" + state);
 		
 		for (int i = 1; i < data1.length; i++)
 		{
@@ -115,31 +117,37 @@ public class PartitionMaker
 				newState = 3;
 			
 			// Change...
-			if (newState != state || i == (data1.length-1))
+			if (newState != state)
 			{
-				if (i == (data1.length-1))
-				{
-					end = (int) data1[i][0];
-					
-					addPartition(start, end);
-				}
-				else if (break1 == -1)
+				System.out.println("CHANGE AT " + data1[i][0] + " : " + newState);
+				
+				// Is this the start of a partition?
+				if (break1 == -1)
 				{
 					break1 = (int) data1[i][0];
 				}
+				// Or the end of a partition?
 				else
 				{
-					break2 = (int) data1[i][0];
-					end = break2 - (int) ((break2-break1) / 2f);
+					// Set the start = to 1 nt past the last partition
+					start = end + 1;
 					
+					break2 = (int) data1[i][0];
+					end = break2;// - (int) ((break2-break1) / 2f);
+					
+					System.out.println("ADDING PARTITION");
 					addPartition(start, end);
 					
-					start = end + 1;
+					
 					break1 = break2 = -1;
 				}
 			}
 
 			state = newState;
 		}
+		
+		// Add the final partition
+		end = (int) data1[data1.length-1][0];
+		addPartition(start, end);
 	}
 }

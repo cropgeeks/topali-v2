@@ -6,7 +6,9 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
-03-03-2006 - Release 2.05
+ - Release 2.05
+  - [NF] All alignment graph result types can be auto-partitioned.
+  - [NF] HMM partitioning ignores indeterminate regions.
   - [SC] Refactoring of the internal data structures for XML (required for a lot
     of bug fixes but unfortunately not backwards compatible).
   - [BF] The Partitions Dialog and the Overview Dialog both now correctly update

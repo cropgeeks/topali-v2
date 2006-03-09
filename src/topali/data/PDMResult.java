@@ -7,6 +7,8 @@ package topali.data;
 
 import java.io.*;
 
+import pal.statistics.*;
+
 import topali.fileio.*;
 
 /*
@@ -62,5 +64,13 @@ public class PDMResult extends AlignmentResult
 	
 	public PDMResult()
 	{
+	}
+	
+	public float calculateThreshold()
+	{
+		double chi2 = ChiSquareDistribution.quantile(thresholdCutoff, df);
+		float threshold = (float) chi2 / (2 * N);
+		
+		return threshold;
 	}
 }

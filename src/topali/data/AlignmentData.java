@@ -22,7 +22,7 @@ public class AlignmentData
 	private ResultsTracker tracker = new ResultsTracker();
 		
 	// A set of alignment annotations (partitions, coding regions, etc)
-	private TOPALiAnnotations topaliAnnotations;
+	private TOPALiAnnotations topaliAnnotations = new TOPALiAnnotations(1);
 
 	
 	public AlignmentData()

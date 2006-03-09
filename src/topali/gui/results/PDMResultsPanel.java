@@ -78,12 +78,9 @@ public class PDMResultsPanel extends GraphResultsPanel
 	{
 		result.thresholdCutoff = thresholdCutoff;
 		System.out.println("cutoff is " + thresholdCutoff);
-		
-		double chi2 = ChiSquareDistribution.quantile(thresholdCutoff, result.df);
-		float threshold = (float) chi2 / (2 * result.N);
 			
 //		glbGraph.setThresholdValue(thresholdCutoff);
-		locGraph.setThresholdValue(threshold);
+		locGraph.setThresholdValue(result.calculateThreshold());
 	}
 	
 	protected void showThresholdDialog()

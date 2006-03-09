@@ -133,17 +133,30 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 
 		AnalysisResult result = (AnalysisResult) resultsCombo.getSelectedItem();
 		
-		if (result instanceof HMMResult)
+		if (result instanceof PDMResult)
+		{
+			PDMResult pdm = (PDMResult) result;
+			pm.autoPartition(pdm.locData, pdm.calculateThreshold());
+		}
+		
+		else if (result instanceof HMMResult)
 		{
 			HMMResult hmm = (HMMResult) result;
 			pm.autoPartitionHMM(hmm.data1, hmm.data2, hmm.data3, hmm.thresholdCutoff);
 		}
 		
-		if (result instanceof DSSResult)
+		else if (result instanceof DSSResult)
 		{
 			DSSResult dss = (DSSResult) result;
 			pm.autoPartition(dss.data,
 				AnalysisUtils.getArrayValue(dss.thresholds, dss.thresholdCutoff));
+		}
+		
+		else if (result instanceof LRTResult)
+		{
+			LRTResult lrt = (LRTResult) result;
+			pm.autoPartition(lrt.data,
+				AnalysisUtils.getArrayValue(lrt.thresholds, lrt.thresholdCutoff));
 		}
 		
 		cleanup();
@@ -154,7 +167,7 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 		winMain.pDialog.refreshPartitionList();
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	
-		int num = data.getTopaliAnnotations().getPartitionAnnotations().size();
+		int num = data.getTopaliAnnotations().getPartitionAnnotations().countRegions();
 		
 		if (num == 1)
 			MsgBox.msg(Text.GuiDiag.getString("AutoPartitionDialog.msg01"),

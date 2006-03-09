@@ -1234,6 +1234,10 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
+				<path>web\WEB-INF\lib\topali.xml</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
 				<path>web\WEB-INF\lib\vamsas.jar</path>
 				<source>true</source>
 			</fileitem>

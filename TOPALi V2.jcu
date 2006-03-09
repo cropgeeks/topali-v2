@@ -1562,760 +1562,70 @@
 				<path>classes</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\analyses</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\analyses\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\analyses\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\cluster</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\dss</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\cluster\dss\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\dss\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\cluster\hmm</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\hmm\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\jobs</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\jobs\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\cluster\lrt</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\lrt\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\pdm</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\pdm\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\cluster\sge</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\trees</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\cluster\trees\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\trees\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\data</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\data\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\fileio</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\fileio\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\fileio\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\gui</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\gui\dialog</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\gui\dialog\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\gui\dialog\hmm</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\hmm\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\gui\dialog\settings</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\dialog\settings\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\gui\nav</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\nav\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\gui\results</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\gui\results\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\results\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\gui\tree</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\gui\tree\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\mod</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\mod\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\mod\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\vamsas</path>
 			</folderitem>
 			<folderitem>
-				<path>classes\topali\vamsas\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\vamsas\.svn\wcprops</path>
-			</folderitem>
-			<folderitem>
 				<path>classes\topali\web</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\tmp</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\tmp\prop-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\tmp\props</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\tmp\text-base</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\tmp\wcprops</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\web\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>.svn</path>
@@ -2384,16 +1694,28 @@
 	</projects>
 	<open_files>
 		<docitem>
-			<path>src\topali\gui\AnnotationsPanel.java</path>
+			<path>src\topali\analyses\PartitionMaker.java</path>
 			<source>true</source>
 			<index>0</index>
-			<active>true</active>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>doc\web\version2.txt</path>
+			<source>true</source>
+			<index>1</index>
+			<active>false</active>
 		</docitem>
 		<docitem>
 			<path>src\topali\gui\AlignmentPanel.java</path>
 			<source>true</source>
-			<index>1</index>
+			<index>2</index>
 			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\topali\data\AlignmentData.java</path>
+			<source>true</source>
+			<index>3</index>
+			<active>true</active>
 		</docitem>
 	</open_files>
 	<build_files>

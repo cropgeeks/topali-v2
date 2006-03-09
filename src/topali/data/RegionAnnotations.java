@@ -27,6 +27,11 @@ public abstract class RegionAnnotations extends AlignmentAnnotations
 		return new Region(s.position, e.position);
 	}
 	
+	public int countRegions()
+	{
+		return annotations.size() / 2;
+	}
+	
 	public void deleteAll()
 		{ annotations.clear(); }
 	
@@ -77,7 +82,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations
 	
 	public int addRegion(Region r)
 	{
-		System.out.println("addRegion: size=" + annotations.size());
+//		System.out.println("addRegion: size=" + annotations.size());
 		int insertionIndex = -1;
 		
 		// Search for the best place to insert the new partition elements
@@ -103,7 +108,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations
 		annotations.add(insertionIndex+1, e);
 		
 		// Should always be a number divisible by 2
-		System.out.println("Returning index " + (insertionIndex/2));
+//		System.out.println("Returning index " + (insertionIndex/2));
 		return insertionIndex / 2;
 	}
 	
