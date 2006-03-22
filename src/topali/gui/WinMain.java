@@ -586,8 +586,7 @@ public class WinMain extends JFrame
 	
 	void menuHelpAbout()
 	{
-		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n9th March 2006 - release 2.05", MsgBox.INF);
+		UpdateChecker.helpAbout();
 	}
 	
 	// Takes an existing PAL alignment and returns a simulated alignment object
