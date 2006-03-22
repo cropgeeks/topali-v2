@@ -1,16 +1,10 @@
 package topali.cluster.jobs;
 
-import java.io.*;
-import java.net.*;
 import javax.xml.namespace.QName;
-
-import org.apache.axis.*;
-import org.apache.axis.client.*;
 
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
-import topali.gui.*;
 
 public class LRTRemoteJob extends RemoteJob
 {

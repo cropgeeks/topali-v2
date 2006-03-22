@@ -30,11 +30,7 @@ package topali.cluster.pdm;
 // Entropy, which contains the probability distributions
 // of topologies (histogram) and the array of entropies.
 
-import java.lang.*;
 import java.io.*;
-import java.awt.*;
-import java.util.*;
-//import java.lang.Math;
 
 
 public class Kullback{

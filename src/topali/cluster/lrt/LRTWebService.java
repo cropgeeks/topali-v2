@@ -30,7 +30,8 @@ public class LRTWebService extends WebService
 			// service can return as soon as possible
 			RunLRT lrt = new RunLRT(jobDir, ss, result);
 			lrt.start();
-				
+			
+			accessLog.info("LRT request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -85,10 +86,13 @@ public class LRTWebService extends WebService
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		template = template.replaceAll("\\$RUN_COUNT", "" + result.runs);
 		
+		// Add header...
+		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
+		
 		// Write...
 		writeFile(template, new File(jobDir, "lrt.sh"));
 		
 		// Run...
-		submitJob("qsub lrt.sh", jobDir);
+		submitJob("lrt.sh", jobDir);
 	}
 }

@@ -10,16 +10,11 @@ import topali.fileio.*;
 public class CollateMBTree
 {
 	private File jobDir;
-	private MBTreeResult result;
 	
 	public CollateMBTree(File jobDir)
 		throws Exception
 	{
 		this.jobDir = jobDir;
-		
-//		String xml = ClusterUtils.readFile(new File(jobDir, "result.xml"));
-//		result = Castor.getMBTreeResult(xml);
-		result = (MBTreeResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 	
 	public float getPercentageComplete()
@@ -37,6 +32,6 @@ public class CollateMBTree
 	public MBTreeResult getResult()
 		throws Exception
 	{
-		return result;
+		return (MBTreeResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 }

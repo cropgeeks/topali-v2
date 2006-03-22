@@ -56,7 +56,7 @@ class LRTAnalysis extends MultiThread
 		this.runDir = runDir;
 
 		// Read the LRTResult
-		File resultFile = new File(runDir.getParentFile(), "result.xml");
+		File resultFile = new File(runDir.getParentFile(), "submit.xml");
 		result = (LRTResult) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
 		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));

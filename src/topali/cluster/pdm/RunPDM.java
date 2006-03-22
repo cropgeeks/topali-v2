@@ -39,7 +39,7 @@ public class RunPDM extends Thread
 			new File(jobDir, "percent").mkdir();
 			
 			// Store the PDMResult object where it can be read by the sub-job
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
+			Castor.saveXML(result, new File(jobDir, "submit.xml"));
 			// Store the SequenceSet where it can be read by the sub-job
 			Castor.saveXML(ss, new File(jobDir, "ss.xml"));
 			

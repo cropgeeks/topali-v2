@@ -218,7 +218,6 @@ public class SequenceSet
 		
 		// 3) Is it a proper alignment, (are all sequences of the same length?)
 		int size = sequences.get(0).getLength();
-		System.out.println("SEQ0 size: " + size);
 		for (Sequence seq: sequences)
 			if (seq.getLength() != size)
 			{

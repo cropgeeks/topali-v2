@@ -5,15 +5,11 @@
 
 package topali.cluster.lrt;
 
-import java.io.*;
-
 import topali.data.*;
 
 import pal.alignment.*;
-import pal.datatype.*;
 import pal.distance.*;
 import pal.tree.*;
-import pal.misc.*;
 import pal.eval.*;
 import pal.substmodel.*;
 
@@ -99,9 +95,9 @@ public class LRT
 	{
 		SubstitutionModel sm = null;
 		
-		if (result.method == this.METHOD_JC)
+		if (result.method == METHOD_JC)
 			sm = TreeUtilities.getF84SubstitutionModel(alignment, ratio, alpha);
-		else if (result.method == this.METHOD_F84)
+		else if (result.method == METHOD_F84)
 			sm = TreeUtilities.getJCSubstitutionModel(alignment);
 		
 		SitePattern sp = new SitePattern(alignment);

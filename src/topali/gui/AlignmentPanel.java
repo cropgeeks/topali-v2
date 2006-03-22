@@ -294,8 +294,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		
 			public void mouseMoved(MouseEvent e)
 			{
-				System.out.println("main.canvas: " + e.getPoint().x);
-				
 				if (ss == null)
 					return;
 					
@@ -311,9 +309,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 					seqName = ss.getSequence(seq).name;
 					str = "Seq " + (seq+1) + ": " + seqName + " (" +  nuc + ")";
 					
-					System.out.println("hBar.v="+hBar.getValue());
-					System.out.println(getWidth());
-					annotationsPanel.test();
+//					System.out.println("hBar.v="+hBar.getValue());
+//					System.out.println(getWidth());
+//					annotationsPanel.test();
 				
 					WinMainStatusBar.setText(str);
 					if (Prefs.gui_seq_tooltip)

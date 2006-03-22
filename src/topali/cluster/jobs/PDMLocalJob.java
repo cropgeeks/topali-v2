@@ -5,7 +5,6 @@ import java.io.*;
 import topali.cluster.*;
 import topali.cluster.pdm.*;
 import topali.data.*;
-import topali.fileio.*;
 import topali.gui.*;
 
 public class PDMLocalJob extends AnalysisJob

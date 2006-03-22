@@ -3,7 +3,6 @@ package topali.cluster.lrt;
 import java.io.*;
 import java.util.*;
 
-import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -17,9 +16,7 @@ public class CollateLRT
 	{
 		this.jobDir = jobDir;
 
-//		String xml = ClusterUtils.readFile(new File(jobDir, "result.xml"));
-//		result = Castor.getLRTResult(xml);
-		result = (LRTResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		result = (LRTResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 	}
 	
 	/*
@@ -81,6 +78,9 @@ public class CollateLRT
 		
 		// Finally, sort the threshold data
 		Arrays.sort(result.thresholds);
+		
+		// Save out the result object (not really needed but useful for debug)
+		Castor.saveXML(result, new File(jobDir, "result.xml"));
 		
 		return result;
 	}

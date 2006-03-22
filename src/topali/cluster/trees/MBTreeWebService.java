@@ -31,7 +31,8 @@ public class MBTreeWebService extends WebService
 			// service can return as soon as possible
 			RunMBTree runMBTree = new RunMBTree(jobDir, ss, result);
 			runMBTree.start();
-				
+			
+			accessLog.info("MBT request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -85,10 +86,13 @@ public class MBTreeWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		
+		// Add header...
+		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
+		
 		// Write...
 		writeFile(template, new File(jobDir, "mbt.sh"));
 		
 		// Run...
-		submitJob("qsub mbt.sh", jobDir);
+		submitJob("mbt.sh", jobDir);
 	}
 }

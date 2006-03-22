@@ -1,4 +1,4 @@
-package topali.web;
+/*package topali.web;
 
 import java.io.*;
 import javax.xml.namespace.QName;
@@ -33,3 +33,4 @@ public abstract class WebServiceClient
 		call.setOperationName(new QName(qname, methodName));		
 	}
 }
+*/

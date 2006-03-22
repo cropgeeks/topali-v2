@@ -4,66 +4,10 @@
     
 <web-app>
 
-	<!-- Path to Java -->
 	<context-param>
-		<param-name>java-path</param-name>
-		<param-value>/usr/bin/java</param-value>
+		<param-name>props-file</param-name>
+		<param-value>/home/tomcat/webapps/topali/WEB-INF/cluster/scri.properties</param-value>
 	</context-param>
-	
-	<!-- Path to TOPALi jar file -->
-	<context-param>
-		<param-name>topali-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/WEB-INF/lib/topali.jar</param-value>
-	</context-param>
-
-	<!-- Directory where final results should be stored -->
-	<context-param>
-		<param-name>job-dir</param-name>
-		<param-value>/home/tomcat/webapps/topali/jobs</param-value>
-	</context-param>
-	
-	<!-- Path to a working directory (on EACH cluster node) -->
-	<context-param>
-		<param-name>tmp-dir</param-name>
-		<param-value>/tmp</param-value>
-	</context-param>
-	
-	<!-- Path to TOPALi's scripts directory -->
-	<context-param>
-		<param-name>scripts-dir</param-name>
-		<param-value>/home/tomcat/webapps/topali/scripts</param-value>
-	</context-param>
-
-	<!-- Path to the Bambe executable -->
-	<context-param>
-		<param-name>bambe-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/binaries/unix/bambe/bambe</param-value>
-	</context-param>
-	
-	<!-- Path to the TreeDist executable -->
-	<context-param>
-		<param-name>treedist-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/binaries/unix/treedist/treedist</param-value>
-	</context-param>
-	
-	<!-- Path to the Barce executable -->
-	<context-param>
-		<param-name>barce-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/binaries/unix/barce/barce</param-value>
-	</context-param>
-	
-	<!-- Path to the Fitch executable -->
-	<context-param>
-		<param-name>fitch-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/binaries/unix/fitch/fitch</param-value>
-	</context-param>
-	
-  <!-- Path to the MrBayes executable -->
-	<context-param>
-		<param-name>mb-path</param-name>
-		<param-value>/home/tomcat/webapps/topali/binaries/unix/mrbayes/mb</param-value>
-	</context-param>
-
 
 	<servlet>
 		<servlet-name>AxisServlet</servlet-name>

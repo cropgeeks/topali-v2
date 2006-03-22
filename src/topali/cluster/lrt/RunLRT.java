@@ -30,8 +30,6 @@ public class RunLRT extends Thread
 		
 	public RunLRT(File jobDir, SequenceSet ss, LRTResult result)
 	{
-		System.out.println("RunLRT (LRT)");
-		
 		this.jobDir = jobDir;
 		this.ss = ss;
 		this.result = result;
@@ -45,7 +43,7 @@ public class RunLRT extends Thread
 			jobDir.mkdirs();
 			
 			// Store the LRTResult object where the individual runs can get it
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
+			Castor.saveXML(result, new File(jobDir, "submit.xml"));
 			
 			// Run the analyses
 			runAnalyses();

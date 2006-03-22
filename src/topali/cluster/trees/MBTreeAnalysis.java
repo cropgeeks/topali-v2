@@ -46,7 +46,7 @@ public class MBTreeAnalysis extends MultiThread
 		this.jobDir = jobDir;
 
 		// Read the MBTreeResult
-		result = (MBTreeResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		result = (MBTreeResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 		// Read the SequenceSet
 		ss = (SequenceSet) Castor.unmarshall(new File(jobDir, "ss.xml"));
 		

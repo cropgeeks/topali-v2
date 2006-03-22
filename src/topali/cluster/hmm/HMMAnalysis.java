@@ -8,8 +8,6 @@ package topali.cluster.hmm;
 import java.io.*;
 import java.util.*;
 
-import pal.alignment.*;
-
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
@@ -49,7 +47,7 @@ class HMMAnalysis extends MultiThread
 		this.jobDir = jobDir;
 
 		// Read the HMMResult
-		result = (HMMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		result = (HMMResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 		// Read the SequenceSet
 		ss = new SequenceSet(new File(jobDir, "hmm.fasta"));
 		
@@ -79,6 +77,8 @@ class HMMAnalysis extends MultiThread
 			
 			// Save final data back to drive where it can be retrieved
 			Castor.saveXML(result, new File(jobDir, "result.xml"));
+			// And write the final percentage
+			new File(new File(jobDir, "percent"), "p100").createNewFile();
 		}
 		catch (Exception e)
 		{

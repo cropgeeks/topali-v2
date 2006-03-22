@@ -1,11 +1,7 @@
 package topali.cluster.dss;
 
 import java.io.*;
-import javax.servlet.http.*;
-
 import org.apache.axis.*;
-import org.apache.axis.transport.http.*;
-
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
@@ -31,7 +27,8 @@ public class DSSWebService extends WebService
 			// service can return as soon as possible
 			RunDSS dss = new RunDSS(jobDir, ss, result);
 			dss.start();
-				
+			
+			accessLog.info("DSS request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -86,10 +83,13 @@ public class DSSWebService extends WebService
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		template = template.replaceAll("\\$RUN_COUNT", "" + result.runs);
 		
+		// Add header...
+		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
+		
 		// Write...
 		writeFile(template, new File(jobDir, "dss.sh"));
 		
 		// Run...
-		submitJob("qsub dss.sh", jobDir);
+		submitJob("dss.sh", jobDir);
 	}
 }

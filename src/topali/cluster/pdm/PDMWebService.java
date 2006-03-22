@@ -1,10 +1,8 @@
 package topali.cluster.pdm;
 
 import java.io.*;
-import javax.servlet.http.*;
 
 import org.apache.axis.*;
-import org.apache.axis.transport.http.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -32,7 +30,8 @@ public class PDMWebService extends WebService
 			// service can return as soon as possible
 			RunPDM pdm = new RunPDM(jobDir, ss, result);
 			pdm.start();
-				
+			
+			accessLog.info("PDM request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -86,10 +85,13 @@ public class PDMWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		
+		// Add header...
+		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
+		
 		// Write...
 		writeFile(template, new File(jobDir, "pdm.sh"));
 		
 		// Run...
-		submitJob("qsub pdm.sh", jobDir);
+		submitJob("pdm.sh", jobDir);
 	}
 }

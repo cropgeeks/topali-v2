@@ -1,10 +1,8 @@
 package topali.cluster.hmm;
 
 import java.io.*;
-import javax.servlet.http.*;
 
 import org.apache.axis.*;
-import org.apache.axis.transport.http.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -31,7 +29,8 @@ public class HMMWebService extends WebService
 			// service can return as soon as possible
 			RunHMM hmm = new RunHMM(jobDir, ss, result);
 			hmm.start();
-				
+			
+			accessLog.info("HMM request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -85,10 +84,13 @@ public class HMMWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		
+		// Add header...
+		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
+		
 		// Write...
 		writeFile(template, new File(jobDir, "hmm.sh"));
 		
 		// Run...
-		submitJob("qsub hmm.sh", jobDir);
+		submitJob("hmm.sh", jobDir);
 	}
 }

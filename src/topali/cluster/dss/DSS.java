@@ -10,13 +10,8 @@ import java.io.*;
 import topali.data.*;
 
 import pal.alignment.*;
-import pal.datatype.*;
 import pal.distance.*;
 import pal.tree.*;
-import pal.misc.*;
-import pal.eval.*;
-import pal.substmodel.*;
-
 import topali.analyses.*;
 
 public class DSS

@@ -83,7 +83,13 @@ public class JobsPanel extends JPanel
 	
 	public void clear()
 	{
+		// Remove knowledge of any jobs
 		model.clear();
+		
+		// And update the text/icon to reflect this
+		setStatusPanel();
+		WinMainStatusBar.resetIcon = true;
+		WinMainStatusBar.setStatusIcon(WinMainStatusBar.OFF);
 	}
 	
 	// Formats the status bar in the bottom-right corner of the screen with a

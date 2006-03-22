@@ -6,9 +6,6 @@
 package topali.cluster.dss;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
-
 import pal.alignment.*;
 import pal.substmodel.*;
 import pal.distance.*;
@@ -43,10 +40,8 @@ public class RunDSS extends Thread
 			jobDir.mkdirs();
 			
 			// Store the DSSResult object where the individual runs can get it
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
-			
-			System.out.println("result.tmpDir=" + result.tmpDir);
-			
+			Castor.saveXML(result, new File(jobDir, "submit.xml"));
+						
 			// Run the analyses
 			runAnalyses();
 		}

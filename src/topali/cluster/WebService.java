@@ -1,12 +1,13 @@
 package topali.cluster;
 
 import java.io.*;
+import java.util.logging.*;
 import javax.servlet.http.*;
 
 import org.apache.axis.*;
 import org.apache.axis.transport.http.*;
 
-import topali.cluster.sge.*;
+import topali.cluster.control.*;
 import topali.fileio.*;
 
 /**
@@ -16,21 +17,52 @@ import topali.fileio.*;
  */
 public abstract class WebService
 {
+	protected static Logger accessLog;	
+	protected static WebXmlProperties props;
+	
 	protected static String javaPath, topaliPath;
-	protected static String scriptsDir;	
+	protected static String scriptsDir, scriptsHdr;
+	
+	static boolean DRMAA = true;
 	
 	protected WebService()
 	{
-		javaPath = getParameter("java-path");
+		if (props == null)
+			initializeProperties();
+		
+		javaPath   = getParameter("java-path");
 		topaliPath = getParameter("topali-path");
 		
 		scriptsDir = getParameter("scripts-dir");
+		scriptsHdr = getParameter("scripts-hdr");
+	}
+	
+	private void initializeProperties()
+	{
+		HttpServletRequest req = getHttpServletRequest();
+		String filename =
+			req.getSession().getServletContext().getInitParameter("props-file");
+				
+		props = new WebXmlProperties(filename);
+			
+		// Now that the properties are loaded, set the log FileHandler
+		// TODO: Get all this into a logging.properties file
+		FileHandler fh = null;
+		try
+		{
+			fh = new FileHandler(getParameter("log-file"), 0, 1, true);
+			fh.setFormatter(new SimpleFormatter());
+		}
+		catch (IOException e) {}
+		accessLog = Logger.getLogger("topali.cluster.ffs");
+		accessLog.addHandler(fh);
 	}
 	
 	protected String getJobId()
 	{
 		String remoteAddress = getHttpServletRequest().getRemoteAddr();
-		return System.currentTimeMillis() + "." + remoteAddress;
+		
+		return System.currentTimeMillis() + "-" + remoteAddress;
 	}
 
 	// Returns the current HttpServletRequest object that can be used to query
@@ -46,9 +78,10 @@ public abstract class WebService
 	// Reads and returns the value for the given parameter name (from web.xml)
 	protected String getParameter(String name)
 	{
-		HttpServletRequest req = getHttpServletRequest();
-
-		return req.getSession().getServletContext().getInitParameter(name);
+		return props.getParameter(name);
+		
+//		HttpServletRequest req = getHttpServletRequest();
+//		return req.getSession().getServletContext().getInitParameter(name);
 	}
 	
 	protected static void writeFile(String str, File filename)
@@ -62,15 +95,17 @@ public abstract class WebService
 	protected static void submitJob(String cmd, File jobDir)
 		throws Exception
 	{
-		SGEMonitor.submitJob(cmd, jobDir);
+		ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
+		cluster.submitJob(jobDir, cmd);
 	}
 	
-	protected abstract float getPercentageComplete(File jobDir)
-		throws AxisFault;
 	
 	//////////////////////////////////////////////////
 	// Public access methods - the actual WEB SERVICES
 	//////////////////////////////////////////////////
+	
+	protected abstract float getPercentageComplete(File jobDir)
+		throws AxisFault;
 	
 	public String getPercentageComplete(String jobId)
 		throws AxisFault
@@ -84,15 +119,13 @@ public abstract class WebService
 			int status = JobStatus.UNKNOWN;
 			
 			// Status (assuming Job is actually in the SGE queue)...
-			SGEMonitor monitor = new SGEMonitor();			
-			if (monitor.loadFile(jobDir))
-			{
-				status = monitor.getJobStatus();
-
-				// TODO: Find out WTF qstat won't always return the state			
-//				if (status == JobStatus.UNKNOWN && progress < 100f)
-//					throw AxisFault.makeFault(new Exception("Unknown cluster job error"));
-			}			
+			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
+			status = cluster.getJobStatus(jobDir);
+			
+			// TODO: Find out WTF qstat won't always return the state
+			// TODO: Following not suitable for SGE 5.3		
+//			if (status == JobStatus.UNKNOWN && progress < 100f)
+//				throw AxisFault.makeFault(new Exception("Unknown cluster job error"));
 			
 			return Castor.getXML(new JobStatus(progress, status));
 		}
@@ -107,8 +140,8 @@ public abstract class WebService
 		File jobDir = new File(getParameter("job-dir"), jobId);
 		
 		// TODO: SGE Job deletion error checking and security
-		SGEMonitor monitor = new SGEMonitor(jobDir);		
-		monitor.deleteJob();
+		ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
+		cluster.deleteJob(jobDir);
 		
 		// Wait a minute before attempting to cleanup (to give SGE time to qdel)
 		Runnable r = new Runnable() {

@@ -10,18 +10,13 @@ import java.awt.event.*;
 import java.awt.dnd.*;
 import java.io.*;
 import javax.swing.*;
-import javax.help.*;
 
 import topali.analyses.*;
-import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.hmm.*;
 import topali.gui.nav.*;
 import topali.gui.tree.*;
-import topali.web.*;
-
-import org.exolab.castor.xml.*;
 
 import pal.alignment.*;
 import pal.tree.*;
@@ -46,7 +41,7 @@ public class WinMain extends JFrame
 	public static PartitionDialog pDialog;
 	public static OverviewDialog ovDialog;
 	public static FileDropAdapter dropAdapter;
-	
+		
 	public WinMain()
 	{
 		// GUI Control initialization
@@ -104,10 +99,12 @@ public class WinMain extends JFrame
 			if (menubar.aFileSave.isEnabled())
 			{
 				// TODO: warn about shutting down with local jobs active
+				String msg = "The current project has unsaved changes. Save now?";
+				if (jobsPanel.hasJobs())
+					msg = "The current project has unsaved changes (and analysis jobs are still running!). Save now?";
 				
-				int res = MsgBox.yesnocan("The current project has unsaved "
-					+ "changes. Save now?", 0);
-				
+				int res = MsgBox.yesnocan(msg, 0);
+								
 				if (res == JOptionPane.YES_OPTION)
 				{
 					if (Project.save(project, false))
@@ -136,22 +133,14 @@ public class WinMain extends JFrame
 
 		project = new Project();
 		
-//		NewProjectDialog dialog = new NewProjectDialog(this);
-//		if (dialog.getProject() != null)
-		{
-//			project = dialog.getProject();
+		setTitle(Text.Gui.getString("WinMain.gui01"));
+		menubar.setProjectOpenedState();
+		navPanel.clear();
 			
-			setTitle(Text.Gui.getString("WinMain.gui01"));
-			menubar.setProjectOpenedState();
-//			menubar.updateRecentFileList(project);
-			navPanel.clear();
-			
-			pDialog.setAlignmentData(null);
-			ovDialog.setAlignmentPanel(null);
-			
-//			MsgBox.msg(Text.format(Text.Gui.getString("WinMain.msg01"),
-//				project.getName()), MsgBox.INF);
-		}
+		pDialog.setAlignmentData(null);
+		ovDialog.setAlignmentPanel(null);
+		
+		// Anything done here may need to go in LoadMonitorDialog.java too
 	}
 	
 	// Opens an existing project

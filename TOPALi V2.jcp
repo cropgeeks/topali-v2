@@ -50,7 +50,7 @@
 				<path>src\topali\cluster\pdm</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge</path>
+				<path>src\topali\cluster\control</path>
 			</folderitem>
 			<folderitem>
 				<path>src\topali\cluster\trees</path>
@@ -116,6 +116,12 @@
 				<path>web\WEB-INF\lib</path>
 			</folderitem>
 			<folderitem>
+				<path>web\WEB-INF\cluster</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge</path>
+			</folderitem>
+			<folderitem>
 				<path>web\scripts</path>
 			</folderitem>
 			<folderitem>
@@ -166,6 +172,10 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
+				<path>src\topali\cluster\JobException.java</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
 				<path>src\topali\cluster\JobStatus.java</path>
 				<source>true</source>
 			</fileitem>
@@ -183,6 +193,10 @@
 			</fileitem>
 			<fileitem>
 				<path>src\topali\cluster\WebService.java</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>src\topali\cluster\WebXmlProperties.java</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
@@ -358,7 +372,15 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>src\topali\cluster\sge\SGEMonitor.java</path>
+				<path>src\topali\cluster\control\DrmaaClient.java</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>src\topali\cluster\control\ICluster.java</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>src\topali\cluster\control\SgeClient.java</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
@@ -1190,6 +1212,10 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
+				<path>web\WEB-INF\lib\drmaa.jar</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
 				<path>web\WEB-INF\lib\jaxrpc.jar</path>
 				<source>true</source>
 			</fileitem>
@@ -1234,10 +1260,6 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\WEB-INF\lib\topali.xml</path>
-				<source>true</source>
-			</fileitem>
-			<fileitem>
 				<path>web\WEB-INF\lib\vamsas.jar</path>
 				<source>true</source>
 			</fileitem>
@@ -1250,23 +1272,39 @@
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\scripts\dss.sh</path>
+				<path>web\WEB-INF\cluster\dundee.properties</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\scripts\hmm.sh</path>
+				<path>web\WEB-INF\cluster\scri.properties</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\scripts\lrt.sh</path>
+				<path>web\WEB-INF\cluster\sge\dss.sh</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\scripts\mbt.sh</path>
+				<path>web\WEB-INF\cluster\sge\dundee.sge</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>
-				<path>web\scripts\pdm.sh</path>
+				<path>web\WEB-INF\cluster\sge\hmm.sh</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>web\WEB-INF\cluster\sge\lrt.sh</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>web\WEB-INF\cluster\sge\mbt.sh</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>web\WEB-INF\cluster\sge\pdm.sh</path>
+				<source>true</source>
+			</fileitem>
+			<fileitem>
+				<path>web\WEB-INF\cluster\sge\scri.sge</path>
 				<source>true</source>
 			</fileitem>
 			<fileitem>

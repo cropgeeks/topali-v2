@@ -6,8 +6,6 @@
 package topali.cluster.dss;
 
 import java.io.*;
-import java.util.*;
-
 import pal.alignment.*;
 
 import topali.cluster.*;
@@ -37,6 +35,10 @@ class DSSAnalysis extends MultiThread
 	{ 
 		DSSAnalysis analysis = null;
 		
+		System.out.println(args.length);
+		for (int i = 0; i < args.length; i++)
+			System.out.println("args_" + i + ": " + args[i]);
+		
 		try
 		{
 			analysis = new DSSAnalysis(new File(args[0]));
@@ -56,7 +58,7 @@ class DSSAnalysis extends MultiThread
 		this.runDir = runDir;
 
 		// Read the DSSResult
-		File resultFile = new File(runDir.getParentFile(), "result.xml");
+		File resultFile = new File(runDir.getParentFile(), "submit.xml");
 		result = (DSSResult) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
 		ss = new SequenceSet(new File(runDir, "dss.fasta"));

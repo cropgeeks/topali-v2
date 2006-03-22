@@ -1,7 +1,6 @@
 package topali.cluster.jobs;
 
 import topali.data.*;
-import topali.gui.Prefs;
 
 public abstract class AnalysisJob
 {	

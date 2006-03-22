@@ -1,4 +1,4 @@
-5
+6
 
 Release History:
 
@@ -6,7 +6,22 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
- - Release 2.05
+ - Release 2.06
+  - [NF] Warning about closing a project while analysis jobs are running.
+  - [BF] The status bar now correctly shows job information when changing
+    project (and jobs are still running).
+  - [SC] DRMAA now used for cluster control (which should also reduce the number
+    of "unknown job status" errors returned by the job monitoring code.
+  - [BF] Fixed a bug where the output from a qsub job submission was read before
+    the buffer was complete, which resulted in a failed submittion.
+  - [BF] Fixed a bug where PDM and HMM jobs could cause an XML premature end of
+  - file error due to the webservice trying to read the result object as it was
+    still being written.
+  - [SC] Separate configuration files for multiple cluster deployment.
+  - [SC] Additional logging of web services/remote jobs using Java Logging API,
+    including logging of access requests and job types.
+
+09-03-2006 - Release 2.05
   - [NF] All alignment graph result types can be auto-partitioned.
   - [NF] HMM partitioning ignores indeterminate regions.
   - [SC] Refactoring of the internal data structures for XML (required for a lot

@@ -215,37 +215,37 @@
 				<path>src\topali\cluster\pdm\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge</path>
+				<path>src\topali\cluster\control</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn</path>
+				<path>src\topali\cluster\control\.svn</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\prop-base</path>
+				<path>src\topali\cluster\control\.svn\prop-base</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\props</path>
+				<path>src\topali\cluster\control\.svn\props</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\text-base</path>
+				<path>src\topali\cluster\control\.svn\text-base</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\tmp</path>
+				<path>src\topali\cluster\control\.svn\tmp</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\tmp\prop-base</path>
+				<path>src\topali\cluster\control\.svn\tmp\prop-base</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\tmp\props</path>
+				<path>src\topali\cluster\control\.svn\tmp\props</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\tmp\text-base</path>
+				<path>src\topali\cluster\control\.svn\tmp\text-base</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\tmp\wcprops</path>
+				<path>src\topali\cluster\control\.svn\tmp\wcprops</path>
 			</folderitem>
 			<folderitem>
-				<path>src\topali\cluster\sge\.svn\wcprops</path>
+				<path>src\topali\cluster\control\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
 				<path>src\topali\cluster\trees</path>
@@ -1070,6 +1070,72 @@
 				<path>web\WEB-INF\lib\.svn\wcprops</path>
 			</folderitem>
 			<folderitem>
+				<path>web\WEB-INF\cluster</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\prop-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\props</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\text-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\tmp</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\tmp\prop-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\tmp\props</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\tmp\text-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\tmp\wcprops</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\sge\.svn\wcprops</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\prop-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\props</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\text-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\tmp</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\tmp\prop-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\tmp\props</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\tmp\text-base</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\tmp\wcprops</path>
+			</folderitem>
+			<folderitem>
+				<path>web\WEB-INF\cluster\.svn\wcprops</path>
+			</folderitem>
+			<folderitem>
 				<path>web\WEB-INF\.svn</path>
 			</folderitem>
 			<folderitem>
@@ -1571,6 +1637,9 @@
 				<path>classes\topali\cluster</path>
 			</folderitem>
 			<folderitem>
+				<path>classes\topali\cluster\control</path>
+			</folderitem>
+			<folderitem>
 				<path>classes\topali\cluster\dss</path>
 			</folderitem>
 			<folderitem>
@@ -1584,9 +1653,6 @@
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\pdm</path>
-			</folderitem>
-			<folderitem>
-				<path>classes\topali\cluster\sge</path>
 			</folderitem>
 			<folderitem>
 				<path>classes\topali\cluster\trees</path>
@@ -1694,27 +1760,21 @@
 	</projects>
 	<open_files>
 		<docitem>
-			<path>src\topali\analyses\PartitionMaker.java</path>
+			<path>src\topali\cluster\WebService.java</path>
 			<source>true</source>
 			<index>0</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>doc\web\version2.txt</path>
+			<path>src\topali\cluster\pdm\PDMWebService.java</path>
 			<source>true</source>
 			<index>1</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\topali\gui\AlignmentPanel.java</path>
+			<path>src\topali\cluster\control\DrmaaClient.java</path>
 			<source>true</source>
 			<index>2</index>
-			<active>false</active>
-		</docitem>
-		<docitem>
-			<path>src\topali\data\AlignmentData.java</path>
-			<source>true</source>
-			<index>3</index>
 			<active>true</active>
 		</docitem>
 	</open_files>

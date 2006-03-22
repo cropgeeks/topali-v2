@@ -71,7 +71,7 @@ public class Entropy
   // Stores maximum number of non-zero topologies at each location
   private int[] maxNonZero;
   
-  // Used to calculate smooting
+  // Used to calculate smoothing
   private int hops = 2;
   
   private File wrkDir;

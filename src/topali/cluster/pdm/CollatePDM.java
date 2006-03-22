@@ -10,16 +10,11 @@ import topali.fileio.*;
 public class CollatePDM
 {
 	private File jobDir;
-	private PDMResult result;
 	
 	public CollatePDM(File jobDir)
 		throws Exception
 	{
 		this.jobDir = jobDir;
-		
-//		String xml = ClusterUtils.readFile(new File(jobDir, "result.xml"));
-//		result = Castor.getPDMResult(xml);
-		result = (PDMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 	
 	public float getPercentageComplete()
@@ -30,13 +25,15 @@ public class CollatePDM
 		
 		// Percentages are tracked by having one file for every 1% stored in a
 		// directory called "percent"
-		System.out.println("CollatePDM: " + new File(jobDir, "percent").listFiles().length);
-		return new File(jobDir, "percent").listFiles().length;
+		try { return new File(jobDir, "percent").listFiles().length; }
+		catch (Exception e)	{
+			return 0;
+		}
 	}
 	
 	public PDMResult getResult()
 		throws Exception
 	{
-		return result;
+		return (PDMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 }

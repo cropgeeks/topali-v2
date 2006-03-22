@@ -6,8 +6,6 @@
 package topali.cluster.hmm;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -39,8 +37,7 @@ public class RunHMM extends Thread
 			new File(jobDir, "percent").mkdir();
 			
 			// Store the HMMResult object where it can be read by the sub-job
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
-			System.out.println("saved ok");
+			Castor.saveXML(result, new File(jobDir, "submit.xml"));
 			// Store the SequenceSet where it can be read by the sub-job
 			ss.save(new File(jobDir, "hmm.fasta"), Filters.FAS, false);
 						

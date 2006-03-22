@@ -146,7 +146,6 @@ class RunBarce
 		
 		public void run()
 		{
-			BufferedWriter out = null;
 			File percentDir = new File(jobDir, "percent");
 			
 			int read = 0;
@@ -174,7 +173,10 @@ class RunBarce
 					{						
 						// Create a file for each difference
 						for (int i = read; i > percent; i--)
-							new File(percentDir, "p" + i).createNewFile();
+							// (but don't write a file for 100% (yet!)
+							// (this gets done back in HMMAnalysis
+							if (i != 100)
+								new File(percentDir, "p" + i).createNewFile();
 						
 						percent = read;
 					}

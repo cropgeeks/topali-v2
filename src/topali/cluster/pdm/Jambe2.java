@@ -67,7 +67,7 @@ public class Jambe2
 		return ((alignmentLength - windowSize) / stepSize) + 1;
 	}
 	
-	private void setPercent(int value)
+	void setPercent(int value)
 		throws IOException
 	{
 		if (value > percent)
@@ -195,8 +195,6 @@ public class Jambe2
 			oAutoCorrelationTime.printOutResults();
 						
 			N = oAutoCorrelationTime.effectiveSampleSizeApprox();
-			
-			setPercent(100);
 		}
 		catch (Exception e)
 		{

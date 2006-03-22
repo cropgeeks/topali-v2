@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.logging.*;
 
 public class TOPALi extends Applet
 {
@@ -23,7 +24,32 @@ public class TOPALi extends Applet
 	
 	public static void main(String[] args)
 	{ 
-		System.out.println("Locale is " + Locale.getDefault());
+		Logger.getLogger("topali.gui.TOPALi").info("Locale: " + Locale.getDefault());
+		
+		
+		long s = System.currentTimeMillis();
+		
+		
+		for (int i = 0; i < 100; i++)
+		{
+			for (int j = 0; j < 960; j++)
+			{
+				for (int k = 0; k < 50; k++)
+				{
+					double result = Math.random() * Math.random();
+				}
+			}
+		}
+		
+		
+		
+		
+		long e = System.currentTimeMillis();
+		
+		System.out.println("sim time: " + (e-s));
+		
+		
+		
 	
 		Utils.createScratch();
 		

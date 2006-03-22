@@ -6,9 +6,6 @@
 package topali.cluster.pdm;
 
 import java.io.*;
-import java.util.*;
-
-import pal.alignment.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -48,7 +45,7 @@ class PDMAnalysis extends MultiThread
 		this.jobDir = jobDir;
 
 		// Read the PDMResult
-		result = (PDMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		result = (PDMResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 		// Read the SequenceSet
 		ss = (SequenceSet) Castor.unmarshall(new File(jobDir, "ss.xml"));
 		
@@ -107,8 +104,8 @@ class PDMAnalysis extends MultiThread
 		result.df = jambe.getHistogramDF();
 		result.N = jambe.getN();
 		
-		
 		Castor.saveXML(result, new File(jobDir, "result.xml"));
+		jambe.setPercent(100);
 	}
 
 	private void populateXaxis(float[] d1d, float[][] d2d, boolean global)

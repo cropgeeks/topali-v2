@@ -7,7 +7,6 @@ package topali.cluster.jobs;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.*;
 import org.apache.axis.client.*;
 
 import topali.cluster.*;

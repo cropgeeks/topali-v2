@@ -9,9 +9,7 @@ package topali.cluster.pdm;
 // write out a window of length windowLength starting at
 // position windowStart.
 
-import java.lang.*;
 import java.io.*;
-import java.awt.*;
 import java.util.*;
 
 public class PhyloData{

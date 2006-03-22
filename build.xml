@@ -62,7 +62,7 @@
 	</target>
 	
 	
-	<target name="tomcat">
+	<target name="tomcat" depends="jar">
 		<exec executable="scp">
 			<arg line="web/WEB-INF/lib/topali.jar tomcat@gruffalo:webapps/topali/WEB-INF/lib"/>
 		</exec>

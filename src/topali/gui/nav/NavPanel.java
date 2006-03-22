@@ -236,7 +236,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		if (parent == null)
 			parent = getResultsFolderNodeForData(data);
 					
-		if (result.status == JobStatus.COMPLETED || result instanceof TreeResult)
+		if (result.status == JobStatus.COMPLETED)
 		{
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode();
 			
