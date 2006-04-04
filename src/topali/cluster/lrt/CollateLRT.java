@@ -2,12 +2,15 @@ package topali.cluster.lrt;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 import topali.data.*;
 import topali.fileio.*;
 
 public class CollateLRT
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private File jobDir;
 	private LRTResult result;
 	
@@ -29,7 +32,10 @@ public class CollateLRT
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
+		{
+			logger.severe("error.txt generated for " + jobDir.getPath());
 			throw new Exception("LRT error.txt");
+		}
 		
 		float count = 0;
 		int runs = result.runs;
@@ -45,11 +51,12 @@ public class CollateLRT
 				
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
+			{
+				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + i);
 				throw new Exception("LRT error.txt (run " + i + ")");
+			}
 		}
 		
-		System.out.println("runs=" + runs + ", count = " + count);
-		System.out.println("perc=" + ((count / ((float) runs)) * 100));
 		
 		return (count / ((float) runs)) * 100;
 	}

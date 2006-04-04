@@ -29,10 +29,13 @@ public class DSSWebService extends WebService
 			dss.start();
 			
 			accessLog.info("DSS request from " + jobId);
+			logger.info("DSS request from " + jobId);
+			
 			return jobId;
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -46,6 +49,7 @@ public class DSSWebService extends WebService
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -58,10 +62,13 @@ public class DSSWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
 			DSSResult result = new CollateDSS(jobDir).getResult();
+			
+			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}

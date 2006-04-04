@@ -8,6 +8,7 @@ package topali.cluster.lrt;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 
 import pal.alignment.*;
 import pal.substmodel.*;
@@ -22,6 +23,8 @@ import topali.mod.*;
 
 public class RunLRT extends Thread
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private SequenceSet ss;
 	private LRTResult result;
 	
@@ -50,7 +53,7 @@ public class RunLRT extends Thread
 		}
 		catch (Exception e)
 		{
-			System.out.println("RunLRT: " + e);
+			logger.severe(""+e);
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
@@ -75,7 +78,8 @@ public class RunLRT extends Thread
 			if (i > 1)
 				dataSS = getSimulatedAlignment();
 			
-			Castor.saveXML(dataSS, new File(runDir, "ss.xml"));
+//			Castor.saveXML(dataSS, new File(runDir, "ss.xml"));
+			dataSS.save(new File(runDir, "lrt.fasta"), indices, Filters.FAS, false);
 
 			if (result.isRemote == false)
 			{
@@ -85,7 +89,10 @@ public class RunLRT extends Thread
 		}
 				
 		if (result.isRemote)
+		{
+			logger.info("analysis ready: submitting to cluster");
 			LRTWebService.runScript(jobDir, result);
+		}
 	}
 	
 	private SequenceSet getSimulatedAlignment()

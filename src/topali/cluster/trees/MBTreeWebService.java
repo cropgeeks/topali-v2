@@ -33,10 +33,12 @@ public class MBTreeWebService extends WebService
 			runMBTree.start();
 			
 			accessLog.info("MBT request from " + jobId);
+			logger.info("MBT request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -50,6 +52,7 @@ public class MBTreeWebService extends WebService
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -62,10 +65,13 @@ public class MBTreeWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
 			MBTreeResult result = new CollateMBTree(jobDir).getResult();
+			
+			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}

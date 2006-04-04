@@ -1,18 +1,17 @@
-package topali.cluster.hmm;
+package topali.cluster.pdm2;
 
 import java.io.*;
-import java.util.logging.*;
+import java.util.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
-public class CollateHMM
+public class PDMMonitor
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
-	
 	private File jobDir;
 	
-	public CollateHMM(File jobDir)
+	public PDMMonitor(File jobDir)
 		throws Exception
 	{
 		this.jobDir = jobDir;
@@ -22,10 +21,7 @@ public class CollateHMM
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
-		{
-			logger.severe("error.txt generated for " + jobDir.getPath());
-			throw new Exception("HMM error.txt");
-		}
+			throw new Exception("PDM error.txt");
 		
 		// Percentages are tracked by having one file for every 1% stored in a
 		// directory called "percent"
@@ -35,9 +31,9 @@ public class CollateHMM
 		}
 	}
 	
-	public HMMResult getResult()
+	public PDMResult getResult()
 		throws Exception
 	{
-		return (HMMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		return (PDMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 }

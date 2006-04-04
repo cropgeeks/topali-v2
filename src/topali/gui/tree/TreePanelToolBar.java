@@ -17,7 +17,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	private TreePane treePane;
 	private TreePanel panel;
 	
-	JButton bExport;
+	JButton bExport, bCluster;
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit, bFloat;
 	
 	TreePanelToolBar(TreePane treePane, TreePanel panel, TreeResult tree)
@@ -43,6 +43,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bSizedToFit = (JToggleButton) WinMainToolBar.getButton(true, null,
 			"tre01", Icons.SIZED_TO_FIT, null);
 		bSizedToFit.setSelected(tree.isSizedToFit);
+		bCluster = (JButton) WinMainToolBar.getButton(false, null, "tre08",
+			Icons.EXPORT, null);
 		bFloat = (JToggleButton) WinMainToolBar.getButton(true, null,
 			"tre07", Icons.FLOAT, null);
 			
@@ -52,6 +54,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bDrawNewHamp.addActionListener(this);
 		bSizedToFit.addActionListener(this);
 		bFloat.addActionListener(this);
+		bCluster.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -60,6 +63,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bDrawCircular);
 		add(bDrawNewHamp);
 		addSeparator();
+//		add(bCluster);
 		add(bSizedToFit);
 		add(bFloat);
 		add(new JLabel(" "));
@@ -90,6 +94,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		else if (e.getSource() == bFloat)
 			treePane.toggleFloating(panel, bFloat.isSelected());
+		
+		else if (e.getSource() == bCluster)
+			TreePanelUtils.cluster(panel);
 		
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}

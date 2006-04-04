@@ -281,7 +281,8 @@ public class JobsPanel extends JPanel
 			if (result.isRemote)
 				job = new PDMRemoteJob((PDMResult)result, data);
 			else
-				job = new PDMLocalJob((PDMResult)result, data);
+				// TODO: change back to PDM(1)
+				job = new PDM2LocalJob((PDMResult)result, data);
 		}
 		
 		// HMM jobs

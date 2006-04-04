@@ -6,7 +6,6 @@
 package topali.cluster.lrt;
 
 import java.io.*;
-import java.util.*;
 
 import pal.alignment.*;
 
@@ -59,7 +58,7 @@ class LRTAnalysis extends MultiThread
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");
 		result = (LRTResult) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
-		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
+		ss = new SequenceSet(new File(runDir, "lrt.fasta"));
 		
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(

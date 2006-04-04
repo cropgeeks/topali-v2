@@ -2,6 +2,7 @@ package topali.data;
 
 import java.awt.*;
 import java.io.*;
+import java.util.*;
 
 import pal.misc.*;
 import pal.tree.*;
@@ -21,6 +22,9 @@ public class TreeResult extends AnalysisResult
 	// What partition of the original alignment was used to created it?
 	private int pS, pE;
 	
+	// This tree *may* be associated with one or more sequence clusters
+	private LinkedList<SequenceCluster> clusters = null;
+	
 	// Additional variables required when this tree is displayed
 	public int viewMode = NORMAL;
 	public boolean isSizedToFit;
@@ -39,6 +43,12 @@ public class TreeResult extends AnalysisResult
 	
 	public void setTreeStr(String treeStr)
 		{ this.treeStr = treeStr; }
+	
+	public LinkedList<SequenceCluster> getClusters()
+		{ return clusters; }
+	
+	public void setClusters(LinkedList<SequenceCluster> clusters)
+		{ this.clusters = clusters; }
 	
 	public int getPartitionStart()
 		{ return pS; }

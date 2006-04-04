@@ -10,31 +10,22 @@ public class SgeClient implements ICluster
 {
 	private static Logger logger = Logger.getLogger("topali.cluster.control");
 	
-	private int sge_job_id;
+	private String sge_job_id;
 	
-	// Initilizes the SgeClient to read the job's ID from a .SGE_ID file
-	public void getJobId(File jobDir)
+	// Reads the jobId from the .SGE_ID file stored in the job's dir which will
+	// be stored as either [id] or [id].[otherdatanotneeded]
+	private void getJobId(File jobDir)
+		throws Exception
 	{
-		// Bugger all we can do about it if it doesn't exist (yet)...
-		File jobFile = new File(jobDir, ".SGE_ID");		
-		if (jobFile.exists() == false)
-			return;
+		String jobId = ClusterUtils.readFile(new File(jobDir, ".SGE_ID"));
 		
-		try
-		{
-			String s = ClusterUtils.readFile(jobFile);
-			
-			// [n].x-y:z
-			if (s.contains("."))
-				sge_job_id = Integer.parseInt(s.substring(0, s.indexOf(".")));
-			// [n]
-			else
-				sge_job_id = Integer.parseInt(s);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
+		if (jobId.indexOf(".") == -1)
+			sge_job_id = jobId;
+		else
+			sge_job_id = jobId.substring(0, jobId.indexOf("."));
+		
+		sge_job_id = sge_job_id.trim();
+		logger.info("jobID: #" + sge_job_id + "#");
 	}
 	
 	/*
@@ -46,6 +37,7 @@ public class SgeClient implements ICluster
 	{
 		String cmd = "qsub " + scriptName;
 		
+		logger.info("submitting job (" + jobDir.getName() + ") to SGE via qsub...");
 		Process p = Runtime.getRuntime().exec(cmd, null, jobDir);
 		SGEStreamReader reader = new SGEStreamReader(p.getInputStream());
 		
@@ -66,15 +58,17 @@ public class SgeClient implements ICluster
 		// "your job [n].x-y:z" (SGE6)		
 		out.write(str[2]);
 		out.close();
+		
+		logger.info("submitting job (" + jobDir.getName() + ") to SGE via qsub...ok");
 	}
 	
 	public int getJobStatus(File jobDir)
 	{
-		getJobId(jobDir);
-		
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder("qstat");
+			logger.info("obtain job status (" + jobDir + ")");
+			
+			ProcessBuilder pb = new ProcessBuilder("qstat", "-xml");
 			pb.redirectErrorStream(true);
 		
 			Process p = pb.start();
@@ -87,11 +81,12 @@ public class SgeClient implements ICluster
 				try { Thread.sleep(100); }
 				catch (InterruptedException e) {}
 			
+			getJobId(jobDir);
 			return processBuffer(reader.buffer.toString());
 		}
 		catch (Exception e)
 		{
-			logger.info("unable to determine job status: " + e);
+			logger.warning("unable to determine job status: " + e);
 			return JobStatus.UNKNOWN;
 		}
 	}
@@ -99,38 +94,30 @@ public class SgeClient implements ICluster
 	/* Processes the output from a "qstat" command to find the status of the
 	 * current job.
 	 */
-	private int processBuffer(String output)
+/*	private int processBuffer(String output)
 		throws Exception
 	{
 		int status = JobStatus.UNKNOWN;
+		System.out.println("searching for job id " + sge_job_id);
 		
 		BufferedReader in = new BufferedReader(new StringReader(output));
 		String str = in.readLine();
 		
 		while (str != null)
 		{
-			StringTokenizer st = new StringTokenizer(str);
-			System.out.println(str);
+			// qstat -f response has ID on token [0] and status on [4]
+			String[] tokens = str.trim().split("\\s+");
 			
-			// What job_id (if any) does this line relate to
-			int id = -1;
-			try { id = Integer.parseInt(st.nextToken()); }
-			catch (Exception e) {}
-			
-			if (id == sge_job_id)
+			if (tokens.length >= 5 && tokens[0].equals(sge_job_id))
 			{
-				// Strip out the status code
-				str = str.substring(38, 44).toLowerCase();
-				System.out.println("  " + str);
-				
 				int newStatus = JobStatus.UNKNOWN;
 				
-				if (str.contains("q"))
+				if (tokens[4].contains("q"))
 					newStatus = JobStatus.QUEUING;
 				// TODO: monitor deletions?
-				if (str.contains("t") || str.contains("r"))
+				if (tokens[4].contains("t") || str.contains("r"))
 					newStatus = JobStatus.RUNNING;
-				if (str.contains("s") || str.contains("h"))
+				if (tokens[4].contains("s") || str.contains("h"))
 					newStatus = JobStatus.HOLDING;
 				
 //				System.out.println("Code is " + str + " (" + newStatus + ")");
@@ -145,6 +132,66 @@ public class SgeClient implements ICluster
 		
 		return status;
 	}
+*/
+	
+	// XML read
+	private int processBuffer(String output)
+		throws Exception
+	{
+		int status = JobStatus.UNKNOWN;
+		
+		BufferedReader in = new BufferedReader(new StringReader(output));
+		String str = in.readLine();
+		
+		while (str != null)
+		{
+			str = str.trim();
+			
+			// What's the job id?
+			if (str.startsWith("<JB_job_number>"))
+			{
+				String id = str.substring(15, str.indexOf("<", 15));
+				
+				// Is this a job we're interested in?
+				if (id.equals(sge_job_id))
+				{
+					// Now keep reading lines until we find the status
+					str = in.readLine();
+					while (str != null)
+					{
+						str = str.trim();
+						
+						if (str.startsWith("<state>"))
+						{
+							String state = str.substring(7, str.indexOf("<", 7));
+							
+							int newStatus = JobStatus.UNKNOWN;
+							if (state.contains("q"))
+								newStatus = JobStatus.QUEUING;
+							else if (state.contains("t") || state.contains("r"))
+								newStatus = JobStatus.RUNNING;
+							else if (state.contains("s") || state.contains("h"))
+								newStatus = JobStatus.HOLDING;
+							
+							if (newStatus > status)
+								status = newStatus;
+							
+							break;
+						}
+						
+						str = in.readLine();
+					}
+				}
+			}
+			
+			str = in.readLine();
+		}
+
+		in.close();
+		
+		return status;
+	}
+
 	
 	/* Deletes the job from the SGE queue. Does not attempt to determine if the
 	 * request to delete was successful or not. Once the command has been sent,
@@ -152,10 +199,10 @@ public class SgeClient implements ICluster
 	 */
 	public void deleteJob(File jobDir)
 	{
-		getJobId(jobDir);
-		
 		try
 		{
+			getJobId(jobDir);
+			
 			ProcessBuilder pb = new ProcessBuilder("qdel", "" + sge_job_id);
 			pb.redirectErrorStream(true);
 		
@@ -164,10 +211,16 @@ public class SgeClient implements ICluster
 		}
 		catch (Exception e)
 		{
-			logger.info("unable to delete job: " + e);
+			logger.warning("unable to delete job: " + e);
 		}
 	}
-
+	
+	public static void main(String[] args)
+		throws Exception
+	{
+		SgeClient client = new SgeClient();
+		System.out.println("status = " + client.getJobStatus(new File(args[0])));
+	}
 }
 
 class SGEStreamReader extends Thread

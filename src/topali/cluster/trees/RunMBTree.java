@@ -8,6 +8,7 @@ package topali.cluster.trees;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -16,6 +17,8 @@ import topali.mod.*;
 
 public class RunMBTree extends Thread
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private SequenceSet ss;
 	private MBTreeResult result;
 	
@@ -48,7 +51,7 @@ public class RunMBTree extends Thread
 		}
 		catch (Exception e)
 		{
-			System.out.println("RunMBTree: " + e);
+			logger.severe(""+e);
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
@@ -57,7 +60,10 @@ public class RunMBTree extends Thread
 		throws Exception
 	{
 		if (result.isRemote)
+		{
+			logger.info("analysis ready: submitting to cluster");
 			MBTreeWebService.runScript(jobDir);
+		}
 		else
 		{
 			ThreadManager manager = new ThreadManager();

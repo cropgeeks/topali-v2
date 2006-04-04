@@ -2,7 +2,6 @@ package topali.gui;
 
 import java.awt.*;
 import java.util.*;
-import java.text.*;
 import javax.swing.*;
 
 import topali.data.*;

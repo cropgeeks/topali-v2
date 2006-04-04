@@ -1,6 +1,7 @@
 package topali.cluster.control;
 
 import java.io.*;
+import java.util.*;
 import java.util.logging.*;
 
 import org.ggf.drmaa.*;
@@ -12,6 +13,10 @@ public class DrmaaClient implements ICluster
 	private static Logger logger = Logger.getLogger("topali.cluster.sge");
 	
 	private static Session session = null;
+	
+	private String jobId;
+	private int arrayStart, arrayEnd, arrayStep;
+	private boolean isArrayJob = false;
 	
 	
 	// "Everything that you as a programmer will do with DRMAA, you will do
@@ -35,6 +40,30 @@ public class DrmaaClient implements ICluster
 				}
 			}));
 		}		
+	}
+	
+	// Reads the jobId from the .SGE_ID file stored in the job's dir which will
+	// be stored as either [id] or [id].[otherdatanotneeded]
+	private void getJobId(File jobDir)
+		throws Exception
+	{
+		String id = ClusterUtils.readFile(new File(jobDir, ".SGE_ID"));
+		id = id.trim();
+				
+		// A simple job
+		if (id.indexOf(".") == -1)
+			jobId = id;
+		// An array job
+		else
+		{
+			StringTokenizer st = new StringTokenizer(id, ".-: ");
+			isArrayJob = true;
+			
+			jobId = st.nextToken();
+			arrayStart = Integer.parseInt(st.nextToken());
+			arrayEnd   = Integer.parseInt(st.nextToken());
+			arrayStep  = Integer.parseInt(st.nextToken());
+		}
 	}
 	
 	public void submitJob(File jobDir, String scriptName)
@@ -80,23 +109,52 @@ public class DrmaaClient implements ICluster
 	
 	public int getJobStatus(File jobDir)
 	{
+		int status = JobStatus.UNKNOWN;
+		
 		try
 		{
-			// Read the jobId from the .SGE_ID file stored in the job's dir
-			String jobId = ClusterUtils.readFile(new File(jobDir, ".SGE_ID"));
-			int status = JobStatus.UNKNOWN;
-			
-			// Query DRMAA for the job's current status
 			initSession();
-			switch (session.getJobProgramStatus(jobId))
+			getJobId(jobDir);			
+			
+			// Simple case: we just need to ask about the jobId
+			if (isArrayJob == false)
+				return getStatus(jobId);
+			// Complicated array job case: we need to ask about every job that
+			// the array can run jobId.[nS] to jobId.[nE]
+			else
+			{
+				for (int i = arrayStart; i <= arrayEnd; i += arrayStep)
+				{				
+					int jobStatus = getStatus(jobId + "." + i);
+					// The status codes are incremental, so a worse status will
+					// override an ok one, setting the overall status to the job
+					// to that of its worst sub task
+					if (jobStatus > status)
+						status = jobStatus;
+				}
+				
+				return status;
+			}
+		}
+		catch (Exception e)
+		{
+			logger.info("can't determine status (" + jobId + "): " + e);
+			return JobStatus.UNKNOWN;
+		}
+	}
+	
+	private int getStatus(String id)
+	{
+		try
+		{
+			// Query DRMAA for the job's current status
+			switch (session.getJobProgramStatus(id))
 			{
 				case Session.UNDETERMINED:
-					status = JobStatus.UNKNOWN;
-					break;
+					return JobStatus.UNKNOWN;
 				
 				case Session.QUEUED_ACTIVE:
-					status = JobStatus.QUEUING;
-					break;
+					return JobStatus.QUEUING;
 				
 				case Session.SYSTEM_ON_HOLD:
 				case Session.USER_ON_HOLD:
@@ -104,29 +162,22 @@ public class DrmaaClient implements ICluster
 				// TODO: split these two into a new group?
 				case Session.SYSTEM_SUSPENDED:
 				case Session.USER_SUSPENDED:
-					status = JobStatus.HOLDING;
-					break;
+					return JobStatus.HOLDING;
 				
 				case Session.RUNNING:
-					status = JobStatus.RUNNING;
-					break;
+					return JobStatus.RUNNING;
 				
 				// TODO: Throw an Exception instead? Or write an error.txt file?
 				case Session.FAILED:
-					status = JobStatus.FATAL_ERROR;
-					break;
+					return JobStatus.FATAL_ERROR;
 				
-				default: status = JobStatus.UNKNOWN;
+				default:
+					return JobStatus.UNKNOWN;
 			}
-			
-//			session.exit();
-			
-//			logger.info("returning SGE status of " + status);
-			return status;
 		}
 		catch (Exception e)
 		{
-			logger.info("can't determine status: " + e);
+//			logger.info("can't determine status (" + id + "): " + e);
 			return JobStatus.UNKNOWN;
 		}
 	}
@@ -135,8 +186,7 @@ public class DrmaaClient implements ICluster
 	{
 		try
 		{
-			// Read the jobId from the .SGE_ID file stored in the job's dir
-			String jobId = ClusterUtils.readFile(new File(jobDir, ".SGE_ID"));
+			getJobId(jobDir);
 			
 			initSession();
 			
@@ -150,7 +200,11 @@ public class DrmaaClient implements ICluster
 	
 	public static void main(String[] args)
 	{
-		try
+		DrmaaClient client = new DrmaaClient();
+		
+		System.out.println(client.getJobStatus(new File(args[0])));
+		
+/*		try
 		{
 			SessionFactory factory = SessionFactory.getFactory();
 			Session session = factory.getSession();
@@ -181,5 +235,6 @@ public class DrmaaClient implements ICluster
 		{
 			e.printStackTrace(System.out);
 		}
+*/
 	}
 }

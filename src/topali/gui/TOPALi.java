@@ -25,31 +25,6 @@ public class TOPALi extends Applet
 	public static void main(String[] args)
 	{ 
 		Logger.getLogger("topali.gui.TOPALi").info("Locale: " + Locale.getDefault());
-		
-		
-		long s = System.currentTimeMillis();
-		
-		
-		for (int i = 0; i < 100; i++)
-		{
-			for (int j = 0; j < 960; j++)
-			{
-				for (int k = 0; k < 50; k++)
-				{
-					double result = Math.random() * Math.random();
-				}
-			}
-		}
-		
-		
-		
-		
-		long e = System.currentTimeMillis();
-		
-		System.out.println("sim time: " + (e-s));
-		
-		
-		
 	
 		Utils.createScratch();
 		
@@ -87,11 +62,7 @@ public class TOPALi extends Applet
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
 			".TOPALiV2.xml"));
 		setProxy();
-		
-		System.out.println("Prefs Locale is " + Prefs.locale);
-		
-		System.out.println("gui_tree_useall: " + Prefs.gui_tree_useall);
-		
+				
 		try
 		{
 			if (Prefs.isWindows)
@@ -190,7 +161,6 @@ public class TOPALi extends Applet
 		// Remove tmp files
 //		Utils.emptyScratch();
 		
-		System.out.println("exit()");
 		
 		// And exit
 		if (isApplet == false)

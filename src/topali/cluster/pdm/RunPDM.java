@@ -8,6 +8,7 @@ package topali.cluster.pdm;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -16,6 +17,8 @@ import topali.mod.*;
 
 public class RunPDM extends Thread
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private SequenceSet ss;
 	private PDMResult result;
 	
@@ -48,7 +51,7 @@ public class RunPDM extends Thread
 		}
 		catch (Exception e)
 		{
-			System.out.println("RunPDM: " + e);
+			logger.severe(""+e);
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
@@ -57,7 +60,10 @@ public class RunPDM extends Thread
 		throws Exception
 	{
 		if (result.isRemote)
+		{
+			logger.info("analysis ready: submitting to cluster");
 			PDMWebService.runScript(jobDir);
+		}
 		else
 		{
 			ThreadManager manager = new ThreadManager();

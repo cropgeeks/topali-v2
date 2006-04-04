@@ -53,6 +53,7 @@ public class SequenceSetNode extends INode
 		aAlgnGoTo.setEnabled(true);
 		
 		aAnlsRunPDM.setEnabled(true);
+		aAnlsRunPDM2.setEnabled(true);
 		aAnlsRunHMM.setEnabled(true);
 		aAnlsRunDSS.setEnabled(true);
 		aAnlsRunLRT.setEnabled(true);

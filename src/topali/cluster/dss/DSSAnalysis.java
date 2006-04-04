@@ -14,7 +14,6 @@ import topali.fileio.*;
 
 class DSSAnalysis extends MultiThread
 {	
-	// The two windows that will be analyzed
 	private SequenceSet ss;
 	
 	// Directory where results will be stored (and temp files worked on)
@@ -34,11 +33,7 @@ class DSSAnalysis extends MultiThread
 	public static void main(String[] args)
 	{ 
 		DSSAnalysis analysis = null;
-		
-		System.out.println(args.length);
-		for (int i = 0; i < args.length; i++)
-			System.out.println("args_" + i + ": " + args[i]);
-		
+				
 		try
 		{
 			analysis = new DSSAnalysis(new File(args[0]));
@@ -46,7 +41,6 @@ class DSSAnalysis extends MultiThread
 		}
 		catch (Exception e)
 		{
-			System.out.println("DSSAnalysis: " + e);
 			ClusterUtils.writeError(new File(analysis.runDir, "error.txt"), e);
 		}
 	}
@@ -72,8 +66,6 @@ class DSSAnalysis extends MultiThread
 	{
 		s = System.currentTimeMillis();
 		long s2 = System.currentTimeMillis();
-		System.out.println("RUN: " + runDir);
-		System.out.println("WRK: " + wrkDir);
 				
 		try
 		{

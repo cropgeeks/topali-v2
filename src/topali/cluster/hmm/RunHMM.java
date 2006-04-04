@@ -6,6 +6,7 @@
 package topali.cluster.hmm;
 
 import java.io.*;
+import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -14,6 +15,8 @@ import topali.mod.*;
 
 public class RunHMM extends Thread
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private SequenceSet ss;
 	private HMMResult result;
 	
@@ -46,6 +49,7 @@ public class RunHMM extends Thread
 		}
 		catch (Exception e)
 		{
+			logger.severe(""+e);
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
@@ -54,7 +58,10 @@ public class RunHMM extends Thread
 		throws Exception
 	{
 		if (result.isRemote)
+		{
+			logger.info("analysis ready: submitting to cluster");
 			HMMWebService.runScript(jobDir);
+		}
 		else
 		{
 			ThreadManager manager = new ThreadManager();

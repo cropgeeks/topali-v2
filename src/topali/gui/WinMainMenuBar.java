@@ -34,7 +34,7 @@ public class WinMainMenuBar extends JMenuBar
 	JMenu mAnls;
 	JMenuItem mAnlsRunPDM, mAnlsRunDSS, mAnlsRunHMM, mAnlsCreateTree,
 		mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove, mAnlsSettings,
-		mAnlsRunLRT;
+		mAnlsRunLRT, mAnlsRunPDM2;
 	
 	JMenu mVamsas;
 	JMenuItem mVamImport, mVamExport;
@@ -56,7 +56,7 @@ public class WinMainMenuBar extends JMenuBar
 		
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
 		aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
-		aAnlsRemove, aAnlsSettings, aAnlsRunLRT;
+		aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2;
 	
 	public static AbstractAction aVamImport, aVamExport;
 	
@@ -201,6 +201,10 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunPDM = new AbstractAction(Text.Gui.getString("aAnlsRunPDM")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAnlsRunPDM(null); } };
+		
+		aAnlsRunPDM2 = new AbstractAction(Text.Gui.getString("aAnlsRunPDM2")) {
+			public void actionPerformed(ActionEvent e) {
+				winMain.menuAnlsRunPDM2(null); } };
 		
 		aAnlsRunHMM = new AbstractAction(Text.Gui.getString("aAnlsRunHMM")) {
 			public void actionPerformed(ActionEvent e) {
@@ -400,6 +404,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls.setMnemonic(KeyEvent.VK_N);
 		
 		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
+		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
@@ -415,6 +420,7 @@ public class WinMainMenuBar extends JMenuBar
 			Icons.SETTINGS);
 		
 		mAnls.add(mAnlsRunPDM);
+//		mAnls.add(mAnlsRunPDM2);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
@@ -553,6 +559,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnGoTo.setEnabled(false);
 		
 		aAnlsRunPDM.setEnabled(false);
+		aAnlsRunPDM2.setEnabled(false);
 		aAnlsRunHMM.setEnabled(false);
 		aAnlsRunDSS.setEnabled(false);
 		aAnlsRunLRT.setEnabled(false);

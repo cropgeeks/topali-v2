@@ -81,7 +81,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 
 		setLayout(new BorderLayout());
 		add(sp, BorderLayout.CENTER);
-		add(annotationsPanel, BorderLayout.SOUTH);
+//		add(annotationsPanel, BorderLayout.SOUTH);
 		
 		// Final setup - ensure the header canvas can compute its height
 		canvas.setCanvasFont();

@@ -368,6 +368,30 @@ public class WinMain extends JFrame
 		submitJob(data, result);
 	}
 	
+	public void menuAnlsRunPDM2(PDMResult iResult)
+	{
+		// Perform an initial check on the data and selected sequences
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		SequenceSet ss = data.getSequenceSet();
+		if (SequenceSetUtils.canRunPDM(ss) == false)
+			return;
+		
+		PDMResult result = new PDMSettingsDialog(this, data, iResult).getPDMResult();
+		if (result == null)
+			return;
+		
+		// TODO: move this (and hmm/dss) into the SettingsDialog for each job type
+		// TODO: increment a counter for PDM2 not PDM(1)
+		int runNum = data.getTracker().getPdmRunCount() + 1;
+		data.getTracker().setPdmRunCount(runNum);
+		result.guiName = "PDM Result " + runNum;
+		result.jobName = "PDM Analysis " + runNum + " on " + data.name + " ("
+			+ ss.getSelectedSequences().length + "/" + ss.getSize()
+			+ " sequences)";
+		
+		submitJob(data, result);
+	}
+	
 	public void menuAnlsRunHMM(HMMResult iResult)
 	{
 		// Perform an initial check on the data and selected sequences

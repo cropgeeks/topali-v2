@@ -1,4 +1,4 @@
-package topali.cluster.pdm;
+package topali.cluster.pdm2;
 
 import java.io.*;
 
@@ -28,11 +28,11 @@ public class PDMWebService extends WebService
 				
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			RunPDM pdm = new RunPDM(jobDir, ss, result);
+			PDMInitializer pdm = new PDMInitializer(jobDir, ss, result);
 			pdm.start();
 			
-			accessLog.info("PDM request from " + jobId);
-			logger.info("PDM request from " + jobId);
+			accessLog.info("PDM2 request from " + jobId);
+			logger.info("PDM2 request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
@@ -47,7 +47,7 @@ public class PDMWebService extends WebService
 	{
 		try
 		{
-			return new CollatePDM(jobDir).getPercentageComplete();
+			return new PDMMonitor(jobDir).getPercentageComplete();
 		}
 		catch (Exception e)
 		{
@@ -63,7 +63,7 @@ public class PDMWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
-			PDMResult result = new CollatePDM(jobDir).getResult();
+			PDMResult result = new PDMMonitor(jobDir).getResult();
 			
 			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);

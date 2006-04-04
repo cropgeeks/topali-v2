@@ -32,10 +32,12 @@ public class LRTWebService extends WebService
 			lrt.start();
 			
 			accessLog.info("LRT request from " + jobId);
+			logger.info("LRT request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -49,6 +51,7 @@ public class LRTWebService extends WebService
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -61,10 +64,13 @@ public class LRTWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
 			LRTResult result = new CollateLRT(jobDir).getResult();
+			
+			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}

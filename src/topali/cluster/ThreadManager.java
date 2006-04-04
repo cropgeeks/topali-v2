@@ -41,4 +41,7 @@ public class ThreadManager
 	
 	public boolean threadsRunning()
 		{ return tokens < maxTokens ? true : false; }
+	
+	public int getMaxTokens()
+		{ return maxTokens; }
 }

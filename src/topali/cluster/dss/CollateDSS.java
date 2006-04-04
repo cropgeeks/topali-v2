@@ -2,12 +2,15 @@ package topali.cluster.dss;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 import topali.data.*;
 import topali.fileio.*;
 
 public class CollateDSS
 {
+	private static Logger logger = Logger.getLogger("topali.cluster");
+	
 	private File jobDir;
 	private DSSResult result;
 	
@@ -29,7 +32,10 @@ public class CollateDSS
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
+		{
+			logger.severe("error.txt generated for " + jobDir.getPath());
 			throw new Exception("DSS error.txt");
+		}
 		
 		float count = 0;
 		int runs = result.runs;
@@ -45,12 +51,12 @@ public class CollateDSS
 				
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
+			{
+				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + i);
 				throw new Exception("DSS error.txt (run " + i + ")");
+			}
 		}
-		
-		System.out.println("runs=" + runs + ", count = " + count);
-		System.out.println("perc=" + ((count / ((float) runs)) * 100));
-		
+				
 		return (count / ((float) runs)) * 100;
 	}
 	

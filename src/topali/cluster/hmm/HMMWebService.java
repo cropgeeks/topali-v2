@@ -31,10 +31,12 @@ public class HMMWebService extends WebService
 			hmm.start();
 			
 			accessLog.info("HMM request from " + jobId);
+			logger.info("HMM request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -48,6 +50,7 @@ public class HMMWebService extends WebService
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(new Exception("getPercentageComplete: " + e));
 		}
 	}
@@ -60,10 +63,13 @@ public class HMMWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
 			HMMResult result = new CollateHMM(jobDir).getResult();
+			
+			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}

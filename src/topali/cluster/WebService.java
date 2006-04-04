@@ -17,13 +17,15 @@ import topali.fileio.*;
  */
 public abstract class WebService
 {
-	protected static Logger accessLog;	
+	protected static Logger accessLog;
+	protected static Logger logger = Logger.getLogger("topali.cluster");
+	
 	protected static WebXmlProperties props;
 	
 	protected static String javaPath, topaliPath;
 	protected static String scriptsDir, scriptsHdr;
 	
-	static boolean DRMAA = true;
+	static boolean DRMAA = false;
 	
 	protected WebService()
 	{
@@ -116,11 +118,13 @@ public abstract class WebService
 			
 			// Progress...
 			float progress = getPercentageComplete(jobDir);
-			int status = JobStatus.UNKNOWN;
+			logger.info(jobId + " at " + progress + " % complete");
 			
 			// Status (assuming Job is actually in the SGE queue)...
+			int status = JobStatus.UNKNOWN;
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
 			status = cluster.getJobStatus(jobDir);
+			logger.info(jobId + " at status (code) " + status);
 			
 			// TODO: Find out WTF qstat won't always return the state
 			// TODO: Following not suitable for SGE 5.3		
@@ -131,6 +135,7 @@ public abstract class WebService
 		}
 		catch (Exception e)
 		{
+			logger.warning(""+e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -140,7 +145,7 @@ public abstract class WebService
 		File jobDir = new File(getParameter("job-dir"), jobId);
 		
 		// TODO: SGE Job deletion error checking and security
-		ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
+		ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 		cluster.deleteJob(jobDir);
 		
 		// Wait a minute before attempting to cleanup (to give SGE time to qdel)
@@ -161,5 +166,7 @@ public abstract class WebService
 	{
 		File jobDir = new File(getParameter("job-dir"), jobId);
 		ClusterUtils.emptyDirectory(jobDir, true);
+		
+		logger.info("cleaning up and removing files for " + jobId);
 	}
 }

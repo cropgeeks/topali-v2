@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.print.*;
+import java.util.*;
 import javax.swing.*;
 
 import pal.tree.*;
@@ -29,6 +30,7 @@ class TreePanel extends JPanel
 	
 	private JScrollPane sp;
 	private JTextArea txtNewHamp;
+	private NameColouriser nc;
 	
 	TreeCanvas canvas;
 	TreePanelToolBar toolbar;	
@@ -41,6 +43,7 @@ class TreePanel extends JPanel
 		
 		palTree = tree.getDisplayablePALTree(ss);
 		createNewHampshireText();
+		createNameColouriser();
 		
 		// Initialise the GUI controls
 		canvas = new TreeCanvas(palTree);
@@ -66,11 +69,35 @@ class TreePanel extends JPanel
 		catch (Exception e) {}
 	}
 	
+	// Uses SequenceCluster information to create a PAL NameColouriser object
+	// that can be used to colour each sequence in the tree according to the
+	// cluster that it belongs to.
+	private void createNameColouriser()
+	{
+		if (tree.getClusters() == null)
+			return;
+		
+		nc = new NameColouriser();
+		int i = 0;
+		
+		for (SequenceCluster cluster: tree.getClusters())
+		{
+			Color c = Utils.getColor(i);
+			for (String seq: cluster.getSequences())
+				nc.addMapping(seq, c);
+			
+			i++;
+		}
+	}
+	
 	TreeResult getTreeResult()
 		{ return tree; }
 	
 	Tree getPalTree()
 		{ return palTree; }
+	
+	SequenceSet getSequenceSet()
+		{ return ss; }
 	
 	BufferedImage getSavableImage()
 		{ return canvas.getSavableImage(); }
@@ -97,6 +124,12 @@ class TreePanel extends JPanel
 		}
 	}
 	
+	void setClusters(LinkedList<SequenceCluster> clusters)
+	{
+		tree.setClusters(clusters);
+		createNameColouriser();
+	}
+	
 	// Internal canvas class that actually handles the painting of the palTree
 	class TreeCanvas extends JPanel implements Printable
 	{
@@ -106,16 +139,6 @@ class TreePanel extends JPanel
 		TreeCanvas(Tree njTree)
 			{ setTree(njTree); }
 		
-/*		void setNameColouriser(NameColouriser newColoriser)
-		{
-			if (newColoriser != null)
-			{
-				nc = newColoriser;
-				painter.setUsingColor(false);
-				painter.setColouriser(nc);
-			}			
-		}
-*/
 		
 		void setTree(Tree newTree)
 		{
@@ -124,10 +147,11 @@ class TreePanel extends JPanel
 			else
 				painter = new TreePainterNormal(newTree, "", false);
 			
-//			setNameColouriser(nc);
-
 			painter.setUsingColor(false);
-			painter.setColouriser(ss.getNameColouriser(Prefs.gui_color_seed));
+			if (nc == null)
+				painter.setColouriser(ss.getNameColouriser(Prefs.gui_color_seed));
+			else
+				painter.setColouriser(nc);
 			
 			dimension = new Dimension(painter.getPreferredSize().width + 50,
 				painter.getPreferredSize().height + 50);
