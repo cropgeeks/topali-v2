@@ -1,10 +1,13 @@
-6
+7
 
 Release History:
 
 [NF] = New Feature
 [BF] = Bug Fix
 [SC] = Source Code
+
+  - [NF] Added client-side support for server-side gzip compression, reducing
+    the amount of data sent between client and server.
 
 05-04-2006 - Release 2.06
   - [BF] The web proxy port option in the settings dialog was not being
