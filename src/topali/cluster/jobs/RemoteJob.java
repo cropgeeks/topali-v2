@@ -8,6 +8,7 @@ package topali.cluster.jobs;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.client.*;
+import org.apache.axis.transport.http.*;
 
 import topali.cluster.*;
 import topali.gui.*;
@@ -43,6 +44,7 @@ public abstract class RemoteJob extends AnalysisJob
 				call.setTargetEndpointAddress(new java.net.URL(url));
 				call.setMaintainSession(true);
 				call.setTimeout(60000);
+				call.setProperty(HTTPConstants.MC_ACCEPT_GZIP, Boolean.TRUE);
 			}
 			catch (Exception exception)
 			{

@@ -30,7 +30,7 @@ class UpdateChecker extends Thread
 	{
 		try
 		{
-			URL url = new URL("http://www.bioss.ac.uk/~iainm/topali/version2.txt");
+			URL url = new URL("http://www.bioss.ac.uk/knowledge/topali/version.txt");
 			URLConnection uc = url.openConnection();
 			
 			BufferedReader in = new BufferedReader(
@@ -51,7 +51,7 @@ class UpdateChecker extends Thread
 		if (webVersion > RELEASE)
 		{
 			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
-				+ "<b>http://www.bioss.ac.uk/software.html</b> to obtain it.</html>";
+				+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
 			
 			MsgBox.msg(msg, MsgBox.INF);
 		}
@@ -64,6 +64,6 @@ class UpdateChecker extends Thread
 	static void helpAbout()
 	{
 		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n30th March 2006 - release 2.06", MsgBox.INF);
+			+ " Scotland\n5th April 2006 - release 2.06", MsgBox.INF);
 	}
 }

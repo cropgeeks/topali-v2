@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>   
-<jnlp codebase="http://www.bioss.ac.uk/~iainm/topali/webstart" href="topali.jnlp">
+<jnlp codebase="http://www.bioss.ac.uk/knowledge/topali/webstart" href="topali.jnlp">
 	<information>
 		<title>TOPALi v2</title>
 		<vendor>Biomathematics & Statistics Scotland</vendor>
@@ -8,7 +8,9 @@
 		<j2se version="1.5+"/>
 		<jar href="axis.jar"/>
 		<jar href="castor-1.0M2-xml.jar"/>
+		<jar href="commons-codec1-2.jar"/>
 		<jar href="commons-discovery-0.2.jar"/>
+		<jar href="commons-httpclient-3.0.jar"/>
 		<jar href="commons-logging-1.0.4.jar"/>
 		<jar href="doe.jar"/>
 		<jar href="jaxrpc.jar"/>

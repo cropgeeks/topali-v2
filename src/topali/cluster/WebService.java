@@ -120,6 +120,9 @@ public abstract class WebService
 			float progress = getPercentageComplete(jobDir);
 			logger.info(jobId + " at " + progress + " % complete");
 			
+			if (progress == 100f)
+				return Castor.getXML(new JobStatus(100, JobStatus.COMPLETING));
+			
 			// Status (assuming Job is actually in the SGE queue)...
 			int status = JobStatus.UNKNOWN;
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();

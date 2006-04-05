@@ -1,42 +1,117 @@
-<h3>What's New in TOPALi</h3>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="Description" content="Site of the Biomathematics and Statistics Scotland Research Institution" />
+<meta name="Keyword" content="mathematics, statistics, bioinformatics, biometrics, biological research, consultancy, postgraduate training" />
+<title>BioSS-Knowledge:Software-What's New in TOPALi v2</title>
+<link rel="stylesheet" type="text/css" href="/biossmain.css" />
+</head>
+
+<body>
+<div id="container">
+<!--#include virtual="/headerbar.html" -->
+<!--#include virtual="/menu.html" -->
+<div id="content">
+
+<h1>KNOWLEDGE TRANSFER : TOPALi v2</h1>
+<h2 class="trainh2">What's New in TOPALi</h2>
 
 <p>TOPALi v2 is an ongoing project, and as such the software is updated often. Below is a list
-of new or interesting features that have been added to the application.</p>
+of new or interesting features that have been added to the application in recent days, weeks,
+months... (newest additions at the bottom).</p>
 
-<hr>
+<p class="trainline"></p>
 
 <p><b>New and improved graphical user interface</b>
 <p>TOPALi v2 sports an entirely new graphical user interface that has been redesigned from scratch
 to improve upon the original TOPALi's interface. On Windows, the interface blends in with Office
 using the Office Look and Feel, while on Unix or Linux the popular JGoodies "Looks" is used.</p>
-<p><img src="new_interface_office.png"></p>
+<p>
+<img src="new_interface_office.png" alt="TOPALi screenshot">
+<img src="new_interface_looks.png" alt="TOPALi screenshot">
+</p>
 
-<p>&nbsp;</p><hr>
+<p>&nbsp;</p><p class="trainline"></p>
 
 <p><b>Work with multiple, multiple alignments</b>
 <p>A TOPALi project can now import and deal with as many DNA/Protein alignments as your PC has
 memory for. Each alignment in listed in a new "tree" view down the left-hand side of the screen,
 along with all the analysis results that relate to that dataset.</p>
-<p><img src="new_interface_office.png"></p>
+<p><img src="multiple_alignments.png" alt="TOPALi screenshot"></p>
 
-<p>&nbsp;</p><hr>
+<p>&nbsp;</p><p class="trainline"></p>
+
+<p><b>XML based project structure</b>
+<p>TOPALi now uses a XML based structure for its project files (which are stored compressed),
+allowing for better compatibility with other programs that want to share its data.</p>
+<p><img src="xml.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
+
+<p><b>Run analysis jobs remotely on high-performance computing clusters</b>
+<p>TOPALi now runs its main analysis jobs on remote HPC clusters, which frees up your PC for
+other tasks while you wait on results. You can submit more than one job at a time too, and
+they'll queue up for running later if no slots are currently available on the cluster.</p>
+<p><img src="jobs.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
+
 
 <p><b>Monitor analysis jobs while working elsewhere</b>
 <p>As your analysis jobs run (either locally or remotely) their status is continually tracked
 by TOPALi and displayed in the status bar. A coloured icon represents overal job status - green
 for OK, blue for communication errors, and red for critical job errors!</p>
-<p><img src="status_monitoring.png"></p>
+<p><img src="status_monitoring.png" alt="TOPALi screenshot"></p>
 
-<p>&nbsp;</p><hr>
+<p>&nbsp;</p><p class="trainline"></p>
 
 <p><b>Integrated JavaHelp user manual</b>
 <p>The user manual for TOPALi v2 is now integrated into the application in JavaHelp format,
 allowing you to easily move between help sections or to print areas of interest.</p>
-<p><img src="javahelp.png"></p>
+<p><img src="javahelp1.png" alt="TOPALi screenshot"></p>
 
-<p>&nbsp;</p><hr>
+<p>All TOPALi dialogs now have access to the help system directly from the dialog, which will
+jump you straight to the relevant section of help for that dialog.</p>
+<p><img src="javahelp2.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
 
 <p><b>TOPALi Tips!</b>
 <p>Each area of the TOPALi interface now comes with tips to help you work more effectivly with
 it, requiring less visits to the help system to learn to use the program.</p>
-<p><img src="topali_tips.png"></p>
+<p><img src="topali_tips.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
+
+<p><b>Alignment Overviews</b>
+<p>Using the Alignment Overview feature you can view the entire alignment in a floating
+window while still working with a close up area in detail. Scrolling around the overview
+automatically moves the main display too.</p>
+<p><img src="overview.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
+
+<p><b>Floating Tree Tooltips</b>
+<p>By using floating tree tooltips, you can instantly view a phylogenetic tree of the area
+currently under the mouse cursor.</p>
+<p><img src="tree_tooltips1.png" alt="TOPALi screenshot"></p>
+<p>Enable the feature (on a per-graph basis) using the toolbar button for that graph</p>
+<p><img src="tree_tooltips2.png" alt="TOPALi screenshot"></p>
+
+<p>&nbsp;</p><p class="trainline"></p>
+
+<p>Still to document...</p>
+<ul>
+<li>local jobs</li>
+<li>dragging and dropping</li>
+<li>recombination methods (lrt)</li>
+<li>web services</li>
+<li>hide/dim sequences</li>
+<li>parallel code</li>
+
+<!--#include virtual="/topmenu.html" -->
+</div><!-- end content div -->
+</div><!-- end container div -->
+</body>
+</html>

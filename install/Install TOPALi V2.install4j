@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="3.2.1">
   <directoryPresets config=".." />
-  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.05" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
+  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.06" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
     <searchSequence>
       <registry />
       <envVar name="JAVA_HOME" />
@@ -84,7 +84,6 @@
         <entry location="src" launcher="false" />
         <entry location="web/.svn" launcher="false" />
         <entry location="web/binaries" launcher="false" />
-        <entry location="web/scripts" launcher="false" />
         <entry location="web/WEB-INF/.svn" launcher="false" />
         <entry location="web/WEB-INF/deploy.bat" launcher="false" />
         <entry location="web/WEB-INF/deploy.sh" launcher="false" />
