@@ -82,7 +82,8 @@ class HMMAnalysis extends MultiThread
 		}
 		catch (Exception e)
 		{
-			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
+			if (e.getMessage().equals("cancel") == false)
+				ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);		

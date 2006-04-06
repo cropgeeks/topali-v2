@@ -12,6 +12,7 @@ import java.io.*;
 import javax.swing.*;
 
 import topali.analyses.*;
+import topali.cluster.*;
 import topali.data.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.hmm.*;
@@ -119,6 +120,9 @@ public class WinMain extends JFrame
 					return false;
 			}
 		}
+		
+		// Cancels all locally running jobs, regardless of project status
+		LocalJobs.cancelAll();
 		
 		return true;
 	}

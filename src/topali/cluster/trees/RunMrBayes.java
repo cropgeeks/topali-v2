@@ -10,25 +10,28 @@ import java.io.*;
 import topali.cluster.*;
 import topali.data.*;
 
-class RunMrBayes
+class RunMrBayes extends StoppableProcess
 {
 	private File wrkDir;
-	private MBTreeResult result;
-	
+			
 	RunMrBayes(File wrkDir, MBTreeResult result)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
+		
+		runCancelMonitor();
 	}
 	
 	void run()
 		throws Exception
 	{		
-		ProcessBuilder pb = new ProcessBuilder(result.mbPath, "mb.nex");
+		MBTreeResult mbResult = (MBTreeResult) result;
+	
+		ProcessBuilder pb = new ProcessBuilder(mbResult.mbPath, "mb.nex");
 		pb.directory(wrkDir);
 		pb.redirectErrorStream(true);
 		
-		Process proc = pb.start();
+		proc = pb.start();
 						
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(
 			proc.getOutputStream()));
@@ -39,8 +42,11 @@ class RunMrBayes
 		writer.close();
 		
 		try { proc.waitFor(); }
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			System.out.println(e);
+			if (LocalJobs.isRunning(result.jobId) == false)
+				throw new Exception("cancel");
 		}
 	}
 }

@@ -93,6 +93,8 @@ public class DSS
 		// Use the forward or the backward score?
 		double dss = (dss_f > dss_b) ? dss_f : dss_b;
 		
+		System.out.println("result.id = " + result.jobId);
+		
 		return dss;
 	}
 	

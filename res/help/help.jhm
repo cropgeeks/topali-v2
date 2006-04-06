@@ -8,6 +8,7 @@
    <mapID target="quickstart" url="html/quickstart.html" />
    
    <mapID target="license" url="html/license.html" />
+   <mapID target="privacy" url="html/privacy.html" />
    
    <mapID target="projects" url="html/projects.html" />
    

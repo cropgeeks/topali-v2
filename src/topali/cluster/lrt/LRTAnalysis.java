@@ -90,8 +90,8 @@ class LRTAnalysis extends MultiThread
 			
 			for (int i = 0;  i < data.length; i++, pos += step, w += step)
 			{
-				if (i % 100 == 0)
-					System.out.println(i);
+				if (LocalJobs.isRunning(result.jobId) == false)
+					throw new Exception("cancel");
 				
 				new File(wrkDir, "window" + (i+1)).mkdir();
 				
@@ -125,7 +125,8 @@ class LRTAnalysis extends MultiThread
 		}
 		catch (Exception e)
 		{
-			ClusterUtils.writeError(new File(runDir, "error.txt"), e);
+			if (e.getMessage().equals("cancel") == false)
+				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);		

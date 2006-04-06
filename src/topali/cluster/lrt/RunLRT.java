@@ -62,13 +62,16 @@ public class RunLRT extends Thread
 	private void runAnalyses()
 		throws Exception
 	{
-		ThreadManager manager = new ThreadManager(1);
+		ThreadManager manager = new ThreadManager();
 		
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 		
 		for (int i = 1; i <= result.runs; i++)
 		{
+			if (LocalJobs.isRunning(result.jobId) == false)
+				return;
+			
 			File runDir = new File(jobDir, "run" + i);
 			runDir.mkdirs();
 			

@@ -42,8 +42,11 @@ public abstract class RemoteJob extends AnalysisJob
 				call = (Call) service.createCall();
 		
 				call.setTargetEndpointAddress(new java.net.URL(url));
-				call.setMaintainSession(true);
+//				call.setMaintainSession(true);
 				call.setTimeout(60000);
+				
+				// Compress transfer (if possible)
+//				call.setProperty(HTTPConstants.MC_GZIP_REQUEST, Boolean.TRUE);
 				call.setProperty(HTTPConstants.MC_ACCEPT_GZIP, Boolean.TRUE);
 			}
 			catch (Exception exception)

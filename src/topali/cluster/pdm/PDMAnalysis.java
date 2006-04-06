@@ -68,17 +68,15 @@ class PDMAnalysis extends MultiThread
 			
 			
 			Jambe2 jambe = new Jambe2(jobDir, wrkDir, result, ss.getLength());
-			if (jambe.run())
-				System.out.println("jambe.run() ok");
-			else
-				System.out.println("jambe.run() FAILED");
+			jambe.runJambe();
 			
 			// And the results collated
 			getResults(jambe);
 		}
 		catch (Exception e)
 		{
-			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
+			if (e.getMessage().equals("cancel") == false)
+				ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);		

@@ -93,11 +93,6 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			result.bambePath = Utils.getLocalPath() + "bambe.exe";
 			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";
 		}
-		else if (Prefs.isMacOSX)
-		{
-			result.bambePath = Utils.getLocalPath() + "bambe";
-			result.treeDistPath = Utils.getLocalPath() + "treedist";
-		}
 		else
 		{
 			result.bambePath = Utils.getLocalPath() + "bambe/bambe";

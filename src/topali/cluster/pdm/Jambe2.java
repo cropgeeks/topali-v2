@@ -9,6 +9,7 @@ import java.io.*;
 import java.awt.*;
 import java.util.*;
 
+import topali.cluster.*;
 import topali.data.*;
 
 public class Jambe2
@@ -80,132 +81,123 @@ public class Jambe2
 		}
 	}
 
-	public boolean run()
+	public void runJambe()
+		throws Exception
 	{
-		try
-		{
-			// Number of Bambe runs required
-			int total = getTotal();
+		// Number of Bambe runs required
+		int total = getTotal();
+	
+		int nLast;
+		ExtractTopos oExtractTopos= new ExtractTopos(wrkDir, nDiscard);
 		
-			int nLast;
-			ExtractTopos oExtractTopos= new ExtractTopos(wrkDir, nDiscard);
-			
-			// Read in the number of base pairs from the alignment
-			oPhyloData = new PhyloData(wrkDir, 10,10); //dummy instantiation
-			oPhyloData.select();
-			nLast = oPhyloData.showLengthDNA()-windowSize-1;			
-			
-			// Error checking...
-			if (nLast < nFirst)
-				throw new JambeException("J01: The current settings for window "
-					+ "size and step size are not suitable for running an "
-					+ "analysis. Try lowering the window size.");
-					
-			if (total < 2)
-				throw new JambeException("J02: The current settings for window "
-					+ "size and step size do not allow for more than one "
-					+ "window location.");
-			
-			
-			// Initialize an array to hold each window pair's local statistic value
-			oEntropy.createLocalArray(total-1);
-//			oEntropy.setHistogramPanel(dialog.getHistogramPanel());
-			
-			// Instantiate an object to compute the autocorrelation time
-			oAutoCorrelationTime = new AutoCorrelationTime(wrkDir, result);
-	
-			RunBambe oRunBambe = new RunBambe(wrkDir);	
-	
-			// Now start with the program ...
-			for (int i = 0; i < total; i++)
-			{				
-				// Read window from the alignment
-				oPhyloData = new PhyloData(wrkDir, (i*stepSize)+1, windowSize);
-				oPhyloData.select();
+		// Read in the number of base pairs from the alignment
+		oPhyloData = new PhyloData(wrkDir, 10,10); //dummy instantiation
+		oPhyloData.select();
+		nLast = oPhyloData.showLengthDNA()-windowSize-1;			
+		
+		// Error checking...
+		if (nLast < nFirst)
+			throw new JambeException("J01: The current settings for window "
+				+ "size and step size are not suitable for running an "
+				+ "analysis. Try lowering the window size.");
 				
-				// Let the dialog know the current window position
-				int n1 = (i * stepSize) + 1;
-				int n2 = n1 + windowSize - 1;
+		if (total < 2)
+			throw new JambeException("J02: The current settings for window "
+				+ "size and step size do not allow for more than one "
+				+ "window location.");
+		
+		
+		// Initialize an array to hold each window pair's local statistic value
+		oEntropy.createLocalArray(total-1);
+//			oEntropy.setHistogramPanel(dialog.getHistogramPanel());
+		
+		// Instantiate an object to compute the autocorrelation time
+		oAutoCorrelationTime = new AutoCorrelationTime(wrkDir, result);
+
+		RunBambe oRunBambe = new RunBambe(wrkDir);	
+
+		// Now start with the program ...
+		for (int i = 0; i < total; i++)
+		{				
+			if (LocalJobs.isRunning(result.jobId) == false)
+				throw new Exception("cancel");
+		
+			// Read window from the alignment
+			oPhyloData = new PhyloData(wrkDir, (i*stepSize)+1, windowSize);
+			oPhyloData.select();
+			
+			// Let the dialog know the current window position
+			int n1 = (i * stepSize) + 1;
+			int n2 = n1 + windowSize - 1;
 //				if (updateGUI)
 //					dialog.setValue(i, n1, n2);
 //				else
 //					dialog.setValue(count * total + i);
-				
-				// Run Bambe;
-				oRunBambe.runBambe();
-				
-				// Extract topologies
-				if (!oExtractTopos.addTopo(writeToFile))
-					return false;
-				
-				
-				/////
+			
+			// Run Bambe;
+			oRunBambe.runBambe();
+			
+			// Extract topologies
+			if (!oExtractTopos.addTopo(writeToFile))
+				throw new JambeException("oExtractTopos.addTopo failed");
+			
+			
+			/////
 /*				if (updateGUI)
-				{
-					oEntropy = computeEntropy(oExtractTopos, i);
-					if (oEntropy == null)
-						return false;
-				
-					dialog.getLocalGraph().setData(
-						oEntropy.getLocalData(), n1 + stepSize);
-				}
+			{
+				oEntropy = computeEntropy(oExtractTopos, i);
+				if (oEntropy == null)
+					return false;
+			
+				dialog.getLocalGraph().setData(
+					oEntropy.getLocalData(), n1 + stepSize);
+			}
 */				/////
-							
-				// Compute autocorrelation time
-				oAutoCorrelationTime.addACT();
-				
-				
-				// We set the percentage as i/total. i starts as 0 so will
-				// always be one less than the actual value - this allows us to
-				// make the "pruning" step the final 1% of any job
-				setPercent((int)(i/(float)total*100));
-			}
-			
-			if (result.pdm_prune)
-			{
-				System.out.println("Starting pruning...");
-				long s = System.currentTimeMillis();
-				PrunePDM prune = new PrunePDM(wrkDir, result, oEntropy, 6);
-				prune.doPruning();
-				if (prune.exception != null)
-					throw prune.exception;
-				System.out.println("Pruned in " + (System.currentTimeMillis()-s));
-			}
-
-			
-			// If we're not updating the GUI (ie, if this run formed part of a
-			// threshold run, then the Entropy calculations can just be run
-			// once)
-//			if (!updateGUI)
-			{
-				for (int i = 0; i < total; i++)
-				{
-					oEntropy = computeEntropy(oExtractTopos, i);
-					if (oEntropy == null)
-						return false;
-				}
-			}
-			
-			// Kullback-Leibler divergence
-			oKullback= new Kullback(wrkDir, oEntropy);
-			oKullback.doItAll();
-			
-			// Compute average autocorrelation time
-			oAutoCorrelationTime.printOutAll(); // all the individual ACTs
-			oAutoCorrelationTime.printOutResults();
 						
-			N = oAutoCorrelationTime.effectiveSampleSizeApprox();
-		}
-		catch (Exception e)
-		{
-			System.out.println("###");
-			e.printStackTrace(System.out);
-			System.out.println("###");
-					
-			return false;
+			// Compute autocorrelation time
+			oAutoCorrelationTime.addACT();
+			
+			
+			// We set the percentage as i/total. i starts as 0 so will
+			// always be one less than the actual value - this allows us to
+			// make the "pruning" step the final 1% of any job
+			setPercent((int)(i/(float)total*100));
 		}
 		
-		return true;
+		if (result.pdm_prune)
+		{
+			System.out.println("Starting pruning...");
+			long s = System.currentTimeMillis();
+			PrunePDM prune = new PrunePDM(wrkDir, result, oEntropy, 6);
+			prune.doPruning();
+			if (prune.exception != null)
+				throw prune.exception;
+			System.out.println("Pruned in " + (System.currentTimeMillis()-s));
+		}
+
+		
+		// If we're not updating the GUI (ie, if this run formed part of a
+		// threshold run, then the Entropy calculations can just be run
+		// once)
+//			if (!updateGUI)
+		{
+			for (int i = 0; i < total; i++)
+			{
+				oEntropy = computeEntropy(oExtractTopos, i);
+				if (oEntropy == null)
+					throw new JambeException("oEntropy is null");
+			}
+		}
+		
+		// Kullback-Leibler divergence
+		oKullback= new Kullback(wrkDir, oEntropy);
+		oKullback.doItAll();
+		
+		// Compute average autocorrelation time
+		oAutoCorrelationTime.printOutAll(); // all the individual ACTs
+		oAutoCorrelationTime.printOutResults();
+					
+		N = oAutoCorrelationTime.effectiveSampleSizeApprox();
 	}
 		
 	public float[] getKullbackMean()

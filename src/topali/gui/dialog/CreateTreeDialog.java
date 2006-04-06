@@ -152,8 +152,6 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		// Path to MrBayes
 		if (Prefs.isWindows)
 			tr.mbPath = Utils.getLocalPath() + "mb.exe";
-		else if (Prefs.isMacOSX)
-			tr.mbPath = Utils.getLocalPath() + "mb";
 		else
 			tr.mbPath = Utils.getLocalPath() + "mrbayes/mb";
 		

@@ -5,9 +5,8 @@ import java.io.*;
 import topali.cluster.*;
 import topali.data.*;
 
-class RunBarce
+class RunBarce extends StoppableProcess
 {
-	private HMMResult result;
 	private File wrkDir, jobDir;
 	
 	RunBarce(HMMResult result, File wrkDir, File jobDir)
@@ -15,16 +14,20 @@ class RunBarce
 		this.result = result;
 		this.wrkDir = wrkDir;
 		this.jobDir = jobDir;
+		
+		runCancelMonitor();
 	}
-	
+		
 	void runBarce()
 		throws Exception
 	{
-		ProcessBuilder pb = new ProcessBuilder(result.barcePath);
+		HMMResult hmmResult = (HMMResult) result;
+				
+		ProcessBuilder pb = new ProcessBuilder(hmmResult.barcePath);
 		pb.directory(wrkDir);
 		pb.redirectErrorStream(true);
 		
-		Process proc = pb.start();
+		proc = pb.start();
 		
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(
 			proc.getOutputStream()));
@@ -37,44 +40,44 @@ class RunBarce
 		// Model settings
 		writer.println("1");
 				
-		if (result.hmm_model.equals("JC+gaps"))
+		if (hmmResult.hmm_model.equals("JC+gaps"))
 			writer.println("m");
-		else if (result.hmm_model.equals("K2P+gaps"))
+		else if (hmmResult.hmm_model.equals("K2P+gaps"))
 		{
 			writer.println("m");
 			writer.println("m");
 		}
-		else if (result.hmm_model.equals("F81+gaps"))
+		else if (hmmResult.hmm_model.equals("F81+gaps"))
 		{
 			writer.println("m");
 			writer.println("m");
 			writer.println("m");
 		}
 		
-		if (result.hmm_initial.equals("No"))
+		if (hmmResult.hmm_initial.equals("No"))
 		{
 			writer.println("e");
 		
 			writer.println("f");
 			writer.println("y");
-			writer.println(result.hmm_freq_est_1 + " "
-				+ result.hmm_freq_est_2 + " "
-				+ result.hmm_freq_est_3 + " "
-				+ result.hmm_freq_est_4);
+			writer.println(hmmResult.hmm_freq_est_1 + " "
+				+ hmmResult.hmm_freq_est_2 + " "
+				+ hmmResult.hmm_freq_est_3 + " "
+				+ hmmResult.hmm_freq_est_4);
 		}
 		
-		if (result.hmm_transition.equals("No"))
+		if (hmmResult.hmm_transition.equals("No"))
 			writer.println("r");
 		
 //			writer.println("p");
-//			writer.println(result.hmm_freq_1 + " " + result.hmm_freq_2 + " "
-//				+ result.hmm_freq_3);
+//			writer.println(hmmResult.hmm_freq_1 + " " + hmmResult.hmm_freq_2 + " "
+//				+ hmmResult.hmm_freq_3);
 		
 		writer.println("d");
-		writer.println(result.hmm_difficulty);
+		writer.println(hmmResult.hmm_difficulty);
 		
 		////////////////////////////
-//		if (result.hmm_use_mosaic)
+//		if (hmmResult.hmm_use_mosaic)
 			writer.println("j");
 		////////////////////////////
 		
@@ -86,38 +89,38 @@ class RunBarce
 		writer.println("2");
 		
 		writer.println("b");
-		writer.println(result.hmm_burn);
+		writer.println(hmmResult.hmm_burn);
 		
 		writer.println("n");
-		writer.println(result.hmm_points);
+		writer.println(hmmResult.hmm_points);
 		
 		writer.println("i");
-		writer.println(result.hmm_thinning);
+		writer.println(hmmResult.hmm_thinning);
 		
 		writer.println("c");
-		writer.println(result.hmm_tuning);
+		writer.println(hmmResult.hmm_tuning);
 		
-		if (result.hmm_lambda.equals("No"))
+		if (hmmResult.hmm_lambda.equals("No"))
 			writer.println("w");
 		else
 		{
-			if (result.hmm_annealing.equals("PAR"))
+			if (hmmResult.hmm_annealing.equals("PAR"))
 				writer.println("q");
-			else if (result.hmm_annealing.equals("PROB"))
+			else if (hmmResult.hmm_annealing.equals("PROB"))
 			{
 				writer.println("q");
 				writer.println("q");
 			}
 		}
 		
-		if (result.hmm_station.equals("No"))
+		if (hmmResult.hmm_station.equals("No"))
 			writer.println("u");
 		
-		if (result.hmm_update.equals("No"))
+		if (hmmResult.hmm_update.equals("No"))
 			writer.println("a");
 		
 		writer.println("o");
-		writer.println(result.hmm_branch);
+		writer.println(hmmResult.hmm_branch);
 		
 		writer.println("x");
 		writer.flush();
@@ -130,9 +133,14 @@ class RunBarce
 		System.out.println("ALL SETTINGS SENT");
 
 		try { proc.waitFor(); }
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			System.out.println(e);
+			if (LocalJobs.isRunning(result.jobId) == false)
+				throw new Exception("cancel");
 		}
+		
+		isRunning = false;
 	}
 	
 	// This is an extension of the normal StreamCatcher that deals with Barce's

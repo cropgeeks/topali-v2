@@ -9,7 +9,7 @@ import javax.swing.event.*;
 import doe.*;
 
 import topali.data.*;
-import static topali.cluster.JobStatus.*;
+import topali.cluster.*;
 import topali.cluster.jobs.*;
 
 public class JobsPanel extends JPanel
@@ -246,11 +246,6 @@ public class JobsPanel extends JPanel
 	{
 		JobsPanelEntry entry = (JobsPanelEntry) list.getSelectedValue();
 		
-		if (entry.getJob().getResult().isRemote == false)
-		{
-			MsgBox.msg("Only remotely running jobs can be cancelled (for now).\nTODO: Cancel local jobs", MsgBox.WAR);
-			return;
-		}
 		
 		// Warn the user...
 		String msg = "Are you sure you wish to cancel this job?";
@@ -260,9 +255,9 @@ public class JobsPanel extends JPanel
 		// Then send the cancel request...
 		int status = entry.getJob().getStatus();
 		
-		if (status != COMPLETING && status != COMPLETED)
+		if (status != JobStatus.COMPLETING && status != JobStatus.COMPLETED)
 		{
-			entry.getJob().setStatus(CANCELLING);
+			entry.getJob().setStatus(JobStatus.CANCELLING);
 			entry.updateStatus();
 		
 			jobsThread.interrupt();
@@ -274,6 +269,10 @@ public class JobsPanel extends JPanel
 	public void createJob(AnalysisResult result, AlignmentData data)
 	{
 		AnalysisJob job = null;
+		
+		// Reset any local jobs to a status of STARTING so that they DO restart
+		if (result.isRemote == false)
+			result.status = JobStatus.STARTING;
 		
 		// PDM jobs
 		if (result instanceof PDMResult)

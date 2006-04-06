@@ -22,6 +22,8 @@ public class PDM2LocalJob extends AnalysisJob
 		result.tmpDir = Prefs.tmpDir.getPath();
 		
 		jobDir = new File(Prefs.tmpDir, result.jobId);
+		
+		LocalJobs.addJob(result.jobId);
 	}
 	
 	public String ws_submitJob()
@@ -63,9 +65,12 @@ public class PDM2LocalJob extends AnalysisJob
 	{
 		ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
+		
+		LocalJobs.delJob(result.jobId);
 	}
 	
 	public void ws_cancelJob()
 	{
+		LocalJobs.cancelJob(result.jobId);
 	}
 }

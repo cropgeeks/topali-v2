@@ -96,8 +96,6 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		
 		if (Prefs.isWindows)
 			result.fitchPath = Utils.getLocalPath() + "fitch.exe";
-		else if (Prefs.isMacOSX)
-			result.fitchPath = Utils.getLocalPath() + "fitch";
 		else
 			result.fitchPath = Utils.getLocalPath() + "fitch/fitch";
 		

@@ -261,7 +261,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		}
 		
 		// If it can't be added as a final result, then it needs to be added as
-		// a running job back in the JobsPanel
+		// a running job back in the JobsPanel		
 		winMain.jobsPanel.createJob(result, data);
 	}
 		

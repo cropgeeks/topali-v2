@@ -127,8 +127,8 @@ public class Utils
 		if (Prefs.isWindows)
 			return System.getProperty("user.dir") + "\\web\\binaries\\";
 		else if (Prefs.isMacOSX)
-			return System.getProperty("user.dir") + "/web/binaries/";
+			return System.getProperty("user.dir") + "/web/binaries/src/";
 		else
-			return System.getProperty("user.dir") + "/web/binaries/unix/";
+			return System.getProperty("user.dir") + "/web/binaries/src/";
 	}
 }

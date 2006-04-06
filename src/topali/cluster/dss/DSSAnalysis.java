@@ -94,6 +94,9 @@ class DSSAnalysis extends MultiThread
 			int w = 1;			
 			for (int i = 0;  i < data.length; i++, pos += step, w += step)
 			{
+				if (LocalJobs.isRunning(result.jobId) == false)
+					throw new Exception("cancel");
+				
 				// Set position for each data point
 				data[i][0] = pos;
 				
@@ -117,7 +120,11 @@ class DSSAnalysis extends MultiThread
 			
 			// 2) Run all the Fitch calculations
 			for (int i = 0;  i < data.length; i++)
+			{
+				if (LocalJobs.isRunning(result.jobId) == false)
+					throw new Exception("cancel");
 				dssWin[i].calculateFitchScores();
+			}
 			RunFitch fitch = new RunFitch(result);
 			fitch.runFitchScripts(wrkDir, windowCount);
 			System.out.println("Fitch run in " + (System.currentTimeMillis()-s2));
@@ -126,7 +133,10 @@ class DSSAnalysis extends MultiThread
 			
 			// 3) Perform actual DSS calculations (using Fitch results)
 			for (int i = 0;  i < data.length; i++)
-			{				
+			{
+				if (LocalJobs.isRunning(result.jobId) == false)
+					throw new Exception("cancel");
+				
 				// Work out the DSS statistic
 				data[i][1] = dssWin[i].calculateDSS();
 				
@@ -140,7 +150,8 @@ class DSSAnalysis extends MultiThread
 		}
 		catch (Exception e)
 		{
-			ClusterUtils.writeError(new File(runDir, "error.txt"), e);
+			if (e.getMessage().equals("cancel") == false)			
+				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);		

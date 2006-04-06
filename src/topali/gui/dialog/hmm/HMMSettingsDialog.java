@@ -98,8 +98,6 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		
 		if (Prefs.isWindows)
 			result.barcePath = Utils.getLocalPath() + "barce.exe";
-		else if (Prefs.isMacOSX)
-			result.barcePath = Utils.getLocalPath() + "barce";
 		else
 			result.barcePath = Utils.getLocalPath() + "barce/barce";
 		
