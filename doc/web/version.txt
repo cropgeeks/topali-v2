@@ -1,10 +1,14 @@
-7
+8
 
 Release History:
 
 [NF] = New Feature
 [BF] = Bug Fix
 [SC] = Source Code
+
+  - [NF] Matched TOPALi's gradient panels for the Office Look and Feel to those
+    of Windows for Classic, Blue, Silver, and Olive colour schemes.
+  - [NF] Full support for local job submission is now included.
 
 06-04-2006
   - [NF] Added client-side support for server-side gzip compression, reducing

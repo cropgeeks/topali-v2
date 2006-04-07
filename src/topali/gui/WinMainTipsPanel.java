@@ -57,6 +57,7 @@ public class WinMainTipsPanel extends JPanel implements ActionListener
 		button.setRolloverIcon(icon2);
 		button.addActionListener(this);
 		button.setToolTipText(tooltip);
+		button.setFocusPainted(false);
 		
 		return button;
 	}

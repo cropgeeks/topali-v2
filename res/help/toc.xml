@@ -31,6 +31,7 @@
 </tocitem>
 
 <tocitem text="Analysis Methods">
+  <tocitem text="Running Jobs Locally" target="local_jobs" image="topic" />
   <tocitem text="Recombination Detection" expand="true">
   	<tocitem text="The PDM Method" target="pdm_method" image="topic" />
     <tocitem text="PDM Settings" target="pdm_settings" image="topic" />	
