@@ -122,7 +122,7 @@ public class TOPALi extends Applet
 	
 	static void setProxy()
 	{
-		final String username = "imilne";
+		final String username = "SIMS\\imilne";
 		final String password = "";
 		
 		if (Prefs.web_proxy_enable)
@@ -132,11 +132,11 @@ public class TOPALi extends Applet
 			
 	//		System.setProperty("http.auth.ntlm.domain", "SIMS");
 			
-	//		java.net.Authenticator.setDefault(new java.net.Authenticator() {
-	//			protected java.net.PasswordAuthentication getPasswordAuthentication() {
-	//				return new java.net.PasswordAuthentication(username, password.toCharArray());
-	//			}
-	///		});
+//			java.net.Authenticator.setDefault(new java.net.Authenticator() {
+//				protected java.net.PasswordAuthentication getPasswordAuthentication() {
+//					return new java.net.PasswordAuthentication(username, password.toCharArray());
+//				}
+//			});
 			
 //			System.setProperty("http.proxyAuth", username + ":" + password);
 //			System.setProperty("http.proxyUser", username);
@@ -146,7 +146,6 @@ public class TOPALi extends Applet
 			
 			System.out.print("Proxy is active - ");
 			System.out.println("  " + Prefs.web_proxy_server + ":" + Prefs.web_proxy_port);
-			System.out.println("  " + System.getProperty("http.proxyAuth"));
 		}
 		else
 		{

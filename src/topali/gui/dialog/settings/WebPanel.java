@@ -27,7 +27,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 	{		
 		secModel = new SpinnerNumberModel(Prefs.web_check_secs, 10, 300, 10);
 		secSpin.setModel(secModel);
-		portModel = new SpinnerNumberModel(Prefs.web_proxy_port, 1, 65535, 1);
+		portModel = new SpinnerNumberModel(Prefs.web_proxy_port, 0, 65535, 1);
 		portSpin.setModel(portModel);
 		
 		useProxy.addActionListener(this);

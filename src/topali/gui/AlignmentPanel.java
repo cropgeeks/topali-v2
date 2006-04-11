@@ -382,7 +382,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				annotationsPanel.setSizes(canW, charW, seqList.getWidth());
 				annotationsPanel.setScrollBarValue(hBar.getValue());
 				
-				System.out.println("hBar.max="+hBar.getMaximum());
+//				System.out.println("hBar.max="+hBar.getMaximum());
 			}
 			
 			updateOverviewDialog();

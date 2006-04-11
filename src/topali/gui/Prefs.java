@@ -566,5 +566,6 @@ public class Prefs extends PreferencesXML
 		web_topali_url = "http://www.compbio.dundee.ac.uk/topali";
 		web_check_secs = 30;
 		web_check_startup = false;
+		web_proxy_port = 8080;
 	}
 }

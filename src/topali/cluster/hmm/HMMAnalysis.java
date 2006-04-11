@@ -60,6 +60,9 @@ class HMMAnalysis extends MultiThread
 	{
 		try
 		{
+			// Firstly, check the alignment is Barce-compatible
+			verifyForBarce();
+			
 			// We need to save out the SequenceSet for Barce to read, ensuring
 			// that only the sequences meant to be processed are saved
 			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
@@ -191,5 +194,37 @@ class HMMAnalysis extends MultiThread
 		{
 			throw new IOException("Error while writing mosaic.in file: " + e);
 		}
+	}
+	
+	// Ensures that any alignments passed to Barce only contain A, G, C, T,
+	// - or N
+	private void verifyForBarce()
+	{
+		int count = 0;
+		
+		for (Sequence seq: ss.getSequences())
+		{
+			StringBuffer buffer = seq.getBuffer();
+			String name = seq.name;
+			
+			// For each character in the sequence...
+			for (int c = 0; c < buffer.length(); c++)
+			{
+				switch (buffer.charAt(c))
+				{
+					case 'A' : break; case 'C' : break;
+					case 'G' : break; case 'T' : break;
+					case '-' : break; case 'N' : break;
+					default: 
+					{
+						count++;
+						buffer.setCharAt(c, 'N');
+					}
+				}
+			}
+		}
+	
+		if (count > 0)
+			System.out.println(count + " illegal character(s) replaced");
 	}
 }

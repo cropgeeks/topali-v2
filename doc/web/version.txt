@@ -1,10 +1,16 @@
-8
+9
 
 Release History:
 
 [NF] = New Feature
 [BF] = Bug Fix
 [SC] = Source Code
+
+ - Release 2.09
+  - [BF] Alignments sent to Barce are now checked for compatibility.
+  - [BF] Default setting of 0 for web proxy port was too low for the spinner
+    control.
+  - [SC] Removed support for compression as it wasn't working in all cases.
 
 07-04-2006 - Release 2.08
   - [NF] Matched TOPALi's gradient panels for the Office Look and Feel to those
