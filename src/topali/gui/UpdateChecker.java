@@ -37,7 +37,10 @@ class UpdateChecker extends Thread
 				new InputStreamReader(uc.getInputStream()));
 			
 			webVersion = Integer.parseInt(in.readLine());
-			in.close();			
+			in.close();
+			
+			System.out.println("Connection to " + url);
+			System.out.println("webVersion: " + webVersion + " (current: " + RELEASE + ")");
 		}
 		catch (Exception e)
 		{
@@ -64,6 +67,6 @@ class UpdateChecker extends Thread
 	static void helpAbout()
 	{
 		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n8th April 2006 - release 2.08", MsgBox.INF);
+			+ " Scotland\n7th April 2006 - release 2.08", MsgBox.INF);
 	}
 }

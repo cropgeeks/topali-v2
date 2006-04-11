@@ -30,7 +30,7 @@ public class PDMRemoteJob extends RemoteJob
 		
 		String alignmentXML = Castor.getXML(ss);
 		String resultXML = Castor.getXML(result);
-					
+	
 		result.jobId = (String) call.invoke(
 			new Object[] { alignmentXML, resultXML } );
 		

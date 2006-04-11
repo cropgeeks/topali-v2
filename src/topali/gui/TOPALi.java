@@ -25,7 +25,7 @@ public class TOPALi extends Applet
 	public static void main(String[] args)
 	{ 
 		Logger.getLogger("topali.gui.TOPALi").info("Locale: " + Locale.getDefault());
-	
+			
 		Utils.createScratch();
 		
 		// These don't work (here) - stick em in as -D options on startup
@@ -122,10 +122,31 @@ public class TOPALi extends Applet
 	
 	static void setProxy()
 	{
+		final String username = "imilne";
+		final String password = "";
+		
 		if (Prefs.web_proxy_enable)
 		{
 			System.setProperty("http.proxyHost", Prefs.web_proxy_server);
 			System.setProperty("http.proxyPort", "" + Prefs.web_proxy_port);
+			
+	//		System.setProperty("http.auth.ntlm.domain", "SIMS");
+			
+	//		java.net.Authenticator.setDefault(new java.net.Authenticator() {
+	//			protected java.net.PasswordAuthentication getPasswordAuthentication() {
+	//				return new java.net.PasswordAuthentication(username, password.toCharArray());
+	//			}
+	///		});
+			
+//			System.setProperty("http.proxyAuth", username + ":" + password);
+//			System.setProperty("http.proxyUser", username);
+//			System.setProperty("http.proxyPassword", password);
+
+
+			
+			System.out.print("Proxy is active - ");
+			System.out.println("  " + Prefs.web_proxy_server + ":" + Prefs.web_proxy_port);
+			System.out.println("  " + System.getProperty("http.proxyAuth"));
 		}
 		else
 		{

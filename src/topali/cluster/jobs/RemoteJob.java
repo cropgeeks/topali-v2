@@ -45,9 +45,10 @@ public abstract class RemoteJob extends AnalysisJob
 //				call.setMaintainSession(true);
 				call.setTimeout(60000);
 				
-				// Compress transfer (if possible)
+				// Compress request (if possible)
 //				call.setProperty(HTTPConstants.MC_GZIP_REQUEST, Boolean.TRUE);
-				call.setProperty(HTTPConstants.MC_ACCEPT_GZIP, Boolean.TRUE);
+				// Compress response (if possible)
+//				call.setProperty(HTTPConstants.MC_ACCEPT_GZIP, Boolean.TRUE);
 			}
 			catch (Exception exception)
 			{

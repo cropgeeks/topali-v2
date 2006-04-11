@@ -36,7 +36,7 @@ while (true) {
 			// can be dealt with immediately
 			timerThread.interrupt();
 		}
-				
+						
 		WinMainStatusBar.resetIcon = true;
 					
 		for (int i = 0; i < model.size(); i++)
