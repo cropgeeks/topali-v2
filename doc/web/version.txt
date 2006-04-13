@@ -7,6 +7,8 @@ Release History:
 [SC] = Source Code
 
  - Release 2.09
+  - [NF] Added support for authenticating proxy servers (tested with ISA 2004).
+  - [SC] Modified doe.jar so that Preference saving handles empty strings.
   - [BF] Alignments sent to Barce are now checked for compatibility.
   - [BF] Default setting of 0 for web proxy port was too low for the spinner
     control.

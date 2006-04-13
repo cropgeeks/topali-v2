@@ -31,8 +31,9 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 		portSpin.setModel(portModel);
 		
 		useProxy.addActionListener(this);
-		if (Prefs.web_proxy_server.equals(" ") == false)
-			proxyName.setText(Prefs.web_proxy_server);
+		proxyName.setText(Prefs.web_proxy_server);
+		userText.setText(Prefs.web_proxy_username);
+		passText.setText(Prefs.web_proxy_password);
 		
 		setDefaults(false);
 	}
@@ -72,6 +73,8 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 		Prefs.web_proxy_enable = useProxy.isSelected();
 		Prefs.web_proxy_server = proxyName.getText();
 		Prefs.web_proxy_port = portModel.getNumber().intValue();
+		Prefs.web_proxy_username = userText.getText();
+		Prefs.web_proxy_password = new String(passText.getPassword());
 		
 		return true;
 	}
@@ -91,6 +94,10 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 		portSpin.setEnabled(state);
 		serverLabel.setEnabled(state);
 		portLabel.setEnabled(state);
+		userLabel.setEnabled(state);
+		userText.setEnabled(state);
+		passLabel.setEnabled(state);
+		passText.setEnabled(state);
 	}
     
     /** This method is called from within the constructor to
@@ -112,8 +119,11 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
         proxyName = new javax.swing.JTextField();
         portLabel = new javax.swing.JLabel();
         portSpin = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
         checkUpdates = new javax.swing.JCheckBox();
+        userText = new javax.swing.JTextField();
+        userLabel = new javax.swing.JLabel();
+        passLabel = new javax.swing.JLabel();
+        passText = new javax.swing.JPasswordField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Phylogenetic web services:"));
         jLabel1.setText("TOPALi web services:");
@@ -139,7 +149,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
                         .add(secSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel3))
-                    .add(topaliURL, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
+                    .add(topaliURL, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -167,11 +177,16 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 
         portSpin.setFont(new java.awt.Font("Dialog", 0, 11));
 
-        jLabel4.setText("(Changes to proxy settings will only take effect after TOPALi is restarted)");
-
         checkUpdates.setText("Check for updated versions of TOPALi at program startup");
         checkUpdates.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         checkUpdates.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        userLabel.setText("Username:");
+
+        passLabel.setText("Password:");
+
+        passText.setFont(new java.awt.Font("DialogInput", 0, 11));
+        passText.setText("jPasswordField1");
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -180,41 +195,61 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(checkUpdates)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(serverLabel)
+                        .add(14, 14, 14)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(serverLabel)
+                            .add(userLabel))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(proxyName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(proxyName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 124, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(userText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .add(27, 27, 27)
+                                .add(portLabel))
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(passLabel)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(portLabel)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(portSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(checkUpdates)
-                        .addContainerGap(126, Short.MAX_VALUE))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(useProxy, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-                        .add(192, 192, 192))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jLabel4)
-                        .addContainerGap(66, Short.MAX_VALUE))))
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(passText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(portSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(useProxy))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel2Layout.linkSize(new java.awt.Component[] {passText, portSpin, proxyName, userText}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .add(checkUpdates)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(useProxy)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jLabel4)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(serverLabel)
-                    .add(proxyName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(portLabel)
-                    .add(portSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(proxyName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(serverLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(userText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(userLabel)))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(portSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(portLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(passLabel)
+                            .add(passText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .add(11, 11, 11))
         );
+
+        jPanel2Layout.linkSize(new java.awt.Component[] {portSpin, proxyName, userText}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -233,8 +268,8 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -244,9 +279,10 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel passLabel;
+    private javax.swing.JPasswordField passText;
     private javax.swing.JLabel portLabel;
     private javax.swing.JSpinner portSpin;
     private javax.swing.JTextField proxyName;
@@ -254,6 +290,8 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
     private javax.swing.JLabel serverLabel;
     private javax.swing.JTextField topaliURL;
     private javax.swing.JCheckBox useProxy;
+    private javax.swing.JLabel userLabel;
+    private javax.swing.JTextField userText;
     // End of variables declaration//GEN-END:variables
     
 }

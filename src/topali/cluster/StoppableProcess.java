@@ -16,7 +16,7 @@ public abstract class StoppableProcess
 	protected AnalysisResult result = null;
 	
 	protected Process proc = null;
-	protected boolean isRunning = true;
+	protected volatile boolean isRunning = true;
 	
 	public void runCancelMonitor()
 	{

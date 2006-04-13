@@ -41,7 +41,7 @@ public class Prefs extends PreferencesXML
 	
 	// All other variables...
 	public static LinkedList<String> gui_recent = new LinkedList<String>();
-	public static String gui_dir = " ";//System.getProperty("user.home");
+	public static String gui_dir = System.getProperty("user.home");
 	public static boolean gui_first_run = true;
 	public static boolean gui_maximized = false;
 	public static boolean gui_toolbar_visible = true;
@@ -50,7 +50,7 @@ public class Prefs extends PreferencesXML
 	public static int gui_win_width = 800;
 	public static int gui_win_height = 600;
 	public static int gui_splits_loc = 150;
-	public static String gui_find_name = " ";
+	public static String gui_find_name = "";
 	public static boolean gui_find_highlight = false;
 	public static boolean gui_find_case = false;
 	public static int gui_filter_tree = Filters.PNG;
@@ -169,9 +169,10 @@ public class Prefs extends PreferencesXML
 	public static String web_topali_url;
 	public static int web_check_secs;
 	public static boolean web_check_startup;
-	public static boolean web_proxy_enable = false;
-	public static String web_proxy_server = " ";
+	public static boolean web_proxy_enable;
+	public static String web_proxy_server;
 	public static int web_proxy_port;
+	public static String web_proxy_username, web_proxy_password;
 	
 	protected void getPreferences()
 	{
@@ -323,6 +324,8 @@ public class Prefs extends PreferencesXML
 		web_proxy_enable = getBool("web_proxy_enable", web_proxy_enable);
 		web_proxy_server = getStr("web_proxy_server", web_proxy_server);
 		web_proxy_port = getInt("web_proxy_port", web_proxy_port);
+		web_proxy_username = getStr("web_proxy_username", web_proxy_username);
+		web_proxy_password = getStr("web_proxy_password", web_proxy_password);
 	}
 	
 	protected void setPreferences()
@@ -330,7 +333,7 @@ public class Prefs extends PreferencesXML
 		for (int i = 0; i < gui_recent.size(); i++)
 			p.setProperty("gui_recent_" + i, gui_recent.get(i));
 		
-		p.setProperty("gui_dir", gui_dir);
+		setStr("gui_dir", gui_dir);
 		p.setProperty("gui_first_run", "" + gui_first_run);
 		p.setProperty("gui_maximized", "" + gui_maximized);
 		p.setProperty("gui_toolbar_visible", "" + gui_toolbar_visible);
@@ -339,7 +342,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_win_width", "" + gui_win_width);
 		p.setProperty("gui_win_height", "" + gui_win_height);
 		p.setProperty("gui_splits_loc", "" + gui_splits_loc);
-		p.setProperty("gui_find_name", gui_find_name);
+		setStr("gui_find_name", gui_find_name);
 		p.setProperty("gui_find_highlight", "" + gui_find_highlight);
 		p.setProperty("gui_find_case", "" + gui_find_case);
 		p.setProperty("gui_filter_tree", "" + gui_filter_tree);
@@ -407,28 +410,28 @@ public class Prefs extends PreferencesXML
 		p.setProperty("pdm_seed", "" + pdm_seed);
 		p.setProperty("pdm_burn", "" + pdm_burn);
 		p.setProperty("pdm_cycles", "" + pdm_cycles);
-		p.setProperty("pdm_burn_algorithm", pdm_burn_algorithm);
-		p.setProperty("pdm_main_algorithm", pdm_main_algorithm);
+		setStr("pdm_burn_algorithm", pdm_burn_algorithm);
+		setStr("pdm_main_algorithm", pdm_main_algorithm);
 		p.setProperty("pdm_use_beta", "" + pdm_use_beta);
 		p.setProperty("pdm_parameter_update_interval", "" + pdm_parameter_update_interval);
 		p.setProperty("pdm_update_theta", "" + pdm_update_theta);
 		p.setProperty("pdm_tune_interval", "" + pdm_tune_interval);			
 		p.setProperty("pdm_molecular_clock", "" + pdm_molecular_clock);
-		p.setProperty("pdm_category_list", pdm_category_list);
-		p.setProperty("pdm_initial_theta", pdm_initial_theta);
+		setStr("pdm_category_list", pdm_category_list);
+		setStr("pdm_initial_theta", pdm_initial_theta);
 		p.setProperty("pdm_outgroup", "" + pdm_outgroup);
 		p.setProperty("pdm_global_tune", "" + pdm_global_tune);
 		p.setProperty("pdm_local_tune", "" + pdm_local_tune);
 		p.setProperty("pdm_theta_tune", "" + pdm_theta_tune);
 		p.setProperty("pdm_beta_tune", "" + pdm_beta_tune);
 		
-		p.setProperty("hmm_model", hmm_model);
-		p.setProperty("hmm_initial", hmm_initial);
+		setStr("hmm_model", hmm_model);
+		setStr("hmm_initial", hmm_initial);
 		p.setProperty("hmm_freq_est_1", "" + hmm_freq_est_1);
 		p.setProperty("hmm_freq_est_2", "" + hmm_freq_est_2);
 		p.setProperty("hmm_freq_est_3", "" + hmm_freq_est_3);
 		p.setProperty("hmm_freq_est_4", "" + hmm_freq_est_4);
-		p.setProperty("hmm_transition", hmm_transition);
+		setStr("hmm_transition", hmm_transition);
 		p.setProperty("hmm_transition_ratio", "" + hmm_transition_ratio);
 		p.setProperty("hmm_freq_1", "" + hmm_freq_1);
 		p.setProperty("hmm_freq_2", "" + hmm_freq_2);
@@ -438,10 +441,10 @@ public class Prefs extends PreferencesXML
 		p.setProperty("hmm_points", "" + hmm_points);
 		p.setProperty("hmm_thinning", "" + hmm_thinning);
 		p.setProperty("hmm_tuning", "" + hmm_tuning);
-		p.setProperty("hmm_lambda", hmm_lambda);
-		p.setProperty("hmm_annealing", hmm_annealing);
-		p.setProperty("hmm_station", hmm_station);
-		p.setProperty("hmm_update", hmm_update);
+		setStr("hmm_lambda", hmm_lambda);
+		setStr("hmm_annealing", hmm_annealing);
+		setStr("hmm_station", hmm_station);
+		setStr("hmm_update", hmm_update);
 		p.setProperty("hmm_branch", "" + hmm_branch);
 		
 		p.setProperty("dss_window", "" + dss_window);
@@ -456,12 +459,14 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
 		
-		p.setProperty("web_topali_url", web_topali_url);
+		setStr("web_topali_url", web_topali_url);
 		p.setProperty("web_check_secs", "" + web_check_secs);
 		p.setProperty("web_check_startup", "" + web_check_startup);
 		p.setProperty("web_proxy_enable", "" + web_proxy_enable);
-		p.setProperty("web_proxy_server", web_proxy_server);
+		setStr("web_proxy_server", web_proxy_server);
 		p.setProperty("web_proxy_port", "" + web_proxy_port);
+		setStr("web_proxy_username", web_proxy_username);
+		setStr("web_proxy_password", web_proxy_password);
 	}
 	
 	public static void setDisplayDefaults()
@@ -567,5 +572,8 @@ public class Prefs extends PreferencesXML
 		web_check_secs = 30;
 		web_check_startup = false;
 		web_proxy_port = 8080;
+		web_proxy_server = "";
+		web_proxy_username = "";
+		web_proxy_password = "";
 	}
 }

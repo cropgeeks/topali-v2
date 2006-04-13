@@ -44,9 +44,7 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 	
 	private JPanel getControls()
 	{
-		String name = Prefs.gui_find_name;
-		name = name.equals(" ") ? "" : Prefs.gui_find_name;
-		seqName = new JTextField(name, 40);
+		seqName = new JTextField(Prefs.gui_find_name, 40);
 		seqName.setToolTipText(Text.GuiDiag.getString("FindSequenceDialog.gui07"));
 		seqName.selectAll();
 		

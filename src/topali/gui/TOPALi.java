@@ -8,9 +8,12 @@ package topali.gui;
 import java.applet.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.*;
 import javax.swing.*;
 import java.util.*;
 import java.util.logging.*;
+
+import topali.mod.*;
 
 public class TOPALi extends Applet
 {
@@ -59,8 +62,9 @@ public class TOPALi extends Applet
 		showSplash();
 		
 		// Load the preferences
-		prefs.loadPreferences(new File(System.getProperty("user.home"),
-			".TOPALiV2.xml"));
+		prefs.loadPreferences(new File(System.getProperty("user.home"), ".TOPALiV2.xml"));
+		doEncryption(true);
+		
 		setProxy();
 				
 		try
@@ -120,37 +124,33 @@ public class TOPALi extends Applet
 		winMain.setVisible(true);
 	}
 	
-	static void setProxy()
-	{
-		final String username = "SIMS\\imilne";
-		final String password = "";
-		
+	public static void setProxy()
+	{		
 		if (Prefs.web_proxy_enable)
 		{
+//			System.setProperty("proxySet", "true");
 			System.setProperty("http.proxyHost", Prefs.web_proxy_server);
 			System.setProperty("http.proxyPort", "" + Prefs.web_proxy_port);
-			
-	//		System.setProperty("http.auth.ntlm.domain", "SIMS");
-			
-//			java.net.Authenticator.setDefault(new java.net.Authenticator() {
-//				protected java.net.PasswordAuthentication getPasswordAuthentication() {
-//					return new java.net.PasswordAuthentication(username, password.toCharArray());
-//				}
-//			});
-			
-//			System.setProperty("http.proxyAuth", username + ":" + password);
+
 //			System.setProperty("http.proxyUser", username);
-//			System.setProperty("http.proxyPassword", password);
-
-
+//			System.setProperty("http.proxyPassword", password);			
+//			System.setProperty("http.auth.ntlm.domain", "SIMS");
 			
-			System.out.print("Proxy is active - ");
-			System.out.println("  " + Prefs.web_proxy_server + ":" + Prefs.web_proxy_port);
+			Authenticator.setDefault(new Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(
+						Prefs.web_proxy_username,
+						Prefs.web_proxy_password.toCharArray());
+				}
+			});
 		}
 		else
 		{
+//			System.setProperty("proxySet", "false");
 			System.setProperty("http.proxyHost", "");
 			System.setProperty("http.proxyPort", "");
+			
+			Authenticator.setDefault(null);
 		}
 	}
 	
@@ -176,8 +176,8 @@ public class TOPALi extends Applet
 		winMain.pDialog.exit();
 	
 		// Save the preferences
-		prefs.savePreferences(new File(System.getProperty("user.home"),
-			".TOPALiV2.xml"));
+		doEncryption(false);
+		prefs.savePreferences(new File(System.getProperty("user.home"),	".TOPALiV2.xml"));
 		// Remove tmp files
 //		Utils.emptyScratch();
 		
@@ -205,5 +205,30 @@ public class TOPALi extends Applet
 	{
 		splash.setVisible(false);
 		splash.dispose();
+	}
+	
+	// Decrypts/encrypts passwords that have been written to disk by TOPALi
+	private void doEncryption(boolean decrypt)
+	{
+		// About as secure as a chocolate teapot is functional...
+		String key    = "287e283d5737552c5a72277561745452";
+		String scheme = StringEncrypter.DESEDE_ENCRYPTION_SCHEME;
+		
+		try
+		{
+			StringEncrypter s = new StringEncrypter(scheme, key);
+		
+			if (decrypt)
+			{
+				try { Prefs.web_proxy_password = s.decrypt(Prefs.web_proxy_password); }
+				catch (EncryptionException e) {}
+			}
+			else
+			{
+				try { Prefs.web_proxy_password = s.encrypt(Prefs.web_proxy_password); }
+				catch (EncryptionException e) {}
+			}
+		}
+		catch (Exception e) {}
 	}
 }

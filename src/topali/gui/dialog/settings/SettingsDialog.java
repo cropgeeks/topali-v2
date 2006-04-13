@@ -82,7 +82,8 @@ public class SettingsDialog extends JDialog implements ActionListener
 		{
 			if (webPanel.isOK())
 			{			
-				setVisible(false);
+				TOPALi.setProxy();
+				setVisible(false);				
 			}
 		}
 	}
