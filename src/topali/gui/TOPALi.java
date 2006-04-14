@@ -28,6 +28,9 @@ public class TOPALi extends Applet
 	public static void main(String[] args)
 	{ 
 		Logger.getLogger("topali.gui.TOPALi").info("Locale: " + Locale.getDefault());
+
+		// Let axis know where its config file is
+		System.setProperty("axis.ClientConfigFile", "res/client-config.wsdd");
 			
 		Utils.createScratch();
 		
