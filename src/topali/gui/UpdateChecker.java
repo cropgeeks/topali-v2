@@ -14,7 +14,7 @@ import doe.*;
 
 class UpdateChecker extends Thread
 {
-	private static int RELEASE = 8;
+	private static int RELEASE = 9;
 	private int webVersion = 0;
 	
 	private boolean useGUI = false;
@@ -67,6 +67,6 @@ class UpdateChecker extends Thread
 	static void helpAbout()
 	{
 		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n7th April 2006 - release 2.08", MsgBox.INF);
+			+ " Scotland\n14th April 2006 - release 2.09", MsgBox.INF);
 	}
 }

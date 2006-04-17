@@ -171,7 +171,7 @@ Castor's auto mapping file generator -->
   <field name="isSizedToFit" type="boolean" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="treeStr" type="string"/>
-  <!--<field name="clusters" type="topali.data.SequenceCluster" collection="collection"/>-->
+  <field name="clusters" type="topali.data.SequenceCluster" collection="collection"/>
 </class>
 
 <!-- MBTreeResult (extends TreeResult) -->

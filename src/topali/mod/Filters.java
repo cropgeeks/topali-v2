@@ -22,6 +22,7 @@ public class Filters extends FileFilter
     public static final int BAM = 12;
     public static final int CSV = 13;
     public static final int NEX_B = 14;
+    public static final int CLU = 15;
     
     private Hashtable<String, Object> filters = new Hashtable<String, Object>();
     private String description = null;
@@ -97,6 +98,10 @@ public class Filters extends FileFilter
 			case NEX_B: filter.addExtension("nex", NEX_B);
 					   filter.setDescription("Nexus (MrBayes) Files");
 					   break;
+			
+			case CLU: filter.addExtension("txt", CLU);
+					  filter.setDescription("Grouped Cluster Files");
+					  break;
 			
 /*			case 2 : filter.addExtension("csv");
 					 filter.setDescription("CSV (Comma Delimited) Files");

@@ -29,7 +29,7 @@ class TreePanel extends JPanel
 	private Tree palTree;
 	
 	private JScrollPane sp;
-	private JTextArea txtNewHamp;
+	private JTextArea txtNewHamp, txtCluster;
 	private NameColouriser nc;
 	
 	TreeCanvas canvas;
@@ -42,7 +42,7 @@ class TreePanel extends JPanel
 		this.tree = tree;
 		
 		palTree = tree.getDisplayablePALTree(ss);
-		createNewHampshireText();
+		createText();
 		createNameColouriser();
 		
 		// Initialise the GUI controls
@@ -60,10 +60,12 @@ class TreePanel extends JPanel
 		setViewMode(tree.viewMode);
 	}
 	
-	private void createNewHampshireText()
+	private void createText()
 	{
 		txtNewHamp = new JTextArea();
+		txtCluster = new JTextArea();
 		Utils.setTextAreaDefaults(txtNewHamp);
+		Utils.setTextAreaDefaults(txtCluster);
 		
 		try { txtNewHamp.setText(palTree.toString()); }
 		catch (Exception e) {}
@@ -74,20 +76,27 @@ class TreePanel extends JPanel
 	// cluster that it belongs to.
 	private void createNameColouriser()
 	{
-		if (tree.getClusters() == null)
+		if (tree.getClusters().size() == 0)
 			return;
 		
 		nc = new NameColouriser();
 		int i = 0;
 		
+		StringBuffer buffer = new StringBuffer();
+		String eol = System.getProperty("line.separator");
 		for (SequenceCluster cluster: tree.getClusters())
 		{
-			Color c = Utils.getColor(i);
+			buffer.append("Cluster " + (i+1) + ":" + eol);
+			buffer.append(cluster);
+			
+			Color c = Utils.getColor(i);			
 			for (String seq: cluster.getSequences())
 				nc.addMapping(seq, c);
 			
 			i++;
 		}
+		
+		txtCluster.setText(buffer.toString());
 	}
 	
 	TreeResult getTreeResult()
@@ -98,6 +107,9 @@ class TreePanel extends JPanel
 	
 	SequenceSet getSequenceSet()
 		{ return ss; }
+	
+	String getClusterText()
+		{ return txtCluster.getText(); }
 	
 	BufferedImage getSavableImage()
 		{ return canvas.getSavableImage(); }
@@ -117,6 +129,8 @@ class TreePanel extends JPanel
 		if (viewMode == tree.TEXTUAL)
 			sp.getViewport().setView(txtNewHamp);
 		// Or viewing the tree itself
+		else if (viewMode == tree.CLUSTER)
+			sp.getViewport().setView(txtCluster);
 		else
 		{
 			canvas.setTree(palTree);

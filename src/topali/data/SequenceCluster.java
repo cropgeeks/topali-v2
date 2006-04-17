@@ -40,10 +40,11 @@ public class SequenceCluster
 	
 	public String toString()
 	{
+		String eol = System.getProperty("line.separator");
 		StringBuffer str = new StringBuffer(1000);
 		
 		for (String seq: sequences)
-			str.append("  " + seq + "\n");
+			str.append("  " + seq + eol);
 		
 		return str.toString();
 	}

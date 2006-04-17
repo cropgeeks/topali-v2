@@ -30,7 +30,7 @@ class TreePanelUtils
 		fc.setDialogTitle(Text.GuiTree.getString("TreePanelUtils.gui01"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 				
-		Filters.setFilters(fc, Prefs.gui_filter_tree, PNG, TRE);
+		Filters.setFilters(fc, Prefs.gui_filter_tree, PNG, TRE, CLU);
 		fc.setAcceptAllFileFilterUsed(false);
 
 		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
@@ -59,6 +59,8 @@ class TreePanelUtils
 				savePNG(file, panel);
 			else if (Prefs.gui_filter_tree == TRE)
 				saveTRE(file, panel);
+			else if (Prefs.gui_filter_tree == CLU)
+				saveCLU(file, panel);
 
 			return;
 		}
@@ -90,6 +92,24 @@ class TreePanelUtils
 			
 			MsgBox.msg(Text.format(Text.GuiTree.getString(
 				"TreePanelUtils.msg03"), file), MsgBox.INF);
+		}
+		catch (Exception e)
+		{
+			MsgBox.msg(Text.format(
+				Text.GuiTree.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
+		}
+		
+		try { out.close(); }
+		catch (Exception e) {}
+	}
+	
+	static void saveCLU(File file, TreePanel panel)
+	{
+		BufferedWriter out = null;
+		try
+		{
+			out = new BufferedWriter(new FileWriter(file));
+			out.write(panel.getClusterText());
 		}
 		catch (Exception e)
 		{
@@ -218,6 +238,11 @@ class TreePanelUtils
 			((WinMain) MsgBox.frm).menuViewDisplaySettings(true);	
 			WinMainMenuBar.aFileSave.setEnabled(true);		
 		}
+		
+		try {
+			String xml = topali.fileio.Castor.getXML(panel.getTreeResult());
+			System.out.println(xml);
+		} catch (Exception e) {}
 	}
 	
 /*	private static Vector getGroup(Vector groups, String name, boolean create)

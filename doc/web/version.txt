@@ -6,7 +6,7 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
- - Release 2.09
+14-04-2006 - Release 2.09
   - [NF] Added support for authenticating proxy servers (tested with ISA 2004).
   - [SC] Modified doe.jar so that Preference saving handles empty strings.
   - [BF] Alignments sent to Barce are now checked for compatibility.

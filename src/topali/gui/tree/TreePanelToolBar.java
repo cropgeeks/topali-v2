@@ -18,7 +18,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	private TreePanel panel;
 	
 	JButton bExport, bCluster;
-	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit, bFloat;
+	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit, bFloat,
+		bViewCluster;
 	
 	TreePanelToolBar(TreePane treePane, TreePanel panel, TreeResult tree)
 	{
@@ -44,9 +45,11 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			"tre01", Icons.SIZED_TO_FIT, null);
 		bSizedToFit.setSelected(tree.isSizedToFit);
 		bCluster = (JButton) WinMainToolBar.getButton(false, null, "tre08",
-			Icons.EXPORT, null);
+			Icons.CLUSTER, null);
 		bFloat = (JToggleButton) WinMainToolBar.getButton(true, null,
 			"tre07", Icons.FLOAT, null);
+		bViewCluster = (JToggleButton) WinMainToolBar.getButton(true, null,
+			"tre09", Icons.TREE_NEWHAMP, null);
 			
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
@@ -55,6 +58,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bSizedToFit.addActionListener(this);
 		bFloat.addActionListener(this);
 		bCluster.addActionListener(this);
+		bViewCluster.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -63,7 +67,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bDrawCircular);
 		add(bDrawNewHamp);
 		addSeparator();
-//		add(bCluster);
+		add(bCluster);
+		add(bViewCluster);
+		addSeparator();
 		add(bSizedToFit);
 		add(bFloat);
 		add(new JLabel(" "));
@@ -73,6 +79,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		group.add(bDrawNormal);
 		group.add(bDrawCircular);
 		group.add(bDrawNewHamp);
+		group.add(bViewCluster);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -97,6 +104,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		else if (e.getSource() == bCluster)
 			TreePanelUtils.cluster(panel);
+		
+		else if (e.getSource() == bViewCluster)
+			panel.setViewMode(TreeResult.CLUSTER);
 		
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}

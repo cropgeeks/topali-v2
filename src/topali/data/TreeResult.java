@@ -13,9 +13,11 @@ import pal.tree.*;
  */
 public class TreeResult extends AnalysisResult
 {
+	// Codes for deciding how to display the tree
 	public static final int NORMAL = 0;
 	public static final int CIRCULAR = 1;
-	public static final int TEXTUAL = 2;
+	public static final int TEXTUAL = 2;	// newhamshire txt
+	public static final int CLUSTER = 3;	// clustering details
 	
 	// The tree bit
 	private String treeStr;
@@ -33,6 +35,7 @@ public class TreeResult extends AnalysisResult
 	
 	public TreeResult()
 	{
+		clusters = new LinkedList<SequenceCluster>();
 	}
 	
 	public TreeResult(String treeStr)

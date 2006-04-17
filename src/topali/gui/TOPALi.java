@@ -131,12 +131,8 @@ public class TOPALi extends Applet
 	{		
 		if (Prefs.web_proxy_enable)
 		{
-//			System.setProperty("proxySet", "true");
 			System.setProperty("http.proxyHost", Prefs.web_proxy_server);
 			System.setProperty("http.proxyPort", "" + Prefs.web_proxy_port);
-
-//			System.setProperty("http.proxyUser", username);
-//			System.setProperty("http.proxyPassword", password);			
 //			System.setProperty("http.auth.ntlm.domain", "SIMS");
 			
 			Authenticator.setDefault(new Authenticator() {
@@ -149,11 +145,8 @@ public class TOPALi extends Applet
 		}
 		else
 		{
-//			System.setProperty("proxySet", "false");
 			System.setProperty("http.proxyHost", "");
 			System.setProperty("http.proxyPort", "");
-			
-			Authenticator.setDefault(null);
 		}
 	}
 	
