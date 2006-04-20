@@ -101,7 +101,7 @@ public class WinMainMenuBar extends JMenuBar
 		
 		aFileImportDataSet = new AbstractAction(Text.Gui.getString("aFileImportDataSet")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.menuFileImportDataSet(null, null, null); } };
+				winMain.menuFileImportDataSet(); } };
 		
 		aFileExportDataSet = new AbstractAction(Text.Gui.getString("aFileExportDataSet")) {
 			public void actionPerformed(ActionEvent e) {

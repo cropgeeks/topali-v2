@@ -84,6 +84,7 @@ public class Prefs extends PreferencesXML
 	public static int gui_tree_method = 0;
 	public static boolean gui_tree_useall = true;
 	public static float gui_group_threshold = 0.05f;
+	public static int gui_import_method = 0;
 	
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
@@ -235,6 +236,7 @@ public class Prefs extends PreferencesXML
 		gui_tree_method = getInt("gui_tree_method", gui_tree_method);
 		gui_tree_useall = getBool("gui_tree_useall", gui_tree_useall);
 		gui_group_threshold = getFloat("gui_group_threshold", gui_group_threshold);
+		gui_import_method = getInt("gui_import_method", gui_import_method);
 		
 		gui_seq_tooltip = getBool("gui_seq_tooltip", gui_seq_tooltip);
 		gui_seq_font_size = getByte("gui_seq_font_size", gui_seq_font_size);
@@ -376,6 +378,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_tree_method", "" + gui_tree_method);
 		p.setProperty("gui_tree_useall", "" + gui_tree_useall);
 		p.setProperty("gui_group_threshold", "" + gui_group_threshold);
+		p.setProperty("gui_import_method", "" + gui_import_method);
 		
 		p.setProperty("gui_seq_tooltip", "" + gui_seq_tooltip);
 		p.setProperty("gui_seq_font_size", "" + gui_seq_font_size);

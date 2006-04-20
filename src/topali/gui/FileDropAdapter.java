@@ -53,7 +53,7 @@ public class FileDropAdapter extends DropTargetAdapter
 					for (int j = 0; j < list.size(); j++)
 					{
 						File file = new File(list.get(j).toString());
-						winMain.menuFileImportDataSet(file, null, null);
+						winMain.menuFileImportDataSet(file);
 					}
 					
 					break;

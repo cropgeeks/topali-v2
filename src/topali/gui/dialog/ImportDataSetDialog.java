@@ -24,14 +24,16 @@ import doe.*;
 public class ImportDataSetDialog extends JDialog implements ActionListener
 {
 	private AlignmentData data;
+	private WinMain winMain;
 	
 	private JButton bOK, bCancel, bBrowse;
 	
 	public ImportDataSetDialog(WinMain winMain)
 	{
 		super(winMain, Text.GuiFile.getString("ImportDataSetDialog.gui01"), true);
+		this.winMain = winMain;
 	
-		add(new GradientPanel(Text.GuiFile.getString("ImportDataSetDialog.gui01")),
+/*		add(new GradientPanel(Text.GuiFile.getString("ImportDataSetDialog.gui01")),
 			BorderLayout.NORTH);
 		add(createControls());
 		add(createButtons(), BorderLayout.SOUTH);
@@ -42,44 +44,42 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 		
 		setLocationRelativeTo(winMain);
 		setResizable(false);
-//		setVisible(true);
+		setVisible(true);
+*/
 	}
 	
-	public AlignmentData getAlignmentData()
-		{ return data; }
-	
-	public boolean loadAlignment(File file)
+	public void promptForAlignment()
 	{
-		if (file == null)
-		{
-			JFileChooser fc = new JFileChooser();
-			fc.setDialogTitle(Text.GuiFile.getString("ImportDataSetDialog.gui01"));
-			fc.setCurrentDirectory(new File(Prefs.gui_dir));
-			
-			Filters.setFilters(fc, -1, FAS, PHY_S, PHY_I, ALN, MSF, NEX, NEX_B);
-			
-			if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-			{
-				file = fc.getSelectedFile();
-				Prefs.gui_dir = "" + fc.getCurrentDirectory();
-			}
-			else
-				return false;
-		}
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle(Text.GuiFile.getString("ImportDataSetDialog.gui01"));
+		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 		
+		Filters.setFilters(fc, -1, FAS, PHY_S, PHY_I, ALN, MSF, NEX, NEX_B);
+		
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fc.getSelectedFile();
+			Prefs.gui_dir = "" + fc.getCurrentDirectory();
+			
+			loadAlignment(file);
+		}
+	}
+	
+	public void loadAlignment(File file)
+	{
 		String name = file.getName();
 		if (name.indexOf(".") != -1)
 			name = name.substring(0, name.lastIndexOf("."));
-						
-		return load(name, file, null);
-	}	
-	
-	public boolean cloneAlignment(String name, Alignment alignment)
-	{
-		return load(name, null, alignment);
+					
+		load(name, file, null);
 	}
 	
-	private boolean load(String name, File filename, Alignment alignment)
+	public void cloneAlignment(String name, Alignment alignment)
+	{
+		load(name, null, alignment);
+	}
+	
+	private void load(String name, File filename, Alignment alignment)
 	{
 		try
 		{
@@ -93,7 +93,6 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 				MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"), MsgBox.WAR);
 			
 			data = new AlignmentData(name, ss);			
-			return true;
 		}
 		catch (AlignmentLoadException e)
 		{
@@ -101,11 +100,14 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
 				+ code), MsgBox.ERR);
 				
-			return false;
+			return;
 		}
+		
+		// Finally, add the data to the project (via WinMain)
+		winMain.addNewAlignmentData(data);
 	}
 	
-	private JPanel createControls()
+/*	private JPanel createControls()
 	{
 		return new JPanel();
 	}
@@ -117,7 +119,8 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 		
 		return Utils.getButtonPanel(this, bOK, bCancel, "import_dataset");
 	}
-	
+*/
+
 	public void actionPerformed(ActionEvent e)
 	{
 	}

@@ -190,7 +190,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		else
 		{
 			Alignment alignment = ss.getAlignment(seqs, nStart, nEnd, false);
-			winMain.menuFileImportDataSet(null, data.name, alignment);
+			new ImportDataSetDialog(winMain).cloneAlignment(data.name, alignment);
 		}
 		
 		return true;

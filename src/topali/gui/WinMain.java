@@ -159,21 +159,33 @@ public class WinMain extends JFrame
 			project = dialog.getProject();
 	}
 	
-	// Imports a dataset (from disk (if alignment is null))
-	public void menuFileImportDataSet(File file, String name, Alignment alignment)
+	public void menuFileImportDataSet()
 	{
-		ImportDataSetDialog dialog = new ImportDataSetDialog(this);
+		ImportOptionsDialog optionsDialog = new ImportOptionsDialog(this);
 		
-		if (alignment == null && !dialog.loadAlignment(file))
-			return;
-		if (alignment != null && !dialog.cloneAlignment(name, alignment))
-			return;
-			
-		AlignmentData data = dialog.getAlignmentData();
-		addNewAlignmentData(data);
+		if (optionsDialog.isOK())
+		{
+			switch (Prefs.gui_import_method)
+			{
+				case 0:
+					new ImportDataSetDialog(this).promptForAlignment();
+					break;
+				case 1: 
+					break;
+				case 2:
+					// TODO:
+					break;
+			}
+		}
 	}
 	
-	private void addNewAlignmentData(AlignmentData data)
+	public void menuFileImportDataSet(File file)
+	{
+		new ImportDataSetDialog(this).loadAlignment(file);
+	}
+	
+	// Adds an AlignmentData object to the current project
+	public void addNewAlignmentData(AlignmentData data)
 	{
 		if (data != null)
 		{
