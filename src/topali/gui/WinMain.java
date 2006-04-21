@@ -170,7 +170,8 @@ public class WinMain extends JFrame
 				case 0:
 					new ImportDataSetDialog(this).promptForAlignment();
 					break;
-				case 1: 
+				case 1:
+					new MakeNADialog(this);
 					break;
 				case 2:
 					// TODO:

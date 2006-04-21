@@ -7,6 +7,8 @@ Release History:
 [SC] = Source Code
 
 14-04-2006 - Release 2.09
+  - [NF] Alignments can now be imported by creating a new alignment from an
+    unaligned cDNA file and its guide protein file.
   - [NF] Support for sequencing clustering on trees has been added.
   - [NF] Added support for authenticating proxy servers (tested with ISA 2004).
   - [SC] Modified doe.jar so that Preference saving handles empty strings.

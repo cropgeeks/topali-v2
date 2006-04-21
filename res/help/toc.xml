@@ -15,6 +15,7 @@
 
 <tocitem text="Alignments" target="alignments" image="topic" >
   <tocitem text="Importing Alignments" target="import_alignment" image="topic" />
+  <tocitem text="cDNA and Guide Protein" target="makena" image="topic" />
   <tocitem text="Exporting Alignments" target="export_alignment" image="topic" />
   <tocitem text="Viewing Alignments" target="view_alignment" image="topic" />
   <tocitem text="Displaying Summary Information" target="summary_info" image="topic" />

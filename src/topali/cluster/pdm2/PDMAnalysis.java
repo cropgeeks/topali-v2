@@ -83,8 +83,12 @@ class PDMAnalysis extends MultiThread
 				ss.save(nexusFile, ss.getSelectedSequences(), winS, winE, Filters.NEX_B, true);
 				addNexusCommands();
 				
-				PDM pdm = new PDM(wrkDir, result);
-				pdm.calculatePDM();
+				RunMrBayes mb = new RunMrBayes(wrkDir, result);
+				mb.run();				
+				saveWindowResults(i+1);
+				
+				if (i == 5)
+					System.exit(0);
 			}
 			
 		}
@@ -112,17 +116,53 @@ class PDMAnalysis extends MultiThread
 		out.newLine();
 		out.write("  set nowarnings=yes;");
 		out.newLine();
-		out.write("  lset nst=6 rates=gamma Ngammacat=8;");
+		out.write("  lset nst=6 rates=invgamma Ngammacat=4;");
 		out.newLine();
-		out.write("  mcmcp ngen=120000 printfreq=50 samplefreq=50 nchain=4 savebrlens=yes;");
+		out.write("  mcmcp ngen=10000 printfreq=100 samplefreq=50 nchain=4 savebrlens=yes;");
 		out.newLine();
 		out.write("  mcmc;");
 		out.newLine();
-		out.write("  sumt burnin=5;");
+		out.write("  sumt burnin=10;");
 		out.newLine();
 		out.write("quit;");
 		
 		out.close();
+	}
+	
+	// Reads a tree datafile from MrBayes and rewrites its results into two
+	// simpler file formats. file1 contains the probabilities and file2 the list
+	// of trees
+	private void saveWindowResults(int num)
+		throws Exception
+	{
+		BufferedReader in = new BufferedReader(
+			new FileReader(new File(wrkDir, "pdm.nex.trprobs")));
+		BufferedWriter outP = new BufferedWriter(
+			new FileWriter(new File(runDir, "win" + num + ".p.txt")));
+		BufferedWriter outT = new BufferedWriter(
+			new FileWriter(new File(runDir, "win" + num + ".t.txt")));
+		
+		String str = in.readLine();
+		while (str != null)
+		{
+			str = str.trim();
+			if (str.startsWith("tree"))
+			{
+				str = str.substring(str.indexOf("&W")+3);
+				outP.write(str.substring(0, str.indexOf("]")));
+				outP.newLine();
+				
+				str = str.substring(str.indexOf("("));
+				outT.write(str);
+				outT.newLine();
+			}
+			
+			str = in.readLine();
+		}
+		
+		in.close();
+		outP.close();
+		outT.close();
 	}
 
 	

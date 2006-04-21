@@ -14,6 +14,7 @@
    
    <mapID target="alignments" url="html/alignments.html" />
      <mapID target="import_alignment" url="html/import_alignment.html" />
+     <mapID target="makena" url="html/makena.html" />
      <mapID target="export_alignment" url="html/export_alignment.html" />
      <mapID target="view_alignment" url="html/view_alignment.html" />
      <mapID target="summary_info" url="html/summary_info.html" />

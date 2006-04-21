@@ -26,6 +26,7 @@ public class SequenceSet
 	private Vector<Sequence> sequences = new Vector<Sequence>();
 	
 	private int length;
+	private boolean isAligned = true;
 	private boolean isDNA;
 	private String overview;
 	
@@ -65,6 +66,19 @@ public class SequenceSet
 		ah.openAlignment(filename);
 		
 		checkValidity();
+	}
+	
+	// Creates a new SequenceSet by loading it from disk and (optionally)
+	// ignores checking to see whether the file is aligned or not
+	// (allows for non-aligned datasets to be held)
+	public SequenceSet(File filename, boolean isAligned)
+		throws AlignmentLoadException
+	{
+		AlignmentHandler ah = new AlignmentHandler(this);
+		ah.openAlignment(filename);
+		
+		this.isAligned = isAligned;
+		checkValidity();		
 	}
 	
 	/* Returns the length of this alignment. */
@@ -217,13 +231,17 @@ public class SequenceSet
 		}
 		
 		// 3) Is it a proper alignment, (are all sequences of the same length?)
-		int size = sequences.get(0).getLength();
-		for (Sequence seq: sequences)
-			if (seq.getLength() != size)
-			{
-				System.out.println(seq.name + " : " + seq.getLength());
-				throw new AlignmentLoadException(NOT_ALIGNED);
-			}
+		// (ignore check if we're not expecting an alignment)
+		if (isAligned)
+		{
+			int size = sequences.get(0).getLength();
+			for (Sequence seq: sequences)
+				if (seq.getLength() != size)
+				{
+					System.out.println(seq.name + " : " + seq.getLength());
+					throw new AlignmentLoadException(NOT_ALIGNED);
+				}
+		}
 		
 		// 4) Check for duplicate names
 		ListIterator<Sequence> itor1 = sequences.listIterator(0);
@@ -248,7 +266,8 @@ public class SequenceSet
 //		if (resetSelection)
 			isDNA = isSequenceDNA();
 		
-		calculateOverview();
+		if (isAligned)
+			calculateOverview();
 		
 /*
 		

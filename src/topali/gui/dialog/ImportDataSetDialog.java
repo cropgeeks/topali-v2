@@ -92,7 +92,7 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 			if (SequenceSetUtils.verifySequenceNames(ss) == false)
 				MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"), MsgBox.WAR);
 			
-			data = new AlignmentData(name, ss);			
+			data = new AlignmentData(name, ss);
 		}
 		catch (AlignmentLoadException e)
 		{
