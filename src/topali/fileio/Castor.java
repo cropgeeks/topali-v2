@@ -5,7 +5,6 @@ import java.io.*;
 import org.exolab.castor.xml.*;
 import org.exolab.castor.mapping.*;
 
-import topali.cluster.*;
 import topali.data.*;
 
 public class Castor

@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.*;
 import static topali.gui.WinMainMenuBar.*;
 
 class DataSetNodeFolder extends INode

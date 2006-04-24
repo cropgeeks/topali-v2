@@ -10,7 +10,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import topali.data.*;
 import topali.gui.*;
 import topali.gui.results.*;
 

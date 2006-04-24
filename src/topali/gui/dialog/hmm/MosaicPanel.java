@@ -13,7 +13,6 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import topali.data.*;
-import topali.gui.*;
 
 import doe.*;
 

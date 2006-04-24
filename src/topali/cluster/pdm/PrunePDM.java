@@ -2,7 +2,6 @@ package topali.cluster.pdm;
 
 import java.io.*;
 import java.util.*;
-import java.text.*;
 
 import topali.data.*;
 
@@ -29,8 +28,6 @@ import pal.tree.*;
  
 class PrunePDM
 {
-	private DecimalFormat d = new DecimalFormat("0.0000");
-	
 	// Entropy class containing the original histogram that will get pruned
 	private Entropy oEntropy;
 	

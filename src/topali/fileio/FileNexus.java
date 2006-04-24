@@ -142,7 +142,6 @@ class FileNexus extends FileGeneric
 	{
 		StringTokenizer st = null;
 		Sequence sequence = null;
-		StringBuffer buf  = null;
 	
 		int index = 0;
 		

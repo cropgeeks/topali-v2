@@ -6,12 +6,10 @@
 package topali.gui.nav;
 
 import javax.swing.*;
-import javax.swing.tree.*;
 
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.results.*;
-import static topali.gui.WinMainMenuBar.*;
 
 public class PDMResultsNode extends ResultsNode implements IPrintable
 {

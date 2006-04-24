@@ -7,7 +7,6 @@ package topali.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -242,8 +241,6 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 	// to a unique group for those sequences.
 	private String doDuplicateCheck()
 	{
-		int size = ss.getSize();
-		
 		StringBuffer buf = new StringBuffer(1000);
 		LinkedList<SequenceList> duplicates = new LinkedList<SequenceList>();
 		
@@ -277,7 +274,6 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 	private void addToList(Sequence seq, LinkedList<SequenceList> duplicates)
 	{
 		// Search through all the existing groups to see if a match can be found
-		ListIterator itor = duplicates.listIterator(0);
 		for (SequenceList list: duplicates)
 		{
 			if (list.hasMatch(seq))

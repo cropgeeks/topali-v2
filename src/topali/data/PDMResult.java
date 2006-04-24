@@ -5,11 +5,7 @@
 
 package topali.data;
 
-import java.io.*;
-
 import pal.statistics.*;
-
-import topali.fileio.*;
 
 /*
  * Class that stores both the results from running a PDM analysis and the

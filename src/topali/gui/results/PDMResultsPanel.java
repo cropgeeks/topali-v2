@@ -11,8 +11,6 @@ import java.awt.print.*;
 import java.io.*;
 import javax.swing.*;
 
-import pal.statistics.*;
-
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.*;

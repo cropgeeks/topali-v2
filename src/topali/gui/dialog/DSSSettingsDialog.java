@@ -140,7 +140,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 			basicPanel.saveSettings();
 			advancedPanel.saveSettings();
 		
-			createDSSObject((e.getModifiers() & e.CTRL_MASK) == 0);
+			createDSSObject((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 			setVisible(false);
 		}
 		

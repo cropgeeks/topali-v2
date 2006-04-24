@@ -12,7 +12,6 @@ package topali.cluster.pdm;
 // to an external file.
 
 import java.io.*;
-import java.awt.*;
 import java.util.*;
 
 

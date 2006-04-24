@@ -19,7 +19,6 @@ import topali.gui.dialog.hmm.*;
 import topali.gui.nav.*;
 import topali.gui.tree.*;
 
-import pal.alignment.*;
 import pal.tree.*;
 
 import doe.*;
@@ -557,9 +556,7 @@ public class WinMain extends JFrame
 	
 	void menuAnlsRename()
 	{
-		// Find out which alignment the result is being removed from
-		AlignmentData data = navPanel.getCurrentAlignmentData();
-		// And what result is being removed
+		// What result is being removed
 		AnalysisResult result = navPanel.getCurrentAnalysisResult();
 		
 		String newName = (String) JOptionPane.showInputDialog(this, 

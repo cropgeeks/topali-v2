@@ -10,10 +10,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import pal.alignment.*;
-import pal.distance.*;
 import pal.tree.*;
 import pal.gui.*;
-import pal.misc.*;
 
 import doe.*;
 

@@ -8,7 +8,6 @@ package topali.cluster.pdm;
 import java.io.*;
 
 import topali.cluster.*;
-import topali.data.*;
 
 class RunBambe
 {

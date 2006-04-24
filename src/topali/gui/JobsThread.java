@@ -1,7 +1,5 @@
 package topali.gui;
 
-import java.util.*;
-import java.net.*;
 import javax.swing.*;
 
 import static topali.cluster.JobStatus.*;

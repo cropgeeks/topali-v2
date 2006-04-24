@@ -29,7 +29,6 @@ package topali.cluster.pdm;
 // --> info().
 
 import java.io.*;
-import java.awt.*;
 import java.util.*;
 
 import topali.data.*;

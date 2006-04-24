@@ -6,8 +6,6 @@
 package topali.cluster.lrt;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 import java.util.logging.*;
 
 import pal.alignment.*;

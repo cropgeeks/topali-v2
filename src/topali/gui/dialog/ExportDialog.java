@@ -14,7 +14,6 @@ import pal.alignment.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.fileio.*;
 import topali.mod.*;
 import static topali.mod.Filters.*;
 

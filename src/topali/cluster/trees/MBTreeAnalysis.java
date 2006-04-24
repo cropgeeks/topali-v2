@@ -6,7 +6,6 @@
 package topali.cluster.trees;
 
 import java.io.*;
-import java.util.*;
 
 import topali.cluster.*;
 import topali.data.*;

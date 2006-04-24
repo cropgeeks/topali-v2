@@ -7,9 +7,6 @@ package topali.gui.dialog.hmm;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.text.*;
 import javax.swing.*;
 
 import doe.*;

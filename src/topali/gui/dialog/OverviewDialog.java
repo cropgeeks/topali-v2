@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-import topali.data.*;
 import topali.gui.*;
 
 public class OverviewDialog extends JDialog

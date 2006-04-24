@@ -14,7 +14,6 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 
 import topali.cluster.*;
-import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.*;
 import static topali.gui.WinMainMenuBar.*;

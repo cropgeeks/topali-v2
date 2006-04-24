@@ -6,13 +6,9 @@
 package topali.gui.nav;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.tree.*;
 
-import topali.data.*;
 import topali.gui.*;
 
 class NavPanelRenderer extends JLabel implements TreeCellRenderer

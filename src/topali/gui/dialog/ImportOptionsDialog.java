@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import topali.data.*;
 import topali.gui.*;
 
 public class ImportOptionsDialog extends JDialog implements ActionListener

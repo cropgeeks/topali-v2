@@ -205,7 +205,6 @@ class HMMAnalysis extends MultiThread
 		for (Sequence seq: ss.getSequences())
 		{
 			StringBuffer buffer = seq.getBuffer();
-			String name = seq.name;
 			
 			// For each character in the sequence...
 			for (int c = 0; c < buffer.length(); c++)

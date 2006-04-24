@@ -6,7 +6,6 @@
 package topali.gui.tree;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.print.*;
 import java.util.*;

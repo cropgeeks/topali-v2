@@ -16,7 +16,6 @@ import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
 import org.jfree.data.xy.*;
 import org.jfree.chart.plot.*;
-import org.jfree.data.*;
 
 import topali.data.*;
 import topali.gui.*;

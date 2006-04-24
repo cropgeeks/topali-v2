@@ -5,12 +5,10 @@
 
 package topali.gui.results;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
-import topali.analyses.*;
 import topali.data.*;
 import topali.gui.*;
 import static topali.gui.WinMainMenuBar.*;

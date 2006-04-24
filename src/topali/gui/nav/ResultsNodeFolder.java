@@ -7,7 +7,6 @@ package topali.gui.nav;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.tree.*;
 
 import topali.data.*;
 import topali.gui.*;

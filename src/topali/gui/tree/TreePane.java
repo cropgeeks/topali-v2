@@ -5,8 +5,6 @@
 
 package topali.gui.tree;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.awt.print.*;
 import java.util.*;
 import javax.swing.*;

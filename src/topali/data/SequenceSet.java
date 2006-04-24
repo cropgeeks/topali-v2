@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import java.text.*;
-import javax.swing.*;
 
 import pal.alignment.*;
 import pal.datatype.*;

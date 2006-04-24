@@ -6,11 +6,8 @@
 package topali.gui.results;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
 import java.awt.print.*;
 import java.io.*;
-import javax.imageio.*;
 import javax.swing.*;
 
 import topali.analyses.*;

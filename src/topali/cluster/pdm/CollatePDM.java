@@ -3,7 +3,6 @@ package topali.cluster.pdm;
 import java.io.*;
 import java.util.logging.*;
 
-import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 

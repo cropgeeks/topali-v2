@@ -10,10 +10,6 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import pal.alignment.*;
-import pal.eval.*;
-import pal.substmodel.*;
-import pal.tree.*;
-import pal.distance.*;
 
 import topali.analyses.*;
 import topali.gui.*;

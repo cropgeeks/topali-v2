@@ -6,7 +6,6 @@
 package topali.fileio;
 
 import java.io.*;
-import java.util.*;
 
 import topali.data.*;
 

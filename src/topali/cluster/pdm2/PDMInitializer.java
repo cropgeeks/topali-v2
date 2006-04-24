@@ -6,8 +6,6 @@
 package topali.cluster.pdm2;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 
 import topali.cluster.*;
 import topali.data.*;

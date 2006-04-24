@@ -5,14 +5,12 @@
 
 package topali.gui.tree;
 
-import java.awt.*;
 import java.io.*;
 import java.text.*;
 import java.util.*;
 import javax.imageio.*;
 import javax.swing.*;
 
-import pal.gui.*;
 import pal.tree.*;
 
 import doe.*;

@@ -9,9 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import topali.data.*;
 import topali.gui.*;
-import topali.gui.nav.*;
 
 public class LoadMonitorDialog extends JDialog implements Runnable
 {

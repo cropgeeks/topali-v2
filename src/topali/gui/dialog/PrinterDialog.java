@@ -2,14 +2,9 @@ package topali.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.awt.print.*;
 import javax.swing.*;
 import javax.print.attribute.*;
-
-import java.awt.font.*;
-import java.util.*;
-import java.text.*;
 
 import topali.gui.*;
 

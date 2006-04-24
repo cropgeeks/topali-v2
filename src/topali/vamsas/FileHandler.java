@@ -1,17 +1,11 @@
 package topali.vamsas;
 
 import java.io.*;
-import java.util.zip.*;
 import javax.swing.*;
 
-import org.exolab.castor.xml.*;
-
-import topali.fileio.*;
 import topali.gui.*;
 import topali.mod.*;
 import static topali.mod.Filters.*;
-
-import org.vamsas.objects.core.*;
 
 import doe.*;
 

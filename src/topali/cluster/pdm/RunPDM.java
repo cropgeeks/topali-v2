@@ -6,14 +6,11 @@
 package topali.cluster.pdm;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
-import topali.mod.*;
 
 public class RunPDM extends Thread
 {

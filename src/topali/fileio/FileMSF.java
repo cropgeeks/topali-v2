@@ -76,8 +76,7 @@ class FileMSF extends FileGeneric
 	{
 		StringTokenizer st = null;
 		Sequence sequence = null;
-		StringBuffer buf  = null;
-	
+		
 		int index = 0;
 		
 		while (str != null)

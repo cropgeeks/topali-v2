@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 
 import pal.alignment.*;
-import pal.misc.*;
 
 import topali.data.*;
 

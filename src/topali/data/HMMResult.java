@@ -5,10 +5,6 @@
 
 package topali.data;
 
-import java.io.*;
-
-import topali.fileio.*;
-
 /*
  * Class that stores both the results from running a HMM analysis and the
  * settings required to make the run (although not the data itself).

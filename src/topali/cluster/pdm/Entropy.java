@@ -36,14 +36,10 @@ package topali.cluster.pdm;
 // and integer codes. By default, the name of this
 // file is called "resultsStringToIntegerTranslator.out". 
 
-import java.lang.*;
 import java.io.*;
-import java.awt.*;
 import java.text.*;
 import java.util.*;
 //import java.lang.Math;
-
-import pal.statistics.ChiSquareDistribution;
 
 public class Entropy
 {	

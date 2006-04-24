@@ -78,7 +78,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			setVisible(false);
 		
 		else if (e.getSource() == bOK)
-			onOK((e.getModifiers() & e.CTRL_MASK) == 0);
+			onOK((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 	}
 	
 	private void onOK(boolean makeRemote)
@@ -147,8 +147,6 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	
 	private void initMBTreeResult(MBTreeResult tr)
 	{
-		MBTreeResult result = new MBTreeResult();
-		
 		// Path to MrBayes
 		if (Prefs.isWindows)
 			tr.mbPath = Utils.getLocalPath() + "mb.exe";

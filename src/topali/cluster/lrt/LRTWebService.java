@@ -1,10 +1,8 @@
 package topali.cluster.lrt;
 
 import java.io.*;
-import javax.servlet.http.*;
 
 import org.apache.axis.*;
-import org.apache.axis.transport.http.*;
 
 import topali.cluster.*;
 import topali.data.*;

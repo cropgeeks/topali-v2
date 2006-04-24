@@ -11,7 +11,6 @@ import java.io.*;
 import javax.swing.*;
 
 import topali.analyses.*;
-import topali.data.*;
 import topali.gui.*;
 
 import doe.*;

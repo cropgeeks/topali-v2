@@ -6,10 +6,8 @@
 package topali.fileio;
 
 import java.io.*;
-import javax.swing.*;
 
 import topali.data.*;
-import topali.fileio.*;
 import static topali.fileio.AlignmentLoadException.*;
 import static topali.mod.Filters.*;
 

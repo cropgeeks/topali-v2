@@ -5,8 +5,6 @@
 
 package topali.data;
 
-import java.util.*;
-
 // Tracks a list of partitions, and also a separate "current" partition which
 // can be the highlighted region on a graph *without* actually being part of the
 // partitions list that the user sees.

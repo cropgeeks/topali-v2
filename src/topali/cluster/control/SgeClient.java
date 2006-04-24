@@ -6,7 +6,6 @@
 package topali.cluster.control;
 
 import java.io.*;
-import java.util.*;
 import java.util.logging.*;
 
 import topali.cluster.*;
