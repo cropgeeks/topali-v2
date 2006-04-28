@@ -10,32 +10,33 @@ import java.io.*;
 import topali.cluster.*;
 import topali.data.*;
 
-class RunMrBayes
+class RunTreeDist
 {
-	private File wrkDir;
-	private PDM2Result result;
-	
-	RunMrBayes(File wrkDir, PDM2Result result)
-	{
-		this.wrkDir = wrkDir;
-		this.result = result;
-	}
-	
-	void run()
+	void runTreeDist(File wrkDir, PDM2Result result, int win)
 		throws Exception
 	{		
-		ProcessBuilder pb = new ProcessBuilder(result.mbPath, "pdm.nex");
+		// Before starting, make sure any previous "outfile" is deleted,
+		// otherwise TreeDist will fail
+		new File(wrkDir, "outfile").delete();
+		
+		ProcessBuilder pb = new ProcessBuilder(result.treeDistPath);
 		pb.directory(wrkDir);
 		pb.redirectErrorStream(true);
 		
 		Process proc = pb.start();
-						
+				
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(
 			proc.getOutputStream()));
 		
 		new StreamCatcher(proc.getInputStream(), false);
 		
-//		writer.println("Y");
+		writer.println("win" + (win-1) + ".txt");
+		writer.println("D");
+		writer.println("2");
+		writer.println("L");
+		writer.println("S");
+		writer.println("Y");
+		writer.println("win" + (win) + ".txt");
 		writer.close();
 		
 		try { proc.waitFor(); }

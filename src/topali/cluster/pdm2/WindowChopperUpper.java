@@ -28,7 +28,7 @@ class WindowChopperUpper
 	// Alignment length
 	private int length;
 	
-	WindowChopperUpper(SequenceSet ss, PDMResult result)
+	WindowChopperUpper(SequenceSet ss, PDM2Result result)
 	{
 		w = result.pdm_window;
 		s = result.pdm_step;

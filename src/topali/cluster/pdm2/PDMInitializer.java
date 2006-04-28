@@ -15,12 +15,12 @@ import topali.mod.*;
 public class PDMInitializer extends Thread
 {
 	private SequenceSet ss;
-	private PDMResult result;
+	private PDM2Result result;
 	
 	// Directory where the job will run
 	private File jobDir;
 	
-	public PDMInitializer(File jobDir, SequenceSet ss, PDMResult result)
+	public PDMInitializer(File jobDir, SequenceSet ss, PDM2Result result)
 	{
 		this.jobDir = jobDir;
 		this.ss = ss;
@@ -34,7 +34,7 @@ public class PDMInitializer extends Thread
 			// Ensure the directory for this job exists
 			jobDir.mkdirs();
 			
-			// Store the PDMResult object where it can be read by the sub-job
+			// Store the PDM2Result object where it can be read by the sub-job
 			Castor.saveXML(result, new File(jobDir, "submit.xml"));
 			
 			// Run the analysis
@@ -74,6 +74,10 @@ public class PDMInitializer extends Thread
 			File runDir = new File(jobDir, "run" + (i++));
 			runDir.mkdirs();
 			
+			// TODO: remove at some point (not needed)
+			new File(runDir, "region-" + r.getS() + "-" + r.getE()).createNewFile();
+			////////
+			
 			File seqFile = new File(runDir, "pdm.fasta");
 			ss.save(seqFile, indices, r.getS(), r.getE(), Filters.FAS, true);
 			
@@ -87,6 +91,6 @@ public class PDMInitializer extends Thread
 		
 		// Or on the cluster...
 		if (result.isRemote)
-			PDMWebService.runScript(jobDir);
+			PDMWebService.runScript(jobDir, regions.length);
 	}
 }

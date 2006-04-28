@@ -113,6 +113,10 @@ public class Prefs extends PreferencesXML
 	public static Color	gui_histo_background;
 	public static Color	gui_cardle_line;
 	
+	// PDM2 analysis run settings
+	public static int pdm2_window;
+	public static int pdm2_step;
+	
 	// PDM analysis run settings
 	public static int pdm_window;
 	public static int pdm_step;
@@ -179,13 +183,12 @@ public class Prefs extends PreferencesXML
 	{
 		setDisplayDefaults();
 		setPDMDefaults();
+		setPDM2Defaults();
 		setHMMDefaults();
 		setDSSDefaults();
 		setLRTDefaults();
 		setWebDefaults();
-		
-		System.out.println("window is " + pdm_window);
-		
+				
 		for (int i = 0; i < 4; i++)
 		{
 			String str = getStr("gui_recent_" + i, "");
@@ -263,6 +266,9 @@ public class Prefs extends PreferencesXML
 		gui_graph_background = getColor("gui_graph_background", gui_graph_background);
 		gui_histo_background = getColor("gui_histo_background", gui_histo_background);
 		gui_cardle_line = getColor("gui_cardle_line", gui_cardle_line);
+		
+		pdm2_window = getInt("pdm2_window", pdm2_window);
+		pdm2_step = getInt("pdm2_step", pdm2_step);
 		
 		pdm_window = getInt("pdm_window", pdm_window);
 		pdm_step = getInt("pdm_step", pdm_step);
@@ -406,6 +412,9 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_histo_background", setColor(gui_histo_background));
 		p.setProperty("gui_cardle_line", setColor(gui_cardle_line));
 		
+		p.setProperty("pdm2_window", "" + pdm2_window);
+		p.setProperty("pdm2_step", "" + pdm2_step);
+		
 		p.setProperty("pdm_window", "" + pdm_window);
 		p.setProperty("pdm_step", "" + pdm_step);
 		p.setProperty("pdm_prune", "" + pdm_prune);
@@ -499,6 +508,12 @@ public class Prefs extends PreferencesXML
 		gui_graph_background = new Color(255, 255, 255);
 		gui_histo_background = new Color(255, 255, 255);
 		gui_cardle_line = new Color(0, 0, 0);
+	}
+	
+	public static void setPDM2Defaults()
+	{
+		pdm2_window = 500;
+		pdm2_step = 10;
 	}
 	
 	public static void setPDMDefaults()

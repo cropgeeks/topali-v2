@@ -29,7 +29,12 @@ public class CollatePDM
 		
 		// Percentages are tracked by having one file for every 1% stored in a
 		// directory called "percent"
-		try { return new File(jobDir, "percent").listFiles().length; }
+		// HOWEVER, we cheat a bit and don't assume completion until 105% done!
+		try 
+		{ 
+			int count = new File(jobDir, "percent").listFiles().length;
+			return ((float)count / 105f) * 100f;
+		}
 		catch (Exception e)	{
 			return 0;
 		}

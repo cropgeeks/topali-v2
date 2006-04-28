@@ -13,6 +13,12 @@
   <parameter name="scope" value="session"/>
 </service>
 
+<service name="topali-pdm2" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.pdm2.PDMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
+
 <service name="topali-dss" provider="java:RPC">
   <parameter name="className" value="topali.cluster.dss.DSSWebService"/>
   <parameter name="allowedMethods" value="*"/>

@@ -58,7 +58,7 @@ public class WinMainToolBar extends JToolBar
 		bAnlsRunPDM = (JButton) getButton(false, null, "gui17",
 			Icons.RUN_PDM, mb.aAnlsRunPDM);
 		bAnlsRunPDM2 = (JButton) getButton(false, null, "gui19",
-			Icons.RUN_PDM, mb.aAnlsRunPDM2);
+			Icons.RUN_PDM2, mb.aAnlsRunPDM2);
 		bAnlsRunHMM = (JButton) getButton(false, null, "gui16",
 			Icons.RUN_HMM, mb.aAnlsRunHMM);
 		bAnlsRunDSS = (JButton) getButton(false, null, "gui15",
@@ -94,7 +94,7 @@ public class WinMainToolBar extends JToolBar
 		add(bAnlsCreateTree);
 		addSeparator();
 		add(bAnlsRunPDM);
-//		add(bAnlsRunPDM2);
+		add(bAnlsRunPDM2);
 		add(bAnlsRunHMM);
 		add(bAnlsRunDSS);
 		add(bAnlsRunLRT);

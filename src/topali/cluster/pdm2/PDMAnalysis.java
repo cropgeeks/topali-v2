@@ -22,9 +22,10 @@ class PDMAnalysis extends MultiThread
 	// but during analysis itself it's best to write to a local HD's directory
 	private File runDir, wrkDir;
 	// And settings
-	private PDMResult result;
+	private PDM2Result result;
 	
-	
+	// PDM object that does the (Frank) calculations
+	private PDM pdm = null;
 	
 	public static void main(String[] args)
 	{ 
@@ -47,9 +48,9 @@ class PDMAnalysis extends MultiThread
 		// Data directory
 		this.runDir = runDir;
 
-		// Read the PDMResult
+		// Read the PDM2Result
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");
-		result = (PDMResult) Castor.unmarshall(resultFile);
+		result = (PDM2Result) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
 		ss = new SequenceSet(new File(runDir, "pdm.fasta"));
 		
@@ -62,34 +63,65 @@ class PDMAnalysis extends MultiThread
 	// windows along that region.
 	public void run()
 	{
+		File pctDir = new File(runDir, "percent");
+		
 		System.out.println(wrkDir);
+		pdm = new PDM(result, runDir, wrkDir, ss.getSize());
 		
 		try
 		{
 			int w = result.pdm_window;
 			int s = result.pdm_step;			
 			int tW = (int) ((ss.getLength() - w) / s) + 1;
-//			int firstWinPos = (int) (1 + (w / 2f - 0.5));
+
+			float[] scores = new float[tW-1];
 			
 			// Move along the alignment, a step (s) at a time
 			for (int i = 0, p = 1; i < tW; i++, p += s)
 			{
+				if (LocalJobs.isRunning(result.jobId) == false)
+					throw new Exception("cancel");
+				
 				// Strip out the window at this position "(p) to (p+w-1)"
 				int winS = p;
 				int winE = p+w-1;
-				
+
+				System.out.println("Window: " + winS + "-" + winE);
+
 				// Save it in Nexus format (ready for MrB to use)
 				File nexusFile = new File(wrkDir, "pdm.nex");
 				ss.save(nexusFile, ss.getSelectedSequences(), winS, winE, Filters.NEX_B, true);
 				addNexusCommands();
 				
+				System.out.print("Running MrB...");
 				RunMrBayes mb = new RunMrBayes(wrkDir, result);
-				mb.run();				
-				saveWindowResults(i+1);
+				mb.run();
+				System.out.println("done");
+				pdm.saveWindowResults(i+1);
 				
-				if (i == 5)
-					System.exit(0);
+				
+				// Once we've done more than one window, we can start to compare
+				// them
+				if (i > 0)
+				{
+					new RunTreeDist().runTreeDist(wrkDir, result, i+1);
+					
+					long st = System.currentTimeMillis();
+					scores[i-1] = pdm.doCalculations();
+					long ed = System.currentTimeMillis();
+					
+					System.out.println("PDM ran in " + (ed-st) + "ms");
+					
+//					System.exit(0);
+// TODO: Cancel local job for PDM2
+				}
+				
+				// Write an update tracking how complete this job is
+				int progress = (int) (((i+1) / (float)tW) * 100);
+				ClusterUtils.setPercent(pctDir, progress);
 			}
+			
+			writeScores(scores);
 			
 		}
 		catch (Exception e)
@@ -129,40 +161,19 @@ class PDMAnalysis extends MultiThread
 		out.close();
 	}
 	
-	// Reads a tree datafile from MrBayes and rewrites its results into two
-	// simpler file formats. file1 contains the probabilities and file2 the list
-	// of trees
-	private void saveWindowResults(int num)
-		throws Exception
+	private void writeScores(float[] scores)
+		throws IOException
 	{
-		BufferedReader in = new BufferedReader(
-			new FileReader(new File(wrkDir, "pdm.nex.trprobs")));
-		BufferedWriter outP = new BufferedWriter(
-			new FileWriter(new File(runDir, "win" + num + ".p.txt")));
-		BufferedWriter outT = new BufferedWriter(
-			new FileWriter(new File(runDir, "win" + num + ".t.txt")));
+		BufferedWriter out = new BufferedWriter(
+			new FileWriter(new File(runDir, "out.xls")));
 		
-		String str = in.readLine();
-		while (str != null)
+		for (float pdm: scores)
 		{
-			str = str.trim();
-			if (str.startsWith("tree"))
-			{
-				str = str.substring(str.indexOf("&W")+3);
-				outP.write(str.substring(0, str.indexOf("]")));
-				outP.newLine();
-				
-				str = str.substring(str.indexOf("("));
-				outT.write(str);
-				outT.newLine();
-			}
-			
-			str = in.readLine();
+			out.write(Float.toString(pdm));
+			out.newLine();
 		}
 		
-		in.close();
-		outP.close();
-		outT.close();
+		out.close();
 	}
 
 	

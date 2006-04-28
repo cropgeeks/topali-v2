@@ -80,8 +80,8 @@ class HMMAnalysis extends MultiThread
 			
 			// Save final data back to drive where it can be retrieved
 			Castor.saveXML(result, new File(jobDir, "result.xml"));
-			// And write the final percentage
-			new File(new File(jobDir, "percent"), "p100").createNewFile();
+			// And write the final percentage as 105%!
+			ClusterUtils.setPercent(new File(jobDir, "percent"), 105);
 		}
 		catch (Exception e)
 		{

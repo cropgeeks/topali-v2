@@ -31,7 +31,7 @@ public class Jambe2
 	// Stores a set of bootstrap results created by running Jambe multiple times
 	private float[] bootstrapValues = null;
 	
-	private File jobDir, wrkDir;
+	private File jobDir, wrkDir, pctDir;
 	private PDMResult result;
 	
 	// Tracks the job percentage-complete value
@@ -42,6 +42,8 @@ public class Jambe2
 		this.jobDir = jobDir;
 		this.wrkDir = wrkDir;
 		this.result = result;
+		
+		pctDir = new File(jobDir, "percent");
 		
 		windowSize = result.pdm_window;
 		stepSize = result.pdm_step;
@@ -64,19 +66,6 @@ public class Jambe2
 	public int getTotal()
 	{
 		return ((alignmentLength - windowSize) / stepSize) + 1;
-	}
-	
-	void setPercent(int value)
-		throws IOException
-	{
-		if (value > percent)
-		{
-			// Create a file for each difference
-			for (int i = value; i > percent; i--)
-				new File(new File(jobDir, "percent"), "p" + i).createNewFile();
-			
-			percent = value;
-		}
 	}
 
 	public void runJambe()
@@ -156,10 +145,9 @@ public class Jambe2
 			oAutoCorrelationTime.addACT();
 			
 			
-			// We set the percentage as i/total. i starts as 0 so will
-			// always be one less than the actual value - this allows us to
-			// make the "pruning" step the final 1% of any job
-			setPercent((int)(i/(float)total*100));
+			// Set the current percentage
+			int progress = (int) (((i+1) / (float)total) * 100);
+			ClusterUtils.setPercent(pctDir, progress);
 		}
 		
 		if (result.pdm_prune)

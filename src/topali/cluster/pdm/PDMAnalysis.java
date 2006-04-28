@@ -103,7 +103,7 @@ class PDMAnalysis extends MultiThread
 		result.N = jambe.getN();
 		
 		Castor.saveXML(result, new File(jobDir, "result.xml"));
-		jambe.setPercent(100);
+		ClusterUtils.setPercent(new File(jobDir, "percent"), 105);
 	}
 
 	private void populateXaxis(float[] d1d, float[][] d2d, boolean global)

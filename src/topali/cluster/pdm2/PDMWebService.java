@@ -19,9 +19,9 @@ public class PDMWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 						
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
-			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
+			PDM2Result result = (PDM2Result) Castor.unmarshall(resultXML);
 			
-			result.bambePath = getParameter("bambe-path");
+			result.mbPath = getParameter("mb-path");
 			result.treeDistPath = getParameter("treedist-path");
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
@@ -63,7 +63,7 @@ public class PDMWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
-			PDMResult result = new PDMMonitor(jobDir).getResult();
+			PDM2Result result = new PDMMonitor(jobDir).getResult();
 			
 			logger.info("returning result for " + jobId);
 			return Castor.getXML(result);
@@ -80,24 +80,25 @@ public class PDMWebService extends WebService
 	 * calls to execute that job. In this case, a java command to run an
 	 * PDMAnalysis on a given directory.
 	 */
-	static void runScript(File jobDir)
+	static void runScript(File jobDir, int partitions)
 		throws Exception
 	{
 		// Read...
-		String template = ClusterUtils.readFile(new File(scriptsDir, "pdm.sh"));
+		String template = ClusterUtils.readFile(new File(scriptsDir, "pdm2.sh"));
 		
 		// Replace...
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
+		template = template.replaceAll("\\$RUN_COUNT", "" + partitions);
 		
 		// Add header...
 		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
 		
 		// Write...
-		writeFile(template, new File(jobDir, "pdm.sh"));
+		writeFile(template, new File(jobDir, "pdm2.sh"));
 		
 		// Run...
-		submitJob("pdm.sh", jobDir);
+		submitJob("pdm2.sh", jobDir);
 	}
 }

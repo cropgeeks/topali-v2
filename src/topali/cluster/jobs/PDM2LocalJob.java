@@ -12,7 +12,7 @@ public class PDM2LocalJob extends AnalysisJob
 	private SequenceSet ss;
 	private File jobDir;
 		
-	public PDM2LocalJob(PDMResult result, AlignmentData data)
+	public PDM2LocalJob(PDM2Result result, AlignmentData data)
 	{
 		this.result = result;
 		this.data = data;
@@ -31,7 +31,7 @@ public class PDM2LocalJob extends AnalysisJob
 	{
 		try
 		{
-			PDMInitializer pdm = new PDMInitializer(jobDir, ss, (PDMResult)result);
+			PDMInitializer pdm = new PDMInitializer(jobDir, ss, (PDM2Result)result);
 			pdm.start();
 			
 			result.status = JobStatus.RUNNING;

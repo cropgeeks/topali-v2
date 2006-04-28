@@ -77,4 +77,20 @@ public class ClusterUtils
 		
 		return sb.toString();
 	}
+	
+	// Given a percentage value (eg 30), the appropriate number of p[n] files
+	// will be written into the directory to track a job's progress. If files
+	// p1 to p25 already exist, then this would add p26-p30
+	public static void setPercent(File dir, int value)
+		throws IOException
+	{
+		// Ensure the directory to write to exists
+		if (dir.exists() == false)
+			dir.mkdir();
+		
+		int current = dir.listFiles().length;
+		
+		for (int p = value; p > current; p--)
+			new File(dir, "p" + p).createNewFile();
+	}
 }

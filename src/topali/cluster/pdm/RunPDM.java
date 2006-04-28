@@ -35,8 +35,6 @@ public class RunPDM extends Thread
 		{
 			// Ensure the directory for this job exists
 			jobDir.mkdirs();
-			// Create the percent tracking directory
-			new File(jobDir, "percent").mkdir();
 			
 			// Store the PDMResult object where it can be read by the sub-job
 			Castor.saveXML(result, new File(jobDir, "submit.xml"));

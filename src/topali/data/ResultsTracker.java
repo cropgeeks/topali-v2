@@ -10,6 +10,7 @@ public class ResultsTracker
 	private int treeRunCount;
 	
 	private int pdmRunCount;
+	private int pdm2RunCount;
 	private int hmmRunCount;
 	private int dssRunCount;
 	private int lrtRunCount;
@@ -27,6 +28,11 @@ public class ResultsTracker
 		{ return (this.pdmRunCount); }
 	public void setPdmRunCount(int pdmRunCount)
 		{ this.pdmRunCount = pdmRunCount; }
+	
+	public int getPdm2RunCount()
+		{ return (this.pdm2RunCount); }
+	public void setPdm2RunCount(int pdm2RunCount)
+		{ this.pdm2RunCount = pdm2RunCount; }
 
 	public int getHmmRunCount()
 		{ return (this.hmmRunCount); }

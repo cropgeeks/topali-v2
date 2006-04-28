@@ -154,10 +154,9 @@ class RunBarce extends StoppableProcess
 		
 		public void run()
 		{
-			File percentDir = new File(jobDir, "percent");
+			File pctDir = new File(jobDir, "percent");
 			
 			int read = 0;
-			int percent = 0;
 			
 			try
 			{
@@ -174,20 +173,10 @@ class RunBarce extends StoppableProcess
 					if (line.equals("::END"))
 						read = 100;
 					
-					if (percent != 100 && line.startsWith("p="))
+					if (line.startsWith("p="))
 						read = Integer.parseInt(line.substring(2));
 					
-					if (read != percent)
-					{						
-						// Create a file for each difference
-						for (int i = read; i > percent; i--)
-							// (but don't write a file for 100% (yet!)
-							// (this gets done back in HMMAnalysis
-							if (i != 100)
-								new File(percentDir, "p" + i).createNewFile();
-						
-						percent = read;
-					}
+					ClusterUtils.setPercent(pctDir, read);
 				}
 			}
 			catch (Exception e) {}

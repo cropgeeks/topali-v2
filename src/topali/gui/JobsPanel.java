@@ -282,6 +282,15 @@ public class JobsPanel extends JPanel
 				job = new PDMLocalJob((PDMResult)result, data);
 		}
 		
+		// PDM2 jobs
+		if (result instanceof PDM2Result)
+		{
+			if (result.isRemote)
+				job = new PDM2RemoteJob((PDM2Result)result, data);
+			else
+				job = new PDM2LocalJob((PDM2Result)result, data);
+		}
+		
 		// HMM jobs
 		if (result instanceof HMMResult)
 		{

@@ -8,6 +8,7 @@ import topali.data.*;
 
 import doe.*;
 
+/* Simple panel containing oft-used Window and Step size settings controls */
 class SlidePanel extends JPanel
 {
 	private JLabel label1, label2;

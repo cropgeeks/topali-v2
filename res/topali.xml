@@ -94,6 +94,8 @@ Castor's auto mapping file generator -->
     <bind-xml node="attribute"/></field>
   <field name="pdmRunCount" type="integer">
     <bind-xml node="attribute"/></field>
+  <field name="pdm2RunCount" type="integer">
+    <bind-xml node="attribute"/></field>
   <field name="hmmRunCount" type="integer">
     <bind-xml node="attribute"/></field>
   <field name="dssRunCount" type="integer">
@@ -276,6 +278,15 @@ Castor's auto mapping file generator -->
 	<!--<field name="glbData" type="float" direct="true" collection="array"/>-->
 	<!--<field name="locData" type="float" direct="true" collection="array"/>-->
 	<!--<field name="histograms" type="float" direct="true" collection="array"/>-->
+</class>
+
+<!-- PDM2Result (extends AlignmentResult) -->
+<class name="topali.data.PDM2Result" extends="topali.data.AlignmentResult" auto-complete="true">
+  <field name="mbPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
+	
 </class>
 
 <!-- HMMResult (extends AlignmentResult) -->
