@@ -72,7 +72,7 @@ public class SgeClient implements ICluster
 		{
 			logger.info("obtain job status (" + jobDir + ")");
 			
-			ProcessBuilder pb = new ProcessBuilder("qstat", "-xml");
+			ProcessBuilder pb = new ProcessBuilder("qstat", "-g", "d", "-xml");
 			pb.redirectErrorStream(true);
 		
 			Process p = pb.start();
