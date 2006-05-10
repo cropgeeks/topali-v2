@@ -1,4 +1,4 @@
-#$ -N TOPALi-LRT
+#$ -N TPi-LRT
 #$ -cwd
 #$ -t 1-$RUN_COUNT
 

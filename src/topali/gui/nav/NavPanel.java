@@ -248,6 +248,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 			
 			if (result instanceof PDMResult)
 				node.setUserObject(new PDMResultsNode(data, (PDMResult)result));
+			if (result instanceof PDM2Result)
+				node.setUserObject(new PDM2ResultsNode(data, (PDM2Result)result));
 			if (result instanceof HMMResult)
 				node.setUserObject(new HMMResultsNode(data, (HMMResult)result));
 			if (result instanceof DSSResult)

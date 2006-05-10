@@ -167,7 +167,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Other settings:"));
-        useProxy.setText("Use a proxy server for all web connections:");
+        useProxy.setText("Use a proxy server for all web connections (requires restart):");
         useProxy.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         useProxy.setMargin(new java.awt.Insets(0, 0, 0, 0));
 

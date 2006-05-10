@@ -176,6 +176,8 @@ public class SgeClient implements ICluster
 								newStatus = JobStatus.RUNNING;
 							else if (state.contains("s") || state.contains("h"))
 								newStatus = JobStatus.HOLDING;
+							else if (state.contains("E"))
+								newStatus = JobStatus.FATAL_ERROR;
 							
 							if (newStatus > status)
 								status = newStatus;

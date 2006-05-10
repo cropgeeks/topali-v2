@@ -1,6 +1,7 @@
 package topali.cluster.pdm2;
 
 import java.io.*;
+import java.util.*;
 import java.util.logging.*;
 
 import topali.data.*;
@@ -33,68 +34,73 @@ public class PDMMonitor
 		File[] files = jobDir.listFiles();
 		for (File f: files)
 		{
-			if (f.isDirectory() && f.getName().startsWith("run"))
-			{
+			if (f.isDirectory() == false)
+				continue;
+			else
 				runs++;
-				
-				if (new File(f, "error.txt").exists())
-				{
-					logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + runs);
-					throw new Exception("PDM2 error.txt in subjob " + runs);
-				}
-				
-				// Check the percentage complete for this job
-				try { total += new File(f, "percent").listFiles().length; }
-				catch (Exception e) {}
+			
+			if (new File(f, "error.txt").exists())
+			{
+				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + runs);
+				throw new Exception("PDM2 error.txt in subjob " + runs);
 			}
+			
+			// Check the percentage complete for this job
+			try { total += new File(f, "percent").listFiles().length; }
+			catch (Exception e) {}
 		}
 		
 		// Now work out the overal percentage
-		System.out.println("runs=" + runs);
-		System.out.println("total=" + total);
 		return total / (float) runs;
 	}
 	
 	public PDM2Result getResult()
 		throws Exception
 	{
-		return (PDM2Result) Castor.unmarshall(new File(jobDir, "result.xml"));
-	}
-	
-	public static void main(String[] args)
-		throws Exception
-	{
-		BufferedWriter out = new BufferedWriter(new FileWriter(new File("out.txt")));
+		// Read in the result object
+		// TODO: Collate results so that result.xml is read rather than submit.xml
+		PDM2Result result =
+			(PDM2Result) Castor.unmarshall(new File(jobDir, "submit.xml"));
 		
-		File file = new File(args[0]);
+		result.thresholdCutoff = 0.95f;
+		result.thresholds = new float[5];
+
+		// Create a (temp) vector to hold the 'y' data we'll read from each file
+		Vector<Float> v = new Vector<Float>(1000);
 		
-		File[] dirs = file.listFiles();
-		for (File f: dirs)
+		File[] files = jobDir.listFiles();
+		for (File f: files)
 		{
 			if (f.isDirectory() == false)
 				continue;
 			
-			try {
-			System.out.println("Reading " + f);
-			BufferedReader in = new BufferedReader(new FileReader(new File(f, "out.xls")));
+			BufferedReader in = new BufferedReader(
+				new FileReader(new File(f, "out.xls")));
+			
 			String str = in.readLine();
-			while (str != null)
+			while (str != null && str.length() > 0)
 			{
-				out.write(str);
-				out.newLine();
-				
+				v.add(Float.parseFloat(str));
 				str = in.readLine();
 			}
 			
 			in.close();
-			
-			}
-			catch (Exception e) { System.out.println(e); }
-			
-			out.newLine();
-			
 		}
 		
-		out.close();
+		
+		// Now convert this data into a 2D array, complete with x values for
+		// each of the y's we've just read
+		result.locData = new float[v.size()][2];
+		
+		int pos = 1+ (int)((result.pdm_window/2f - 0.5) + (result.pdm_step/2f));
+		
+		for (int i = 0; i < result.locData.length; i++, pos += result.pdm_step)
+		{
+			result.locData[i][0] = pos;
+			result.locData[i][1] = v.get(i);
+		}
+		
+		
+		return result;
 	}
 }

@@ -284,9 +284,13 @@ Castor's auto mapping file generator -->
 <class name="topali.data.PDM2Result" extends="topali.data.AlignmentResult" auto-complete="true">
   <field name="mbPath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="nProcessors" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
 	
+	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- HMMResult (extends AlignmentResult) -->

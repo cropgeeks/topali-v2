@@ -65,6 +65,6 @@ class UpdateChecker extends Thread
 	static void helpAbout()
 	{
 		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n14th April 2006 - release 2.09", MsgBox.INF);
+			+ " Scotland\n10th May 2006 - release 2.09", MsgBox.INF);
 	}
 }

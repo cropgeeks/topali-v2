@@ -99,6 +99,10 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		if (aResult instanceof PDMResult)
 			TOPALi.winMain.menuAnlsRunPDM((PDMResult)aResult);
 		
+		// Resubmit a PDM2 job
+		if (aResult instanceof PDM2Result)
+			TOPALi.winMain.menuAnlsRunPDM2((PDM2Result)aResult);
+		
 		// Resubmit an HMM job
 		if (aResult instanceof HMMResult)
 			TOPALi.winMain.menuAnlsRunHMM((HMMResult)aResult);

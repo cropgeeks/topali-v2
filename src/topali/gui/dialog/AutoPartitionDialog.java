@@ -138,6 +138,12 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 			pm.autoPartition(pdm.locData, pdm.calculateThreshold());
 		}
 		
+//		else if (result instanceof PDM2Result)
+//		{
+//			PDM2Result pdm = (PDM2Result) result;
+//			pm.autoPartition(pdm.locData, pdm.calculateThreshold());
+//		}
+		
 		else if (result instanceof HMMResult)
 		{
 			HMMResult hmm = (HMMResult) result;

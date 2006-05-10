@@ -416,7 +416,7 @@ public class WinMainMenuBar extends JMenuBar
 			Icons.SETTINGS);
 		
 		mAnls.add(mAnlsRunPDM);
-		mAnls.add(mAnlsRunPDM2);
+//		mAnls.add(mAnlsRunPDM2);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);

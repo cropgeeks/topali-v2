@@ -62,6 +62,8 @@ public class PDM2RemoteJob extends RemoteJob
 		String resultXML = (String) call.invoke(new Object[] { result.jobId } );		
 		result = (PDM2Result) Castor.unmarshall(resultXML);
 		
+		System.out.println("No of datapoints = " + ((PDM2Result)result).locData.length);
+		
 		result.status = JobStatus.COMPLETING;
 		return result;
 	}

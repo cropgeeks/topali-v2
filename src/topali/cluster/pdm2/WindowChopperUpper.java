@@ -35,7 +35,7 @@ class WindowChopperUpper
 		length = ss.getLength();
 	}
 	
-	RegionAnnotations.Region[] getRegions(int nProcessors)
+/*	RegionAnnotations.Region[] getRegions(int nProcessors)
 	{
 		// Total number of windows that need to be PDMed
 		int tW = (int) ((length - w) / s) + 1;
@@ -54,7 +54,9 @@ class WindowChopperUpper
 			// Region's starting nucleotide
 			int B = (P-1) * (wp*s) + 1;
 			// Region's ending nucleotide
-			int E = (B-1) + w + ((wp-1)*s);
+			// (Note: used to be wp-1 but we want an extra window at the end so
+			// that we can get a score for between regions)
+			int E = (B-1) + w + ((wp)*s);
 			
 			if (E >= finalWinNuc)
 				E = finalWinNuc;
@@ -68,6 +70,27 @@ class WindowChopperUpper
 				break;
 			else			
 				P++;
+		}
+		
+		// Convert the list to an array and return
+		return list.toArray(new RegionAnnotations.Region[] {});
+	}
+*/
+	
+	RegionAnnotations.Region[] getWindows(int nProcessors)
+	{
+		// Total number of windows that need to be PDMed
+		int tW = (int) ((length - w) / s) + 1;
+		System.out.println("tW=" + tW);
+
+		// Move along the alignment a step (s) at at time, creating windows from
+		// position (p) to position+window-1 (p+w-1)
+		for (int i = 0, p = 1; i < tW; i++, p += s)
+		{
+			int B = p;
+			int E = p + w - 1;
+					
+			list.add(new RegionAnnotations.Region(B, E));
 		}
 		
 		// Convert the list to an array and return

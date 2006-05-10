@@ -24,6 +24,7 @@ public class PDMWebService extends WebService
 			result.mbPath = getParameter("mb-path");
 			result.treeDistPath = getParameter("treedist-path");
 			result.tmpDir = getParameter("tmp-dir");
+			result.nProcessors = Integer.parseInt(getParameter("n-processors"));
 			result.jobId = jobId;
 				
 			// We put the starting of the job into its own thread so the web

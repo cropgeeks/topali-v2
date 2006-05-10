@@ -19,6 +19,13 @@ public class PDMInitializer extends Thread
 	
 	// Directory where the job will run
 	private File jobDir;
+	private ThreadManager manager;
+	
+	// Holds sequence indices (as not every sequences may be processed)
+	private int[] indices;
+	// Holds a list of windows that form the basic of the PDM job
+	private RegionAnnotations.Region[] regions;
+	
 	
 	public PDMInitializer(File jobDir, SequenceSet ss, PDM2Result result)
 	{
@@ -46,7 +53,7 @@ public class PDMInitializer extends Thread
 		}
 	}
 	
-	private void runAnalysis()
+/*	private void runAnalysis()
 		throws Exception
 	{
 		ThreadManager manager = new ThreadManager();
@@ -56,7 +63,8 @@ public class PDMInitializer extends Thread
 		
 		// Number of processors/jobs/slots/whatever available for use
 		int nodeCount = manager.getMaxTokens();
-		if (result.isRemote) nodeCount = 54;						// TODO: fill in with real value
+		if (result.isRemote)
+			nodeCount = result.nProcessors;
 
 		// Before the job can be started (on the cluster) we need to break it
 		// down into a set of groups, where each group contains [n] windows
@@ -92,5 +100,77 @@ public class PDMInitializer extends Thread
 		// Or on the cluster...
 		if (result.isRemote)
 			PDMWebService.runScript(jobDir, regions.length);
+	}
+*/
+
+	private void runAnalysis()
+		throws Exception
+	{
+		manager = new ThreadManager();
+		
+		// Sequences that should be selected/saved for processing
+		indices = ss.getIndicesFromNames(result.selectedSeqs);
+		
+		// Number of processors/jobs/slots/whatever available for use
+		int nodeCount = manager.getMaxTokens();
+		if (result.isRemote)
+			nodeCount = result.nProcessors;
+
+//		nodeCount = 54;
+
+		// Before the job can be started (on the cluster) we need to break it
+		// up into its windows, then split them between nodes
+		// This code used to write the region data as a mini-alignment and the
+		// analysis would then work out the windows, but this method is easier
+		// to deal with when adjusting windows for variable site information
+		WindowChopperUpper wcu = new WindowChopperUpper(ss, result);
+		regions = wcu.getWindows(nodeCount);
+		
+		
+		// Number of windows per node (best case)
+		int wN    = (int) ((regions.length / nodeCount) + 1);		
+		// Number of nodes we actually end up using
+		int nodes = (int) ((regions.length / wN) + 1);
+		
+		for (int i = 0; i < nodes; i++)
+		{
+			int sIndex = (i*wN);
+			int eIndex = (i*wN) + wN; // (no -1 because we want an extra overlapping window)
+			
+			writeWindows(i+1, sIndex, eIndex);
+		}
+					
+		// Or on the cluster...
+		if (result.isRemote)
+			PDMWebService.runScript(jobDir, nodes);
+	}
+	
+	private void writeWindows(int nodeIndex, int s, int e)
+		throws Exception
+	{
+		File runDir = new File(jobDir, "run" + nodeIndex);
+		runDir.mkdirs();
+		
+		// Write the full alignment too, just in case...
+		File seqFile = new File(runDir, "pdm.fasta");
+		ss.save(seqFile, indices, Filters.FAS, true);
+		
+		for (int i = s, win = 1; i <= e; i++, win++)
+		{
+			// (There will be no "extra" window for the last node's data)
+			if (i >= regions.length)
+				continue;
+				
+			RegionAnnotations.Region r = regions[i];
+			
+			seqFile = new File(runDir, "win" + win + ".nex");
+			ss.save(seqFile, indices, r.getS(), r.getE(), Filters.NEX_B, true);
+		}
+		
+		if (result.isRemote == false)
+		{
+			PDMAnalysis analysis = new PDMAnalysis(runDir);
+			analysis.startThread(manager);
+		}
 	}
 }

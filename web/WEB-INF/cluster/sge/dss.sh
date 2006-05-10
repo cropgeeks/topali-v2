@@ -1,4 +1,4 @@
-#$ -N TOPALi-DSS
+#$ -N TPi-DSS
 #$ -cwd
 #$ -t 1-$RUN_COUNT
 

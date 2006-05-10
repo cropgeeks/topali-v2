@@ -15,6 +15,8 @@ public class PDM2Result extends AlignmentResult
 	public String mbPath;
 	// The location of the TreeDist binary
 	public String treeDistPath;
+	// The number of job-slots available to hack this job up into
+	public int nProcessors;
 		
 	public int pdm_window;
 	public int pdm_step;
@@ -22,6 +24,11 @@ public class PDM2Result extends AlignmentResult
 	// Data for the global and local statistic graphs
 //	public float[][] glbData;
 	public float[][] locData;
+	
+	// Bootstrap information (maximum y found for each run)
+	public float[] thresholds;
+	// And current threshold cutoff point
+	public float thresholdCutoff = 0.95f;
 	
 	// Data for the (tree) histograms
 //	public float[][] histograms;

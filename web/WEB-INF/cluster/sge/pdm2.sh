@@ -1,4 +1,4 @@
-#$ -N TOPALi-PDM2
+#$ -N TPi-PDM2
 #$ -cwd
 #$ -t 1-$RUN_COUNT
 
