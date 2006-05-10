@@ -90,9 +90,6 @@ public class HMMWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		
-		// Add header...
-		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
-		
 		// Write...
 		writeFile(template, new File(jobDir, "hmm.sh"));
 		

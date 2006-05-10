@@ -1,3 +1,6 @@
+#$ -q 32.bit-q
+#$ -l www_parallel=1
+
 #$ -N TPi-PDM2
 #$ -cwd
 #$ -t 1-$RUN_COUNT

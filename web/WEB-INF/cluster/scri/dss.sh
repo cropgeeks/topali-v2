@@ -1,3 +1,5 @@
+#$ -l fastq=true
+
 #$ -N TPi-DSS
 #$ -cwd
 #$ -t 1-$RUN_COUNT

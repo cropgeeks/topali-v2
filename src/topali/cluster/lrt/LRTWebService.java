@@ -90,9 +90,6 @@ public class LRTWebService extends WebService
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		template = template.replaceAll("\\$RUN_COUNT", "" + result.runs);
 		
-		// Add header...
-		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
-		
 		// Write...
 		writeFile(template, new File(jobDir, "lrt.sh"));
 		

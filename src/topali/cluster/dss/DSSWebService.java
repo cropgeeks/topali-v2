@@ -89,10 +89,7 @@ public class DSSWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		template = template.replaceAll("\\$RUN_COUNT", "" + result.runs);
-		
-		// Add header...
-		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
-		
+				
 		// Write...
 		writeFile(template, new File(jobDir, "dss.sh"));
 		

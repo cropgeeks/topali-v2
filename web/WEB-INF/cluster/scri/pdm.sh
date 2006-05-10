@@ -1,3 +1,5 @@
+#$ -l fastq=true
+
 #$ -N TPi-PDM
 #$ -cwd
 

@@ -93,9 +93,6 @@ public class PDMWebService extends WebService
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 		template = template.replaceAll("\\$RUN_COUNT", "" + partitions);
 		
-		// Add header...
-		template = ClusterUtils.readFile(new File(scriptsHdr)) + template;
-		
 		// Write...
 		writeFile(template, new File(jobDir, "pdm2.sh"));
 		
