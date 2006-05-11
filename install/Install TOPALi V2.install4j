@@ -177,6 +177,10 @@
     </win32Archive>
   </mediaSets>
   <buildIds buildAll="true">
+    <mediaSet refId="4" />
+    <mediaSet refId="22" />
+    <mediaSet refId="26" />
+    <mediaSet refId="36" />
     <mediaSet refId="43" />
   </buildIds>
 </install4j>
