@@ -104,12 +104,29 @@ Castor's auto mapping file generator -->
     <bind-xml node="attribute"/></field>
 </class>
 
+<!-- AlignmentFileStat -->
+<class name="topali.data.AlignmentFileStat">
+  <field name="filename" type="string" direct="true">
+ 		<bind-xml node="attribute"/></field>
+  <field name="size" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="length" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="isDna" type="boolean" direct="true">
+  	<bind-xml node="attribute"/></field>
+ <field name="fileSize" type="long" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
 <!-- AlignmentData -->
 <class name="topali.data.AlignmentData">
   <field name="name" type="string" direct="true">
     <bind-xml node="attribute"/></field>
+ <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
+    <bind-xml node="attribute"/></field>
   	
   <field name="sequenceSet" type="topali.data.SequenceSet"/>
+  <field name="references" type="topali.data.AlignmentFileStat" collection="collection"/>
   <field name="results" type="topali.data.AnalysisResult" collection="collection"/>
   <field name="tracker" type="topali.data.ResultsTracker"/>
 <!--<field name="partitionInfo" type="topali.data.PartitionInfo"/>-->

@@ -175,6 +175,9 @@ public class WinMain extends JFrame
 				case 2:
 					// TODO:
 					break;
+				case 3:
+					new ImportFileSetsDialog(this);					
+					break;
 			}
 		}
 	}

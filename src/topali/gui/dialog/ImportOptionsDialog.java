@@ -8,7 +8,7 @@ import topali.gui.*;
 
 public class ImportOptionsDialog extends JDialog implements ActionListener
 {
-	private JRadioButton rImport, rCDNA, rAlign;
+	private JRadioButton rImport, rCDNA, rAlign, rMulti;
 	private JButton bOK, bCancel;
 	
 	private boolean isOK = false;
@@ -45,25 +45,32 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 			+ "existing, unaligned DNA");
 		rAlign.setMnemonic(KeyEvent.VK_P);
 		rAlign.setEnabled(false);
+		rMulti = new JRadioButton("by selecting a folder of multiple, multiple alignments "
+			+ "for comparitive genomic analysis");
+		rMulti.setMnemonic(KeyEvent.VK_F);
+		rMulti.addMouseListener(dblListener);
 		
 		switch (Prefs.gui_import_method)
 		{
 			case 0: rImport.setSelected(true); break;
 			case 1: rCDNA.setSelected(true);   break;
 			case 2: rAlign.setSelected(true);  break;
+			case 3: rMulti.setSelected(true);  break;
 		}
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(rImport);
 		group.add(rCDNA);
 		group.add(rAlign);
+		group.add(rMulti);
 		
-		JPanel p1 = new JPanel(new GridLayout(3, 1));
+		JPanel p1 = new JPanel(new GridLayout(4, 1));
 		p1.setBorder(BorderFactory.createTitledBorder("Please select how you'd "
 			+ "like to import data into TOPALi:"));
 		p1.add(rImport);
 		p1.add(rCDNA);
 		p1.add(rAlign);
+		p1.add(rMulti);
 		
 		JPanel p2 = new JPanel(new BorderLayout());
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -94,6 +101,8 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 				Prefs.gui_import_method = 1;
 			else if (rAlign.isSelected())
 				Prefs.gui_import_method = 2;
+			else if (rMulti.isSelected())
+				Prefs.gui_import_method = 3;
 			
 			isOK = true;
 			setVisible(false);

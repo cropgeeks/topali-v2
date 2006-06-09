@@ -7,7 +7,7 @@
 
 
   <target name="init">
-    <mkdir dir="${classes}"/>
+    <!--<mkdir dir="${classes}"/>-->
   </target>
 
 

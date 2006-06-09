@@ -160,12 +160,13 @@ class PDMAnalysis extends MultiThread
 				win2Index = p2;
 				onFirstLine = false;
 			}
-			
+						
 			// Are we half-way through the data yet?
 			if (p2 == 1)
 				break;
 			
-			pdmSum += (float) calculateWeightedPDM(p1, p2, rf);
+			if (rf == 0)
+				pdmSum += (float) calculateWeightedPDM(p1, p2, rf);
 			
 			// Read the next line from the datafile
 			line = in.readLine();
@@ -191,7 +192,7 @@ class PDMAnalysis extends MultiThread
 		double p = pK * Math.log(pK/qK);
 		double q = qK * Math.log(qK/pK);
 		
-		return (1-(rf/rfMax)) * (p+q);
+		return (1-(rf/rfMax)) * (q);//(p+q);
 	}
 
 	

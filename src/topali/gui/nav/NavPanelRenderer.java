@@ -36,6 +36,9 @@ class NavPanelRenderer extends JLabel implements TreeCellRenderer
 		else if (obj instanceof SequenceSetNode)
 			setIcon(Icons.TREE_ALIGNMENT);
 		
+		else if (obj instanceof FileListNode)
+			setIcon(Icons.TREE_TABLE);
+		
 		else if (obj instanceof TreePaneNode)
 			setIcon(Icons.TREE_TREE);
 		

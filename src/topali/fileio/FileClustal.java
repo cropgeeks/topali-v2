@@ -29,8 +29,12 @@ class FileClustal extends FileGeneric
 			in = new BufferedReader(new FileReader(file));		
 			String str = in.readLine();
 			
-			// Is this file even in clustal format?
-			if (str.toUpperCase().startsWith("CLUSTAL") == false)
+			// Is this file even in clustal/muscle format?
+			if (str.toUpperCase().startsWith("CLUSTAL"))
+			{}
+			else if (str.toUpperCase().startsWith("MUSCLE"))
+			{}
+			else
 				throw new Exception();
 			
 			str = in.readLine();

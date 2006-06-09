@@ -166,10 +166,15 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		model.insertNodeInto(dataNode, root, root.getChildCount());
 		
 		// 1) Add the Alignment Node
-		DefaultMutableTreeNode node = addSequenceSetNode(dataNode, data);
+		DefaultMutableTreeNode node = null;
+		if (data.isReferenceList() == false)
+			node = addSequenceSetNode(dataNode, data);
+		else
+			node = addFileListNode(dataNode, data);
 		
 		// 2) Add the Trees Node
-		addTreesNode(dataNode, data);
+		if (data.isReferenceList() == false)
+			addTreesNode(dataNode, data);
 		// 3) Add the Results Node
 		addResultsFolder(dataNode, data);
 
@@ -202,6 +207,18 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		
 		// Add it to the tree
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(sNode);
+		parent.add(node);
+		
+		return node;
+	}
+	
+	private DefaultMutableTreeNode addFileListNode(
+		DefaultMutableTreeNode parent, AlignmentData data)
+	{
+		FileListNode fNode = new FileListNode(data);
+		
+		// Add it to the tree
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(fNode);
 		parent.add(node);
 		
 		return node;

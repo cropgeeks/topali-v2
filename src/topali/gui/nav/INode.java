@@ -17,7 +17,8 @@ abstract class INode
 	{
 		this.data = data;
 		
-		ss = data.getSequenceSet();
+		if (data.isReferenceList() == false)
+			ss = data.getSequenceSet();
 	}
 	
 	public abstract void setMenus();

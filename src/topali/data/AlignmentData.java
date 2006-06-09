@@ -5,6 +5,7 @@
 
 package topali.data;
 
+import java.io.*;
 import java.util.*;
 
 /* Represents an Alignment and the results/analyses run upon it. */
@@ -15,6 +16,10 @@ public class AlignmentData
 			
 	// And the data for it
 	private SequenceSet sequenceSet;
+	// This object can also be used to reference a list of alignments
+	// (not held in memory)
+	private LinkedList<AlignmentFileStat> refs = new LinkedList<AlignmentFileStat>();
+	private boolean isReferenceList = false;
 		
 	// All the AnalysisResults created and associated with this alignment
 	private LinkedList<AnalysisResult> results = new LinkedList<AnalysisResult>();
@@ -42,6 +47,18 @@ public class AlignmentData
 	
 	public void setSequenceSet(SequenceSet sequenceSet)
 		{ this.sequenceSet = sequenceSet; }
+	
+	public LinkedList<AlignmentFileStat> getReferences()
+		{ return refs; }
+	
+	public void setReferences(LinkedList<AlignmentFileStat> refs)
+		{ this.refs = refs; }
+	
+	public boolean isReferenceList()
+		{ return isReferenceList; }
+		
+	public void setIsReferenceList(boolean isReferenceList)
+		{ this.isReferenceList = isReferenceList; }
 	
 	public void setTopaliAnnotations(TOPALiAnnotations topaliAnnotations)
 		{ this.topaliAnnotations = topaliAnnotations; }
@@ -73,4 +90,16 @@ public class AlignmentData
 		{ return tracker; }
 	public void setTracker(ResultsTracker tracker)
 		{ this.tracker = tracker; }
+	
+	public void addReference(String path, SequenceSet ss)
+	{
+		AlignmentFileStat stat = new AlignmentFileStat(path);
+		
+		stat.length = ss.getLength();
+		stat.size = ss.getSize();
+		stat.isDna = ss.isDNA();
+		stat.fileSize = new File(path).length();
+		
+		refs.add(stat);		
+	}
 }
