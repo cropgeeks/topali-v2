@@ -140,9 +140,20 @@ public class PDMInitializer extends Thread
 			writeWindows(i+1, sIndex, eIndex);
 		}
 					
-		// Or on the cluster...
+		// Submit job (and post processing) to the cluster...
 		if (result.isRemote)
-			PDMWebService.runScript(jobDir, nodes);
+		{
+			PDMWebService.runScript(jobDir, nodes, true);
+			PDMWebService.runScript(jobDir, 0, false);
+		}
+		
+		// Or run post processing locally
+		else
+		{
+			PDMPostAnalysis post = new PDMPostAnalysis(jobDir);
+			post.startThread(manager);
+		}
+			
 	}
 	
 	private void writeWindows(int nodeIndex, int s, int e)
@@ -167,6 +178,7 @@ public class PDMInitializer extends Thread
 			ss.save(seqFile, indices, r.getS(), r.getE(), Filters.NEX_B, true);
 		}
 		
+		// Start this window running locally
 		if (result.isRemote == false)
 		{
 			PDMAnalysis analysis = new PDMAnalysis(runDir);

@@ -80,23 +80,27 @@ public class PDMWebService extends WebService
 	 * Creates the script that each instance of a job running on the cluster
 	 * calls to execute that job. In this case, a java command to run an
 	 * PDMAnalysis on a given directory.
+	 * Also modified to run PDM2 script "A" or "B" depending on call
 	 */
-	static void runScript(File jobDir, int partitions)
+	static void runScript(File jobDir, int partitions, boolean scriptA)
 		throws Exception
 	{
+		String name = scriptA ? "pdm2_a.sh" : "pdm2_b.sh";
+		
 		// Read...
-		String template = ClusterUtils.readFile(new File(scriptsDir, "pdm2.sh"));
+		String template = ClusterUtils.readFile(new File(scriptsDir, name));
 		
 		// Replace...
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
-		template = template.replaceAll("\\$RUN_COUNT", "" + partitions);
+		if (scriptA)
+			template = template.replaceAll("\\$RUN_COUNT", "" + partitions);
 		
 		// Write...
-		writeFile(template, new File(jobDir, "pdm2.sh"));
+		writeFile(template, new File(jobDir, name));
 		
 		// Run...
-		submitJob("pdm2.sh", jobDir);
+		submitJob(name, jobDir);
 	}
 }

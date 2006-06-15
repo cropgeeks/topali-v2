@@ -16,12 +16,16 @@ import javax.swing.table.*;
 import topali.data.*;
 import topali.gui.dialog.*;
 
+import doe.*;
+
 public class FileListPanel extends JPanel implements ListSelectionListener
 {
 	private AlignmentData data;
 	private LinkedList<AlignmentFileStat> refs;
 	
 	private JTable table;
+	private AlignmentTableModel model;
+	
 	private PanelToolBar toolbar;
 	
 	public FileListPanel(AlignmentData data)
@@ -36,7 +40,7 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 	
 	private JPanel createControls()
 	{
-		table = new JTable(new AlignmentTableModel());
+		table = new JTable(model = new AlignmentTableModel());
 		table.sizeColumnsToFit(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 		table.getSelectionModel().addListSelectionListener(this);
 		
@@ -75,6 +79,7 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting()) return;
 		
 		toolbar.bImport.setEnabled(table.getSelectedRowCount() == 1);
+		toolbar.bRemove.setEnabled(table.getSelectedRowCount() > 0);
 	}
 	
 	// Loads the currently selected alignment into TOPALi "properly".
@@ -90,7 +95,20 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 		new ImportDataSetDialog(TOPALi.winMain).loadAlignment(file);
 	}
 	
-	private class AlignmentTableModel extends AbstractTableModel
+	private void removeAlignment(int[] rows)
+	{
+		if (MsgBox.yesno("Are you sure you want to remove the selected "
+			+ "alignments from this dataset?", 1) == JOptionPane.YES_OPTION)
+		{
+			
+			for (int index = rows.length-1; index >= 0; index--)
+				model.removeAlignment(rows[index]);
+				
+			WinMainMenuBar.aFileSave.setEnabled(true);
+		}
+	}
+	
+	private class AlignmentTableModel extends DefaultTableModel
 	{
 		public String getColumnName(int col)
 		{
@@ -127,11 +145,17 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 			
 			return null;
 		}
+		
+		void removeAlignment(int row)
+		{
+			refs.remove(row);
+			removeRow(row);
+		}
 	}
 	
 	private class PanelToolBar extends JToolBar implements ActionListener
 	{
-		private JButton bImport;
+		private JButton bImport, bRemove;
 		
 		PanelToolBar()
 		{
@@ -145,13 +169,21 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 			bImport.setEnabled(false);
 			bImport.addActionListener(this);
 			
+			bRemove = (JButton) WinMainToolBar.getButton(false, null, "list02",
+				Icons.TABLE_REMOVE, null);
+			bRemove.setEnabled(false);
+			bRemove.addActionListener(this);
+			
 			add(bImport);
+			add(bRemove);
 		}
 		
 		public void actionPerformed(ActionEvent e)
 		{
 			if (e.getSource() == bImport)
 				loadAlignment(table.getSelectedRow());
+			else if (e.getSource() == bRemove)
+				removeAlignment(table.getSelectedRows());
 		}
 	}
 }
