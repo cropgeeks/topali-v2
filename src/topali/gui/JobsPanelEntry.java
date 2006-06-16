@@ -39,6 +39,7 @@ class JobsPanelEntry extends JPanel
 		if (job.getResult() instanceof TreeResult)
 		{
 			pBar.setString("non-trackable job");
+			pBar.setIndeterminate(true);
 		}
 		
 		jobLabel = new JLabel(job.getResult().jobName);

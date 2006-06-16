@@ -14,6 +14,7 @@ public abstract class MultiThread extends Thread
 	
 	public MultiThread()
 	{
+		s = System.currentTimeMillis();
 	}
 	
 	public void startThread(ThreadManager manager)

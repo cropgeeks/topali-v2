@@ -116,7 +116,6 @@ public class PDMInitializer extends Thread
 		if (result.isRemote)
 			nodeCount = result.nProcessors;
 
-//		nodeCount = 54;
 
 		// Before the job can be started (on the cluster) we need to break it
 		// up into its windows, then split them between nodes
@@ -140,26 +139,19 @@ public class PDMInitializer extends Thread
 			writeWindows(i+1, sIndex, eIndex);
 		}
 					
-		// Submit job (and post processing) to the cluster...
+		// Submit job to the cluster...
 		if (result.isRemote)
-		{
-			PDMWebService.runScript(jobDir, nodes, true);
-			PDMWebService.runScript(jobDir, 0, false);
-		}
-		
-		// Or run post processing locally
+			PDMWebService.runScript(jobDir, nodes + 1);
+		// Or start post processing task locally
 		else
-		{
-			PDMPostAnalysis post = new PDMPostAnalysis(jobDir);
-			post.startThread(manager);
-		}
-			
+			new PDMAnalysis(new File("null")).startThread(manager);
+		
 	}
 	
 	private void writeWindows(int nodeIndex, int s, int e)
 		throws Exception
 	{
-		File runDir = new File(jobDir, "run" + nodeIndex);
+		File runDir = new File(new File(jobDir, "nodes"), "run" + nodeIndex);
 		runDir.mkdirs();
 		
 		// Write the full alignment too, just in case...

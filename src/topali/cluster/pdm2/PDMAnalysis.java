@@ -15,13 +15,18 @@ import topali.mod.*;
 
 class PDMAnalysis extends MultiThread
 {	
+	// Gets set to true if this object can't find its data - we assume it's
+	// therefore meant to do the PostAnalysis tasks
+	// TODO: what if there is an error and data is missing by mistake?
+	private boolean doPostAnalysis = false;
+
 	private SequenceSet ss;
 	
 	// Directory where results will be stored (and temp files worked on)
 	// Why two different places? Because while running on the cluster the job
 	// directory is usually an NFS share - fine for writing final results to,
 	// but during analysis itself it's best to write to a local HD's directory
-	private File runDir, wrkDir;
+	private File jobDir, runDir, wrkDir, treesDir;
 	// And settings
 	private PDM2Result result;
 	
@@ -57,32 +62,53 @@ class PDMAnalysis extends MultiThread
 	PDMAnalysis(File runDir)
 		throws Exception
 	{
-		// Data directory
+		// Data (for this run) directory
 		this.runDir = runDir;
-
-		// Read the PDM2Result
-		File resultFile = new File(runDir.getParentFile(), "submit.xml");
-		result = (PDM2Result) Castor.unmarshall(resultFile);
-		// Read the SequenceSet
-		ss = new SequenceSet(new File(runDir, "pdm.fasta"));
+		// Job directory
+		jobDir = runDir.getParentFile().getParentFile();
 		
-		// Temporary working directory
-		wrkDir = ClusterUtils.getWorkingDirectory(
-			result,	runDir.getParentFile().getName(), runDir.getName());
+		if (runDir.exists())
+		{
+			// Read the PDM2Result
+			File resultFile = new File(jobDir, "submit.xml");
+			result = (PDM2Result) Castor.unmarshall(resultFile);
+			// Read the SequenceSet
+			ss = new SequenceSet(new File(runDir, "pdm.fasta"));
+		
+			// Temporary working directory
+			wrkDir = ClusterUtils.getWorkingDirectory(
+				result,	jobDir.getName(), runDir.getName());
+		}
+		else
+			doPostAnalysis = true;
 	}
 	
 	// A PDMAnalysis must take a region of DNA and perform a PDM analysis on [n] 
 	// windows along that region.
 	public void run()
 	{
+		if (doPostAnalysis)
+			new PDMPostAnalysis(jobDir, result);
+		else
+			doMainAnalysis();
+		
+		giveToken();
+	}
+	
+	private void doMainAnalysis()
+	{		
 		File pctDir = new File(runDir, "percent");
+		
+		// Create the location where we'll save the tree information
+		treesDir = new File(runDir, "trees");
+		treesDir.mkdirs();
 		
 		// What is the highest robinson-faulds distance we expect?
 		rfMax = (2*ss.getSize()) - 6;
 		
 		try
 		{
-			int tW = countWindows();
+/*			int tW = countWindows();
 			float[] scores = new float[tW-1];
 			
 			// Move along the alignment, a window at a time
@@ -121,15 +147,14 @@ class PDMAnalysis extends MultiThread
 			}
 			
 			writeScores(scores);
-			
+*/			
 		}
 		catch (Exception e)
 		{
 			ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 		
-//		ClusterUtils.emptyDirectory(wrkDir, true);		
-		giveToken();
+//		ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 	
 	private float doCalculations()
@@ -213,14 +238,14 @@ class PDMAnalysis extends MultiThread
 		BufferedReader in = new BufferedReader(
 			new FileReader(new File(wrkDir, "pdm.nex.trprobs")));
 		
-		System.out.println("Writing " + new File(wrkDir, "win" + num + ".txt"));
+		System.out.println("Writing " + new File(wrkDir, "win" + num));
 			
 		// File written to the local node's hard disk
 		BufferedWriter outL = new BufferedWriter(
-			new FileWriter(new File(wrkDir, "win" + num + ".txt")));
-		// File written to the head node's hard disk
+			new FileWriter(new File(wrkDir, "win" + num)));
+		// File written to the head node's hard disk	
 		BufferedWriter outH = new BufferedWriter(
-			new FileWriter(new File(runDir, "win" + num + ".txt")));
+			new FileWriter(new File(treesDir, "win" + num)));
 		
 		String str = in.readLine();
 		while (str != null)

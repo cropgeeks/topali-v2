@@ -30,13 +30,13 @@ class RunTreeDist
 		
 		new StreamCatcher(proc.getInputStream(), false);
 		
-		writer.println("win" + (win-1) + ".txt");
+		writer.println("win" + (win-1));
 		writer.println("D");
 		writer.println("2");
 		writer.println("L");
 		writer.println("S");
 		writer.println("Y");
-		writer.println("win" + (win) + ".txt");
+		writer.println("win" + (win));
 		writer.close();
 		
 		try { proc.waitFor(); }

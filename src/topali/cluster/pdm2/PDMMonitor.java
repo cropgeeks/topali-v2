@@ -22,6 +22,21 @@ public class PDMMonitor
 	public float getPercentageComplete()
 		throws Exception
 	{
+		float percent = this.getParallelPercentageComplete();
+		
+		// TODO: check for completion of the PDM2PostAnalysis run
+		// if (complete
+			// return 100
+		// else
+			// Fudge the return so it doesn't appear finished until 105% complete
+			return (percent / 105) * 100f;
+	}
+	
+	// Returns the percentage completion for the parallel section of the job
+	// (ie the main window-along-an-alignment bit)
+	float getParallelPercentageComplete()
+		throws Exception
+	{
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe("error.txt generated for " + jobDir.getPath());
@@ -31,13 +46,10 @@ public class PDMMonitor
 		// Calculate a running percentage total for each sub-job directory
 		int runs = 0, total = 0;
 		
-		File[] files = jobDir.listFiles();
+		File[] files = new File(jobDir, "nodes").listFiles();
 		for (File f: files)
 		{
-			if (f.isDirectory() == false)
-				continue;
-			else
-				runs++;
+			runs++;
 			
 			if (new File(f, "error.txt").exists())
 			{
@@ -68,12 +80,9 @@ public class PDMMonitor
 		// Create a (temp) vector to hold the 'y' data we'll read from each file
 		Vector<Float> v = new Vector<Float>(1000);
 		
-		File[] files = jobDir.listFiles();
+		File[] files = new File(jobDir, "nodes").listFiles();
 		for (File f: files)
 		{
-			if (f.isDirectory() == false)
-				continue;
-			
 			BufferedReader in = new BufferedReader(
 				new FileReader(new File(f, "out.xls")));
 			
