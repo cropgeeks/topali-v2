@@ -130,6 +130,9 @@ public class PDMInitializer extends Thread
 		int wN    = (int) ((regions.length / nodeCount) + 1);		
 		// Number of nodes we actually end up using
 		int nodes = (int) ((regions.length / wN) + 1);
+		// Check for special case where integer rounddown goes tits up
+		// (ie 39 nodes but all data written in 38)
+		if (wN*(nodes-1) == regions.length) nodes -= 1;
 		
 		for (int i = 0; i < nodes; i++)
 		{
@@ -141,10 +144,14 @@ public class PDMInitializer extends Thread
 					
 		// Submit job to the cluster...
 		if (result.isRemote)
-			PDMWebService.runScript(jobDir, nodes + 1);
-		// Or start post processing task locally
+			PDMWebService.runScript(jobDir, nodes+1);
+		
+		// Or start post processing task locally (after other windows complete)
 		else
-			new PDMAnalysis(new File("null")).startThread(manager);
+		{
+			File file = new File(new File(jobDir, "nodes"), "runX");
+			new PDMAnalysis(file).startThread(manager);
+		}
 		
 	}
 	

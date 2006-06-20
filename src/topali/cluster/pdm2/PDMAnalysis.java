@@ -62,16 +62,20 @@ class PDMAnalysis extends MultiThread
 	PDMAnalysis(File runDir)
 		throws Exception
 	{
-		// Data (for this run) directory
+		// Data (for this run) directory - may not exist (but will not be null)
+		// if we're dealing with a PostAnalysis run
 		this.runDir = runDir;
+				
 		// Job directory
 		jobDir = runDir.getParentFile().getParentFile();
+		System.out.println("jobDir: " + jobDir);
+		
+		// Read the PDM2Result
+		File resultFile = new File(jobDir, "submit.xml");
+		result = (PDM2Result) Castor.unmarshall(resultFile);
 		
 		if (runDir.exists())
 		{
-			// Read the PDM2Result
-			File resultFile = new File(jobDir, "submit.xml");
-			result = (PDM2Result) Castor.unmarshall(resultFile);
 			// Read the SequenceSet
 			ss = new SequenceSet(new File(runDir, "pdm.fasta"));
 		
@@ -108,7 +112,7 @@ class PDMAnalysis extends MultiThread
 		
 		try
 		{
-/*			int tW = countWindows();
+			int tW = countWindows();
 			float[] scores = new float[tW-1];
 			
 			// Move along the alignment, a window at a time
@@ -137,7 +141,7 @@ class PDMAnalysis extends MultiThread
 				// them
 				if (i > 0)
 				{
-					new RunTreeDist().runTreeDist(wrkDir, result, i+1);					
+					new RunTreeDist().runTreeDistTypeA(wrkDir, result, i+1);					
 					scores[i-1] = doCalculations();
 				}
 				
@@ -147,7 +151,7 @@ class PDMAnalysis extends MultiThread
 			}
 			
 			writeScores(scores);
-*/			
+			
 		}
 		catch (Exception e)
 		{
