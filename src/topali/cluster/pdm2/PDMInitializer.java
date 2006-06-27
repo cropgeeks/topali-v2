@@ -125,6 +125,7 @@ public class PDMInitializer extends Thread
 		WindowChopperUpper wcu = new WindowChopperUpper(ss, result);
 		regions = wcu.getWindows(nodeCount);
 		
+		System.out.println("NoWindows=" + regions.length);
 		
 		// Number of windows per node (best case)
 		int wN    = (int) ((regions.length / nodeCount) + 1);		

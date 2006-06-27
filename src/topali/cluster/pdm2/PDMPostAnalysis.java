@@ -19,6 +19,10 @@ class PDMPostAnalysis
 	
 	private Hashtable<String, TreeScore> treeTable = new Hashtable<String, TreeScore>(500);
 	private TreeScore[] trees;
+	
+	private int windowCount = 0;
+	
+	private float[] thresholds;
 
 	PDMPostAnalysis(File jobDir, PDM2Result result)
 	{
@@ -42,20 +46,37 @@ class PDMPostAnalysis
 		throws Exception
 	{
 		System.out.println("Running PDM2PostAnalysis");
-		
+				
 		// Nothing can be done until the main alignment run is complete
-		while (new PDMMonitor(jobDir).getParallelPercentageComplete() < 100f)
+		float progress = new PDMMonitor(jobDir).getParallelPercentageComplete();
+		while (progress < 100f)
 		{
 			try { Thread.sleep(5000); }
 			catch (InterruptedException e) {}
+			
+			System.out.println("progress=" + progress);
+			progress = new PDMMonitor(jobDir).getParallelPercentageComplete();
 		}
+		
+		long s = System.currentTimeMillis();
 		
 		// First we read and compute summation scores for every tree found
 		readTreeFiles();
 		// Then we move the trees into an array (writing them to disk as well)
 		createTreeArray();
+		
 		// Next, run TreeDist to remove duplicates from the array
-		runTreeDist();
+//		runTreeDist();
+
+		// This sorts, and sums the values in the array so it can be searched
+		makeArrayCumulative();
+
+
+		computeThreshold(101);
+		
+		collateResults();
+		
+		System.out.println("PostRun complete in " + (System.currentTimeMillis()-s) + "ms");
 	}
 	
 	private void readTreeFiles()
@@ -92,6 +113,7 @@ class PDMPostAnalysis
 		throws Exception
 	{
 		BufferedReader in = new BufferedReader(new FileReader(file));
+		windowCount++;
 		
 		String str = in.readLine();
 		while (str != null && str.length() > 0)
@@ -134,8 +156,11 @@ class PDMPostAnalysis
 		for (int i = 0; keys.hasMoreElements(); i++)
 		{
 			trees[i] = treeTable.remove(keys.nextElement());
-			System.out.println(trees[i].treeStr + "\t" + trees[i].prob);
+			// Divide the probability score by the number of windows so that
+			// they sum to 1 rather than windowCount
+			trees[i].prob /= windowCount;
 			
+			System.out.println(trees[i].treeStr + "\t" + trees[i].prob);			
 			out.write(trees[i].treeStr);
 			out.newLine();			
 		}
@@ -143,7 +168,7 @@ class PDMPostAnalysis
 		out.close();
 	}
 	
-	private void runTreeDist()
+/*	private void runTreeDist()
 		throws Exception
 	{
 		long s = System.currentTimeMillis();
@@ -171,6 +196,158 @@ class PDMPostAnalysis
 		}
 		
 		in.close();
+	}
+*/
+
+	private void makeArrayCumulative()
+	{
+		Arrays.sort(trees);
+		
+		System.out.println("Array now");
+		
+		float prevValue = 0;
+		for (TreeScore ts: trees)
+		{
+			ts.prob += prevValue;
+			prevValue = ts.prob;
+			
+			System.out.println(ts.treeStr + "\t" + ts.prob);
+		}
+	}
+	
+	private void computeThreshold(int bootstrapCount)
+	{
+		long s = System.currentTimeMillis();
+		
+		float[] histo1 = null;
+		float[] histo2 = null;
+		
+		thresholds = new float[bootstrapCount];
+		
+		for (int i = 0; i < (bootstrapCount+1); i++)
+		{
+			histo1 = createSampledHistogram(200);
+			
+			if (i > 0)
+			{
+//				System.out.println();
+//				System.out.println("HISTO_1\tHISTO_2");
+//				for (int j = 0; j < histo1.length; j++)
+//					System.out.println(" " + histo1[j] + "\t" + histo2[j]);
+//				System.out.println();
+				
+				thresholds[i-1] = computePDMFromSamples(histo1, histo2);
+			}
+			
+			histo2 = histo1;
+		}
+		
+		// Sort the thresholds data into accending order
+		Arrays.sort(thresholds);
+		
+		System.out.println("Threshold time: " + (System.currentTimeMillis()-s));
+	}
+	
+	private float computePDMFromSamples(float[] histo1, float[] histo2)
+	{
+		float pdm = 0;
+		
+		for (int i = 0; i < histo1.length; i++)
+		{
+			if (histo1[i] == 0 || histo2[i] == 0)
+				continue;
+			
+			pdm += histo1[i] * Math.log(histo1[i] / histo2[i]);
+		}
+		
+		return pdm;
+	}
+
+	// Creates a simulated histogram by sampling values from the actual global
+	// histogram. Note that the simulated histogram will still have the same
+	// number of trees as the original. This allows for a quick pdm score to be
+	// calculated on sim1[0] against sim2[0] and [1] against [1] etc
+	private float[] createSampledHistogram(int sampleCount)
+	{
+		float[] histogram = new float[trees.length];
+		
+		for (int i = 0; i < sampleCount; i++)
+		{
+			int index = findTreeWithValue(Math.random());
+			
+			// Each time a tree is picked, we basically increase its "found"
+			// count by 1. However, we want the histogram normalized so its
+			// values sum to 1, therefore we actually increase by 1/sampleCount
+			histogram[index] += (1.0f / (float)sampleCount);
+		}
+		
+		return histogram;
+	}
+	
+	// Does a very inefficient lookup of the global tree histogram to find which
+	// tree should be sampled based on the given random value. Basically just
+	// searches the histogram array in a linear fashion rather than doing some
+	// thing clever with lookup tables.
+	// TODO: something clever
+	private int findTreeWithValue(double rndValue)
+	{
+		int index = 0;
+		for (TreeScore ts: trees)
+		{
+			if (ts.prob >= rndValue)
+				return index;
+			else
+				index++;
+		}
+		
+		return index;
+	}
+	
+	private void collateResults()
+		throws Exception
+	{
+		// Read in the result object
+		// TODO: Collate results so that result.xml is read rather than submit.xml
+		PDM2Result result =
+			(PDM2Result) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		
+		result.thresholds = thresholds;
+
+		// Create a (temp) vector to hold the 'y' data we'll read from each file
+		Vector<Float> v = new Vector<Float>(1000);
+		
+		File[] files = new File(jobDir, "nodes").listFiles();
+		for (File f: files)
+		{
+			BufferedReader in = new BufferedReader(
+				new FileReader(new File(f, "out.xls")));
+			
+			String str = in.readLine();
+			while (str != null && str.length() > 0)
+			{
+				v.add(Float.parseFloat(str));
+				str = in.readLine();
+			}
+			
+			in.close();
+		}
+		
+		
+		// Now convert this data into a 2D array, complete with x values for
+		// each of the y's we've just read
+		result.locData = new float[v.size()][2];
+		
+		int pos = 1+ (int)((result.pdm_window/2f - 0.5) + (result.pdm_step/2f));
+		
+		for (int i = 0; i < result.locData.length; i++, pos += result.pdm_step)
+		{
+			result.locData[i][0] = pos;
+			result.locData[i][1] = v.get(i);
+		}
+		
+		
+		Castor.saveXML(result, new File(jobDir, "result.xml"));
+		new File(jobDir, "ok").createNewFile();
 	}
 	
 	/*
@@ -206,7 +383,7 @@ class PDMPostAnalysis
 		});
 	}
 	
-	private static class TreeScore
+	private static class TreeScore implements Comparable
 	{
 		String treeStr;
 		float prob;
@@ -217,6 +394,18 @@ class PDMPostAnalysis
 		{
 			this.treeStr = treeStr;
 			this.prob = prob;
+		}
+		
+		// This sorts an array of these objects so that the tree with the
+		// highest probabilty is first
+		public int compareTo(Object o)
+		{
+			TreeScore other = (TreeScore) o;
+			
+			if (this.prob < other.prob) return  1;
+			if (this.prob > other.prob) return -1;
+			
+			return 0;
 		}
 	}
 }

@@ -22,7 +22,13 @@ public class PDMMonitor
 	public float getPercentageComplete()
 		throws Exception
 	{
+		if (new File(jobDir, "ok").exists())
+			return 100f;
+		
 		float percent = this.getParallelPercentageComplete();
+		
+//		if (true)
+//			return percent;
 		
 		// TODO: check for completion of the PDM2PostAnalysis run
 		// if (complete
@@ -58,58 +64,23 @@ public class PDMMonitor
 			}
 			
 			// Check the percentage complete for this job
-			try { total += new File(f, "percent").listFiles().length; }
-			catch (Exception e) {}
+			File pDir = new File(f, "percent");
+			if (pDir.exists())
+				total += pDir.listFiles().length;
+			
+//			try { total += new File(f, "percent").listFiles().length; }
+//			catch (Exception e) { System.out.println(e); }
 		}
 		
+		System.out.println("PERCENT: total=" + total + " and runs=" + runs);
+		
 		// Now work out the overal percentage
-		return total / (float) runs;
+		return ((float) total) / ((float) runs);
 	}
 	
 	public PDM2Result getResult()
 		throws Exception
 	{
-		// Read in the result object
-		// TODO: Collate results so that result.xml is read rather than submit.xml
-		PDM2Result result =
-			(PDM2Result) Castor.unmarshall(new File(jobDir, "submit.xml"));
-		
-		result.thresholdCutoff = 0.95f;
-		result.thresholds = new float[5];
-
-		// Create a (temp) vector to hold the 'y' data we'll read from each file
-		Vector<Float> v = new Vector<Float>(1000);
-		
-		File[] files = new File(jobDir, "nodes").listFiles();
-		for (File f: files)
-		{
-			BufferedReader in = new BufferedReader(
-				new FileReader(new File(f, "out.xls")));
-			
-			String str = in.readLine();
-			while (str != null && str.length() > 0)
-			{
-				v.add(Float.parseFloat(str));
-				str = in.readLine();
-			}
-			
-			in.close();
-		}
-		
-		
-		// Now convert this data into a 2D array, complete with x values for
-		// each of the y's we've just read
-		result.locData = new float[v.size()][2];
-		
-		int pos = 1+ (int)((result.pdm_window/2f - 0.5) + (result.pdm_step/2f));
-		
-		for (int i = 0; i < result.locData.length; i++, pos += result.pdm_step)
-		{
-			result.locData[i][0] = pos;
-			result.locData[i][1] = v.get(i);
-		}
-		
-		
-		return result;
+		return (PDM2Result) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
 }

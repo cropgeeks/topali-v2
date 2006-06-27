@@ -31,7 +31,7 @@ public class PDM2ResultsPanel extends GraphResultsPanel
 		graph.setBorder(BorderFactory.createLineBorder(Icons.grayBackground, 4));
 		graph.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		
-//		setThreshold(result.thresholdCutoff);
+		setThreshold(result.thresholdCutoff);
 		
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.EAST);
@@ -46,18 +46,17 @@ public class PDM2ResultsPanel extends GraphResultsPanel
 	
 	public void setThreshold(float thresholdCutoff)
 	{
-/*		result.thresholdCutoff = thresholdCutoff;
+		result.thresholdCutoff = thresholdCutoff;
 		
 		float threshold =
 			AnalysisUtils.getArrayValue(result.thresholds, thresholdCutoff);
 		
 		graph.setThresholdValue(threshold);
-*/
 	}
 	
 	protected void showThresholdDialog()
 	{ 
-//		new ThresholdDialog(this, result.thresholdCutoff);
+		new ThresholdDialog(this, result.thresholdCutoff);
 	}
 	
 	protected String getAnalysisText()

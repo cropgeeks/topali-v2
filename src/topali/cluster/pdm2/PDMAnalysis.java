@@ -178,7 +178,7 @@ class PDMAnalysis extends MultiThread
 		while (line != null)
 		{
 			st = new StringTokenizer(line);
-			// Integer representations of the two probabilies
+			// Integer representations of the two probabilities
 			int p1 = Integer.parseInt(st.nextToken());
 			int p2 = Integer.parseInt(st.nextToken());
 			// And robinson-faulds distance
