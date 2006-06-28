@@ -64,7 +64,14 @@ class UpdateChecker extends Thread
 	
 	static void helpAbout()
 	{
-		MsgBox.msg("TOPALi V2 - (C) 2006 Iain Milne, Biomathematics & Statistics"
-			+ " Scotland\n10th May 2006 - release 2.09", MsgBox.INF);
+		String msg = "<html><b>TOPALi v2</b> (2.09)<br><br>"
+					+ "Copyright &copy 2003-2006<br><br>"
+					+ "Iain Milne and Frank Wright<br>"
+					+ "Biomathematics & Statistics Scotland<br><br>"
+					+ "This software is licensed. Please see accompanying "
+					+ "license file for details."
+					+ "</html>";
+				
+		doe.MsgBox.msg(msg, doe.MsgBox.INF);
 	}
 }
