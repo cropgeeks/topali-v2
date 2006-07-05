@@ -12,16 +12,14 @@ import topali.cluster.*;
 
 class BambeInfile
 {
-	private SequenceSet ss;
 	private PDMResult result;
 	
 	private BufferedWriter out = null;
 	private String sep = System.getProperty("line.separator");
 	
-	void saveInfile(File wrkDir, SequenceSet ss, PDMResult result)
+	void saveInfile(File wrkDir, PDMResult result)
 		throws Exception
 	{
-		this.ss = ss;
 		this.result = result;
 		
 		System.out.println(wrkDir);
@@ -101,13 +99,13 @@ class BambeInfile
 		out.write(sep + "data-file = dna.in");
 		out.write(sep + "initial-tree-type = neighbor-joining");
 		
-		double[] freqs = ss.getParams().getFrequencies();		
+		double[] freqs = result.frequencies;
 		out.write(sep + "initial-pia = " + freqs[0]); //+ result.pdm_initial_pia);
 		out.write(sep + "initial-pic = " + freqs[1]); //+ result.pdm_initial_pig);
 		out.write(sep + "initial-pig = " + freqs[2]); //+ result.pdm_initial_pic);
 		out.write(sep + "initial-pit = " + freqs[3]); //+ result.pdm_initial_pit);
 		
-		out.write(sep + "initial-kappa = " + ss.getParams().getKappa());
+		out.write(sep + "initial-kappa = " + result.kappa);
 		
 		System.out.println("PIA: " + freqs[0]);
 	}
