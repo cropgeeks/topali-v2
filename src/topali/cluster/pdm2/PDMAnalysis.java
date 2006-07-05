@@ -194,7 +194,8 @@ class PDMAnalysis extends MultiThread
 			if (p2 == 1)
 				break;
 			
-			if (rf == 0)
+//			if (rf == 0)
+			if (rf <= (rfMax*0.25))
 				pdmSum += (float) calculateWeightedPDM(p1, p2, rf);
 			
 			// Read the next line from the datafile
@@ -218,10 +219,12 @@ class PDMAnalysis extends MultiThread
 		if (pK < 0.000001 || qK < 0.000001)
 			return 0;
 	
-		double p = pK * Math.log(pK/qK);
-		double q = qK * Math.log(qK/pK);
+		double avg = (pK+qK)*0.5;
 		
-		return (1-(rf/rfMax)) * (q);//(p+q);
+		double p = pK * Math.log(pK/avg);		
+		double q = qK * Math.log(qK/avg);
+		
+		return (1-(rf/rfMax)) * ((p+q)*0.5);
 	}
 
 	

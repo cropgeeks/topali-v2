@@ -43,6 +43,9 @@ public class PDMMonitor
 	float getParallelPercentageComplete()
 		throws Exception
 	{
+		System.out.println();
+		System.out.println("Checking for progress");
+		
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe("error.txt generated for " + jobDir.getPath());
@@ -55,6 +58,7 @@ public class PDMMonitor
 		File[] files = new File(jobDir, "nodes").listFiles();
 		for (File f: files)
 		{
+			System.out.print(f + " ");
 			runs++;
 			
 			if (new File(f, "error.txt").exists())
@@ -67,6 +71,9 @@ public class PDMMonitor
 			File pDir = new File(f, "percent");
 			if (pDir.exists())
 				total += pDir.listFiles().length;
+			
+			try { System.out.println(pDir.listFiles().length); }
+			catch (Exception e) { e.printStackTrace(System.out); }
 			
 //			try { total += new File(f, "percent").listFiles().length; }
 //			catch (Exception e) { System.out.println(e); }

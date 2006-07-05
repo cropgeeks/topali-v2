@@ -300,7 +300,7 @@ class PDMPostAnalysis
 				index++;
 		}
 		
-		return index;
+		return index-1;
 	}
 	
 	private void collateResults()
