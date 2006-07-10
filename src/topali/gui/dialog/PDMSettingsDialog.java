@@ -106,6 +106,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		result.pdm_window = Prefs.pdm_window;
 		result.treeToolTipWindow = Prefs.pdm_window;
 		result.pdm_step = Prefs.pdm_step;
+		result.pdm_runs = Prefs.pdm_runs + 1;
 		result.pdm_prune = Prefs.pdm_prune;
 		result.pdm_cutoff = Prefs.pdm_cutoff;
 		result.pdm_seed = Prefs.pdm_seed;
@@ -128,6 +129,9 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		
 		result.frequencies = ss.getParams().getFrequencies();
 		result.kappa = ss.getParams().getKappa();
+		
+		result.tRatio = ss.getParams().getTRatio();
+		result.alpha = ss.getParams().getAlpha();
 	}
 	
 	private void setInitialSettings(PDMResult iResult)
@@ -235,7 +239,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		JLabel lEstimate, lPIA, lPIG, lPIC, lPIT, lTTP, lGAM, lParam, lTreeFile;
 		JLabel luKap, luThet, luPi, luTTP, luGAM, ltInt, ltGlo, ltLoc, ltThe;
 		JLabel ltPi, ltKap, ltTTP, ltGam, ltBet, lOutgroup, lTree, lHeight;
-		JLabel lPrune;
+		JLabel lPrune, lRuns;
 		JTextField cSeed, cBurn, cCycles, cSample, cCat, cInitKap, cInitThet;
 		JTextField cTTP, cGAM, cParam, cOutgroup;
 		JTextField ctInt, ctGlo, ctLoc, ctThe, ctPi, ctKap, ctTTP, ctGam, ctBet;
@@ -243,10 +247,19 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		JComboBox cBurnAlg, cMainAlg, cUseBeta, cNewick, cMole, cModel, cTree;
 		JComboBox cSingleKap, cEstimate, cuKap, cuThet, cuPi, cuTTP, cuGAM;
 		JComboBox cPrune;
+		JSpinner cRuns;
+		SpinnerNumberModel runsModel;
 	
 		BambePanel()
 		{
 			setPreferredSize(new Dimension(50, 50));
+		
+			// Threshold runs
+			runsModel = new SpinnerNumberModel(Prefs.pdm_runs, 10, 1000, 1);
+			cRuns = new JSpinner(runsModel);
+			((JSpinner.NumberEditor)cRuns.getEditor()).getTextField()
+				.setToolTipText("Number of times to re-run the analysis to calculate the threshold values");
+			lRuns = new JLabel("Number of bootstrapping threshold runs:");
 		
 			// Pruning
 			String[] v1 = { "Yes", "No" };
@@ -452,32 +465,35 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 			getVerticalScrollBar().setUnitIncrement(10);
 			
-			layout.add(lPrune, 0, 0, 0, 1, new Insets(10, 10, 5, 5));
-			layout.add(cPrune, 1, 0, 1, 1, new Insets(10, 5, 5, 10));
+			layout.add(lRuns, 0, 0, 0, 1, new Insets(10, 10, 5, 5));
+			layout.add(cRuns, 1, 0, 1, 1, new Insets(10, 5, 5, 10));
 			
-			layout.add(lSeed, 0, 1, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cSeed, 1, 1, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lPrune, 0, 1, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cPrune, 1, 1, 1, 1, new Insets(5, 5, 5, 10));
 			
-			layout.add(lBurn, 0, 2, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cBurn, 1, 2, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lSeed, 0, 2, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cSeed, 1, 2, 1, 1, new Insets(5, 5, 5, 10));
 			
-			layout.add(lCycles, 0, 3, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cCycles, 1, 3, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lBurn, 0, 3, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cBurn, 1, 4, 1, 1, new Insets(5, 5, 5, 10));
 			
-			layout.add(lBurnAlg, 0, 4, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cBurnAlg, 1, 4, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lCycles, 0, 4, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cCycles, 1, 4, 1, 1, new Insets(5, 5, 5, 10));
 			
-			layout.add(lMainAlg, 0, 5, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cMainAlg, 1, 5, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lBurnAlg, 0, 5, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cBurnAlg, 1, 5, 1, 1, new Insets(5, 5, 5, 10));
 			
-			layout.add(lUseBeta, 0, 6, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cUseBeta, 1, 6, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lMainAlg, 0, 6, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cMainAlg, 1, 6, 1, 1, new Insets(5, 5, 5, 10));
 			
-//			layout.add(lSample, 0, 6, 0, 1, new Insets(5, 10, 5, 5));
-//			layout.add(cSample, 1, 6, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(lUseBeta, 0, 7, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cUseBeta, 1, 7, 1, 1, new Insets(5, 5, 5, 10));
 			
-//			layout.add(lNewick, 0, 7, 0, 1, new Insets(5, 10, 5, 5));
-//			layout.add(cNewick, 1, 7, 1, 1, new Insets(5, 5, 5, 10));
+//			layout.add(lSample, 0, 8, 0, 1, new Insets(5, 10, 5, 5));
+//			layout.add(cSample, 1, 8, 1, 1, new Insets(5, 5, 5, 10));
+			
+//			layout.add(lNewick, 0, 9, 0, 1, new Insets(5, 10, 5, 5));
+//			layout.add(cNewick, 1, 9, 1, 1, new Insets(5, 5, 5, 10));
 			
 			layout.add(lMole, 0, 8, 0, 1, new Insets(5, 10, 5, 5));
 			layout.add(cMole, 1, 8, 1, 1, new Insets(5, 5, 5, 10));
@@ -578,6 +594,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 	
 		boolean saveSettings()
 		{
+			Prefs.pdm_runs = runsModel.getNumber().intValue();
+			
 			try { Prefs.pdm_seed = Integer.parseInt(cSeed.getText()); }
 			catch (Exception e)	{
 				return error("Seed: positive (odd) integer expected.", cSeed);

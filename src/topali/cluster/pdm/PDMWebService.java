@@ -25,7 +25,7 @@ public class PDMWebService extends WebService
 			result.treeDistPath = getParameter("treedist-path");
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
-				
+			
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
 			RunPDM pdm = new RunPDM(jobDir, ss, result);
@@ -80,7 +80,7 @@ public class PDMWebService extends WebService
 	 * calls to execute that job. In this case, a java command to run an
 	 * PDMAnalysis on a given directory.
 	 */
-	static void runScript(File jobDir)
+	static void runScript(File jobDir, PDMResult result)
 		throws Exception
 	{
 		// Read...
@@ -90,6 +90,7 @@ public class PDMWebService extends WebService
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
+		template = template.replaceAll("\\$RUN_COUNT", "" + result.pdm_runs);
 		
 		// Write...
 		writeFile(template, new File(jobDir, "pdm.sh"));

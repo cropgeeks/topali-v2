@@ -30,6 +30,9 @@ public class PDMResultsPanel extends GraphResultsPanel
 		this.result = result;
 		
 		float[] threshold = { 0.95f };
+		if (result.thresholds != null)
+			threshold = result.thresholds;
+		
 				
 		glbGraph = new AlignmentGraph(data, result, result.glbData, threshold);
 		glbGraph.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
@@ -92,6 +95,7 @@ public class PDMResultsPanel extends GraphResultsPanel
 		
 		str += "\n\npdm_window:          " + result.pdm_window;
 		str += "\npdm_step:            " + result.pdm_step;
+		str += "\npdm_runs:            " + (result.pdm_runs-1);
 		str += "\npdm_prune:           " + result.pdm_prune;
 		str += "\npdm_cutoff:          " + result.pdm_cutoff;
 		str += "\npdm_seed:            " + result.pdm_seed;

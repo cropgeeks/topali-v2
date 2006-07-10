@@ -17,7 +17,7 @@ class PDMAnalysis extends MultiThread
 	private SequenceSet ss;
 	
 	// Directory where results will be stored (and temp files worked on)
-	private File jobDir, wrkDir;
+	private File runDir, wrkDir;
 	// And settings
 	private PDMResult result;
 
@@ -34,24 +34,25 @@ class PDMAnalysis extends MultiThread
 		catch (Exception e)
 		{
 			System.out.println("PDMAnalysis: " + e);
-			ClusterUtils.writeError(new File(analysis.jobDir, "error.txt"), e);
+			ClusterUtils.writeError(new File(analysis.runDir, "error.txt"), e);
 		}
 	}
 	
-	PDMAnalysis(File jobDir)
+	PDMAnalysis(File runDir)
 		throws Exception
 	{
 		// Data directory
-		this.jobDir = jobDir;
+		this.runDir = runDir;
 
 		// Read the PDMResult
-		result = (PDMResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		File resultFile = new File(runDir.getParentFile(), "submit.xml");
+		result = (PDMResult) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
-		ss = (SequenceSet) Castor.unmarshall(new File(jobDir, "ss.xml"));
+		ss = new SequenceSet(new File(runDir, "pdm.fasta"));
 		
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(
-			result, jobDir.getName(), "pdm");
+			result,	runDir.getParentFile().getName(), runDir.getName());
 	}
 	
 	public void run()
@@ -59,7 +60,7 @@ class PDMAnalysis extends MultiThread
 		try
 		{
 			// Save the input file used by Bambe
-			new BambeInfile().saveInfile(wrkDir, ss, result);
+//			new BambeInfile().saveInfile(wrkDir, result);
 			
 			// We need to save out the SequenceSet for Bambe to read, ensuring
 			// that only the sequences meant to be processed are saved
@@ -67,7 +68,7 @@ class PDMAnalysis extends MultiThread
 			ss.save(new File(wrkDir, "dna.dat"), indices, Filters.BAM, true);
 			
 			
-			Jambe2 jambe = new Jambe2(jobDir, wrkDir, result, ss.getLength());
+			Jambe2 jambe = new Jambe2(runDir, wrkDir, result, ss.getLength());
 			jambe.runJambe();
 			
 			// And the results collated
@@ -75,8 +76,10 @@ class PDMAnalysis extends MultiThread
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace(System.out);
+			
 			if (e.getMessage().equals("cancel") == false)
-				ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
+				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);		
@@ -90,6 +93,12 @@ class PDMAnalysis extends MultiThread
 		float[] gblData = jambe.getKullbackMean();
 		float[] locData = jambe.getLocalData();
 		
+		// Highest value found?
+		float max = locData[0];
+		for (float value: locData)
+			if (value > max)
+				max = value;
+		
 		// Turn them into x/y arrays that can be plotted
 		result.glbData = new float[gblData.length][2];
 		result.locData = new float[locData.length][2];
@@ -102,8 +111,13 @@ class PDMAnalysis extends MultiThread
 		result.df = jambe.getHistogramDF();
 		result.N = jambe.getN();
 		
-		Castor.saveXML(result, new File(jobDir, "result.xml"));
-		ClusterUtils.setPercent(new File(jobDir, "percent"), 105);
+		Castor.saveXML(result, new File(runDir, "result.xml"));
+		ClusterUtils.setPercent(new File(runDir, "percent"), 105);
+		
+		// Save the value of the highest local point found to a file
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir, "max.txt")));
+		out.write("" + max);
+		out.close();
 	}
 
 	private void populateXaxis(float[] d1d, float[][] d2d, boolean global)

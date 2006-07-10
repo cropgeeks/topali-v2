@@ -267,6 +267,7 @@ Castor's auto mapping file generator -->
 	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_runs" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_prune" type="boolean" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_cutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_seed" type="int" direct="true"><bind-xml node="attribute"/></field>
@@ -290,11 +291,14 @@ Castor's auto mapping file generator -->
 	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
 	<field name="df" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="N" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="tRatio" type="double" direct="true"><bind-xml node="attribute"/></field>
+	<field name="alpha" type="double" direct="true"><bind-xml node="attribute"/></field>
 	
 	<field name="frequencies" type="double" direct="true" collection="array"/>
 	<!--<field name="glbData" type="float" direct="true" collection="array"/>-->
 	<!--<field name="locData" type="float" direct="true" collection="array"/>-->
 	<!--<field name="histograms" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- PDM2Result (extends AlignmentResult) -->

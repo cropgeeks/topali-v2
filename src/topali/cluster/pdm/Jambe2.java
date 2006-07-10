@@ -31,7 +31,7 @@ public class Jambe2
 	// Stores a set of bootstrap results created by running Jambe multiple times
 	private float[] bootstrapValues = null;
 	
-	private File jobDir, wrkDir, pctDir;
+	private File wrkDir, pctDir;
 	private PDMResult result;
 	
 	// Tracks the job percentage-complete value
@@ -39,7 +39,6 @@ public class Jambe2
 
 	public Jambe2(File jobDir, File wrkDir, PDMResult result, int length)
 	{
-		this.jobDir = jobDir;
 		this.wrkDir = wrkDir;
 		this.result = result;
 		
@@ -101,7 +100,7 @@ public class Jambe2
 		// Instantiate an object to compute the autocorrelation time
 		oAutoCorrelationTime = new AutoCorrelationTime(wrkDir, result);
 
-		RunBambe oRunBambe = new RunBambe(wrkDir);	
+		RunBambe oRunBambe = new RunBambe(wrkDir, result);	
 
 		// Now start with the program ...
 		for (int i = 0; i < total; i++)

@@ -7,6 +7,8 @@ package topali.data;
 
 import pal.statistics.*;
 
+import topali.analyses.*;
+
 /*
  * Class that stores both the results from running a PDM analysis and the
  * settings required to make the run (although not the data itself).
@@ -20,6 +22,8 @@ public class PDMResult extends AlignmentResult
 		
 	public int pdm_window;
 	public int pdm_step;
+	// Number of PDM runs (including bootstraps)
+	public int pdm_runs;
 	public boolean pdm_prune;
 	public float pdm_cutoff;
 	public int pdm_seed;
@@ -46,9 +50,16 @@ public class PDMResult extends AlignmentResult
 	public double kappa;
 	
 	
+	// These properties relate to the alignment being analysed
+	public double tRatio, alpha;
+	
+	
 	// Data for the global and local statistic graphs
 	public float[][] glbData;
 	public float[][] locData;
+	
+	// Bootstrap information (maximum y found for each run)
+	public float[] thresholds;
 	
 	// Data for the (tree) histograms
 	public float[][] histograms;
@@ -64,9 +75,17 @@ public class PDMResult extends AlignmentResult
 	
 	public float calculateThreshold()
 	{
-		double chi2 = ChiSquareDistribution.quantile(thresholdCutoff, df);
-		float threshold = (float) chi2 / (2 * N);
+		// Old or new method of threshold calculation?
+		if (thresholds != null)
+		{
+			return AnalysisUtils.getArrayValue(thresholds, thresholdCutoff);
+		}
+		else
+		{		
+			double chi2 = ChiSquareDistribution.quantile(thresholdCutoff, df);
+			float threshold = (float) chi2 / (2 * N);
 		
-		return threshold;
+			return threshold;
+		}
 	}
 }

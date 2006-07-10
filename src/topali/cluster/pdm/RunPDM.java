@@ -8,9 +8,16 @@ package topali.cluster.pdm;
 import java.io.*;
 import java.util.logging.*;
 
+import pal.alignment.*;
+import pal.substmodel.*;
+import pal.distance.*;
+import pal.tree.*;
+
+import topali.analyses.*;
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
+import topali.mod.*;
 
 public class RunPDM extends Thread
 {
@@ -28,7 +35,7 @@ public class RunPDM extends Thread
 		this.ss = ss;
 		this.result = result;
 	}
-
+	
 	public void run()
 	{
 		try
@@ -36,13 +43,11 @@ public class RunPDM extends Thread
 			// Ensure the directory for this job exists
 			jobDir.mkdirs();
 			
-			// Store the PDMResult object where it can be read by the sub-job
+			// Store the PDMResult object where the individual runs can get it
 			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-			// Store the SequenceSet where it can be read by the sub-job
-			Castor.saveXML(ss, new File(jobDir, "ss.xml"));
-			
-			// Run the analysis
-			runAnalysis();
+						
+			// Run the analyses
+			runAnalyses();
 		}
 		catch (Exception e)
 		{
@@ -50,21 +55,67 @@ public class RunPDM extends Thread
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
-	
-	private void runAnalysis()
+
+	// Run [n]+1 number of PDM runs on this alignment
+	private void runAnalyses()
 		throws Exception
 	{
+		ThreadManager manager = new ThreadManager();
+		
+		// Sequences that should be selected/saved for processing
+		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+		
+		for (int i = 1; i <= result.pdm_runs; i++)
+		{
+			if (LocalJobs.isRunning(result.jobId) == false)
+				return;
+			
+			File runDir = new File(jobDir, "run" + i);
+			runDir.mkdirs();
+			
+			// This is the dataset that PDM will run on
+			SequenceSet dataSS = ss;
+			// And if it's not the first run, then it needs to be simulated data
+			if (i > 1)
+				dataSS = getSimulatedAlignment();
+			
+			dataSS.save(new File(runDir, "pdm.fasta"), indices, Filters.FAS, false);
+
+			if (result.isRemote == false)
+			{
+				PDMAnalysis analysis = new PDMAnalysis(runDir);
+				analysis.startThread(manager);
+			}
+		}
+				
 		if (result.isRemote)
 		{
 			logger.info("analysis ready: submitting to cluster");
-			PDMWebService.runScript(jobDir);
+			PDMWebService.runScript(jobDir, result);
 		}
-		else
-		{
-			ThreadManager manager = new ThreadManager();
-						
-			PDMAnalysis analysis = new PDMAnalysis(jobDir);
-			analysis.startThread(manager);
-		}
+	}
+	
+	private SequenceSet getSimulatedAlignment()
+		throws Exception
+	{
+		SimpleAlignment a = ss.getAlignment(false);
+
+		// Create a distance matrix from this alignment
+		JukesCantorDistanceMatrix distance = new JukesCantorDistanceMatrix(a);
+				
+		// Create a NJ tree from the distance matrix
+		NeighborJoiningTree tree = new NeighborJoiningTree(distance);
+		
+		// SubstitutionModel
+		SubstitutionModel model = null;
+		
+		model = TreeUtilities.getF84SubstitutionModel(a, result.tRatio, result.alpha);
+		
+		// Simulate...
+		SimulatedAlignment sim = new SimulatedAlignment(a.getLength(), tree, model);
+		sim.simulate();
+		
+		// And convert back to TOPALi-friendly SequenceSet format
+		return new SequenceSet(sim);
 	}
 }

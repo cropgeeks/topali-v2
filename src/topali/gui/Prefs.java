@@ -120,6 +120,7 @@ public class Prefs extends PreferencesXML
 	// PDM analysis run settings
 	public static int pdm_window;
 	public static int pdm_step;
+	public static int pdm_runs;
 	public static boolean pdm_prune;
 	public static float pdm_cutoff;
 	public static int pdm_seed;
@@ -272,6 +273,7 @@ public class Prefs extends PreferencesXML
 		
 		pdm_window = getInt("pdm_window", pdm_window);
 		pdm_step = getInt("pdm_step", pdm_step);
+		pdm_runs = getInt("pdm_runs", pdm_runs);
 		pdm_prune = getBool("pdm_prune", pdm_prune);
 		pdm_cutoff = getFloat("pdm_cutoff", pdm_cutoff);
 		pdm_seed = getInt("pdm_seed", pdm_seed);
@@ -417,6 +419,7 @@ public class Prefs extends PreferencesXML
 		
 		p.setProperty("pdm_window", "" + pdm_window);
 		p.setProperty("pdm_step", "" + pdm_step);
+		p.setProperty("pdm_runs", "" + pdm_runs);
 		p.setProperty("pdm_prune", "" + pdm_prune);
 		p.setProperty("pdm_cutoff", "" + pdm_cutoff);
 		p.setProperty("pdm_seed", "" + pdm_seed);
@@ -520,6 +523,7 @@ public class Prefs extends PreferencesXML
 	{
 		pdm_window = 500;
 		pdm_step = 10;
+		pdm_runs = 100;
 		pdm_prune = true;
 		pdm_cutoff = 0.05f;
 		pdm_seed = 194024933;

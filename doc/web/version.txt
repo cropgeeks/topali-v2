@@ -7,6 +7,8 @@ Release History:
 [SC] = Source Code
 
   - [NF] Added support for loading alignments in Muscle format.
+  - [NF] PDM now calculates its significance threshold via bootstrapping (in
+    parallel over the cluster).
 
 10-05-2006 - Release 2.09
   - [BF] Modified the way cluster job progress is tracked as a workaround for a
