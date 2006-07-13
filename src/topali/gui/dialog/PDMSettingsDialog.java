@@ -475,7 +475,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			layout.add(cSeed, 1, 2, 1, 1, new Insets(5, 5, 5, 10));
 			
 			layout.add(lBurn, 0, 3, 0, 1, new Insets(5, 10, 5, 5));
-			layout.add(cBurn, 1, 4, 1, 1, new Insets(5, 5, 5, 10));
+			layout.add(cBurn, 1, 3, 1, 1, new Insets(5, 5, 5, 10));
 			
 			layout.add(lCycles, 0, 4, 0, 1, new Insets(5, 10, 5, 5));
 			layout.add(cCycles, 1, 4, 1, 1, new Insets(5, 5, 5, 10));

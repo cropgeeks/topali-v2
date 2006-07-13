@@ -1,4 +1,4 @@
-10
+11
 
 Release History:
 
@@ -6,6 +6,10 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+13-07-2006
+  - [BF] Reinstated the burn-time control for PDM analysis jobs.
+
+10-07-2006
   - [NF] Added support for loading alignments in Muscle format.
   - [NF] PDM now calculates its significance threshold via bootstrapping (in
     parallel over the cluster).
