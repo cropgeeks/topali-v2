@@ -266,7 +266,7 @@ class MosaicPanel extends JPanel implements ActionListener
 		int currTop = -1;
 		
 		// Scan every column
-		for (int pos = 1, newTop = -1; pos <= length; pos++)
+		for (int pos = 2, newTop = -1; pos <= length; pos++)
 		{
 			char s1 = buffers[0].charAt(pos-1);
 			char s2 = buffers[1].charAt(pos-1);
