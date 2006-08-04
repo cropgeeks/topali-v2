@@ -63,10 +63,8 @@ public class RunMBTree extends Thread
 		}
 		else
 		{
-			ThreadManager manager = new ThreadManager();
-						
 			MBTreeAnalysis analysis = new MBTreeAnalysis(jobDir);
-			analysis.startThread(manager);
+			analysis.startThread(LocalJobs.manager);
 		}
 	}
 }

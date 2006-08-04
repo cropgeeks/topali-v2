@@ -10,7 +10,7 @@ import topali.data.*;
 import java.io.*;
 
 public class ClusterUtils
-{
+{	
 	public static boolean isWindows =
 		System.getProperty("os.name").startsWith("Windows");
 	
@@ -74,6 +74,8 @@ public class ClusterUtils
 			sb.append(str + sep);
 			str = in.readLine();
 		}
+		
+		in.close();
 		
 		return sb.toString();
 	}

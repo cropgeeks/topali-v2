@@ -60,8 +60,6 @@ public class RunDSS extends Thread
 	private void runAnalyses()
 		throws Exception
 	{
-		ThreadManager manager = new ThreadManager();
-		
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 		
@@ -84,7 +82,7 @@ public class RunDSS extends Thread
 			if (result.isRemote == false)
 			{
 				DSSAnalysis analysis = new DSSAnalysis(runDir);
-				analysis.startThread(manager);
+				analysis.startThread(LocalJobs.manager);
 			}
 		}
 				

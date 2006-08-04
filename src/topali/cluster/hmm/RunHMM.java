@@ -62,10 +62,8 @@ public class RunHMM extends Thread
 		}
 		else
 		{
-			ThreadManager manager = new ThreadManager();
-						
 			HMMAnalysis analysis = new HMMAnalysis(jobDir);
-			analysis.startThread(manager);
+			analysis.startThread(LocalJobs.manager);
 		}
 	}
 }

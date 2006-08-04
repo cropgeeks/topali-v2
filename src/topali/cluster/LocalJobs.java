@@ -13,6 +13,9 @@ import java.util.*;
  */
 public class LocalJobs
 {
+	// A single instance of a global ThreadManager for all locally run jobs
+	public static ThreadManager manager = new ThreadManager();
+	
 	private static Hashtable<String, Boolean> jobs = new Hashtable<String, Boolean>(10);
 	
 	public static void addJob(String jobId)

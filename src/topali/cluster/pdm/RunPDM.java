@@ -60,8 +60,6 @@ public class RunPDM extends Thread
 	private void runAnalyses()
 		throws Exception
 	{
-		ThreadManager manager = new ThreadManager();
-		
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 		
@@ -84,7 +82,7 @@ public class RunPDM extends Thread
 			if (result.isRemote == false)
 			{
 				PDMAnalysis analysis = new PDMAnalysis(runDir);
-				analysis.startThread(manager);
+				analysis.startThread(LocalJobs.manager);
 			}
 		}
 				

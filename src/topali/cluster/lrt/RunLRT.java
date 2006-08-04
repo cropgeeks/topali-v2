@@ -60,8 +60,6 @@ public class RunLRT extends Thread
 	private void runAnalyses()
 		throws Exception
 	{
-		ThreadManager manager = new ThreadManager();
-		
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 		
@@ -85,7 +83,7 @@ public class RunLRT extends Thread
 			if (result.isRemote == false)
 			{
 				LRTAnalysis analysis = new LRTAnalysis(runDir);
-				analysis.startThread(manager);
+				analysis.startThread(LocalJobs.manager);
 			}
 		}
 				

@@ -19,7 +19,6 @@ public class PDMInitializer extends Thread
 	
 	// Directory where the job will run
 	private File jobDir;
-	private ThreadManager manager;
 	
 	// Holds sequence indices (as not every sequences may be processed)
 	private int[] indices;
@@ -106,13 +105,11 @@ public class PDMInitializer extends Thread
 	private void runAnalysis()
 		throws Exception
 	{
-		manager = new ThreadManager();
-		
 		// Sequences that should be selected/saved for processing
 		indices = ss.getIndicesFromNames(result.selectedSeqs);
 		
 		// Number of processors/jobs/slots/whatever available for use
-		int nodeCount = manager.getMaxTokens();
+		int nodeCount = LocalJobs.manager.getMaxTokens();
 		if (result.isRemote)
 			nodeCount = result.nProcessors;
 
@@ -151,7 +148,7 @@ public class PDMInitializer extends Thread
 		else
 		{
 			File file = new File(new File(jobDir, "nodes"), "runX");
-			new PDMAnalysis(file).startThread(manager);
+			new PDMAnalysis(file).startThread(LocalJobs.manager);
 		}
 		
 	}
@@ -182,7 +179,7 @@ public class PDMInitializer extends Thread
 		if (result.isRemote == false)
 		{
 			PDMAnalysis analysis = new PDMAnalysis(runDir);
-			analysis.startThread(manager);
+			analysis.startThread(LocalJobs.manager);
 		}
 	}
 }
