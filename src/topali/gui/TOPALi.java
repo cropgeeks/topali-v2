@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.util.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.mod.*;
 
 public class TOPALi extends Applet
@@ -69,6 +70,7 @@ public class TOPALi extends Applet
 		doEncryption(true);
 		
 		setProxy();
+		LocalJobs.manager = new ThreadManager(Prefs.gui_max_cpus);
 				
 		try
 		{

@@ -17,6 +17,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 {
 	private JTabbedPane tabs;
 	private WebPanel webPanel;
+	private CachePanel cachePanel;
 	
 	private JButton bOK, bCancel, bDefault, bHelp;
 		
@@ -26,6 +27,8 @@ public class SettingsDialog extends JDialog implements ActionListener
 				
 		tabs = new JTabbedPane();
 		tabs.addTab("Web/Cluster", webPanel = new WebPanel());
+		tabs.addTab("Local Job Settings", cachePanel = new CachePanel());
+		tabs.setSelectedIndex(1);
 		
 		add(tabs, BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
@@ -80,6 +83,8 @@ public class SettingsDialog extends JDialog implements ActionListener
 			
 		else if (e.getSource() == bOK)
 		{
+			cachePanel.isOK();
+			
 			if (webPanel.isOK())
 			{			
 				TOPALi.setProxy();

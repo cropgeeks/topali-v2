@@ -40,6 +40,11 @@ public class LocalJobs
 			cancelJob(keys.nextElement());
 	}
 	
+	public static boolean jobsRunning()
+	{ 
+		return manager.threadsRunning();
+	}
+	
 	public static boolean isRunning(String jobId)
 	{
 		try

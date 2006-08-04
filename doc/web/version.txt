@@ -1,10 +1,17 @@
-12
+13
 
 Release History:
 
 [NF] = New Feature
 [BF] = Bug Fix
 [SC] = Source Code
+
+04-08-2006
+  - [NF] Locally run jobs are now queued so that they do not all request CPU
+    resource at the same time.
+  - [NF] Added a new tab to the Settings dialog that allows you to clear the
+    disk cache (left by local jobs) and to set the maximum number of CPUs or
+    cores you want TOPALi to use for local jobs.
 
 26-07-2006
   - [BF] Fixed a bug with HMM topology defining sites creating invalid input to

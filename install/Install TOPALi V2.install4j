@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="3.2.4">
   <directoryPresets config=".." />
-  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.12" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
+  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.13" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
     <searchSequence>
       <registry />
       <envVar name="JAVA_HOME" />
