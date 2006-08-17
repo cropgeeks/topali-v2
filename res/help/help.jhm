@@ -43,7 +43,7 @@
      <mapID target="estimate_tree" url="html/estimate_tree.html" />
    
    <mapID target="display_settings" url="html/display_settings.html" /> 
-   
+   <mapID target="settings" url="html/settings.html" />
    
    <mapID target="backIcon" url="icons/back.png" />
    <mapID target="forwardIcon" url="icons/forward.png" />
