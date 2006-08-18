@@ -230,17 +230,14 @@ class TreePanelUtils
 						MsgBox.ERR);
 					return;
 				}
+				
+				i++;
 			}
 			
 			panel.getSequenceSet().setSelectedSequences(indices);
 			((WinMain) MsgBox.frm).menuViewDisplaySettings(true);	
 			WinMainMenuBar.aFileSave.setEnabled(true);		
 		}
-		
-		try {
-			String xml = topali.fileio.Castor.getXML(panel.getTreeResult());
-			System.out.println(xml);
-		} catch (Exception e) {}
 	}
 	
 /*	private static Vector getGroup(Vector groups, String name, boolean create)
