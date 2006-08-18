@@ -1,10 +1,15 @@
-13
+14
 
 Release History:
 
 [NF] = New Feature
 [BF] = Bug Fix
 [SC] = Source Code
+
+18-08-2006
+  - [BF] Clustering sequences into a group (using trees) should now select the
+    correct set of sequences back in the main panel.
+  - [NF] Added help documentation for the Settings dialog.
 
 04-08-2006
   - [NF] Locally run jobs are now queued so that they do not all request CPU

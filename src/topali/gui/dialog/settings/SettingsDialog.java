@@ -28,7 +28,6 @@ public class SettingsDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		tabs.addTab("Web/Cluster", webPanel = new WebPanel());
 		tabs.addTab("Local Job Settings", cachePanel = new CachePanel());
-		tabs.setSelectedIndex(1);
 		
 		add(tabs, BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
@@ -59,7 +58,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bDefault = new JButton(Text.Gui.getString("defaults"));
 		bDefault.addActionListener(this);
-		bHelp = TOPALiHelp.getHelpButton("web_settings");
+		bHelp = TOPALiHelp.getHelpButton("settings");
 				
 		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
