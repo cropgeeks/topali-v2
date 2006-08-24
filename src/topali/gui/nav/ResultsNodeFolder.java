@@ -12,6 +12,8 @@ import topali.data.*;
 import topali.gui.*;
 import static topali.gui.WinMainMenuBar.*;
 
+import doe.*;
+
 public class ResultsNodeFolder extends INode
 {	
 	ResultsNodeFolder(AlignmentData data)
@@ -31,17 +33,33 @@ public class ResultsNodeFolder extends INode
 	
 	public JComponent getPanel()
 	{
-		String msg = null;
-		if (data.getResults().size() == 1)
-			msg = data.getResults().size() + " result available";
-		else
-			msg = data.getResults().size() + " results available";
-		if (data.getResults().size() != 0)
-			msg += " - expand the Results folder to view individual analyses";
+		int count = 0;
+		for (AnalysisResult result: data.getResults())
+			if (result.endTime != 0)
+				count++;
 		
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.setBackground(Color.white);
-		p1.add(new JLabel(msg, JLabel.CENTER));
-		return p1;
+		String msg1 = null;
+		if (count == 1)
+			msg1 = count + " result available";
+		else
+			msg1 = count + " results available";
+		if (count != 0)
+			msg1 += " - expand the Results folder to view individual analyses";
+		
+		String msg2 = "";
+		if (count != data.getResults().size())
+		{
+			int diff = data.getResults().size()-count;
+			
+			msg2 = "(" + ((diff==1) ? "1 analysis " : diff + " analyses ");
+			msg2 += "still in progress)";
+		}
+		
+		DoeLayout layout = new DoeLayout();		
+		layout.getPanel().setBackground(Color.white);
+		layout.add(new JLabel(msg1, JLabel.CENTER), 0, 0, 1, 1, new Insets(0, 0, 0, 0));
+		layout.add(new JLabel(msg2, JLabel.CENTER), 0, 1, 1, 1, new Insets(2, 0, 0, 0));
+				
+		return layout.getPanel();
 	}
 }
