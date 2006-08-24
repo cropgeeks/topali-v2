@@ -67,5 +67,12 @@
 			<arg line="web/WEB-INF/lib/topali.jar tomcat@gruffalo:webapps/topali/WEB-INF/lib"/>
 		</exec>
 	</target>
+	
+	<target name="javadoc">
+  	<javadoc destdir="doc/api" author="true" version="true" use="true">  	  
+      <fileset dir="${src}" defaultexcludes="yes">
+      </fileset>
+    </javadoc>
+  </target>
 
 </project>
