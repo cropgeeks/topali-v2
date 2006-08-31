@@ -39,12 +39,12 @@ public class WebSettingsDialog extends JDialog implements ActionListener
 	
 	private JPanel getControls()
 	{
-		topaliURL = new JTextField(Prefs.web_topali_url, 40);
-		JLabel label1 = new JLabel("TOPALi services: ");
+		topaliURL = new JTextField(Prefs.web_broker_url, 40);
+		JLabel label1 = new JLabel("Remote resource broker: ");
 		label1.setLabelFor(topaliURL);
 		label1.setDisplayedMnemonic(KeyEvent.VK_T);
 		JPanel p1 = new JPanel();
-		p1.setBorder(BorderFactory.createTitledBorder("Phylogenetic web services:"));
+		p1.setBorder(BorderFactory.createTitledBorder("Web services:"));
 		p1.add(label1);
 		p1.add(topaliURL);
 		
@@ -74,7 +74,7 @@ public class WebSettingsDialog extends JDialog implements ActionListener
 		
 		Prefs.setWebDefaults();
 		
-		topaliURL.setText(Prefs.web_topali_url);
+		topaliURL.setText(Prefs.web_broker_url);
 		minSpin.setValue((Integer)Prefs.web_check_secs);
 	}
 	
@@ -112,11 +112,11 @@ public class WebSettingsDialog extends JDialog implements ActionListener
 		{
 			if (topaliURL.getText().length() == 0)
 			{
-				MsgBox.msg("Please ensure a URL is entered for the TOPALi web services.", MsgBox.ERR);
+				MsgBox.msg("Please ensure a URL is entered for the resource broker.", MsgBox.ERR);
 				return;
 			}
 			
-			Prefs.web_topali_url = topaliURL.getText();
+			Prefs.web_broker_url = topaliURL.getText();
 			Prefs.web_check_secs = minModel.getNumber().intValue();
 			
 			setVisible(false);

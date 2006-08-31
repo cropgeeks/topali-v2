@@ -43,7 +43,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 		if (reset)
 			Prefs.setWebDefaults();
 		
-		topaliURL.setText(Prefs.web_topali_url);		
+		topaliURL.setText(Prefs.web_broker_url);		
 		secSpin.setValue(Prefs.web_check_secs);		
 		checkUpdates.setSelected(Prefs.web_check_startup);
 		useProxy.setSelected(Prefs.web_proxy_enable);
@@ -55,7 +55,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 	{
 		if (topaliURL.getText().length() == 0)
 		{
-			MsgBox.msg("Please ensure a URL is entered for the TOPALi web services.", MsgBox.ERR);
+			MsgBox.msg("Please ensure a URL is entered for the resource broker.", MsgBox.ERR);
 			return false;
 		}
 		
@@ -66,7 +66,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 			return false;
 		}
 		
-		Prefs.web_topali_url = topaliURL.getText();
+		Prefs.web_broker_url = topaliURL.getText();
 		Prefs.web_check_secs = secModel.getNumber().intValue();
 		
 		Prefs.web_check_startup = checkUpdates.isSelected();
@@ -125,8 +125,8 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
         passLabel = new javax.swing.JLabel();
         passText = new javax.swing.JPasswordField();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Phylogenetic web services:"));
-        jLabel1.setText("TOPALi web services:");
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Web services:"));
+        jLabel1.setText("Remote resource broker:");
 
         jLabel2.setText("Check job progress every:");
 

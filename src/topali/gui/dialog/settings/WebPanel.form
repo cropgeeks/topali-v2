@@ -38,7 +38,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Phylogenetic web services:"/>
+            <TitledBorder title="Web services:"/>
           </Border>
         </Property>
       </Properties>
@@ -86,7 +86,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="TOPALi web services:"/>
+            <Property name="text" type="java.lang.String" value="Remote resource broker:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="topaliURL">

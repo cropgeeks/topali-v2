@@ -12,9 +12,8 @@ public class HMMRemoteJob extends RemoteJob
 		
 	public HMMRemoteJob(HMMResult result, AlignmentData data)
 	{
-		super("topali-hmm");
+		super("topali-hmm", result);
 		
-		this.result = result;
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		
@@ -25,6 +24,8 @@ public class HMMRemoteJob extends RemoteJob
 	public String ws_submitJob()
 		throws Exception
 	{
+		determineClusterURL();
+		
 		call = getCall();			
 		call.setOperationName(new QName("topali-hmm", "submit"));
 		

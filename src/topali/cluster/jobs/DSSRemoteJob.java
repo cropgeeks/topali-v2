@@ -12,9 +12,8 @@ public class DSSRemoteJob extends RemoteJob
 	
 	public DSSRemoteJob(DSSResult result, AlignmentData data)
 	{
-		super("topali-dss");
+		super("topali-dss", result);
 		
-		this.result = result;
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		
@@ -25,6 +24,8 @@ public class DSSRemoteJob extends RemoteJob
 	public String ws_submitJob()
 		throws Exception
 	{
+		determineClusterURL();
+		
 		call = getCall();			
 		call.setOperationName(new QName("topali-dss", "submit"));
 		

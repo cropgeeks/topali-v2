@@ -12,9 +12,8 @@ public class MBTreeRemoteJob extends RemoteJob
 
 	public MBTreeRemoteJob(MBTreeResult result, AlignmentData data)
 	{
-		super("topali-mbt");
+		super("topali-mbt", result);
 		
-		this.result = result;
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		
@@ -25,6 +24,8 @@ public class MBTreeRemoteJob extends RemoteJob
 	public String ws_submitJob()
 		throws Exception
 	{
+		determineClusterURL();
+		
 		call = getCall();			
 		call.setOperationName(new QName("topali-mbt", "submit"));
 		

@@ -12,9 +12,8 @@ public class PDM2RemoteJob extends RemoteJob
 		
 	public PDM2RemoteJob(PDM2Result result, AlignmentData data)
 	{
-		super("topali-pdm2");
+		super("topali-pdm2", result);
 		
-		this.result = result;
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		
@@ -25,6 +24,8 @@ public class PDM2RemoteJob extends RemoteJob
 	public String ws_submitJob()
 		throws Exception
 	{
+		determineClusterURL();
+		
 		call = getCall();			
 		call.setOperationName(new QName("topali-pdm2", "submit"));
 		

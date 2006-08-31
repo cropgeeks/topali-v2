@@ -17,6 +17,9 @@ public class AnalysisResult
 	// Is the job local or server side
 	public boolean isRemote = true;
 	
+	// (If it is remote), the URL of the server where the job will be run
+	public String url;
+	
 	// Location on disk of the scratch file area
 	public String tmpDir;
 	

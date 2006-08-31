@@ -12,9 +12,8 @@ public class LRTRemoteJob extends RemoteJob
 	
 	public LRTRemoteJob(LRTResult result, AlignmentData data)
 	{
-		super("topali-lrt");
+		super("topali-lrt", result);
 		
-		this.result = result;
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		
@@ -25,6 +24,8 @@ public class LRTRemoteJob extends RemoteJob
 	public String ws_submitJob()
 		throws Exception
 	{
+		determineClusterURL();
+		
 		call = getCall();			
 		call.setOperationName(new QName("topali-lrt", "submit"));
 		

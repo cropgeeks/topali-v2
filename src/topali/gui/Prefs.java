@@ -173,7 +173,8 @@ public class Prefs extends PreferencesXML
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 	
 	// Vamsas/web settings
-	public static String web_topali_url;
+//	public static String web_topali_url;
+	public static String web_broker_url;
 	public static int web_check_secs;
 	public static boolean web_check_startup;
 	public static boolean web_proxy_enable;
@@ -330,7 +331,7 @@ public class Prefs extends PreferencesXML
 		lrt_runs = getInt("lrt_runs", lrt_runs);
 		lrt_method = getInt("lrt_method", lrt_method);
 		
-		web_topali_url = getStr("web_topali_url", web_topali_url);
+		web_broker_url = getStr("web_broker_url", web_broker_url);
 		web_check_secs = getInt("web_check_secs", web_check_secs);
 		web_check_startup = getBool("web_check_startup", web_check_startup);
 		web_proxy_enable = getBool("web_proxy_enable", web_proxy_enable);
@@ -477,7 +478,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
 		
-		setStr("web_topali_url", web_topali_url);
+		setStr("web_broker_url", web_broker_url);
 		p.setProperty("web_check_secs", "" + web_check_secs);
 		p.setProperty("web_check_startup", "" + web_check_startup);
 		p.setProperty("web_proxy_enable", "" + web_proxy_enable);
@@ -593,7 +594,8 @@ public class Prefs extends PreferencesXML
 	
 	public static void setWebDefaults()
 	{
-		web_topali_url = "http://www.compbio.dundee.ac.uk/topali";
+//		web_topali_url = "http://www.compbio.dundee.ac.uk/topali";
+		web_broker_url = "http://gruffalo.scri.ac.uk:8080/broker";
 		web_check_secs = 30;
 		web_check_startup = false;
 		web_proxy_port = 8080;

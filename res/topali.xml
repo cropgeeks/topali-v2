@@ -159,6 +159,8 @@ Castor's auto mapping file generator -->
   	<bind-xml node="attribute"/></field>
   <field name="isRemote" type="boolean" direct="true">
   	<bind-xml node="attribute"/></field>
+  <field name="url" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
   <field name="tmpDir" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="jobId" type="string" direct="true">

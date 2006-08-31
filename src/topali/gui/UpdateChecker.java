@@ -12,7 +12,7 @@ import doe.*;
 
 class UpdateChecker extends Thread
 {
-	private static int RELEASE = 14;
+	private static int RELEASE = 15;
 	private int webVersion = 0;
 	
 	private boolean useGUI = false;
@@ -64,7 +64,7 @@ class UpdateChecker extends Thread
 	
 	static void helpAbout()
 	{
-		String msg = "<html><b>TOPALi v2</b> (2.14)<br><br>"
+		String msg = "<html><b>TOPALi v2</b> (2.15)<br><br>"
 					+ "Copyright &copy 2003-2006<br><br>"
 					+ "Iain Milne and Frank Wright<br>"
 					+ "Biomathematics & Statistics Scotland<br><br>"
