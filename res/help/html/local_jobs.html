@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Running Jobs Locally</title
+</title>
+
+<body>
+
+<h1>Running Jobs Locally</h1>
+
+<p>TOPALi is designed to run its analysis methods on remote high-performance compute clusters,
+however, there may be times when you wish to run jobs locally on your own machine.</p>
+
+<p>To do this, you need to do several things:</p>
+
+<p><b>Download Binaries</b><br>
+Visit the TOPALi website (http://www.bioss.ac.uk/knowledge/topali) and download the
+<b>binaries.zip</b> add-on package.</p>
+
+<p><b>Extract Zip File</b><br>
+Extract the contents of this zip file to the directory where TOPALi is installed. It should
+be &lt;topali&gt;/web/binaries.</p>
+
+<p><b>Compile Binaries (non Windows systems only)</b><br>
+cd into binaries/src and run "sh compileprogs". This will compile each of the external programs
+that TOPALi uses.</p>
+
+<p><b>CTRL-click Run Buttons</b><br>
+Finally, to submit jobs locally, simply hold down the CTRL key when pressing "Run" on
+any analysis job's settings dialog.</p>
+<p><img src="images/run_locally.png"></p>
+
+<p>You should note that locally submitted jobs do not act in the same way as remotely submitted
+jobs. They can be cancelled, but their state cannot be saved as part of a project. If a project
+is saved while a local job is running, the job will restart from the beginning the next time
+that project is opened. Also, any local jobs in progress when a new project is created or an
+existing project is loaded will be automatically cancelled.</p>
+
+</body>
+</html>

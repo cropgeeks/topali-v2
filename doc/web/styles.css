@@ -1,0 +1,26 @@
+BODY { 
+    background: #ffffff; 
+    font-family: "Tahoma", "Helvetica", "Arial", "sans-serif"; 
+    font-size: 13px;
+    line-height: 16px; color: #666666;
+}
+
+P.highlight
+{
+  color: #333333;
+}
+
+A:link, 
+A:visited, 
+A:active { 
+    text-decoration: none;
+    color: #0000ff;
+}
+
+H1
+{ 
+    font-family: "Tahoma", "Helvetica", "Arial", "sans-serif"; 
+    line-height: 16px; 
+    font-weight: bold; 
+    color: #333333;
+}

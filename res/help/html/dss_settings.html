@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>DSS Settings</title
+</title>
+
+<body>
+
+<h1>DSS Settings</h1>
+
+<p>DSS stands for <i><a href="dss_method.html">Difference of Sums of Squares</a></i>.</p>
+
+<p>Please ensure that at least 3 sequences have been selected from your 
+alignment before attempting to run DSS. See <a href="select_seqs.html">
+selecting sequences</a> for further information.</p>
+
+<p>To run the DSS analysis method, select <b>Analysis | Run DSS</b> from the menu 
+bar. This brings up the Settings dialog that provides two groups of parameters
+that can be customized before starting the DSS run.</p>
+
+<p><b>Basic settings:</b><br>
+Basic settings are available by selecting the <b>Basic</b> tabbed pane.
+<ul>
+  <li><b>Step size</b> - step size (in nucleotides) to use when moving along the 
+  alignment.</li>
+  <li><b>Window size</b> - window size (in nucleotides) to use when analyzing along the 
+  alignment.</li>
+  <li><b>Analysis run method</b> - specifies the type of DSS analysis to be done</li>
+</ul>
+</p>
+
+<p><b>Advanced settings</b><br>
+Advanced settings are available by selecting the <b>Advanced</b> tabbed pane. It is
+advisable not to change these settings unless you understand the methodology behind DSS.
+<ul>
+  <li><b>Number of bootstrapping threshold runs</b> - number of times to re-run the analysis 
+  to calculate the threshold values.</li>
+  <li><b>Least squares method</b> - least squares method to use when calculating 
+  sum of squares.</li>
+  <li><b>Nucleotide substitution model</b> - nucleotide substitution model to 
+  use in distance matrix calculations.</li>
+  <li><b>Number of passes</b> - number of passes to perform over the alignment 
+  (one: forward only, two: forward and backward).</li>
+</ul>
+
+<p>Once you are happy with the settings, click <b>Run</b> to begin the analysis.</p>
+
+</body>
+</html>

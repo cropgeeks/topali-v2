@@ -1,0 +1,351 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+
+<!-- Mapping file from TOPALi class objects to/from XML. A git of a file at
+first glance, but it was built up by hand over time, with occasional help from
+Castor's auto mapping file generator -->
+
+<mapping>
+
+<!-- Sequence -->
+<class name="topali.data.Sequence">
+  <field name="name" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="safeName" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  	
+  <field name="sequence" type="string"/>
+</class>
+
+<!-- SequenceCluster -->
+<class name="topali.data.SequenceCluster">
+  <field name="sequences" type="string" collection="collection"/>
+</class>
+
+<!-- SequenceSetParams -->
+<class name="topali.data.SequenceSetParams">
+  <field name="tRatio" type="double"/>
+  <field name="alpha" type="double"/>
+  <field name="kappa" type="double"/>
+  <field name="avgDistance" type="double"/>
+  <field name="frequencies" type="double" collection="array"/>
+</class>
+
+<!-- SequenceSet -->
+<class name="topali.data.SequenceSet">
+  <field name="length" type="int">
+  	<bind-xml node="attribute"/></field>
+  <field name="isDNA" type="boolean" get-method="isDNA" set-method="setIsDNA">
+  	<bind-xml node="attribute"/></field>
+  	
+  <field name="overview" type="string"/>
+  <field name="params" type="topali.data.SequenceSetParams"/>
+  <field name="selectedSequences" type="int" collection="array"/>
+  <field name="sequences" type="topali.data.Sequence" collection="vector"/>
+</class>
+
+<!-- AnnotationElement -->
+<class name="topali.data.AnnotationElement">
+  <field name="position" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="value" type="float" direct="true">
+  	<bind-xml node="attribute"/></field>	
+  <field name="displayCharacter" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="secondaryStructure" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="description" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
+<!-- TOPALiAnnotations -->
+<class name="topali.data.TOPALiAnnotations">
+  <field name="annotations" type="topali.data.AlignmentAnnotations" collection="collection"/>
+</class>
+
+<!-- AlignmentAnnotations -->
+<class name="topali.data.AlignmentAnnotations">
+  <field name="label" type="string">
+  	<bind-xml node="attribute"/></field>
+  <field name="description" type="string">
+  	<bind-xml node="attribute"/></field>
+  
+  <field name="annotations" type="topali.data.AnnotationElement" collection="vector"/>
+</class>
+
+<!-- RegionAnnotations -->
+<class name="topali.data.RegionAnnotations" extends="topali.data.AlignmentAnnotations">
+
+</class>
+
+<!-- PartitionAnnotations -->
+<class name="topali.data.PartitionAnnotations" extends="topali.data.RegionAnnotations">
+	<field name="currentStart" type="int">
+		<bind-xml node="attribute"/></field>
+	<field name="currentEnd" type="int">
+		<bind-xml node="attribute"/></field>
+	<field name="alignmentLength" type="int">
+		<bind-xml node="attribute"/></field>
+</class>
+
+<!-- ResultsTracker -->
+<class name="topali.data.ResultsTracker">
+	<field name="treeRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="pdmRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="pdm2RunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="hmmRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="dssRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="lrtRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+</class>
+
+<!-- AlignmentFileStat -->
+<class name="topali.data.AlignmentFileStat">
+  <field name="filename" type="string" direct="true">
+ 		<bind-xml node="attribute"/></field>
+  <field name="size" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="length" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="isDna" type="boolean" direct="true">
+  	<bind-xml node="attribute"/></field>
+ <field name="fileSize" type="long" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
+<!-- AlignmentData -->
+<class name="topali.data.AlignmentData">
+  <field name="name" type="string" direct="true">
+    <bind-xml node="attribute"/></field>
+ <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
+    <bind-xml node="attribute"/></field>
+  	
+  <field name="sequenceSet" type="topali.data.SequenceSet"/>
+  <field name="references" type="topali.data.AlignmentFileStat" collection="collection"/>
+  <field name="results" type="topali.data.AnalysisResult" collection="collection"/>
+  <field name="tracker" type="topali.data.ResultsTracker"/>
+<!--<field name="partitionInfo" type="topali.data.PartitionInfo"/>-->
+  <field name="topaliAnnotations" type="topali.data.TOPALiAnnotations"/>
+  
+</class>
+
+
+<!-- Project -->
+<class name="topali.gui.Project">
+  <field name="vamsasID" type="string">
+    <bind-xml node="attribute"/></field>
+   
+  <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
+  <field name="treePath" type="int" collection="array"/>
+</class>
+
+<!-- JobStatus -->
+<class name="topali.cluster.JobStatus">
+	<field name="progress" type="float" direct="true"/>
+	<field name="status" type="int" direct="true"/>
+</class>
+
+
+<!-- AnalysisResult -->
+<class name="topali.data.AnalysisResult">
+  <field name="guiName" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="jobName" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="isRemote" type="boolean" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="url" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="tmpDir" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="jobId" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="startTime" type="long" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="endTime" type="long" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="status" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
+<!-- TreeResult (extends AnalysisReult) -->
+<class name="topali.data.TreeResult" extends="topali.data.AnalysisResult">
+  <field name="partitionStart" type="int">
+  	<bind-xml node="attribute"/></field>
+  <field name="partitionEnd" type="int">
+  	<bind-xml node="attribute"/></field>
+  <field name="x" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="y" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="width" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="height" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="viewMode" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="isSizedToFit" type="boolean" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="treeStr" type="string"/>
+  <field name="clusters" type="topali.data.SequenceCluster" collection="collection"/>
+</class>
+
+<!-- MBTreeResult (extends TreeResult) -->
+<class name="topali.data.MBTreeResult" extends="topali.data.TreeResult">
+	<field name="mbPath" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+	
+	<field name="selectedSeqs" type="string" direct="true" collection="array"/>
+</class>
+
+<!-- AlignmentResult (extends AnalysisReult) -->
+<class name="topali.data.AlignmentResult" extends="topali.data.AnalysisResult">
+	<field name="useTreeToolTips" type="boolean" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="treeToolTipWindow" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	
+	<field name="selectedSeqs" type="string" direct="true" collection="array"/>
+</class>
+
+<!-- DSSResult (extends AlignmentResult) -->
+<class name="topali.data.DSSResult" extends="topali.data.AlignmentResult" auto-complete="true">
+	<field name="fitchPath" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="method" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="power" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="window" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="step" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="passCount" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="runs" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="avgDist" type="double" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="tRatio" type="double" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="alpha" type="double" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="thresholdCutoff" type="float" direct="true">
+		<bind-xml node="attribute"/></field>		
+	
+	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
+</class>
+
+<!-- LRTResult (extends AlignmentResult) -->
+<class name="topali.data.LRTResult" extends="topali.data.AlignmentResult" auto-complete="true">
+	<field name="method" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="window" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="step" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="runs" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="tRatio" type="double" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="alpha" type="double" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="thresholdCutoff" type="float" direct="true">
+		<bind-xml node="attribute"/></field>		
+	
+	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
+</class>
+
+<!-- PDMResult (extends AlignmentResult) -->
+<class name="topali.data.PDMResult" extends="topali.data.AlignmentResult" auto-complete="true">
+  <field name="bambePath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_runs" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_prune" type="boolean" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_cutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_seed" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_burn" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_cycles" type="int" direct="true"><bind-xml node="attribute"/></field>	
+	<field name="pdm_burn_algorithm" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_main_algorithm" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_use_beta" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_parameter_update_interval" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_update_theta" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_tune_interval" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_molecular_clock" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_category_list" type="string" direct="true"><bind-xml node="attribute"/></field>	
+	<field name="pdm_initial_theta" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_outgroup" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_global_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_local_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_theta_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_beta_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="kappa" type="double" direct="true"><bind-xml node="attribute"/></field>
+	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
+	<field name="df" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="N" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="tRatio" type="double" direct="true"><bind-xml node="attribute"/></field>
+	<field name="alpha" type="double" direct="true"><bind-xml node="attribute"/></field>
+	
+	<field name="frequencies" type="double" direct="true" collection="array"/>
+	<!--<field name="glbData" type="float" direct="true" collection="array"/>-->
+	<!--<field name="locData" type="float" direct="true" collection="array"/>-->
+	<!--<field name="histograms" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
+</class>
+
+<!-- PDM2Result (extends AlignmentResult) -->
+<class name="topali.data.PDM2Result" extends="topali.data.AlignmentResult" auto-complete="true">
+  <field name="mbPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+	<field name="nProcessors" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
+	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
+	
+	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="thresholds" type="float" direct="true" collection="array"/>
+</class>
+
+<!-- HMMResult (extends AlignmentResult) -->
+<class name="topali.data.HMMResult" extends="topali.data.AlignmentResult" auto-complete="true">
+  <field name="barcePath" type="string" direct="true"><bind-xml node="attribute"/></field>  
+  <field name="hmm_model" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_initial" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_est_1" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_est_2" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_est_3" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_est_4" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_transition" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_transition_ratio" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_1" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_2" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_freq_3" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_difficulty" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_burn" type="int" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_points" type="int" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_thinning" type="int" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_tuning" type="int" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_lambda" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_annealing" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_station" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_update" type="string" direct="true"><bind-xml node="attribute"/></field>
+  <field name="hmm_branch" type="float" direct="true"><bind-xml node="attribute"/></field>
+  <field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
+  
+  <!--<field name="bpArray" type="int" direct="true" collection="array"/>-->
+  <!--<field name="data1" type="float" direct="true" collection="array"/>-->
+  <!--<field name="data2" type="float" direct="true" collection="array"/>-->
+  <!--<field name="data3" type="float" direct="true" collection="array"/>-->
+</class>
+
+</mapping>
