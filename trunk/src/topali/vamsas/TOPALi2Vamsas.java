@@ -1,6 +1,7 @@
 package topali.vamsas;
 
 import org.vamsas.objects.core.*;
+import org.vamsas.objects.utils.*;
 
 class TOPALi2Vamsas
 {
@@ -35,21 +36,21 @@ class TOPALi2Vamsas
 		
 		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
 		
-		vDataSet.addAlignment(createAlignment(tAlignmentData));
+//		vDataSet.addAlignment(createAlignment(tAlignmentData));
 		vDataSet.setProvenance(createProvenance());
 		// TODO: id - optional
 		
 		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
 		{
-			Sequence vSequence = createSequence(tSequence);
+			Sequence vSequence = createSequence(tSequence, tSequenceSet);
 			vDataSet.addSequence(vSequence);
 		}
 		
 		return vDataSet;
 	}
 	
-	// Returns a Sequence
-	Sequence createSequence(topali.data.Sequence tSequence)
+	// Returns a VAMSAS Sequence object
+	Sequence createSequence(topali.data.Sequence tSequence, topali.data.SequenceSet tSequenceSet)
 	{
 		Sequence vSequence = new Sequence();
 		
@@ -58,7 +59,12 @@ class TOPALi2Vamsas
 		vSequence.setStart(1);
 		vSequence.setEnd(tSequence.getLength());
 		vSequence.setId(tSequence.safeName);
-		// TODO: dictionary - ?
+		
+		if (tSequenceSet.isDNA())
+			vSequence.setDictionary(SymbolDictionary.STANDARD_NA);
+		else
+			vSequence.setDictionary(SymbolDictionary.STANDARD_AA);
+	
 		// TODO: dbRef
 		
 		return vSequence;
@@ -83,12 +89,12 @@ class TOPALi2Vamsas
 		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
 		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
 		{
-			AlignmentSequence alignmentSequence = createAlignmentSequence(tSequence);
-			vAlignment.addAlignmentSequence(alignmentSequence);
+//			AlignmentSequence alignmentSequence = createAlignmentSequence(tSequence);
+//			vAlignment.addAlignmentSequence(alignmentSequence);
 		}
 		
 		// Results annotations
-		for (topali.data.AnalysisResult tResult: tAlignmentData.getResults())
+/*		for (topali.data.AnalysisResult tResult: tAlignmentData.getResults())
 		{
 //			if (tResult instanceof topali.data.HMMResult)
 //				for (int graph = 1; graph <= 3; graph++)	
@@ -105,12 +111,13 @@ class TOPALi2Vamsas
 				vAlignment.addTree(createTree((topali.data.TreeResult)tResult));
 			}
 		}
+*/
 		
 		return vAlignment;
 	}
 	
 	// Returns an AlignmentSequence
-	AlignmentSequence createAlignmentSequence(topali.data.Sequence tSequence)
+/*	AlignmentSequence createAlignmentSequence(topali.data.Sequence tSequence)
 	{
 		AlignmentSequence vAlignmentSequence = new AlignmentSequence();
 		
@@ -123,24 +130,28 @@ class TOPALi2Vamsas
 				
 		return vAlignmentSequence;
 	}
+*/
 
-	Provenance createProvenance()
+	private Provenance createProvenance()
+		{ return createProvenance("update"); }
+
+	private Provenance createProvenance(String action)
 	{
 		Provenance vProvenance = new Provenance();
 		
-		vProvenance.addEntry(createProvenanceEntry());
+		vProvenance.addEntry(createProvenanceEntry(action));
 		
 		return vProvenance;
 	}
 	
-	Entry createProvenanceEntry()
+	private Entry createProvenanceEntry(String action)
 	{
 		Entry vEntry = new Entry();
 		
 		vEntry.setUser(System.getProperty("user.name"));
+		vEntry.setApp("TOPALi");
+		vEntry.setAction(action);
 		vEntry.setDate(new org.exolab.castor.types.Date(System.currentTimeMillis()));
-		vEntry.setAction("created");
-		// TODO: id - optional
 		
 		return vEntry;
 	}
@@ -219,7 +230,7 @@ class TOPALi2Vamsas
 	
 	private void createAnnotationsForDataArray(AlignmentAnnotations vAlignmentAnnotations, float[][] data)
 	{
-		for (int i = 0; i < data.length; i++)
+/*		for (int i = 0; i < data.length; i++)
 		{
 			AnnotationElement vAnnotationElement = new AnnotationElement();
 			
@@ -228,6 +239,7 @@ class TOPALi2Vamsas
 			
 			vAlignmentAnnotations.addAnnotationElement(vAnnotationElement);
 		}
+*/
 	}
 	
 /*	// Equations for a straight line y = mx+c

@@ -30,6 +30,8 @@ public class WinMainToolBar extends JToolBar
 	private JButton bAnlsRunLRT;
 	private JButton bHelpDisplay;
 	
+	private JButton bVamExport;
+	
 	
 	WinMainToolBar(WinMainMenuBar mb, final NavPanel navPanel)
 	{
@@ -68,6 +70,9 @@ public class WinMainToolBar extends JToolBar
 		bFilePrint = (JButton) getButton(false, null, "gui13",
 			Icons.PRINT16, mb.aFilePrint);
 		
+		bVamExport = (JButton) getButton(false, null, "gui20",
+			null, mb.aVamExport);
+		
 		bHelpDisplay = (JButton) getButton(false, null, "gui14", Icons.HELP16, null);
 		bHelpDisplay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,6 +97,8 @@ public class WinMainToolBar extends JToolBar
 		add(bAlgnMoveDown);
 		addSeparator();
 		add(bAnlsCreateTree);
+		addSeparator();
+		add(bVamExport);
 		addSeparator();
 		add(bAnlsRunPDM);
 //		add(bAnlsRunPDM2);
