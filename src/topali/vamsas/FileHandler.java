@@ -1,11 +1,18 @@
 package topali.vamsas;
 
 import java.io.*;
+import java.util.zip.*;
 import javax.swing.*;
+
+import org.exolab.castor.xml.*;
+import org.exolab.castor.mapping.*;
 
 import topali.gui.*;
 import topali.mod.*;
+import topali.fileio.*;
 import static topali.mod.Filters.*;
+
+import org.vamsas.objects.core.*;
 
 import doe.*;
 
@@ -17,7 +24,7 @@ public class FileHandler
 	
 	public void saveVamsas(topali.data.AlignmentData tAlignmentData)
 	{
-/*		File filename = saveAs();
+		File filename = saveAs();
 		if (filename == null)
 			return;
 		
@@ -38,8 +45,7 @@ public class FileHandler
 			ZipEntry entry = new ZipEntry("vamsas.xml");
 			zOut.putNextEntry(entry);
 			
-			Castor.initialise();
-			
+
 			Marshaller m = new Marshaller(cOut);
 			m.setEncoding("UTF-8");
 			m.marshal(obj);
@@ -50,7 +56,6 @@ public class FileHandler
 		{
 			MsgBox.msg("Error while writing vamsas XML:\n  " + e, MsgBox.ERR);
 		}
-*/
 	}
 	
 	public topali.data.AlignmentData[] loadVamsas()
