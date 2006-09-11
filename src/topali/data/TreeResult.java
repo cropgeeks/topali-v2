@@ -104,4 +104,25 @@ public class TreeResult extends AnalysisResult
 		else
 			return "Unknown Tree";
 	}
+	
+	// Returns a newick formatted string containing the real (unsafe) seq names.
+	public String getTreeStrActual(SequenceSet ss)
+		throws TreeParseException
+	{
+		ReadTree palTree = new ReadTree(new PushbackReader(
+			new StringReader(treeStr)));
+		
+		String newick = treeStr;
+		
+		int count = palTree.getExternalNodeCount();
+		for (int i = 0; i < count; i++)
+		{
+			Node node = palTree.getExternalNode(i);
+			
+			String safeName = node.getIdentifier().getName();
+			newick = newick.replaceAll(safeName, ss.getNameForSafeName(safeName));
+		}
+		
+		return newick;
+	}
 }

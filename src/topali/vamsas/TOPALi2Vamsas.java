@@ -8,6 +8,11 @@ class TOPALi2Vamsas
 	private VAMSAS vVAMSAS = null;
 	private boolean isUpdating = false;
 	
+	// TODO: ASSUME for now that we're only ever dealing with a single dataset
+	// and a single alignment (SequenceSet)
+	private topali.data.AlignmentData tAlignmentData;
+	private topali.data.SequenceSet tSequenceSet;
+	
 	// Constructor called when no VAMSAS object exists yet
 	TOPALi2Vamsas()
 	{
@@ -24,33 +29,76 @@ class TOPALi2Vamsas
 	
 	VAMSAS createVAMSAS(topali.data.AlignmentData tAlignmentData)
 	{
-		vVAMSAS.addDataSet(createDataSet(tAlignmentData));
+		this.tAlignmentData = tAlignmentData;
+		this.tSequenceSet = tAlignmentData.getSequenceSet();
+		
+		vVAMSAS.addDataSet(createDataSet());
 		
 		return vVAMSAS;
 	}
 	
-	DataSet createDataSet(topali.data.AlignmentData tAlignmentData)
+	DataSet createDataSet()
 	{
 		DataSet vDataSet = new DataSet();
 		// Does this dataset already exist?
 		
-		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
-		
-//		vDataSet.addAlignment(createAlignment(tAlignmentData));
-		vDataSet.setProvenance(createProvenance());
-		// TODO: id - optional
+		vDataSet.addAlignment(createAlignment());
 		
 		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
 		{
-			Sequence vSequence = createSequence(tSequence, tSequenceSet);
+			Sequence vSequence = createSequence(tSequence);
 			vDataSet.addSequence(vSequence);
 		}
 		
+		// TODO: id - optional - TOPALi ignores trees and annotations at the
+		// dataset level as we're only interested in alignments.
+		
+		vDataSet.setProvenance(createProvenance());
 		return vDataSet;
 	}
 	
+	Alignment createAlignment()
+	{
+		Alignment vAlignment = new Alignment();
+		
+		vAlignment.setGapChar("-");
+		vAlignment.setAligned(true);
+		vAlignment.setModifiable(false);
+		
+		// TODO: id - optional
+		
+		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
+		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
+		{
+			AlignmentSequence alignmentSequence = createAlignmentSequence(tSequence);
+			vAlignment.addAlignmentSequence(alignmentSequence);
+		}
+		
+		// Results annotations
+		for (topali.data.AnalysisResult tResult: tAlignmentData.getResults())
+		{
+//			if (tResult instanceof topali.data.HMMResult)
+//				for (int graph = 1; graph <= 3; graph++)	
+//					vAlignment.addAlignmentAnnotations(createHMMAnnotations((topali.data.HMMResult)tResult, graph));
+					
+//			if (tResult instanceof topali.data.DSSResult)
+//			{
+//				vAlignment.addAlignmentAnnotations(
+//					createDSSAnnotations((topali.data.DSSResult)tResult));
+//			}
+			
+			if (tResult instanceof topali.data.TreeResult)
+				vAlignment.addTree(createTree((topali.data.TreeResult)tResult));
+		}
+		
+		createAnnotations(vAlignment);
+		
+		vAlignment.setProvenance(createProvenance());
+		return vAlignment;
+	}
+	
 	// Returns a VAMSAS Sequence object
-	Sequence createSequence(topali.data.Sequence tSequence, topali.data.SequenceSet tSequenceSet)
+	Sequence createSequence(topali.data.Sequence tSequence)
 	{
 		Sequence vSequence = new Sequence();
 		
@@ -70,54 +118,10 @@ class TOPALi2Vamsas
 		return vSequence;
 	}
 	
-	Alignment createAlignment(topali.data.AlignmentData tAlignmentData)
-	{
-		Alignment vAlignment = new Alignment();
-		
-		vAlignment.setGapChar("-");
-		vAlignment.setAligned(true);
-		vAlignment.setProvenance(createProvenance());
-//		if (tAlignmentData.getAnnotations().size() > 0)
-//		{
-//			AlignmentAnnotations a = createAlignmentAnnotations(tAlignmentData.getAnnotations());
-//			vAlignment.addAlignmentAnnotations(a);
-//		}
-//		else
-//			System.out.println("no annotations");
-		// TODO: id - optional
-		
-		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
-		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
-		{
-//			AlignmentSequence alignmentSequence = createAlignmentSequence(tSequence);
-//			vAlignment.addAlignmentSequence(alignmentSequence);
-		}
-		
-		// Results annotations
-/*		for (topali.data.AnalysisResult tResult: tAlignmentData.getResults())
-		{
-//			if (tResult instanceof topali.data.HMMResult)
-//				for (int graph = 1; graph <= 3; graph++)	
-//					vAlignment.addAlignmentAnnotations(createHMMAnnotations((topali.data.HMMResult)tResult, graph));
-					
-			if (tResult instanceof topali.data.DSSResult)
-			{
-				vAlignment.addAlignmentAnnotations(
-					createDSSAnnotations((topali.data.DSSResult)tResult));
-			}
-			
-			if (tResult instanceof topali.data.TreeResult)
-			{
-				vAlignment.addTree(createTree((topali.data.TreeResult)tResult));
-			}
-		}
-*/
-		
-		return vAlignment;
-	}
-	
 	// Returns an AlignmentSequence
-/*	AlignmentSequence createAlignmentSequence(topali.data.Sequence tSequence)
+	// TODO: This is almost the same as the above - can't they be merged in
+	// some way?
+	AlignmentSequence createAlignmentSequence(topali.data.Sequence tSequence)
 	{
 		AlignmentSequence vAlignmentSequence = new AlignmentSequence();
 		
@@ -126,11 +130,59 @@ class TOPALi2Vamsas
 		vAlignmentSequence.setStart(1);
 		vAlignmentSequence.setEnd(tSequence.getLength());
 		vAlignmentSequence.setId(tSequence.safeName);
+				
 		vAlignmentSequence.setRefid(createSequence(tSequence));
 				
 		return vAlignmentSequence;
 	}
-*/
+	
+	void createAnnotations(Alignment vAlignment)
+	{
+		// For now, let's just take the current graph display (partition) annotations (F6)
+		// and ignore each of the individual analysis runs' ones.
+		topali.data.TOPALiAnnotations tAnnotations = tAlignmentData.getTopaliAnnotations();		
+		topali.data.PartitionAnnotations pAnnotations = tAnnotations.getPartitionAnnotations();
+		
+		AlignmentAnnotation vAlignmentAnnotation = new AlignmentAnnotation();
+		vAlignmentAnnotation.setType("topali:Current Partitions");
+		vAlignmentAnnotation.setGraph(false);
+		vAlignmentAnnotation.setSeg(new Seg[] { createAlignmentSegment()});
+		vAlignmentAnnotation.setProvenance(createProvenance());
+		
+		Glyph vGlyph1 = new Glyph();
+		vGlyph1.setContent("[");
+		Glyph vGlyph2 = new Glyph();
+		vGlyph2.setContent("]");
+		
+		for (topali.data.RegionAnnotations.Region region: pAnnotations)
+		{
+			AnnotationElement vAnnotationElement = new AnnotationElement();
+			vAnnotationElement.setPosition(region.getS());
+			vAnnotationElement.setAfter(false);			
+			vAnnotationElement.setDescription("topali:Partition Start");
+			vAnnotationElement.setGlyph(new Glyph[] { vGlyph1 });
+			vAlignmentAnnotation.addAnnotationElement(vAnnotationElement);
+			
+			vAnnotationElement = new AnnotationElement();
+			vAnnotationElement.setPosition(region.getE());
+			vAnnotationElement.setAfter(false);			
+			vAnnotationElement.setDescription("topali:Partition End");
+			vAnnotationElement.setGlyph(new Glyph[] { vGlyph2 });
+			vAlignmentAnnotation.addAnnotationElement(vAnnotationElement);
+		}
+		
+		vAlignment.addAlignmentAnnotation(vAlignmentAnnotation);
+	}
+
+	Seg createAlignmentSegment()
+	{
+		Seg vSeg = new Seg();
+		vSeg.setStart(1);
+		vSeg.setEnd(tSequenceSet.getLength());
+		vSeg.setInclusive(true);
+		
+		return vSeg;
+	}
 
 	private Provenance createProvenance()
 		{ return createProvenance("update"); }
@@ -186,10 +238,20 @@ class TOPALi2Vamsas
 	{
 		Tree vTree = new Tree();
 		
+		// Safe newick formatted tree
 		Newick newick = new Newick();
 		newick.setContent(tTree.getTreeStr());
-		
 		vTree.addNewick(newick);
+		
+		// Unsafe format (but with real sequence names)
+		try
+		{
+			newick = new Newick();
+			newick.setContent(tTree.getTreeStrActual(tSequenceSet));
+			vTree.addNewick(newick);
+		}
+		catch (pal.tree.TreeParseException e) {}
+		
 		vTree.setProvenance(createProvenance());
 		
 		return vTree;
