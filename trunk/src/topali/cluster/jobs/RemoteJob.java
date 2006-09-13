@@ -37,22 +37,34 @@ public abstract class RemoteJob extends AnalysisJob
 	protected void determineClusterURL()
 		 throws Exception
 	{
-		// First form of the URL...this points to the ResourceBroker service
-		url = Prefs.web_broker_url + "/services/ResourceBroker";
+		if (Prefs.web_use_broker)
+		{		
+			// First form of the URL...this points to the ResourceBroker service
+			url = Prefs.web_broker_url + "/services/ResourceBroker";
+			
+			getCall();		
+			call.setOperationName(new QName("ResourceBroker", "getAvailableURL"));
+			
+			// The URL is now set to the return from this call - which will be
+			// the actual server we run the job on
+			String broker = (String) call.invoke(new Object[] {} );
+			
+			// Append what we need for a TOPALi job onto the server's URL
+			url = broker + "/topali/services/" + serviceName;
+			result.url = url;
+			
+			// Reset the call object
+			call = null;
+		}
+		else
+		{
+			System.out.println("Setting URL to non-broker value");
+			
+			url = Prefs.web_direct_url + "/services/" + serviceName;
+			result.url = url;
+		}
 		
-		getCall();		
-		call.setOperationName(new QName("ResourceBroker", "getAvailableURL"));
-		
-		// The URL is now set to the return from this call - which will be the
-		// actual server we run the job on
-		url = (String) call.invoke(new Object[] {} );
-		
-		// Append what we need for a TOPALi job onto the server's URL
-		result.url = url = url + "/topali/services";
-		
-		// Reset the call object
-		call = null;
-		
+		System.out.println("Using resource broker: " + Prefs.web_use_broker);
 		System.out.println("RemoteJob: actual URL is now " + result.url);
 	}
 
