@@ -24,7 +24,14 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 	}
 	
 	private void createControls()
-	{		
+	{
+		ButtonGroup grp = new ButtonGroup();
+		grp.add(radioDirect);
+		grp.add(radioBroker);
+		
+		radioDirect.addActionListener(this);
+		radioBroker.addActionListener(this);
+				
 		secModel = new SpinnerNumberModel(Prefs.web_check_secs, 10, 300, 10);
 		secSpin.setModel(secModel);
 		portModel = new SpinnerNumberModel(Prefs.web_proxy_port, 0, 65535, 1);
@@ -43,17 +50,28 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 		if (reset)
 			Prefs.setWebDefaults();
 		
-		topaliURL.setText(Prefs.web_broker_url);		
-		secSpin.setValue(Prefs.web_check_secs);		
+		directURL.setText(Prefs.web_direct_url);
+		brokerURL.setText(Prefs.web_broker_url);
+		radioBroker.setSelected(Prefs.web_use_broker);
+		radioDirect.setSelected(!Prefs.web_use_broker);
+		secSpin.setValue(Prefs.web_check_secs);
+		
 		checkUpdates.setSelected(Prefs.web_check_startup);
 		useProxy.setSelected(Prefs.web_proxy_enable);
 		
 		checkStates(useProxy.isSelected());
+		setRadioStates();
 	}
 	
 	boolean isOK()
 	{
-		if (topaliURL.getText().length() == 0)
+		if (radioDirect.isSelected() && directURL.getText().length() == 0)
+		{
+			MsgBox.msg("Please ensure a URL is entered for direct connections.", MsgBox.ERR);
+			return false;
+		}
+		
+		if (radioBroker.isSelected() && brokerURL.getText().length() == 0)
 		{
 			MsgBox.msg("Please ensure a URL is entered for the resource broker.", MsgBox.ERR);
 			return false;
@@ -66,7 +84,9 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 			return false;
 		}
 		
-		Prefs.web_broker_url = topaliURL.getText();
+		Prefs.web_direct_url = directURL.getText();
+		Prefs.web_broker_url = brokerURL.getText();
+		Prefs.web_use_broker = radioBroker.isSelected();
 		Prefs.web_check_secs = secModel.getNumber().intValue();
 		
 		Prefs.web_check_startup = checkUpdates.isSelected();
@@ -81,11 +101,23 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		boolean state = useProxy.isSelected();
+		if (e.getSource() == useProxy)
+		{
+			boolean state = useProxy.isSelected();
 		
-		checkStates(state);
-		if (state)
-			proxyName.requestFocus();
+			checkStates(state);
+			if (state)
+				proxyName.requestFocus();
+		}
+		
+		else if (e.getSource() == radioBroker || e.getSource() == radioDirect)
+			setRadioStates();
+	}
+	
+	private void setRadioStates()
+	{
+		directURL.setEnabled(radioDirect.isSelected());
+		brokerURL.setEnabled(radioBroker.isSelected());
 	}
 	
 	private void checkStates(boolean state)
@@ -108,11 +140,13 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        topaliURL = new javax.swing.JTextField();
+        brokerURL = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         secSpin = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
+        directURL = new javax.swing.JTextField();
+        radioBroker = new javax.swing.JRadioButton();
+        radioDirect = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         useProxy = new javax.swing.JCheckBox();
         serverLabel = new javax.swing.JLabel();
@@ -126,13 +160,25 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
         passText = new javax.swing.JPasswordField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Web services:"));
-        jLabel1.setText("Remote resource broker:");
 
         jLabel2.setText("Check job progress every:");
 
         secSpin.setFont(new java.awt.Font("Dialog", 0, 11));
 
         jLabel3.setText("seconds");
+
+        radioBroker.setText("Use resource broker:");
+        radioBroker.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        radioBroker.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        radioDirect.setText("Use direct connection:");
+        radioDirect.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        radioDirect.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        radioDirect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioDirectActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -142,28 +188,35 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel2)
-                    .add(jLabel1))
+                    .add(radioDirect)
+                    .add(radioBroker))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(secSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel3))
-                    .add(topaliURL, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, brokerURL, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, directURL, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(topaliURL, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(radioBroker)
+                    .add(brokerURL, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(radioDirect)
+                    .add(directURL, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel2)
-                    .add(secSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel3))
-                .addContainerGap())
+                    .add(jLabel3)
+                    .add(secSpin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Other settings:"));
@@ -255,11 +308,11 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -272,11 +325,16 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void radioDirectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioDirectActionPerformed
+// TODO add your handling code here:
+    }//GEN-LAST:event_radioDirectActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField brokerURL;
     private javax.swing.JCheckBox checkUpdates;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField directURL;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -286,9 +344,10 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
     private javax.swing.JLabel portLabel;
     private javax.swing.JSpinner portSpin;
     private javax.swing.JTextField proxyName;
+    private javax.swing.JRadioButton radioBroker;
+    private javax.swing.JRadioButton radioDirect;
     private javax.swing.JSpinner secSpin;
     private javax.swing.JLabel serverLabel;
-    private javax.swing.JTextField topaliURL;
     private javax.swing.JCheckBox useProxy;
     private javax.swing.JLabel userLabel;
     private javax.swing.JTextField userText;

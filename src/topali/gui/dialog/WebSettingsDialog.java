@@ -13,6 +13,8 @@ import topali.gui.*;
 
 import doe.*;
 
+/*
+
 public class WebSettingsDialog extends JDialog implements ActionListener
 {
 	private JButton bOK, bCancel, bDefault, bHelp;
@@ -123,3 +125,5 @@ public class WebSettingsDialog extends JDialog implements ActionListener
 		}
 	}
 }
+
+*/
