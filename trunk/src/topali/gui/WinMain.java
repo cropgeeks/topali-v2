@@ -18,6 +18,7 @@ import topali.gui.dialog.*;
 import topali.gui.dialog.hmm.*;
 import topali.gui.nav.*;
 import topali.gui.tree.*;
+import topali.vamsas.*;
 
 import pal.tree.*;
 
@@ -27,6 +28,8 @@ public class WinMain extends JFrame
 {
 	// The user's project
 	private Project project = new Project();
+	// And associated vamsas session (if any)
+	private VamsasClient vClient = null;
 	
 	// GUI controls...
 	private WinMainMenuBar menubar;
@@ -594,9 +597,42 @@ public class WinMain extends JFrame
 		new topali.gui.dialog.settings.SettingsDialog(this);
 	}
 	
+	void menuVamsasSelectSession()
+	{
+		// First ensure it's ok to begin a new session
+		if (vClient != null)
+		{
+			String msg = "An association with an existing VAMSAS session has "
+				+ "already been established. Would you like to drop this\n"
+				+ "connection and begin (or connect to) a new session?";
+			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+				return;
+		}
+		
+		// Create a dialog to select the session file
+		JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(new File(Prefs.gui_dir));
+		fc.setSelectedFile(new File("vamsas-session.zip"));
+		fc.setDialogTitle("Select (or Create) VAMSAS Session File");
+		
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fc.getSelectedFile();
+			Prefs.gui_dir = "" + fc.getCurrentDirectory();
+			
+			vClient = new VamsasClient(file);
+		}
+	}
+	
 	void menuVamsasImport()
 	{
-		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
+		if (vClient == null)
+		{
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.", MsgBox.WAR);
+			return;
+		}
+		
+/*		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
 		
 		AlignmentData[] datasets = fh.loadVamsas();
 		
@@ -610,14 +646,23 @@ public class WinMain extends JFrame
 			else
 				MsgBox.msg(datasets.length + " alignments have been imported into TOPALi.", MsgBox.INF);
 		}
+*/
 	}
 	
 	void menuVamsasExport()
 	{
-		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
+		if (vClient == null)
+		{
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.", MsgBox.WAR);
+			return;
+		}
+		
+//		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
 		
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		fh.saveVamsas(data);
+//		fh.saveVamsas(data);
+
+		vClient.writeToFile(data);
 	}
 	
 	void menuHelpUpdate(boolean useGUI)

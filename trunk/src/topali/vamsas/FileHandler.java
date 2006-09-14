@@ -24,7 +24,7 @@ public class FileHandler
 	
 	public void saveVamsas(topali.data.AlignmentData tAlignmentData)
 	{
-		File filename = saveAs();
+/*		File filename = saveAs();
 		if (filename == null)
 			return;
 		
@@ -56,6 +56,7 @@ public class FileHandler
 		{
 			MsgBox.msg("Error while writing vamsas XML:\n  " + e, MsgBox.ERR);
 		}
+*/
 	}
 	
 	public topali.data.AlignmentData[] loadVamsas()

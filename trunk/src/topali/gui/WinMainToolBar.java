@@ -98,8 +98,8 @@ public class WinMainToolBar extends JToolBar
 		addSeparator();
 		add(bAnlsCreateTree);
 		addSeparator();
-		add(bVamExport);
-		addSeparator();
+//		add(bVamExport);
+//		addSeparator();
 		add(bAnlsRunPDM);
 //		add(bAnlsRunPDM2);
 		add(bAnlsRunHMM);
