@@ -1,5 +1,7 @@
 package topali.vamsas;
 
+import java.util.*;
+
 import org.vamsas.objects.core.*;
 import org.vamsas.objects.utils.*;
 
@@ -42,13 +44,8 @@ class TOPALi2Vamsas
 		DataSet vDataSet = new DataSet();
 		// Does this dataset already exist?
 		
-		vDataSet.addAlignment(createAlignment());
-		
-		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
-		{
-			Sequence vSequence = createSequence(tSequence);
-			vDataSet.addSequence(vSequence);
-		}
+		// Sequences are only added when we add AlignmentSequences
+		vDataSet.addAlignment(createAlignment(vDataSet));
 		
 		// TODO: id - optional - TOPALi ignores trees and annotations at the
 		// dataset level as we're only interested in alignments.
@@ -57,7 +54,7 @@ class TOPALi2Vamsas
 		return vDataSet;
 	}
 	
-	Alignment createAlignment()
+	Alignment createAlignment(DataSet vDataSet)
 	{
 		Alignment vAlignment = new Alignment();
 		
@@ -70,7 +67,12 @@ class TOPALi2Vamsas
 		topali.data.SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
 		for (topali.data.Sequence tSequence: tSequenceSet.getSequences())
 		{
-			AlignmentSequence alignmentSequence = createAlignmentSequence(tSequence);
+			// Create (and add) the DataSetSequence first...
+			Sequence vSequence = createSequence(tSequence);
+			vDataSet.addSequence(vSequence);
+			
+			// So it can be used as a reference for the AlignmentSequence
+			AlignmentSequence alignmentSequence = createAlignmentSequence(vSequence, tSequence);
 			vAlignment.addAlignmentSequence(alignmentSequence);
 		}
 		
@@ -106,7 +108,6 @@ class TOPALi2Vamsas
 		vSequence.setSequence(tSequence.getSequence());
 		vSequence.setStart(1);
 		vSequence.setEnd(tSequence.getLength());
-		vSequence.setId(tSequence.safeName);
 		
 		if (tSequenceSet.isDNA())
 			vSequence.setDictionary(SymbolDictionary.STANDARD_NA);
@@ -121,7 +122,7 @@ class TOPALi2Vamsas
 	// Returns an AlignmentSequence
 	// TODO: This is almost the same as the above - can't they be merged in
 	// some way?
-	AlignmentSequence createAlignmentSequence(topali.data.Sequence tSequence)
+	AlignmentSequence createAlignmentSequence(Sequence ref, topali.data.Sequence tSequence)
 	{
 		AlignmentSequence vAlignmentSequence = new AlignmentSequence();
 		
@@ -129,9 +130,8 @@ class TOPALi2Vamsas
 		vAlignmentSequence.setSequence(tSequence.getSequence());
 		vAlignmentSequence.setStart(1);
 		vAlignmentSequence.setEnd(tSequence.getLength());
-		vAlignmentSequence.setId(tSequence.safeName);
 				
-		vAlignmentSequence.setRefid(createSequence(tSequence));
+		vAlignmentSequence.setRefid(ref);
 				
 		return vAlignmentSequence;
 	}
@@ -237,6 +237,8 @@ class TOPALi2Vamsas
 	Tree createTree(topali.data.TreeResult tTree)
 	{
 		Tree vTree = new Tree();
+		
+		vTree.setTitle(tTree.getTitle());
 		
 		// Safe newick formatted tree
 		Newick newick = new Newick();

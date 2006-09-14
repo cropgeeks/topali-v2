@@ -58,13 +58,10 @@ public abstract class RemoteJob extends AnalysisJob
 		}
 		else
 		{
-			System.out.println("Setting URL to non-broker value");
-			
 			url = Prefs.web_direct_url + "/services/" + serviceName;
 			result.url = url;
 		}
 		
-		System.out.println("Using resource broker: " + Prefs.web_use_broker);
 		System.out.println("RemoteJob: actual URL is now " + result.url);
 	}
 

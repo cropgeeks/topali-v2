@@ -33,7 +33,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunLRT, mAnlsRunPDM2;
 	
 	JMenu mVamsas;
-	JMenuItem mVamImport, mVamExport;
+	JMenuItem mVamSelectSession, mVamImport, mVamExport;
 	
 	JMenu mHelp;
 	JMenuItem mHelpContents, mHelpLicense, mHelpAbout, mHelpUpdate, mHelpTestMethod;
@@ -54,7 +54,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
 		aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2;
 	
-	public static AbstractAction aVamImport, aVamExport;
+	public static AbstractAction aVamSelectSession, aVamImport, aVamExport;
 	
 	public static AbstractAction aHelpContents, aHelpLicense, aHelpAbout,
 		aHelpUpdate, aHelpTestMethod;
@@ -238,6 +238,10 @@ public class WinMainMenuBar extends JMenuBar
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAnlsSettings(); } };
 				
+				
+		aVamSelectSession = new AbstractAction(Text.Gui.getString("aVamSelectSession")) {
+			public void actionPerformed(ActionEvent e) {
+				winMain.menuVamsasSelectSession(); } };
 				
 		aVamImport = new AbstractAction(Text.Gui.getString("aVamImport")) {
 			public void actionPerformed(ActionEvent e) {
@@ -439,15 +443,18 @@ public class WinMainMenuBar extends JMenuBar
 		mVamsas = new JMenu(Text.Gui.getString("menuVamsas"));
 		mVamsas.setMnemonic(KeyEvent.VK_S);
 		
+		mVamSelectSession = getItem(aVamSelectSession, KeyEvent.VK_S, 0, 0);
 		mVamImport = getItem(aVamImport, KeyEvent.VK_I, 0, 0,
 			Icons.IMPORT16);
 		mVamExport = getItem(aVamExport, KeyEvent.VK_E, 0, 0,
 			Icons.EXPORT);
 		
+		mVamsas.add(mVamSelectSession);
+		mVamsas.addSeparator();
 		mVamsas.add(mVamImport);
 		mVamsas.add(mVamExport);
 		
-//		add(mVamsas);
+		add(mVamsas);
 	}
 	
 	private void createHelpMenu()

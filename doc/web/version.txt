@@ -6,8 +6,9 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
-  - [NF] TOPALi now uses a remote resource broker to determine which HPC cluster
-    it should submit job requests to.
+          - Release 2.15
+  - [NF] TOPALi can now use a remote resource broker to determine which HPC
+    cluster it should submit job requests to.
   - [BF] Clicking on the Results folder in the treeview will now give a proper
     indication of result status (how many, and how many completed/in progress).
 
