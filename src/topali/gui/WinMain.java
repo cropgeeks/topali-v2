@@ -624,6 +624,18 @@ public class WinMain extends JFrame
 		}
 	}
 	
+	void menuVamsasExport()
+	{
+		if (vClient == null)
+		{
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.", MsgBox.WAR);
+			return;
+		}
+				
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		vClient.writeToFile(data);
+	}
+	
 	void menuVamsasImport()
 	{
 		if (vClient == null)
@@ -632,9 +644,11 @@ public class WinMain extends JFrame
 			return;
 		}
 		
-/*		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
+		AlignmentData[] datasets = vClient.readFromFile();
 		
-		AlignmentData[] datasets = fh.loadVamsas();
+//		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
+		
+//		AlignmentData[] datasets = fh.loadVamsas();
 		
 		if (datasets != null)
 		{
@@ -646,23 +660,6 @@ public class WinMain extends JFrame
 			else
 				MsgBox.msg(datasets.length + " alignments have been imported into TOPALi.", MsgBox.INF);
 		}
-*/
-	}
-	
-	void menuVamsasExport()
-	{
-		if (vClient == null)
-		{
-			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.", MsgBox.WAR);
-			return;
-		}
-		
-//		topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
-		
-		AlignmentData data = navPanel.getCurrentAlignmentData();
-//		fh.saveVamsas(data);
-
-		vClient.writeToFile(data);
 	}
 	
 	void menuHelpUpdate(boolean useGUI)

@@ -76,24 +76,48 @@ class TOPALi2Vamsas
 			vAlignment.addAlignmentSequence(alignmentSequence);
 		}
 		
+		// Partition annotations
+		createPartitionAnnotations(vAlignment);
+		
 		// Results annotations
 		for (topali.data.AnalysisResult tResult: tAlignmentData.getResults())
 		{
-//			if (tResult instanceof topali.data.HMMResult)
-//				for (int graph = 1; graph <= 3; graph++)	
-//					vAlignment.addAlignmentAnnotations(createHMMAnnotations((topali.data.HMMResult)tResult, graph));
+			if (tResult instanceof topali.data.PDMResult)
+			{
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName + " (Global)",
+						((topali.data.PDMResult)tResult).glbData));
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName + " (Local)",
+						((topali.data.PDMResult)tResult).locData));
+			}
+			
+			if (tResult instanceof topali.data.HMMResult)
+			{
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName + " (Graph1)",
+						((topali.data.HMMResult)tResult).data1));
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName + " (Graph2)",
+						((topali.data.HMMResult)tResult).data3));
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName + " (Graph3)",
+						((topali.data.HMMResult)tResult).data2));
+			}
 					
-//			if (tResult instanceof topali.data.DSSResult)
-//			{
-//				vAlignment.addAlignmentAnnotations(
-//					createDSSAnnotations((topali.data.DSSResult)tResult));
-//			}
+			if (tResult instanceof topali.data.DSSResult)
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName,
+						((topali.data.DSSResult)tResult).data));
+			
+			if (tResult instanceof topali.data.LRTResult)
+				vAlignment.addAlignmentAnnotation(
+					createAnnotationsForDataArray(tResult.guiName,
+						((topali.data.LRTResult)tResult).data));
 			
 			if (tResult instanceof topali.data.TreeResult)
 				vAlignment.addTree(createTree((topali.data.TreeResult)tResult));
 		}
-		
-		createAnnotations(vAlignment);
 		
 		vAlignment.setProvenance(createProvenance());
 		return vAlignment;
@@ -136,7 +160,7 @@ class TOPALi2Vamsas
 		return vAlignmentSequence;
 	}
 	
-	void createAnnotations(Alignment vAlignment)
+	void createPartitionAnnotations(Alignment vAlignment)
 	{
 		// For now, let's just take the current graph display (partition) annotations (F6)
 		// and ignore each of the individual analysis runs' ones.
@@ -208,32 +232,6 @@ class TOPALi2Vamsas
 		return vEntry;
 	}
 	
-/*	AlignmentAnnotations createAlignmentAnnotations(topali.data.Annotations tAnnotations)
-	{
-		AlignmentAnnotations vAlignmentAnnotations = new AlignmentAnnotations();
-		
-		vAlignmentAnnotations.setLabel(tAnnotations.getLabel());
-		vAlignmentAnnotations.setDescription(tAnnotations.getDescription());
-		vAlignmentAnnotations.setProvenance(createProvenance());
-		// TODO: graph?
-		vAlignmentAnnotations.setGraph(false);
-		
-		for (topali.data.AnnotationElement tAnnotationElement: tAnnotations.getAnnotations())
-		{
-			AnnotationElement vAnnotationElement = new AnnotationElement();
-			vAnnotationElement.setPosition(tAnnotationElement.position);
-			vAnnotationElement.setDisplayCharacter(tAnnotationElement.displayCharacter);
-			vAnnotationElement.setDescription(tAnnotationElement.description);
-			vAnnotationElement.setSecondaryStructure(tAnnotationElement.secondaryStructure);
-			vAnnotationElement.setValue(tAnnotationElement.value);
-			
-			vAlignmentAnnotations.addAnnotationElement(vAnnotationElement);
-		}
-		
-		return vAlignmentAnnotations;
-	}
-*/
-	
 	Tree createTree(topali.data.TreeResult tTree)
 	{
 		Tree vTree = new Tree();
@@ -259,52 +257,80 @@ class TOPALi2Vamsas
 		return vTree;
 	}
 	
-	AlignmentAnnotations createDSSAnnotations(topali.data.DSSResult result)
+	AlignmentAnnotation createDSSAnnotations(topali.data.DSSResult result)
 	{
-		AlignmentAnnotations vAlignmentAnnotations = new AlignmentAnnotations();
-		
-		vAlignmentAnnotations.setLabel(result.guiName);
-		vAlignmentAnnotations.setDescription("DSS Results Data");
-		vAlignmentAnnotations.setGraph(true);
-		vAlignmentAnnotations.setProvenance(createProvenance());
-		
-		createAnnotationsForDataArray(vAlignmentAnnotations, result.data);
-	
-		return vAlignmentAnnotations;
+		return createAnnotationsForDataArray(result.jobName, result.data);
 	}
 	
-	AlignmentAnnotations createHMMAnnotations(topali.data.HMMResult result, int graph)
-	{
-		AlignmentAnnotations vAlignmentAnnotations = new AlignmentAnnotations();
-		
-		vAlignmentAnnotations.setLabel(result.guiName);
-		vAlignmentAnnotations.setDescription("HMM Results Data " + graph);
-		vAlignmentAnnotations.setGraph(true);
-		vAlignmentAnnotations.setProvenance(createProvenance());
-		
+	AlignmentAnnotation createHMMAnnotations(topali.data.HMMResult result, int graph)
+	{		
 		float[][] data = null;
 		if (graph == 1) data = result.data1;
 		else if (graph == 2) data = result.data2;
 		else if (graph == 3) data = result.data3;
 		
-		createAnnotationsForDataArray(vAlignmentAnnotations, data);
-		
-		return vAlignmentAnnotations;
+		return createAnnotationsForDataArray(result.jobName, data);
 	}
 	
-	private void createAnnotationsForDataArray(AlignmentAnnotations vAlignmentAnnotations, float[][] data)
+	private AlignmentAnnotation createAnnotationsForDataArray(String name, float[][] data)
 	{
-/*		for (int i = 0; i < data.length; i++)
+		AlignmentAnnotation vAlignmentAnnotation = new AlignmentAnnotation();
+		vAlignmentAnnotation.setType(name);
+		vAlignmentAnnotation.setGraph(true);
+		vAlignmentAnnotation.setSeg(new Seg[] { createAlignmentSegment()});
+		vAlignmentAnnotation.setProvenance(createProvenance());
+		
+		for (int i = 0; i < data.length; i++)
 		{
 			AnnotationElement vAnnotationElement = new AnnotationElement();
 			
 			vAnnotationElement.setPosition((int)data[i][0]);
-			vAnnotationElement.setValue(data[i][1]);
-			
-			vAlignmentAnnotations.addAnnotationElement(vAnnotationElement);
+			// TODO: At some point vamsas will take multiple Y's per X
+			vAnnotationElement.setValue(new float[] { data[i][1] });
+			vAlignmentAnnotation.addAnnotationElement(vAnnotationElement);
 		}
-*/
+		
+		return vAlignmentAnnotation;
 	}
+/*	
+	void createAnnotations(Alignment vAlignment)
+	{
+		// For now, let's just take the current graph display (partition) annotations (F6)
+		// and ignore each of the individual analysis runs' ones.
+		topali.data.TOPALiAnnotations tAnnotations = tAlignmentData.getTopaliAnnotations();		
+		topali.data.PartitionAnnotations pAnnotations = tAnnotations.getPartitionAnnotations();
+		
+		AlignmentAnnotation vAlignmentAnnotation = new AlignmentAnnotation();
+		vAlignmentAnnotation.setType("topali:Current Partitions");
+		vAlignmentAnnotation.setGraph(false);
+		vAlignmentAnnotation.setSeg(new Seg[] { createAlignmentSegment()});
+		vAlignmentAnnotation.setProvenance(createProvenance());
+		
+		Glyph vGlyph1 = new Glyph();
+		vGlyph1.setContent("[");
+		Glyph vGlyph2 = new Glyph();
+		vGlyph2.setContent("]");
+		
+		for (topali.data.RegionAnnotations.Region region: pAnnotations)
+		{
+			AnnotationElement vAnnotationElement = new AnnotationElement();
+			vAnnotationElement.setPosition(region.getS());
+			vAnnotationElement.setAfter(false);			
+			vAnnotationElement.setDescription("topali:Partition Start");
+			vAnnotationElement.setGlyph(new Glyph[] { vGlyph1 });
+			vAlignmentAnnotation.addAnnotationElement(vAnnotationElement);
+			
+			vAnnotationElement = new AnnotationElement();
+			vAnnotationElement.setPosition(region.getE());
+			vAnnotationElement.setAfter(false);			
+			vAnnotationElement.setDescription("topali:Partition End");
+			vAnnotationElement.setGlyph(new Glyph[] { vGlyph2 });
+			vAlignmentAnnotation.addAnnotationElement(vAnnotationElement);
+		}
+		
+		vAlignment.addAlignmentAnnotation(vAlignmentAnnotation);
+	}
+	*/
 	
 /*	// Equations for a straight line y = mx+c
 	// getM()

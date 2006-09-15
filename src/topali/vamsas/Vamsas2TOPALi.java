@@ -23,22 +23,25 @@ class Vamsas2TOPALi
 		for (int i = 0; i < tAlignmentData.length; i++)
 		{
 			Alignment vAlignment = vDataSet.getAlignment(i);			
-			tAlignmentData[i] = createAlignmentData(vAlignment);
-			tAlignmentData[i].name = "vamsas " + (i+1);
+			tAlignmentData[i] = createAlignmentData(vAlignment, (i+1));
+	//		tAlignmentData[i].name = "vamsas " + (i+1);
 		}
 		
 		System.out.println("Returning " + tAlignmentData.length + " alignment datasets");
 		return tAlignmentData;
 	}
 	
-	topali.data.AlignmentData createAlignmentData(Alignment vAlignment)
+	topali.data.AlignmentData createAlignmentData(Alignment vAlignment, int index)
 		throws AlignmentLoadException
 	{
-		topali.data.AlignmentData tAlignmentData = new topali.data.AlignmentData();
-		
 		// Retrieve the sequences and create a SequenceSet object from them
 		AlignmentSequence[] vAlignmentSequences = vAlignment.getAlignmentSequence();
-		tAlignmentData.setSequenceSet(createSequenceSet(vAlignmentSequences));
+		topali.data.SequenceSet tSequenceSet = createSequenceSet(vAlignmentSequences);
+		
+		topali.data.AlignmentData tAlignmentData =
+			new topali.data.AlignmentData("VAMSAS " + index, tSequenceSet);
+		
+//		tAlignmentData.setSequenceSet(createSequenceSet(vAlignmentSequences));
 		
 //		tAlignmentData.getPartitionInfo().createDefaultPartition(tAlignmentData);
 				
