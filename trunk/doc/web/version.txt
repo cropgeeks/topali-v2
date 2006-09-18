@@ -6,7 +6,9 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
-          - Release 2.15
+18-09-2006 - Release 2.15          
+  - [SC] VAMSAS integration code enabled again.
+  - [SC] Changes and updates to the library JAR files.
   - [NF] TOPALi can now use a remote resource broker to determine which HPC
     cluster it should submit job requests to.
   - [BF] Clicking on the Results folder in the treeview will now give a proper
