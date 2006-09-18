@@ -26,7 +26,9 @@ public class SettingsDialog extends JDialog implements ActionListener
 		super(winMain, "TOPALi Settings", true);
 				
 		tabs = new JTabbedPane();
-		tabs.addTab("Web/Cluster", webPanel = new WebPanel());
+		webPanel = new WebPanel();
+		webPanel.setBorder(BorderFactory.createEmptyBorder(-8, -8, -10, -8));
+		tabs.addTab("Web/Cluster", webPanel);
 		tabs.addTab("Local Job Settings", cachePanel = new CachePanel());
 		
 		add(tabs, BorderLayout.CENTER);
