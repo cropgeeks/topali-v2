@@ -38,7 +38,7 @@ public class AlignmentHandler
 		ISeqFile seqFile = null;
 
 		// Try possible file formats until successfull
-		seqFile = new FileNexus(ss);
+/*		seqFile = new FileNexus(ss);
 		if (seqFile.readFile(file))
 			return true;
 		
@@ -53,10 +53,14 @@ public class AlignmentHandler
 		seqFile = new FileFasta(ss);
 		if (seqFile.readFile(file))
 			return true;
-
-		seqFile = new FileGeneric(ss);
+*/
+		seqFile = new FileReadSeq(ss);
 		if (seqFile.readFile(file))
 			return true;
+
+//		seqFile = new FileGeneric(ss);
+//		if (seqFile.readFile(file))
+//			return true;
 
 		return false;
 	}
