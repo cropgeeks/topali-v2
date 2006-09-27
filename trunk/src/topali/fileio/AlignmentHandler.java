@@ -49,11 +49,11 @@ public class AlignmentHandler
 		seqFile = new FileClustal(ss);
 		if (seqFile.readFile(file))
 			return true;
-
+*/
 		seqFile = new FileFasta(ss);
 		if (seqFile.readFile(file))
 			return true;
-*/
+
 		seqFile = new FileReadSeq(ss);
 		if (seqFile.readFile(file))
 			return true;

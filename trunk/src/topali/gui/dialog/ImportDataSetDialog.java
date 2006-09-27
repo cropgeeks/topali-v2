@@ -5,6 +5,7 @@
 
 package topali.gui.dialog;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
@@ -20,31 +21,39 @@ import static topali.mod.Filters.*;
 
 import doe.*;
 
-public class ImportDataSetDialog extends JDialog implements ActionListener
+public class ImportDataSetDialog extends JDialog implements Runnable
 {
 	private AlignmentData data;
 	private WinMain winMain;
 	
-	private JButton bOK, bCancel, bBrowse;
-	
+	private String name;
+	private File filename;
+	private Alignment alignment;
+		
 	public ImportDataSetDialog(WinMain winMain)
 	{
 		super(winMain, Text.GuiFile.getString("ImportDataSetDialog.gui01"), true);
 		this.winMain = winMain;
-	
-/*		add(new GradientPanel(Text.GuiFile.getString("ImportDataSetDialog.gui01")),
-			BorderLayout.NORTH);
-		add(createControls());
-		add(createButtons(), BorderLayout.SOUTH);
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				doLoad();
+			}
+		});
+		
+		JLabel icon = new JLabel(Icons.UNKNOWN);
+		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
+		JLabel label1 = new JLabel("Processing alignment...please be patient.");
+		JPanel p1 = new JPanel(new GridLayout(1, 1, 0, 2));
+		p1.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+		p1.add(label1);
+		add(p1);
+		add(icon, BorderLayout.WEST);
 		
 		pack();
-		getRootPane().setDefaultButton(bOK);
-		Utils.addCloseHandler(this, bOK);
-		
-		setLocationRelativeTo(winMain);
 		setResizable(false);
-		setVisible(true);
-*/
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(winMain);
 	}
 	
 	public void promptForAlignment()
@@ -80,6 +89,18 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 	
 	private void load(String name, File filename, Alignment alignment)
 	{
+		this.name = name;
+		this.filename = filename;
+		this.alignment = alignment;
+		
+		setVisible(true);
+	}
+	
+	private void doLoad()
+		{ new Thread(this).start(); }
+	
+	public void run()
+	{
 		try
 		{
 			SequenceSet ss = null;
@@ -92,35 +113,16 @@ public class ImportDataSetDialog extends JDialog implements ActionListener
 				MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"), MsgBox.WAR);
 			
 			data = new AlignmentData(name, ss);
+			
+			winMain.addNewAlignmentData(data);
 		}
 		catch (AlignmentLoadException e)
 		{
 			int code = e.getReason();			
 			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
 				+ code), MsgBox.ERR);
-				
-			return;
 		}
 		
-		// Finally, add the data to the project (via WinMain)
-		winMain.addNewAlignmentData(data);
-	}
-	
-/*	private JPanel createControls()
-	{
-		return new JPanel();
-	}
-	
-	private JPanel createButtons()
-	{
-		bOK = new JButton(Text.Gui.getString("ok"));
-		bCancel = new JButton(Text.Gui.getString("cancel"));
-		
-		return Utils.getButtonPanel(this, bOK, bCancel, "import_dataset");
-	}
-*/
-
-	public void actionPerformed(ActionEvent e)
-	{
+		setVisible(false);
 	}
 }
