@@ -16,6 +16,7 @@ import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
 import org.jfree.data.xy.*;
 import org.jfree.chart.plot.*;
+import org.jfree.ui.*;
 
 import topali.data.*;
 import topali.gui.*;
@@ -333,7 +334,7 @@ public class AlignmentGraph extends JPanel implements Printable
 			if (nE > alignmentLength)
 				nE = alignmentLength;
 				
-			pAnnotations.setCurrentPartition(nS, nE);			
+			pAnnotations.setCurrentPartition(nS, nE);
 			WinMain.repaintDisplay();
 		}
 		
@@ -341,6 +342,16 @@ public class AlignmentGraph extends JPanel implements Printable
 		
 		public void paintComponent(Graphics graphics)
 		{
+/*			int nS = pAnnotations.getCurrentStart();
+			int nE = pAnnotations.getCurrentEnd();
+				
+			IntervalMarker iMarker = new IntervalMarker(nS, nE);
+			iMarker.setPaint(new Color(200, 200, 200));
+						
+			plot.clearDomainMarkers();
+			plot.addDomainMarker(iMarker, Layer.BACKGROUND);
+*/			
+			
 			super.paintComponent(graphics);
 			
 			Graphics2D g = (Graphics2D) graphics;		
