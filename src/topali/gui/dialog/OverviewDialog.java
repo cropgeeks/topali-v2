@@ -119,6 +119,10 @@ public class OverviewDialog extends JDialog
 	
 	void imageAvailable(OverviewGenerator generator)
 	{
+		// We need this check because multiple user resizes of the window,
+		// *before* the image has finished, will kick off additional threads.
+		// There's no way around it, but we just make sure the image shown is
+		// from the last thread started, as it will match the window size.		
 		if (generator == imager)
 		{
 			image = imager.getImage();
