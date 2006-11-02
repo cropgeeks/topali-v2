@@ -199,7 +199,7 @@ public class AlignmentGraph extends JPanel implements Printable
 		
 		GraphPanel()
 		{
-			super(chart);
+			super(chart, true);
 			
 			tooltip = new TreeToolTip(data, aResult.selectedSeqs);
 			
