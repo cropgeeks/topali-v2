@@ -57,6 +57,7 @@ public class SequenceSetNode extends INode
 		aAnlsRunHMM.setEnabled(true);
 		aAnlsRunDSS.setEnabled(true);
 		aAnlsRunLRT.setEnabled(true);
+		aAnlsRunCodeML.setEnabled(true);
 		aAnlsCreateTree.setEnabled(true);
 		
 		aVamExport.setEnabled(true);

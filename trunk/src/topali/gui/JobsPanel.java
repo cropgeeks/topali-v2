@@ -309,12 +309,24 @@ public class JobsPanel extends JPanel
 				job = new DSSLocalJob((DSSResult)result, data);
 		}
 		
+		// LRT jobs
 		else if (result instanceof LRTResult)
 		{
 			if (result.isRemote)
 				job = new LRTRemoteJob((LRTResult)result, data);
 			else
 				job = new LRTLocalJob((LRTResult)result, data);
+		}
+		
+		// CodeML jobs
+		else if (result instanceof CodeMLResult)
+		{
+			if (result.isRemote)
+			{
+//				job = new CodeMLRemoteJob((CodeMLResult)result, data);
+			}
+			else
+				job = new CodeMLLocalJob((CodeMLResult)result, data);
 		}
 		
 		// MrBayes jobs

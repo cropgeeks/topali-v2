@@ -213,6 +213,12 @@ Castor's auto mapping file generator -->
 	<field name="selectedSeqs" type="string" direct="true" collection="array"/>
 </class>
 
+<!-- CodeMLResult (extends AlignmentResult) -->
+<class name="topali.data.CodeMLResult" extends="topali.data.AlignmentResult" auto-complete="true">
+	<field name="codeMLPath" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+</class>
+
 <!-- DSSResult (extends AlignmentResult) -->
 <class name="topali.data.DSSResult" extends="topali.data.AlignmentResult" auto-complete="true">
 	<field name="fitchPath" type="string" direct="true">

@@ -480,6 +480,25 @@ public class WinMain extends JFrame
 		submitJob(data, result);
 	}
 	
+	public void menuAnlsRunCodeML(CodeMLResult iResult)
+	{
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		SequenceSet ss = data.getSequenceSet();
+		
+		CodeMLResult result = new CodeMLResult();
+		
+		int runNum = data.getTracker().getCodeMLRunCount() + 1;
+		data.getTracker().setCodeMLRunCount(runNum);
+		result.guiName = "CodeML Result " + runNum;
+		result.jobName = "CodeML Analysis " + runNum + " on " + data.name + " ("
+			+ ss.getSelectedSequences().length + "/" + ss.getSize()
+			+ " sequences)";
+		
+		result.isRemote = false;
+		
+		submitJob(data, result);
+	}
+	
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
