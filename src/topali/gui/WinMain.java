@@ -672,11 +672,40 @@ public class WinMain extends JFrame
 		UpdateChecker.helpAbout();
 	}
 	
-	// Takes an existing PAL alignment and returns a simulated alignment object
-	// that can be used to generate further alignments
 	void menuHelpTestMethod()
 	{
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		SequenceSet ss = data.getSequenceSet();
 		
+		long s = System.currentTimeMillis();
+		
+		String[] codons = { "ATG", "GTG", "TTG", "TAG", "TGA", "TAA" }; // AUG, GUG, UUG
+		
+		// stops: UAG is amber, UGA is opal (sometimes also called umber), and UAA is ochre
+		
+		for (int i = 0; i < ss.getLength()-2; i++)
+		{
+			for (int j = 0; j < codons.length; j++)
+			{			
+				boolean found = true;
+			
+				for (Sequence seq: ss.getSequences())
+					if (seq.getBuffer().substring(i, i+3).equals(codons[j]) == false)
+						found = false;
+			
+				if (found)
+				{
+					if (j < 2)
+						System.out.print("START: ");
+					else
+						System.out.print("STOP:  ");
+					System.out.println(codons[j] + " at " + (i+1));
+				}
+			}
+		}
+		
+		long e = System.currentTimeMillis();
+		System.out.println("Time: " + (e-s) + "ms");
 //		
 	}	
 }
