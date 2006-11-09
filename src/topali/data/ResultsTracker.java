@@ -14,6 +14,7 @@ public class ResultsTracker
 	private int hmmRunCount;
 	private int dssRunCount;
 	private int lrtRunCount;
+	private int codeMLRunCount;
 	
 	public ResultsTracker()
 	{
@@ -48,4 +49,9 @@ public class ResultsTracker
 		{ return (this.lrtRunCount); }
 	public void setLrtRunCount(int lrtRunCount)
 		{ this.lrtRunCount = lrtRunCount; }
+	
+	public int getCodeMLRunCount()
+		{ return (this.codeMLRunCount); }
+	public void setCodeMLRunCount(int codeMLRunCount)
+		{ this.codeMLRunCount = codeMLRunCount; }
 }
