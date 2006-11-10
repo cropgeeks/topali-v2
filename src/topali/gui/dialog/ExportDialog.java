@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import pal.alignment.*;
 
+import topali.analyses.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.*;
@@ -25,19 +26,23 @@ public class ExportDialog extends JDialog implements ActionListener
 	private AlignmentData data;
 	private SequenceSet ss;
 	
+	// Selected partition indexes (at the time this dialog was opened)
+	private int[] regions = null;
+	
 	private JButton bOK, bCancel;
 	private JRadioButton rAllSeq, rSelSeq;
 	private JRadioButton rAllPar, rSelPar;
 	private JRadioButton rDisk, rProject;
 	
-	public ExportDialog(WinMain winMain, AlignmentData data)
+	public ExportDialog(WinMain winMain, AlignmentData data, int[] regions)
 	{
 		super(winMain, "", true);
 	
 		this.winMain = winMain;
 		this.data = data;
+		this.regions = regions;
 		ss = data.getSequenceSet();
-		
+				
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
 		getRootPane().setDefaultButton(bOK);
@@ -83,16 +88,24 @@ public class ExportDialog extends JDialog implements ActionListener
 		int s = pAnnotations.getCurrentStart();
 		int e = pAnnotations.getCurrentEnd();
 		
+		
 		String tAllPar = "Export the full alignment (1-" + ss.getLength() + ")";
-		String tSelPar = "Only export the currently selected partition ("
-			+ s + "-" + e + ")";
-		rAllPar = new JRadioButton(tAllPar, Prefs.gui_export_allpars);
+		String tSelPar = "Export a concatenation of the currently selected "
+			+ "partitions (length = " + countConcatenatedLength() + ")";
+		rAllPar = new JRadioButton(tAllPar, true);
 		rAllPar.setMnemonic(KeyEvent.VK_F);
-		rSelPar = new JRadioButton(tSelPar, !Prefs.gui_export_allpars);
-		rSelPar.setMnemonic(KeyEvent.VK_P);
+		rSelPar = new JRadioButton(tSelPar);
+		rSelPar.setMnemonic(KeyEvent.VK_S);
+		
+		if (regions.length == 0)
+			rSelPar.setEnabled(false);
+		
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(rAllPar);
 		group2.add(rSelPar);
+		
+		if (Prefs.gui_export_pars == 2 && regions.length > 0)
+			rSelPar.setSelected(true);
 		
 		JPanel p2 = new JPanel(new GridLayout(2, 1, 0, 0));
 		p2.setBorder(BorderFactory.createTitledBorder("Alignment length:"));
@@ -136,12 +149,32 @@ public class ExportDialog extends JDialog implements ActionListener
 		else if (e.getSource() == bOK)
 		{
 			Prefs.gui_export_allseqs = rAllSeq.isSelected();
-			Prefs.gui_export_allpars = rAllPar.isSelected();
+			
+			if (rAllPar.isSelected()) Prefs.gui_export_pars = 1;
+			if (rSelPar.isSelected()) Prefs.gui_export_pars = 2;
+			
 			Prefs.gui_export_todisk  = rDisk.isSelected();
 			
 			if (export())
 				setVisible(false);
 		}
+	}
+	
+	// (Tries) to calculate what total length a new alignment would have if it
+	// was formed by concatenating all the selected partitions together
+	private int countConcatenatedLength()
+	{
+		PartitionAnnotations pAnnotations =
+			data.getTopaliAnnotations().getPartitionAnnotations();	
+		
+		int concatLength = 0;
+		for (int r: regions)
+		{
+			RegionAnnotations.Region region = pAnnotations.get(r);
+			concatLength += (region.getE()-region.getS()) + 1;
+		}
+		
+		return concatLength;
 	}
 
 	private boolean export()
@@ -151,19 +184,13 @@ public class ExportDialog extends JDialog implements ActionListener
 		if (Prefs.gui_export_allseqs == false)
 			seqs = ss.getSelectedSequences();
 		
-		// Alignment length
-		int nStart = 1;
-		int nEnd = ss.getLength();
-		if (Prefs.gui_export_allpars == false)
-		{
-			PartitionAnnotations pa = data.getTopaliAnnotations().getPartitionAnnotations();
-			
-			nStart = pa.getCurrentStart();
-			nEnd = pa.getCurrentEnd();
-		}
+		// We recreate the alignment so it only contains the sequences and regions that
+		// correspond to the user's selection
+		SequenceSet toExport = SequenceSetUtils.getConcatenatedSequenceSet(data, seqs, regions);
 		
 		// Work out a new name for the alignment
-		String name = data.name + " ("+seqs.length+"x"+(nEnd-nStart+1)+ ")";
+		String name = data.name + " ("+toExport.getSize()+"x"+(toExport.getLength())+ ")";
+		
 		
 		// Save to disk...
 		if (Prefs.gui_export_todisk)
@@ -174,7 +201,7 @@ public class ExportDialog extends JDialog implements ActionListener
 
 			try
 			{
-				ss.save(filename, seqs, nStart, nEnd, Prefs.gui_filter_algn, false);
+				toExport.save(filename, Prefs.gui_filter_algn, false);
 				MsgBox.msg(filename + " was successfully saved to disk.", MsgBox.INF);
 				return true;
 			}
@@ -188,7 +215,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		// Or add as a new project alignment
 		else
 		{
-			Alignment alignment = ss.getAlignment(seqs, nStart, nEnd, false);
+			Alignment alignment = toExport.getAlignment(false);
 			new ImportDataSetDialog(winMain).cloneAlignment(data.name, alignment);
 		}
 		

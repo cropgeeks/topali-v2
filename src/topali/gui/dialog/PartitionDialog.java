@@ -73,8 +73,9 @@ public class PartitionDialog extends JDialog
 		bRemove.addActionListener(this);
 		bClose = new JButton("Close");
 		bClose.addActionListener(this);
-		bExport = new JButton(WinMainMenuBar.aFileExportDataSet);
-		bExport.setText("Export...");
+		bExport = new JButton("Export...");
+		bExport.addActionListener(this);
+//		bExport.setText("Export...");
 		bExport.setMnemonic(KeyEvent.VK_X);
 		bTree = new JButton(WinMainMenuBar.aAnlsCreateTree);
 		bTree.setText("Create Tree...");
@@ -208,20 +209,24 @@ public class PartitionDialog extends JDialog
 		if (regionList.getSelectedIndices().length == 1)
 		{
 			bEdit.setEnabled(true);
-			bExport.setEnabled(true);
 			bTree.setEnabled(true);
 		}
 		else
 		{
-			bEdit.setEnabled(false);
-			bExport.setEnabled(false);
+			bEdit.setEnabled(false);			
 			bTree.setEnabled(false);
 		}
 	
 		if (regionModel.size() == 0)
+		{
+			bExport.setEnabled(false);
 			bRemoveAll.setEnabled(false);
+		}
 		else
+		{
+			bExport.setEnabled(true);
 			bRemoveAll.setEnabled(true);
+		}
 	}
 	
 	// Updates the dialog whenever a different alignment has been selected
@@ -367,6 +372,15 @@ public class PartitionDialog extends JDialog
 					
 		else if (e.getSource() == bNew)
 			newPartition();
+		
+		// Call the export dialog (also telling it which partitions are selected)
+		else if (e.getSource() == bExport)
+			doExport();
+	}
+	
+	public void doExport()
+	{
+		new ExportDialog(winMain, data, regionList.getSelectedIndices());
 	}
 	
 	// Uses the edit dialog to create a new partition

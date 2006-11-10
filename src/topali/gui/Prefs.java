@@ -73,7 +73,7 @@ public class Prefs extends PreferencesXML
 	public static boolean gui_preview_current = true;
 	public static int gui_pdialog_splitter = -1;
 	public static boolean gui_export_allseqs = true;
-	public static boolean gui_export_allpars = true;
+	public static int gui_export_pars = 1;
 	public static boolean gui_export_todisk = true;
 	public static int gui_odialog_x = -1;
 	public static int gui_odialog_y = -1;
@@ -232,7 +232,7 @@ public class Prefs extends PreferencesXML
 		gui_preview_current = getBool("gui_preview_current", gui_preview_current);
 		gui_pdialog_splitter = getInt("gui_pdialog_splitter", gui_pdialog_splitter);
 		gui_export_allseqs = getBool("gui_export_allseqs", gui_export_allseqs);
-		gui_export_allpars = getBool("gui_export_allpars", gui_export_allpars);
+		gui_export_pars = getInt("gui_export_pars", gui_export_pars);
 		gui_export_todisk = getBool("gui_export_todisk", gui_export_todisk);
 		gui_odialog_x = getInt("gui_odialog_x", gui_odialog_x);
 		gui_odialog_y = getInt("gui_odialog_y", gui_odialog_y);
@@ -381,7 +381,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_preview_current", "" + gui_preview_current);
 		p.setProperty("gui_pdialog_splitter", "" + gui_pdialog_splitter);
 		p.setProperty("gui_export_allseqs", "" + gui_export_allseqs);
-		p.setProperty("gui_export_allpars", "" + gui_export_allpars);
+		p.setProperty("gui_export_pars", "" + gui_export_pars);
 		p.setProperty("gui_export_todisk", "" + gui_export_todisk);
 		p.setProperty("gui_odialog_x", "" + gui_odialog_x);
 		p.setProperty("gui_odialog_y", "" + gui_odialog_y);
