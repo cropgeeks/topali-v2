@@ -303,4 +303,45 @@ public class SequenceSetUtils
 		
 		return true;
 	}
+	
+	// Creates and returns a new SequenceSet using the existing SequenceSet from
+	// the alignment data. This method will *only* use sequences and partitions
+	// that have been selected by the user
+	// Currently only called by the Sequence->Export code
+	public static SequenceSet getConcatenatedSequenceSet(AlignmentData data, int[] seqs, int[] regions)
+	{
+		PartitionAnnotations pAnnotations =
+			data.getTopaliAnnotations().getPartitionAnnotations();
+			
+		SequenceSet ssOld = data.getSequenceSet();
+		SequenceSet ssNew = new SequenceSet();		
+		
+		// For each sequence we want to add...
+		for (int seqIndex: seqs)
+		{
+			// Create (and add) the sequence to the set
+			Sequence seqOld = ssOld.getSequence(seqIndex);
+			Sequence seqNew = new Sequence(seqOld.name);
+						
+			// Concatenate and add each partition to the sequence's data
+			StringBuffer buffer = seqNew.getBuffer();
+			
+			// We either want to concatenate together the regions...
+			if (regions.length > 0)
+			{
+				for (int r: regions)
+				{
+					RegionAnnotations.Region reg = pAnnotations.get(r);
+					buffer.append(seqOld.getPartition(reg.getS(), reg.getE()));
+				}
+			}
+			// Or just make a new alignment that contains the same as before
+			else
+				buffer.append(seqOld.getSequence());
+			
+			ssNew.addSequence(seqNew);
+		}
+		
+		return ssNew;
+	}
 }

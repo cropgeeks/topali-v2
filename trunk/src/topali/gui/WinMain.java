@@ -201,12 +201,6 @@ public class WinMain extends JFrame
 		}
 	}
 	
-	void menuFileExportDataSet()
-	{
-		AlignmentData data = navPanel.getCurrentAlignmentData();
-		new ExportDialog(this, data);
-	}
-	
 	/* Save the current project to disk. */
 	void menuFileSave(boolean saveAs)
 	{
@@ -494,6 +488,7 @@ public class WinMain extends JFrame
 			+ ss.getSelectedSequences().length + "/" + ss.getSize()
 			+ " sequences)";
 		
+		/////!!!!!!!!!!!!!!!!!!!
 		result.isRemote = false;
 		
 		submitJob(data, result);
