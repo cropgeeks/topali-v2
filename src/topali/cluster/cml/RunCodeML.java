@@ -30,7 +30,7 @@ class RunCodeML
 	void run()
 		throws Exception
 	{
-		ProcessBuilder pb = new ProcessBuilder(result.codeMLPath);
+		ProcessBuilder pb = new ProcessBuilder(result.codemlPath);
 		pb.directory(wrkDir);
 		pb.redirectErrorStream(true);
 		

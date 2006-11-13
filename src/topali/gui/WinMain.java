@@ -479,7 +479,9 @@ public class WinMain extends JFrame
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
 		
-		CodeMLResult result = new CodeMLResult();
+		CodeMLResult result = new CodeMLSettingsDialog(this, data, iResult).getCodeMLResult();
+		if (result == null)
+			return;
 		
 		int runNum = data.getTracker().getCodeMLRunCount() + 1;
 		data.getTracker().setCodeMLRunCount(runNum);
@@ -487,12 +489,7 @@ public class WinMain extends JFrame
 		result.jobName = "CodeML Analysis " + runNum + " on " + data.name + " ("
 			+ ss.getSelectedSequences().length + "/" + ss.getSize()
 			+ " sequences)";
-		
-		/////!!!!!!!!!!!!!!!!!!!
-		result.isRemote = false;
-		result.codeMLPath = Utils.getLocalPath() + "codeml.exe";
-		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
-		
+				
 		submitJob(data, result);
 	}
 	

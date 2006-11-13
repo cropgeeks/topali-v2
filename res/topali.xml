@@ -215,7 +215,7 @@ Castor's auto mapping file generator -->
 
 <!-- CodeMLResult (extends AlignmentResult) -->
 <class name="topali.data.CodeMLResult" extends="topali.data.AlignmentResult" auto-complete="true">
-	<field name="codeMLPath" type="string" direct="true">
+	<field name="codemlPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
 </class>
 

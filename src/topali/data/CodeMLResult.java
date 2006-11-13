@@ -13,7 +13,7 @@ package topali.data;
 public class CodeMLResult extends AlignmentResult
 {
 	// The location of the CodeML binary
-	public String codeMLPath;
+	public String codemlPath;
 	
 	public CodeMLResult()
 	{

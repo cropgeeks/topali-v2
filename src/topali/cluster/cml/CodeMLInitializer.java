@@ -60,7 +60,7 @@ public class CodeMLInitializer extends Thread
 		
 		
 		// We want to run each of the models, making *8* runs in total
-		for (int i = 1; i <= 1; i++)
+		for (int i = 1; i <= 8; i++)
 		{
 			if (LocalJobs.isRunning(result.jobId) == false)
 				return;
@@ -75,7 +75,7 @@ public class CodeMLInitializer extends Thread
 		if (result.isRemote)
 		{
 			logger.info("analysis ready: submitting to cluster");
-//			CodeMLWebService.runScript(jobDir, result);
+			CodeMLWebService.runScript(jobDir);
 		}
 	}
 }
