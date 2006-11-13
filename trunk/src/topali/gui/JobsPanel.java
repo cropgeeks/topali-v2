@@ -322,9 +322,7 @@ public class JobsPanel extends JPanel
 		else if (result instanceof CodeMLResult)
 		{
 			if (result.isRemote)
-			{
-//				job = new CodeMLRemoteJob((CodeMLResult)result, data);
-			}
+				job = new CodeMLRemoteJob((CodeMLResult)result, data);
 			else
 				job = new CodeMLLocalJob((CodeMLResult)result, data);
 		}

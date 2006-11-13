@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.codeml;
+package topali.cluster.cml;
 
 import java.io.*;
 
