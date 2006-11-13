@@ -62,9 +62,6 @@ public class RunMBTree extends Thread
 			MBTreeWebService.runScript(jobDir);
 		}
 		else
-		{
-			MBTreeAnalysis analysis = new MBTreeAnalysis(jobDir);
-			analysis.startThread(LocalJobs.manager);
-		}
+			new MBTreeAnalysis(jobDir).startThread(LocalJobs.manager);
 	}
 }

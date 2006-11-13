@@ -31,8 +31,7 @@ public class DSSLocalJob extends AnalysisJob
 	{
 		try
 		{
-			RunDSS dss = new RunDSS(jobDir, ss, (DSSResult)result);
-			dss.start();
+			new RunDSS(jobDir, ss, (DSSResult)result).start();
 			
 			result.status = JobStatus.RUNNING;			
 			return result.jobId;

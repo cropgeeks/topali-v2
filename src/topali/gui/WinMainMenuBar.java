@@ -412,7 +412,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
-		mAnlsRunCodeML = getItem(aAnlsRunCodeML, KeyEvent.VK_P, 0, 0);
+		mAnlsRunCodeML = getItem(aAnlsRunCodeML, KeyEvent.VK_O, 0, 0);
 		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T,
 			KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
