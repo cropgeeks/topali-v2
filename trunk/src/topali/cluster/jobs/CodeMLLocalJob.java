@@ -3,7 +3,7 @@ package topali.cluster.jobs;
 import java.io.*;
 
 import topali.cluster.*;
-import topali.cluster.trees.*;
+import topali.cluster.codeml.*;
 import topali.data.*;
 import topali.gui.*;
 
@@ -31,8 +31,7 @@ public class CodeMLLocalJob extends AnalysisJob
 	{
 		try
 		{
-//			RunMBTree mb = new RunMBTree(jobDir, ss, (MBTreeResult)result);
-//			mb.start();
+			new CodeMLInitializer(jobDir, ss, (CodeMLResult)result).start();
 			
 			result.status = JobStatus.RUNNING;
 			return result.jobId;
@@ -48,16 +47,14 @@ public class CodeMLLocalJob extends AnalysisJob
 	public float ws_getProgress()
 		throws Exception
 	{
-		return 0;
-		
-//		return new CollateMBTree(jobDir).getPercentageComplete();
+		return new CodeMLMonitor(jobDir).getPercentageComplete();
 	}
 	
 	public AnalysisResult ws_downloadResult()
 		throws Exception
 	{
-//		result = new CollateMBTree(jobDir).getResult();
-//		result.status = JobStatus.COMPLETING;
+		result = new CodeMLMonitor(jobDir).getResult();
+		result.status = JobStatus.COMPLETING;
 		
 		return result;
 	}

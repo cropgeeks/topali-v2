@@ -81,10 +81,7 @@ public class RunLRT extends Thread
 			dataSS.save(new File(runDir, "lrt.fasta"), indices, Filters.FAS, false);
 
 			if (result.isRemote == false)
-			{
-				LRTAnalysis analysis = new LRTAnalysis(runDir);
-				analysis.startThread(LocalJobs.manager);
-			}
+				new LRTAnalysis(runDir).startThread(LocalJobs.manager);
 		}
 				
 		if (result.isRemote)

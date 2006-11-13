@@ -490,6 +490,8 @@ public class WinMain extends JFrame
 		
 		/////!!!!!!!!!!!!!!!!!!!
 		result.isRemote = false;
+		result.codeMLPath = Utils.getLocalPath() + "codeml.exe";
+		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		
 		submitJob(data, result);
 	}

@@ -6,6 +6,8 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] Updated the export dialog so alignments can now be created/exported by
+    concatenating together one or more of the currently selected partitions.
   - [NF] Updated help for several topics.
   - [NF] Improved the rendering speed of the charts while highlighting regions.
   - [NF] TOPALi can now use ReadSeq (remotely) for additional sequence-format
