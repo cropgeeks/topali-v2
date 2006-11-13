@@ -30,6 +30,12 @@
   <parameter name="allowedMethods" value="*"/>
   <parameter name="scope" value="session"/>
  </service>
+ 
+<service name="topali-cml" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.cml.CodeMLWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
 
 <service name="topali-mbt" provider="java:RPC">
   <parameter name="className" value="topali.cluster.trees.MBTreeWebService"/>
