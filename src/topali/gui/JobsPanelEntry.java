@@ -46,7 +46,7 @@ class JobsPanelEntry extends JPanel
 		statusLabel = new JLabel("Starting job...");
 		iconLabel = new JLabel(Icons.STATUS_OFF);
 		
-		long time = job.getStartTime();
+		long time = job.getResult().startTime;
 		startStr = "Submitted: " + new Date(time).toString();
 		timeLabel = new JLabel(startStr);		
 		

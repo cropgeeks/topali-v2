@@ -148,7 +148,7 @@ public class PDMInitializer extends Thread
 		else
 		{
 			File file = new File(new File(jobDir, "nodes"), "runX");
-			new PDMAnalysis(file).startThread(LocalJobs.manager);
+			new PDMAnalysis(file).start(LocalJobs.manager);
 		}
 		
 	}
@@ -179,7 +179,7 @@ public class PDMInitializer extends Thread
 		if (result.isRemote == false)
 		{
 			PDMAnalysis analysis = new PDMAnalysis(runDir);
-			analysis.startThread(LocalJobs.manager);
+			analysis.start(LocalJobs.manager);
 		}
 	}
 }

@@ -17,19 +17,7 @@ public abstract class AnalysisJob
 	
 	public void setJobId(String jobId)
 		{ result.jobId = jobId; }
-	
-	public long getStartTime()
-		{ return result.startTime; }
-	
-	public void setStartTime(long startTime)
-		{ result.startTime = startTime; }
-	
-	public long getEndTime()
-		{ return result.endTime; }
-	
-	public void setEndTime(long endTime)
-		{ result.endTime = endTime; }
-		
+			
 	public int getStatus()
 		{ return result.status; }
 	

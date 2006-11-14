@@ -16,6 +16,8 @@ import java.util.logging.*;
 import topali.cluster.*;
 import topali.mod.*;
 
+import sbrn.commons.multicore.*;
+
 public class TOPALi extends Applet
 {
 	private boolean isApplet = false;
@@ -72,7 +74,7 @@ public class TOPALi extends Applet
 		doEncryption(true);
 		
 		setProxy();
-		LocalJobs.manager = new ThreadManager(Prefs.gui_max_cpus);
+		LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);
 				
 		try
 		{

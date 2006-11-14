@@ -12,7 +12,9 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-class PDMAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+class PDMAnalysis extends TokenThread
 {	
 	private SequenceSet ss;
 	

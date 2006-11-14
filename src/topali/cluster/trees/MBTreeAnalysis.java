@@ -12,7 +12,9 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-public class MBTreeAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+public class MBTreeAnalysis extends TokenThread
 {
 	private SequenceSet ss;
 	

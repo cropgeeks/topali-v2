@@ -13,7 +13,9 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-class HMMAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+class HMMAnalysis extends TokenThread
 {	
 	// The two windows that will be analyzed
 	private SequenceSet ss;

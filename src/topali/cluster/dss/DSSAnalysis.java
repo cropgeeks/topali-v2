@@ -12,7 +12,9 @@ import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
-class DSSAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+class DSSAnalysis extends TokenThread
 {	
 	private SequenceSet ss;
 	
@@ -64,9 +66,6 @@ class DSSAnalysis extends MultiThread
 	
 	public void run()
 	{
-		s = System.currentTimeMillis();
-		long s2 = System.currentTimeMillis();
-				
 		try
 		{
 			int window = result.window;
@@ -115,8 +114,6 @@ class DSSAnalysis extends MultiThread
 				File dssWrkDir = new File(wrkDir, "win"+(i+1));
 				dssWin[i] = new DSS(dssWrkDir, result, win1, win2);
 			}
-			System.out.println("Data written in " + (System.currentTimeMillis()-s2));
-			s2 = System.currentTimeMillis();
 			
 			// 2) Run all the Fitch calculations
 			for (int i = 0;  i < data.length; i++)
@@ -126,10 +123,7 @@ class DSSAnalysis extends MultiThread
 				dssWin[i].calculateFitchScores();
 			}
 			RunFitch fitch = new RunFitch(result);
-			fitch.runFitchScripts(wrkDir, windowCount);
-			System.out.println("Fitch run in " + (System.currentTimeMillis()-s2));
-			s2 = System.currentTimeMillis();
-			
+			fitch.runFitchScripts(wrkDir, windowCount);			
 			
 			// 3) Perform actual DSS calculations (using Fitch results)
 			for (int i = 0;  i < data.length; i++)
@@ -146,7 +140,6 @@ class DSSAnalysis extends MultiThread
 			}
 			
 			writeResults();
-			System.out.println("DSS in " + (System.currentTimeMillis()-s2));
 		}
 		catch (Exception e)
 		{

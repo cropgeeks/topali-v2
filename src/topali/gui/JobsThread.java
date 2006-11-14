@@ -139,7 +139,7 @@ while (true) {
 					JobsPanelEntry entry = (JobsPanelEntry) model.get(i);				
 					AnalysisJob job = entry.getJob();
 					
-					entry.setTimeLabel(job.getStartTime(), current);
+					entry.setTimeLabel(job.getResult().startTime, current);
 				}
 				
 				jobsPanel.repaint();

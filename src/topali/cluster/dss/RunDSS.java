@@ -80,7 +80,7 @@ public class RunDSS extends Thread
 			dataSS.save(new File(runDir, "dss.fasta"), indices, Filters.FAS, false);
 
 			if (result.isRemote == false)
-				new DSSAnalysis(runDir).startThread(LocalJobs.manager);
+				new DSSAnalysis(runDir).start(LocalJobs.manager);
 		}
 				
 		if (result.isRemote)

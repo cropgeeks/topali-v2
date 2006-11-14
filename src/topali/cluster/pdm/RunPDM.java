@@ -80,7 +80,7 @@ public class RunPDM extends Thread
 			dataSS.save(new File(runDir, "pdm.fasta"), indices, Filters.FAS, false);
 
 			if (result.isRemote == false)
-				new PDMAnalysis(runDir).startThread(LocalJobs.manager);
+				new PDMAnalysis(runDir).start(LocalJobs.manager);
 		}
 				
 		if (result.isRemote)
