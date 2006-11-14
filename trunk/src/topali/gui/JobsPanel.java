@@ -145,7 +145,7 @@ public class JobsPanel extends JPanel
 		model.removeElement(entry);
 		
 		AnalysisJob job = entry.getJob();
-		job.setEndTime(System.currentTimeMillis());
+		job.getResult().endTime = System.currentTimeMillis();
 		
 		// Move its results into main window		
 		winMain.navPanel.addResultsNode(null, job.getAlignmentData(), job.getResult());

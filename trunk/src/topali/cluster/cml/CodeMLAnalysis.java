@@ -14,8 +14,9 @@ import topali.fileio.*;
 import topali.mod.*;
 
 import sbrn.commons.file.*;
+import sbrn.commons.multicore.*;
 
-class CodeMLAnalysis extends MultiThread
+class CodeMLAnalysis extends TokenThread
 {	
 	// Directory where results will be stored (and temp files worked on)
 	// Why two different places? Because while running on the cluster the job

@@ -13,7 +13,9 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-class PDMAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+class PDMAnalysis extends TokenThread
 {	
 	// Gets set to true if this object can't find its data - we assume it's
 	// therefore meant to do the PostAnalysis tasks

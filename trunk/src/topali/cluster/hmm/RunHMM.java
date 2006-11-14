@@ -61,6 +61,6 @@ public class RunHMM extends Thread
 			HMMWebService.runScript(jobDir);
 		}
 		else
-			new HMMAnalysis(jobDir).startThread(LocalJobs.manager);
+			new HMMAnalysis(jobDir).start(LocalJobs.manager);
 	}
 }

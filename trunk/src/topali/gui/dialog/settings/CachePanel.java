@@ -9,6 +9,8 @@ import javax.swing.*;
 import topali.cluster.*;
 import topali.gui.*;
 
+import sbrn.commons.multicore.*;
+
 import doe.*;
 
 class CachePanel extends JPanel implements ActionListener
@@ -98,7 +100,7 @@ class CachePanel extends JPanel implements ActionListener
 		Prefs.gui_max_cpus = cpuModel.getNumber().intValue();
 		
 		if (LocalJobs.jobsRunning() == false)
-			LocalJobs.manager = new ThreadManager(Prefs.gui_max_cpus);
+			LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);
 		
 		return true;
 	}

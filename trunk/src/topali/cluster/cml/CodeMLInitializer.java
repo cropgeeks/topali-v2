@@ -69,7 +69,7 @@ public class CodeMLInitializer extends Thread
 			runDir.mkdirs();
 							
 			if (result.isRemote == false)
-				new CodeMLAnalysis(runDir).startThread(LocalJobs.manager);
+				new CodeMLAnalysis(runDir).start(LocalJobs.manager);
 		}
 				
 		if (result.isRemote)

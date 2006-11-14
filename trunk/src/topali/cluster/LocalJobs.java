@@ -7,14 +7,16 @@ package topali.cluster;
 
 import java.util.*;
 
+import sbrn.commons.multicore.*;
+
 /* Maintains a list of all jobs currently running locally. The jobs check this
  * list to see if they're still allowed to run (if not, it means they've been
  * cancelled and they need to stop doing what they do...)
  */
 public class LocalJobs
 {
-	// A single instance of a global ThreadManager for all locally run jobs
-	public static ThreadManager manager = new ThreadManager();
+	// A single instance of a global TokenManager for all locally run jobs
+	public static TokenManager manager = new TokenManager();
 	
 	private static Hashtable<String, Boolean> jobs = new Hashtable<String, Boolean>(10);
 	

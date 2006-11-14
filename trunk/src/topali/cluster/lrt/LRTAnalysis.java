@@ -13,7 +13,9 @@ import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
-class LRTAnalysis extends MultiThread
+import sbrn.commons.multicore.*;
+
+class LRTAnalysis extends TokenThread
 {	
 	// The two windows that will be analyzed
 	private SequenceSet ss;
@@ -67,7 +69,6 @@ class LRTAnalysis extends MultiThread
 	
 	public void run()
 	{
-		s = System.currentTimeMillis();
 		System.out.println(runDir);
 				
 		try
