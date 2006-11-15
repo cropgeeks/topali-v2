@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.pdm;
+package topali.cluster.jobs.pdm;
 
 // Compute the autocorrelation time (ACT) from the energies
 // (negative log likelihoods). The energies are assumed to

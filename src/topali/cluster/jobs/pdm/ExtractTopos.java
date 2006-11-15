@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.pdm;
+package topali.cluster.jobs.pdm;
 
 // OBJECTIVE
 // Reads in run1.topo and adds it as a further column to the

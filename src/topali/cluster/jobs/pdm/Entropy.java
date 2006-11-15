@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.pdm;
+package topali.cluster.jobs.pdm;
 
 //         _______  E  n  t  r  o  p  y  _______
 // The main program moves a window over the DNA sequence
