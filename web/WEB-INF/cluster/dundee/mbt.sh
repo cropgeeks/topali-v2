@@ -5,4 +5,4 @@
 #$ -cwd
 #$ -j y
 
-$JAVA -cp $TOPALi topali.cluster.trees.MBTreeAnalysis "$JOB_DIR"
+$JAVA -cp $TOPALi topali.cluster.jobs.trees.MBTreeAnalysis "$JOB_DIR"

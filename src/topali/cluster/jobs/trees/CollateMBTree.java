@@ -1,4 +1,4 @@
-package topali.cluster.trees;
+package topali.cluster.jobs.trees;
 
 import java.io.*;
 import java.util.logging.*;
