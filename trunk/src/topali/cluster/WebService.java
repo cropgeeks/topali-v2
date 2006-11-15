@@ -18,7 +18,7 @@ import topali.fileio.*;
 public abstract class WebService
 {
 	protected static Logger accessLog;
-	protected static Logger logger = Logger.getLogger("topali.cluster");
+	protected static Logger logger;
 	
 	protected static WebXmlProperties props;
 	
@@ -49,15 +49,23 @@ public abstract class WebService
 			
 		// Now that the properties are loaded, set the log FileHandler
 		// TODO: Get all this into a logging.properties file
-		FileHandler fh = null;
+		
+		// We set two loggers - one to log access only, and one for more detail
+		FileHandler fh1 = null, fh2 = null;
 		try
 		{
-			fh = new FileHandler(getParameter("log-file"), 0, 1, true);
-			fh.setFormatter(new SimpleFormatter());
+			fh1 = new FileHandler(getParameter("access-log"), 0, 1, true);			
+			fh2 = new FileHandler(getParameter("info-log"), 0, 1, true);
+			fh1.setFormatter(new SimpleFormatter());
+			fh2.setFormatter(new SimpleFormatter());
 		}
 		catch (IOException e) {}
-		accessLog = Logger.getLogger("topali.cluster.ffs");
-		accessLog.addHandler(fh);
+		
+		accessLog = Logger.getLogger("topali.cluster.access-log");
+		logger = Logger.getLogger("topali.cluster.info-log");
+				
+		accessLog.addHandler(fh1);
+		logger.addHandler(fh2);
 	}
 	
 	protected String getJobId()
@@ -118,7 +126,7 @@ public abstract class WebService
 			
 			// Progress...
 			float progress = getPercentageComplete(jobDir);
-			logger.info(jobId + " at " + progress + " % complete");
+			logger.info(jobId + " - " + progress + "%");
 			
 			if (progress == 100f)
 				return Castor.getXML(new JobStatus(100, JobStatus.COMPLETING));
@@ -127,7 +135,7 @@ public abstract class WebService
 			int status = JobStatus.UNKNOWN;
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
 			status = cluster.getJobStatus(jobDir);
-			logger.info(jobId + " at status (code) " + status);
+			logger.info(jobId + " - current status = " + status);
 			
 			// TODO: Find out WTF qstat won't always return the state
 			// TODO: Following not suitable for SGE 5.3		
@@ -138,13 +146,15 @@ public abstract class WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
 	
 	public void deleteJob(final String jobId)
 	{
+		logger.info(jobId + " - delete job command received");
+		
 		File jobDir = new File(getParameter("job-dir"), jobId);
 		
 		// TODO: SGE Job deletion error checking and security
@@ -167,9 +177,9 @@ public abstract class WebService
 	
 	public void cleanup(String jobId)
 	{
-		File jobDir = new File(getParameter("job-dir"), jobId);
-		ClusterUtils.emptyDirectory(jobDir, true);
+		logger.info(jobId + " - cleaning up and removing files");
 		
-		logger.info("cleaning up and removing files for " + jobId);
+		File jobDir = new File(getParameter("job-dir"), jobId);
+		ClusterUtils.emptyDirectory(jobDir, true);		
 	}
 }
