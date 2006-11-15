@@ -6,6 +6,8 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [BF] Updated the timer threads for the job progress screen so that jobs with
+    indeterminate progress bars are properly displayed.
   - [NF] Updated the export dialog so alignments can now be created/exported by
     concatenating together one or more of the currently selected partitions.
   - [NF] Updated help for several topics.

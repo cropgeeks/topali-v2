@@ -6,7 +6,6 @@
 package topali.cluster.jobs.cml;
 
 import java.io.*;
-import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -21,8 +20,6 @@ import topali.mod.*;
  */
 public class CodeMLInitializer extends Thread
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
-	
 	private SequenceSet ss;
 	private CodeMLResult result;
 	
@@ -73,9 +70,6 @@ public class CodeMLInitializer extends Thread
 		}
 				
 		if (result.isRemote)
-		{
-			logger.info("analysis ready: submitting to cluster");
 			CodeMLWebService.runScript(jobDir);
-		}
 	}
 }

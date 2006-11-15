@@ -51,8 +51,6 @@ public class ClusterUtils
 		try
 		{
 			out = new BufferedWriter(new FileWriter(filename));
-//			out.write(exception.toString());
-			out.newLine();
 			exception.printStackTrace(new PrintWriter(out));
 		}
 		catch (Exception e) {}

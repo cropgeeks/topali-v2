@@ -1,6 +1,7 @@
 package topali.cluster.jobs.cml;
 
 import java.io.*;
+import java.util.logging.*;
 
 import org.apache.axis.*;
 
@@ -30,12 +31,12 @@ public class CodeMLWebService extends WebService
 			new CodeMLInitializer(jobDir, ss, result).start();
 			
 			accessLog.info("CML request from " + jobId);
-			logger.info("CML request from " + jobId);
+			logger.info(jobId + " - CML request received");
 			return jobId;
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -49,7 +50,7 @@ public class CodeMLWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -63,12 +64,12 @@ public class CodeMLWebService extends WebService
 			
 			CodeMLResult result = new CodeMLMonitor(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + " -  returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -93,6 +94,7 @@ public class CodeMLWebService extends WebService
 		writeFile(template, new File(jobDir, "cml.sh"));
 		
 		// Run...
-		submitJob("cml.sh", jobDir);
+		logger.info(jobDir.getName() + " - submitting to cluster");
+		submitJob("cml.sh", jobDir);		
 	}
 }
