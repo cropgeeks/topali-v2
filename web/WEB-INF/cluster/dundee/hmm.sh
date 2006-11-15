@@ -5,4 +5,4 @@
 #$ -cwd
 #$ -j y
 
-$JAVA -cp $TOPALi topali.cluster.hmm.HMMAnalysis "$JOB_DIR"
+$JAVA -cp $TOPALi topali.cluster.jobs.hmm.HMMAnalysis "$JOB_DIR"

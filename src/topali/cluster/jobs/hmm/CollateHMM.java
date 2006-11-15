@@ -1,4 +1,4 @@
-package topali.cluster.hmm;
+package topali.cluster.jobs.hmm;
 
 import java.io.*;
 import java.util.logging.*;
