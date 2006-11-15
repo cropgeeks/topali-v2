@@ -584,9 +584,9 @@ public class Prefs extends PreferencesXML
 		dss_window     = 500;
 		dss_step       = 10;
 		dss_runs       = 100;
-		dss_power      = topali.cluster.dss.DSS.POWER_UNWEIGHTED;
-		dss_method     = topali.cluster.dss.DSS.METHOD_JC;
-		dss_pass_count = topali.cluster.dss.DSS.ONE_PASS;
+		dss_power      = topali.cluster.jobs.dss.DSS.POWER_UNWEIGHTED;
+		dss_method     = topali.cluster.jobs.dss.DSS.METHOD_JC;
+		dss_pass_count = topali.cluster.jobs.dss.DSS.ONE_PASS;
 	}
 	
 	public static void setLRTDefaults()

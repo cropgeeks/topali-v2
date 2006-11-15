@@ -1,4 +1,4 @@
-package topali.cluster.dss;
+package topali.cluster.jobs.dss;
 
 import java.io.*;
 import java.util.*;
