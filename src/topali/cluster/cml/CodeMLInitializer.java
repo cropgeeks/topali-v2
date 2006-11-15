@@ -26,7 +26,7 @@ public class CodeMLInitializer extends Thread
 	private SequenceSet ss;
 	private CodeMLResult result;
 	
-	// Directory where the job will run
+	// Directory where the job will store its final results
 	private File jobDir;
 		
 	public CodeMLInitializer(File jobDir, SequenceSet ss, CodeMLResult result)
@@ -38,13 +38,13 @@ public class CodeMLInitializer extends Thread
 
 	public void run()
 	{
-		try { runAnalysis(); }
+		try { startThreads(); }
 		catch (Exception e) {
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
 	
-	private void runAnalysis()
+	private void startThreads()
 		throws Exception
 	{
 		// Ensure the directory for this job exists
