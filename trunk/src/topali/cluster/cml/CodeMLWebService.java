@@ -27,11 +27,10 @@ public class CodeMLWebService extends WebService
 				
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			CodeMLInitializer pdm = new CodeMLInitializer(jobDir, ss, result);
-			pdm.start();
+			new CodeMLInitializer(jobDir, ss, result).start();
 			
-			accessLog.info("CODEML request from " + jobId);
-			logger.info("CODEML request from " + jobId);
+			accessLog.info("CML request from " + jobId);
+			logger.info("CML request from " + jobId);
 			return jobId;
 		}
 		catch (Exception e)

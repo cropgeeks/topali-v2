@@ -16,69 +16,51 @@ import topali.mod.*;
 import sbrn.commons.file.*;
 import sbrn.commons.multicore.*;
 
-class CodeMLAnalysis extends TokenThread
+class CodeMLAnalysis extends AnalysisThread
 {	
-	// Directory where results will be stored (and temp files worked on)
-	// Why two different places? Because while running on the cluster the job
-	// directory is usually an NFS share - fine for writing final results to,
-	// but during analysis itself it's best to write to a local HD's directory
-	private File runDir, wrkDir;
-	// And settings
 	private CodeMLResult result;
 	
+	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
-	{ 
-		CodeMLAnalysis analysis = null;
-		
-		try
-		{
-			analysis = new CodeMLAnalysis(new File(args[0]));
-			analysis.run();
-		}
-		catch (Exception e)
-		{
-			ClusterUtils.writeError(new File(analysis.runDir, "error.txt"), e);
-		}
-	}
+		{ new CodeMLAnalysis(new File(args[0])).run(); }
 	
+	// If running locally, the job will be started via a normal constructor call
 	CodeMLAnalysis(File runDir)
-		{ this.runDir = runDir; }
-	
-	public void run()
+		{ super(runDir); }
+
+
+	public void runAnalysis()
+		throws Exception
 	{
-		try
-		{
-			// Read the CodeMLResult
-			File jobDir = runDir.getParentFile();
-			File resultFile = new File(jobDir, "submit.xml");
-			result = (CodeMLResult) Castor.unmarshall(resultFile);
-			
-			// Temporary working directory
-			wrkDir = ClusterUtils.getWorkingDirectory(
-				result,	jobDir.getName(), runDir.getName());
-
-
-			// 1) Copy the sequence data to the working directory
-			File src = new File(jobDir, "seq.phy");
-			File des = new File(wrkDir, "seq.phy");
-			FileUtils.copyFile(src, des, false);
-			
-			// 2) Write out the input files that CODEML requires			
-			RunCodeML runCodeML = new RunCodeML(wrkDir, result);
-			runCodeML.saveCTLSettings(0);
-			runCodeML.createTree();
-			
-			// 4) Run the job
-			runCodeML.run();
-			
-		}
-		catch (Exception e)
-		{
-			if (e.getMessage().equals("cancel") == false)			
-				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
-		}
+		// Read the CodeMLResult
+		File jobDir = runDir.getParentFile();
+		File resultFile = new File(jobDir, "submit.xml");
+		result = (CodeMLResult) Castor.unmarshall(resultFile);
 		
-//		ClusterUtils.emptyDirectory(wrkDir, true);		
-		giveToken();
+		// Temporary working directory
+		wrkDir = ClusterUtils.getWorkingDirectory(
+			result,	jobDir.getName(), runDir.getName());
+
+
+		// 1) Copy the sequence data to the working directory
+		File src = new File(jobDir, "seq.phy");
+		File des = new File(wrkDir, "seq.phy");
+		FileUtils.copyFile(src, des, false);
+		
+		// 2) Write out the input files that CODEML requires			
+		RunCodeML runCodeML = new RunCodeML(wrkDir, result);
+		runCodeML.saveCTLSettings(0);
+		runCodeML.createTree();
+		
+		// 4) Run the job
+		runCodeML.run();
+		
+		
+		// TEMP (for now) - copy results from wrkDir to runDir
+		for (File f: wrkDir.listFiles())
+			FileUtils.copyFile(f, new File(runDir, f.getName()), false);
+			
+		
+		ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 }
