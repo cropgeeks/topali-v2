@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.trees;
+package topali.cluster.jobs.trees;
 
 import java.io.*;
 import java.util.logging.*;
