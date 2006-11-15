@@ -1,4 +1,4 @@
-package topali.cluster.pdm2;
+package topali.cluster.jobs.pdm2;
 
 import java.io.*;
 
