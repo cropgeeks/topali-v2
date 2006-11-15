@@ -144,7 +144,7 @@ while (true) {
 				
 				jobsPanel.repaint();
 				
-				try { Thread.sleep(30000); }
+				try { Thread.sleep(50); }
 				catch (InterruptedException e) {}
 			}
 		}
