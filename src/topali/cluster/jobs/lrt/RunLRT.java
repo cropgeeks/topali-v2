@@ -6,7 +6,6 @@
 package topali.cluster.jobs.lrt;
 
 import java.io.*;
-import java.util.logging.*;
 
 import pal.alignment.*;
 import pal.substmodel.*;
@@ -21,8 +20,6 @@ import topali.mod.*;
 
 public class RunLRT extends Thread
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
-	
 	private SequenceSet ss;
 	private LRTResult result;
 	
@@ -34,34 +31,28 @@ public class RunLRT extends Thread
 		this.jobDir = jobDir;
 		this.ss = ss;
 		this.result = result;
-	}	
-
+	}
+	
 	public void run()
 	{
-		try
-		{
-			// Ensure the directory for this job exists
-			jobDir.mkdirs();
-			
-			// Store the LRTResult object where the individual runs can get it
-			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-			
-			// Run the analyses
-			runAnalyses();
-		}
-		catch (Exception e)
-		{
-			logger.severe(""+e);
+		try { startThreads(); }
+		catch (Exception e) {
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
 	
-	// Run [n]+1 number of LRT runs on this alignment
-	private void runAnalyses()
+	private void startThreads()
 		throws Exception
 	{
+		// Ensure the directory for this job exists
+		jobDir.mkdirs();
+		
+		// Store the LRTResult object where the individual runs can get it
+		Castor.saveXML(result, new File(jobDir, "submit.xml"));
+			
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+
 		
 		for (int i = 1; i <= result.runs; i++)
 		{
@@ -85,10 +76,7 @@ public class RunLRT extends Thread
 		}
 				
 		if (result.isRemote)
-		{
-			logger.info("analysis ready: submitting to cluster");
 			LRTWebService.runScript(jobDir, result);
-		}
 	}
 	
 	private SequenceSet getSimulatedAlignment()

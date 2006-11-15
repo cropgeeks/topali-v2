@@ -13,9 +13,7 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-import sbrn.commons.multicore.*;
-
-class PDMAnalysis extends TokenThread
+class PDMAnalysis extends AnalysisThread
 {	
 	// Gets set to true if this object can't find its data - we assume it's
 	// therefore meant to do the PostAnalysis tasks
@@ -24,12 +22,7 @@ class PDMAnalysis extends TokenThread
 
 	private SequenceSet ss;
 	
-	// Directory where results will be stored (and temp files worked on)
-	// Why two different places? Because while running on the cluster the job
-	// directory is usually an NFS share - fine for writing final results to,
-	// but during analysis itself it's best to write to a local HD's directory
-	private File jobDir, runDir, wrkDir, treesDir;
-	// And settings
+	private File jobDir, treesDir;
 	private PDM2Result result;
 	
 	
@@ -46,28 +39,18 @@ class PDMAnalysis extends TokenThread
 	// in the arrays
 	private int win2Index = 0;
 	
+	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
-	{ 
-		PDMAnalysis analysis = null;
-		
-		try
-		{
-			analysis = new PDMAnalysis(new File(args[0]));
-			analysis.run();
-		}
-		catch (Exception e)
-		{
-			ClusterUtils.writeError(new File(analysis.runDir, "error.txt"), e);
-		}
-	}
+		{ new PDMAnalysis(new File(args[0])).run(); }
 	
+	// If running locally, the job will be started via a normal constructor call
 	PDMAnalysis(File runDir)
+		{ super(runDir); }
+	
+	
+	public void runAnalysis()
 		throws Exception
 	{
-		// Data (for this run) directory - may not exist (but will not be null)
-		// if we're dealing with a PostAnalysis run
-		this.runDir = runDir;
-				
 		// Job directory
 		jobDir = runDir.getParentFile().getParentFile();
 		System.out.println("jobDir: " + jobDir);
@@ -87,20 +70,15 @@ class PDMAnalysis extends TokenThread
 		}
 		else
 			doPostAnalysis = true;
-	}
-	
-	// A PDMAnalysis must take a region of DNA and perform a PDM analysis on [n] 
-	// windows along that region.
-	public void run()
-	{
+
+
 		if (doPostAnalysis)
 			new PDMPostAnalysis(jobDir, result);
 		else
 			doMainAnalysis();
-		
-		giveToken();
 	}
 	
+	// TODO: This needs reformatted into a throws Exception format for AnalysisThread
 	private void doMainAnalysis()
 	{		
 		File pctDir = new File(runDir, "percent");

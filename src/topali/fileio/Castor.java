@@ -112,7 +112,7 @@ public class Castor
 
 		return (HMMResult) unmarshaller.unmarshal(new StringReader(xml));
 	}
-*/
+
 	public static DSSResult getDSSResult(String xml)
 		throws Exception
 	{
@@ -121,7 +121,7 @@ public class Castor
 		
 		return (DSSResult) unmarshaller.unmarshal(new StringReader(xml));
 	}
-/*	
+	
 	public static LRTResult getLRTResult(String xml)
 		throws Exception
 	{

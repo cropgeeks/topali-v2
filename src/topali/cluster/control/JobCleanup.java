@@ -20,7 +20,7 @@ public class JobCleanup
 	public static void main(String[] args)
 	{
 		// Disable logging (and SGE feedback)
-		Logger.getLogger("topali.cluster").setLevel(Level.OFF);
+		Logger.getLogger("topali.cluster.info-log").setLevel(Level.OFF);
 		
 		if (args.length == 0)
 		{

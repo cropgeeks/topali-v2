@@ -9,7 +9,7 @@ import topali.fileio.*;
 
 public class PDMMonitor
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private File jobDir;
 	
@@ -43,12 +43,9 @@ public class PDMMonitor
 	float getParallelPercentageComplete()
 		throws Exception
 	{
-		System.out.println();
-		System.out.println("Checking for progress");
-		
 		if (new File(jobDir, "error.txt").exists())
 		{
-			logger.severe("error.txt generated for " + jobDir.getPath());
+			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("PDM2 error.txt");
 		}
 		
@@ -58,12 +55,12 @@ public class PDMMonitor
 		File[] files = new File(jobDir, "nodes").listFiles();
 		for (File f: files)
 		{
-			System.out.print(f + " ");
+			logger.info(f + " ");
 			runs++;
 			
 			if (new File(f, "error.txt").exists())
 			{
-				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + runs);
+				logger.severe(jobDir.getName() + " - error.txt found for run " + runs);
 				throw new Exception("PDM2 error.txt in subjob " + runs);
 			}
 			
@@ -72,14 +69,14 @@ public class PDMMonitor
 			if (pDir.exists())
 				total += pDir.listFiles().length;
 			
-			try { System.out.println(pDir.listFiles().length); }
+			try { logger.info("pDir.length = " + pDir.listFiles().length); }
 			catch (Exception e) { e.printStackTrace(System.out); }
 			
 //			try { total += new File(f, "percent").listFiles().length; }
 //			catch (Exception e) { System.out.println(e); }
 		}
 		
-		System.out.println("PERCENT: total=" + total + " and runs=" + runs);
+		logger.info("PERCENT: total=" + total + " and runs=" + runs);
 		
 		// Now work out the overal percentage
 		return ((float) total) / ((float) runs);

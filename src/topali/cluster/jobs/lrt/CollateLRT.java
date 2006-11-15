@@ -9,7 +9,7 @@ import topali.fileio.*;
 
 public class CollateLRT
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private File jobDir;
 	private LRTResult result;
@@ -33,7 +33,7 @@ public class CollateLRT
 	{
 		if (new File(jobDir, "error.txt").exists())
 		{
-			logger.severe("error.txt generated for " + jobDir.getPath());
+			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("LRT error.txt");
 		}
 		
@@ -52,7 +52,7 @@ public class CollateLRT
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
 			{
-				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + i);
+				logger.severe(jobDir.getName() + " - error.txt found for run " + i);
 				throw new Exception("LRT error.txt (run " + i + ")");
 			}
 		}

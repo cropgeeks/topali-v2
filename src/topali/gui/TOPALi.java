@@ -11,7 +11,6 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
-import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.mod.*;
@@ -30,8 +29,7 @@ public class TOPALi extends Applet
 	
 	public static void main(String[] args)
 	{ 
-		Logger.getLogger("topali.gui.TOPALi").info("Locale: " + Locale.getDefault());
-		
+		System.out.println("Locale is " + Locale.getDefault());
 		System.out.println("Running Java " + System.getProperty("java.version"));
 
 		// Let axis know where its config file is

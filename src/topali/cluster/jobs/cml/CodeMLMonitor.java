@@ -9,7 +9,7 @@ import topali.fileio.*;
 
 public class CodeMLMonitor
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private File jobDir;
 	

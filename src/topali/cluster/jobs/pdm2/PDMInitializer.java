@@ -32,24 +32,26 @@ public class PDMInitializer extends Thread
 		this.ss = ss;
 		this.result = result;
 	}
-
+	
 	public void run()
 	{
-		try
-		{
-			// Ensure the directory for this job exists
-			jobDir.mkdirs();
-			
-			// Store the PDM2Result object where it can be read by the sub-job
-			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-			
-			// Run the analysis
-			runAnalysis();
-		}
-		catch (Exception e)
-		{
+		try { startThreads(); }
+		catch (Exception e) {
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
+	}
+	
+	private void startThreads()
+		throws Exception
+	{
+		// Ensure the directory for this job exists
+		jobDir.mkdirs();
+		
+		// Store the PDM2Result object where it can be read by the sub-job
+		Castor.saveXML(result, new File(jobDir, "submit.xml"));
+		
+		// Run the analysis
+		runAnalysis();
 	}
 	
 /*	private void runAnalysis()

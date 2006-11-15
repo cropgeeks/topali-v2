@@ -13,86 +13,57 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-import sbrn.commons.multicore.*;
-
-class HMMAnalysis extends TokenThread
+class HMMAnalysis extends AnalysisThread
 {	
-	// The two windows that will be analyzed
 	private SequenceSet ss;
-	
-	// Directory where results will be stored (and temp files worked on)
-	private File jobDir, wrkDir;
-	// And settings
 	private HMMResult result;
 
-	
+	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
-	{ 
-		HMMAnalysis analysis = null;
-		
-		try
-		{
-			analysis = new HMMAnalysis(new File(args[0]));
-			analysis.run();
-		}
-		catch (Exception e)
-		{
-			System.out.println("HMMAnalysis: " + e);
-			ClusterUtils.writeError(new File(analysis.jobDir, "error.txt"), e);
-		}
-	}
+		{ new HMMAnalysis(new File(args[0])).run(); }
 	
-	HMMAnalysis(File jobDir)
+	// If running locally, the job will be started via a normal constructor call
+	HMMAnalysis(File runDir)
+		{ super(runDir); }
+
+	
+	public void runAnalysis()
 		throws Exception
 	{
-		// Data directory
-		this.jobDir = jobDir;
-
 		// Read the HMMResult
-		result = (HMMResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		result = (HMMResult) Castor.unmarshall(new File(runDir, "submit.xml"));
 		// Read the SequenceSet
-		ss = new SequenceSet(new File(jobDir, "hmm.fasta"));
-		
+		ss = new SequenceSet(new File(runDir, "hmm.fasta"));
+				
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(
-			result, jobDir.getName(), "barce");
-	}
-	
-	public void run()
-	{
-		try
-		{
-			// Firstly, check the alignment is Barce-compatible
-			verifyForBarce();
-			
-			// We need to save out the SequenceSet for Barce to read, ensuring
-			// that only the sequences meant to be processed are saved
-			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-			ss.save(new File(wrkDir, "seq.phy"), indices, Filters.PHY_S, true);
-			
-			// Store the mosaic.in file
-			saveMosaicFile(new File(wrkDir, "mosaic.in"));
-			
-			// Then Barce can be run
-			RunBarce barce = new RunBarce(result, wrkDir, jobDir);
-			barce.runBarce();
-			
-			// And the results collated
-			getResults();
-			
-			// Save final data back to drive where it can be retrieved
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
-			// And write the final percentage as 105%!
-			ClusterUtils.setPercent(new File(jobDir, "percent"), 105);
-		}
-		catch (Exception e)
-		{
-			if (e.getMessage().equals("cancel") == false)
-				ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
-		}
+			result, runDir.getName(), "barce");
+
+
+		// Firstly, check the alignment is Barce-compatible
+		verifyForBarce();
 		
+		// We need to save out the SequenceSet for Barce to read, ensuring
+		// that only the sequences meant to be processed are saved
+		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+		ss.save(new File(wrkDir, "seq.phy"), indices, Filters.PHY_S, true);
+		
+		// Store the mosaic.in file
+		saveMosaicFile(new File(wrkDir, "mosaic.in"));
+		
+		// Then Barce can be run
+		RunBarce barce = new RunBarce(result, wrkDir, runDir);
+		barce.runBarce();
+		
+		// And the results collated
+		getResults();
+		
+		// Save final data back to drive where it can be retrieved
+		Castor.saveXML(result, new File(runDir, "result.xml"));
+		// And write the final percentage as 105%!
+		ClusterUtils.setPercent(new File(runDir, "percent"), 105);
+
 		ClusterUtils.emptyDirectory(wrkDir, true);		
-		giveToken();
 	}
 	
 	private void getResults()

@@ -1,6 +1,7 @@
 package topali.cluster.jobs.lrt;
 
 import java.io.*;
+import java.util.logging.*;
 
 import org.apache.axis.*;
 
@@ -30,12 +31,12 @@ public class LRTWebService extends WebService
 			lrt.start();
 			
 			accessLog.info("LRT request from " + jobId);
-			logger.info("LRT request from " + jobId);
+			logger.info(jobId + " - LRT request received");
 			return jobId;
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -49,7 +50,7 @@ public class LRTWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -63,12 +64,12 @@ public class LRTWebService extends WebService
 			
 			LRTResult result = new CollateLRT(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + " - returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -94,6 +95,7 @@ public class LRTWebService extends WebService
 		writeFile(template, new File(jobDir, "lrt.sh"));
 		
 		// Run...
+		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("lrt.sh", jobDir);
 	}
 }

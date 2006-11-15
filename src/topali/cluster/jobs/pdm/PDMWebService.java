@@ -1,6 +1,7 @@
 package topali.cluster.jobs.pdm;
 
 import java.io.*;
+import java.util.logging.*;
 
 import org.apache.axis.*;
 
@@ -37,7 +38,7 @@ public class PDMWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -51,7 +52,7 @@ public class PDMWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -65,12 +66,12 @@ public class PDMWebService extends WebService
 			
 			PDMResult result = new CollatePDM(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + "- returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -96,6 +97,7 @@ public class PDMWebService extends WebService
 		writeFile(template, new File(jobDir, "pdm.sh"));
 		
 		// Run...
+		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("pdm.sh", jobDir);
 	}
 }

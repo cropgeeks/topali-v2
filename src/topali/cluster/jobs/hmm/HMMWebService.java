@@ -1,6 +1,7 @@
 package topali.cluster.jobs.hmm;
 
 import java.io.*;
+import java.util.logging.*;
 
 import org.apache.axis.*;
 
@@ -31,12 +32,12 @@ public class HMMWebService extends WebService
 			hmm.start();
 			
 			accessLog.info("HMM request from " + jobId);
-			logger.info("HMM request from " + jobId);
+			logger.info(jobId + " - HMM request received");
 			return jobId;
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -50,7 +51,7 @@ public class HMMWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(new Exception("getPercentageComplete: " + e));
 		}
 	}
@@ -64,12 +65,12 @@ public class HMMWebService extends WebService
 			
 			HMMResult result = new CollateHMM(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + " - returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -94,6 +95,7 @@ public class HMMWebService extends WebService
 		writeFile(template, new File(jobDir, "hmm.sh"));
 		
 		// Run...
+		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("hmm.sh", jobDir);
 	}
 }
