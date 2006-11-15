@@ -8,7 +8,7 @@ import topali.fileio.*;
 
 public class CollateHMM
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private File jobDir;
 	
@@ -23,7 +23,7 @@ public class CollateHMM
 	{
 		if (new File(jobDir, "error.txt").exists())
 		{
-			logger.severe("error.txt generated for " + jobDir.getPath());
+			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("HMM error.txt");
 		}
 		

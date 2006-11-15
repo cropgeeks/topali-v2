@@ -12,40 +12,23 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-import sbrn.commons.multicore.*;
-
-class PDMAnalysis extends TokenThread
+class PDMAnalysis extends AnalysisThread
 {	
 	private SequenceSet ss;
-	
-	// Directory where results will be stored (and temp files worked on)
-	private File runDir, wrkDir;
-	// And settings
 	private PDMResult result;
 
-	
+	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
-	{ 
-		PDMAnalysis analysis = null;
-		
-		try
-		{
-			analysis = new PDMAnalysis(new File(args[0]));
-			analysis.run();
-		}
-		catch (Exception e)
-		{
-			System.out.println("PDMAnalysis: " + e);
-			ClusterUtils.writeError(new File(analysis.runDir, "error.txt"), e);
-		}
-	}
+		{ new PDMAnalysis(new File(args[0])).run(); }
 	
+	// If running locally, the job will be started via a normal constructor call
 	PDMAnalysis(File runDir)
+		{ super(runDir); }
+
+
+	public void runAnalysis()
 		throws Exception
 	{
-		// Data directory
-		this.runDir = runDir;
-
 		// Read the PDMResult
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");
 		result = (PDMResult) Castor.unmarshall(resultFile);
@@ -54,38 +37,24 @@ class PDMAnalysis extends TokenThread
 		
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(
-			result,	runDir.getParentFile().getName(), runDir.getName());
-	}
-	
-	public void run()
-	{
-		try
-		{
-			// Save the input file used by Bambe
+		result,	runDir.getParentFile().getName(), runDir.getName());
+
+		// Save the input file used by Bambe
 //			new BambeInfile().saveInfile(wrkDir, result);
-			
-			// We need to save out the SequenceSet for Bambe to read, ensuring
-			// that only the sequences meant to be processed are saved
-			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-			ss.save(new File(wrkDir, "dna.dat"), indices, Filters.BAM, true);
-			
-			
-			Jambe2 jambe = new Jambe2(runDir, wrkDir, result, ss.getLength());
-			jambe.runJambe();
-			
-			// And the results collated
-			getResults(jambe);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace(System.out);
-			
-			if (e.getMessage().equals("cancel") == false)
-				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
-		}
 		
+		// We need to save out the SequenceSet for Bambe to read, ensuring
+		// that only the sequences meant to be processed are saved
+		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+		ss.save(new File(wrkDir, "dna.dat"), indices, Filters.BAM, true);
+		
+		
+		Jambe2 jambe = new Jambe2(runDir, wrkDir, result, ss.getLength());
+		jambe.runJambe();
+		
+		// And the results collated
+		getResults(jambe);
+
 		ClusterUtils.emptyDirectory(wrkDir, true);		
-		giveToken();
 	}
 	
 	private void getResults(Jambe2 jambe)

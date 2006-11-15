@@ -1,6 +1,7 @@
 package topali.cluster.jobs.trees;
 
 import java.io.*;
+import java.util.logging.*;
 
 import org.apache.axis.*;
 
@@ -31,12 +32,12 @@ public class MBTreeWebService extends WebService
 			runMBTree.start();
 			
 			accessLog.info("MBT request from " + jobId);
-			logger.info("MBT request from " + jobId);
+			logger.info(jobId + " - MBT request received");
 			return jobId;
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -50,7 +51,7 @@ public class MBTreeWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -64,12 +65,12 @@ public class MBTreeWebService extends WebService
 			
 			MBTreeResult result = new CollateMBTree(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + " - returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -94,6 +95,7 @@ public class MBTreeWebService extends WebService
 		writeFile(template, new File(jobDir, "mbt.sh"));
 		
 		// Run...
+		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("mbt.sh", jobDir);
 	}
 }

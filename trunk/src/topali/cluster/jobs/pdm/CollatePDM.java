@@ -10,7 +10,7 @@ import topali.fileio.*;
 
 public class CollatePDM
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private File jobDir;
 	private PDMResult result;
@@ -28,7 +28,7 @@ public class CollatePDM
 	{
 		if (new File(jobDir, "error.txt").exists())
 		{
-			logger.severe("error.txt generated for " + jobDir.getPath());
+			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("PDM error.txt");
 		}
 
@@ -52,7 +52,7 @@ public class CollatePDM
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
 			{
-				logger.severe("error.txt generated for " + jobDir.getPath() + " on run " + i);
+				logger.severe(jobDir.getName() + " - error.txt found for run " + i);
 				throw new Exception("PDM error.txt (run " + i + ")");
 			}
 		}
@@ -76,7 +76,6 @@ public class CollatePDM
 			String max = ClusterUtils.readFile(new File(runDir, "max.txt"));
 			
 			result.thresholds[i] = Float.parseFloat(max);
-			System.out.println("Read " + result.thresholds[i]);
 		}
 		
 		Arrays.sort(result.thresholds);

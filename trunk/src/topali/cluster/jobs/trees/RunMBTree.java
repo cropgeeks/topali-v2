@@ -14,7 +14,7 @@ import topali.fileio.*;
 
 public class RunMBTree extends Thread
 {
-	private static Logger logger = Logger.getLogger("topali.cluster");
+	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 	
 	private SequenceSet ss;
 	private MBTreeResult result;
@@ -31,36 +31,27 @@ public class RunMBTree extends Thread
 	
 	public void run()
 	{
-		try
-		{
-			// Ensure the directory for this job exists
-			jobDir.mkdirs();
-//			// Create the percent tracking directory
-//			new File(jobDir, "percent").mkdir();
-			
-			// Store the MBTreeResult object where it can be read by the sub-job
-			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-			// Store the SequenceSet where it can be read by the sub-job
-			Castor.saveXML(ss, new File(jobDir, "ss.xml"));
-			
-			// Run the analysis
-			runAnalysis();
-		}
-		catch (Exception e)
-		{
-			logger.severe(""+e);
+		try { startThread(); }
+		catch (Exception e) {
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
 	
-	private void runAnalysis()
+	private void startThread()
 		throws Exception
 	{
+		// Ensure the directory for this job exists
+		jobDir.mkdirs();
+//		// Create the percent tracking directory
+//		new File(jobDir, "percent").mkdir();
+		
+		// Store the MBTreeResult object where it can be read by the sub-job
+		Castor.saveXML(result, new File(jobDir, "submit.xml"));
+		// Store the SequenceSet where it can be read by the sub-job
+		Castor.saveXML(ss, new File(jobDir, "ss.xml"));
+		
 		if (result.isRemote)
-		{
-			logger.info("analysis ready: submitting to cluster");
 			MBTreeWebService.runScript(jobDir);
-		}
 		else
 			new MBTreeAnalysis(jobDir).start(LocalJobs.manager);
 	}

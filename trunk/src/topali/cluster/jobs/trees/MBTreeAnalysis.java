@@ -12,77 +12,50 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
 
-import sbrn.commons.multicore.*;
-
-public class MBTreeAnalysis extends TokenThread
+public class MBTreeAnalysis extends AnalysisThread
 {
 	private SequenceSet ss;
-	
-	// Directory where results will be stored (and temp files worked on)
-	private File jobDir, wrkDir;
-	// And settings
 	private MBTreeResult result;
 
-	
+	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
-	{ 
-		MBTreeAnalysis analysis = null;
-		
-		try
-		{
-			analysis = new MBTreeAnalysis(new File(args[0]));
-			analysis.run();
-		}
-		catch (Exception e)
-		{
-			System.out.println("MBAnalysis: " + e);
-			ClusterUtils.writeError(new File(analysis.jobDir, "error.txt"), e);
-		}
-	}
+		{ new MBTreeAnalysis(new File(args[0])).run(); }
 	
-	public MBTreeAnalysis(File jobDir)
+	// If running locally, the job will be started via a normal constructor call
+	MBTreeAnalysis(File runDir)
+		{ super(runDir); }
+	
+	
+	public void runAnalysis()
 		throws Exception
 	{
-		// Data directory
-		this.jobDir = jobDir;
-
 		// Read the MBTreeResult
-		result = (MBTreeResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		result = (MBTreeResult) Castor.unmarshall(new File(runDir, "submit.xml"));
 		// Read the SequenceSet
-		ss = (SequenceSet) Castor.unmarshall(new File(jobDir, "ss.xml"));
+		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
 		
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(
-			result, jobDir.getName(), "mrbayes");
-	}
-	
-	public void run()
-	{
-		try
-		{
-			// We need to save out the SequenceSet for MrBayes to read, ensuring
-			// that only the sequences meant to be processed are saved
-			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-			ss.save(new File(wrkDir, "mb.nex"), indices, Filters.NEX_B, true);
+			result, runDir.getName(), "mrbayes");
+
+		// We need to save out the SequenceSet for MrBayes to read, ensuring
+		// that only the sequences meant to be processed are saved
+		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+		ss.save(new File(wrkDir, "mb.nex"), indices, Filters.NEX_B, true);
 			
-			// Add nexus commands to tell MrBayes what to do
-			addNexusCommands();
-			
-			RunMrBayes mb = new RunMrBayes(wrkDir, result);
-			mb.run();
-			
-			readTree();
-			
-			// Save final data back to drive where it can be retrieved
-			Castor.saveXML(result, new File(jobDir, "result.xml"));
-		}
-		catch (Exception e)
-		{
-			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
-		}
+		// Add nexus commands to tell MrBayes what to do
+		addNexusCommands();
 		
-//		ClusterUtils.emptyDirectory(wrkDir, true);
-		giveToken();
+		RunMrBayes mb = new RunMrBayes(wrkDir, result);
+		mb.run();
+		
+		readTree();
+		
+		// Save final data back to drive where it can be retrieved
+		Castor.saveXML(result, new File(runDir, "result.xml"));
+
+	
+		ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 	
 	private void addNexusCommands()
@@ -143,7 +116,7 @@ public class MBTreeAnalysis extends TokenThread
 		// TODO: Is this worth it (other than a percentage tracker)?
 		// And write the data to tree.txt too
 		BufferedWriter out = new BufferedWriter(
-			new FileWriter(new File(jobDir, "tree.txt")));
+			new FileWriter(new File(runDir, "tree.txt")));
 		out.write(treeStr);
 		out.close();
 	}

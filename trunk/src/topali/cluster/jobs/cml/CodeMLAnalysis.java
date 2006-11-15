@@ -14,7 +14,6 @@ import topali.fileio.*;
 import topali.mod.*;
 
 import sbrn.commons.file.*;
-import sbrn.commons.multicore.*;
 
 class CodeMLAnalysis extends AnalysisThread
 {	

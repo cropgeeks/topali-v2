@@ -1,7 +1,10 @@
 package topali.cluster.jobs.dss;
 
 import java.io.*;
+import java.util.logging.*;
+
 import org.apache.axis.*;
+
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
@@ -29,13 +32,12 @@ public class DSSWebService extends WebService
 			dss.start();
 			
 			accessLog.info("DSS request from " + jobId);
-			logger.info("DSS request from " + jobId);
-			
+			logger.info(jobId + " - DSS request received");
 			return jobId;
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -49,7 +51,7 @@ public class DSSWebService extends WebService
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -63,12 +65,12 @@ public class DSSWebService extends WebService
 			
 			DSSResult result = new CollateDSS(jobDir).getResult();
 			
-			logger.info("returning result for " + jobId);
+			logger.info(jobId + " -  returning result");
 			return Castor.getXML(result);
 		}
 		catch (Exception e)
 		{
-			logger.warning(""+e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -94,6 +96,7 @@ public class DSSWebService extends WebService
 		writeFile(template, new File(jobDir, "dss.sh"));
 		
 		// Run...
+		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("dss.sh", jobDir);
 	}
 }

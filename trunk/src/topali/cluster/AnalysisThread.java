@@ -31,9 +31,15 @@ public abstract class AnalysisThread extends TokenThread
 	// writing an error file to the runDir for this task
 	public void run()
 	{
-		try { runAnalysis(); }
-		catch (Exception e) {
-			ClusterUtils.writeError(new File(runDir, "error.txt"), e);
+		try
+		{ 
+			runAnalysis();
+		}
+		// Catch the error, but only log it if it wasn't a cancel request
+		catch (Exception e)
+		{
+			if (e.getMessage().equals("cancel") == false)
+				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 		
 		// Release the shared token that will have been assigned to this job if

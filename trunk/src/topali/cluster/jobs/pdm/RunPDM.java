@@ -6,7 +6,6 @@
 package topali.cluster.jobs.pdm;
 
 import java.io.*;
-import java.util.logging.*;
 
 import pal.alignment.*;
 import pal.substmodel.*;
@@ -20,9 +19,7 @@ import topali.fileio.*;
 import topali.mod.*;
 
 public class RunPDM extends Thread
-{
-	private static Logger logger = Logger.getLogger("topali.cluster");
-	
+{	
 	private SequenceSet ss;
 	private PDMResult result;
 	
@@ -38,30 +35,24 @@ public class RunPDM extends Thread
 	
 	public void run()
 	{
-		try
-		{
-			// Ensure the directory for this job exists
-			jobDir.mkdirs();
-			
-			// Store the PDMResult object where the individual runs can get it
-			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-						
-			// Run the analyses
-			runAnalyses();
-		}
-		catch (Exception e)
-		{
-			logger.severe(""+e);
+		try { startThreads(); }
+		catch (Exception e) {
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
-
-	// Run [n]+1 number of PDM runs on this alignment
-	private void runAnalyses()
+	
+	private void startThreads()
 		throws Exception
 	{
+		// Ensure the directory for this job exists
+		jobDir.mkdirs();
+		
+		// Store the PDMResult object where the individual runs can get it
+		Castor.saveXML(result, new File(jobDir, "submit.xml"));
+					
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
+
 		
 		for (int i = 1; i <= result.pdm_runs; i++)
 		{
@@ -84,10 +75,7 @@ public class RunPDM extends Thread
 		}
 				
 		if (result.isRemote)
-		{
-			logger.info("analysis ready: submitting to cluster");
 			PDMWebService.runScript(jobDir, result);
-		}
 	}
 	
 	private SequenceSet getSimulatedAlignment()

@@ -6,7 +6,6 @@
 package topali.cluster.jobs.hmm;
 
 import java.io.*;
-import java.util.logging.*;
 
 import topali.cluster.*;
 import topali.data.*;
@@ -14,9 +13,7 @@ import topali.fileio.*;
 import topali.mod.*;
 
 public class RunHMM extends Thread
-{
-	private static Logger logger = Logger.getLogger("topali.cluster");
-	
+{	
 	private SequenceSet ss;
 	private HMMResult result;
 	
@@ -28,38 +25,29 @@ public class RunHMM extends Thread
 		this.jobDir = jobDir;
 		this.ss = ss;
 		this.result = result;
-	}	
-
-	public void run()
-	{
-		try
-		{
-			// Ensure the directory for this job exists
-			jobDir.mkdirs();
-			
-			// Store the HMMResult object where it can be read by the sub-job
-			Castor.saveXML(result, new File(jobDir, "submit.xml"));
-			// Store the SequenceSet where it can be read by the sub-job
-			ss.save(new File(jobDir, "hmm.fasta"), Filters.FAS, false);
-						
-			// Run the analysis
-			runAnalysis();
-		}
-		catch (Exception e)
-		{
-			logger.severe(""+e);
-			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
-		}
 	}
 	
-	private void runAnalysis()
+	public void run()
+	{
+		try { startThread(); }
+		catch (Exception e) {
+			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
+		}
+	}	
+
+	private void startThread()
 		throws Exception
 	{
+		// Ensure the directory for this job exists
+		jobDir.mkdirs();
+		
+		// Store the HMMResult object where it can be read by the sub-job
+		Castor.saveXML(result, new File(jobDir, "submit.xml"));
+		// Store the SequenceSet where it can be read by the sub-job
+		ss.save(new File(jobDir, "hmm.fasta"), Filters.FAS, false);
+
 		if (result.isRemote)
-		{
-			logger.info("analysis ready: submitting to cluster");
 			HMMWebService.runScript(jobDir);
-		}
 		else
 			new HMMAnalysis(jobDir).start(LocalJobs.manager);
 	}
