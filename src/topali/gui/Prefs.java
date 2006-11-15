@@ -594,7 +594,7 @@ public class Prefs extends PreferencesXML
 		lrt_window = 500;
 		lrt_step = 10;
 		lrt_runs = 100;
-		lrt_method = topali.cluster.lrt.LRT.METHOD_JC;
+		lrt_method = topali.cluster.jobs.lrt.LRT.METHOD_JC;
 	}
 	
 	public static void setWebDefaults()

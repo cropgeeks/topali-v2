@@ -1,4 +1,4 @@
-package topali.cluster.lrt;
+package topali.cluster.jobs.lrt;
 
 import java.io.*;
 
