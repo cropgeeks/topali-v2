@@ -114,7 +114,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.method = Prefs.dss_method;
 		result.power = Prefs.dss_power;
 		result.passCount = Prefs.dss_pass_count;
-		result.avgDist = topali.cluster.dss.DSS.getAverageDistance(ss);
+		result.avgDist = topali.cluster.jobs.dss.DSS.getAverageDistance(ss);
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
 	}

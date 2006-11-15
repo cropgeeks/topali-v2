@@ -3,7 +3,7 @@ package topali.cluster.jobs;
 import java.io.*;
 
 import topali.cluster.*;
-import topali.cluster.dss.*;
+import topali.cluster.jobs.dss.*;
 import topali.data.*;
 import topali.gui.*;
 
