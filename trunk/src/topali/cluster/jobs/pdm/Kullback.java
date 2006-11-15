@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.pdm;
+package topali.cluster.jobs.pdm;
 
 // Read in files results_entropy.java and results_histo.java.
 // The latter file is a matrix in which the rows represent
