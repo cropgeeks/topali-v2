@@ -220,7 +220,7 @@ Castor's auto mapping file generator -->
 </class>
 
 <!-- DSSResult (extends AlignmentResult) -->
-<class name="topali.data.DSSResult" extends="topali.data.AlignmentResult" auto-complete="true">
+<class name="topali.data.DSSResult" extends="topali.data.AlignmentResult" >
 	<field name="fitchPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
 	<field name="method" type="int" direct="true">
@@ -244,12 +244,12 @@ Castor's auto mapping file generator -->
 	<field name="thresholdCutoff" type="float" direct="true">
 		<bind-xml node="attribute"/></field>		
 	
-	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- LRTResult (extends AlignmentResult) -->
-<class name="topali.data.LRTResult" extends="topali.data.AlignmentResult" auto-complete="true">
+<class name="topali.data.LRTResult" extends="topali.data.AlignmentResult">
 	<field name="method" type="int" direct="true">
 		<bind-xml node="attribute"/></field>
 	<field name="window" type="int" direct="true">
@@ -265,12 +265,12 @@ Castor's auto mapping file generator -->
 	<field name="thresholdCutoff" type="float" direct="true">
 		<bind-xml node="attribute"/></field>		
 	
-	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- PDMResult (extends AlignmentResult) -->
-<class name="topali.data.PDMResult" extends="topali.data.AlignmentResult" auto-complete="true">
+<class name="topali.data.PDMResult" extends="topali.data.AlignmentResult">
   <field name="bambePath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
@@ -303,14 +303,14 @@ Castor's auto mapping file generator -->
 	<field name="alpha" type="double" direct="true"><bind-xml node="attribute"/></field>
 	
 	<field name="frequencies" type="double" direct="true" collection="array"/>
-	<!--<field name="glbData" type="float" direct="true" collection="array"/>-->
-	<!--<field name="locData" type="float" direct="true" collection="array"/>-->
-	<!--<field name="histograms" type="float" direct="true" collection="array"/>-->
+	<field name="glbData" type="string"/>
+	<field name="locData" type="string"/>
+	<field name="histograms" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- PDM2Result (extends AlignmentResult) -->
-<class name="topali.data.PDM2Result" extends="topali.data.AlignmentResult" auto-complete="true">
+<class name="topali.data.PDM2Result" extends="topali.data.AlignmentResult">
   <field name="mbPath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="treeDistPath" type="string" direct="true"><bind-xml node="attribute"/></field>
 	<field name="nProcessors" type="int" direct="true"><bind-xml node="attribute"/></field>
@@ -318,12 +318,12 @@ Castor's auto mapping file generator -->
 	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
 	
-	<!--field name="data" type="float" direct="true" collection="array"/>-->
+	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
 
 <!-- HMMResult (extends AlignmentResult) -->
-<class name="topali.data.HMMResult" extends="topali.data.AlignmentResult" auto-complete="true">
+<class name="topali.data.HMMResult" extends="topali.data.AlignmentResult">
   <field name="barcePath" type="string" direct="true"><bind-xml node="attribute"/></field>  
   <field name="hmm_model" type="string" direct="true"><bind-xml node="attribute"/></field>
   <field name="hmm_initial" type="string" direct="true"><bind-xml node="attribute"/></field>
@@ -348,10 +348,10 @@ Castor's auto mapping file generator -->
   <field name="hmm_branch" type="float" direct="true"><bind-xml node="attribute"/></field>
   <field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
   
-  <!--<field name="bpArray" type="int" direct="true" collection="array"/>-->
-  <!--<field name="data1" type="float" direct="true" collection="array"/>-->
-  <!--<field name="data2" type="float" direct="true" collection="array"/>-->
-  <!--<field name="data3" type="float" direct="true" collection="array"/>-->
+  <field name="bpArray" type="string"/>
+  <field name="data1" type="string"/>
+  <field name="data2" type="string"/>
+  <field name="data3" type="string"/>
 </class>
 
 </mapping>

@@ -9,6 +9,8 @@ import pal.statistics.*;
 
 import topali.analyses.*;
 
+import sbrn.commons.*;
+
 /*
  * Class that stores both the results from running a PDM analysis and the
  * settings required to make the run (although not the data itself).
@@ -88,4 +90,20 @@ public class PDMResult extends AlignmentResult
 			return threshold;
 		}
 	}
+	
+	// Castor conversion methods so that the 2D data arrays are saved as strings
+	public String getGlbData()
+		{ return MatrixXML.arrayToString(glbData); }	
+	public void setGlbData(String str)
+		{ glbData = MatrixXML.stringTo2DFloatArray(str); }
+		
+	public String getLocData()
+		{ return MatrixXML.arrayToString(locData); }	
+	public void setLocData(String str)
+		{ locData = MatrixXML.stringTo2DFloatArray(str); }
+	
+	public String getHistograms()
+		{ return MatrixXML.arrayToString(histograms); }	
+	public void setHistograms(String str)
+		{ histograms = MatrixXML.stringTo2DFloatArray(str); }
 }

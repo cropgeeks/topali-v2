@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import sbrn.commons.*;
+
 /*
  * Class that stores both the results from running a LRT analysis and the
  * settings required to make the run (although not the data itself).
@@ -36,4 +38,11 @@ public class LRTResult extends AlignmentResult
 	public LRTResult()
 	{
 	}
+	
+	// Castor conversion methods so that the 2D data array is saved as a string
+	public String getData()
+		{ return MatrixXML.arrayToString(data); }
+	
+	public void setData(String str)
+		{ data = MatrixXML.stringTo2DFloatArray(str); }
 }
