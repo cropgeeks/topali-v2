@@ -38,7 +38,7 @@ class JobsPanelEntry extends JPanel
 				
 		if (job.getResult() instanceof TreeResult)
 		{
-			pBar.setString("non-trackable job");
+			pBar.setString("percentage tracking not available for this job type");
 			pBar.setIndeterminate(true);
 		}
 		
