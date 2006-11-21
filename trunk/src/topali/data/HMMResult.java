@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import sbrn.commons.*;
+
 /*
  * Class that stores both the results from running a HMM analysis and the
  * settings required to make the run (although not the data itself).
@@ -48,4 +50,25 @@ public class HMMResult extends AlignmentResult
 	public HMMResult()
 	{
 	}
+	
+	// Castor conversion methods so that the 2D data arrays are saved as strings
+	public String getBpArray()
+		{ return MatrixXML.arrayToString(bpArray); }	
+	public void setBpArray(String str)
+		{ bpArray = MatrixXML.stringTo2DIntArray(str); }
+		
+	public String getData1()
+		{ return MatrixXML.arrayToString(data1); }	
+	public void setData1(String str)
+		{ data1 = MatrixXML.stringTo2DFloatArray(str); }
+		
+	public String getData2()
+		{ return MatrixXML.arrayToString(data2); }	
+	public void setData2(String str)
+		{ data2 = MatrixXML.stringTo2DFloatArray(str); }
+	
+	public String getData3()
+		{ return MatrixXML.arrayToString(data3); }	
+	public void setData3(String str)
+		{ data3 = MatrixXML.stringTo2DFloatArray(str); }
 }

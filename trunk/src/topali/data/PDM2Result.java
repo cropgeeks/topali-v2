@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import sbrn.commons.*;
+
 /*
  * Class that stores both the results from running a PDM2 analysis and the
  * settings required to make the run (although not the data itself).
@@ -41,4 +43,11 @@ public class PDM2Result extends AlignmentResult
 	public PDM2Result()
 	{
 	}
+	
+	// Castor conversion methods so that the 2D data array is saved as a string
+	public String getData()
+		{ return MatrixXML.arrayToString(locData); }
+	
+	public void setData(String str)
+		{ locData = MatrixXML.stringTo2DFloatArray(str); }
 }

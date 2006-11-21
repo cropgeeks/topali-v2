@@ -6,6 +6,10 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [BF] TOPALi is now compatible with Java 1.6 after fixing multidimensional
+    array issues with the Castor XML package. This has changed the XML project
+    format again though, so projects created in versions earlier than 2.16 will
+    no longer load. Project files have also been reduced in size.
   - [BF] Updated the timer threads for the job progress screen so that jobs with
     indeterminate progress bars are properly displayed.
   - [NF] Updated the export dialog so alignments can now be created/exported by
