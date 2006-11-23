@@ -65,8 +65,14 @@ class JobsPanelEntry extends JPanel
 		p3.add(p1, BorderLayout.NORTH);
 		p3.add(p2);
 		p3.add(timeLabel, BorderLayout.SOUTH);
-				
-		add(p3);
+		
+		JPanel p4 = new JPanel(new BorderLayout(5, 5));
+		p4.setBackground(bgColor);
+		p4.add(p3);				
+		p4.add(new JLabel("Double click to cancel this job"), BorderLayout.SOUTH);
+		
+		add(p4);
+		
 		if (job.getResult().isRemote)
 			add(new JLabel(Icons.COMMS), BorderLayout.WEST);
 		else
