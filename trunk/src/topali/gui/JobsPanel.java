@@ -11,8 +11,7 @@ import topali.data.*;
 import topali.cluster.*;
 import topali.cluster.jobs.*;
 
-public class JobsPanel extends JPanel
-	implements ActionListener, ListSelectionListener
+public class JobsPanel extends JPanel implements ListSelectionListener
 {
 	private WinMain winMain;
 	
@@ -20,8 +19,8 @@ public class JobsPanel extends JPanel
 	private DefaultListModel model;
 	private JobsThread jobsThread;
 	
-	private JButton bCancel;
-	private JTextArea infoText;
+	private static JTextArea infoText;
+	private static ServerPanel serverPanel = new ServerPanel();
 			
 	JobsPanel(WinMain winMain)
 	{
@@ -33,6 +32,13 @@ public class JobsPanel extends JPanel
 		list.setCellRenderer(new JobsPanelListRenderer());
 		list.addListSelectionListener(this);
 		
+		list.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+					cancelJob(list.locationToIndex(e.getPoint()));
+			}
+		});
 		
 		
 		JScrollPane sp = new JScrollPane(list);
@@ -40,16 +46,19 @@ public class JobsPanel extends JPanel
 			Text.Gui.getString("JobsPanel.gui01"));
 		gp.setStyle(gp.OFFICE2003);
 		
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.add(gp, BorderLayout.NORTH);
-		p1.add(sp);
-//		add(getControlPanel(), BorderLayout.SOUTH);
+		JPanel headerPanel = new JPanel(new BorderLayout());
+		headerPanel.add(gp, BorderLayout.NORTH);
+//		headerPanel.add(serverPanel);
+		
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(headerPanel, BorderLayout.NORTH);
+		mainPanel.add(sp);
 		
 		JSplitPane splits = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splits.setTopComponent(p1);
+		splits.setTopComponent(mainPanel);
 		splits.setBottomComponent(getControlPanel());
-		splits.setResizeWeight(0.9);
-		splits.setDividerLocation(0.9);		
+		splits.setResizeWeight(0.85);
+		splits.setDividerLocation(0.85);		
 		
 		setLayout(new BorderLayout());
 		add(splits);
@@ -60,21 +69,13 @@ public class JobsPanel extends JPanel
 	
 	private JPanel getControlPanel()
 	{
-		bCancel = new JButton("Cancel Job");
-		bCancel.setEnabled(false);
-		bCancel.addActionListener(this);
-		
 		infoText = new JTextArea();
 		Utils.setTextAreaDefaults(infoText);
 		JScrollPane sp = new JScrollPane(infoText);
-		
-		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-		p1.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 0));
-		p1.add(bCancel);
-		
-		JPanel p2 = new JPanel(new BorderLayout());
+				
+		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		p2.add(p1, BorderLayout.EAST);
+		p2.add(serverPanel, BorderLayout.NORTH);
 		p2.add(sp);
 		
 		return p2;
@@ -84,6 +85,7 @@ public class JobsPanel extends JPanel
 	{
 		// Remove knowledge of any jobs
 		model.clear();
+		serverPanel.setVisible(model.size() > 0);
 		
 		// And update the text/icon to reflect this
 		setStatusPanel();
@@ -132,6 +134,7 @@ public class JobsPanel extends JPanel
 	{
 		JobsPanelEntry jobEntry = new JobsPanelEntry(job);
 		model.addElement(jobEntry);
+		serverPanel.setVisible(model.size() > 0);
 						
 		jobsThread.interrupt();
 		
@@ -143,6 +146,7 @@ public class JobsPanel extends JPanel
 	{
 		// Remove the entry from the jobsPanel
 		model.removeElement(entry);
+		serverPanel.setVisible(model.size() > 0);
 		
 		AnalysisJob job = entry.getJob();
 		job.getResult().endTime = System.currentTimeMillis();
@@ -158,6 +162,7 @@ public class JobsPanel extends JPanel
 	void cancelJobEntry(JobsPanelEntry entry)
 	{
 		model.removeElement(entry);
+		serverPanel.setVisible(model.size() > 0);
 		
 		AnalysisJob job = entry.getJob();
 		job.getAlignmentData().removeResult(job.getResult());
@@ -206,27 +211,15 @@ public class JobsPanel extends JPanel
 		return false;
 	}
 	
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == bCancel)
-			cancelJob();
-	}
-	
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if (e.getValueIsAdjusting())
 			return;
 			
 		if (list.getSelectedValue() != null)
-		{
-			bCancel.setEnabled(true);
 			displayErrorInfo((JobsPanelEntry)list.getSelectedValue());
-		}
 		else
-		{
-			bCancel.setEnabled(false);
 			displayErrorInfo(null);
-		}
 	}
 	
 	private void displayErrorInfo(JobsPanelEntry entry)
@@ -241,13 +234,16 @@ public class JobsPanel extends JPanel
 		infoText.setCaretPosition(0);
 	}
 	
-	private void cancelJob()
+	private void cancelJob(int index)
 	{
+		if (index == -1)
+			return;
+
 		JobsPanelEntry entry = (JobsPanelEntry) list.getSelectedValue();
 		
-		
 		// Warn the user...
-		String msg = "Are you sure you wish to cancel this job?";
+		String msg = entry.getJob().getResult().jobName
+			+ " - are you sure you wish to cancel this job?";
 		if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
 			return;
 		
@@ -337,5 +333,27 @@ public class JobsPanel extends JPanel
 		}
 		
 		addJob(job);
+	}
+	
+	public static void setServerStatus(String str)
+		{ serverPanel.setStatus(str); }
+	
+	private static class ServerPanel extends JPanel
+	{
+		ServerPanel()
+		{		
+			JLabel label = new JLabel("Hover mouse here for remote server status",
+				JLabel.LEFT);
+			label.setIcon(Icons.INFO16);
+		
+			add(label);
+			setBackground(new Color(255, 255, 225));
+			setVisible(false);
+		}
+		
+		void setStatus(String str)
+		{
+			setToolTipText(str);
+		}
 	}
 }

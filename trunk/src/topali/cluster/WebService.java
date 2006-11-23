@@ -10,6 +10,8 @@ import org.apache.axis.transport.http.*;
 import topali.cluster.control.*;
 import topali.fileio.*;
 
+import sbrn.commons.file.*;
+
 /**
  * Base class for all TOPALi web services. Some of the PUBLIC methods used by
  * all the services are common enough to be defined here, but this class mainly
@@ -113,6 +115,20 @@ public abstract class WebService
 	//////////////////////////////////////////////////
 	// Public access methods - the actual WEB SERVICES
 	//////////////////////////////////////////////////
+	
+	public String getServerStatus()
+		throws AxisFault
+	{
+		try
+		{
+			File statusFile = new File(getParameter("status-file"));
+			return FileUtils.readFile(statusFile);
+		}
+		catch (IOException e)
+		{
+			throw AxisFault.makeFault(e);
+		}
+	}
 	
 	protected abstract float getPercentageComplete(File jobDir)
 		throws AxisFault;
