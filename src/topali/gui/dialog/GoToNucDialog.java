@@ -77,7 +77,7 @@ public class GoToNucDialog extends JDialog implements ActionListener
 		else if (e.getSource() == bOK)
 		{
 			Prefs.gui_goto_nuc = ((Number)model.getNumber()).intValue();
-			panel.jumpToPosition(Prefs.gui_goto_nuc, -1);
+			panel.jumpToPosition(Prefs.gui_goto_nuc, -1, false, false);
 			
 			setVisible(false);
 		}

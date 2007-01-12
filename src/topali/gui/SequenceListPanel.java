@@ -174,6 +174,13 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 		updateList(indices);
 	}
 	
+	void selectHighlighted(int first, int last) {
+		int[] indices = new int[last-first+1];
+		for(int i=0, j=first; j <= last; i++,j++)
+			indices[i] = j;
+		updateList(indices);
+	}
+	
 	void selectUnique()
 	{
 		int[] indices = SequenceSetUtils.getUniqueSequences(ss);
@@ -287,16 +294,22 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 			JMenuItem m2 = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 			JMenuItem m3 = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 			JMenuItem m4 = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
-			
+			JMenuItem m5 = getItem(aAlgnSelectHighlighted, KeyEvent.VK_H, 0, 0);
+				
 			m.add(m1);
 			m.add(m2);
+			m.add(m5);
 			m.add(m3);
 			m.addSeparator();
 			m.add(m4);
 			
+			JMenuItem addPart = getItem(aAlgnAddPartition, KeyEvent.VK_P, 0, 0);
+			
 			add(aAlgnDisplaySummary, Icons.INFO16, KeyEvent.VK_I, 0, 0, 16, false);
 			p.addSeparator();
 			p.add(m);
+			p.add(addPart);
+			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F, KeyEvent.CTRL_MASK, 0, false);
 			add(aAlgnRename, KeyEvent.VK_R, 0, 0, 0, false);
 			add(aAlgnGoTo, KeyEvent.VK_G, 0, 0, 0, false);

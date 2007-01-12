@@ -31,6 +31,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 	private JSpinner fontSpin, colorSpin;
 	private JCheckBox showText, boldFont, showCols, smooth, line, tooltip, tree;
 	private JCheckBox dimSeqs;
+	private JCheckBox showVertHighlight, showHorzHighlight;
 	
 	private JButton close, defaults, help;
 
@@ -89,6 +90,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 		tooltip.setSelected(Prefs.gui_seq_tooltip);
 		tree.setSelected(Prefs.gui_tree_unique_cols);
 		dimSeqs.setSelected(Prefs.gui_seq_dim);
+		showVertHighlight.setSelected(Prefs.gui_show_vertical_highlight);
+		showHorzHighlight.setSelected(Prefs.gui_show_horizontal_highlight);
 		
 		fontSpin.setValue(new Integer(Prefs.gui_seq_font_size));
 		colorSpin.setValue(new Integer(Prefs.gui_color_seed));
@@ -129,19 +132,20 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 		m.addElement(new ColorObject(10,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui12"),
 			Prefs.gui_seq_color_gaps));
-		m.addElement(new ColorObject(11,
+		m.addElement(new ColorObject(11, Text.GuiDiag.getString("DisplaySettingsDialog.gui47"), Prefs.gui_seq_highlight));
+		m.addElement(new ColorObject(12,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui13"),
 			Prefs.gui_graph_threshold));
-		m.addElement(new ColorObject(12,
+		m.addElement(new ColorObject(13,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui14"),
 			Prefs.gui_graph_window));
-		m.addElement(new ColorObject(13,
+		m.addElement(new ColorObject(14,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui15"),
 			Prefs.gui_cardle_line));
-		m.addElement(new ColorObject(14,
+		m.addElement(new ColorObject(15,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui16"),
 			Prefs.gui_graph_background));
-		m.addElement(new ColorObject(15,
+		m.addElement(new ColorObject(16,
 			Text.GuiDiag.getString("DisplaySettingsDialog.gui17"),
 			Prefs.gui_histo_background));
 		
@@ -196,6 +200,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 			Prefs.gui_seq_tooltip = tooltip.isSelected();
 			Prefs.gui_tree_unique_cols = tree.isSelected();
 			Prefs.gui_seq_dim = dimSeqs.isSelected();
+			Prefs.gui_show_horizontal_highlight = showHorzHighlight.isSelected();
+			Prefs.gui_show_vertical_highlight = showVertHighlight.isSelected();
 		
 			winMain.menuViewDisplaySettings(true);
 		}
@@ -271,6 +277,14 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 		dimSeqs.setMnemonic(KeyEvent.VK_D);
 		dimSeqs.setToolTipText(Text.GuiDiag.getString("DisplaySettingsDialog.gui42"));
 		
+		showHorzHighlight = new JCheckBox(Text.GuiDiag.getString("DisplaySettingsDialog.gui44"));
+		showHorzHighlight.addActionListener(this);
+		showHorzHighlight.setToolTipText(Text.GuiDiag.getString("DisplaySettingsDialog.gui46"));
+		
+		showVertHighlight = new JCheckBox(Text.GuiDiag.getString("DisplaySettingsDialog.gui43"));
+		showVertHighlight.addActionListener(this);
+		showVertHighlight.setToolTipText(Text.GuiDiag.getString("DisplaySettingsDialog.gui45"));
+		
 		smooth = new JCheckBox(Text.GuiDiag.getString("DisplaySettingsDialog.gui29"));
 		smooth.addActionListener(this);
 		smooth.setMnemonic(KeyEvent.VK_S);
@@ -315,6 +329,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 //		layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(tooltip, 0, 9, 1, 2, new Insets(0, 1, 0, 5));
 //		layout.add(tree, 0, 10, 1, 2, new Insets(0, 1, 5, 5));
+		layout.add(showVertHighlight, 0, 11, 1, 2, new Insets(0,1,0,5));
+		layout.add(showHorzHighlight, 0, 12, 1, 2, new Insets(0,1,0,5));
 		
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.setBorder(BorderFactory.createTitledBorder(
@@ -399,21 +415,22 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener, Ch
 			
 			switch (index)
 			{
-				case 1: Prefs.gui_seq_color_text = color; break;
-				case 2: Prefs.gui_seq_color_a = color; break;
-				case 3: Prefs.gui_seq_color_c = color; break;
-				case 4: Prefs.gui_seq_color_g = color; break;
-				case 5: Prefs.gui_seq_color_t = color; break;
-				case 6: Prefs.gui_seq_color_gpst = color; break;
-				case 7: Prefs.gui_seq_color_hkr = color; break;
-				case 8: Prefs.gui_seq_color_fwy = color; break;
-				case 9: Prefs.gui_seq_color_ilmv = color; break;
-				case 10: Prefs.gui_seq_color_gaps = color; break;
-				case 11: Prefs.gui_graph_threshold = color; break;
-				case 12: Prefs.gui_graph_window = color; break;
-				case 13: Prefs.gui_cardle_line = color; break;
-				case 14: Prefs.gui_graph_background = color; break;
-				case 15: Prefs.gui_histo_background = color; break;
+			case 1: Prefs.gui_seq_color_text = color; break;
+			case 2: Prefs.gui_seq_color_a = color; break;
+			case 3: Prefs.gui_seq_color_c = color; break;
+			case 4: Prefs.gui_seq_color_g = color; break;
+			case 5: Prefs.gui_seq_color_t = color; break;
+			case 6: Prefs.gui_seq_color_gpst = color; break;
+			case 7: Prefs.gui_seq_color_hkr = color; break;
+			case 8: Prefs.gui_seq_color_fwy = color; break;
+			case 9: Prefs.gui_seq_color_ilmv = color; break;
+			case 10: Prefs.gui_seq_color_gaps = color; break;
+			case 11: Prefs.gui_seq_highlight = color; break;
+			case 12: Prefs.gui_graph_threshold = color; break;
+			case 13: Prefs.gui_graph_window = color; break;
+			case 14: Prefs.gui_cardle_line = color; break;
+			case 15: Prefs.gui_graph_background = color; break;
+			case 16: Prefs.gui_histo_background = color; break;
 			}
 			
 			winMain.menuViewDisplaySettings(true);

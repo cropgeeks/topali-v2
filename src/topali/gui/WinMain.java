@@ -302,6 +302,11 @@ public class WinMain extends JFrame
 		p.getListPanel().selectInvert();
 	}
 	
+	void menuAlgnSelectHighlighted() {
+		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
+		p.getListPanel().selectHighlighted(p.getHighlightSeq(), p.getHighlightSeq()+p.getHighlightSeqRange());
+	}
+	
 	void menuAlgnMove(boolean up, boolean top)
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
@@ -334,6 +339,11 @@ public class WinMain extends JFrame
 	void menuAlgnShowPartitionDialog()
 	{
 		pDialog.setVisible(true);
+	}
+	
+	void menuAddNewPartition() {
+		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
+		pDialog.addPartition(p.getHighlightNuc(), p.getHighlightNuc()+p.getHighlightNucRange());
 	}
 	
 	/* Removes an alignment from the current project. */
@@ -736,6 +746,29 @@ public class WinMain extends JFrame
 					
 					panel.highlight(i, pos, false, true);
 					
+					
+					break;
+				}
+				
+				i++;
+			}
+		}
+	}	
+	
+	public void vamsasMouseOver(String seqName, int pos)
+	{
+		for (AlignmentData data: project.getDatasets())
+		{
+			int i = 0;
+			for (Sequence seq: data.getSequenceSet().getSequences())
+			{
+				if (seq.name.equals(seqName))
+				{
+					
+					AlignmentPanel panel = navPanel.getCurrentAlignmentPanel(data);
+					
+					panel.highlight(i, pos, false);
+					panel.updateStatusBar(i, pos);
 					
 					break;
 				}

@@ -6,6 +6,7 @@ import javax.swing.*;
 public abstract class PopupMenuAdapter extends MouseAdapter
 {
 	protected JPopupMenu p;
+	private boolean enabled = true;
 	
 	public PopupMenuAdapter()
 	{
@@ -14,7 +15,7 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		if (e.isPopupTrigger())
+		if (e.isPopupTrigger() && enabled)
 		{
 			handlePopup(e.getX(), e.getY());			
 			p.show(e.getComponent(), e.getX(), e.getY());
@@ -39,7 +40,10 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 		p.add(item);
 	}
 	
+	public void setEnabled(boolean b) {
+		this.enabled = b;
+	}
+	
 	protected void handlePopup(int x, int y)
 	{
-	}
-}
+	}}
