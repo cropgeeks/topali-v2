@@ -12,7 +12,7 @@ import topali.mod.*;
 import topali.fileio.*;
 import static topali.mod.Filters.*;
 
-import org.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.core.*;
 
 import doe.*;
 

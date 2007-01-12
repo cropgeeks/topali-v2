@@ -6,6 +6,8 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] Cleaned up the job progress screen, allowing for a double-click to
+    cancel a job, and also adding a server status information panel.
   - [BF] TOPALi is now compatible with Java 1.6 after fixing multidimensional
     array issues with the Castor XML package. This has changed the XML project
     format again though, so projects created in versions earlier than 2.16 will

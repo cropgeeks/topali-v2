@@ -1,6 +1,6 @@
 package topali.vamsas;
 
-import org.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.core.*;
 
 public class JalviewFile
 {

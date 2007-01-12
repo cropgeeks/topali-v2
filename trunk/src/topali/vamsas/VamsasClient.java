@@ -5,13 +5,15 @@ import java.util.*;
 
 import topali.data.*;
 
-import org.vamsas.client.*;
-import org.vamsas.client.simpleclient.*;
-import org.vamsas.objects.core.*;
-import org.vamsas.test.simpleclient.*;
+import uk.ac.vamsas.client.*;
+import uk.ac.vamsas.client.simpleclient.*;
+import uk.ac.vamsas.objects.core.*;
+import uk.ac.vamsas.test.simpleclient.*;
 
 public class VamsasClient extends ArchiveClient implements Runnable
 {
+	public PickHandler msgHandler;// = new PickHandler();
+	
 	private Hashtable hashtable = new Hashtable();
 	
 	public VamsasClient(File sessionFile)

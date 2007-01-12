@@ -2,8 +2,8 @@ package topali.vamsas;
 
 import java.util.*;
 
-import org.vamsas.objects.core.*;
-import org.vamsas.objects.utils.*;
+import uk.ac.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.utils.*;
 
 class TOPALi2Vamsas
 {
@@ -60,7 +60,7 @@ class TOPALi2Vamsas
 		
 		vAlignment.setGapChar("-");
 		vAlignment.setAligned(true);
-		vAlignment.setModifiable(false);
+//		vAlignment.setModifiable(false);
 		
 		// TODO: id - optional
 		
