@@ -23,7 +23,7 @@ public class WinMainMenuBar extends JMenuBar
 	
 	JMenu mAlgn, mAlgnSelect;
 	JMenuItem mAlgnFindSeq, mAlgnSelectAll, mAlgnSelectNone, mAlgnSelectUnique,
-		mAlgnSelectInvert, mAlgnRename, mAlgnMoveUp, mAlgnMoveDown, mAlgnGoTo,
+		mAlgnSelectInvert, mAlgnSelectHighlighted, mAlgnRename, mAlgnMoveUp, mAlgnMoveDown, mAlgnGoTo,
 		mAlgnMoveTop, mAlgnRemove, mAlgnDisplaySummary, mAlgnPhyloView,
 		mAlgnShowPDialog, mAlgnShowOvDialog;
 	
@@ -46,9 +46,11 @@ public class WinMainMenuBar extends JMenuBar
 		aViewDisplaySettings;
 	
 	public static AbstractAction aAlgnFindSeq, aAlgnSelectAll, aAlgnSelectNone,
-		aAlgnSelectUnique, aAlgnSelectInvert, aAlgnRename, aAlgnMoveUp,
+		aAlgnSelectUnique, aAlgnSelectInvert, aAlgnSelectHighlighted, aAlgnRename, aAlgnMoveUp,
 		aAlgnMoveDown, aAlgnMoveTop, aAlgnRemove, aAlgnDisplaySummary,
 		aAlgnGoTo, aAlgnPhyloView, aAlgnShowPDialog, aAlgnShowOvDialog;
+	
+	public static AbstractAction aAlgnAddPartition;
 		
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
 		aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
@@ -160,7 +162,11 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnSelectInvert = new AbstractAction(Text.Gui.getString("aAlgnSelectInvert")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnSelectInvert(); } };
-		
+				
+		aAlgnSelectHighlighted = new AbstractAction(Text.Gui.getString("aAlgnSelectHighlighted")) {
+			public void actionPerformed(ActionEvent e) {
+				winMain.menuAlgnSelectHighlighted(); } };
+				
 		aAlgnRename = new AbstractAction(Text.Gui.getString("aAlgnRename")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnRename(); } };
@@ -188,7 +194,11 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnShowPDialog = new AbstractAction(Text.Gui.getString("aAlgnShowPDialog")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnShowPartitionDialog(); } };
-		
+				
+		aAlgnAddPartition = new AbstractAction(Text.Gui.getString("aAlgnAddPartition")) {
+			public void actionPerformed(ActionEvent e) {
+				winMain.menuAddNewPartition(); } };
+				
 		aAlgnShowOvDialog = new AbstractAction(Text.Gui.getString("aAlgnShowOvDialog")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnShowOvDialog(); } };
@@ -358,6 +368,8 @@ public class WinMainMenuBar extends JMenuBar
 		mAlgnSelectNone = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 		mAlgnSelectUnique = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 		mAlgnSelectInvert = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
+		mAlgnSelectHighlighted = getItem(aAlgnSelectHighlighted, KeyEvent.VK_H, 0, 0);
+		
 		mAlgnMoveUp = getItem(aAlgnMoveUp, 0,
 			KeyEvent.VK_UP, KeyEvent.ALT_MASK, Icons.UP16);
 		mAlgnMoveUp.setDisplayedMnemonicIndex(15);
@@ -377,6 +389,7 @@ public class WinMainMenuBar extends JMenuBar
 		
 		mAlgnSelect.add(mAlgnSelectAll);
 		mAlgnSelect.add(mAlgnSelectNone);
+		mAlgnSelect.add(mAlgnSelectHighlighted);
 		mAlgnSelect.add(mAlgnSelectUnique);
 		mAlgnSelect.addSeparator();
 		mAlgnSelect.add(mAlgnSelectInvert);
@@ -560,6 +573,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnSelectNone.setEnabled(false);
 		aAlgnSelectUnique.setEnabled(false);
 		aAlgnSelectInvert.setEnabled(false);
+		aAlgnSelectHighlighted.setEnabled(false);
 		aAlgnMoveUp.setEnabled(false);
 		aAlgnMoveDown.setEnabled(false);
 		aAlgnMoveTop.setEnabled(false);

@@ -86,6 +86,8 @@ public class Prefs extends PreferencesXML
 	public static float gui_group_threshold = 0.05f;
 	public static int gui_import_method = 0;
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
+	public static boolean gui_show_horizontal_highlight = true;
+	public static boolean gui_show_vertical_highlight = true;
 	
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
@@ -108,6 +110,7 @@ public class Prefs extends PreferencesXML
 	public static Color	gui_seq_color_fwy;
 	public static Color	gui_seq_color_ilmv;
 	public static Color	gui_seq_color_gaps;
+	public static Color gui_seq_highlight;
 	public static Color	gui_graph_window;
 	public static Color	gui_graph_threshold;
 	public static Color	gui_graph_background;
@@ -266,11 +269,14 @@ public class Prefs extends PreferencesXML
 		gui_seq_color_fwy = getColor("gui_seq_color_fwy", gui_seq_color_fwy);
 		gui_seq_color_ilmv = getColor("gui_seq_color_ilmv", gui_seq_color_ilmv);
 		gui_seq_color_gaps = getColor("gui_seq_color_gaps", gui_seq_color_gaps);
+		gui_seq_highlight = getColor("gui_seq_highlight", gui_seq_highlight);
 		gui_graph_window = getColor("gui_graph_window", gui_graph_window);
 		gui_graph_threshold = getColor("gui_graph_threshold", gui_graph_threshold);
 		gui_graph_background = getColor("gui_graph_background", gui_graph_background);
 		gui_histo_background = getColor("gui_histo_background", gui_histo_background);
 		gui_cardle_line = getColor("gui_cardle_line", gui_cardle_line);
+		gui_show_horizontal_highlight = getBool("gui_show_horizontal_highlight", gui_show_horizontal_highlight);
+		gui_show_vertical_highlight = getBool("gui_show_vertical_highlight", gui_show_vertical_highlight);
 		
 		pdm2_window = getInt("pdm2_window", pdm2_window);
 		pdm2_step = getInt("pdm2_step", pdm2_step);
@@ -415,11 +421,14 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_seq_color_fwy", setColor(gui_seq_color_fwy));
 		p.setProperty("gui_seq_color_ilmv", setColor(gui_seq_color_ilmv));
 		p.setProperty("gui_seq_color_gaps", setColor(gui_seq_color_gaps));
+		p.setProperty("gui_seq_highlight", setColor(gui_seq_highlight));
 		p.setProperty("gui_graph_window", setColor(gui_graph_window));
 		p.setProperty("gui_graph_threshold", setColor(gui_graph_threshold));
 		p.setProperty("gui_graph_background", setColor(gui_graph_background));
 		p.setProperty("gui_histo_background", setColor(gui_histo_background));
 		p.setProperty("gui_cardle_line", setColor(gui_cardle_line));
+		p.setProperty("gui_show_horizontal_highlight", ""+gui_show_horizontal_highlight);
+		p.setProperty("gui_show_vertical_highlight", ""+gui_show_vertical_highlight);
 		
 		p.setProperty("pdm2_window", "" + pdm2_window);
 		p.setProperty("pdm2_step", "" + pdm2_step);
@@ -515,11 +524,14 @@ public class Prefs extends PreferencesXML
 		gui_seq_color_fwy = new Color(153, 153, 255);
 		gui_seq_color_ilmv = new Color(153, 255, 153);
 		gui_seq_color_gaps = new Color(255, 255, 255);
+		gui_seq_highlight = new Color(0,0,230);
 		gui_graph_window = new Color(0, 0, 255);
 		gui_graph_threshold = new Color(0, 255, 64);
 		gui_graph_background = new Color(255, 255, 255);
 		gui_histo_background = new Color(255, 255, 255);
 		gui_cardle_line = new Color(0, 0, 0);
+		gui_show_horizontal_highlight = true;
+		gui_show_vertical_highlight = true;
 	}
 	
 	public static void setPDM2Defaults()

@@ -162,7 +162,7 @@ public class OverviewDialog extends JDialog
 			int nuc = (int) (x / imager.nScale);
 			int seq = (int) (y / imager.sScale);
 						
-			panel.jumpToPosition(nuc, seq);
+			panel.jumpToPosition(nuc, seq, false, false);
 		}
 	
 		public void paintComponent(Graphics g)
