@@ -40,15 +40,17 @@ class CodeMLAnalysis extends AnalysisThread
 		wrkDir = ClusterUtils.getWorkingDirectory(
 			result,	jobDir.getName(), runDir.getName());
 
-
 		// 1) Copy the sequence data to the working directory
 		File src = new File(jobDir, "seq.phy");
 		File des = new File(wrkDir, "seq.phy");
 		FileUtils.copyFile(src, des, false);
 		
-		// 2) Write out the input files that CODEML requires			
+		// 2) Work out (from the run directory, which run/model to use)
+		int modelType = Integer.parseInt(runDir.getName().substring(3));
+				
+		// 3) Write out the input files that CODEML requires			
 		RunCodeML runCodeML = new RunCodeML(wrkDir, result);
-		runCodeML.saveCTLSettings(0);
+		runCodeML.saveCTLSettings(modelType);
 		runCodeML.createTree();
 		
 		// 4) Run the job

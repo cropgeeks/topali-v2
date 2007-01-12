@@ -29,7 +29,7 @@ public class WinMain extends JFrame
 	// The user's project
 	private Project project = new Project();
 	// And associated vamsas session (if any)
-	private VamsasClient vClient = null;
+	public static VamsasClient vClient = null;
 	
 	// GUI controls...
 	private WinMainMenuBar menubar;
@@ -720,5 +720,28 @@ public class WinMain extends JFrame
 		long e = System.currentTimeMillis();
 		System.out.println("Time: " + (e-s) + "ms");
 //		
+	}
+	
+	public void vamsasMouseOver(String seqName, int pos)
+	{
+		for (AlignmentData data: project.getDatasets())
+		{
+			int i = 0;
+			for (Sequence seq: data.getSequenceSet().getSequences())
+			{
+				if (seq.name.equals(seqName))
+				{
+					
+					AlignmentPanel panel = navPanel.getCurrentAlignmentPanel(data);
+					
+					panel.highlight(i, pos, false, true);
+					
+					
+					break;
+				}
+				
+				i++;
+			}
+		}
 	}	
 }

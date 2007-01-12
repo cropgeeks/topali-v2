@@ -2,7 +2,7 @@ package topali.vamsas;
 
 import topali.fileio.*;
 
-import org.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.core.*;
 
 class Vamsas2TOPALi
 {

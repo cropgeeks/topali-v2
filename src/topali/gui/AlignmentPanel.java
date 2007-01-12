@@ -7,6 +7,8 @@ package topali.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.help.TextHelpModel.Highlight;
 import javax.swing.*;
 
 import topali.data.*;
@@ -14,6 +16,11 @@ import topali.data.*;
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener
 {
+	
+	private final boolean horizontalHighlight = true;
+	private final boolean verticalHighlight = true;
+	private final Color highlightColor = new Color(255,255,210);
+    
 	private JScrollPane sp;
 	JScrollBar hBar, vBar;
 	private JViewport view;
@@ -53,6 +60,11 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	private int charDepth;
 	////////////////////////////////////////////////////////////////////////////
 				
+	private int highlightSeq = -1;
+	private int highlightSeqRange = 1;
+	private int highlightNuc = -1;
+	private int highlightNucRange = 1;
+	
 	public AlignmentPanel(AlignmentData data)
 	{	
 		this.data = data;
@@ -70,7 +82,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		canvas = new DisplayCanvas();
 		seqList = new SequenceListPanel(this, ss);
 		annotationsPanel = new AnnotationsPanel(this, data);
-				
+		
 		sp.setViewportView(canvas);
 		sp.setRowHeaderView(seqList);
 		sp.setColumnHeaderView(header);		
@@ -85,6 +97,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		header.computeInitialHeight();
 		
 		addPageHandlers();
+		
 	}	
 	
 	public SequenceListPanel getListPanel()
@@ -118,6 +131,39 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	void setPopupMenu(PopupMenuAdapter popup)
 	{
 		canvas.addMouseListener(popup);
+	}
+	
+	public void highlight(int seq, int nuc, boolean sendMessage, boolean jumpto) {
+		highlight(seq, 1, nuc, 1, sendMessage, jumpto);
+	}
+	
+	public void highlight(int seq, int seqRange, int nuc, int nucRange, boolean sendMessage, boolean jumpto) {
+		if(sendMessage) {
+			//TODO: send vamsas mouseover message
+			
+			if (WinMain.vClient != null && seq >= 0)
+			{
+				String seqName = ss.getSequence(seq).name;
+				
+				uk.ac.vamsas.client.picking.MouseOverMessage message =
+					new uk.ac.vamsas.client.picking.MouseOverMessage(
+						seqName, nuc);
+				WinMain.vClient.msgHandler.sendMessage(message);
+			}
+			
+		}
+		
+		if (jumpto)
+		{
+			//jumpToPosition(nuc, seq);
+		}
+		
+		this.highlightNuc = nuc;
+		this.highlightNucRange = nucRange;
+		this.highlightSeq = seq;
+		this.highlightSeqRange = seqRange;
+		
+		this.repaint();
 	}
 	
 	private void addPageHandlers()
@@ -275,13 +321,37 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				setData();
 		}
 		
+		int mouseStartSeq = -1;
+		int mouseStartNuc = -1;
+		
 		class CanvasMouseListener extends MouseAdapter
 		{
+			int x = -1;
+			int y = -1;
+			
 			public void mouseExited(MouseEvent e)
 			{
 				setToolTipText(null);
 				WinMainStatusBar.setText("");
+				
+				highlight(-1, -1, true, false);
 			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
+				mouseStartNuc = (((e.getX()-pX) / charW) + (pX / charW)) + 1;
+				mouseStartSeq = e.getY() / charH;
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				super.mouseReleased(e);
+				mouseStartSeq = -1;
+				mouseStartNuc = -1;
+			}			
+			
+			
 		}
 		
 		class CanvasMouseMotionListener extends MouseMotionAdapter
@@ -313,13 +383,33 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 					WinMainStatusBar.setText(str);
 					if (Prefs.gui_seq_tooltip)
 						setToolTipText(str);
+					
+					highlight(seq, nuc, true, false);
 				}
 				catch (Exception ne)
 				{
 					setToolTipText(null);
 					WinMainStatusBar.setText("");
+					
+					highlight(-1, -1, false, false);
 				}
 			}
+			
+			
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				super.mouseDragged(e);
+				
+				if(mouseStartSeq>=0 && mouseStartNuc>=0) {
+					int nuc = (((e.getX()-pX) / charW) + (pX / charW)) + 1;
+					int seq = e.getY() / charH;
+					highlight(mouseStartSeq, (seq-mouseStartSeq), mouseStartNuc, (nuc-mouseStartNuc), true, false);
+					
+					System.out.println(mouseStartSeq+"-"+(mouseStartSeq+seq)+" "+mouseStartNuc+"-"+(mouseStartNuc+nuc));
+				}
+			}
+			
+			
 		}
 	
 		// Updated each time new data has been loaded (or changes have been made
@@ -496,6 +586,11 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 //							(start+i+1) > SequenceSet.nEnd)
 //							g.setColor(g.getColor().darker().darker());
 						
+						//Color Highlight
+						if((seq>=highlightSeq && seq<highlightSeq+highlightSeqRange && horizontalHighlight) || (i+start+1>=highlightNuc && i+start+1<highlightNuc+highlightNucRange && verticalHighlight))
+							g.setColor(g.getColor().darker());
+						if((seq>=highlightSeq && seq<highlightSeq+highlightSeqRange && horizontalHighlight) && (i+start+1>=highlightNuc && i+start+1<highlightNuc+highlightNucRange && verticalHighlight))
+							g.setColor(g.getColor().darker());
 						
 						g.fillRect(x, y1, charW, charH);
 					}
@@ -510,7 +605,23 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				if (Prefs.gui_seq_show_text)
 					g.drawString(new String(str), pX, y2);
 			}
-						
+			
+			// Cross-Hair highlight
+//			int vertHlX = (highlightNuc-1) * charW;
+//			int vertHlY = pY;
+//			int vertHlW = highlightNucRange * charW;
+//			int vertHlH = ss.getSize() * charH;
+//			
+//			int horzHlX = pX;
+//			int horzHlY = highlightSeq * charH;
+//			int horzHlW = ss.getLength() * charW;
+//			int horzHlH = highlightSeqRange * charH;
+//			
+//			if(highlightNuc>=0 && verticalHighlight)
+//				g.drawRect(vertHlX, vertHlY, vertHlW, vertHlH);
+//			if(highlightSeq>=0 && horizontalHighlight)
+//				g.drawRect(horzHlX, horzHlY, horzHlW, horzHlH);
+			
 			header.repaint();
 		}
 		
