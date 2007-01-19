@@ -80,14 +80,14 @@ Castor's auto mapping file generator -->
 
 <!-- PartitionAnnotations -->
 <class name="topali.data.PartitionAnnotations" extends="topali.data.RegionAnnotations">
-	<field name="currentStart" type="int">
-		<bind-xml node="attribute"/></field>
-	<field name="currentEnd" type="int">
-		<bind-xml node="attribute"/></field>
 	<field name="alignmentLength" type="int">
 		<bind-xml node="attribute"/></field>
 </class>
 
+<!-- CDSAnnotation -->
+<class name="topali.data.CDSAnnotations" extends="topali.data.RegionAnnotations">
+</class>
+  
 <!-- ResultsTracker -->
 <class name="topali.data.ResultsTracker">
 	<field name="treeRunCount" type="integer">
@@ -123,6 +123,10 @@ Castor's auto mapping file generator -->
   <field name="name" type="string" direct="true">
     <bind-xml node="attribute"/></field>
  <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
+    <bind-xml node="attribute"/></field>
+  <field name="activeRegionS" type="int" get-method="getActiveRegionS" set-method="setActiveRegionS">
+    <bind-xml node="attribute"/></field>
+  <field name="activeRegionE" type="int" get-method="getActiveRegionE" set-method="setActiveRegionS">
     <bind-xml node="attribute"/></field>
   	
   <field name="sequenceSet" type="topali.data.SequenceSet"/>
