@@ -5,22 +5,39 @@
 
 package topali.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
-import javax.help.TextHelpModel.Highlight;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.KeyStroke;
 
-import topali.data.*;
+import topali.data.AlignmentData;
+import topali.data.SequenceSet;
+import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener
 {
-	
-	private final boolean horizontalHighlight = true;
-	private final boolean verticalHighlight = true;
-	private final Color highlightColor = new Color(255,255,210);
-    
 	private JScrollPane sp;
 	JScrollBar hBar, vBar;
 	private JViewport view;
@@ -33,7 +50,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	// SequenceSet data that is displayed
 	private AlignmentData data;
 	private SequenceSet ss;
-	private PartitionAnnotations pAnnotations;
 	
 	// Fonts used by the display areas
 	private FontMetrics fm;
@@ -59,18 +75,24 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	private int charCount;
 	private int charDepth;
 	////////////////////////////////////////////////////////////////////////////
-				
-	private int highlightSeq = -1;
-	private int highlightSeqRange = 1;
-	private int highlightNuc = -1;
-	private int highlightNucRange = 1;
+	 
+	//Area to highlight (unit: nuc. and seq. numbers, NOT px!)
+	public Rectangle mouseHighlight = new Rectangle(-1, -1, 0, 0);
+	//Flag to hold highlight (false = mouse over highlight, true = hold current highlight) (toggled by mouse click)
+	public boolean holdMouseHighlight = false;
+	//Stores the position, when user clicks the rigth mouse button
+	private Point rightMouseCoord = null;
+	
+	MyPopupMenuAdapter popup;
+	
+	//Scrolls if the user wants to select an area outside the current view.
+	Scroller scroller;
 	
 	public AlignmentPanel(AlignmentData data)
 	{	
 		this.data = data;
 		ss = data.getSequenceSet();
-		pAnnotations = data.getTopaliAnnotations().getPartitionAnnotations();
-	
+		
 		sp = new JScrollPane();		
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
@@ -90,14 +112,15 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 
 		setLayout(new BorderLayout());
 		add(sp, BorderLayout.CENTER);
-//		add(annotationsPanel, BorderLayout.SOUTH);
 		
 		// Final setup - ensure the header canvas can compute its height
 		canvas.setCanvasFont();
 		header.computeInitialHeight();
 		
 		addPageHandlers();
-		
+	
+		scroller = new Scroller();
+		scroller.start();
 	}	
 	
 	public SequenceListPanel getListPanel()
@@ -114,32 +137,104 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		seqList.findSequence(sp, index, select);
 	}
 	
-	public void jumpToPosition(int nuc, int seq)
+	/** 
+	 * Move view to a certain position
+	 * @param nuc Nucleotide to place in view
+	 * @param seq Sequence to place in view
+	 * @param center Center view
+	 * @param justWhenOutOfVisArea Move only if position is really out of view.
+	 */
+	public void jumpToPosition(int nuc, int seq, boolean center, boolean justWhenOutOfVisArea)
 	{
-		// X (nucleotide)
-		int x = nuc * charW - (charW);
-		sp.getHorizontalScrollBar().setValue(x);
+		Rectangle vSize = sp.getViewport().getViewRect();
+		Point vPos = sp.getViewport().getViewPosition();
 		
-		// Y (sequence)
-		if (seq >= 0)
-		{
-			int y = seq * charH - (charH);
+		int visSeqMin = (int)(vPos.getY() / charH);
+		int visSeqMax = (int)((vPos.getY() + vSize.getHeight()) / charH);
+		int visNucMin = (int)(vPos.getX() / charW);
+		int visNucMax = (int)((vPos.getX() + vSize.getWidth()) / charW);
+		
+		boolean outOfVisArea = (seq<visSeqMin || seq>visSeqMax || nuc<visNucMin || nuc>visNucMax);
+		
+		int x = nuc * charW - (charW);
+		int y = seq * charH - (charH);
+		if(center) {
+			x -= vSize.getWidth()/2;
+			y -= vSize.getHeight()/2;
+			if(x>sp.getHorizontalScrollBar().getMaximum())
+				x = sp.getHorizontalScrollBar().getMaximum();
+			if(y>sp.getVerticalScrollBar().getMaximum())
+				y = sp.getVerticalScrollBar().getMaximum();
+			if(x<0)
+				x=0;
+			if(y<0)
+				y=0;
+		}
+		
+		if(outOfVisArea || !justWhenOutOfVisArea) {		
+			sp.getHorizontalScrollBar().setValue(x);
 			sp.getVerticalScrollBar().setValue(y);
 		}
 	}
 	
-	void setPopupMenu(PopupMenuAdapter popup)
+	/**
+	 * Start the scroller (direction and speed depends on mouse coordinates)
+	 * @param mouse
+	 */
+	private void scroll(Point mouse) {
+		Rectangle vSize = sp.getViewport().getViewRect();
+		Point vPos = sp.getViewport().getViewPosition();
+		int x1 = (int)vPos.getX();
+		int y1 = (int)vPos.getY();
+		int x2 = (int)(x1 + vSize.getWidth());
+		int y2 = (int)(y1 + vSize.getHeight());
+		
+		boolean scroll = false;
+		
+		//if there's a need for scrolling, notify the scroller
+		if(mouse.getX()<x1) {
+			scroller.left=(int)(x1-mouse.getX());
+			scroll = true;
+		}
+		if(mouse.getX()>x2) {
+			scroller.right=(int)(mouse.getX()-x2);
+			scroll = true;
+		}
+		if(mouse.getY()<y1) {
+			scroller.up=(int)(y1-mouse.getY());
+			scroll = true;
+		}
+		if(mouse.getY()>y2) {
+			scroller.down=(int)(mouse.getY()-y2);
+			scroll = true;
+		}
+		
+		scroller.setRunning(scroll);
+		synchronized (scroller) {
+			scroller.notify();			
+		}
+	}
+	
+	void setPopupMenu(MyPopupMenuAdapter popup)
 	{
-		canvas.addMouseListener(popup);
+		this.popup = popup;
+		canvas.addMouseListener(this.popup);
 	}
 	
-	public void highlight(int seq, int nuc, boolean sendMessage, boolean jumpto) {
-		highlight(seq, 1, nuc, 1, sendMessage, jumpto);
+	public void highlight(int seq, int nuc, boolean localCall) {
+		highlight(seq, 0, nuc, 0, localCall);
 	}
 	
-	public void highlight(int seq, int seqRange, int nuc, int nucRange, boolean sendMessage, boolean jumpto) {
-		if(sendMessage) {
-			//TODO: send vamsas mouseover message
+	/**
+	 * Highlight a certain (area of) nucleotide(s)
+	 * @param seq 	Sequence to start highlighting
+	 * @param seqRange	No of sequences to highlight	
+	 * @param nuc	Nucleotid to start highlighting
+	 * @param nucRange	No of nucleotides to highlight
+	 * @param localCall	Flag if this method was called locally or as response to an external message
+	 */
+	public void highlight(int seq, int seqRange, int nuc, int nucRange, boolean localCall) {
+		if(localCall) {
 			
 			if (WinMain.vClient != null && seq >= 0)
 			{
@@ -153,17 +248,56 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 			
 		}
 		
-		if (jumpto)
-		{
-			//jumpToPosition(nuc, seq);
+		if (!localCall && nuc>-1 && seq>-1) {
+			jumpToPosition(nuc, seq, true, true);
 		}
 		
-		this.highlightNuc = nuc;
-		this.highlightNucRange = nucRange;
-		this.highlightSeq = seq;
-		this.highlightSeqRange = seqRange;
+		this.mouseHighlight.setBounds(nuc, seq, nucRange, seqRange);
 		
-		this.repaint();
+		if(seq>=0 && Prefs.gui_show_horizontal_highlight)
+			popup.enableSelectHighlighted(true);
+		else
+			popup.enableSelectHighlighted(false);
+		if(nuc>=0 && Prefs.gui_show_vertical_highlight)
+			popup.enableAnnotate(true);
+		else
+			popup.enableAnnotate(false);
+		updateStatusBar(seq, seqRange, nuc, nucRange);
+		
+		this.repaint();		
+	}
+	
+	/**
+	 * Update status bar to match current mouse highlight/selection
+	 * @param seq
+	 * @param seqRange
+	 * @param nuc
+	 * @param nucRange
+	 */
+	private void updateStatusBar(int seq, int seqRange, int nuc, int nucRange) {
+		if(seq==-1 || nuc==-1) {
+			WinMainStatusBar.setText("");
+			setToolTipText(null);
+		}
+		else {
+			String text = "";
+			if(seqRange>0 && Prefs.gui_show_horizontal_highlight) {
+				if(nucRange>0 && Prefs.gui_show_vertical_highlight)
+					text = "Seq "+(seq+1)+"-"+(seq+1+seqRange)+": "+ss.getSequence(seq).name+"-"+ss.getSequence(seq+seqRange).name+" ("+nuc+"-"+(nuc+nucRange)+")";
+				else
+					text = "Seq "+(seq+1)+"-"+(seq+1+seqRange)+": "+ss.getSequence(seq).name+"-"+ss.getSequence(seq+seqRange).name;
+			}
+			else {
+				if(nucRange>0 && Prefs.gui_show_vertical_highlight)
+					text = "("+nuc+"-"+(nuc+nucRange)+")";
+				else
+					text = "Seq "+(seq+1)+": "+ss.getSequence(seq).name+" ("+nuc+")";
+			}
+			
+			WinMainStatusBar.setText(text);
+			if (Prefs.gui_seq_tooltip)
+				setToolTipText(text);
+		}
 	}
 	
 	private void addPageHandlers()
@@ -201,8 +335,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	
 	void refreshAndRepaint()
 	{
-//		ss.setRemoveRestoreState();
-//		winMain.setGraphEnabledStatus();
 
 		seqList.refreshAndRepaint();
 		sp.setRowHeaderView(seqList);
@@ -331,37 +463,56 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 			
 			public void mouseExited(MouseEvent e)
 			{
-				setToolTipText(null);
-				WinMainStatusBar.setText("");
-				
-				highlight(-1, -1, true, false);
+				if(!holdMouseHighlight) {
+				highlight(-1, -1, true);
+				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
-				mouseStartNuc = (((e.getX()-pX) / charW) + (pX / charW)) + 1;
-				mouseStartSeq = e.getY() / charH;
+				
+				if(e.getButton()==MouseEvent.BUTTON3) {
+					rightMouseCoord = e.getPoint();
+					popup.setEnabled(true);
+					return;
+				}
+				
+				if(e.getButton()==MouseEvent.BUTTON1) {
+					holdMouseHighlight = !holdMouseHighlight;
+					mouseStartNuc = (((e.getX()-pX) / charW) + (pX / charW)) + 1;
+					mouseStartSeq = e.getY() / charH;
+					if(!holdMouseHighlight) {
+						highlight(-1, -1, true);
+					}
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				super.mouseReleased(e);
-				mouseStartSeq = -1;
-				mouseStartNuc = -1;
+				
+				if(e.getButton()==MouseEvent.BUTTON3) {
+					rightMouseCoord = null;
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+				
+				if(e.getButton()==MouseEvent.BUTTON1) {
+					mouseStartSeq = -1;
+					mouseStartNuc = -1;
+					scroller.setRunning(false);
+				}
 			}			
-			
 			
 		}
 		
 		class CanvasMouseMotionListener extends MouseMotionAdapter
 		{
-			String seqName = null;
-			String str = null;
 		
 			public void mouseMoved(MouseEvent e)
 			{
-				if (ss == null)
+				if (ss == null || (!Prefs.gui_show_horizontal_highlight && !Prefs.gui_show_vertical_highlight) || holdMouseHighlight)
 					return;
 					
 				Point p = e.getPoint();
@@ -372,41 +523,62 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 					// then + to starting char to get actual char
 					int nuc = (((p.x-pX) / charW) + (pX / charW)) + 1;
 					int seq = p.y / charH;
-				
-					seqName = ss.getSequence(seq).name;
-					str = "Seq " + (seq+1) + ": " + seqName + " (" +  nuc + ")";
 					
-//					System.out.println("hBar.v="+hBar.getValue());
-//					System.out.println(getWidth());
-//					annotationsPanel.test();
-				
-					WinMainStatusBar.setText(str);
-					if (Prefs.gui_seq_tooltip)
-						setToolTipText(str);
-					
-					highlight(seq, nuc, true, false);
+					if(!holdMouseHighlight) {
+						highlight(seq, nuc, true);
+					}
 				}
 				catch (Exception ne)
 				{
-					setToolTipText(null);
-					WinMainStatusBar.setText("");
-					
-					highlight(-1, -1, false, false);
+					if(!holdMouseHighlight) {
+						highlight(-1, -1, true);
+					}
 				}
 			}
-			
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				super.mouseDragged(e);
 				
-				if(mouseStartSeq>=0 && mouseStartNuc>=0) {
-					int nuc = (((e.getX()-pX) / charW) + (pX / charW)) + 1;
-					int seq = e.getY() / charH;
-					highlight(mouseStartSeq, (seq-mouseStartSeq), mouseStartNuc, (nuc-mouseStartNuc), true, false);
+				if(rightMouseCoord!=null) {
+					Point p = e.getPoint();
+					setCursor(new Cursor(Cursor.HAND_CURSOR));
+					int dX = (int)(rightMouseCoord.getX()-p.getX());
+					int dY = (int)(rightMouseCoord.getY()-p.getY());
+					int newX = sp.getHorizontalScrollBar().getValue()+dX;
+					int newY = sp.getVerticalScrollBar().getValue()+dY;
 					
-					System.out.println(mouseStartSeq+"-"+(mouseStartSeq+seq)+" "+mouseStartNuc+"-"+(mouseStartNuc+nuc));
+					sp.getHorizontalScrollBar().setValue(newX);
+					sp.getVerticalScrollBar().setValue(newY);
+				
+					popup.setEnabled(false);
+					return;
 				}
+				
+				if(mouseStartSeq>=0 && mouseStartNuc>=0) {
+					int nuc = (((e.getX()-pX) / charW) + (pX / charW))+1;
+					int seq = e.getY() / charH;
+					nuc = (nuc<1) ? 1 : nuc;
+					seq = (seq<0) ? 0 : seq;
+					
+					int nucRange = (nuc-mouseStartNuc);
+					int nucStart = (nucRange<0) ? nuc : mouseStartNuc;
+					nucRange = (nucRange<0) ? -nucRange : nucRange;
+					
+					int seqRange = (seq-mouseStartSeq);
+					int seqStart = (seqRange<0) ? seq : mouseStartSeq;
+					seqRange = (seqRange<0) ? -seqRange : seqRange;
+					
+					if((seqStart+seqRange>=ss.getSize()))
+						seqRange = ss.getSize()-seqStart-1;
+					if((nucStart+nucRange)>ss.getLength())
+						nucRange = ss.getLength()-nucStart;
+					
+					highlight(seqStart, seqRange, nucStart, nucRange, true);
+					scroll(e.getPoint());
+				}
+				
+				holdMouseHighlight = true;
 			}
 			
 			
@@ -425,11 +597,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 
 			charW = fm.charWidth('G');
 			charH = fm.getHeight();
-			charDec = fm.getMaxDescent();
-			
-//			System.out.println("charW: " + charW);
-//			System.out.println("charH: " + charH);
-			
+			charDec = fm.getMaxDescent();			
 			
 			hBar.setUnitIncrement(charW);
 			vBar.setUnitIncrement(charH);
@@ -455,21 +623,14 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				return;
 			
 			charCount = (int) ((float) d.getWidth() / (float) charW);
-			charDepth = (int) ((float) d.getHeight() / (float) charH);
-//			System.out.println("CharCount: " + charCount);
-//			System.out.println("Dim width: " + d.getWidth());
-			
+			charDepth = (int) ((float) d.getHeight() / (float) charH);			
 			pX = p.x;
 			pY = p.y;
-						
-//			System.out.println(pX + ", " + pY);
 
 			if (annotationsPanel != null)
 			{
 				annotationsPanel.setSizes(canW, charW, seqList.getWidth());
 				annotationsPanel.setScrollBarValue(hBar.getValue());
-				
-//				System.out.println("hBar.max="+hBar.getMaximum());
 			}
 			
 			updateOverviewDialog();
@@ -489,32 +650,24 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		public void paintComponent(Graphics g)
 		{		
 			super.paintComponent(g);
-						
-//			g.setColor(Color.white);
-//			g.fillRect(0, 0, getSize().width, getSize().height);
-						
+			
 			if (buffer == null)
 				return;
 
 			start = (pX / charW);
 			int seqStart = (int) (pY / charH);
-//			int seqStart = 0;
 
 			g.setFont(font);
 			
 			int seqEnd = seqStart + charDepth + 2;
 
-			// For each sequence...
-//			for (int seq = seqStart, y = charH; seq < ss.getSize();
-//				seq++, y += charH)
 			for (int seq = seqStart, y = charH + (charH * seqStart); seq < seqEnd;
 				seq++, y += charH)
 			{
 				if (seq >= ss.getSize())
 					break;
 			
-				boolean drawDim = !seqList.getList().isSelectedIndex(seq)
-					&& Prefs.gui_seq_dim;
+				boolean drawDim = !seqList.getList().isSelectedIndex(seq) && Prefs.gui_seq_dim;
 			
 				// Extract the text to display in this section
 				char str[];
@@ -528,69 +681,39 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				int y2 = y - charDec;
 												
 				// Highlight the colours
-				if (Prefs.gui_seq_show_colors && drawDim == false)
 				{
 					for (int i = 0, x = pX; i < str.length; i++, x += charW)
-					{
-						g.setColor(getColor(str[i]));
-/*						if (ss.isDNA())
-						{
-							// DNA COLOUR CODING
-							switch (str[i])
-							{
-								case 'A' : g.setColor(Prefs.gui_seq_color_a); break;
-								case 'C' : g.setColor(Prefs.gui_seq_color_c); break;
-								case 'G' : g.setColor(Prefs.gui_seq_color_g); break;
-								case 'T' : g.setColor(Prefs.gui_seq_color_t); break;
-								case 'U' : g.setColor(Prefs.gui_seq_color_t); break;
-								default  : g.setColor(Prefs.gui_seq_color_gaps);
-									break;
-							}
+					{					
+						if(Prefs.gui_seq_show_colors && drawDim == false) {
+							g.setColor(getColor(str[i]));
+							
+							// Subset selection highlighting
+							int cS = data.getActiveRegionS();
+							int cE = data.getActiveRegionE();
+							if ((start+i+1) < cS || (start+i+1) > cE)
+								g.setColor(g.getColor().darker().darker());		
+
 						}
 						else
-						{
-							// PROTEIN COLOUR CODING
-							switch (str[i])
-							{
-								case 'G' : g.setColor(Prefs.gui_seq_color_gpst); break;
-								case 'P' : g.setColor(Prefs.gui_seq_color_gpst); break;
-								case 'S' : g.setColor(Prefs.gui_seq_color_gpst); break;
-								case 'T' : g.setColor(Prefs.gui_seq_color_gpst); break;
-								
-								case 'H' : g.setColor(Prefs.gui_seq_color_hkr); break;
-								case 'K' : g.setColor(Prefs.gui_seq_color_hkr); break;
-								case 'R' : g.setColor(Prefs.gui_seq_color_hkr); break;
-								
-								case 'F' : g.setColor(Prefs.gui_seq_color_fwy); break;
-								case 'W' : g.setColor(Prefs.gui_seq_color_fwy); break;
-								case 'Y' : g.setColor(Prefs.gui_seq_color_fwy); break;
-								
-								case 'I' : g.setColor(Prefs.gui_seq_color_ilmv); break;
-								case 'L' : g.setColor(Prefs.gui_seq_color_ilmv); break;
-								case 'M' : g.setColor(Prefs.gui_seq_color_ilmv); break;
-								case 'V' : g.setColor(Prefs.gui_seq_color_ilmv); break;
-							
-								default: g.setColor(Prefs.gui_seq_color_gaps); break;
-							}
-						}
-*/						
-						
-						// Subset selection highlighting
-						int cS = pAnnotations.getCurrentStart();
-						int cE = pAnnotations.getCurrentEnd();
-						
-						if ((start+i+1) < cS || (start+i+1) > cE)
-							g.setColor(g.getColor().darker().darker());
+							g.setColor(Color.WHITE);
 
-//						if ((start+i+1) < SequenceSet.nStart ||
-//							(start+i+1) > SequenceSet.nEnd)
-//							g.setColor(g.getColor().darker().darker());
+						g.fillRect(x, y1, charW, charH);
 						
-						//Color Highlight
-						if((seq>=highlightSeq && seq<highlightSeq+highlightSeqRange && horizontalHighlight) || (i+start+1>=highlightNuc && i+start+1<highlightNuc+highlightNucRange && verticalHighlight))
-							g.setColor(g.getColor().darker());
-						if((seq>=highlightSeq && seq<highlightSeq+highlightSeqRange && horizontalHighlight) && (i+start+1>=highlightNuc && i+start+1<highlightNuc+highlightNucRange && verticalHighlight))
-							g.setColor(g.getColor().darker());
+//						Highlight
+						boolean horz = false;
+						boolean vert = false;
+						Color highlight = new Color(Prefs.gui_seq_highlight.getRed(), Prefs.gui_seq_highlight.getGreen(), Prefs.gui_seq_highlight.getBlue(), 75);
+						
+						if(seq>=mouseHighlight.y && seq<=mouseHighlight.y+mouseHighlight.height && Prefs.gui_show_horizontal_highlight) {
+							g.setColor(highlight);
+							horz = true;
+						}
+						if(i+start+1>=mouseHighlight.x && i+start+1<=mouseHighlight.x+mouseHighlight.width && Prefs.gui_show_vertical_highlight) {
+							g.setColor(highlight);
+							vert = true;
+						}
+						if(horz && vert)
+							g.setColor(new Color(highlight.getRed(), highlight.getGreen(), highlight.getBlue(), 150));
 						
 						g.fillRect(x, y1, charW, charH);
 					}
@@ -606,36 +729,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 					g.drawString(new String(str), pX, y2);
 			}
 			
-			// Cross-Hair highlight
-//			int vertHlX = (highlightNuc-1) * charW;
-//			int vertHlY = pY;
-//			int vertHlW = highlightNucRange * charW;
-//			int vertHlH = ss.getSize() * charH;
-//			
-//			int horzHlX = pX;
-//			int horzHlY = highlightSeq * charH;
-//			int horzHlW = ss.getLength() * charW;
-//			int horzHlH = highlightSeqRange * charH;
-//			
-//			if(highlightNuc>=0 && verticalHighlight)
-//				g.drawRect(vertHlX, vertHlY, vertHlW, vertHlH);
-//			if(highlightSeq>=0 && horizontalHighlight)
-//				g.drawRect(horzHlX, horzHlY, horzHlW, horzHlH);
-			
 			header.repaint();
 		}
 		
-/*		private Color getGreyScale(Color c)
-		{
-			int r = c.getRed();
-			int g = c.getGreen();
-			int b = c.getBlue();
-			
-			int out = (int)(((double)r*0.3) + ((double)g * 0.59) + ((double)b * 0.11));
-						
-			return new Color(out, out, out);
-		}
-*/
 	}
 	
 	public Color getColor(char c)
@@ -681,4 +777,80 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 			}
 		}
 	}
-}
+	
+	/**
+	 * Scrolls the canvas.
+	 * Set up, right, down and/or left (the value determines the scrolling speed) and
+	 * set running=true.
+	 * @author dlindn
+	 */
+	class Scroller extends Thread {
+		public int up = 0;
+		public int right = 0;
+		public int down = 0;
+		public int left = 0;
+		
+		boolean running = false;
+		
+		public Scroller() {
+		}
+
+		public void run() {
+			while(true) {
+				while(running) {
+					int value;
+					if(up>0) { 
+						value = sp.getVerticalScrollBar().getValue();
+						if(value<=up)
+							this.running = false;
+						sp.getVerticalScrollBar().setValue(value-up);
+					}
+					if(right>0) {
+						value = sp.getHorizontalScrollBar().getValue();
+						if(value>(canvas.getWidth()-right))
+							this.running = false;
+						sp.getHorizontalScrollBar().setValue(value+right);
+					}
+					if(down>0) {
+						value = sp.getVerticalScrollBar().getValue();
+						if(value>(canvas.getHeight()-down))
+							this.running = false;
+						sp.getVerticalScrollBar().setValue(value+down);
+					}
+					if(left>0) {
+						value = sp.getHorizontalScrollBar().getValue();
+						if(value<=left)
+							this.running = false;
+						sp.getHorizontalScrollBar().setValue(value-left);
+					}
+					
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}	
+			this.up = 0;
+			this.right = 0;
+			this.down = 0;
+			this.left = 0;
+			
+			synchronized (this) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			}
+			
+		}
+		
+		public void setRunning(boolean b) {
+			this.running = b;
+		}
+		
+		public boolean isRunning() {
+			return this.running;
+		}
+	}}

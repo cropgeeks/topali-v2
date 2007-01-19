@@ -12,7 +12,7 @@ import uk.ac.vamsas.test.simpleclient.*;
 
 public class VamsasClient extends ArchiveClient implements Runnable
 {
-	public PickHandler msgHandler;// = new PickHandler();
+	public PickHandler msgHandler = new PickHandler();
 	
 	private Hashtable hashtable = new Hashtable();
 	

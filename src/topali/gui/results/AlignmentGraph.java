@@ -191,7 +191,6 @@ public class AlignmentGraph extends JPanel implements Printable
 		private XYPlot plot;
 		private ValueAxis xAxis, yAxis;
 		
-		private PartitionAnnotations pAnnotations;
 		// Mouse position (when clicked, and when dragging)
 		private int clickX, dragX;
 		
@@ -202,9 +201,7 @@ public class AlignmentGraph extends JPanel implements Printable
 			super(chart, true);
 			
 			tooltip = new TreeToolTip(data, aResult.selectedSeqs);
-			
-			pAnnotations = data.getTopaliAnnotations().getPartitionAnnotations();
-			
+		
 			addMouseListener(this);
 			addMouseMotionListener(this);
 			
@@ -302,7 +299,7 @@ public class AlignmentGraph extends JPanel implements Printable
 		{
 			if (e.isMetaDown() == false && !e.isPopupTrigger())
 			{
-				pAnnotations.resetCurrentPartition();		
+				data.setActiveRegion(-1, -1);
 				WinMain.repaintDisplay();
 			}
 		}
@@ -334,7 +331,8 @@ public class AlignmentGraph extends JPanel implements Printable
 			if (nE > alignmentLength)
 				nE = alignmentLength;
 				
-			pAnnotations.setCurrentPartition(nS, nE);
+			data.setActiveRegion(nS, nE);
+			
 			WinMain.repaintDisplay();
 		}
 		
@@ -365,9 +363,8 @@ public class AlignmentGraph extends JPanel implements Printable
 			{
 				Rectangle r = getCanvasArea();
 
-				int nS = pAnnotations.getCurrentStart();
-				int nE = pAnnotations.getCurrentEnd();
-
+				int nS = data.getActiveRegionS();
+				int nE = data.getActiveRegionE();
 				int pStart = getPointFromNucleotide(nS-1) - r.x;
 				int pEnd   = getPointFromNucleotide(nE+1);
 				
@@ -378,15 +375,6 @@ public class AlignmentGraph extends JPanel implements Printable
 				int width = r.width + r.x - pEnd;
 				g.fillRect(pEnd, r.y, width, r.height);
 			}
-			
-	/*		if (xpos != -1)
-			{
-				Shape oldClip = g.getClip();
-				g.clipRect(xpos-20, (int)rec.getY(), 40, (int)rec.getHeight());
-				g.fillRect(xpos-20, (int)rec.getY(), 40, (int)rec.getHeight());
-				g.setClip(oldClip);
-			}
-	*/
 		}
 	
 		private Rectangle2D getDataArea()

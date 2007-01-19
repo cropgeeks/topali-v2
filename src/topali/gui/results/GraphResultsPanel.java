@@ -63,7 +63,11 @@ abstract class GraphResultsPanel extends JPanel implements IThresholdListener
 	
 	protected void addSelectedPartition()
 	{
-		WinMain.pDialog.addCurrentPartition();
+		WinMain.rDialog.addCurrentRegion(PartitionAnnotations.class);
+	}
+	
+	protected void addSelectedRegion(Class type) {
+		WinMain.rDialog.addCurrentRegion(type);
 	}
 	
 	protected void showToolTipDialog()
@@ -219,9 +223,34 @@ abstract class GraphResultsPanel extends JPanel implements IThresholdListener
 	
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
+		
+		JMenu annotate;
 		MyPopupMenuAdapter()
 		{
-			add(toolbar.aAdd, Icons.ADD_PARTITION, KeyEvent.VK_S, 0, 0, 0, false);
+			//add(toolbar.aAdd, Icons.ADD_PARTITION, KeyEvent.VK_S, 0, 0, 0, false);
+			
+			JMenuItem addPart = new JMenuItem(); 
+			addPart.setAction(new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					WinMain.rDialog.addRegion(data.getActiveRegionS(), data.getActiveRegionE(), PartitionAnnotations.class);
+				}});
+			addPart.setText(Text.Gui.getString("aAlgnAddPartition"));
+			addPart.setMnemonic(KeyEvent.VK_P);
+			
+			JMenuItem addCodReg = new JMenuItem();
+			addCodReg.setAction(new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					WinMain.rDialog.addRegion(data.getActiveRegionS(), data.getActiveRegionE(), CDSAnnotations.class);
+				}});
+			addCodReg.setText(Text.Gui.getString("aAlgnAddCDS"));
+			addCodReg.setMnemonic(KeyEvent.VK_C);
+			
+			annotate = new JMenu(Text.Gui.getString("menuAlgnAnnotate"));
+			annotate.setIcon(Icons.ADD_PARTITION);
+			annotate.add(addPart);
+			annotate.add(addCodReg);
+			p.add(annotate);
+			
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0, false);
 			add(toolbar.aAdjust, Icons.ADJUST_THRESHOLD, KeyEvent.VK_A, 0, 0, 0, false);
 			add(aAnlsCreateTree, Icons.CREATE_TREE, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, 20, true);

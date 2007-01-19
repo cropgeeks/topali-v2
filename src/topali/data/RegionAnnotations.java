@@ -21,6 +21,9 @@ public abstract class RegionAnnotations extends AlignmentAnnotations
 		// The actual annotation index for this region
 		int index = partitionIndex * 2;
 		
+		if(index>=annotations.size())
+			return null;
+		
 		AnnotationElement s = annotations.get(index);
 		AnnotationElement e = annotations.get(index+1);
 		

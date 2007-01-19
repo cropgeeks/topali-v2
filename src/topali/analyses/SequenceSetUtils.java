@@ -308,11 +308,8 @@ public class SequenceSetUtils
 	// the alignment data. This method will *only* use sequences and partitions
 	// that have been selected by the user
 	// Currently only called by the Sequence->Export code
-	public static SequenceSet getConcatenatedSequenceSet(AlignmentData data, int[] seqs, int[] regions)
+	public static SequenceSet getConcatenatedSequenceSet(AlignmentData data, RegionAnnotations annotations, int[] seqs, int[] regions)
 	{
-		PartitionAnnotations pAnnotations =
-			data.getTopaliAnnotations().getPartitionAnnotations();
-			
 		SequenceSet ssOld = data.getSequenceSet();
 		SequenceSet ssNew = new SequenceSet();		
 		
@@ -331,7 +328,7 @@ public class SequenceSetUtils
 			{
 				for (int r: regions)
 				{
-					RegionAnnotations.Region reg = pAnnotations.get(r);
+					RegionAnnotations.Region reg = annotations.get(r);
 					buffer.append(seqOld.getPartition(reg.getS(), reg.getE()));
 				}
 			}

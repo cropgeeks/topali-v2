@@ -7,6 +7,7 @@ package topali.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -249,7 +250,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 		disPanel.repaint();
 		
 		if (Prefs.gui_preview_current)
-			WinMain.pDialog.updateTreePreview(false);
+			WinMain.rDialog.updateTreePreview(false);
 		
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}
@@ -282,38 +283,72 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 		}
 	}
 	
-	static class MyPopupMenuAdapter extends PopupMenuAdapter
+	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
+		JMenuItem selectHighlighted;
+		JMenu annotate;
+		
 		MyPopupMenuAdapter()
 		{
 			// Create the "Select" submenu
-			JMenu m = new JMenu(Text.Gui.getString("menuAlgnSelect"));
+			JMenu menu = new JMenu(Text.Gui.getString("menuAlgnSelect"));
 			
 			JMenuItem m1 = getItem(aAlgnSelectAll, KeyEvent.VK_A,
 				KeyEvent.VK_A, KeyEvent.CTRL_MASK);
 			JMenuItem m2 = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 			JMenuItem m3 = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 			JMenuItem m4 = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
-			JMenuItem m5 = getItem(aAlgnSelectHighlighted, KeyEvent.VK_H, 0, 0);
+			selectHighlighted = getItem(aAlgnSelectHighlighted, KeyEvent.VK_H, 0, 0);
 				
-			m.add(m1);
-			m.add(m2);
-			m.add(m5);
-			m.add(m3);
-			m.addSeparator();
-			m.add(m4);
+			menu.add(m1);
+			menu.add(m2);
+			menu.add(selectHighlighted);
+			menu.add(m3);
+			menu.addSeparator();
+			menu.add(m4);
 			
-			JMenuItem addPart = getItem(aAlgnAddPartition, KeyEvent.VK_P, 0, 0);
+			JMenuItem addPart = new JMenuItem();
+			addPart.setAction(new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					WinMain.rDialog.addRegion(disPanel.mouseHighlight.x, disPanel.mouseHighlight.x+disPanel.mouseHighlight.width, PartitionAnnotations.class);
+					disPanel.highlight(-1, -1, true);
+					disPanel.holdMouseHighlight = false;
+				}});
+			addPart.setText(Text.Gui.getString("aAlgnAddPartition"));
+			addPart.setMnemonic(KeyEvent.VK_P);
+			
+			JMenuItem addCodReg = new JMenuItem();
+			addCodReg.setAction(new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					WinMain.rDialog.addRegion(disPanel.mouseHighlight.x, disPanel.mouseHighlight.x+disPanel.mouseHighlight.width, CDSAnnotations.class);
+					disPanel.highlight(-1, -1, true);
+					disPanel.holdMouseHighlight = false;
+				}});
+			addCodReg.setText(Text.Gui.getString("aAlgnAddCDS"));
+			addCodReg.setMnemonic(KeyEvent.VK_C);
+			
+			annotate = new JMenu(Text.Gui.getString("menuAlgnAnnotate"));
+			annotate.add(addPart);
+			annotate.add(addCodReg);
 			
 			add(aAlgnDisplaySummary, Icons.INFO16, KeyEvent.VK_I, 0, 0, 16, false);
 			p.addSeparator();
-			p.add(m);
-			p.add(addPart);
+			p.add(menu);
+			p.add(annotate);
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F, KeyEvent.CTRL_MASK, 0, false);
 			add(aAlgnRename, KeyEvent.VK_R, 0, 0, 0, false);
 			add(aAlgnGoTo, KeyEvent.VK_G, 0, 0, 0, false);
 			add(aViewDisplaySettings, KeyEvent.VK_D, KeyEvent.VK_F5, 0, 0, true);
+		}
+		
+		public void enableSelectHighlighted(boolean b) {
+			selectHighlighted.setEnabled(b);
+			WinMainMenuBar.aAlgnSelectHighlighted.setEnabled(b);
+		}
+		
+		public void enableAnnotate(boolean b) {
+			annotate.setEnabled(b);
 		}
 	}
 }

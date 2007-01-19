@@ -2,6 +2,7 @@ package topali.vamsas;
 
 import java.util.*;
 
+import topali.data.PartitionAnnotations;
 import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.utils.*;
 
@@ -165,7 +166,7 @@ class TOPALi2Vamsas
 		// For now, let's just take the current graph display (partition) annotations (F6)
 		// and ignore each of the individual analysis runs' ones.
 		topali.data.TOPALiAnnotations tAnnotations = tAlignmentData.getTopaliAnnotations();		
-		topali.data.PartitionAnnotations pAnnotations = tAnnotations.getPartitionAnnotations();
+		topali.data.PartitionAnnotations pAnnotations = (PartitionAnnotations)tAnnotations.getAnnotations(PartitionAnnotations.class);
 		
 		AlignmentAnnotation vAlignmentAnnotation = new AlignmentAnnotation();
 		vAlignmentAnnotation.setType("topali:Current Partitions");

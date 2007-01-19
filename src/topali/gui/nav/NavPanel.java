@@ -386,7 +386,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 			iNode.setMenus();
 			
 			// And update everything based upon it
-			winMain.pDialog.setAlignmentData(data);
+			winMain.rDialog.setAlignmentData(data);
 			winMain.ovDialog.setAlignmentPanel(getCurrentAlignmentPanel(data));
 			WinMainTipsPanel.setDisplayedTips(iNode.getTipsKey());			
 		}

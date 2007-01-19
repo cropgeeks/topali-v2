@@ -17,7 +17,7 @@ public class PartitionMaker
 	
 	public PartitionMaker(AlignmentData data)
 	{
-		pAnnotations = data.getTopaliAnnotations().getPartitionAnnotations();
+		pAnnotations = (PartitionAnnotations)data.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class);
 		pAnnotations.deleteAll();
 
 		alignmentLength = data.getSequenceSet().getLength();

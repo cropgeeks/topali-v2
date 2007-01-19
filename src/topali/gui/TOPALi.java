@@ -173,7 +173,7 @@ public class TOPALi extends Applet
 		Prefs.gui_win_height = winMain.getHeight();
 		Prefs.gui_splits_loc = winMain.splits.getDividerLocation();
 		winMain.ovDialog.exit();
-		winMain.pDialog.exit();
+		winMain.rDialog.exit();
 	
 		// Save the preferences
 		doEncryption(false);

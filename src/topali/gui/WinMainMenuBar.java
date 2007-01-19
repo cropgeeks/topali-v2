@@ -49,8 +49,6 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnSelectUnique, aAlgnSelectInvert, aAlgnSelectHighlighted, aAlgnRename, aAlgnMoveUp,
 		aAlgnMoveDown, aAlgnMoveTop, aAlgnRemove, aAlgnDisplaySummary,
 		aAlgnGoTo, aAlgnPhyloView, aAlgnShowPDialog, aAlgnShowOvDialog;
-	
-	public static AbstractAction aAlgnAddPartition;
 		
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
 		aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
@@ -73,7 +71,7 @@ public class WinMainMenuBar extends JMenuBar
 		createAnlsMenu();
 		createVamsasMenu();
 		createHelpMenu();
-
+		
 		setBorderPainted(false);
 //		setStartupState();
 		setProjectOpenedState();
@@ -103,7 +101,7 @@ public class WinMainMenuBar extends JMenuBar
 		
 		aFileExportDataSet = new AbstractAction(Text.Gui.getString("aFileExportDataSet")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.pDialog.doExport(); } };
+				winMain.rDialog.doExport(); } };
 		
 		aFilePrintSetup = new AbstractAction(Text.Gui.getString("aFilePrintSetup")) {
 			public void actionPerformed(ActionEvent e) {
@@ -194,16 +192,11 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnShowPDialog = new AbstractAction(Text.Gui.getString("aAlgnShowPDialog")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnShowPartitionDialog(); } };
-				
-		aAlgnAddPartition = new AbstractAction(Text.Gui.getString("aAlgnAddPartition")) {
-			public void actionPerformed(ActionEvent e) {
-				winMain.menuAddNewPartition(); } };
-				
+
 		aAlgnShowOvDialog = new AbstractAction(Text.Gui.getString("aAlgnShowOvDialog")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAlgnShowOvDialog(); } };
-						
-				
+										
 		aAnlsRunPDM = new AbstractAction(Text.Gui.getString("aAnlsRunPDM")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.menuAnlsRunPDM(null); } };
@@ -383,7 +376,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAlgnRemove = getItem(aAlgnRemove, KeyEvent.VK_M, 0, 0, Icons.REMOVE16);
 		mAlgnGoTo = getItem(aAlgnGoTo, KeyEvent.VK_G, 0, 0);
 		mAlgnShowPDialog = getItem(aAlgnShowPDialog, KeyEvent.VK_P,
-			KeyEvent.VK_F6, 0);
+			KeyEvent.VK_F3, 0);
 		mAlgnShowOvDialog = getItem(aAlgnShowOvDialog, KeyEvent.VK_V,
 			KeyEvent.VK_F7, 0);
 		
