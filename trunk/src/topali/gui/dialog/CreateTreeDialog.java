@@ -126,13 +126,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	
 	private void initTreeResult(TreeResult tr)
 	{
-		// Current partition information
-		PartitionAnnotations pAnnotations =
-			data.getTopaliAnnotations().getPartitionAnnotations();
+		// Current partition information				
+		tr.setPartitionStart(data.getActiveRegionS());
+		tr.setPartitionEnd(data.getActiveRegionE());
 		
-		tr.setPartitionStart(pAnnotations.getCurrentStart());
-		tr.setPartitionEnd(pAnnotations.getCurrentEnd());
-					
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		

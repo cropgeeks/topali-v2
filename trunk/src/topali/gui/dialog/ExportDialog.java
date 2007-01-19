@@ -8,6 +8,8 @@ package topali.gui.dialog;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Vector;
+
 import javax.swing.*;
 
 import pal.alignment.*;
@@ -24,6 +26,7 @@ public class ExportDialog extends JDialog implements ActionListener
 {
 	private WinMain winMain;
 	private AlignmentData data;
+	private RegionAnnotations annotations;
 	private SequenceSet ss;
 	
 	// Selected partition indexes (at the time this dialog was opened)
@@ -34,13 +37,14 @@ public class ExportDialog extends JDialog implements ActionListener
 	private JRadioButton rAllPar, rSelPar;
 	private JRadioButton rDisk, rProject;
 	
-	public ExportDialog(WinMain winMain, AlignmentData data, int[] regions)
+	public ExportDialog(WinMain winMain, AlignmentData data, RegionAnnotations annotations, int[] regions)
 	{
 		super(winMain, "", true);
 	
 		this.winMain = winMain;
 		this.data = data;
 		this.regions = regions;
+		this.annotations = annotations;
 		ss = data.getSequenceSet();
 				
 		add(getControls(), BorderLayout.CENTER);
@@ -82,12 +86,6 @@ public class ExportDialog extends JDialog implements ActionListener
 		p1.setBorder(BorderFactory.createTitledBorder("Sequence selection:"));
 		p1.add(rAllSeq);
 		p1.add(rSelSeq);
-		
-		PartitionAnnotations pAnnotations =
-			data.getTopaliAnnotations().getPartitionAnnotations();
-		int s = pAnnotations.getCurrentStart();
-		int e = pAnnotations.getCurrentEnd();
-		
 		
 		String tAllPar = "Export the full alignment (1-" + ss.getLength() + ")";
 		String tSelPar = "Export a concatenation of the currently selected "
@@ -164,16 +162,12 @@ public class ExportDialog extends JDialog implements ActionListener
 	// was formed by concatenating all the selected partitions together
 	private int countConcatenatedLength()
 	{
-		PartitionAnnotations pAnnotations =
-			data.getTopaliAnnotations().getPartitionAnnotations();	
-		
 		int concatLength = 0;
-		for (int r: regions)
-		{
-			RegionAnnotations.Region region = pAnnotations.get(r);
+		
+		for(int r: regions) {
+			RegionAnnotations.Region region = annotations.get(r);
 			concatLength += (region.getE()-region.getS()) + 1;
 		}
-		
 		return concatLength;
 	}
 
@@ -186,7 +180,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		
 		// We recreate the alignment so it only contains the sequences and regions that
 		// correspond to the user's selection
-		SequenceSet toExport = SequenceSetUtils.getConcatenatedSequenceSet(data, seqs, regions);
+		SequenceSet toExport = SequenceSetUtils.getConcatenatedSequenceSet(data, annotations, seqs, regions);
 		
 		// Work out a new name for the alignment
 		String name = data.name + " ("+toExport.getSize()+"x"+(toExport.getLength())+ ")";

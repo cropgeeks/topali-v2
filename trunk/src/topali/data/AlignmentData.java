@@ -8,6 +8,8 @@ package topali.data;
 import java.io.*;
 import java.util.*;
 
+import topali.gui.WinMainMenuBar;
+
 /* Represents an Alignment and the results/analyses run upon it. */
 public class AlignmentData
 {
@@ -29,6 +31,8 @@ public class AlignmentData
 	// A set of alignment annotations (partitions, coding regions, etc)
 	private TOPALiAnnotations topaliAnnotations = new TOPALiAnnotations(1);
 
+	// For marking the current selected Region.
+	private int activeRegionS, activeRegionE;
 	
 	public AlignmentData()
 	{
@@ -46,7 +50,10 @@ public class AlignmentData
 		{ return sequenceSet; }
 	
 	public void setSequenceSet(SequenceSet sequenceSet)
-		{ this.sequenceSet = sequenceSet; }
+		{ this.sequenceSet = sequenceSet;
+		this.activeRegionS = 1;
+		this.activeRegionE = sequenceSet.getLength();
+		}
 	
 	public LinkedList<AlignmentFileStat> getReferences()
 		{ return refs; }
@@ -102,4 +109,35 @@ public class AlignmentData
 		
 		refs.add(stat);		
 	}
+	
+	public void setActiveRegion(int start, int end) {
+		if(start==-1 || end==-1) {
+			this.activeRegionS = 1;
+			this.activeRegionE = sequenceSet.getLength();
+		}
+		else {
+			this.activeRegionS = start;
+			this.activeRegionE = end;
+		}
+	}
+
+	
+	//------------------
+	public int getActiveRegionE() {
+		return activeRegionE;
+	}
+
+	public void setActiveRegionE(int activeRegionE) {
+		this.activeRegionE = activeRegionE;
+	}
+
+	public int getActiveRegionS() {
+		return activeRegionS;
+	}
+
+	public void setActiveRegionS(int activeRegionS) {
+		this.activeRegionS = activeRegionS;
+	}
+	
+	
 }

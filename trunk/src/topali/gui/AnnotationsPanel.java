@@ -103,7 +103,7 @@ class AnnotationsPanel extends JPanel
 				
 			g.drawLine(0, 9, totalWidth, 9);
 			
-			for (RegionAnnotations.Region r: data.getTopaliAnnotations().getPartitionAnnotations())
+			for (RegionAnnotations.Region r: (PartitionAnnotations)data.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class))
 			{
 				int nS = r.getS();
 				int nE = r.getE();

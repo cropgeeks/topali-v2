@@ -16,17 +16,12 @@ public class TOPALiAnnotations
 	
 	public TOPALiAnnotations()
 	{
-		annotations = new Vector<AlignmentAnnotations>(2);
+		annotations = new Vector<AlignmentAnnotations>();
 	}
 	
 	public TOPALiAnnotations(int alignmentLength)
 	{
-		annotations = new Vector<AlignmentAnnotations>(2);
-		
-		// Create a set of partition annotations
-		PartitionAnnotations pAnnotations = new PartitionAnnotations(alignmentLength);
-		// And add them as the first element of the list
-		annotations.add(pAnnotations);
+		annotations = new Vector<AlignmentAnnotations>();
 	}
 	
 	public Vector<AlignmentAnnotations> getAnnotations()
@@ -35,9 +30,26 @@ public class TOPALiAnnotations
 	public void setAnnotations(Vector<AlignmentAnnotations> annotations)
 		{ this.annotations = annotations; }
 	
-	// Returns the PartitionAnnotations (element 0 in the list)
-	public PartitionAnnotations getPartitionAnnotations()
-	{
-		return (PartitionAnnotations) annotations.get(0);
+	public AlignmentAnnotations getAnnotations(Class type) {
+		if(!AlignmentAnnotations.class.isAssignableFrom(type))
+			throw new IllegalArgumentException("Just subclasses of AlignmentAnnotations are allowed!");
+		
+		AlignmentAnnotations result = null;
+		for(AlignmentAnnotations anno : annotations) {
+			if(anno.getClass().equals(type)) {
+				result = anno;
+				break;
+			}
+		}
+		
+		if(result==null) {
+			try {
+				result = (AlignmentAnnotations)type.newInstance();
+				annotations.add(result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }

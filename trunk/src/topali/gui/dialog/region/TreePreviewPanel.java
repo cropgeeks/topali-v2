@@ -3,23 +3,38 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui.dialog;
+package topali.gui.dialog.region;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import pal.alignment.*;
-import pal.tree.*;
-import pal.gui.*;
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-import doe.*;
+import pal.alignment.SimpleAlignment;
+import pal.gui.TreePainter;
+import pal.gui.TreePainterNormal;
+import pal.tree.Tree;
+import topali.analyses.TreeCreator;
+import topali.data.AlignmentData;
+import topali.data.SequenceSet;
+import topali.gui.Icons;
+import topali.gui.Prefs;
+import topali.gui.Text;
+import topali.gui.WinMain;
+import doe.MsgBox;
 
-import topali.analyses.*;
-import topali.data.*;
-import topali.gui.*;
-
-class TreePreviewPanel extends JPanel implements ActionListener
+public class TreePreviewPanel extends JPanel implements ActionListener
 {
 	// Current alignment data and partition info
 	private SequenceSet ss;
@@ -34,14 +49,13 @@ class TreePreviewPanel extends JPanel implements ActionListener
 	private TreePainter painter;
 	
 	private WinMain winMain;
-	private PartitionDialog pDialog;
+	private RegionDialog dialog;
 	private JCheckBox checkCurrent = null;
 	private TreeCanvas canvas = new TreeCanvas();
 
-	TreePreviewPanel(WinMain winMain, PartitionDialog pDialog)
+	public TreePreviewPanel(WinMain winMain, JDialog dialog)
 	{
 		this.winMain = winMain;
-		this.pDialog = pDialog;
 	
 		checkCurrent = new JCheckBox(
 			Text.GuiDiag.getString("TreePreviewPanel.gui01"),
@@ -61,7 +75,7 @@ class TreePreviewPanel extends JPanel implements ActionListener
 		if (e.getSource() == checkCurrent)
 		{
 			Prefs.gui_preview_current = checkCurrent.isSelected();
-			pDialog.updateTreePreview(false);
+			dialog.updateTreePreview(false);
 		}
 	}
 	
@@ -71,7 +85,7 @@ class TreePreviewPanel extends JPanel implements ActionListener
 		canvas.repaint();
 	}
 	
-	void setAlignmentData(AlignmentData data)
+	public void setAlignmentData(AlignmentData data)
 	{
 		if (data == null)
 			clearTree();
@@ -162,7 +176,7 @@ class TreePreviewPanel extends JPanel implements ActionListener
 					if (e.getClickCount() == 2)
 					{						
 						drawPreview = !drawPreview;						
-						pDialog.updateTreePreview(false);
+						dialog.updateTreePreview(false);
 					}
 				}
 			});
@@ -172,16 +186,6 @@ class TreePreviewPanel extends JPanel implements ActionListener
 		{
 			super.paintComponent(g);
 						
-/*			if (pInfo != null && pInfo.drawPreview == false)
-			{
-				String s = "double-click to re-enable tree preview";
-				int length = g.getFontMetrics().stringWidth(s);
-				
-				g.setColor(Color.lightGray);
-				g.drawString(s, (int)(getWidth()/2f-length/2f), getHeight()/2);
-			}
-*/			
-//			else if (painter != null)
 			if (painter != null)
 			{
 				if (Prefs.gui_tree_unique_cols)

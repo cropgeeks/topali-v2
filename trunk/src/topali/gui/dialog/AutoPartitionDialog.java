@@ -169,10 +169,11 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 	
 	private void cleanup()
 	{
-		winMain.pDialog.refreshPartitionList();
+		winMain.rDialog.refreshList();
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	
-		int num = data.getTopaliAnnotations().getPartitionAnnotations().countRegions();
+		PartitionAnnotations anno = (PartitionAnnotations)data.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class);
+		int num = anno.countRegions();
 		
 		if (num == 1)
 			MsgBox.msg(Text.GuiDiag.getString("AutoPartitionDialog.msg01"),

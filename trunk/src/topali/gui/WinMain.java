@@ -16,6 +16,7 @@ import topali.cluster.*;
 import topali.data.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.hmm.*;
+import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
 import topali.gui.tree.*;
 import topali.vamsas.*;
@@ -41,7 +42,7 @@ public class WinMain extends JFrame
 	public static NavPanel navPanel;
 	public static JSplitPane splits;
 	public static JobsPanel jobsPanel;
-	public static PartitionDialog pDialog;
+	public static RegionDialog rDialog;
 	public static OverviewDialog ovDialog;
 	public static FileDropAdapter dropAdapter;
 		
@@ -74,7 +75,7 @@ public class WinMain extends JFrame
 		
 		tips = new WinMainTipsPanel();		
 		jobsPanel = new JobsPanel(this);		
-		pDialog = new PartitionDialog(this);
+		rDialog = new RegionDialog(this);
 		ovDialog = new OverviewDialog(this);
 		
 		splits = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -143,7 +144,7 @@ public class WinMain extends JFrame
 		menubar.setProjectOpenedState();
 		navPanel.clear();
 			
-		pDialog.setAlignmentData(null);
+		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 		
 		// Anything done here may need to go in LoadMonitorDialog.java too
@@ -304,7 +305,7 @@ public class WinMain extends JFrame
 	
 	void menuAlgnSelectHighlighted() {
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().selectHighlighted(p.getHighlightSeq(), p.getHighlightSeq()+p.getHighlightSeqRange());
+		p.getListPanel().selectHighlighted(p.mouseHighlight.y, p.mouseHighlight.y+p.mouseHighlight.height);
 	}
 	
 	void menuAlgnMove(boolean up, boolean top)
@@ -338,12 +339,7 @@ public class WinMain extends JFrame
 	
 	void menuAlgnShowPartitionDialog()
 	{
-		pDialog.setVisible(true);
-	}
-	
-	void menuAddNewPartition() {
-		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		pDialog.addPartition(p.getHighlightNuc(), p.getHighlightNuc()+p.getHighlightNucRange());
+		rDialog.setVisible(true);
 	}
 	
 	/* Removes an alignment from the current project. */
@@ -364,7 +360,7 @@ public class WinMain extends JFrame
 			project.removeDataSet(data);
 			
 			navPanel.removeSelectedNode();
-			pDialog.setAlignmentData(null);
+			rDialog.setAlignmentData(null);
 			ovDialog.setAlignmentPanel(null);
 			
 			menubar.aFileSave.setEnabled(true);
@@ -556,7 +552,7 @@ public class WinMain extends JFrame
 	{
 		menubar.setMenusForNavChange();
 		navPanel.clearSelection();
-		pDialog.setAlignmentData(null);
+		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 		
 		int location = splits.getDividerLocation();
@@ -732,28 +728,6 @@ public class WinMain extends JFrame
 //		
 	}
 	
-	public void vamsasMouseOver(String seqName, int pos)
-	{
-		for (AlignmentData data: project.getDatasets())
-		{
-			int i = 0;
-			for (Sequence seq: data.getSequenceSet().getSequences())
-			{
-				if (seq.name.equals(seqName))
-				{
-					
-					AlignmentPanel panel = navPanel.getCurrentAlignmentPanel(data);
-					
-					panel.highlight(i, pos, false, true);
-					
-					
-					break;
-				}
-				
-				i++;
-			}
-		}
-	}	
 	
 	public void vamsasMouseOver(String seqName, int pos)
 	{
@@ -768,7 +742,6 @@ public class WinMain extends JFrame
 					AlignmentPanel panel = navPanel.getCurrentAlignmentPanel(data);
 					
 					panel.highlight(i, pos, false);
-					panel.updateStatusBar(i, pos);
 					
 					break;
 				}
