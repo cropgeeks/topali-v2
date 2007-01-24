@@ -34,9 +34,6 @@ public class Jambe2
 	private File wrkDir, pctDir;
 	private PDMResult result;
 	
-	// Tracks the job percentage-complete value
-	private int percent;
-
 	public Jambe2(File jobDir, File wrkDir, PDMResult result, int length)
 	{
 		this.wrkDir = wrkDir;

@@ -21,6 +21,8 @@ class DSSAnalysis extends AnalysisThread
 	double[][] data;
 	// Maximum DSS value found
 	double maximum;
+	
+	private File pctDir;
 
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
@@ -40,6 +42,9 @@ class DSSAnalysis extends AnalysisThread
 		result = (DSSResult) Castor.unmarshall(resultFile);
 		// Read the SequenceSet
 		ss = new SequenceSet(new File(runDir, "dss.fasta"));
+		
+		// Percent directory
+		pctDir = new File(runDir, "percent");
 		
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(
@@ -93,16 +98,24 @@ class DSSAnalysis extends AnalysisThread
 			dssWin[i] = new DSS(dssWrkDir, result, win1, win2);
 		}
 		
+		
 		// 2) Run all the Fitch calculations
 		for (int i = 0;  i < data.length; i++)
 		{
 			if (LocalJobs.isRunning(result.jobId) == false)
 				throw new Exception("cancel");
 			dssWin[i].calculateFitchScores();
+			
+			
+			// Should reach 50% by the end of the loop
+			int percent = (int) (((i / (float)data.length) * 100) / 2.0f);
+			ClusterUtils.setPercent(pctDir, percent);
+//			System.out.println("percent="+percent);
 		}
 		RunFitch fitch = new RunFitch(result);
 		fitch.runFitchScripts(wrkDir, windowCount);			
 		
+				
 		// 3) Perform actual DSS calculations (using Fitch results)
 		for (int i = 0;  i < data.length; i++)
 		{
@@ -115,9 +128,17 @@ class DSSAnalysis extends AnalysisThread
 			// Is it bigger than the current maximum?
 			if (data[i][1] > maximum)
 				maximum = data[i][1];
+			
+			
+			// Should reach 100% by the end of the loop
+			int percent = (int) (((i / (float)data.length) * 100) / 2.0f) + 50;
+			ClusterUtils.setPercent(pctDir, percent);
+//			System.out.println("percent="+percent);
 		}
 		
 		writeResults();
+		
+		ClusterUtils.setPercent(pctDir, 105);
 
 		ClusterUtils.emptyDirectory(wrkDir, true);		
 	}
