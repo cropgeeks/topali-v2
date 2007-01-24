@@ -8,5 +8,8 @@ public class HashVT
 	// TOPALi data objects.
 	private Hashtable<String, Object> ht = new Hashtable<String, Object>();
 	
-	
+	public void addReference(String id, Object obj)
+	{
+		ht.put(id, obj);
+	}
 }
