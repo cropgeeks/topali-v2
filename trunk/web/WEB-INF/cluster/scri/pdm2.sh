@@ -1,4 +1,4 @@
-#$ -l fastq=true
+#$ -l fq=true
 
 #$ -N TPi-PDM2
 #$ -cwd
