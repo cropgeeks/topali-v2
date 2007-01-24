@@ -6,6 +6,10 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] The old "Partitions" dialog has been split into a generic annotations
+    viewer, with separate sections for Paritions and Coding Regions (so far).
+  - [NF] Alignment selections can now be carried out using the main alignment
+    view window.
   - [NF] Cleaned up the job progress screen, allowing for a double-click to
     cancel a job, and also adding a server status information panel.
   - [BF] TOPALi is now compatible with Java 1.6 after fixing multidimensional
@@ -21,7 +25,7 @@ Release History:
   - [NF] TOPALi can now use ReadSeq (remotely) for additional sequence-format
     compatibility.
 
-18-09-2006 - Release 2.15          
+18-09-2006 - Release 2.15
   - [SC] VAMSAS integration code enabled again.
   - [SC] Changes and updates to the library JAR files.
   - [NF] TOPALi can now use a remote resource broker to determine which HPC
