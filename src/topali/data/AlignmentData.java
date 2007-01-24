@@ -42,6 +42,8 @@ public class AlignmentData
 	{
 		this.name = name;
 		this.sequenceSet = sequenceSet;
+		activeRegionS = 1;
+		activeRegionE = sequenceSet.getLength();
 		
 		topaliAnnotations = new TOPALiAnnotations(sequenceSet.getLength());
 	}
