@@ -243,7 +243,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 				uk.ac.vamsas.client.picking.MouseOverMessage message =
 					new uk.ac.vamsas.client.picking.MouseOverMessage(
 						seqName, nuc);
-				//WinMain.vClient.msgHandler.sendMessage(message);
+//				WinMain.vClient.msgHandler.sendMessage(message);
 			}
 			
 		}
