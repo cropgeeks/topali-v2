@@ -1,4 +1,4 @@
-#$ -l fastq=true
+#$ -l fq=true
 
 #$ -N TPi-LRT
 #$ -cwd
