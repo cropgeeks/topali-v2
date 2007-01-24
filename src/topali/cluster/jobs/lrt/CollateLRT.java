@@ -37,18 +37,17 @@ public class CollateLRT
 			throw new Exception("LRT error.txt");
 		}
 		
-		float count = 0;
-		int runs = result.runs;
-				
+		int runs = result.runs;	
+		int total = 0;
+		
 		for (int i = 1; i <= runs; i++)
 		{
 			String runName = "run" + i;
 			File runDir = new File(jobDir, runName);
+					
+			try { total += new File(runDir, "percent").listFiles().length; }
+			catch (Exception e) {}
 			
-			// If the output for this run exists, increment the counter
-			if (new File(runDir, "out.xls").exists())
-				count++;
-				
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
 			{
@@ -56,9 +55,8 @@ public class CollateLRT
 				throw new Exception("LRT error.txt (run " + i + ")");
 			}
 		}
-		
-		
-		return (count / ((float) runs)) * 100;
+	
+		return ((float)total/(float)runs/ 105f)*100f;
 	}
 	
 	/*

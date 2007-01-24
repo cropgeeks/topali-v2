@@ -23,13 +23,17 @@ class LRTAnalysis extends AnalysisThread
 	// Maximum LRT value found
 	double maximum;
 	
+	private File pctDir;
+	
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 		{ new LRTAnalysis(new File(args[0])).run(); }
 	
 	// If running locally, the job will be started via a normal constructor call
 	LRTAnalysis(File runDir)
-		{ super(runDir); }
+		{ 
+		super(runDir); 
+		}
 
 	
 	public void runAnalysis()
@@ -45,7 +49,8 @@ class LRTAnalysis extends AnalysisThread
 		wrkDir = ClusterUtils.getWorkingDirectory(
 			result,	runDir.getParentFile().getName(), runDir.getName());
 
-
+//		Percent directory
+		pctDir = new File(runDir, "percent");
 		int window = result.window;
 		int step = result.step;
 		
@@ -93,10 +98,15 @@ class LRTAnalysis extends AnalysisThread
 			// Is it bigger than the current maximum?
 			if (data[i][1] > maximum)
 				maximum = data[i][1];
+			
+			int percent = (int)(i / (float)data.length * 100);
+			ClusterUtils.setPercent(pctDir, percent);
 		}
 		
 		writeResults();
 
+		ClusterUtils.setPercent(pctDir, 105);
+		
 		ClusterUtils.emptyDirectory(wrkDir, true);		
 	}
 	

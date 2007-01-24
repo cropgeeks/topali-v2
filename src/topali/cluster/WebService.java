@@ -144,7 +144,7 @@ public abstract class WebService
 			float progress = getPercentageComplete(jobDir);
 			logger.info(jobId + " - " + progress + "%");
 			
-			if (progress == 100f)
+			if (progress >= 100f)
 				return Castor.getXML(new JobStatus(100, JobStatus.COMPLETING));
 			
 			// Status (assuming Job is actually in the SGE queue)...
