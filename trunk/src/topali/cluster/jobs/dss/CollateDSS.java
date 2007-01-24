@@ -37,7 +37,10 @@ public class CollateDSS
 			throw new Exception("DSS error.txt");
 		}
 		
-		float count = 0;
+		
+		// How many p[n] do we expect to find..
+		float total = 0;
+		// Over how many separate runs (1 run per node)
 		int runs = result.runs;
 				
 		for (int i = 1; i <= runs; i++)
@@ -45,19 +48,21 @@ public class CollateDSS
 			String runName = "run" + i;
 			File runDir = new File(jobDir, runName);
 			
-			// If the output for this run exists, increment the counter
-			if (new File(runDir, "out.xls").exists())
-				count++;
+			try { total += new File(runDir, "percent").listFiles().length; }
+			catch (Exception e) {}
 				
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
 			{
 				logger.severe(jobDir.getName() + " - error.txt found for run " + i);
-				throw new Exception("DSS error.txt (run " + i + ")");
+				throw new Exception("PDM error.txt (run " + i + ")");
 			}
 		}
-				
-		return (count / ((float) runs)) * 100;
+		
+		// Return this total as a percentage
+		// (the main run finishes at 100% but we don't *really* finish until the
+		// post-analysis is done, which writes 105% to disk)
+		return ((total / (float) runs) / 105f) * 100;
 	}
 	
 	/*

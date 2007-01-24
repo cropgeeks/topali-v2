@@ -22,7 +22,7 @@ public class CodeMLWebService extends WebService
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
 			
-			result.codemlPath = getParameter("codeml-path");
+			result.codemlPath = getParameter("bin-path") + "/src/codeml/codeml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 				
