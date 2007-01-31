@@ -63,8 +63,6 @@ public abstract class RemoteJob extends AnalysisJob
 		}
 		
 		System.out.println("RemoteJob: actual URL is now " + result.url);
-		
-		ws_getServerStatus();
 	}
 
 	protected Call getCall()
@@ -116,25 +114,5 @@ public abstract class RemoteJob extends AnalysisJob
 		call.invoke(new Object[] { result.jobId } );
 		
 		result.status = JobStatus.CANCELLED;
-	}
-	
-	// Makes an initial call to the server to find out its status.
-	// TODO: This is a web service call, but would be nice to make it standard
-	// HTTP in case something is wrong with the server
-	private void ws_getServerStatus()
-	{
-		try
-		{
-			call = getCall();
-			call.setOperationName(new QName(serviceName, "getServerStatus"));
-		
-			String status = (String) call.invoke(new Object[] {});
-			
-			JobsPanel.setServerStatus(status);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
 	}
 }

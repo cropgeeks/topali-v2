@@ -6,12 +6,14 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] Improvements to job feedback (finer percentage levels) for LRT and DSS
+    analysis jobs.
   - [NF] The old "Partitions" dialog has been split into a generic annotations
     viewer, with separate sections for Paritions and Coding Regions (so far).
   - [NF] Alignment selections can now be carried out using the main alignment
     view window.
   - [NF] Cleaned up the job progress screen, allowing for a double-click to
-    cancel a job, and also adding a server status information panel.
+    cancel a job.
   - [BF] TOPALi is now compatible with Java 1.6 after fixing multidimensional
     array issues with the Castor XML package. This has changed the XML project
     format again though, so projects created in versions earlier than 2.16 will

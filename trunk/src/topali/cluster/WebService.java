@@ -116,20 +116,6 @@ public abstract class WebService
 	// Public access methods - the actual WEB SERVICES
 	//////////////////////////////////////////////////
 	
-	public String getServerStatus()
-		throws AxisFault
-	{
-		try
-		{
-			File statusFile = new File(getParameter("status-file"));
-			return FileUtils.readFile(statusFile);
-		}
-		catch (IOException e)
-		{
-			throw AxisFault.makeFault(e);
-		}
-	}
-	
 	protected abstract float getPercentageComplete(File jobDir)
 		throws AxisFault;
 	
