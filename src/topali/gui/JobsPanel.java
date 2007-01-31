@@ -85,7 +85,7 @@ public class JobsPanel extends JPanel implements ListSelectionListener
 	{
 		// Remove knowledge of any jobs
 		model.clear();
-		serverPanel.setVisible(model.size() > 0);
+//		serverPanel.setVisible(model.size() > 0);
 		
 		// And update the text/icon to reflect this
 		setStatusPanel();
@@ -134,7 +134,7 @@ public class JobsPanel extends JPanel implements ListSelectionListener
 	{
 		JobsPanelEntry jobEntry = new JobsPanelEntry(job);
 		model.addElement(jobEntry);
-		serverPanel.setVisible(model.size() > 0);
+//		serverPanel.setVisible(model.size() > 0);
 						
 		jobsThread.interrupt();
 		
@@ -146,7 +146,7 @@ public class JobsPanel extends JPanel implements ListSelectionListener
 	{
 		// Remove the entry from the jobsPanel
 		model.removeElement(entry);
-		serverPanel.setVisible(model.size() > 0);
+//		serverPanel.setVisible(model.size() > 0);
 		
 		AnalysisJob job = entry.getJob();
 		job.getResult().endTime = System.currentTimeMillis();
@@ -162,7 +162,7 @@ public class JobsPanel extends JPanel implements ListSelectionListener
 	void cancelJobEntry(JobsPanelEntry entry)
 	{
 		model.removeElement(entry);
-		serverPanel.setVisible(model.size() > 0);
+//		serverPanel.setVisible(model.size() > 0);
 		
 		AnalysisJob job = entry.getJob();
 		job.getAlignmentData().removeResult(job.getResult());
@@ -335,8 +335,8 @@ public class JobsPanel extends JPanel implements ListSelectionListener
 		addJob(job);
 	}
 	
-	public static void setServerStatus(String str)
-		{ serverPanel.setStatus(str); }
+//	public static void setServerStatus(String str)
+//		{ serverPanel.setStatus(str); }
 	
 	private static class ServerPanel extends JPanel
 	{
