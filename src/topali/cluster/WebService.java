@@ -56,8 +56,11 @@ public abstract class WebService
 		FileHandler fh1 = null, fh2 = null;
 		try
 		{
-			fh1 = new FileHandler(getParameter("access-log"), 0, 1, true);			
-			fh2 = new FileHandler(getParameter("info-log"), 0, 1, true);
+			File fAccessLog = new File(getParameter("logs-dir"), "access-log");
+			File fInfoLog = new File(getParameter("logs-dir"), "info-log");
+			
+			fh1 = new FileHandler(fAccessLog.getPath(), 0, 1, true);			
+			fh2 = new FileHandler(fInfoLog.getPath(), 0, 1, true);
 			fh1.setFormatter(new SimpleFormatter());
 			fh2.setFormatter(new SimpleFormatter());
 		}
