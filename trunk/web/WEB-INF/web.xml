@@ -4,19 +4,6 @@
     
 <web-app>
 
-<!--
-	<context-param>
-		<param-name>props-file</param-name>
-		<param-value>/home/tomcat/webapps/topali/WEB-INF/cluster/scri.properties</param-value>
-	</context-param>
--->
-
-  <context-param>
-		<param-name>props-file</param-name>
-		<param-value>/gpfs/gjb_lab/ws-dev1/software/topali/web/WEB-INF/cluster/dundee.properties</param-value>
-	</context-param>
-
-
 	<servlet>
 		<servlet-name>AxisServlet</servlet-name>
 		<display-name>Apache-Axis Servlet</display-name>

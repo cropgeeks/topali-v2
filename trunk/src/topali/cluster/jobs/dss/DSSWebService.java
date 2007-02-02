@@ -22,7 +22,7 @@ public class DSSWebService extends WebService
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);			
 			DSSResult result = (DSSResult) Castor.unmarshall(resultXML);
 			
-			result.fitchPath = getParameter("bin-path") + "/src/fitch/fitch";
+			result.fitchPath = webappPath + "/binaries/src/fitch/fitch";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;			
 				

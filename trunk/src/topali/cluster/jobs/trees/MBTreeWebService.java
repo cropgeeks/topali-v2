@@ -22,7 +22,7 @@ public class MBTreeWebService extends WebService
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
 			MBTreeResult result = (MBTreeResult) Castor.unmarshall(resultXML);
 			
-			result.mbPath = getParameter("bin-path") + "/src/mrbayes/mb";
+			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 				

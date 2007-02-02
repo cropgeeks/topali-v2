@@ -2,6 +2,7 @@ package topali.cluster;
 
 import java.io.*;
 import java.util.logging.*;
+import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.axis.*;
@@ -24,8 +25,9 @@ public abstract class WebService
 	
 	protected static WebXmlProperties props;
 	
+	protected static File webappPath;
 	protected static String javaPath, topaliPath;
-	protected static String scriptsDir, scriptsHdr;
+	protected static String scriptsDir;
 	
 	static boolean DRMAA = false;
 	
@@ -33,22 +35,29 @@ public abstract class WebService
 	{
 		if (props == null)
 			initializeProperties();
-		
-		javaPath   = getParameter("java-path");
-		topaliPath = getParameter("topali-path");
-		
-		scriptsDir = getParameter("scripts-dir");
-		scriptsHdr = getParameter("scripts-hdr");
 	}
 	
 	private void initializeProperties()
 	{
+		String fs = File.separator;
+		
 		HttpServletRequest req = getHttpServletRequest();
-		String filename =
-			req.getSession().getServletContext().getInitParameter("props-file");
-				
-		props = new WebXmlProperties(filename);
-			
+		ServletContext sc = req.getSession().getServletContext();
+		
+		// This defines a real path to where the webapp is located on disk
+		webappPath = new File(sc.getRealPath("/"));
+		
+		// We then load the properties for this install
+		File configPath = new File(webappPath, "WEB-INF"+fs+"cluster");
+		props = new WebXmlProperties(new File(configPath, "cluster.properties"));
+		
+		// And configure some other needed values as shortcuts for the subclasses
+		scriptsDir = configPath.getPath();
+		javaPath   = getParameter("java-path");
+		topaliPath = new File(webappPath, "WEB-INF"+fs+"lib"+fs+"topali.jar").getPath();		
+		
+		
+		
 		// Now that the properties are loaded, set the log FileHandler
 		// TODO: Get all this into a logging.properties file
 		
@@ -56,8 +65,9 @@ public abstract class WebService
 		FileHandler fh1 = null, fh2 = null;
 		try
 		{
-			File fAccessLog = new File(getParameter("logs-dir"), "access-log");
-			File fInfoLog = new File(getParameter("logs-dir"), "info-log");
+			File logsDir = new File(webappPath, "logs");
+			File fAccessLog = new File(logsDir, "access-log");
+			File fInfoLog = new File(logsDir, "info-log");
 			
 			fh1 = new FileHandler(fAccessLog.getPath(), 0, 1, true);			
 			fh2 = new FileHandler(fInfoLog.getPath(), 0, 1, true);
@@ -71,6 +81,8 @@ public abstract class WebService
 				
 		accessLog.addHandler(fh1);
 		logger.addHandler(fh2);
+		
+		logger.info("Initializing properties");
 	}
 	
 	protected String getJobId()
@@ -90,13 +102,10 @@ public abstract class WebService
 			context.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
 	}
 	
-	// Reads and returns the value for the given parameter name (from web.xml)
+	// Reads and returns the value for the given parameter name
 	protected String getParameter(String name)
 	{
 		return props.getParameter(name);
-		
-//		HttpServletRequest req = getHttpServletRequest();
-//		return req.getSession().getServletContext().getInitParameter(name);
 	}
 	
 	protected static void writeFile(String str, File filename)

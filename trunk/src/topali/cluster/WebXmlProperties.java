@@ -7,18 +7,18 @@ class WebXmlProperties
 {
 	private static Properties props;
 	
-	WebXmlProperties(String filename)
+	WebXmlProperties(File filename)
 	{
 		if (props == null)
 			loadProperties(filename);		
 	}
 	
-	private static void loadProperties(String filename)
+	private static void loadProperties(File filename)
 	{
 		try
 		{
 			props = new Properties();
-			props.load(new FileInputStream(new File(filename)));
+			props.load(new FileInputStream(filename));
 		}
 		catch (IOException e)
 		{

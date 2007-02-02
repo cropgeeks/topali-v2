@@ -22,8 +22,8 @@ public class PDMWebService extends WebService
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
 			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
 			
-			result.bambePath = getParameter("bin-path") + "/src/bambe/bambe";
-			result.treeDistPath = getParameter("bin-path") + "/src/treedist/treedist";
+			result.bambePath = webappPath + "/binaries/src/bambe/bambe";
+			result.treeDistPath = webappPath + "/binaries/src/treedist/treedist";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 			

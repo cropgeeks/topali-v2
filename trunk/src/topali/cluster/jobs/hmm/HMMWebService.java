@@ -22,7 +22,7 @@ public class HMMWebService extends WebService
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
 			HMMResult result = (HMMResult) Castor.unmarshall(resultXML);
 			
-			result.barcePath = getParameter("bin-path") + "/src/barce/barce";
+			result.barcePath = webappPath + "/binaries/src/barce/barce";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 				
