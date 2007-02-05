@@ -66,6 +66,9 @@
 		<exec executable="scp">
 			<arg line="web/WEB-INF/lib/topali.jar tomcat@gruffalo:webapps/topali/WEB-INF/lib"/>
 		</exec>
+		<exec executable="ssh">
+			<arg line="tomcat@gruffalo ./restart.sh"/>
+		</exec>
 	</target>
 	
 	<target name="javadoc">
