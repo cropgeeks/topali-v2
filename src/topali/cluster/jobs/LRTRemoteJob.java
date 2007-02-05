@@ -41,7 +41,7 @@ public class LRTRemoteJob extends RemoteJob
 		return result.jobId;
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		call = getCall();
@@ -51,7 +51,7 @@ public class LRTRemoteJob extends RemoteJob
 		JobStatus status = (JobStatus) Castor.unmarshall(statusXML);
 			
 		result.status = status.status;
-		return status.progress;
+		return status;
 	}
 	
 	public AnalysisResult ws_downloadResult()

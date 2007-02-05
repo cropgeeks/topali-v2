@@ -23,7 +23,7 @@ public class CollatePDM
 		result = (PDMResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 	}
 	
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
@@ -58,7 +58,9 @@ public class CollatePDM
 		}
 		
 		// Return this total as a percentage
-		return (total / ((float) runs)) * 100;
+		float progress = (total / ((float) runs)) * 100;
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	public PDMResult getResult()

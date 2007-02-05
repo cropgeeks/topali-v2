@@ -45,7 +45,7 @@ public class HMMLocalJob extends AnalysisJob
 		}
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		return new CollateHMM(jobDir).getPercentageComplete();

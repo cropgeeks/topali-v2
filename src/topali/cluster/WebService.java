@@ -48,13 +48,13 @@ public abstract class WebService
 		webappPath = new File(sc.getRealPath("/"));
 		
 		// We then load the properties for this install
-		File configPath = new File(webappPath, "WEB-INF"+fs+"cluster");
+		File configPath = FileUtils.getFile(webappPath, "WEB-INF", "cluster");
 		props = new WebXmlProperties(new File(configPath, "cluster.properties"));
 		
 		// And configure some other needed values as shortcuts for the subclasses
 		scriptsDir = configPath.getPath();
 		javaPath   = getParameter("java-path");
-		topaliPath = new File(webappPath, "WEB-INF"+fs+"lib"+fs+"topali.jar").getPath();		
+		topaliPath = FileUtils.getFile(webappPath, "WEB-INF", "lib", "topali.jar").getPath();		
 		
 		
 		
@@ -128,7 +128,7 @@ public abstract class WebService
 	// Public access methods - the actual WEB SERVICES
 	//////////////////////////////////////////////////
 	
-	protected abstract float getPercentageComplete(File jobDir)
+	protected abstract JobStatus getPercentageComplete(File jobDir)
 		throws AxisFault;
 	
 	public String getPercentageComplete(String jobId)
@@ -139,24 +139,24 @@ public abstract class WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			
 			// Progress...
-			float progress = getPercentageComplete(jobDir);
-			logger.info(jobId + " - " + progress + "%");
+			JobStatus js = getPercentageComplete(jobDir);
+			logger.info(jobId + " - " + js.progress + "%");
 			
-			if (progress >= 100f)
+			if (js.progress >= 100f)
 				return Castor.getXML(new JobStatus(100, JobStatus.COMPLETING));
 			
 			// Status (assuming Job is actually in the SGE queue)...
-			int status = JobStatus.UNKNOWN;
+			js.status = JobStatus.UNKNOWN;
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
-			status = cluster.getJobStatus(jobDir);
-			logger.info(jobId + " - current status = " + status);
+			js.status = cluster.getJobStatus(jobDir);
+			logger.info(jobId + " - current status = " + js.status);
 			
 			// TODO: Find out WTF qstat won't always return the state
 			// TODO: Following not suitable for SGE 5.3		
 //			if (status == JobStatus.UNKNOWN && progress < 100f)
 //				throw AxisFault.makeFault(new Exception("Unknown cluster job error"));
 			
-			return Castor.getXML(new JobStatus(progress, status));
+			return Castor.getXML(js);
 		}
 		catch (Exception e)
 		{

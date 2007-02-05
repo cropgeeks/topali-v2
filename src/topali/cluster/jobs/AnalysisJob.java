@@ -1,6 +1,7 @@
 package topali.cluster.jobs;
 
 import topali.data.*;
+import topali.cluster.*;
 
 public abstract class AnalysisJob
 {	
@@ -38,7 +39,7 @@ public abstract class AnalysisJob
 	public abstract String ws_submitJob()
 		throws Exception;
 	
-	public abstract float ws_getProgress()
+	public abstract JobStatus ws_getProgress()
 		throws Exception;
 	
 	public abstract AnalysisResult ws_downloadResult()

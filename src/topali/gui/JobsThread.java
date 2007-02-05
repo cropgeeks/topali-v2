@@ -2,6 +2,7 @@ package topali.gui;
 
 import javax.swing.*;
 
+import topali.cluster.*;
 import static topali.cluster.JobStatus.*;
 import topali.cluster.jobs.*;
 import topali.data.*;
@@ -64,13 +65,15 @@ while (true) {
 					case RUNNING:
 					case COMMS_ERROR:
 					{
-						float progress = job.ws_getProgress(); 
-						entry.setProgress(progress);
+						JobStatus js = job.ws_getProgress(); 
+						entry.setProgress(js.progress);
+						
+						System.out.println("job text = " + js.text);
 						
 						// When a job is finished, the "old" outofdate results
 						// object must be removed from the dataset and replaced
 						// with the new one
-						if (progress >= 100f)
+						if (js.progress >= 100f)
 						{
 							// Retrieve the result
 							AnalysisResult oldR = job.getResult();

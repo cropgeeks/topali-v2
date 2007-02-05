@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -19,13 +20,16 @@ public class PDMMonitor
 		this.jobDir = jobDir;
 	}
 	
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
-		if (new File(jobDir, "ok").exists())
-			return 100f;
+		float progress = 0;
 		
-		float percent = this.getParallelPercentageComplete();
+		if (new File(jobDir, "ok").exists())
+			progress = 100f;
+		else
+		{
+			progress = this.getParallelPercentageComplete();
 		
 //		if (true)
 //			return percent;
@@ -35,7 +39,10 @@ public class PDMMonitor
 			// return 100
 		// else
 			// Fudge the return so it doesn't appear finished until 105% complete
-			return (percent / 105) * 100f;
+			progress = (progress / 105) * 100f;
+		}
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	// Returns the percentage completion for the parallel section of the job

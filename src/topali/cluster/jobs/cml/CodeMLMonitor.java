@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -19,10 +20,10 @@ public class CodeMLMonitor
 		this.jobDir = jobDir;
 	}
 	
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
-		return 0;
+		return new JobStatus();
 	}
 	
 	public CodeMLResult getResult()
