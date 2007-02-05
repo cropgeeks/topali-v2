@@ -1,46 +1,61 @@
 package topali.gui;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import static topali.cluster.JobStatus.CANCELLED;
+import static topali.cluster.JobStatus.CANCELLING;
+import static topali.cluster.JobStatus.COMMS_ERROR;
+import static topali.cluster.JobStatus.COMPLETED;
+import static topali.cluster.JobStatus.COMPLETING;
+import static topali.cluster.JobStatus.FATAL_ERROR;
+import static topali.cluster.JobStatus.HOLDING;
+import static topali.cluster.JobStatus.QUEUING;
+import static topali.cluster.JobStatus.RUNNING;
+import static topali.cluster.JobStatus.STARTING;
+import static topali.cluster.JobStatus.UNKNOWN;
+import static topali.gui.WinMainStatusBar.BLU;
+import static topali.gui.WinMainStatusBar.GRE;
+import static topali.gui.WinMainStatusBar.OFF;
+import static topali.gui.WinMainStatusBar.RED;
 
-import topali.data.*;
-import topali.cluster.jobs.*;
-import static topali.cluster.JobStatus.*;
-import static topali.gui.WinMainStatusBar.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
 
-class JobsPanelEntry extends JPanel
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+
+import topali.cluster.jobs.AnalysisJob;
+import doe.MsgBox;
+
+public abstract class JobsPanelEntry extends JPanel implements ActionListener
 {
 	private AnalysisJob job;
+	
 	private String startStr;
 	
 	private JLabel jobLabel, statusLabel, timeLabel, iconLabel;
-	private JProgressBar pBar;
 	
 	private Color bgColor = (Color) UIManager.get("list.background");
 		
-	JobsPanelEntry(AnalysisJob job)
+	private JButton cancelButton;
+	
+	public JobsPanelEntry(AnalysisJob job)
 	{
 		this.job = job;
 		
 		setBackground(bgColor);
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createTitledBorder("JobId: N/A"));
-				
-		pBar = new JProgressBar();
-		pBar.setStringPainted(true);
-		pBar.setValue(0);
-		pBar.setPreferredSize(new Dimension(50, 20));
-		pBar.setMaximum(100);
-		pBar.setBorderPainted(false);
-		pBar.setForeground(new Color(140, 165, 214));
-		pBar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				
-		if (job.getResult() instanceof TreeResult)
-		{
-			pBar.setString("percentage tracking not available for this job type");
-			pBar.setIndeterminate(true);
-		}
 		
 		jobLabel = new JLabel(job.getResult().jobName);
 		statusLabel = new JLabel("Starting job...");
@@ -50,28 +65,38 @@ class JobsPanelEntry extends JPanel
 		startStr = "Submitted: " + new Date(time).toString();
 		timeLabel = new JLabel(startStr);		
 		
-		JPanel p1 = new JPanel(new GridLayout(2, 1, 5, 5));
-		p1.setBackground(bgColor);
-		p1.add(jobLabel);
-		p1.add(statusLabel);
+		JPanel header = new JPanel(new GridBagLayout());
+		header.setBackground(bgColor);
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.LINE_START;
+		header.add(jobLabel, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		header.add(statusLabel, c);
+		cancelButton = new JButton("Cancel");
+		cancelButton.setBackground(bgColor);
+		cancelButton.addActionListener(this);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.LINE_END;
+		header.add(cancelButton, c);
 		
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBackground(bgColor);
-		p2.add(pBar);
+		p2.add(getProgressComponent());
 		p2.add(iconLabel, BorderLayout.EAST);
 		
 		JPanel p3 = new JPanel(new BorderLayout(5, 5));
 		p3.setBackground(bgColor);
-		p3.add(p1, BorderLayout.NORTH);
+		p3.add(header, BorderLayout.NORTH);
 		p3.add(p2);
-		p3.add(timeLabel, BorderLayout.SOUTH);
+		p3.add(timeLabel, BorderLayout.SOUTH);			
 		
-		JPanel p4 = new JPanel(new BorderLayout(5, 5));
-		p4.setBackground(bgColor);
-		p4.add(p3);				
-		p4.add(new JLabel("Double click to cancel this job"), BorderLayout.SOUTH);
-		
-		add(p4);
+		add(p3);
 		
 		if (job.getResult().isRemote)
 			add(new JLabel(Icons.COMMS), BorderLayout.WEST);
@@ -79,7 +104,11 @@ class JobsPanelEntry extends JPanel
 			add(new JLabel(Icons.LOCAL), BorderLayout.WEST);
 	}
 	
-	void setJobId(String jobId)
+	public abstract JComponent getProgressComponent();
+	
+	public abstract void setProgress(float progress, String text);
+	
+	public void setJobId(String jobId)
 	{
 		String title = "JobId: " + jobId + " ";
 		if (job.getResult().isRemote)
@@ -90,11 +119,10 @@ class JobsPanelEntry extends JPanel
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
 	
-	void updateStatus()
+	public void updateStatus()
 	{
 		statusLabel.setForeground(Color.black);		
 		iconLabel.setIcon(Icons.STATUS_GRE);
-		
 		
 		switch (job.getStatus())
 		{
@@ -155,35 +183,50 @@ class JobsPanelEntry extends JPanel
 	long h=0, m=0, s=0;
 	long elapsed;
 	
-	void setTimeLabel(long start, long current)
+	public void setTimeLabel(long start, long current)
 	{
-//		if (job.getStatus() == COMPLETE || job.getStatus() == ERROR)
-//			return;
-		
 		elapsed = current - start;
 
 		h = (elapsed/(1000*60*60));
 		m = (elapsed-(h*1000*60*60))/(1000*60);
-//		s = (elapsed-(h*1000*60*60)-(m*1000*60))/1000;
-		
+	
 		timeLabel.setText(startStr + " (Runtime: "
 			+ h + "h:" + Prefs.i2.format(m) + "m)");
 	}
 	
-	void setProgress(float progress)
-		{ pBar.setValue((int)progress); }
-	
-	int getProgress()
-		{ return pBar.getValue(); }
-	
 	AnalysisJob getJob()
 		{ return job; }
 		
-	void setSelected(boolean selected)
+	public void setSelected(boolean selected)
 	{
 		if (selected)
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.BOLD));
 		else
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.PLAIN));
 	}
+
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(cancelButton)) {
+			String msg = job.getResult().jobName
+			+ " - are you sure you wish to cancel this job?";
+			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+				return;
+			else
+				WinMain.jobsPanel.cancelJob(this);
+		}
+	}
+
+	//Have to override this, to prevent JobsPanel's BoxLayout from scaling this Component to it's
+	//maximum size.
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
+	@Override
+	public Dimension getMinimumSize() {
+		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	}
+	
+	
 }

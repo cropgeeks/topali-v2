@@ -5,25 +5,59 @@
 
 package topali.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import java.io.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.dnd.DropTarget;
+import java.awt.event.WindowEvent;
+import java.io.File;
 
-import topali.analyses.*;
-import topali.cluster.*;
-import topali.data.*;
-import topali.gui.dialog.*;
-import topali.gui.dialog.hmm.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JSplitPane;
+
+import pal.tree.Tree;
+import topali.analyses.SequenceSetUtils;
+import topali.analyses.TreeCreator;
+import topali.cluster.LocalJobs;
+import topali.data.AlignmentData;
+import topali.data.AnalysisResult;
+import topali.data.CodeMLResult;
+import topali.data.DSSResult;
+import topali.data.HMMResult;
+import topali.data.LRTResult;
+import topali.data.PDM2Result;
+import topali.data.PDMResult;
+import topali.data.Sequence;
+import topali.data.SequenceSet;
+import topali.data.TreeResult;
+import topali.gui.dialog.AutoPartitionDialog;
+import topali.gui.dialog.CodeMLSettingsDialog;
+import topali.gui.dialog.CreateTreeDialog;
+import topali.gui.dialog.DSSSettingsDialog;
+import topali.gui.dialog.DisplaySettingsDialog;
+import topali.gui.dialog.FindSequenceDialog;
+import topali.gui.dialog.GoToNucDialog;
+import topali.gui.dialog.ImportDataSetDialog;
+import topali.gui.dialog.ImportFileSetsDialog;
+import topali.gui.dialog.ImportOptionsDialog;
+import topali.gui.dialog.LRTSettingsDialog;
+import topali.gui.dialog.LoadMonitorDialog;
+import topali.gui.dialog.MakeNADialog;
+import topali.gui.dialog.MovieDialog;
+import topali.gui.dialog.OverviewDialog;
+import topali.gui.dialog.PDM2SettingsDialog;
+import topali.gui.dialog.PDMSettingsDialog;
+import topali.gui.dialog.PrinterDialog;
+import topali.gui.dialog.SummaryDialog;
+import topali.gui.dialog.hmm.HMMSettingsDialog;
 import topali.gui.dialog.region.RegionDialog;
-import topali.gui.nav.*;
-import topali.gui.tree.*;
-import topali.vamsas.*;
-
-import pal.tree.*;
-
-import doe.*;
+import topali.gui.nav.NavPanel;
+import topali.gui.nav.SequenceSetNode;
+import topali.gui.tree.TreePane;
+import topali.vamsas.VamsasClient;
+import doe.MsgBox;
 
 public class WinMain extends JFrame
 {
