@@ -24,6 +24,8 @@ public class JobStatus
 	
 	public float progress;
 	public int status;
+	// A custom description of the job's progress or status
+	public String text;
 	
 	
 	public JobStatus()
@@ -34,5 +36,13 @@ public class JobStatus
 	{
 		this.progress = progress;
 		this.status = status;
+		this.text = "";
+	}
+	
+	public JobStatus(float progress, int status, String text)
+	{
+		this.progress = progress;
+		this.status = status;
+		this.text = text;
 	}
 }

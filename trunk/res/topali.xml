@@ -152,6 +152,7 @@ Castor's auto mapping file generator -->
 <class name="topali.cluster.JobStatus">
 	<field name="progress" type="float" direct="true"/>
 	<field name="status" type="int" direct="true"/>
+	<field name="text" type="string" direct="true"/>
 </class>
 
 

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -28,7 +29,7 @@ public class CollateDSS
 	 * file for each run directory. This is then returned as a percentage of
 	 * the total number of runs.
 	 */
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
@@ -62,7 +63,9 @@ public class CollateDSS
 		// Return this total as a percentage
 		// (the main run finishes at 100% but we don't *really* finish until the
 		// post-analysis is done, which writes 105% to disk)
-		return ((total / (float) runs) / 105f) * 100;
+		float progress = ((total / (float) runs) / 105f) * 100;
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	/*

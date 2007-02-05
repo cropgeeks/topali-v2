@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -28,7 +29,7 @@ public class CollateLRT
 	 * file for each run directory. This is then returned as a percentage of
 	 * the total number of runs.
 	 */
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
@@ -56,7 +57,9 @@ public class CollateLRT
 			}
 		}
 	
-		return ((float)total/(float)runs/ 105f)*100f;
+		float progress = ((float)total/(float)runs/ 105f)*100f;
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	/*

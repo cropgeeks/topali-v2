@@ -3,6 +3,7 @@ package topali.cluster.jobs.hmm;
 import java.io.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -18,9 +19,11 @@ public class CollateHMM
 		this.jobDir = jobDir;
 	}
 	
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
+		float progress = 0;
+		
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe(jobDir.getName() + " - error.txt found");
@@ -33,11 +36,11 @@ public class CollateHMM
 		try 
 		{ 
 			int count = new File(jobDir, "percent").listFiles().length;
-			return ((float)count / 105f) * 100f;
+			progress = ((float)count / 105f) * 100f;
 		}
-		catch (Exception e)	{
-			return 0;
-		}
+		catch (Exception e)	{}
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	public HMMResult getResult()

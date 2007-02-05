@@ -41,7 +41,7 @@ public class CodeMLRemoteJob extends RemoteJob
 		return result.jobId;
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		call = getCall();
@@ -49,9 +49,9 @@ public class CodeMLRemoteJob extends RemoteJob
 			
 		String statusXML = (String) call.invoke(new Object[] { result.jobId } );
 		JobStatus status = (JobStatus) Castor.unmarshall(statusXML);
-			
+				
 		result.status = status.status;
-		return status.progress;
+		return status;
 	}
 	
 	public AnalysisResult ws_downloadResult()

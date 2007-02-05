@@ -41,7 +41,7 @@ public class CodeMLWebService extends WebService
 		}
 	}
 	
-	protected float getPercentageComplete(File jobDir)
+	protected JobStatus getPercentageComplete(File jobDir)
 		throws AxisFault
 	{
 		try

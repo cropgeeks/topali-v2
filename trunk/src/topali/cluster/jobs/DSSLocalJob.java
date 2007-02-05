@@ -44,7 +44,7 @@ public class DSSLocalJob extends AnalysisJob
 		}
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		return new CollateDSS(jobDir).getPercentageComplete();

@@ -45,7 +45,7 @@ public class MBTreeLocalJob extends AnalysisJob
 		}
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		return new CollateMBTree(jobDir).getPercentageComplete();

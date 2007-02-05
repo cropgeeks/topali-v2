@@ -45,7 +45,7 @@ public class PDM2LocalJob extends AnalysisJob
 		}
 	}
 	
-	public float ws_getProgress()
+	public JobStatus ws_getProgress()
 		throws Exception
 	{
 		return new PDMMonitor(jobDir).getPercentageComplete();

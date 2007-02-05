@@ -3,6 +3,7 @@ package topali.cluster.jobs.trees;
 import java.io.*;
 import java.util.logging.*;
 
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.*;
 
@@ -18,9 +19,11 @@ public class CollateMBTree
 		this.jobDir = jobDir;
 	}
 	
-	public float getPercentageComplete()
+	public JobStatus getPercentageComplete()
 		throws Exception
 	{
+		float progress = 0;
+		
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe(jobDir.getName() + " - error.txt found");
@@ -28,9 +31,9 @@ public class CollateMBTree
 		}
 		
 		if (new File(jobDir, "tree.txt").exists())
-			return 100f;
-		else
-			return (float) Math.random() * 99;
+			progress = 100f;
+		
+		return new JobStatus(progress, 0, "_status");
 	}
 	
 	public MBTreeResult getResult()
