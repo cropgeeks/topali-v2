@@ -45,7 +45,7 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 	
 	private JLabel jobLabel, statusLabel, timeLabel, iconLabel;
 	
-	private Color bgColor = (Color) UIManager.get("list.background");
+	protected Color bgColor = (Color) UIManager.get("list.background");
 		
 	private JButton cancelButton;
 	
