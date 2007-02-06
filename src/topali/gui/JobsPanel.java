@@ -2,6 +2,9 @@ package topali.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -273,4 +276,11 @@ public class JobsPanel extends JPanel {
 		WinMainStatusBar.setStatusIcon(WinMainStatusBar.OFF);
 	}
 
+	public void select(JobsPanelEntry e) {
+		for(JobsPanelEntry entry : jobs)
+			entry.setSelected(false);
+		e.setSelected(true);
+		infoText.setText(e.getJob().errorInfo);
+	}
+	
 }

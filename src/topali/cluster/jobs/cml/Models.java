@@ -1,7 +1,16 @@
 package topali.cluster.jobs.cml;
 
 public class Models
-{
+{	
+	public final static int MODEL_M0 = 1;
+	public final static int MODEL_M1 = 2;
+	public final static int MODEL_M2 = 3;
+	public final static int MODEL_M1a = 4;
+	public final static int MODEL_M2a = 5;
+	public final static int MODEL_M3 = 6;
+	public final static int MODEL_M7 = 7;
+	public final static int MODEL_M8 = 8;
+	
 	private static String nl = System.getProperty("line.separator");
 	
 	static String getModel(int model)
@@ -18,14 +27,14 @@ public class Models
 		
 		switch (model)
 		{
-			case 1: return getModel_M0(settings);
-			case 2: return getModel_M1(settings);
-			case 3: return getModel_M2(settings);
-			case 4: return getModel_M1a(settings);
-			case 5: return getModel_M2a(settings);
-			case 6: return getModel_M3(settings);
-			case 7: return getModel_M7(settings);
-			case 8: return getModel_M8(settings);
+			case MODEL_M0: return getModel_M0(settings);
+			case MODEL_M1: return getModel_M1(settings);
+			case MODEL_M2: return getModel_M2(settings);
+			case MODEL_M1a: return getModel_M1a(settings);
+			case MODEL_M2a: return getModel_M2a(settings);
+			case MODEL_M3: return getModel_M3(settings);
+			case MODEL_M7: return getModel_M7(settings);
+			case MODEL_M8: return getModel_M8(settings);
 		}
 		
 		return new String();

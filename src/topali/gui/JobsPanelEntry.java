@@ -18,12 +18,16 @@ import static topali.gui.WinMainStatusBar.RED;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -34,10 +38,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import doe.MsgBox;
 
-public abstract class JobsPanelEntry extends JPanel implements ActionListener
+public abstract class JobsPanelEntry extends JPanel implements MouseListener
 {
 	private AnalysisJob job;
 	
@@ -47,7 +52,7 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 	
 	protected Color bgColor = (Color) UIManager.get("list.background");
 		
-	private JButton cancelButton;
+	private JLabel cancelButton;
 	
 	public JobsPanelEntry(AnalysisJob job)
 	{
@@ -77,9 +82,12 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 		c.gridx = 0;
 		c.gridy = 1;
 		header.add(statusLabel, c);
-		cancelButton = new JButton("Cancel");
+		//cancelButton = new JButton("Cancel");
+		cancelButton = new JLabel();
+		cancelButton.setIcon(Icons.CANCEL);
+		cancelButton.setToolTipText("Cancel this job");
 		cancelButton.setBackground(bgColor);
-		cancelButton.addActionListener(this);
+		cancelButton.addMouseListener(this);
 		c.gridx = 1;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.LINE_END;
@@ -102,11 +110,13 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 			add(new JLabel(Icons.COMMS), BorderLayout.WEST);
 		else
 			add(new JLabel(Icons.LOCAL), BorderLayout.WEST);
+		
+		this.addMouseListener(this);
 	}
 	
 	public abstract JComponent getProgressComponent();
 	
-	public abstract void setProgress(float progress, String text);
+	public abstract void setJobStatus(JobStatus status);
 	
 	public void setJobId(String jobId)
 	{
@@ -205,18 +215,6 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.PLAIN));
 	}
 
-	
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(cancelButton)) {
-			String msg = job.getResult().jobName
-			+ " - are you sure you wish to cancel this job?";
-			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
-				return;
-			else
-				WinMain.jobsPanel.cancelJob(this);
-		}
-	}
-
 	//Have to override this, to prevent JobsPanel's BoxLayout from scaling this Component to it's
 	//maximum size.
 	@Override
@@ -227,6 +225,34 @@ public abstract class JobsPanelEntry extends JPanel implements ActionListener
 	public Dimension getMinimumSize() {
 		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
 	}
+
+	public void mouseClicked(MouseEvent e) {
+		if(e.getSource().equals(cancelButton)) {
+			String msg = job.getResult().jobName
+			+ " - are you sure you wish to cancel this job?";
+			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+				return;
+			else
+				WinMain.jobsPanel.cancelJob(this);
+		}
+		
+	}
 	
+	public void mousePressed(MouseEvent e) {
+		if(!e.getSource().equals(cancelButton))
+			WinMain.jobsPanel.select(this);
+	}
 	
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource().equals(cancelButton))
+			setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource().equals(cancelButton))
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
 }
