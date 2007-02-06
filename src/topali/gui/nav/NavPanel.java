@@ -273,6 +273,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 				node.setUserObject(new DSSResultsNode(data, (DSSResult)result));
 			if (result instanceof LRTResult)
 				node.setUserObject(new LRTResultsNode(data, (LRTResult)result));
+			if (result instanceof CodeMLResult)
+				node.setUserObject(new CodeMLResultsNode(data, (CodeMLResult)result));
 			
 			model.insertNodeInto(node, parent, parent.getChildCount());
 			return;

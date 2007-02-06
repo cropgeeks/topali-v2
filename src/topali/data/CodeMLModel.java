@@ -21,7 +21,7 @@ public class CodeMLModel
 	public float p0, p1, p2;
 	public float w0, w1, w2;
 	
-//	public float p, q, w;
+	public float p, q, _w;
 	
 	public float likelihood;
 }
