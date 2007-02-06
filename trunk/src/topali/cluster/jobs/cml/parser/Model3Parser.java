@@ -45,7 +45,7 @@ public class Model3Parser extends CMLResultParser {
 				
 			}
 			
-			//parse rst file
+//			parse rst file
 			in = new BufferedReader(new FileReader(rstFile));
 			line = null;
 			Pattern p = Pattern.compile("\\d+ \\w .+");
@@ -54,7 +54,7 @@ public class Model3Parser extends CMLResultParser {
 				Matcher m = p.matcher(line);
 				if(m.matches()) {
 					String[] tmp = line.split("\\s+");
-					pss.add(tmp[0]+" "+tmp[1]+" "+tmp[2]);
+					pss.add(tmp[0]+" "+tmp[1]+" "+tmp[tmp.length-1]);
 				}
 			}
 			

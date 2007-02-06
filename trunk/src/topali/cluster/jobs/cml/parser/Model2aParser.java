@@ -2,6 +2,8 @@ package topali.cluster.jobs.cml.parser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Model2aParser extends CMLResultParser {
 
@@ -39,6 +41,19 @@ public class Model2aParser extends CMLResultParser {
 					w0 = Double.parseDouble(b[1]);
 					w1 = Double.parseDouble(b[2]);
 					w2 = Double.parseDouble(b[3]);
+				}
+				
+//				parse rst file
+				in = new BufferedReader(new FileReader(rstFile));
+				line = null;
+				Pattern p = Pattern.compile("\\d+ \\w .+");
+				while((line=in.readLine())!=null) {
+					line = line.trim();
+					Matcher m = p.matcher(line);
+					if(m.matches()) {
+						String[] tmp = line.split("\\s+");
+						pss.add(tmp[0]+" "+tmp[1]+" "+tmp[tmp.length-1]);
+					}
 				}
 				
 			}
