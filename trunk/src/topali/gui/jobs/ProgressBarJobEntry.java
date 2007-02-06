@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 
+import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.gui.JobsPanel;
 import topali.gui.JobsPanelEntry;
@@ -31,8 +32,8 @@ public class ProgressBarJobEntry extends JobsPanelEntry {
 	}
 
 	@Override
-	public void setProgress(float progress, String text) {
-		pb.setValue((int)progress);
+	public void setJobStatus(JobStatus status) {
+		pb.setValue((int)status.progress);
 	}
 
 }

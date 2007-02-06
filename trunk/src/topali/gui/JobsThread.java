@@ -67,7 +67,7 @@ public class JobsThread extends Thread {
 						final JobStatus status = job.ws_getProgress();
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
-								entry.setProgress(status.progress, status.text);
+								entry.setJobStatus(status);
 							}
 						});
 

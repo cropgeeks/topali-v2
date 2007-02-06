@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.gui.JobsPanel;
 import topali.gui.JobsPanelEntry;
@@ -23,13 +24,13 @@ public class NoTrackingJobEntry extends JobsPanelEntry {
 		JPanel p = new JPanel();
 		p.setBackground(Color.WHITE);
 		p.setAlignmentX(CENTER_ALIGNMENT);
-		p.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		p.setBorder(BorderFactory.createTitledBorder(""));
 		p.add(new JLabel("No progress tracking available."));
 		return p;
 	}
 
 	@Override
-	public void setProgress(float progress, String text) {
+	public void setJobStatus(JobStatus status) {
 	}
 
 	

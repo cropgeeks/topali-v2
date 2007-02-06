@@ -38,6 +38,8 @@ public class Icons
 	
 	public static ImageIcon WIN_WARN, WIN_INFORM, WIN_ERROR, WIN_QUESTION;
 	
+	public static ImageIcon CANCEL, BULLET_GREEN, BULLET_WHITE;
+	
 	public Icons()
 	{
 		Class c = getClass();
