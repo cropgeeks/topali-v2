@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 
 import topali.cluster.*;
+import topali.cluster.jobs.cml.parser.*;
 import topali.data.*;
 import topali.fileio.*;
 import topali.mod.*;
@@ -61,7 +62,18 @@ class CodeMLAnalysis extends AnalysisThread
 		for (File f: wrkDir.listFiles())
 			FileUtils.copyFile(f, new File(runDir, f.getName()), false);
 		
-		new File(runDir, "ok").createNewFile();	
+		
+		File resultsFile = new File(wrkDir, "results.txt");
+		File rstFile     = new File(wrkDir, "rst");
+		
+		CMLResultParser parser = CMLResultParser.getParser(modelType);
+		parser.parse(resultsFile.getPath(), rstFile.getPath());		
+		CodeMLModel model = parser.getModelResult();
+		
+		model.name = Models.getModelName(modelType);
+		model.runNumber = "run " + modelType;		
+		Castor.saveXML(model, new File(runDir, "model.xml"));
+		
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);
 	}

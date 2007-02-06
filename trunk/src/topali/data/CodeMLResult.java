@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import java.util.*;
+
 /*
  * Class that stores both the results from running a PAML positive selection
  * analysis (via CODEML) and the settings required to make the run (although 
@@ -15,7 +17,7 @@ public class CodeMLResult extends AlignmentResult
 	// The location of the CodeML binary
 	public String codemlPath;
 	
-	public CodeMLModel[] models;
+	public Vector<CodeMLModel> models = new Vector<CodeMLModel>();
 	
 	public CodeMLResult()
 	{

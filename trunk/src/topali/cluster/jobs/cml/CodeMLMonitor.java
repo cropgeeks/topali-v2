@@ -31,11 +31,12 @@ public class CodeMLMonitor
 		
 		String text = "";
 		
-		for (int i = 1; i <= 8; i++)
+		for (int i = 1; i <= Models.MAX; i++)
 		{
 			File runDir = new File(jobDir, "run" + i);
 			
-			text += "run" + i + "=" + (new File(runDir, "ok").exists()) + " ";
+			boolean ok = new File(runDir, "model.xml").exists();
+			text += Models.getModelName(i) + "=" + ok + " ";
 			
 			// But also check if an error file for this run exists
 			if (new File(runDir, "error.txt").exists())
@@ -45,12 +46,31 @@ public class CodeMLMonitor
 			}
 		}
 		
-		return new JobStatus(0, 0, text);
+		if (text.contains("false"))
+			return new JobStatus(0, 0, text);
+		else
+			return new JobStatus(100f, 0, text);
 	}
 	
 	public CodeMLResult getResult()
 		throws Exception
 	{
-		return (CodeMLResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		// Load in the original submission xml
+		CodeMLResult result =
+			(CodeMLResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		
+		// Populate it with the results from each run
+		for (int i = 1; i <= Models.MAX; i++)
+		{
+			File runDir = new File(jobDir, "run" + i);
+			
+			File modelFile = new File(runDir, "model.xml");
+			CodeMLModel model = (CodeMLModel) Castor.unmarshall(modelFile);
+			
+			result.models.add(model);
+		}
+		
+		// Return it
+		return result;
 	}
 }
