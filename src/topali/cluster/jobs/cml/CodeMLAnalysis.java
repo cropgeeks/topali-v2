@@ -60,7 +60,8 @@ class CodeMLAnalysis extends AnalysisThread
 		// TEMP (for now) - copy results from wrkDir to runDir
 		for (File f: wrkDir.listFiles())
 			FileUtils.copyFile(f, new File(runDir, f.getName()), false);
-			
+		
+		new File(runDir, "ok").createNewFile();	
 		
 		ClusterUtils.emptyDirectory(wrkDir, true);
 	}

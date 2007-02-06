@@ -23,7 +23,29 @@ public class CodeMLMonitor
 	public JobStatus getPercentageComplete()
 		throws Exception
 	{
-		return new JobStatus();
+		if (new File(jobDir, "error.txt").exists())
+		{
+			logger.severe(jobDir.getName() + " - error.txt found");
+			throw new Exception("CML error.txt");
+		}
+		
+		String text = "";
+		
+		for (int i = 1; i <= 8; i++)
+		{
+			File runDir = new File(jobDir, "run" + i);
+			
+			text += "run" + i + "=" + (new File(runDir, "ok").exists()) + " ";
+			
+			// But also check if an error file for this run exists
+			if (new File(runDir, "error.txt").exists())
+			{
+				logger.severe(jobDir.getName() + " - error.txt found for run " + i);
+				throw new Exception("CML error.txt (run " + i + ")");
+			}
+		}
+		
+		return new JobStatus(0, 0, text);
 	}
 	
 	public CodeMLResult getResult()
