@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import topali.cluster.JobStatus;
 import topali.cluster.jobs.*;
 import topali.gui.*;
 
@@ -32,16 +33,16 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	}
 
 	@Override
-	public void setProgress(float progress, String text)
+	public void setJobStatus(JobStatus status)
 	{
-		if (text == null)
+		if (status.text == null)
 			return;
 		
-		System.out.println(text);
+		System.out.println(status.text);
 		
 		String str = "<html>Completed models:&nbsp;&nbsp; ";
 		
-		StringTokenizer tok = new StringTokenizer(text, " ");
+		StringTokenizer tok = new StringTokenizer(status.text, " ");
 		while(tok.hasMoreElements())
 		{
 			String[] tmp = tok.nextToken().split("=");
