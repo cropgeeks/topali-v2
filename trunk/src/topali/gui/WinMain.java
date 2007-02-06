@@ -177,7 +177,7 @@ public class WinMain extends JFrame
 		setTitle(Text.Gui.getString("WinMain.gui01"));
 		menubar.setProjectOpenedState();
 		navPanel.clear();
-			
+		
 		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 		

@@ -49,7 +49,7 @@ public class JobsPanel extends JPanel {
 
 	private final JobsThread jobsThread;
 
-	private static JTextArea infoText;
+	public static JTextArea infoText;
 
 	private final JPanel jp;
 
@@ -269,7 +269,8 @@ public class JobsPanel extends JPanel {
 		// Remove knowledge of any jobs
 		jobs.clear();
 		jp.removeAll();
-
+		infoText.setText("");
+		
 		// And update the text/icon to reflect this
 		setStatusPanel();
 		WinMainStatusBar.resetIcon = true;
