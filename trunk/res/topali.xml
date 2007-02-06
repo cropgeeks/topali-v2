@@ -222,6 +222,38 @@ Castor's auto mapping file generator -->
 <class name="topali.data.CodeMLResult" extends="topali.data.AlignmentResult" auto-complete="true">
 	<field name="codemlPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
+	
+	<field name="models" type="topali.data.CodeMLModel" direct="true" collection="array"/>
+</class>
+
+<!-- CodeMLModel -->
+<class name="topali.data.CodeMLModel" auto-complete="true">
+	<field name="runNumber" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="name" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="siteClass" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="params" type="int" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="dnDS" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="w" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="p0" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="p1" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="p2" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="w0" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="w1" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="w2" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="likelihood" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
 </class>
 
 <!-- DSSResult (extends AlignmentResult) -->
