@@ -223,7 +223,7 @@ Castor's auto mapping file generator -->
 	<field name="codemlPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
 	
-	<field name="models" type="topali.data.CodeMLModel" direct="true" collection="array"/>
+	<field name="models" type="topali.data.CodeMLModel" direct="true" collection="vector"/>
 </class>
 
 <!-- CodeMLModel -->

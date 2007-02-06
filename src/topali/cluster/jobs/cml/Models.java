@@ -2,6 +2,8 @@ package topali.cluster.jobs.cml;
 
 public class Models
 {	
+	public final static int MAX = 8;
+
 	public final static int MODEL_M0 = 1;
 	public final static int MODEL_M1 = 2;
 	public final static int MODEL_M2 = 3;
@@ -12,6 +14,23 @@ public class Models
 	public final static int MODEL_M8 = 8;
 	
 	private static String nl = System.getProperty("line.separator");
+	
+	public static String getModelName(int model)
+	{
+		switch (model)
+		{
+			case MODEL_M0: return "M0";
+			case MODEL_M1: return "M1";
+			case MODEL_M2: return "M2";
+			case MODEL_M1a: return "M1a";
+			case MODEL_M2a: return "M2a";
+			case MODEL_M3: return "M3";
+			case MODEL_M7: return "M7";
+			case MODEL_M8: return "M8";
+		}
+		
+		return new String();
+	}
 	
 	static String getModel(int model)
 	{
