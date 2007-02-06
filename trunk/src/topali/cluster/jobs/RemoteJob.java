@@ -40,17 +40,17 @@ public abstract class RemoteJob extends AnalysisJob
 		if (Prefs.web_use_broker)
 		{		
 			// First form of the URL...this points to the ResourceBroker service
-			url = Prefs.web_broker_url + "/services/ResourceBroker";
+			url = Prefs.web_broker_url + "/services/resource-broker";
 			
 			getCall();		
 			call.setOperationName(new QName("ResourceBroker", "getAvailableURL"));
 			
 			// The URL is now set to the return from this call - which will be
 			// the actual server we run the job on
-			String broker = (String) call.invoke(new Object[] {} );
+			String broker = (String) call.invoke(new Object[] { "topali" } );
 			
 			// Append what we need for a TOPALi job onto the server's URL
-			url = broker + "/topali/services/" + serviceName;
+			url = broker + "/services/" + serviceName;
 			result.url = url;
 			
 			// Reset the call object
