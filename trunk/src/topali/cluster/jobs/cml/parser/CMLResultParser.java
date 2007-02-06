@@ -3,11 +3,14 @@ package topali.cluster.jobs.cml.parser;
 import java.util.LinkedList;
 import java.util.List;
 
+import topali.data.*;
 import topali.cluster.jobs.cml.Models;
 
-public abstract class CMLResultParser {
+public abstract class CMLResultParser
+{
+	protected CodeMLModel model = new CodeMLModel();
 	
-	double dnds, w, p0, p1, p2, w0, w1, w2, p, q, _w, lnl;
+//	double dnds, w, p0, p1, p2, w0, w1, w2, p, q, _w, lnl;
 	List<String> pss;
 	
 	public CMLResultParser() {
@@ -34,7 +37,10 @@ public abstract class CMLResultParser {
 	
 	public abstract void parse(String resultFile, String rstFile);
 
-	public double getDnds() {
+	public CodeMLModel getModelResult()
+		{ return model; }
+
+/*	public double getDnds() {
 		return dnds;
 	}
 	
@@ -85,14 +91,14 @@ public abstract class CMLResultParser {
 	public double getW2() {
 		return w2;
 	}
-
+*/
 	/**
 		 * toString methode: creates a String representation of the object
 		 * @return the String representation
 		 * @author info.vancauwenberge.tostring plugin
 	
 		 */
-		public String toString() {
+/*		public String toString() {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("CMLResultParser[");
 			buffer.append(" dnds = ").append(dnds);
@@ -111,6 +117,6 @@ public abstract class CMLResultParser {
 			buffer.append("]");
 			return buffer.toString();
 		}
-
+*/
 	
 }

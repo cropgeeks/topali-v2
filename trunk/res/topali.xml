@@ -252,6 +252,12 @@ Castor's auto mapping file generator -->
 		<bind-xml node="attribute"/></field>
 	<field name="w2" type="float" direct="true">
 		<bind-xml node="attribute"/></field>
+	<field name="p" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="q" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
+	<field name="_w" type="float" direct="true">
+		<bind-xml node="attribute"/></field>
 	<field name="likelihood" type="float" direct="true">
 		<bind-xml node="attribute"/></field>
 </class>

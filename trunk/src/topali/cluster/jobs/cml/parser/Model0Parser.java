@@ -20,13 +20,13 @@ public class Model0Parser extends CMLResultParser {
 					a = line.substring(line.lastIndexOf(':')+1);
 					a = a.trim();
 					b = a.split("\\s+");
-					lnl = Double.parseDouble(b[0]);
+					model.likelihood = Float.parseFloat(b[0]);
 					continue;
 				}
 				
 				if(line.startsWith("omega (dN/dS)")) {
 					b = line.split("\\s+");
-					dnds = Double.parseDouble(b[3]);
+					model.dnDS = Float.parseFloat(b[3]);
 				}
 				
 			}

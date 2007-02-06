@@ -22,22 +22,22 @@ public class Model8Parser extends CMLResultParser {
 					a = line.substring(line.lastIndexOf(':')+1);
 					a = a.trim();
 					b = a.split("\\s+");
-					lnl = Double.parseDouble(b[0]);
+					model.likelihood = Float.parseFloat(b[0]);
 					continue;
 				}
 				
 				if(line.startsWith("p0=")) {
 					b = line.split("\\s+");
-					p0 = Double.parseDouble(b[1]);
-					p = Double.parseDouble(b[3]);
-					q = Double.parseDouble(b[5]);
+					model.p0 = Float.parseFloat(b[1]);
+					model.p = Float.parseFloat(b[3]);
+					model.q = Float.parseFloat(b[5]);
 					continue;
 				}
 				
 				if(line.startsWith("(p1=")) {
 					b = line.split("\\s+");
-					p1 = Double.parseDouble(b[1].replaceAll("\\)", ""));
-					_w = Double.parseDouble(b[3]);
+					model.p1 = Float.parseFloat(b[1].replaceAll("\\)", ""));
+					model._w = Float.parseFloat(b[3]);
 				}
 			}
 			

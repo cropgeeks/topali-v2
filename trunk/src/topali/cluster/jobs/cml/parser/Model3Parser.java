@@ -24,23 +24,23 @@ public class Model3Parser extends CMLResultParser {
 					a = line.substring(line.lastIndexOf(':')+1);
 					a = a.trim();
 					b = a.split("\\s+");
-					lnl = Double.parseDouble(b[0]);
+					model.likelihood = Float.parseFloat(b[0]);
 					continue;
 				}
 				
 				if(line.startsWith("p:")) {
 					b = line.split("\\s+");
-					p0 = Double.parseDouble(b[1]);
-					p1 = Double.parseDouble(b[2]);
-					p2 = Double.parseDouble(b[3]);
+					model.p0 = Float.parseFloat(b[1]);
+					model.p1 = Float.parseFloat(b[2]);
+					model.p2 = Float.parseFloat(b[3]);
 					continue;
 				}
 				
 				if(line.startsWith("w:")) {
 					b = line.split("\\s+");
-					w0 = Double.parseDouble(b[1]);
-					w1 = Double.parseDouble(b[2]);
-					w2 = Double.parseDouble(b[3]);
+					model.w0 = Float.parseFloat(b[1]);
+					model.w1 = Float.parseFloat(b[2]);
+					model.w2 = Float.parseFloat(b[3]);
 				}
 				
 			}
