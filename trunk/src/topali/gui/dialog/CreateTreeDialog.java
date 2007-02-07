@@ -1,8 +1,7 @@
-/*
- * CreateTreeDialog.java
- *
- * Created on 23 November 2005, 16:29
- */
+// (C) 2003-2007 Biomathematics & Statistics Scotland
+//
+// This package may be distributed under the
+// terms of the GNU General Public License (GPL)
 
 package topali.gui.dialog;
 
