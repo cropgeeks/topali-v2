@@ -1,8 +1,7 @@
-/*
- * WebPanel2.java
- *
- * Created on 16 December 2005, 09:29
- */
+// (C) 2003-2007 Biomathematics & Statistics Scotland
+//
+// This package may be distributed under the
+// terms of the GNU General Public License (GPL)
 
 package topali.gui.dialog.settings;
 

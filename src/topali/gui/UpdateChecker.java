@@ -1,4 +1,4 @@
-// (C) 2003-2006 Iain Milne
+// (C) 2003-2007 Biomathematics & Statistics Scotland
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
@@ -65,9 +65,9 @@ class UpdateChecker extends Thread
 	static void helpAbout()
 	{
 		String msg = "<html><b>TOPALi v2</b> (2.16)<br><br>"
-					+ "Copyright &copy 2003-2006<br><br>"
-					+ "Iain Milne and Frank Wright<br>"
-					+ "Biomathematics & Statistics Scotland<br><br>"
+					+ "Copyright &copy 2003-2007 Biomathematics & Statistics Scotland<br><br>"
+					+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
+					+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"
 					+ "This software is licensed. Please see accompanying "
 					+ "license file for details."
 					+ "</html>";
