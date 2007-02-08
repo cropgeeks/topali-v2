@@ -21,20 +21,34 @@ public class Model7Parser extends CMLResultParser {
 				
 				line = line.trim();
 				
-				if(line.startsWith("lnL(ntime:")) {
-					a = line.substring(line.lastIndexOf(':')+1);
-					a = a.trim();
-					b = a.split("\\s+");
-					model.likelihood = Float.parseFloat(b[0]);
-					continue;
-				}
-				
-				if(line.startsWith("p=")) {
-					b = line.split("\\s+");
-					model.p = Float.parseFloat(b[1]);
-					model.q = Float.parseFloat(b[3]);
+				try
+				{
+					if(line.startsWith("lnL(ntime:")) {
+						a = line.substring(line.lastIndexOf(':')+1);
+						a = a.trim();
+						b = a.split("\\s+");
+						model.likelihood = Float.parseFloat(b[0]);
+						continue;
+					}
+					
+					if(line.startsWith("p=")) {
+						b = line.split("\\s+");
+						model.p = Float.parseFloat(b[1]);
+						model.q = Float.parseFloat(b[3]);
+						continue;
+					}
+					
+					if(model.dnDS==-1 && line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}")) {
+						b = line.split("\\s+");
+						model.dnDS = Float.parseFloat(b[4]);
+					}
+				} catch (RuntimeException e)
+				{
+					e.printStackTrace();
+					System.err.println("Error parsing line:/n"+line);
 				}
 			}
+			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

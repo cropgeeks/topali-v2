@@ -260,6 +260,7 @@ Castor's auto mapping file generator -->
 		<bind-xml node="attribute"/></field>
 	<field name="likelihood" type="float" direct="true">
 		<bind-xml node="attribute"/></field>
+	<field name="pss" type="string" direct="true"/>
 </class>
 
 <!-- DSSResult (extends AlignmentResult) -->

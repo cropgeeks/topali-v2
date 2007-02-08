@@ -53,11 +53,9 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	
 	private String startStr;
 	
-	private JLabel jobLabel, statusLabel, timeLabel, iconLabel;
+	private JLabel jobLabel, statusLabel, timeLabel, iconLabel, cancelLabel;
 	
 	protected Color bgColor = (Color) UIManager.get("list.background");
-		
-	private JLabel cancelButton;
 	
 	public JobsPanelEntry(AnalysisJob job)
 	{
@@ -87,16 +85,15 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		c.gridx = 0;
 		c.gridy = 1;
 		header.add(statusLabel, c);
-		//cancelButton = new JButton("Cancel");
-		cancelButton = new JLabel();
-		cancelButton.setIcon(Icons.CANCEL);
-		cancelButton.setToolTipText("Cancel this job");
-		cancelButton.setBackground(bgColor);
-		cancelButton.addMouseListener(this);
+		
+		cancelLabel = new JLabel("<html><u>Cancel</u></html>");
+		cancelLabel.setToolTipText("Cancel this job.");
+		cancelLabel.setForeground(Color.BLUE);
+		cancelLabel.addMouseListener(this);
 		c.gridx = 1;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.LINE_END;
-		header.add(cancelButton, c);
+		header.add(cancelLabel, c);
 		
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBackground(bgColor);
@@ -232,30 +229,41 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if(e.getSource().equals(cancelButton)) {
+		if(e.getSource().equals(cancelLabel)) {
 			String msg = job.getResult().jobName
 			+ " - are you sure you wish to cancel this job?";
 			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
 				return;
-			else
+			else {
 				WinMain.jobsPanel.cancelJob(this);
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				cancelLabel.setText("<html>Cancel</html>");
+				cancelLabel.setForeground(Color.LIGHT_GRAY);
+				cancelLabel.removeMouseListener(this);
+			}
 		}
 		
 	}
 	
 	public void mousePressed(MouseEvent e) {
-		if(!e.getSource().equals(cancelButton))
+		if(!e.getSource().equals(cancelLabel))
 			WinMain.jobsPanel.select(this);
 	}
 	
 	public void mouseEntered(MouseEvent e) {
-		if(e.getSource().equals(cancelButton))
+		if(e.getSource().equals(cancelLabel)) {
 			setCursor(new Cursor(Cursor.HAND_CURSOR));
+			cancelLabel.setForeground(Color.CYAN);
+			cancelLabel.repaint();
+		}
 	}
 
 	public void mouseExited(MouseEvent e) {
-		if(e.getSource().equals(cancelButton))
+		if(e.getSource().equals(cancelLabel)) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			cancelLabel.setForeground(Color.BLUE);
+			cancelLabel.repaint();
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {

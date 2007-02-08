@@ -43,8 +43,6 @@ public class CodeMLJobEntry extends JobsPanelEntry
 		if (status.text == null)
 			return;
 		
-		System.out.println(status.text);
-		
 		String str = "<html>Completed models:&nbsp;&nbsp; ";
 		
 		StringTokenizer tok = new StringTokenizer(status.text, " ");

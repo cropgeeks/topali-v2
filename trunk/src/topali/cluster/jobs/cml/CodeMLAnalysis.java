@@ -70,7 +70,8 @@ class CodeMLAnalysis extends AnalysisThread
 		parser.parse(resultsFile.getPath(), rstFile.getPath());		
 		CodeMLModel model = parser.getModelResult();
 		
-		model.name = Models.getModelName(modelType);
+		model.name = Models.getLongModelName(modelType);
+		model.params = Models.getNParameters(modelType);
 		model.runNumber = "run " + modelType;		
 		Castor.saveXML(model, new File(runDir, "model.xml"));
 		

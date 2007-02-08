@@ -21,20 +21,28 @@ public class Model0Parser extends CMLResultParser {
 				
 				line = line.trim();
 				
-				if(line.startsWith("lnL(ntime:")) {
-					a = line.substring(line.lastIndexOf(':')+1);
-					a = a.trim();
-					b = a.split("\\s+");
-					model.likelihood = Float.parseFloat(b[0]);
-					continue;
+				try
+				{
+					if(line.startsWith("lnL(ntime:")) {
+						a = line.substring(line.lastIndexOf(':')+1);
+						a = a.trim();
+						b = a.split("\\s+");
+						model.likelihood = Float.parseFloat(b[0]);
+						continue;
+					}
+					
+					if(line.startsWith("omega (dN/dS)")) {
+						b = line.split("\\s+");
+						model.dnDS = Float.parseFloat(b[3]);
+					}
+				} catch (RuntimeException e)
+				{
+					e.printStackTrace();
+					System.err.println("Error parsing line:/n"+line);
 				}
-				
-				if(line.startsWith("omega (dN/dS)")) {
-					b = line.split("\\s+");
-					model.dnDS = Float.parseFloat(b[3]);
-				}
-				
 			}
+			in.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
