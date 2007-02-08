@@ -21,30 +21,43 @@ public class Model1aParser extends CMLResultParser {
 				
 				line = line.trim();
 				
-				//TODO: dN/dS
-				
-				if(line.startsWith("lnL(ntime:")) {
-					a = line.substring(line.lastIndexOf(':')+1);
-					a = a.trim();
-					b = a.split("\\s+");
-					model.likelihood = Float.parseFloat(b[0]);
-					continue;
-				}
-				
-				if(line.startsWith("p:")) {
-					b = line.split("\\s+");
-					model.p0 = Float.parseFloat(b[1]);
-					model.p1 = Float.parseFloat(b[2]);
-					continue;
-				}
-				
-				if(line.startsWith("w:")) {
-					b = line.split("\\s+");
-					model.w0 = Float.parseFloat(b[1]);
-					model.w1 = Float.parseFloat(b[2]);
+				try
+				{
+					if(line.startsWith("lnL(ntime:")) {
+						a = line.substring(line.lastIndexOf(':')+1);
+						a = a.trim();
+						b = a.split("\\s+");
+						model.likelihood = Float.parseFloat(b[0]);
+						continue;
+					}
+					
+					if(line.startsWith("p:")) {
+						b = line.split("\\s+");
+						model.p0 = Float.parseFloat(b[1]);
+						model.p1 = Float.parseFloat(b[2]);
+						continue;
+					}
+					
+					if(line.startsWith("w:")) {
+						b = line.split("\\s+");
+						model.w0 = Float.parseFloat(b[1]);
+						model.w1 = Float.parseFloat(b[2]);
+						continue;
+					}
+					
+					if(model.dnDS==-1 && line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}")) {
+						b = line.split("\\s+");
+						model.dnDS = Float.parseFloat(b[4]);
+					}
+				} catch (RuntimeException e)
+				{
+					e.printStackTrace();
+					System.err.println("Error parsing line:/n"+line);
 				}
 				
 			}
+			in.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

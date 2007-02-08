@@ -9,11 +9,20 @@ public class Models
 {	
 	public final static int MAX = 8;
 
+//	public final static int MODEL_M0 = 1;
+//	public final static int MODEL_M1 = 2;
+//	public final static int MODEL_M2 = 3;
+//	public final static int MODEL_M1a = 4;
+//	public final static int MODEL_M2a = 5;
+//	public final static int MODEL_M3 = 6;
+//	public final static int MODEL_M7 = 7;
+//	public final static int MODEL_M8 = 8;
+	
 	public final static int MODEL_M0 = 1;
-	public final static int MODEL_M1 = 2;
-	public final static int MODEL_M2 = 3;
-	public final static int MODEL_M1a = 4;
-	public final static int MODEL_M2a = 5;
+	public final static int MODEL_M1 = 4;
+	public final static int MODEL_M2 = 5;
+	public final static int MODEL_M1a = 2;
+	public final static int MODEL_M2a = 3;
 	public final static int MODEL_M3 = 6;
 	public final static int MODEL_M7 = 7;
 	public final static int MODEL_M8 = 8;
@@ -35,6 +44,38 @@ public class Models
 		}
 		
 		return new String();
+	}
+	
+	public static String getLongModelName(int model)
+	{
+		switch (model)
+		{
+			case MODEL_M0: return "M0 (one-ratio)";
+			case MODEL_M1: return "M1 (NearlyNeutral)";
+			case MODEL_M2: return "M2 (PositiveSelection)";
+			case MODEL_M1a: return "M1a (NearlyNeutral)";
+			case MODEL_M2a: return "M2a (PositiveSelection)";
+			case MODEL_M3: return "M3 (discrete (3 categories))";
+			case MODEL_M7: return "M7 (beta (10 categories))";
+			case MODEL_M8: return "M8 (beta&w>1 (11 categories))";
+		}
+		
+		return new String();
+	}
+	
+	public static int getNParameters(int model) {
+		switch (model)
+		{
+			case MODEL_M0: return 1;
+			case MODEL_M1: return 1;
+			case MODEL_M2: return 3;
+			case MODEL_M1a: return 2;
+			case MODEL_M2a: return 4;
+			case MODEL_M3: return 5;
+			case MODEL_M7: return 2;
+			case MODEL_M8: return 4;
+		}
+		return -1;
 	}
 	
 	static String getModel(int model)

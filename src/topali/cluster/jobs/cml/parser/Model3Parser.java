@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 public class Model3Parser extends CMLResultParser {
 
+	String bla;
+	
 	@Override
 	public void parse(String resultFile, String rstFile) {
 		try {
@@ -23,45 +25,76 @@ public class Model3Parser extends CMLResultParser {
 				
 				line = line.trim();
 				
-				//TODO: dN/dS
-				
-				if(line.startsWith("lnL(ntime:")) {
-					a = line.substring(line.lastIndexOf(':')+1);
-					a = a.trim();
-					b = a.split("\\s+");
-					model.likelihood = Float.parseFloat(b[0]);
-					continue;
+				try
+				{
+					if(line.startsWith("lnL(ntime:")) {
+						a = line.substring(line.lastIndexOf(':')+1);
+						a = a.trim();
+						b = a.split("\\s+");
+						model.likelihood = Float.parseFloat(b[0]);
+						continue;
+					}
+					
+					if(line.startsWith("p:")) {
+						b = line.split("\\s+");
+						model.p0 = Float.parseFloat(b[1]);
+						model.p1 = Float.parseFloat(b[2]);
+						model.p2 = Float.parseFloat(b[3]);
+						continue;
+					}
+					
+					if(line.startsWith("w:")) {
+						b = line.split("\\s+");
+						model.w0 = Float.parseFloat(b[1]);
+						model.w1 = Float.parseFloat(b[2]);
+						model.w2 = Float.parseFloat(b[3]);
+						continue;
+					}
+					
+					if(model.dnDS==-1 && line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}")) {
+						b = line.split("\\s+");
+						model.dnDS = Float.parseFloat(b[4]);
+					}
+				} catch (RuntimeException e)
+				{
+					e.printStackTrace();
+					System.err.println("Error parsing line:/n"+line);
 				}
-				
-				if(line.startsWith("p:")) {
-					b = line.split("\\s+");
-					model.p0 = Float.parseFloat(b[1]);
-					model.p1 = Float.parseFloat(b[2]);
-					model.p2 = Float.parseFloat(b[3]);
-					continue;
-				}
-				
-				if(line.startsWith("w:")) {
-					b = line.split("\\s+");
-					model.w0 = Float.parseFloat(b[1]);
-					model.w1 = Float.parseFloat(b[2]);
-					model.w2 = Float.parseFloat(b[3]);
-				}
-				
 			}
+			in.close();
 			
 //			parse rst file
 			in = new BufferedReader(new FileReader(rstFile));
 			line = null;
-			Pattern p = Pattern.compile("\\d+ \\w .+");
+			Pattern p = Pattern.compile("\\d+ \\D .+");
+			boolean start = false;
+			StringBuffer pss = new StringBuffer();
 			while((line=in.readLine())!=null) {
 				line = line.trim();
+				bla = line;
 				Matcher m = p.matcher(line);
-				if(m.matches()) {
+				if(m.matches() && start) {
 					String[] tmp = line.split("\\s+");
-					pss.add(tmp[0]+" "+tmp[1]+" "+tmp[tmp.length-1]);
+					int pos = Integer.parseInt(tmp[0]);
+					char aa = tmp[1].charAt(0);
+					float prob = Float.parseFloat(tmp[4]);
+					float postmeanW = Float.parseFloat(tmp[tmp.length-2]);
+					pss.append(pos);
+					pss.append('|');
+					pss.append(aa);
+					pss.append('|');
+					pss.append(postmeanW);
+					pss.append('|');
+					pss.append(prob);
+					pss.append(' ');
 				}
+				if(line.startsWith("Naive Empirical Bayes (NEB)"))
+					start = true;
+				else if(line.startsWith("Positively selected sites"))
+					start = false;
 			}
+			model.pss = pss.toString();
+			in.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

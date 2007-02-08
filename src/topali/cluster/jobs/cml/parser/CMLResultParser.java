@@ -5,20 +5,14 @@
 
 package topali.cluster.jobs.cml.parser;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import topali.data.*;
 import topali.cluster.jobs.cml.Models;
+import topali.data.CodeMLModel;
 
 public abstract class CMLResultParser
 {
 	protected CodeMLModel model = new CodeMLModel();
 	
-	List<String> pss;
-	
 	public CMLResultParser() {
-		pss = new LinkedList<String>();
 	}
 
 	public static CMLResultParser getParser(int model)
@@ -28,8 +22,8 @@ public abstract class CMLResultParser
 		switch(model)
 		{
 			case Models.MODEL_M0: parser = new Model0Parser(); break;
-			case Models.MODEL_M1: parser = new Model0Parser(); break;	// dummy parsers
-			case Models.MODEL_M2: parser = new Model0Parser(); break;	// dummy parsers
+			case Models.MODEL_M1: parser = new Model1aParser(); break;	// dummy parsers
+			case Models.MODEL_M2: parser = new Model2aParser(); break;	// dummy parsers
 			case Models.MODEL_M1a: parser = new Model1aParser(); break;
 			case Models.MODEL_M2a: parser = new Model2aParser(); break;
 			case Models.MODEL_M3: parser = new Model3Parser(); break;
@@ -47,4 +41,5 @@ public abstract class CMLResultParser
 
 	public CodeMLModel getModelResult()
 		{ return model; }
+	
 }
