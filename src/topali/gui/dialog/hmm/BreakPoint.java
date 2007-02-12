@@ -5,11 +5,12 @@
 
 package topali.gui.dialog.hmm;
 
-class BreakPoint 
+class BreakPoint
 {
 	int breakpoint;
+
 	int topology;
-	
+
 	BreakPoint(int bp, int tp)
 	{
 		breakpoint = bp;

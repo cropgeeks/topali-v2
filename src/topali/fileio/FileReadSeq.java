@@ -5,15 +5,13 @@
 
 package topali.fileio;
 
-import java.io.*;
-import java.util.*;
-
-import topali.data.*;
-import topali.gui.*;
-
-import doe.*;
+import java.io.File;
+import java.io.IOException;
 
 import sbrn.commons.bioinf.ReadSeq;
+import topali.data.SequenceSet;
+import topali.gui.Prefs;
+import doe.MsgBox;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
 // delegating the actual work to the ReadSeq util class (web/cgi service)
@@ -23,35 +21,37 @@ class FileReadSeq extends FileGeneric
 	{
 		ss = s;
 	}
-	
+
 	public boolean readFile(File file)
 	{
 		File outFile = new File(Prefs.tmpDir, "tmpAlignment");
-		
+
 		// Use ReadSeq to convert the file into a FASTA formatted file
 		System.out.println("Attempting ReadSeq conversion...");
 		ReadSeq readSeq = new ReadSeq(file, outFile);
-		try { readSeq.convertFile(); }
-		catch (Exception e)
+		try
+		{
+			readSeq.convertFile();
+		} catch (Exception e)
 		{
 			System.out.println(e);
 			success = false;
 			ss.reset();
-			
+
 			MsgBox.msg("TOPALi was unable to convert the file using ReadSeq:\n"
-				+ e, MsgBox.ERR);
+					+ e, MsgBox.ERR);
 		}
-		
+
 		// Then use TOPALi's FASTA handler to load the file
 		FileFasta ff = new FileFasta(ss);
 		success = ff.readFile(outFile);
-		
+
 		return success;
 	}
-	
-	public void writeFile(File file, int[] index, int start, int end, boolean useSafeNames)
-		throws IOException
+
+	public void writeFile(File file, int[] index, int start, int end,
+			boolean useSafeNames) throws IOException
 	{
-		
+
 	}
 }

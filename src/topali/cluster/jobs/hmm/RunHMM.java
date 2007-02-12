@@ -5,18 +5,21 @@
 
 package topali.cluster.jobs.hmm;
 
-import java.io.*;
+import java.io.File;
 
-import topali.cluster.*;
-import topali.data.*;
-import topali.fileio.*;
-import topali.mod.*;
+import topali.cluster.ClusterUtils;
+import topali.cluster.LocalJobs;
+import topali.data.HMMResult;
+import topali.data.SequenceSet;
+import topali.fileio.Castor;
+import topali.mod.Filters;
 
 public class RunHMM extends Thread
-{	
+{
 	private SequenceSet ss;
+
 	private HMMResult result;
-	
+
 	// Directory where the job will run
 	private File jobDir;
 
@@ -26,21 +29,23 @@ public class RunHMM extends Thread
 		this.ss = ss;
 		this.result = result;
 	}
-	
+
 	public void run()
 	{
-		try { startThread(); }
-		catch (Exception e) {
+		try
+		{
+			startThread();
+		} catch (Exception e)
+		{
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
-	}	
+	}
 
-	private void startThread()
-		throws Exception
+	private void startThread() throws Exception
 	{
 		// Ensure the directory for this job exists
 		jobDir.mkdirs();
-		
+
 		// Store the HMMResult object where it can be read by the sub-job
 		Castor.saveXML(result, new File(jobDir, "submit.xml"));
 		// Store the SequenceSet where it can be read by the sub-job

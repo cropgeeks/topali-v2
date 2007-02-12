@@ -5,32 +5,35 @@
 
 package topali.gui.nav;
 
-import topali.data.*;
 import static topali.gui.WinMainMenuBar.*;
+import topali.data.AlignmentData;
+import topali.data.AnalysisResult;
 
 public abstract class ResultsNode extends INode
 {
 	protected AnalysisResult result;
-	
+
 	public ResultsNode(AlignmentData data, AnalysisResult result)
 	{
 		super(data);
-		
+
 		this.result = result;
 	}
-	
+
 	AnalysisResult getResult()
-		{ return result; }
-	
+	{
+		return result;
+	}
+
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
-		
+
 		aAnlsCreateTree.setEnabled(true);
 		aAnlsPartition.setEnabled(true);
 		aAnlsRename.setEnabled(true);
 		aAnlsRemove.setEnabled(true);
-		
+
 		aVamExport.setEnabled(true);
 	}
 }

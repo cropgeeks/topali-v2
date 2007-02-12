@@ -13,8 +13,8 @@ public class AnalysisUtils
 	{
 		int index = (int) Math.round(percentile * values.length);
 		if (index >= values.length)
-			index = values.length-1;
-		
+			index = values.length - 1;
+
 		return values[index];
 	}
 }

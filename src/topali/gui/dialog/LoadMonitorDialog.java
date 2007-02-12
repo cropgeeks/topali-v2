@@ -5,37 +5,43 @@
 
 package topali.gui.dialog;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 
 import topali.gui.*;
 
 public class LoadMonitorDialog extends JDialog implements Runnable
 {
-	private WinMain winMain;
 	private WinMainMenuBar menubar;
+
 	private String filename;
-	
+
 	private Project project;
-	
+
 	private static JLabel label1;
+
 	private static JLabel label2;
-	
-	public LoadMonitorDialog(WinMain winMain, WinMainMenuBar menubar, String filename)
+
+	public LoadMonitorDialog(WinMain winMain, WinMainMenuBar menubar,
+			String filename)
 	{
 		super(winMain, Text.GuiDiag.getString("LoadMonitorDialog.gui01"), true);
-		
-		this.winMain = winMain;
+
 		this.menubar = menubar;
 		this.filename = filename;
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e) {
+
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowOpened(WindowEvent e)
+			{
 				doLoad();
 			}
 		});
-				
+
 		JLabel icon = new JLabel(Icons.OPEN_PROJECT);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 		label1 = new JLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui02"));
@@ -46,49 +52,58 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 		p1.add(label2);
 		add(p1);
 		add(icon, BorderLayout.WEST);
-		
+
 		pack();
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 		setVisible(true);
 	}
-	
+
 	private void doLoad()
-		{ new Thread(this).start(); }
-	
+	{
+		new Thread(this).start();
+	}
+
 	public Project getProject()
-		{ return project; }
-	
+	{
+		return project;
+	}
+
 	public void run()
-	{		
+	{
 		setLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui03"));
 		Project temp = Project.open(filename);
 		setLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui04"));
-		
+
 		if (temp != null)
 		{
 			project = temp;
-		
+
 			menubar.setProjectOpenedState();
 			menubar.updateRecentFileList(project);
-			winMain.navPanel.displayProject(project);
-			menubar.aFileSave.setEnabled(false);
+			WinMain.navPanel.displayProject(project);
+			WinMainMenuBar.aFileSave.setEnabled(false);
 		}
-		
+
 		setVisible(false);
 	}
-	
+
 	public static void setLabel(final String msg)
 	{
-		Runnable r = new Runnable() {
+		Runnable r = new Runnable()
+		{
 			public void run()
 			{
 				label2.setText("(" + msg + ")");
 			}
 		};
-		
-		try { SwingUtilities.invokeAndWait(r); }
-		catch (Exception e) {}
+
+		try
+		{
+			SwingUtilities.invokeAndWait(r);
+		} catch (Exception e)
+		{
+		}
 	}
 }

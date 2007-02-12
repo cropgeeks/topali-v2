@@ -13,13 +13,14 @@ import java.io.*;
 public class StreamCatcher extends Thread
 {
 	protected BufferedReader reader = null;
+
 	protected boolean showOutput = false;
 
 	public StreamCatcher(InputStream in, boolean showOutput)
 	{
 		reader = new BufferedReader(new InputStreamReader(in));
 		this.showOutput = showOutput;
-		
+
 		start();
 	}
 
@@ -28,18 +29,23 @@ public class StreamCatcher extends Thread
 		try
 		{
 			String line = reader.readLine();
-									
+
 			while (line != null)
 			{
 				if (showOutput)
 					System.out.println(line);
-					
-				line = reader.readLine();				
+
+				line = reader.readLine();
 			}
+		} catch (Exception e)
+		{
 		}
-		catch (Exception e) {}
-		
-		try { reader.close(); }
-		catch (IOException e) {}
+
+		try
+		{
+			reader.close();
+		} catch (IOException e)
+		{
+		}
 	}
 }

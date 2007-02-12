@@ -5,43 +5,15 @@
 
 package topali.gui;
 
-import static topali.cluster.JobStatus.CANCELLED;
-import static topali.cluster.JobStatus.CANCELLING;
-import static topali.cluster.JobStatus.COMMS_ERROR;
-import static topali.cluster.JobStatus.COMPLETED;
-import static topali.cluster.JobStatus.COMPLETING;
-import static topali.cluster.JobStatus.FATAL_ERROR;
-import static topali.cluster.JobStatus.HOLDING;
-import static topali.cluster.JobStatus.QUEUING;
-import static topali.cluster.JobStatus.RUNNING;
-import static topali.cluster.JobStatus.STARTING;
-import static topali.cluster.JobStatus.UNKNOWN;
-import static topali.gui.WinMainStatusBar.BLU;
-import static topali.gui.WinMainStatusBar.GRE;
-import static topali.gui.WinMainStatusBar.OFF;
-import static topali.gui.WinMainStatusBar.RED;
+import static topali.cluster.JobStatus.*;
+import static topali.gui.WinMainStatusBar.*;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Date;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
@@ -50,29 +22,29 @@ import doe.MsgBox;
 public abstract class JobsPanelEntry extends JPanel implements MouseListener
 {
 	private AnalysisJob job;
-	
+
 	private String startStr;
-	
+
 	private JLabel jobLabel, statusLabel, timeLabel, iconLabel, cancelLabel;
-	
+
 	protected Color bgColor = (Color) UIManager.get("list.background");
-	
+
 	public JobsPanelEntry(AnalysisJob job)
 	{
 		this.job = job;
-		
+
 		setBackground(bgColor);
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createTitledBorder("JobId: N/A"));
-		
+
 		jobLabel = new JLabel(job.getResult().jobName);
 		statusLabel = new JLabel("Starting job...");
 		iconLabel = new JLabel(Icons.STATUS_OFF);
-		
+
 		long time = job.getResult().startTime;
 		startStr = "Submitted: " + new Date(time).toString();
-		timeLabel = new JLabel(startStr);		
-		
+		timeLabel = new JLabel(startStr);
+
 		JPanel header = new JPanel(new GridBagLayout());
 		header.setBackground(bgColor);
 		GridBagConstraints c = new GridBagConstraints();
@@ -85,7 +57,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		c.gridx = 0;
 		c.gridy = 1;
 		header.add(statusLabel, c);
-		
+
 		cancelLabel = new JLabel("<html><u>Cancel</u></html>");
 		cancelLabel.setToolTipText("Cancel this job.");
 		cancelLabel.setForeground(Color.BLUE);
@@ -94,32 +66,32 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.LINE_END;
 		header.add(cancelLabel, c);
-		
+
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBackground(bgColor);
 		p2.add(getProgressComponent());
 		p2.add(iconLabel, BorderLayout.EAST);
-		
+
 		JPanel p3 = new JPanel(new BorderLayout(5, 5));
 		p3.setBackground(bgColor);
 		p3.add(header, BorderLayout.NORTH);
 		p3.add(p2);
-		p3.add(timeLabel, BorderLayout.SOUTH);			
-		
+		p3.add(timeLabel, BorderLayout.SOUTH);
+
 		add(p3);
-		
+
 		if (job.getResult().isRemote)
 			add(new JLabel(Icons.COMMS), BorderLayout.WEST);
 		else
 			add(new JLabel(Icons.LOCAL), BorderLayout.WEST);
-		
+
 		this.addMouseListener(this);
 	}
-	
+
 	public abstract JComponent getProgressComponent();
-	
+
 	public abstract void setJobStatus(JobStatus status);
-	
+
 	public void setJobId(String jobId)
 	{
 		String title = "JobId: " + jobId + " ";
@@ -127,88 +99,91 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			title += "(remote)";
 		else
 			title += "(local)";
-		
+
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
-	
+
 	public void updateStatus()
 	{
-		statusLabel.setForeground(Color.black);		
+		statusLabel.setForeground(Color.black);
 		iconLabel.setIcon(Icons.STATUS_GRE);
-		
+
 		switch (job.getStatus())
 		{
-			case UNKNOWN:
-				iconLabel.setIcon(Icons.STATUS_BLU);
-				WinMainStatusBar.setStatusIcon(BLU);
-				statusLabel.setForeground(Color.blue);
-				statusLabel.setText("Unknown job status...");				
-				break;
-			
-			case STARTING:
-				statusLabel.setText("Starting job...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-			case QUEUING:
-				statusLabel.setText("Queued - waiting to run...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-			case RUNNING:
-				statusLabel.setText("Running...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-			case HOLDING:
-				statusLabel.setText("Holding - waiting to resume...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-			case COMPLETING:
-				statusLabel.setText("Completed - waiting to retrieve result...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-				
-			case CANCELLING:
-				statusLabel.setText("Cancelling...");
-				WinMainStatusBar.setStatusIcon(GRE);
-				break;
-			
-			case COMPLETED:
-			case CANCELLED:
-				WinMainStatusBar.setStatusIcon(OFF);
-				break;				
-			
-			case COMMS_ERROR:
-				iconLabel.setIcon(Icons.STATUS_BLU);
-				WinMainStatusBar.setStatusIcon(BLU);
-				statusLabel.setForeground(Color.blue);
-				statusLabel.setText("Communication error - waiting to retry...");
-				break;
-			
-			case FATAL_ERROR:
-				iconLabel.setIcon(Icons.STATUS_RED);
-				WinMainStatusBar.setStatusIcon(RED);
-				statusLabel.setForeground(Color.red);
-				statusLabel.setText("Fatal job error...");
-				break;
+		case UNKNOWN:
+			iconLabel.setIcon(Icons.STATUS_BLU);
+			WinMainStatusBar.setStatusIcon(BLU);
+			statusLabel.setForeground(Color.blue);
+			statusLabel.setText("Unknown job status...");
+			break;
+
+		case STARTING:
+			statusLabel.setText("Starting job...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+		case QUEUING:
+			statusLabel.setText("Queued - waiting to run...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+		case RUNNING:
+			statusLabel.setText("Running...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+		case HOLDING:
+			statusLabel.setText("Holding - waiting to resume...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+		case COMPLETING:
+			statusLabel.setText("Completed - waiting to retrieve result...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+
+		case CANCELLING:
+			statusLabel.setText("Cancelling...");
+			WinMainStatusBar.setStatusIcon(GRE);
+			break;
+
+		case COMPLETED:
+		case CANCELLED:
+			WinMainStatusBar.setStatusIcon(OFF);
+			break;
+
+		case COMMS_ERROR:
+			iconLabel.setIcon(Icons.STATUS_BLU);
+			WinMainStatusBar.setStatusIcon(BLU);
+			statusLabel.setForeground(Color.blue);
+			statusLabel.setText("Communication error - waiting to retry...");
+			break;
+
+		case FATAL_ERROR:
+			iconLabel.setIcon(Icons.STATUS_RED);
+			WinMainStatusBar.setStatusIcon(RED);
+			statusLabel.setForeground(Color.red);
+			statusLabel.setText("Fatal job error...");
+			break;
 		}
 	}
-	
-	long h=0, m=0, s=0;
+
+	long h = 0, m = 0, s = 0;
+
 	long elapsed;
-	
+
 	public void setTimeLabel(long start, long current)
 	{
 		elapsed = current - start;
 
-		h = (elapsed/(1000*60*60));
-		m = (elapsed-(h*1000*60*60))/(1000*60);
-	
-		timeLabel.setText(startStr + " (Runtime: "
-			+ h + "h:" + Prefs.i2.format(m) + "m)");
+		h = (elapsed / (1000 * 60 * 60));
+		m = (elapsed - (h * 1000 * 60 * 60)) / (1000 * 60);
+
+		timeLabel.setText(startStr + " (Runtime: " + h + "h:"
+				+ Prefs.i2.format(m) + "m)");
 	}
-	
+
 	AnalysisJob getJob()
-		{ return job; }
-		
+	{
+		return job;
+	}
+
 	public void setSelected(boolean selected)
 	{
 		if (selected)
@@ -217,24 +192,33 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.PLAIN));
 	}
 
-	//Have to override this, to prevent JobsPanel's BoxLayout from scaling this Component to it's
-	//maximum size.
+	// Have to override this, to prevent JobsPanel's BoxLayout from scaling this
+	// Component to it's
+	// maximum size.
 	@Override
-	public Dimension getMaximumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
-	}
-	@Override
-	public Dimension getMinimumSize() {
-		return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+	public Dimension getMaximumSize()
+	{
+		return new Dimension(super.getMaximumSize().width,
+				getPreferredSize().height);
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		if(e.getSource().equals(cancelLabel)) {
+	@Override
+	public Dimension getMinimumSize()
+	{
+		return new Dimension(super.getMaximumSize().width,
+				getPreferredSize().height);
+	}
+
+	public void mouseClicked(MouseEvent e)
+	{
+		if (e.getSource().equals(cancelLabel))
+		{
 			String msg = job.getResult().jobName
-			+ " - are you sure you wish to cancel this job?";
+					+ " - are you sure you wish to cancel this job?";
 			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
 				return;
-			else {
+			else
+			{
 				WinMain.jobsPanel.cancelJob(this);
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				cancelLabel.setText("<html>Cancel</html>");
@@ -242,30 +226,36 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 				cancelLabel.removeMouseListener(this);
 			}
 		}
-		
+
 	}
-	
-	public void mousePressed(MouseEvent e) {
-		if(!e.getSource().equals(cancelLabel))
+
+	public void mousePressed(MouseEvent e)
+	{
+		if (!e.getSource().equals(cancelLabel))
 			WinMain.jobsPanel.select(this);
 	}
-	
-	public void mouseEntered(MouseEvent e) {
-		if(e.getSource().equals(cancelLabel)) {
+
+	public void mouseEntered(MouseEvent e)
+	{
+		if (e.getSource().equals(cancelLabel))
+		{
 			setCursor(new Cursor(Cursor.HAND_CURSOR));
 			cancelLabel.setForeground(Color.CYAN);
 			cancelLabel.repaint();
 		}
 	}
 
-	public void mouseExited(MouseEvent e) {
-		if(e.getSource().equals(cancelLabel)) {
+	public void mouseExited(MouseEvent e)
+	{
+		if (e.getSource().equals(cancelLabel))
+		{
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			cancelLabel.setForeground(Color.BLUE);
 			cancelLabel.repaint();
 		}
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e)
+	{
 	}
 }

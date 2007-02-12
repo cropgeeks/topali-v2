@@ -5,176 +5,186 @@
 
 package topali.gui;
 
+import static topali.mod.Filters.TOP;
+
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.zip.*;
-import javax.swing.*;
 
-import org.exolab.castor.xml.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
-import topali.data.*;
-import topali.fileio.*;
-import topali.gui.dialog.*;
-import topali.mod.*;
-import static topali.mod.Filters.*;
+import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.Unmarshaller;
 
-import doe.*;
+import topali.data.AlignmentData;
+import topali.fileio.Castor;
+import topali.gui.dialog.LoadMonitorDialog;
+import topali.mod.Filters;
+import doe.MsgBox;
 
 public class Project
 {
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
 	public File filename;
-	
-	
+
 	// The datasets within the project
 	private LinkedList<AlignmentData> datasets = new LinkedList<AlignmentData>();
-	
+
 	// Index of the selection path in the navigation tree, so TOPALi can restore
 	// its state after a project-load
 	private int[] treePath;
-	
+
 	// Is this project associated with a VAMSAS session
 	private String vamsasID;
-	
+
 	public Project()
 	{
 	}
-	
+
 	public LinkedList<AlignmentData> getDatasets()
-		{ return datasets; }
-	
+	{
+		return datasets;
+	}
+
 	public void setDatasets(LinkedList<AlignmentData> datasets)
-		{ this.datasets = datasets; }
+	{
+		this.datasets = datasets;
+	}
 
 	void removeDataSet(AlignmentData data)
 	{
 		datasets.remove(data);
 	}
-	
+
 	public int[] getTreePath()
-		{ return treePath; }
-	
+	{
+		return treePath;
+	}
+
 	public void setTreePath(int[] treePath)
-		{ this.treePath = treePath; }
-	
+	{
+		this.treePath = treePath;
+	}
+
 	public String getVamsasID()
-		{ return vamsasID; }
-	
+	{
+		return vamsasID;
+	}
+
 	public void setVamsasID(String vamsasID)
-		{ this.vamsasID = vamsasID; }
-	
-	
+	{
+		this.vamsasID = vamsasID;
+	}
+
 	// Calls load() to load the given project from disk, or opens a FileDialog
 	// to prompt for the project name if filename is null
 	public static Project open(String filename)
 	{
 		if (filename != null)
 			return open(new File(filename));
-	
+
 		// Create the dialog
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 		fc.setDialogTitle(Text.Gui.getString("Project.gui01"));
-		
+
 		Filters.setFilters(fc, TOP, TOP);
-		
+
 		if (fc.showOpenDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 			Prefs.gui_dir = "" + fc.getCurrentDirectory();
-			
+
 			return open(file);
 		}
-		
+
 		return null;
 	}
-	
+
 	static Project open(File filename)
 	{
 		try
 		{
 			ZipFile zipFile = new ZipFile(filename);
-			InputStream zin = zipFile.getInputStream(
-				new ZipEntry("project.xml"));
+			InputStream zin = zipFile
+					.getInputStream(new ZipEntry("project.xml"));
 			BufferedReader in = new BufferedReader(new InputStreamReader(zin));
-						
+
 			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
 			// Create a new Unmarshaller
-//			Castor.initialise();
-//			Unmarshaller unmarshaller = new Unmarshaller();//Project.class);			
-//			unmarshaller.setMapping(Castor.getMapping());
-//			unmarshaller.setWhitespacePreserve(true);
-//			unmarshaller.setIgnoreExtraElements(true);
-			
+			// Castor.initialise();
+			// Unmarshaller unmarshaller = new Unmarshaller();//Project.class);
+			// unmarshaller.setMapping(Castor.getMapping());
+			// unmarshaller.setWhitespacePreserve(true);
+			// unmarshaller.setIgnoreExtraElements(true);
+
 			// Unmarshal the person object
 			Unmarshaller unmarshaller = Castor.getUnmarshaller();
 			Project p = (Project) unmarshaller.unmarshal(in);
 			in.close();
-			
+
 			p.filename = filename;
-			
+
 			zipFile.close();
-			
+
 			return p;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
-			MsgBox.msg(
-				Text.format(Text.Gui.getString("Project.err01"), filename, e),
-				MsgBox.ERR);
-			
+			MsgBox.msg(Text.format(Text.Gui.getString("Project.err01"),
+					filename, e), MsgBox.ERR);
+
 			e.printStackTrace(System.out);
 			return null;
 		}
-	}	
-	
+	}
+
 	static boolean save(Project p, boolean saveAs)
 	{
 		if (p.filename == null)
 			saveAs = true;
 		if (saveAs && p.saveAs() == false)
 			return false;
-		
+
 		try
 		{
 			long s = System.currentTimeMillis();
-						
+
 			// Open an output stream to the zip...
 			ZipOutputStream zOut = new ZipOutputStream(
-				new BufferedOutputStream(new FileOutputStream(p.filename)));
+					new BufferedOutputStream(new FileOutputStream(p.filename)));
 			// And another for Castor to write to within the zip...
-			BufferedWriter cOut = new BufferedWriter(
-				new OutputStreamWriter(zOut));
-			
+			BufferedWriter cOut = new BufferedWriter(new OutputStreamWriter(
+					zOut));
+
 			ZipEntry entry = new ZipEntry("project.xml");
 			zOut.putNextEntry(entry);
-			
+
 			Marshaller m = new Marshaller(cOut);
 			m.setMapping(Castor.getMapping());
 			m.setEncoding("UTF-8");
 			m.marshal(p);
-			
+
 			cOut.close();
 			zOut.close();
-			
-			System.out.println("XML/Zip Write: " + (System.currentTimeMillis()-s));
-		}
-		catch(Exception e)
+
+			System.out.println("XML/Zip Write: "
+					+ (System.currentTimeMillis() - s));
+		} catch (Exception e)
 		{
-			MsgBox.msg(
-				Text.format(Text.Gui.getString("Project.err02"), p.filename,
-				e.getMessage()), MsgBox.ERR);
-			
+			MsgBox.msg(Text.format(Text.Gui.getString("Project.err02"),
+					p.filename, e.getMessage()), MsgBox.ERR);
+
 			e.printStackTrace(System.out);
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean saveAs()
 	{
 		JFileChooser fc = new JFileChooser();
@@ -184,36 +194,37 @@ public class Project
 		if (filename != null)
 			fc.setSelectedFile(filename);
 		else
-			fc.setSelectedFile(new File(Prefs.gui_dir, "project " + Prefs.gui_project_count + ".topali"));		
-		
+			fc.setSelectedFile(new File(Prefs.gui_dir, "project "
+					+ Prefs.gui_project_count + ".topali"));
+
 		Filters.setFilters(fc, TOP, TOP);
 
 		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = Filters.getSelectedFileForSaving(fc);
-			
+
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = Text.format(
-					Text.Gui.getString("Project.msg01"), file);
+				String msg = Text.format(Text.Gui.getString("Project.msg01"),
+						file);
 				int response = MsgBox.yesnocan(msg, 1);
-					
+
 				if (response == JOptionPane.NO_OPTION)
 					continue;
-				else if (response == JOptionPane.CANCEL_OPTION ||
-					response == JOptionPane.CLOSED_OPTION)
+				else if (response == JOptionPane.CANCEL_OPTION
+						|| response == JOptionPane.CLOSED_OPTION)
 					return false;
 			}
-			
+
 			// Otherwise it's ok to save...
 			Prefs.gui_dir = "" + fc.getCurrentDirectory();
 			Prefs.gui_project_count++;
 			filename = file;
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 }

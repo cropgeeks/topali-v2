@@ -5,37 +5,46 @@
 
 package topali.gui.nav;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import topali.data.*;
-import topali.gui.*;
-import topali.gui.results.*;
+import topali.data.AlignmentData;
+import topali.data.CodeMLResult;
+import topali.gui.IPrintable;
+import topali.gui.results.CodeMLResultsPanel;
 
 public class CodeMLResultsNode extends ResultsNode implements IPrintable
 {
 	private CodeMLResultsPanel panel;
-	
+
 	CodeMLResultsNode(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
-		
-		panel = new CodeMLResultsPanel(data, result);
+
+		panel = new CodeMLResultsPanel(result);
 	}
-	
+
 	public String toString()
-		{ return result.guiName; }
-		
+	{
+		return result.guiName;
+	}
+
 	public String getHelpKey()
-		{ return "cml_method"; }
-	
+	{
+		return "cml_method";
+	}
+
 	public JComponent getPanel()
-		{ return panel; }
-	
+	{
+		return panel;
+	}
+
 	public boolean isPrintable()
-		{ return false; }
-	
+	{
+		return false;
+	}
+
 	public void print()
 	{
-//		panel.print();
+		// panel.print();
 	}
 }

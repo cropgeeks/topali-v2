@@ -7,25 +7,24 @@ package topali.gui.jobs;
 
 import java.awt.Color;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
-import topali.gui.JobsPanel;
 import topali.gui.JobsPanelEntry;
 
-public class NoTrackingJobEntry extends JobsPanelEntry {
-	
-	public NoTrackingJobEntry(AnalysisJob job) {
+public class NoTrackingJobEntry extends JobsPanelEntry
+{
+
+	public NoTrackingJobEntry(AnalysisJob job)
+	{
 		super(job);
 	}
 
 	@Override
-	public JComponent getProgressComponent() {
-		
+	public JComponent getProgressComponent()
+	{
+
 		JPanel p = new JPanel();
 		p.setBackground(Color.WHITE);
 		p.setAlignmentX(CENTER_ALIGNMENT);
@@ -35,8 +34,8 @@ public class NoTrackingJobEntry extends JobsPanelEntry {
 	}
 
 	@Override
-	public void setJobStatus(JobStatus status) {
+	public void setJobStatus(JobStatus status)
+	{
 	}
 
-	
 }

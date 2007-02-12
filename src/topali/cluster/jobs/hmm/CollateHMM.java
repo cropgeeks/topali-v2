@@ -5,51 +5,49 @@
 
 package topali.cluster.jobs.hmm;
 
-import java.io.*;
-import java.util.logging.*;
+import java.io.File;
+import java.util.logging.Logger;
 
-import topali.cluster.*;
-import topali.data.*;
-import topali.fileio.*;
+import topali.cluster.JobStatus;
+import topali.data.HMMResult;
+import topali.fileio.Castor;
 
 public class CollateHMM
 {
 	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
-	
+
 	private File jobDir;
-	
-	public CollateHMM(File jobDir)
-		throws Exception
+
+	public CollateHMM(File jobDir) throws Exception
 	{
 		this.jobDir = jobDir;
 	}
-	
-	public JobStatus getPercentageComplete()
-		throws Exception
+
+	public JobStatus getPercentageComplete() throws Exception
 	{
 		float progress = 0;
-		
+
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("HMM error.txt");
 		}
-		
+
 		// Percentages are tracked by having one file for every 1% stored in a
 		// directory called "percent"
 		// HOWEVER, we cheat a bit and don't assume completion until 105% done!
-		try 
-		{ 
+		try
+		{
 			int count = new File(jobDir, "percent").listFiles().length;
-			progress = ((float)count / 105f) * 100f;
+			progress = ((float) count / 105f) * 100f;
+		} catch (Exception e)
+		{
 		}
-		catch (Exception e)	{}
-		
+
 		return new JobStatus(progress, 0, "_status");
 	}
-	
-	public HMMResult getResult()
-		throws Exception
+
+	public HMMResult getResult() throws Exception
 	{
 		return (HMMResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}

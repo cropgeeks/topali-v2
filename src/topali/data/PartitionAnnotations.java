@@ -10,7 +10,7 @@ package topali.data;
 // partitions list that the user sees.
 public class PartitionAnnotations extends RegionAnnotations
 {
-	
+
 	private int alignmentLength;
 
 	public PartitionAnnotations()
@@ -18,19 +18,23 @@ public class PartitionAnnotations extends RegionAnnotations
 		// Empty constructor for Castor XML
 		label = "TOPALi Partitions";
 	}
-	
+
 	public PartitionAnnotations(int alignmentLength)
 	{
 		super();
 		this.alignmentLength = alignmentLength;
 	}
-	
-	
+
 	public int getAlignmentLength()
-		{ return alignmentLength; }
+	{
+		return alignmentLength;
+	}
+
 	public void setAlignmentLength(int alignmentLength)
-		{ this.alignmentLength = alignmentLength; }	
-	
+	{
+		this.alignmentLength = alignmentLength;
+	}
+
 	protected AnnotationElement create(int position)
 	{
 		return new AnnotationElement(AnnotationElement.PARTITION, position);

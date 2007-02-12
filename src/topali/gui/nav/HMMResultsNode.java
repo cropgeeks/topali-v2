@@ -5,32 +5,41 @@
 
 package topali.gui.nav;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import topali.data.*;
-import topali.gui.*;
-import topali.gui.results.*;
+import topali.data.AlignmentData;
+import topali.data.HMMResult;
+import topali.gui.WinMainTipsPanel;
+import topali.gui.results.HMMResultsPanel;
 
 public class HMMResultsNode extends ResultsNode
 {
 	private HMMResultsPanel panel;
-	
+
 	HMMResultsNode(AlignmentData data, HMMResult result)
 	{
 		super(data, result);
-		
+
 		panel = new HMMResultsPanel(data, result);
 	}
-	
+
 	public String toString()
-		{ return result.guiName; }
-		
+	{
+		return result.guiName;
+	}
+
 	public int getTipsKey()
-		{ return WinMainTipsPanel.TIPS_NONE; }
-	
+	{
+		return WinMainTipsPanel.TIPS_NONE;
+	}
+
 	public String getHelpKey()
-		{ return "hmm_method"; }
-	
+	{
+		return "hmm_method";
+	}
+
 	public JComponent getPanel()
-		{ return panel; }
+	{
+		return panel;
+	}
 }

@@ -5,12 +5,13 @@
 
 package topali.fileio;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 interface ISeqFile
 {
 	public boolean readFile(File file);
-	
-	public void writeFile(File file, int[] index, int start, int end, boolean useSafeNames)
-		throws IOException;
+
+	public void writeFile(File file, int[] index, int start, int end,
+			boolean useSafeNames) throws IOException;
 }
