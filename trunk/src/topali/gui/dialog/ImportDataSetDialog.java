@@ -5,42 +5,51 @@
 
 package topali.gui.dialog;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
-
-import pal.alignment.*;
-
-import topali.analyses.*;
-import topali.data.*;
-import topali.fileio.*;
-import topali.gui.*;
-import topali.mod.*;
 import static topali.mod.Filters.*;
 
-import doe.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+
+import javax.swing.*;
+
+import pal.alignment.Alignment;
+import topali.analyses.SequenceSetUtils;
+import topali.data.AlignmentData;
+import topali.data.SequenceSet;
+import topali.fileio.AlignmentLoadException;
+import topali.gui.*;
+import topali.mod.Filters;
+import doe.MsgBox;
 
 public class ImportDataSetDialog extends JDialog implements Runnable
 {
 	private AlignmentData data;
+
 	private WinMain winMain;
-	
+
 	private String name;
+
 	private File filename;
+
 	private Alignment alignment;
-		
+
 	public ImportDataSetDialog(WinMain winMain)
 	{
-		super(winMain, Text.GuiFile.getString("ImportDataSetDialog.gui01"), true);
+		super(winMain, Text.GuiFile.getString("ImportDataSetDialog.gui01"),
+				true);
 		this.winMain = winMain;
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e) {
+
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowOpened(WindowEvent e)
+			{
 				doLoad();
 			}
 		});
-		
+
 		JLabel icon = new JLabel(Icons.UNKNOWN);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 		JLabel label1 = new JLabel("Processing alignment...please be patient.");
@@ -49,56 +58,58 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 		p1.add(label1);
 		add(p1);
 		add(icon, BorderLayout.WEST);
-		
+
 		pack();
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 	}
-	
+
 	public void promptForAlignment()
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle(Text.GuiFile.getString("ImportDataSetDialog.gui01"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-		
+
 		Filters.setFilters(fc, -1, FAS, PHY_S, PHY_I, ALN, MSF, NEX, NEX_B);
-		
+
 		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 			Prefs.gui_dir = "" + fc.getCurrentDirectory();
-			
+
 			loadAlignment(file);
 		}
 	}
-	
+
 	public void loadAlignment(File file)
 	{
 		String name = file.getName();
 		if (name.indexOf(".") != -1)
 			name = name.substring(0, name.lastIndexOf("."));
-					
+
 		load(name, file, null);
 	}
-	
+
 	public void cloneAlignment(String name, Alignment alignment)
 	{
 		load(name, null, alignment);
 	}
-	
+
 	private void load(String name, File filename, Alignment alignment)
 	{
 		this.name = name;
 		this.filename = filename;
 		this.alignment = alignment;
-		
+
 		setVisible(true);
 	}
-	
+
 	private void doLoad()
-		{ new Thread(this).start(); }
-	
+	{
+		new Thread(this).start();
+	}
+
 	public void run()
 	{
 		try
@@ -108,21 +119,21 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 				ss = new SequenceSet(filename);
 			else
 				ss = new SequenceSet(alignment);
-				
+
 			if (SequenceSetUtils.verifySequenceNames(ss) == false)
-				MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"), MsgBox.WAR);
-			
+				MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"),
+						MsgBox.WAR);
+
 			data = new AlignmentData(name, ss);
-			
+
 			winMain.addNewAlignmentData(data);
-		}
-		catch (AlignmentLoadException e)
+		} catch (AlignmentLoadException e)
 		{
-			int code = e.getReason();			
-			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
-				+ code), MsgBox.ERR);
+			int code = e.getReason();
+			MsgBox.msg(Text.GuiFile
+					.getString("ImportDataSetDialog.err0" + code), MsgBox.ERR);
 		}
-		
+
 		setVisible(false);
 	}
 }

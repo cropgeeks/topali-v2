@@ -5,38 +5,50 @@
 
 package topali.gui.nav;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import topali.data.*;
-import topali.gui.*;
-import topali.gui.results.*;
+import topali.data.AlignmentData;
+import topali.data.PDMResult;
+import topali.gui.IPrintable;
+import topali.gui.WinMainTipsPanel;
+import topali.gui.results.PDMResultsPanel;
 
 public class PDMResultsNode extends ResultsNode implements IPrintable
 {
 	private PDMResultsPanel panel;
-	
+
 	PDMResultsNode(AlignmentData data, PDMResult result)
 	{
 		super(data, result);
-		
+
 		panel = new PDMResultsPanel(data, result);
 	}
-	
+
 	public String toString()
-		{ return result.guiName; }
-		
+	{
+		return result.guiName;
+	}
+
 	public int getTipsKey()
-		{ return WinMainTipsPanel.TIPS_NONE; }
-	
+	{
+		return WinMainTipsPanel.TIPS_NONE;
+	}
+
 	public String getHelpKey()
-		{ return "pdm_method"; }
-	
+	{
+		return "pdm_method";
+	}
+
 	public JComponent getPanel()
-		{ return panel; }
-	
+	{
+		return panel;
+	}
+
 	public boolean isPrintable()
-		{ return true; }
-	
+	{
+		return true;
+	}
+
 	public void print()
 	{
 		panel.print();

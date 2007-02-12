@@ -8,50 +8,92 @@ package topali.data;
 public class ResultsTracker
 {
 	private int treeRunCount;
-	
+
 	private int pdmRunCount;
+
 	private int pdm2RunCount;
+
 	private int hmmRunCount;
+
 	private int dssRunCount;
+
 	private int lrtRunCount;
+
 	private int codeMLRunCount;
-	
+
 	public ResultsTracker()
 	{
 	}
 
 	public int getTreeRunCount()
-		{ return (this.treeRunCount); }
+	{
+		return (this.treeRunCount);
+	}
+
 	public void setTreeRunCount(int treeRunCount)
-		{ this.treeRunCount = treeRunCount; }
+	{
+		this.treeRunCount = treeRunCount;
+	}
 
 	public int getPdmRunCount()
-		{ return (this.pdmRunCount); }
+	{
+		return (this.pdmRunCount);
+	}
+
 	public void setPdmRunCount(int pdmRunCount)
-		{ this.pdmRunCount = pdmRunCount; }
-	
+	{
+		this.pdmRunCount = pdmRunCount;
+	}
+
 	public int getPdm2RunCount()
-		{ return (this.pdm2RunCount); }
+	{
+		return (this.pdm2RunCount);
+	}
+
 	public void setPdm2RunCount(int pdm2RunCount)
-		{ this.pdm2RunCount = pdm2RunCount; }
+	{
+		this.pdm2RunCount = pdm2RunCount;
+	}
 
 	public int getHmmRunCount()
-		{ return (this.hmmRunCount); }
+	{
+		return (this.hmmRunCount);
+	}
+
 	public void setHmmRunCount(int hmmRunCount)
-		{ this.hmmRunCount = hmmRunCount; }
+	{
+		this.hmmRunCount = hmmRunCount;
+	}
 
 	public int getDssRunCount()
-		{ return (this.dssRunCount); }
+	{
+		return (this.dssRunCount);
+	}
+
 	public void setDssRunCount(int dssRunCount)
-		{ this.dssRunCount = dssRunCount; }
+	{
+		this.dssRunCount = dssRunCount;
+	}
 
 	public int getLrtRunCount()
-		{ return (this.lrtRunCount); }
+	{
+		return (this.lrtRunCount);
+	}
+
 	public void setLrtRunCount(int lrtRunCount)
-		{ this.lrtRunCount = lrtRunCount; }
-	
+	{
+		this.lrtRunCount = lrtRunCount;
+	}
+
 	public int getCodeMLRunCount()
-		{ return (this.codeMLRunCount); }
+	{
+		System.out.println("get count, is " + codeMLRunCount);
+		return (this.codeMLRunCount);
+	}
+
 	public void setCodeMLRunCount(int codeMLRunCount)
-		{ this.codeMLRunCount = codeMLRunCount; }
+	{
+		this.codeMLRunCount = codeMLRunCount;
+		System.out.println("set count to " + codeMLRunCount);
+	}
 }

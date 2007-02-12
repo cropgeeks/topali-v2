@@ -5,14 +5,17 @@
 
 package topali.data;
 
-public class CDSAnnotations extends RegionAnnotations{
+public class CDSAnnotations extends RegionAnnotations
+{
 
-	public CDSAnnotations() {
+	public CDSAnnotations()
+	{
 		label = "Coding Regions";
 	}
-	
+
 	@Override
-	protected AnnotationElement create(int position) {
+	protected AnnotationElement create(int position)
+	{
 		return new AnnotationElement(AnnotationElement.CODINGREG, position);
 	}
 

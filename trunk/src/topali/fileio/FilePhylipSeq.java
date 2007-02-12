@@ -7,9 +7,9 @@ package topali.fileio;
 
 import java.io.*;
 
-import pal.alignment.*;
-
-import topali.data.*;
+import pal.alignment.AlignmentUtils;
+import pal.alignment.SimpleAlignment;
+import topali.data.SequenceSet;
 
 public class FilePhylipSeq extends FileGeneric
 {
@@ -17,18 +17,19 @@ public class FilePhylipSeq extends FileGeneric
 	{
 		ss = s;
 	}
-	
-	public void writeFile(File file, int[] index, int start, int end, boolean useSafeNames)
-		throws IOException
+
+	public void writeFile(File file, int[] index, int start, int end,
+			boolean useSafeNames) throws IOException
 	{
 		PrintWriter out = new PrintWriter(new FileWriter(file));
-		
+
 		// Create a PAL alignment
-		SimpleAlignment alignment = ss.getAlignment(index, start, end, useSafeNames);
-		
+		SimpleAlignment alignment = ss.getAlignment(index, start, end,
+				useSafeNames);
+
 		// Write it to disk
 		AlignmentUtils.printSequential(alignment, out);
-		
+
 		out.close();
 	}
 }

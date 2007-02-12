@@ -7,50 +7,18 @@ package topali.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import topali.cluster.JobStatus;
-import topali.cluster.jobs.AnalysisJob;
-import topali.cluster.jobs.CodeMLLocalJob;
-import topali.cluster.jobs.CodeMLRemoteJob;
-import topali.cluster.jobs.DSSLocalJob;
-import topali.cluster.jobs.DSSRemoteJob;
-import topali.cluster.jobs.HMMLocalJob;
-import topali.cluster.jobs.HMMRemoteJob;
-import topali.cluster.jobs.LRTLocalJob;
-import topali.cluster.jobs.LRTRemoteJob;
-import topali.cluster.jobs.MBTreeLocalJob;
-import topali.cluster.jobs.MBTreeRemoteJob;
-import topali.cluster.jobs.PDM2LocalJob;
-import topali.cluster.jobs.PDM2RemoteJob;
-import topali.cluster.jobs.PDMLocalJob;
-import topali.cluster.jobs.PDMRemoteJob;
-import topali.data.AlignmentData;
-import topali.data.AnalysisResult;
-import topali.data.CodeMLResult;
-import topali.data.DSSResult;
-import topali.data.HMMResult;
-import topali.data.LRTResult;
-import topali.data.MBTreeResult;
-import topali.data.PDM2Result;
-import topali.data.PDMResult;
-import topali.gui.jobs.CodeMLJobEntry;
-import topali.gui.jobs.NoTrackingJobEntry;
-import topali.gui.jobs.ProgressBarJobEntry;
+import topali.cluster.jobs.*;
+import topali.data.*;
+import topali.gui.jobs.*;
 import doe.GradientPanel;
 
-public class JobsPanel extends JPanel {
-	private WinMain winMain;
+public class JobsPanel extends JPanel
+{
 
 	private final JobsThread jobsThread;
 
@@ -60,9 +28,8 @@ public class JobsPanel extends JPanel {
 
 	public Vector<JobsPanelEntry> jobs;
 
-	public JobsPanel(WinMain winMain) {
-		this.winMain = winMain;
-
+	public JobsPanel()
+	{
 		jobs = new Vector<JobsPanelEntry>();
 
 		jp = new JPanel();
@@ -74,7 +41,7 @@ public class JobsPanel extends JPanel {
 
 		GradientPanel gp = new GradientPanel(Text.Gui
 				.getString("JobsPanel.gui01"));
-		gp.setStyle(gp.OFFICE2003);
+		gp.setStyle(GradientPanel.OFFICE2003);
 
 		JPanel headerPanel = new JPanel(new BorderLayout());
 		headerPanel.add(gp, BorderLayout.NORTH);
@@ -96,7 +63,8 @@ public class JobsPanel extends JPanel {
 		jobsThread.start();
 	}
 
-	private JPanel getControlPanel() {
+	private JPanel getControlPanel()
+	{
 		infoText = new JTextArea();
 		Utils.setTextAreaDefaults(infoText);
 		JScrollPane sp = new JScrollPane(infoText);
@@ -108,7 +76,8 @@ public class JobsPanel extends JPanel {
 		return p2;
 	}
 
-	public void addJob(AnalysisJob job, JobsPanelEntry e) {
+	public void addJob(JobsPanelEntry e)
+	{
 		jobs.add(e);
 
 		e.setAlignmentX(JPanel.TOP_ALIGNMENT);
@@ -119,7 +88,8 @@ public class JobsPanel extends JPanel {
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}
 
-	void removeJobEntry(JobsPanelEntry entry, boolean getResults) {
+	void removeJobEntry(JobsPanelEntry entry, boolean getResults)
+	{
 		jobs.remove(entry);
 		jp.remove(entry);
 
@@ -127,22 +97,24 @@ public class JobsPanel extends JPanel {
 		job.getResult().endTime = System.currentTimeMillis();
 
 		// Move its results into main window
-		if (getResults) {
-			winMain.navPanel.addResultsNode(null, job.getAlignmentData(), job
+		if (getResults)
+		{
+			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), job
 					.getResult());
-		}
-		else
+		} else
 			job.getAlignmentData().removeResult(job.getResult());
-		
+
 		setStatusPanel();
 		WinMainMenuBar.aFileSave.setEnabled(true);
 		jp.repaint();
 	}
 
-	public void cancelJob(JobsPanelEntry e) {
+	public void cancelJob(JobsPanelEntry e)
+	{
 		// Then send the cancel request...
 		int status = e.getJob().getStatus();
-		if (status != JobStatus.COMPLETING && status != JobStatus.COMPLETED) {
+		if (status != JobStatus.COMPLETING && status != JobStatus.COMPLETED)
+		{
 			e.getJob().setStatus(JobStatus.CANCELLING);
 			e.updateStatus();
 			jobsThread.interrupt();
@@ -151,11 +123,13 @@ public class JobsPanel extends JPanel {
 
 	// Formats the status bar in the bottom-right corner of the screen with a
 	// message describing the number of analysis jobs that are running
-	void setStatusPanel() {
+	void setStatusPanel()
+	{
 		// Count the jobs types
 		int lCount = 0, rCount = 0;
 		float progress = 0;
-		for (JobsPanelEntry entry : jobs) {
+		for (JobsPanelEntry entry : jobs)
+		{
 			AnalysisJob job = entry.getJob();
 
 			if (job.getResult().isRemote)
@@ -171,7 +145,8 @@ public class JobsPanel extends JPanel {
 		if (lCount + rCount == 1)
 			js = Text.Gui.getString("JobsPanel.gui03");
 		// Format the message
-		Object[] args = { jobs.size(), js, lCount, rCount };
+		Object[] args =
+		{ jobs.size(), js, lCount, rCount };
 		String msg = Text.format(Text.Gui.getString("JobsPanel.gui02"), args);
 
 		if (jobs.size() > 0)
@@ -181,16 +156,18 @@ public class JobsPanel extends JPanel {
 		WinMainStatusBar.setJobText(msg, false);
 	}
 
-	public void createJob(AnalysisResult result, AlignmentData data) {
+	public void createJob(AnalysisResult result, AlignmentData data)
+	{
 		AnalysisJob job = null;
 		JobsPanelEntry entry = null;
-		
+
 		// Reset any local jobs to a status of STARTING so that they DO restart
 		if (result.isRemote == false)
 			result.status = JobStatus.STARTING;
 
 		// PDM jobs
-		if (result instanceof PDMResult) {
+		if (result instanceof PDMResult)
+		{
 			if (result.isRemote)
 				job = new PDMRemoteJob((PDMResult) result, data);
 			else
@@ -199,7 +176,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// PDM2 jobs
-		if (result instanceof PDM2Result) {
+		if (result instanceof PDM2Result)
+		{
 			if (result.isRemote)
 				job = new PDM2RemoteJob((PDM2Result) result, data);
 			else
@@ -208,7 +186,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// HMM jobs
-		if (result instanceof HMMResult) {
+		if (result instanceof HMMResult)
+		{
 			if (result.isRemote)
 				job = new HMMRemoteJob((HMMResult) result, data);
 			else
@@ -217,7 +196,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// DSS jobs
-		else if (result instanceof DSSResult) {
+		else if (result instanceof DSSResult)
+		{
 			if (result.isRemote)
 				job = new DSSRemoteJob((DSSResult) result, data);
 			else
@@ -226,7 +206,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// LRT jobs
-		else if (result instanceof LRTResult) {
+		else if (result instanceof LRTResult)
+		{
 			if (result.isRemote)
 				job = new LRTRemoteJob((LRTResult) result, data);
 			else
@@ -235,7 +216,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// CodeML jobs
-		else if (result instanceof CodeMLResult) {
+		else if (result instanceof CodeMLResult)
+		{
 			if (result.isRemote)
 				job = new CodeMLRemoteJob((CodeMLResult) result, data);
 			else
@@ -244,7 +226,8 @@ public class JobsPanel extends JPanel {
 		}
 
 		// MrBayes jobs
-		else if (result instanceof MBTreeResult) {
+		else if (result instanceof MBTreeResult)
+		{
 			if (result.isRemote)
 				job = new MBTreeRemoteJob((MBTreeResult) result, data);
 			else
@@ -252,15 +235,18 @@ public class JobsPanel extends JPanel {
 			entry = new NoTrackingJobEntry(job);
 		}
 
-		addJob(job, entry);
+		addJob(entry);
 	}
 
-	boolean hasJobs() {
+	boolean hasJobs()
+	{
 		return jobs.size() > 0;
 	}
 
-	boolean hasJobs(AlignmentData data) {
-		for (JobsPanelEntry entry : jobs) {
+	boolean hasJobs(AlignmentData data)
+	{
+		for (JobsPanelEntry entry : jobs)
+		{
 			AnalysisResult r1 = entry.getJob().getResult();
 
 			for (AnalysisResult r2 : data.getResults())
@@ -270,23 +256,25 @@ public class JobsPanel extends JPanel {
 		return false;
 	}
 
-	public void clear() {
+	public void clear()
+	{
 		// Remove knowledge of any jobs
 		jobs.clear();
 		jp.removeAll();
 		infoText.setText("");
-		
+
 		// And update the text/icon to reflect this
 		setStatusPanel();
 		WinMainStatusBar.resetIcon = true;
 		WinMainStatusBar.setStatusIcon(WinMainStatusBar.OFF);
 	}
 
-	public void select(JobsPanelEntry e) {
-		for(JobsPanelEntry entry : jobs)
+	public void select(JobsPanelEntry e)
+	{
+		for (JobsPanelEntry entry : jobs)
 			entry.setSelected(false);
 		e.setSelected(true);
 		infoText.setText(e.getJob().errorInfo);
 	}
-	
+
 }

@@ -5,25 +5,31 @@
 
 package topali.data;
 
-import java.io.*;
+import java.io.File;
 
 public class AlignmentFileStat
 {
 	public String filename;
+
 	public int size;
+
 	public int length;
+
 	public boolean isDna;
+
 	public long fileSize;
-	
+
 	public AlignmentFileStat()
 	{
 	}
-	
+
 	public AlignmentFileStat(String filename)
 	{
 		this.filename = filename;
 	}
-	
+
 	public String toString()
-		{ return new File(filename).getName(); }
+	{
+		return new File(filename).getName();
+	}
 }

@@ -5,7 +5,7 @@
 
 package topali.cluster;
 
-import topali.data.*;
+import topali.data.AnalysisResult;
 
 /*
  * This is a base class for classes that wish to run native process jobs, but
@@ -14,14 +14,16 @@ import topali.data.*;
 public abstract class StoppableProcess
 {
 	protected AnalysisResult result = null;
-	
+
 	protected Process proc = null;
+
 	protected volatile boolean isRunning = true;
-	
+
 	public void runCancelMonitor()
 	{
 		// Before we start, kick off a thread to monitor for job cancellations
-		Runnable r = new Runnable() {
+		Runnable r = new Runnable()
+		{
 			public void run()
 			{
 				while (isRunning)
@@ -31,13 +33,17 @@ public abstract class StoppableProcess
 						proc.destroy();
 						isRunning = false;
 					}
-					
-					try { Thread.sleep(1000); }
-					catch (InterruptedException e) {}
+
+					try
+					{
+						Thread.sleep(1000);
+					} catch (InterruptedException e)
+					{
+					}
 				}
 			}
 		};
-		
+
 		if (result.isRemote == false)
 			new Thread(r).start();
 	}

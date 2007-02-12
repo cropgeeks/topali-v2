@@ -5,11 +5,15 @@
 
 package topali.gui.nav;
 
-import java.awt.*;
-import javax.swing.*;
-
-import topali.data.*;
 import static topali.gui.WinMainMenuBar.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import topali.data.AlignmentData;
 
 class DataSetNodeFolder extends INode
 {
@@ -17,19 +21,21 @@ class DataSetNodeFolder extends INode
 	{
 		super(data);
 	}
-	
+
 	public String toString()
-		{ return data.name; }
-		
+	{
+		return data.name;
+	}
+
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
-		
+
 		aAlgnRemove.setEnabled(true);
-		
+
 		aVamExport.setEnabled(true);
 	}
-	
+
 	public JPanel getPanel()
 	{
 		JPanel p = new JPanel(new BorderLayout());

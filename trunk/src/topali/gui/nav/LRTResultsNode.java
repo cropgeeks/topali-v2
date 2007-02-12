@@ -5,35 +5,44 @@
 
 package topali.gui.nav;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import topali.data.*;
-import topali.gui.*;
-import topali.gui.results.*;
+import topali.data.AlignmentData;
+import topali.data.LRTResult;
+import topali.gui.IPrintable;
+import topali.gui.results.LRTResultsPanel;
 
 public class LRTResultsNode extends ResultsNode implements IPrintable
 {
 	private LRTResultsPanel panel;
-	
+
 	LRTResultsNode(AlignmentData data, LRTResult result)
 	{
 		super(data, result);
-		
+
 		panel = new LRTResultsPanel(data, result);
 	}
-	
+
 	public String toString()
-		{ return result.guiName; }
-		
+	{
+		return result.guiName;
+	}
+
 	public String getHelpKey()
-		{ return "lrt_method"; }
-	
+	{
+		return "lrt_method";
+	}
+
 	public JComponent getPanel()
-		{ return panel; }
-	
+	{
+		return panel;
+	}
+
 	public boolean isPrintable()
-		{ return true; }
-	
+	{
+		return true;
+	}
+
 	public void print()
 	{
 		panel.print();

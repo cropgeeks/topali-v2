@@ -56,19 +56,21 @@ public class Model2aParser extends CMLResultParser
 						continue;
 					}
 
-					if(model.dnDS==-1 && line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}")) {
+					if (model.dnDS == -1
+							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
+					{
 						b = line.split("\\s+");
 						model.dnDS = Float.parseFloat(b[4]);
 					}
 				} catch (RuntimeException e)
 				{
 					e.printStackTrace();
-					System.err.println("Error parsing line:/n"+line);
+					System.err.println("Error parsing line:/n" + line);
 				}
-				
+
 			}
 			in.close();
-			
+
 			// parse rst file
 			in = new BufferedReader(new FileReader(rstFile));
 			line = null;
@@ -85,7 +87,7 @@ public class Model2aParser extends CMLResultParser
 					int pos = Integer.parseInt(tmp[0]);
 					char aa = tmp[1].charAt(0);
 					float prob = Float.parseFloat(tmp[4]);
-					float postmeanW = Float.parseFloat(tmp[tmp.length-1]);
+					float postmeanW = Float.parseFloat(tmp[tmp.length - 1]);
 					pss.append(pos);
 					pss.append('|');
 					pss.append(aa);
@@ -95,9 +97,9 @@ public class Model2aParser extends CMLResultParser
 					pss.append(prob);
 					pss.append(' ');
 				}
-				if(line.startsWith("Naive Empirical Bayes (NEB)"))
+				if (line.startsWith("Naive Empirical Bayes (NEB)"))
 					start = true;
-				else if(line.startsWith("Positively selected sites"))
+				else if (line.startsWith("Positively selected sites"))
 					start = false;
 			}
 			model.pss = pss.toString();

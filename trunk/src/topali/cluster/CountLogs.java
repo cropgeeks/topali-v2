@@ -6,42 +6,43 @@
 package topali.cluster;
 
 import java.io.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 public class CountLogs
 {
 	private Hashtable<String, User> hashtable = new Hashtable<String, User>(500);
-	
+
 	public static void main(String[] args)
 	{
 		new CountLogs(args[0]);
 	}
-	
+
 	public CountLogs(String logfile)
-	{		
+	{
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(new File(logfile)));
-			
+			BufferedReader in = new BufferedReader(new FileReader(new File(
+					logfile)));
+
 			String str = in.readLine();
 			while (str != null)
 			{
 				if (str.startsWith("INFO:"))
 					processLine(str);
-				
+
 				str = in.readLine();
 			}
-			
+
 			in.close();
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			System.out.println(e);
 		}
-		
+
 		System.out.println("Unique IPs: " + hashtable.size());
 		System.out.println();
-		
+
 		Enumeration<String> keys = hashtable.keys();
 		while (keys.hasMoreElements())
 		{
@@ -55,13 +56,13 @@ public class CountLogs
 			System.out.println();
 		}
 	}
-	
+
 	private void processLine(String str)
 	{
-		String ip = str.substring(str.lastIndexOf("-")+1);
-		
+		String ip = str.substring(str.lastIndexOf("-") + 1);
+
 		User user = getUser(ip);
-		
+
 		if (str.contains("PDM"))
 			user.PDM++;
 		else if (str.contains("HMM"))
@@ -73,25 +74,26 @@ public class CountLogs
 		else if (str.contains("MBT"))
 			user.MBT++;
 	}
-	
+
 	private User getUser(String ip)
 	{
 		User user = hashtable.get(ip);
-		
+
 		if (user == null)
 		{
 			user = new User(ip);
 			hashtable.put(user.ip, user);
 		}
-		
+
 		return user;
 	}
-	
+
 	private static class User
 	{
 		String ip;
+
 		int PDM, HMM, DSS, LRT, MBT;
-		
+
 		User(String ip)
 		{
 			this.ip = ip;

@@ -5,30 +5,37 @@
 
 package topali.gui.nav;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import topali.data.*;
-import topali.gui.*;
+import topali.data.AlignmentData;
+import topali.gui.FileListPanel;
+import topali.gui.WinMainTipsPanel;
 
 class FileListNode extends INode
 {
 	private FileListPanel panel;
-	
+
 	FileListNode(AlignmentData data)
 	{
-		super(data);		
+		super(data);
 		panel = new FileListPanel(data);
 	}
-	
+
 	public int getTipsKey()
-		{ return WinMainTipsPanel.TIPS_NONE; }
-	
+	{
+		return WinMainTipsPanel.TIPS_NONE;
+	}
+
 	public String toString()
-		{ return data.name; }
-	
+	{
+		return data.name;
+	}
+
 	public JComponent getPanel()
-		{ return panel; }
-	
+	{
+		return panel;
+	}
+
 	public void setMenus()
 	{
 	}

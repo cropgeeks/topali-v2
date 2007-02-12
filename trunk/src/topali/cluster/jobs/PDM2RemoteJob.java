@@ -7,69 +7,71 @@ package topali.cluster.jobs;
 
 import javax.xml.namespace.QName;
 
-import topali.cluster.*;
+import topali.cluster.JobStatus;
 import topali.data.*;
-import topali.fileio.*;
+import topali.fileio.Castor;
 
 public class PDM2RemoteJob extends RemoteJob
 {
-	private SequenceSet ss;	
-		
+	private SequenceSet ss;
+
 	public PDM2RemoteJob(PDM2Result result, AlignmentData data)
 	{
 		super("topali-pdm2", result);
-		
+
 		this.data = data;
 		this.ss = data.getSequenceSet();
-		
+
 		if (result.startTime == 0)
 			result.startTime = System.currentTimeMillis();
 	}
-			
-	public String ws_submitJob()
-		throws Exception
+
+	public String ws_submitJob() throws Exception
 	{
 		determineClusterURL();
-		
-		call = getCall();			
+
+		call = getCall();
 		call.setOperationName(new QName("topali-pdm2", "submit"));
-		
+
 		String alignmentXML = Castor.getXML(ss);
 		String resultXML = Castor.getXML(result);
-	
-		result.jobId = (String) call.invoke(
-			new Object[] { alignmentXML, resultXML } );
-		
+
+		result.jobId = (String) call.invoke(new Object[]
+		{ alignmentXML, resultXML });
+
 		System.out.println("Job in progress: " + result.jobId);
 
 		result.status = JobStatus.QUEUING;
 		return result.jobId;
 	}
-	
-	public JobStatus ws_getProgress()
-		throws Exception
+
+	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
-		call.setOperationName(new QName("topali-pdm2", "getPercentageComplete"));
-			
-		String statusXML = (String) call.invoke(new Object[] { result.jobId } );
+		call
+				.setOperationName(new QName("topali-pdm2",
+						"getPercentageComplete"));
+
+		String statusXML = (String) call.invoke(new Object[]
+		{ result.jobId });
 		JobStatus status = (JobStatus) Castor.unmarshall(statusXML);
-			
+
 		result.status = status.status;
 		return status;
 	}
-	
-	public AnalysisResult ws_downloadResult()
-		throws Exception
+
+	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();
 		call.setOperationName(new QName("topali-pdm2", "getResult"));
-		
-		String resultXML = (String) call.invoke(new Object[] { result.jobId } );		
+
+		String resultXML = (String) call.invoke(new Object[]
+		{ result.jobId });
 		result = (PDM2Result) Castor.unmarshall(resultXML);
-		
-		System.out.println("No of datapoints = " + ((PDM2Result)result).locData.length);
-		
+
+		System.out.println("No of datapoints = "
+				+ ((PDM2Result) result).locData.length);
+
 		result.status = JobStatus.COMPLETING;
 		return result;
 	}

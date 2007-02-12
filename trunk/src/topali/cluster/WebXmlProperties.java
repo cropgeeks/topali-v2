@@ -6,31 +6,30 @@
 package topali.cluster;
 
 import java.io.*;
-import java.util.*;
+import java.util.Properties;
 
 class WebXmlProperties
 {
 	private static Properties props;
-	
+
 	WebXmlProperties(File filename)
 	{
 		if (props == null)
-			loadProperties(filename);		
+			loadProperties(filename);
 	}
-	
+
 	private static void loadProperties(File filename)
 	{
 		try
 		{
 			props = new Properties();
 			props.load(new FileInputStream(filename));
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
 	static String getParameter(String key)
 	{
 		return props.getProperty(key);
