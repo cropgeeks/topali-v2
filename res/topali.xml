@@ -102,6 +102,8 @@ Castor's auto mapping file generator -->
     <bind-xml node="attribute"/></field>
   <field name="lrtRunCount" type="integer">
     <bind-xml node="attribute"/></field>
+  <field name="codeMLRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
 </class>
 
 <!-- AlignmentFileStat -->
