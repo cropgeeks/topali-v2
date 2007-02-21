@@ -23,19 +23,12 @@ public class Prefs extends PreferencesXML
 	public static Locale locale = Locale.getDefault();
 
 	public static DecimalFormat d1 = new DecimalFormat("0.0");
-
 	public static DecimalFormat d2 = new DecimalFormat("0.00");
-
 	public static DecimalFormat d4 = new DecimalFormat("0.0000");
-
 	public static DecimalFormat d5 = new DecimalFormat("0.00000");
-
 	public static DecimalFormat i2 = new DecimalFormat("00");
-
 	public static DecimalFormat i3 = new DecimalFormat("000");
-
 	public static DecimalFormat i4 = new DecimalFormat("0000");
-
 	public static Font labelFont = (Font) UIManager.get("Label.font");
 
 	public static File tmpDir = new File(System.getProperty("java.io.tmpdir"),
@@ -50,250 +43,135 @@ public class Prefs extends PreferencesXML
 
 	// All other variables...
 	public static LinkedList<String> gui_recent = new LinkedList<String>();
-
 	public static String gui_dir = System.getProperty("user.home");
-
 	public static boolean gui_first_run = true;
-
 	public static boolean gui_maximized = false;
-
 	public static boolean gui_toolbar_visible = true;
-
 	public static boolean gui_statusbar_visible = true;
-
 	public static boolean gui_tips_visible = true;
-
 	public static int gui_win_width = 800;
-
 	public static int gui_win_height = 600;
-
 	public static int gui_splits_loc = 150;
-
 	public static String gui_find_name = "";
-
 	public static boolean gui_find_highlight = false;
-
 	public static boolean gui_find_case = false;
-
 	public static int gui_filter_tree = Filters.PNG;
-
 	public static int gui_filter_algn = Filters.FAS;
-
 	public static int gui_filter_graph = Filters.CSV;
-
 	public static int gui_goto_nuc = 1;
-
 	public static int gui_project_count = 1;
-
 	public static boolean gui_menu_icons = true;
-
 	public static int gui_movie_x = -1;
-
 	public static int gui_movie_y = -1;
-
 	public static int gui_movie_width = 550;
-
 	public static int gui_movie_height = 450;
-
 	public static boolean gui_movie_current = false;
-
 	public static boolean gui_movie_circular = false;
-
 	public static int gui_movie_window = 500;
-
 	public static int gui_movie_step = 10;
-
 	public static int gui_movie_delay = 25;
-
 	public static int gui_pdialog_x = -1;
-
 	public static int gui_pdialog_y = -1;
-
 	public static boolean gui_preview_current = true;
-
 	public static int gui_pdialog_splitter = -1;
-
 	public static boolean gui_export_allseqs = true;
-
 	public static int gui_export_pars = 1;
-
 	public static boolean gui_export_todisk = true;
-
 	public static int gui_odialog_x = -1;
-
 	public static int gui_odialog_y = -1;
-
 	public static int gui_odialog_w = 350;
-
 	public static int gui_odialog_h = 150;
-
 	public static int gui_auto_min = 75;
-
 	public static boolean gui_auto_discard = false;
-
 	public static int gui_tree_method = 0;
-
 	public static boolean gui_tree_useall = true;
-
 	public static float gui_group_threshold = 0.05f;
-
 	public static int gui_import_method = 0;
-
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
-
 	public static boolean gui_show_horizontal_highlight = true;
-
 	public static boolean gui_show_vertical_highlight = true;
 
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
-
 	public static byte gui_seq_font_size;
-
 	public static boolean gui_seq_font_bold;
-
 	public static boolean gui_seq_show_text;
-
 	public static boolean gui_seq_show_colors;
-
 	public static boolean gui_graph_smooth;
-
 	public static boolean gui_graph_line;
-
 	public static boolean gui_tree_unique_cols;
-
 	public static boolean gui_seq_dim;
-
 	public static int gui_color_seed = 0;
-
 	public static Color gui_seq_color_text;
-
 	public static Color gui_seq_color_a;
-
 	public static Color gui_seq_color_c;
-
 	public static Color gui_seq_color_g;
-
 	public static Color gui_seq_color_t;
-
 	public static Color gui_seq_color_gpst;
-
 	public static Color gui_seq_color_hkr;
-
 	public static Color gui_seq_color_fwy;
-
 	public static Color gui_seq_color_ilmv;
-
 	public static Color gui_seq_color_gaps;
-
 	public static Color gui_seq_highlight;
-
 	public static Color gui_graph_window;
-
 	public static Color gui_graph_threshold;
-
 	public static Color gui_graph_background;
-
 	public static Color gui_histo_background;
-
 	public static Color gui_cardle_line;
 
 	// PDM2 analysis run settings
 	public static int pdm2_window;
-
 	public static int pdm2_step;
 
 	// PDM analysis run settings
 	public static int pdm_window;
-
 	public static int pdm_step;
-
 	public static int pdm_runs;
-
 	public static boolean pdm_prune;
-
 	public static float pdm_cutoff;
-
 	public static int pdm_seed;
-
 	public static int pdm_burn;
-
 	public static int pdm_cycles;
-
 	public static String pdm_burn_algorithm;
-
 	public static String pdm_main_algorithm;
-
 	public static String pdm_use_beta;
-
 	public static int pdm_parameter_update_interval;
-
 	public static String pdm_update_theta;
-
 	public static int pdm_tune_interval;
-
 	public static String pdm_molecular_clock;
-
 	public static String pdm_category_list;
-
 	public static String pdm_initial_theta;
-
 	public static int pdm_outgroup;
-
 	public static float pdm_global_tune;
-
 	public static float pdm_local_tune;
-
 	public static float pdm_theta_tune;
-
 	public static float pdm_beta_tune;
 
 	// HMM analysis run settings
 	public static String hmm_model;
-
 	public static String hmm_initial;
-
 	public static float hmm_freq_est_1;
-
 	public static float hmm_freq_est_2;
-
 	public static float hmm_freq_est_3;
-
 	public static float hmm_freq_est_4;
-
 	public static String hmm_transition;
-
 	public static float hmm_transition_ratio;
-
 	public static float hmm_freq_1;
-
 	public static float hmm_freq_2;
-
 	public static float hmm_freq_3;
-
 	public static float hmm_difficulty;
-
 	public static int hmm_burn;
-
 	public static int hmm_points;
-
 	public static int hmm_thinning;
-
 	public static int hmm_tuning;
-
 	public static String hmm_lambda;
-
 	public static String hmm_annealing;
-
 	public static String hmm_station;
-
 	public static String hmm_update;
-
 	public static float hmm_branch;
 
 	// DSS analysis run settings
 	public static int dss_window, dss_step, dss_runs;
-
 	public static int dss_power, dss_method, dss_pass_count;
 
 	// LRT analysis run settings
@@ -301,21 +179,13 @@ public class Prefs extends PreferencesXML
 
 	// Vamsas/web settings
 	public static String web_direct_url;
-
 	public static String web_broker_url;
-
-	public static boolean web_use_broker;
-
+	public static boolean web_use_rbroker;
 	public static int web_check_secs;
-
 	public static boolean web_check_startup;
-
 	public static boolean web_proxy_enable;
-
 	public static String web_proxy_server;
-
 	public static int web_proxy_port;
-
 	public static String web_proxy_username, web_proxy_password;
 
 	protected void getPreferences()
@@ -486,7 +356,7 @@ public class Prefs extends PreferencesXML
 
 		web_direct_url = getStr("web_direct_url", web_direct_url);
 		web_broker_url = getStr("web_broker_url", web_broker_url);
-		web_use_broker = getBool("web_use_broker", web_use_broker);
+		web_use_rbroker = getBool("web_use_rbroker", web_use_rbroker);
 		web_check_secs = getInt("web_check_secs", web_check_secs);
 		web_check_startup = getBool("web_check_startup", web_check_startup);
 		web_proxy_enable = getBool("web_proxy_enable", web_proxy_enable);
@@ -641,7 +511,7 @@ public class Prefs extends PreferencesXML
 
 		setStr("web_direct_url", web_direct_url);
 		setStr("web_broker_url", web_broker_url);
-		p.setProperty("web_use_broker", "" + web_use_broker);
+		p.setProperty("web_use_rbroker", "" + web_use_rbroker);
 		p.setProperty("web_check_secs", "" + web_check_secs);
 		p.setProperty("web_check_startup", "" + web_check_startup);
 		p.setProperty("web_proxy_enable", "" + web_proxy_enable);
@@ -760,9 +630,9 @@ public class Prefs extends PreferencesXML
 
 	public static void setWebDefaults()
 	{
-		web_direct_url = "http://www.compbio.dundee.ac.uk/topali";
-		web_broker_url = "http://gruffalo.scri.ac.uk:8080/broker";
-		web_use_broker = false;
+		web_direct_url = "http://gruffalo.scri.ac.uk/topali";
+		web_broker_url = "http://gruffalo.scri.ac.uk/broker";
+		web_use_rbroker = true;
 		web_check_secs = 30;
 		web_check_startup = false;
 		web_proxy_port = 8080;
