@@ -53,8 +53,8 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 
 		directURL.setText(Prefs.web_direct_url);
 		brokerURL.setText(Prefs.web_broker_url);
-		radioBroker.setSelected(Prefs.web_use_broker);
-		radioDirect.setSelected(!Prefs.web_use_broker);
+		radioBroker.setSelected(Prefs.web_use_rbroker);
+		radioDirect.setSelected(!Prefs.web_use_rbroker);
 		secSpin.setValue(Prefs.web_check_secs);
 
 		checkUpdates.setSelected(Prefs.web_check_startup);
@@ -91,7 +91,7 @@ class WebPanel extends javax.swing.JPanel implements ActionListener
 
 		Prefs.web_direct_url = directURL.getText();
 		Prefs.web_broker_url = brokerURL.getText();
-		Prefs.web_use_broker = radioBroker.isSelected();
+		Prefs.web_use_rbroker = radioBroker.isSelected();
 		Prefs.web_check_secs = secModel.getNumber().intValue();
 
 		Prefs.web_check_startup = checkUpdates.isSelected();

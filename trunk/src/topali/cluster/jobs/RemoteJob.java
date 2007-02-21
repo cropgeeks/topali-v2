@@ -40,7 +40,7 @@ public abstract class RemoteJob extends AnalysisJob
 
 	protected void determineClusterURL() throws Exception
 	{
-		if (Prefs.web_use_broker)
+		if (Prefs.web_use_rbroker)
 		{
 			// First form of the URL...this points to the ResourceBroker service
 			url = Prefs.web_broker_url + "/services/resource-broker";
