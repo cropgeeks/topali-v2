@@ -39,6 +39,8 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	@Override
 	public void setJobStatus(JobStatus status)
 	{
+		super.setJobStatus(status);
+		
 		if (status.text == null)
 			return;
 

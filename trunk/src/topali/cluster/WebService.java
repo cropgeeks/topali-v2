@@ -155,6 +155,9 @@ public abstract class WebService
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
 			js.status = cluster.getJobStatus(jobDir);
 			logger.info(jobId + " - current status = " + js.status);
+			
+			if (js.status == JobStatus.QUEUING)
+				js.text = "" + cluster.getQueueCount(jobDir);
 
 			// TODO: Find out WTF qstat won't always return the state
 			// TODO: Following not suitable for SGE 5.3

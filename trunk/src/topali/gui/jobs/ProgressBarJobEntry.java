@@ -41,6 +41,7 @@ public class ProgressBarJobEntry extends JobsPanelEntry
 	@Override
 	public void setJobStatus(JobStatus status)
 	{
+		super.setJobStatus(status);
 		pb.setValue((int) status.progress);
 	}
 

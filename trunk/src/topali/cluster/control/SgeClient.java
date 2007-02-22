@@ -223,6 +223,56 @@ public class SgeClient implements ICluster
 		System.out
 				.println("status = " + client.getJobStatus(new File(args[0])));
 	}
+	
+	// Counts how many jobs are ahead of you in the queue while in qw mode
+	public int getQueueCount(File jobDir)
+		throws Exception
+	{
+		try
+		{
+			getJobId(jobDir);
+
+			// qstat -show pendingjobs only
+			ProcessBuilder pb = new ProcessBuilder("qstat", "-s", "p");
+			pb.redirectErrorStream(true);
+
+			Process p = pb.start();
+			SGEStreamReader reader = new SGEStreamReader(p.getInputStream());
+
+			// Run the job
+			p.waitFor();
+			// And give the buffer time to be read properly
+			while (reader.stillReading)
+				try { Thread.sleep(100); }
+				catch (InterruptedException e) {}
+
+			StringBuffer buffer = reader.buffer;			
+			BufferedReader in = new BufferedReader(new StringReader(buffer.toString()));
+			
+			// Ignore the header lines
+			in.readLine();
+			in.readLine();
+			
+			String str = in.readLine();
+			int count = 1;
+
+			while ((str = in.readLine()) != null)
+			{
+				str = str.trim();
+				if (str.startsWith(this.sge_job_id))
+					break;
+				else
+					count++;
+			}
+			
+			return count;
+		}
+		catch (Exception e)
+		{
+			logger.warning("grid engine exception: " + e);
+			return -1;
+		}	
+	}
 }
 
 class SGEStreamReader extends Thread

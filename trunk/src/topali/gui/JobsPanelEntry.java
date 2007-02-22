@@ -24,6 +24,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	private AnalysisJob job;
 
 	private String startStr;
+	private String qCount = "-1";
 
 	private JLabel jobLabel, statusLabel, timeLabel, iconLabel, cancelLabel;
 
@@ -90,7 +91,11 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 
 	public abstract JComponent getProgressComponent();
 
-	public abstract void setJobStatus(JobStatus status);
+	public void setJobStatus(JobStatus status)
+	{
+		if (status.status == JobStatus.QUEUING)
+			qCount = status.text;
+	}
 
 	public void setJobId(String jobId)
 	{
@@ -122,9 +127,16 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			WinMainStatusBar.setStatusIcon(GRE);
 			break;
 		case QUEUING:
-			statusLabel.setText("Queued - waiting to run...");
+		{
+			String txt = "waiting to run...";
+			int q = Integer.parseInt(qCount);
+			if (q >= 0)
+				txt = q + (q==1 ? " job " : " jobs ") + "ahead of you...";
+				
+			statusLabel.setText("Queued - " + txt);
 			WinMainStatusBar.setStatusIcon(GRE);
 			break;
+		}
 		case RUNNING:
 			statusLabel.setText("Running...");
 			WinMainStatusBar.setStatusIcon(GRE);

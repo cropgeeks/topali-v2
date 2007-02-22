@@ -15,4 +15,6 @@ public interface ICluster
 	public int getJobStatus(File jobDir);
 
 	public void deleteJob(File jobDir);
+	
+	public int getQueueCount(File jobDir) throws Exception;
 }
