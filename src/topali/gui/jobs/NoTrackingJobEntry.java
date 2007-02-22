@@ -36,6 +36,7 @@ public class NoTrackingJobEntry extends JobsPanelEntry
 	@Override
 	public void setJobStatus(JobStatus status)
 	{
+		super.setJobStatus(status);
 	}
 
 }

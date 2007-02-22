@@ -61,6 +61,8 @@ public class JobsPanel extends JPanel
 
 		jobsThread = new JobsThread(this);
 		jobsThread.start();
+		
+		setStatusPanel();
 	}
 
 	private JPanel getControlPanel()
@@ -149,8 +151,8 @@ public class JobsPanel extends JPanel
 		{ jobs.size(), js, lCount, rCount };
 		String msg = Text.format(Text.Gui.getString("JobsPanel.gui02"), args);
 
-		if (jobs.size() > 0)
-			msg += " - " + (int) progress + "%";
+//		if (jobs.size() > 0)
+//			msg += " - " + (int) progress + "%";
 
 		// Display it
 		WinMainStatusBar.setJobText(msg, false);

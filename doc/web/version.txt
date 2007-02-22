@@ -6,6 +6,8 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] The job status panel will now tell you what position in the queue (on
+    the remote cluster) you job is currently in while waiting to run.
   - [NF] Improvements to job feedback (finer percentage levels) for LRT and DSS
     analysis jobs.
   - [NF] The old "Partitions" dialog has been split into a generic annotations

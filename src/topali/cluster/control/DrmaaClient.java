@@ -200,6 +200,12 @@ public class DrmaaClient implements ICluster
 			logger.info("unable to delete job: " + e);
 		}
 	}
+	
+	public int getQueueCount(File jobDir)
+		throws Exception
+	{
+		return -1;
+	}
 
 	public static void main(String[] args)
 	{
