@@ -521,6 +521,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 	{
 		protected void handlePopup(int x, int y)
 		{
+			
 			// Create the menu
 			p = new JPopupMenu();
 

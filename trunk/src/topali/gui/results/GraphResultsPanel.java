@@ -294,5 +294,13 @@ abstract class GraphResultsPanel extends JPanel implements IThresholdListener
 			add(aAnlsCreateTree, Icons.CREATE_TREE, KeyEvent.VK_T,
 					KeyEvent.VK_T, KeyEvent.CTRL_MASK, 20, true);
 		}
+
+		@Override
+		protected void handlePopup(int x, int y)
+		{
+			
+		}
+		
+		
 	}
 }

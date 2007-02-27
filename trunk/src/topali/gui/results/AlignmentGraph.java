@@ -16,7 +16,6 @@ import java.awt.print.Printable;
 import javax.swing.*;
 
 import org.jfree.chart.*;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.*;
 import org.jfree.data.xy.XYSeries;
@@ -28,6 +27,12 @@ import topali.gui.*;
 
 public class AlignmentGraph extends JPanel implements Printable
 {
+	public static int TYPE_LINECHART = 0;
+
+	public static int TYPE_HISTOGRAMM = 1;
+
+	private int type;
+
 	// Reference back to the AlignmentData object
 	private AlignmentData data;
 
@@ -38,19 +43,20 @@ public class AlignmentGraph extends JPanel implements Printable
 	// The data being plotted
 	private float[][] graphData;
 
-	private float[] thresholds;
-
+	private float threshold;
+	
 	private JFreeChart chart;
 
 	private GraphPanel graph;
 
 	public AlignmentGraph(AlignmentData data, AlignmentResult aResult,
-			float[][] graphData, float[] thresholds)
+			float[][] graphData, float threshold, int type)
 	{
+		this.type = type;
 		this.data = data;
+		this.threshold = threshold;
 		this.aResult = aResult;
 		this.graphData = graphData;
-		this.thresholds = thresholds;
 
 		alignmentLength = data.getSequenceSet().getLength();
 
@@ -63,6 +69,7 @@ public class AlignmentGraph extends JPanel implements Printable
 	// Sets the threshold to be displayed at the given percentage level
 	public void setThresholdValue(float value)
 	{
+		this.threshold = value;
 		XYPlot plot = chart.getXYPlot();
 		plot.clearRangeMarkers();
 
@@ -89,11 +96,15 @@ public class AlignmentGraph extends JPanel implements Printable
 
 	private void initializeChart()
 	{
-		chart = ChartFactory.createXYLineChart(null, null, // xaxis title
-				null, // yaxis title
-				null, PlotOrientation.VERTICAL, true, true, false);
+		if (type == TYPE_LINECHART)
+			chart = ChartFactory.createXYLineChart(null, null, // xaxis title
+					null, // yaxis title
+					null, PlotOrientation.VERTICAL, true, true, false);
+		else if (type == TYPE_HISTOGRAMM)
+			chart = ChartFactory.createHistogram(null, null, null, null,
+					PlotOrientation.VERTICAL, false, false, false);
 
-		setChartData();
+		setChartData(this.graphData);
 
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -102,22 +113,16 @@ public class AlignmentGraph extends JPanel implements Printable
 
 		XYPlot plot = chart.getXYPlot();
 
-		// plot.setDomainGridlinesVisible(false);
-		// plot.setRangeGridlinesVisible(false);
-
-		NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
-		// xAxis.setLowerBound(1);
-		// xAxis.setUpperBound(data[data.length-1]);
+		ValueAxis xAxis = (ValueAxis) plot.getDomainAxis();
 		xAxis.setTickLabelFont(new JLabel().getFont());
-		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+		ValueAxis yAxis = (ValueAxis) plot.getRangeAxis();
 		yAxis.setLowerBound(0);
 
 		yAxis.setTickLabelFont(new JLabel().getFont());
 
-		// Set the height of the graph to show 5% above the maximum value
-		float maxY = findMax();
-		yAxis.setUpperBound(maxY * 1.05);
-
+//		 Set the height of the graph to show 5% above the maximum value
+		adjustUpperYBound();
+		
 		// And set the width of the graph to fit the data exactly
 		xAxis.setLowerBound(0);
 		xAxis.setUpperBound(alignmentLength);
@@ -125,28 +130,23 @@ public class AlignmentGraph extends JPanel implements Printable
 		graph = new GraphPanel();
 	}
 
-	public void setHMMUpperLowerLimits()
+	public void setChartData(float[][] data)
 	{
-		XYPlot plot = chart.getXYPlot();
-		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-
-		yAxis.setLowerBound(-0.01);
-		yAxis.setUpperBound(+1.01);
-	}
-
-	private void setChartData()
-	{
+		this.graphData = data;
+		
 		XYSeries series = new XYSeries("");
 
-		for (int i = 0; i < graphData.length; i++)
-			series.add(graphData[i][0], graphData[i][1]);
+		for (int i = 0; i < data.length; i++)
+			series.add(data[i][0], data[i][1]);
 
 		XYSeriesCollection coll = new XYSeriesCollection(series);
 		chart.getXYPlot().setDataset(coll);
+		
+		adjustUpperYBound();
 	}
 
 	// Searches both the data and the thresholds to find the maximum Y value
-	private float findMax()
+	private void adjustUpperYBound()
 	{
 		float max = 0;
 
@@ -154,11 +154,12 @@ public class AlignmentGraph extends JPanel implements Printable
 			if (graphData[i][1] > max)
 				max = graphData[i][1];
 
-		if (thresholds[thresholds.length - 1] > max)
-			max = thresholds[thresholds.length - 1];
-
-		System.out.println("max is " + max);
-		return max;
+		if(threshold>max)
+			max = threshold;
+		
+		XYPlot plot = chart.getXYPlot();
+		ValueAxis yAxis = (ValueAxis) plot.getRangeAxis();
+		yAxis.setUpperBound(max * 1.05);
 	}
 
 	GraphPanel getGraphPanel()
@@ -345,7 +346,8 @@ public class AlignmentGraph extends JPanel implements Printable
 		}
 
 		private Color highlight = new Color(50, 50, 50, 50); // last value is
-																// alpha
+
+		// alpha
 
 		public void paintComponent(Graphics graphics)
 		{

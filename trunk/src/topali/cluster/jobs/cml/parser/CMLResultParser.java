@@ -5,18 +5,18 @@
 
 package topali.cluster.jobs.cml.parser;
 
-import topali.cluster.jobs.cml.Models;
-import topali.data.CodeMLModel;
+import topali.data.CMLModel;
 
 /**
  * Base class for the CodeML result file parsers
  */
 public abstract class CMLResultParser
 {
-	protected CodeMLModel model = new CodeMLModel();
-
-	public CMLResultParser()
+	CMLModel model;
+	
+	public CMLResultParser(CMLModel model)
 	{
+		this.model = model;
 	}
 
 	/**
@@ -25,35 +25,35 @@ public abstract class CMLResultParser
 	 * @param model
 	 * @return
 	 */
-	public static CMLResultParser getParser(int model)
+	public static CMLResultParser getParser(CMLModel model)
 	{
 		CMLResultParser parser = null;
 
-		switch (model)
+		switch (model.getModel())
 		{
-		case Models.MODEL_M0:
-			parser = new Model0Parser();
+		case CMLModel.MODEL_M0:
+			parser = new Model0Parser(model);
 			break;
-		case Models.MODEL_M1:
-			parser = new Model1aParser();
+		case CMLModel.MODEL_M1:
+			parser = new Model1aParser(model);
 			break; // same as M1a
-		case Models.MODEL_M2:
-			parser = new Model2aParser();
+		case CMLModel.MODEL_M2:
+			parser = new Model2aParser(model);
 			break; // same as M2a
-		case Models.MODEL_M1a:
-			parser = new Model1aParser();
+		case CMLModel.MODEL_M1a:
+			parser = new Model1aParser(model);
 			break;
-		case Models.MODEL_M2a:
-			parser = new Model2aParser();
+		case CMLModel.MODEL_M2a:
+			parser = new Model2aParser(model);
 			break;
-		case Models.MODEL_M3:
-			parser = new Model3Parser();
+		case CMLModel.MODEL_M3:
+			parser = new Model3Parser(model);
 			break;
-		case Models.MODEL_M7:
-			parser = new Model7Parser();
+		case CMLModel.MODEL_M7:
+			parser = new Model7Parser(model);
 			break;
-		case Models.MODEL_M8:
-			parser = new Model8Parser();
+		case CMLModel.MODEL_M8:
+			parser = new Model8Parser(model);
 			break;
 		}
 
@@ -64,11 +64,11 @@ public abstract class CMLResultParser
 		return parser;
 	}
 
+	/**
+	 * Parses the files and writes the data to the the CMLModel model
+	 * @param resultFile
+	 * @param rstFile
+	 */
 	public abstract void parse(String resultFile, String rstFile);
-
-	public CodeMLModel getModelResult()
-	{
-		return model;
-	}
 
 }

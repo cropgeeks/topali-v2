@@ -10,9 +10,16 @@ import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import topali.data.CMLModel;
+
 public class Model8Parser extends CMLResultParser
 {
 
+	public Model8Parser(CMLModel model)
+	{
+		super(model);
+	}
+	
 	@Override
 	public void parse(String resultFile, String rstFile)
 	{
@@ -34,32 +41,32 @@ public class Model8Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.likelihood = Float.parseFloat(b[0]);
+						model.setLikelihood(Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("p0="))
 					{
 						b = line.split("\\s+");
-						model.p0 = Float.parseFloat(b[1]);
-						model.p = Float.parseFloat(b[3]);
-						model.q = Float.parseFloat(b[5]);
+						model.setP0(Double.parseDouble(b[1]));
+						model.setP(Double.parseDouble(b[3]));
+						model.setQ(Double.parseDouble(b[5]));
 						continue;
 					}
 
 					if (line.startsWith("(p1="))
 					{
 						b = line.split("\\s+");
-						model.p1 = Float.parseFloat(b[1].replaceAll("\\)", ""));
-						model._w = Float.parseFloat(b[3]);
+						model.setP1(Double.parseDouble(b[1].replaceAll("\\)", "")));
+						model.set_w(Double.parseDouble(b[3]));
 						continue;
 					}
 
-					if (model.dnDS == -1
+					if (model.getDnDS() == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.dnDS = Float.parseFloat(b[4]);
+						model.setDnDS(Double.parseDouble(b[4]));
 					}
 				} catch (RuntimeException e)
 				{
@@ -85,12 +92,9 @@ public class Model8Parser extends CMLResultParser
 					int pos = Integer.parseInt(tmp[0]);
 					char aa = tmp[1].charAt(0);
 					float prob = Float.parseFloat(tmp[12]);
-					float postmeanW = Float.parseFloat(tmp[tmp.length - 1]);
 					pss.append(pos);
 					pss.append('|');
 					pss.append(aa);
-					pss.append('|');
-					pss.append(postmeanW);
 					pss.append('|');
 					pss.append(prob);
 					pss.append(' ');
@@ -100,7 +104,7 @@ public class Model8Parser extends CMLResultParser
 				else if (line.startsWith("Positively selected sites"))
 					start = false;
 			}
-			model.pss = pss.toString();
+			model.setPss(pss.toString());
 			in.close();
 
 		} catch (Exception e)

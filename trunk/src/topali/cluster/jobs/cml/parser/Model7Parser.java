@@ -8,9 +8,16 @@ package topali.cluster.jobs.cml.parser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import topali.data.CMLModel;
+
 public class Model7Parser extends CMLResultParser
 {
 
+	public Model7Parser(CMLModel model)
+	{
+		super(model);
+	}
+	
 	@Override
 	public void parse(String resultFile, String rstFile)
 	{
@@ -32,23 +39,23 @@ public class Model7Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.likelihood = Float.parseFloat(b[0]);
+						model.setLikelihood(Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("p="))
 					{
 						b = line.split("\\s+");
-						model.p = Float.parseFloat(b[1]);
-						model.q = Float.parseFloat(b[3]);
+						model.setP(Double.parseDouble(b[1]));
+						model.setQ(Double.parseDouble(b[3]));
 						continue;
 					}
 
-					if (model.dnDS == -1
+					if (model.getDnDS() == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.dnDS = Float.parseFloat(b[4]);
+						model.setDnDS(Double.parseDouble(b[4]));
 					}
 				} catch (RuntimeException e)
 				{

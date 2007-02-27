@@ -8,6 +8,7 @@ package topali.gui.dialog;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -72,6 +73,24 @@ public class CodeMLSettingsDialog extends JDialog implements ActionListener
 
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		result.isRemote = makeRemote;
+		
+		//result.models.add(new CMLModel(CMLModel.MODEL_M0));
+		//result.models.add(new CMLModel(CMLModel.MODEL_M1a));
+		//result.models.add(new CMLModel(CMLModel.MODEL_M2a));
+		//result.models.add(new CMLModel(CMLModel.MODEL_M7));
+		//result.models.add(new CMLModel(CMLModel.MODEL_M8));
+		
+		CMLModel m = new CMLModel(CMLModel.MODEL_M2a);
+		result.models.add(m);
+		
+		for(float i=16; i>=0.015; i/=2) {
+			m = new CMLModel(CMLModel.MODEL_M2a);
+			Map<String, String> set = m.getSettingsMap();
+			set.put("omega", Float.toString(i));
+			m.setName(m.getName()+" (w="+i+")");
+			m.setSettings(set);
+			result.models.add(m);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e)

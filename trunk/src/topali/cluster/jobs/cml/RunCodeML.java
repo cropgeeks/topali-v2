@@ -13,6 +13,7 @@ import pal.tree.NeighborJoiningTree;
 import pal.tree.Tree;
 import sbrn.commons.file.FileUtils;
 import topali.cluster.StreamCatcher;
+import topali.data.CMLModel;
 import topali.data.CodeMLResult;
 
 class RunCodeML
@@ -52,9 +53,9 @@ class RunCodeML
 	}
 
 	// Saves the codeml.ctl settings file used by CODEML
-	void saveCTLSettings(int modelNum) throws IOException
+	void saveCTLSettings(CMLModel model) throws IOException
 	{
-		String settings = Models.getModel(modelNum);
+		String settings = model.codemlSettings();
 
 		File ctlFile = new File(wrkDir, "codeml.ctl");
 		FileUtils.writeFile(ctlFile, settings);

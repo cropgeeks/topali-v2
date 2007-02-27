@@ -94,6 +94,5 @@ public class ResultsTracker
 	public void setCodeMLRunCount(int codeMLRunCount)
 	{
 		this.codeMLRunCount = codeMLRunCount;
-		System.out.println("set count to " + codeMLRunCount);
 	}
 }
