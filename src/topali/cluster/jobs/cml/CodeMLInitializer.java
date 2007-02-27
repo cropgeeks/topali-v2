@@ -9,8 +9,7 @@ import java.io.File;
 
 import topali.cluster.ClusterUtils;
 import topali.cluster.LocalJobs;
-import topali.data.CodeMLResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 
@@ -60,21 +59,18 @@ public class CodeMLInitializer extends Thread
 		// Store the sequence data in phylip sequential
 		ss.save(new File(jobDir, "seq.phy"), indices, Filters.PHY_S, false);
 
-		System.out.println("MAX is " + Models.MAX);
-
-		// We want to run each of the models, making *8* runs in total
-		for (int i = 1; i <= Models.MAX; i++)
-		{
+//		 We want to run each of the models, making *8* runs in total
+		for(int i=0; i<result.models.size(); i++) {
 			if (LocalJobs.isRunning(result.jobId) == false)
 				return;
 
-			File runDir = new File(jobDir, "run" + i);
+			File runDir = new File(jobDir, "run" + (i+1));
 			runDir.mkdirs();
 
 			if (result.isRemote == false)
 				new CodeMLAnalysis(runDir).start(LocalJobs.manager);
 		}
-
+		
 		if (result.isRemote)
 			CodeMLWebService.runScript(jobDir);
 	}

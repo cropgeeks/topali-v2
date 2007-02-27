@@ -378,5 +378,13 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 		{
 			annotate.setEnabled(b);
 		}
+
+		@Override
+		protected void handlePopup(int x, int y)
+		{
+			
+		}
+		
+		
 	}
 }

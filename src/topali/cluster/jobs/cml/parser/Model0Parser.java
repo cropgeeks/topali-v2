@@ -8,8 +8,15 @@ package topali.cluster.jobs.cml.parser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import topali.data.CMLModel;
+
 public class Model0Parser extends CMLResultParser
 {
+	
+	public Model0Parser(CMLModel model)
+	{
+		super(model);
+	}
 
 	@Override
 	public void parse(String resultFile, String rstFile)
@@ -32,14 +39,14 @@ public class Model0Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.likelihood = Float.parseFloat(b[0]);
+						model.setLikelihood(Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("omega (dN/dS)"))
 					{
 						b = line.split("\\s+");
-						model.dnDS = Float.parseFloat(b[3]);
+						model.setDnDS(Double.parseDouble(b[3]));
 					}
 				} catch (RuntimeException e)
 				{
@@ -48,7 +55,7 @@ public class Model0Parser extends CMLResultParser
 				}
 			}
 			in.close();
-
+			
 		} catch (Exception e)
 		{
 			e.printStackTrace();

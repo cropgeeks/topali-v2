@@ -68,18 +68,31 @@ public class MBTreeAnalysis extends AnalysisThread
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(wrkDir,
 				"mb.nex"), true));
 
+		
 		out.newLine();
 		out.newLine();
 		out.write("begin mrbayes;");
 		out.newLine();
 
-		out.write("  lset nst=6 rates=gamma;");
-		out.newLine();
-		out.write("  mcmc nruns=1 ngen=10000 samplefreq=10;");
-		out.newLine();
-		out.write("  sump burnin=1000;");
-		out.newLine();
-		out.write("  sumt burnin=1000;");
+		if(ss.isDNA()) {
+			out.write("  lset nst=6 rates=gamma;");
+			out.newLine();
+			out.write("  mcmc nruns=1 ngen=10000 samplefreq=10;");
+			out.newLine();
+			out.write("  sump burnin=1000;");
+			out.newLine();
+			out.write("  sumt burnin=1000;");
+		}
+		else {
+			//out.write("lset aamodel=jones mcmcp samplefreq=50 printfreq=50 nchains=2 startingtree=random mcmcp savebrlens=yes filename=testseq1c mcmc ngen=20000 sump;");
+			out.write("prset aamodelpr=fixed(jones);");
+			out.write("mcmcp samplefreq=50 printfreq=50 nchains=2 startingtree=random;");
+			out.write("mcmcp savebrlens=yes;");
+			out.write("mcmc ngen=20000;");
+			out.write("sump;");
+			out.write("sumt;");
+		}
+		
 		out.newLine();
 		out.write("end;");
 

@@ -30,21 +30,18 @@ public class HMMResultsPanel extends GraphResultsPanel
 		super(data, result);
 		this.result = result;
 
-		float[] threshold =
-		{ 0.95f };
-
-		graph1 = new AlignmentGraph(data, result, result.data1, threshold);
-		graph1.setHMMUpperLowerLimits();
+		graph1 = new AlignmentGraph(data, result, result.data1, 0.95f, AlignmentGraph.TYPE_LINECHART);
+		//graph1.setHMMUpperLowerLimits();
 		graph1.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		graph1.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 1 (1,2), (2,3):"));
-		graph2 = new AlignmentGraph(data, result, result.data2, threshold);
-		graph2.setHMMUpperLowerLimits();
+		graph2 = new AlignmentGraph(data, result, result.data2, 0.95f, AlignmentGraph.TYPE_LINECHART);
+		//graph2.setHMMUpperLowerLimits();
 		graph2.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		graph2.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 2 (1,3), (2,4):"));
-		graph3 = new AlignmentGraph(data, result, result.data3, threshold);
-		graph3.setHMMUpperLowerLimits();
+		graph3 = new AlignmentGraph(data, result, result.data3, 0.95f, AlignmentGraph.TYPE_LINECHART);
+		//graph3.setHMMUpperLowerLimits();
 		graph3.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		graph3.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 3 (1,4), (2,3):"));

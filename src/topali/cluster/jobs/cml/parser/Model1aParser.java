@@ -8,9 +8,16 @@ package topali.cluster.jobs.cml.parser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import topali.data.CMLModel;
+
 public class Model1aParser extends CMLResultParser
 {
 
+	public Model1aParser(CMLModel model)
+	{
+		super(model);
+	}
+	
 	@Override
 	public void parse(String resultFile, String rstFile)
 	{
@@ -32,31 +39,31 @@ public class Model1aParser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.likelihood = Float.parseFloat(b[0]);
+						model.setLikelihood(Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("p:"))
 					{
 						b = line.split("\\s+");
-						model.p0 = Float.parseFloat(b[1]);
-						model.p1 = Float.parseFloat(b[2]);
+						model.setP0(Double.parseDouble(b[1]));
+						model.setP1(Double.parseDouble(b[2]));
 						continue;
 					}
 
 					if (line.startsWith("w:"))
 					{
 						b = line.split("\\s+");
-						model.w0 = Float.parseFloat(b[1]);
-						model.w1 = Float.parseFloat(b[2]);
+						model.setW0(Double.parseDouble(b[1]));
+						model.setW1(Double.parseDouble(b[2]));
 						continue;
 					}
 
-					if (model.dnDS == -1
+					if (model.getDnDS() == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.dnDS = Float.parseFloat(b[4]);
+						model.setDnDS(Double.parseDouble(b[4]));
 					}
 				} catch (RuntimeException e)
 				{

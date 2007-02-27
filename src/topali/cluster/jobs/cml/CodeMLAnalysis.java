@@ -11,8 +11,7 @@ import sbrn.commons.file.FileUtils;
 import topali.cluster.AnalysisThread;
 import topali.cluster.ClusterUtils;
 import topali.cluster.jobs.cml.parser.CMLResultParser;
-import topali.data.CodeMLModel;
-import topali.data.CodeMLResult;
+import topali.data.*;
 import topali.fileio.Castor;
 
 class CodeMLAnalysis extends AnalysisThread
@@ -36,7 +35,13 @@ class CodeMLAnalysis extends AnalysisThread
 		// Read the CodeMLResult
 		File jobDir = runDir.getParentFile();
 		File resultFile = new File(jobDir, "submit.xml");
-		result = (CodeMLResult) Castor.unmarshall(resultFile);
+		try
+		{
+			result = (CodeMLResult) Castor.unmarshall(resultFile);
+		} catch (RuntimeException e)
+		{
+			e.printStackTrace();
+		}
 
 		// Temporary working directory
 		wrkDir = ClusterUtils.getWorkingDirectory(result, jobDir.getName(),
@@ -48,11 +53,12 @@ class CodeMLAnalysis extends AnalysisThread
 		FileUtils.copyFile(src, des, false);
 
 		// 2) Work out (from the run directory, which run/model to use)
-		int modelType = Integer.parseInt(runDir.getName().substring(3));
+		int i = Integer.parseInt(runDir.getName().substring(3)); 
+		CMLModel model = result.models.get(i-1); // (i-1) as i is starting with 1
 
 		// 3) Write out the input files that CODEML requires
 		RunCodeML runCodeML = new RunCodeML(wrkDir, result);
-		runCodeML.saveCTLSettings(modelType);
+		runCodeML.saveCTLSettings(model);
 		runCodeML.createTree();
 
 		// 4) Run the job
@@ -65,13 +71,9 @@ class CodeMLAnalysis extends AnalysisThread
 		File resultsFile = new File(wrkDir, "results.txt");
 		File rstFile = new File(wrkDir, "rst");
 
-		CMLResultParser parser = CMLResultParser.getParser(modelType);
+		CMLResultParser parser = CMLResultParser.getParser(model);
 		parser.parse(resultsFile.getPath(), rstFile.getPath());
-		CodeMLModel model = parser.getModelResult();
 
-		model.name = Models.getFullModelName(modelType);
-		model.params = Models.getNParameters(modelType);
-		model.runNumber = "run " + modelType;
 		Castor.saveXML(model, new File(runDir, "model.xml"));
 
 		ClusterUtils.emptyDirectory(wrkDir, true);

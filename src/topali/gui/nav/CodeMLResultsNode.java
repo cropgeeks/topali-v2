@@ -10,17 +10,18 @@ import javax.swing.JComponent;
 import topali.data.AlignmentData;
 import topali.data.CodeMLResult;
 import topali.gui.IPrintable;
+import topali.gui.results.CodeMLResultPanel;
 import topali.gui.results.CodeMLResultsPanel;
 
 public class CodeMLResultsNode extends ResultsNode implements IPrintable
 {
-	private CodeMLResultsPanel panel;
+	private CodeMLResultPanel panel;
 
 	CodeMLResultsNode(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
 
-		panel = new CodeMLResultsPanel(result);
+		panel = new CodeMLResultPanel(data, result);
 	}
 
 	public String toString()

@@ -31,7 +31,12 @@ public class DSSResultsPanel extends GraphResultsPanel
 		super(data, result);
 		this.result = result;
 
-		graph = new AlignmentGraph(data, result, result.data, result.thresholds);
+		float threshold = -1;
+		for(float f : result.thresholds)
+			if(f>threshold)
+				threshold = f;
+		
+		graph = new AlignmentGraph(data, result, result.data, threshold, AlignmentGraph.TYPE_LINECHART);
 		graph
 				.setBorder(BorderFactory.createLineBorder(Icons.grayBackground,
 						4));

@@ -25,7 +25,7 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 	{
 		if (e.isPopupTrigger() && enabled)
 		{
-			// handlePopup(e.getX(), e.getY());
+			handlePopup(e.getX(), e.getY());
 			p.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
@@ -54,8 +54,6 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 		this.enabled = b;
 	}
 
-	// protected void handlePopup(int x, int y)
-	// {
-	// }
+	 protected abstract void handlePopup(int x, int y);
 
 }

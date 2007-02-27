@@ -5,181 +5,108 @@
 
 package topali.gui.results;
 
-import java.awt.BorderLayout;
-import java.util.Vector;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.Hashtable;
+import java.util.List;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import topali.data.*;
 import topali.gui.Icons;
 
-public class CodeMLResultsPanel extends JPanel
+public class CodeMLResultsPanel extends JPanel implements ChangeListener
 {
-	private Vector<CodeMLModel> models;
-
-	JTable table;
-
-	final float minP = 0.95f;
-
-	public CodeMLResultsPanel(CodeMLResult result)
-	{
-		this.models = result.models;
-
+	CodeMLResultTable table;
+	//CodeMLGraphPanel graph = null;
+	AlignmentGraph graph;
+	JLabel labelP;
+	JSlider sliderP;
+	
+	AlignmentData data;
+	AlignmentResult result;
+	
+	public CodeMLResultsPanel(AlignmentData data, CodeMLResult result)
+	{	
+		this.data = data;
+		this.result = result;
 		this.setBorder(BorderFactory.createLineBorder(Icons.grayBackground, 4));
-		setLayout(new BorderLayout());
-		table = getTable();
-		add(new JScrollPane(table), BorderLayout.CENTER);
+		
+		//table = new CodeMLResultTable(result, this);
+		
+		JPanel sliderPanel = new JPanel();
+		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.X_AXIS));
+		sliderPanel.add(Box.createHorizontalGlue());
+		labelP = new JLabel("p(w>1) = ");
+		sliderPanel.add(labelP);
+		sliderP = new JSlider(JSlider.HORIZONTAL, 0, 100, 95);
+		sliderP.setMajorTickSpacing(5);
+		sliderP.setMinorTickSpacing(1);
+		sliderP.setPaintTicks(true);
+		sliderP.setPaintLabels(true);
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+		labelTable.put(0, new JLabel("0.00"));
+		labelTable.put(50, new JLabel("0.50"));
+		labelTable.put(75, new JLabel("0.75"));
+		labelTable.put(90, new JLabel("0.90"));
+		labelTable.put(100, new JLabel("1.00"));
+		sliderP.setLabelTable(labelTable);
+		sliderP.addChangeListener(this);
+		sliderPanel.add(sliderP);
+		sliderPanel.add(Box.createHorizontalGlue());
+		
+		//graph = new CodeMLGraphPanel(data, result);
+		graph = new AlignmentGraph(data, result, new float[][]{}, 0.95f, AlignmentGraph.TYPE_HISTOGRAMM);
+		
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1.0;
+		c.weighty = 0.25;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(new JScrollPane(table), c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.05;
+		c.gridy = 1;
+		this.add(sliderPanel, c);
+		c.weighty = 0.7;
+		c.gridy = 2;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(new JScrollPane(graph), c);
+	}
+	
+	public void setSelectedModel(CMLModel m) {
+		float minP = (float)sliderP.getValue()/100f;
+		table.setThreshold(minP);
+		
+		List<PSSite> pss = m.getPSS(-1f);
+		float[][] data = new float[pss.size()][2];
+		for (int i = 0; i < pss.size(); i++)
+		{
+			PSSite p = pss.get(i);
+			//ser.add(p.getPos() * 3 - 1, p.getP());
+			data[i][0] = p.getPos() * 3 - 1;
+			data[i][1] = (float)p.getP();
+		}
+		graph.setChartData(data);
+		graph.setThresholdValue(minP);
+		//graph.setModel(m);
+		//graph.setThreshold(minP);
+		this.revalidate();
 	}
 
-	private JTable getTable()
+	public void stateChanged(ChangeEvent e)
 	{
-		TableModel tmodel = new myTableModel();
-		JTable table = new JTable(tmodel);
-		return table;
+		if(e.getSource().equals(sliderP)) {
+			float minP = (float)sliderP.getValue()/100f;
+			graph.setThresholdValue(minP);
+			table.setThreshold(minP);
+		}
+		
 	}
-
-	class myTableModel extends AbstractTableModel
-	{
-
-		public int getColumnCount()
-		{
-			return 15;
-		}
-
-		public int getRowCount()
-		{
-			return models.size();
-		}
-
-		public Object getValueAt(int rowIndex, int columnIndex)
-		{
-			String res = null;
-			CodeMLModel model = models.get(rowIndex);
-			switch (columnIndex)
-			{
-			case 0:
-				res = "" + model.name;
-				break;
-			case 1:
-				res = "" + model.params;
-				break;
-			case 2:
-				res = "" + model.likelihood;
-				break;
-			case 3:
-				res = "" + model.dnDS;
-				break;
-			case 4:
-				res = "" + model.w;
-				break;
-			case 5:
-				res = "" + model.p0;
-				break;
-			case 6:
-				res = "" + model.p1;
-				break;
-			case 7:
-				res = "" + model.p2;
-				break;
-			case 8:
-				res = "" + model.w0;
-				break;
-			case 9:
-				res = "" + model.w1;
-				break;
-			case 10:
-				res = "" + model.w2;
-				break;
-			case 11:
-				res = "" + model.p;
-				break;
-			case 12:
-				res = "" + model.q;
-				break;
-			case 13:
-				res = "" + model._w;
-				break;
-			case 14:
-				res = getPSS(model);
-				break;
-			default:
-				res = "";
-			}
-			if (res.startsWith("-1"))
-				res = "";
-			return res;
-		}
-
-		@Override
-		public boolean isCellEditable(int rowIndex, int columnIndex)
-		{
-			return false;
-		}
-
-		@Override
-		public String getColumnName(int column)
-		{
-			switch (column)
-			{
-			case 0:
-				return "Model";
-			case 1:
-				return "Free parameters";
-			case 2:
-				return "Likelihood";
-			case 3:
-				return "dN/dS";
-			case 4:
-				return "W";
-			case 5:
-				return "P0";
-			case 6:
-				return "P1";
-			case 7:
-				return "P2";
-			case 8:
-				return "W0";
-			case 9:
-				return "W1";
-			case 10:
-				return "W2";
-			case 11:
-				return "P";
-			case 12:
-				return "Q";
-			case 13:
-				return "W";
-			case 14:
-				return "PSS";
-			default:
-				return "";
-			}
-		}
-
-		private String getPSS(CodeMLModel m)
-		{
-			if (m.getPSS(-1f) == null)
-				return "-";
-
-			if (m.getPSS(minP).size() > 0)
-			{
-				StringBuffer res = new StringBuffer();
-				res.append("<html>");
-				for (CodeMLModel.PSS pss : m.getPSS(0.95f))
-				{
-					if (pss.p > 0.99f)
-						res.append("<b>" + pss + "</b>");
-					else
-						res.append(pss);
-					res.append(' ');
-				}
-				res.append("</html>");
-				return res.toString();
-			} else
-				return "0";
-		}
-
-	}
+	
+	
 }

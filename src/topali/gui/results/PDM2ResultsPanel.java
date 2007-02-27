@@ -30,8 +30,12 @@ public class PDM2ResultsPanel extends GraphResultsPanel
 		super(data, result);
 		this.result = result;
 
-		graph = new AlignmentGraph(data, result, result.locData,
-				result.thresholds);
+		float threshold = -1;
+		for(float f : result.thresholds)
+			if(f>threshold)
+				threshold = f;
+		
+		graph = new AlignmentGraph(data, result, result.locData, threshold, AlignmentGraph.TYPE_LINECHART);
 		graph
 				.setBorder(BorderFactory.createLineBorder(Icons.grayBackground,
 						4));

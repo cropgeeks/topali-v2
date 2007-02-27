@@ -17,7 +17,7 @@ public class CodeMLResult extends AlignmentResult
 	// The location of the CodeML binary
 	public String codemlPath;
 
-	public Vector<CodeMLModel> models = new Vector<CodeMLModel>();
+	public Vector<CMLModel> models = new Vector<CMLModel>();
 
 	public CodeMLResult()
 	{

@@ -36,16 +36,22 @@ public class PDMResultsPanel extends GraphResultsPanel implements
 		super(data, result);
 		this.result = result;
 
-		float[] threshold =
-		{ 0.95f };
-		if (result.thresholds != null)
-			threshold = result.thresholds;
-
-		glbGraph = new AlignmentGraph(data, result, result.glbData, threshold);
+		float threshold;
+		if(result.thresholds==null)
+			threshold = 0.95f;
+		else
+		{
+			threshold = -1;
+			for(float f : result.thresholds)
+				if(f>threshold)
+					threshold = f;
+		}
+		
+		glbGraph = new AlignmentGraph(data, result, result.glbData, threshold, AlignmentGraph.TYPE_LINECHART);
 		glbGraph.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		glbGraph.setBorder(BorderFactory
 				.createTitledBorder("Global divergence measure:"));
-		locGraph = new AlignmentGraph(data, result, result.locData, threshold);
+		locGraph = new AlignmentGraph(data, result, result.locData, threshold, AlignmentGraph.TYPE_LINECHART);
 		locGraph.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
 		locGraph.setBorder(BorderFactory
 				.createTitledBorder("Local divergence measure:"));
