@@ -6,6 +6,8 @@
 package topali.fileio;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
@@ -13,6 +15,8 @@ import org.exolab.castor.xml.*;
 
 public class Castor
 {
+	protected static Logger log = Logger.getLogger("topali.cluster.info-log");
+
 	private static Mapping mapping;
 
 	private static Unmarshaller unmarshaller;
@@ -40,6 +44,7 @@ public class Castor
 		} catch (Exception e)
 		{
 			// Critical error. Set the unmarshaller to null so it cannot be used
+			log.log(Level.SEVERE, "Cannot create Unmarshaller!", e);
 			unmarshaller = null;
 		}
 	}

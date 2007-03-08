@@ -18,6 +18,7 @@ import pal.tree.Tree;
 import topali.data.*;
 import topali.gui.Prefs;
 import topali.gui.Utils;
+import topali.gui.atv.ATV;
 
 class TreePanel extends JPanel
 {
@@ -161,6 +162,11 @@ class TreePanel extends JPanel
 	{
 		tree.setClusters(clusters);
 		createNameColouriser();
+	}
+	
+	void launchATV() {
+		ATV atv = new ATV(palTree.toString(), "TOPALi", null);
+		SwingUtilities.invokeLater(atv);
 	}
 
 	// Internal canvas class that actually handles the painting of the palTree

@@ -13,13 +13,55 @@ import java.util.Vector;
  * not the data itself).
  */
 public class CodeMLResult extends AlignmentResult
-{
+{	
+	
+	public final static int TYPE_SITEMODEL = 0;
+	public final static int TYPE_BRANCHMODEL = 1;
+	
+	public int type;
+	public Vector<CMLModel> models = new Vector<CMLModel>();
+	public Vector<CMLHypothesis> hypos = new Vector<CMLHypothesis>();
+	
 	// The location of the CodeML binary
 	public String codemlPath;
-
-	public Vector<CMLModel> models = new Vector<CMLModel>();
-
-	public CodeMLResult()
+	
+	public CodeMLResult() {
+		
+	}
+	
+	public CodeMLResult(int type)
 	{
+		this.type = type;
+	}
+
+	/**
+	 * Calling this method, will remove repeated models and just keep the one with the best likelihood.
+	 * E.g. you ran M0 several times with different omega start values, this method will remove all M0s, just
+	 * keeping the one with the best likelihood.
+	 */
+	public void filterModels() {
+		Vector<CMLModel> models = new Vector<CMLModel>();
+		CMLModel lastModel = null;
+		
+		for(int i=0; i<this.models.size(); i++) {
+			CMLModel thisModel = this.models.get(i);
+			
+			if(lastModel==null) {
+				lastModel = thisModel;
+				continue;
+			}
+			
+			if(thisModel.abbr.equals(lastModel.abbr)) {
+				if(thisModel.likelihood>lastModel.likelihood)
+					lastModel = thisModel;
+			}
+			else {
+				models.add(lastModel);
+				lastModel = thisModel;
+			}
+		}
+		models.add(lastModel);
+		
+		this.models = models;
 	}
 }

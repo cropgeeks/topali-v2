@@ -86,8 +86,7 @@ public class TOPALi extends Applet
 			{
 				// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-				UIManager
-						.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
+				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 				// UIManager.setLookAndFeel("org.fife.plaf.OfficeXP.OfficeXPLookAndFeel");
 				// UIManager.setLookAndFeel("org.fife.plaf.VisualStudio2005.VisualStudio2005LookAndFeel");
 

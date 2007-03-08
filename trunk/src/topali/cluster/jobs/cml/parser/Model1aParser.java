@@ -39,31 +39,31 @@ public class Model1aParser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.setLikelihood(Double.parseDouble(b[0]));
+						model.likelihood = Double.parseDouble(b[0]);
 						continue;
 					}
 
 					if (line.startsWith("p:"))
 					{
 						b = line.split("\\s+");
-						model.setP0(Double.parseDouble(b[1]));
-						model.setP1(Double.parseDouble(b[2]));
+						model.p0 = Double.parseDouble(b[1]);
+						model.p1 = Double.parseDouble(b[2]);
 						continue;
 					}
 
 					if (line.startsWith("w:"))
 					{
 						b = line.split("\\s+");
-						model.setW0(Double.parseDouble(b[1]));
-						model.setW1(Double.parseDouble(b[2]));
+						model.w0 = Double.parseDouble(b[1]);
+						model.w1 = Double.parseDouble(b[2]);
 						continue;
 					}
 
-					if (model.getDnDS() == -1
+					if (model.dnDS == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.setDnDS(Double.parseDouble(b[4]));
+						model.dnDS = Double.parseDouble(b[4]);
 					}
 				} catch (RuntimeException e)
 				{

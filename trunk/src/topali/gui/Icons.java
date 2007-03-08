@@ -42,7 +42,7 @@ public class Icons
 	public static ImageIcon DOWN16, HELP16;
 
 	public static ImageIcon WIN_WARN, WIN_INFORM, WIN_ERROR, WIN_QUESTION;
-
+	
 	private Icons()
 	{
 	}

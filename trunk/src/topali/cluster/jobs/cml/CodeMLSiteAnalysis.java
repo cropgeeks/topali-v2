@@ -14,18 +14,18 @@ import topali.cluster.jobs.cml.parser.CMLResultParser;
 import topali.data.*;
 import topali.fileio.Castor;
 
-class CodeMLAnalysis extends AnalysisThread
+class CodeMLSiteAnalysis extends AnalysisThread
 {
 	private CodeMLResult result;
 
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 	{
-		new CodeMLAnalysis(new File(args[0])).run();
+		new CodeMLSiteAnalysis(new File(args[0])).run();
 	}
 
 	// If running locally, the job will be started via a normal constructor call
-	CodeMLAnalysis(File runDir)
+	CodeMLSiteAnalysis(File runDir)
 	{
 		super(runDir);
 	}
@@ -60,10 +60,10 @@ class CodeMLAnalysis extends AnalysisThread
 		RunCodeML runCodeML = new RunCodeML(wrkDir, result);
 		runCodeML.saveCTLSettings(model);
 		runCodeML.createTree();
-
+		
 		// 4) Run the job
 		runCodeML.run();
-
+		
 		// TEMP (for now) - copy results from wrkDir to runDir
 		for (File f : wrkDir.listFiles())
 			FileUtils.copyFile(f, new File(runDir, f.getName()), false);

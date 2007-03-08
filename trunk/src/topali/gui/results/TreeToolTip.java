@@ -17,7 +17,7 @@ import topali.data.AlignmentData;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
 
-class TreeToolTip extends JToolTip
+public class TreeToolTip extends JToolTip
 {
 	private SequenceSet ss;
 
@@ -30,7 +30,7 @@ class TreeToolTip extends JToolTip
 	// Pass in the Alignment object along with the sequences used during
 	// whatever
 	// analysis run this tooltip will hover over
-	TreeToolTip(AlignmentData data, String[] seqNames)
+	public TreeToolTip(AlignmentData data, String[] seqNames)
 	{
 		ss = data.getSequenceSet();
 		this.seqNames = seqNames;
@@ -50,7 +50,7 @@ class TreeToolTip extends JToolTip
 			return new Dimension();
 	}
 
-	void createNewTree(int n1, int n2)
+	public void createNewTree(int n1, int n2)
 	{
 		// We have to work out the indices each time, because they could change
 		// if the user rearranged the sequence ordering

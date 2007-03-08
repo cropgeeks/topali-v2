@@ -3,6 +3,6 @@
 #$ -N TPi-CML
 #$ -cwd
 #$ -j y
-#$ -t 1-8
+#$ -t 1-$RUNS
 
-$JAVA -cp $TOPALi topali.cluster.jobs.cml.CodeMLAnalysis "$JOB_DIR/run$SGE_TASK_ID"
+$JAVA -cp $TOPALi $CLASS "$JOB_DIR/run$SGE_TASK_ID"

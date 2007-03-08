@@ -39,23 +39,23 @@ public class Model7Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.setLikelihood(Double.parseDouble(b[0]));
+						model.likelihood = (Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("p="))
 					{
 						b = line.split("\\s+");
-						model.setP(Double.parseDouble(b[1]));
-						model.setQ(Double.parseDouble(b[3]));
+						model.p = (Double.parseDouble(b[1]));
+						model.q = (Double.parseDouble(b[3]));
 						continue;
 					}
 
-					if (model.getDnDS() == -1
+					if (model.dnDS == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.setDnDS(Double.parseDouble(b[4]));
+						model.dnDS = (Double.parseDouble(b[4]));
 					}
 				} catch (RuntimeException e)
 				{

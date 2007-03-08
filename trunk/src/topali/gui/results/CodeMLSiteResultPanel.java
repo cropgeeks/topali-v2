@@ -10,26 +10,23 @@ import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import topali.data.*;
 
-public class CodeMLResultPanel extends GraphResultsPanel
+public class CodeMLSiteResultPanel extends GraphResultsPanel
 {
 
-	CodeMLResultTable table;
+	CodeMLSiteResultTable table;
 	AlignmentGraph graph;
 	
-	public CodeMLResultPanel(AlignmentData data, CodeMLResult result)
+	public CodeMLSiteResultPanel(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
 		
-		table = new CodeMLResultTable(result, this);
+		table = new CodeMLSiteResultTable(result, this);
 		graph = new AlignmentGraph(data, result, new float[][]{}, 0.95f, AlignmentGraph.TYPE_HISTOGRAMM);
 		graph.getGraphPanel().addMouseListener(new MyPopupMenuAdapter());
-		
-		JPanel leftPanel = new JPanel();
 		
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -48,19 +45,21 @@ public class CodeMLResultPanel extends GraphResultsPanel
 		c.fill = GridBagConstraints.NONE;
 		this.add(toolbar, c);
 	}
-
+	
 	public void setSelectedModel(int index) {
 		CMLModel m = ((CodeMLResult)super.aResult).models.get(index);
 		
-		List<PSSite> pss = m.getPSS(-1f);
-		float[][] data = new float[pss.size()][2];
-		for (int i = 0; i < pss.size(); i++)
-		{
-			PSSite p = pss.get(i);
-			data[i][0] = p.getPos() * 3 - 1;
-			data[i][1] = (float)p.getP();
+		if(m.supportsPSS) {
+			List<PSSite> pss = m.getPSS(-1f);
+			float[][] data = new float[pss.size()][2];
+			for (int i = 0; i < pss.size(); i++)
+			{
+				PSSite p = pss.get(i);
+				data[i][0] = p.getPos() * 3 - 1;
+				data[i][1] = (float)p.getP();
+			}
+			graph.setChartData(data);
 		}
-		graph.setChartData(data);
 	}
 	
 	@Override

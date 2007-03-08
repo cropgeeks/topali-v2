@@ -39,14 +39,14 @@ public class Model0Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.setLikelihood(Double.parseDouble(b[0]));
+						model.likelihood = Double.parseDouble(b[0]);
 						continue;
 					}
 
 					if (line.startsWith("omega (dN/dS)"))
 					{
 						b = line.split("\\s+");
-						model.setDnDS(Double.parseDouble(b[3]));
+						model.dnDS = Double.parseDouble(b[3]);
 					}
 				} catch (RuntimeException e)
 				{

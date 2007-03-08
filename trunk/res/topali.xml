@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 
+
 <!-- Mapping file from TOPALi class objects to/from XML. A git of a file at first glance, but it was built up by hand over time, with occasional help from Castor's auto mapping file generator -->
 
 <mapping>
@@ -222,48 +223,65 @@
 <class name="topali.data.CodeMLResult" extends="topali.data.AlignmentResult">
 	<field name="codemlPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
-	
+	<field name="type" type="integer" direct="true"/>
 	<field name="models" type="topali.data.CMLModel" direct="true" collection="vector"/>
+	<field name="hypos" type="topali.data.CMLHypothesis" direct="true" collection="vector"/>
+</class>
+
+<!-- CMLHypothesis -->
+<class name="topali.data.CMLHypothesis">
+  <field name="model" type="integer" direct="true">
+		<bind-xml node="attribute"/></field>
+  <field name="tree" type="string" direct="true">
+		<bind-xml node="attribute"/></field>
+  <field name="settings" type="string" direct="true">
+    <bind-xml node="attribute"/></field>
+  <field name="omegaTree" type="string" direct="true">
+    <bind-xml node="attribute"/></field>
+  <field name="likelihood" type="double" direct="true">
+    <bind-xml node="attribute"/></field>
 </class>
 
 <!-- CMLModel -->
-<class name="topali.data.CMLModel">
-	<field name="name" type="string">
+<class name="topali.data.CMLModel" auto-complete="false">
+  <field name="name" type="string"  direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="abbr" type="string">
+  <field name="abbr" type="string"  direct="true">
 		<bind-xml node="attribute"/></field>	
-	<field name="model" type="integer">
+  <field name="model" type="integer"  direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="nParameter" type="integer">
+  <field name="nParameter" type="integer"  direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="supportsPSS" type="boolean">
+  <field name="supportsPSS" type="boolean" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="dnDS" type="double">
+  <field name="fixedOmega" type="boolean" direct="true">
+    <bind-xml node="attribute"/></field>
+  <field name="dnDS" type="double"  direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="w" type="double">
+  <field name="w" type="double"  direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="p0" type="double">
+  <field name="p0" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="p1" type="double">
+  <field name="p1" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="p2" type="double">
+  <field name="p2" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="w0" type="double">
+  <field name="w0" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="w1" type="double">
+  <field name="w1" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="w2" type="double">
+  <field name="w2" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="p" type="double">
+  <field name="p" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="q" type="double">
+  <field name="q" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="_w" type="double">
+  <field name="_w" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="likelihood" type="double">
+  <field name="likelihood" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="pss" type="string"/>
-	<field name="settings" type="string"/>
+  <field name="pss" type="string" direct="true"/>
+  <field name="settings" collection="map" direct="true"/>
 </class>
 
 <!-- DSSResult (extends AlignmentResult) -->

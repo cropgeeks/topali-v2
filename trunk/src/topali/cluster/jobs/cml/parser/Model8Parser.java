@@ -41,32 +41,32 @@ public class Model8Parser extends CMLResultParser
 						a = line.substring(line.lastIndexOf(':') + 1);
 						a = a.trim();
 						b = a.split("\\s+");
-						model.setLikelihood(Double.parseDouble(b[0]));
+						model.likelihood = (Double.parseDouble(b[0]));
 						continue;
 					}
 
 					if (line.startsWith("p0="))
 					{
 						b = line.split("\\s+");
-						model.setP0(Double.parseDouble(b[1]));
-						model.setP(Double.parseDouble(b[3]));
-						model.setQ(Double.parseDouble(b[5]));
+						model.p0 = (Double.parseDouble(b[1]));
+						model.p = (Double.parseDouble(b[3]));
+						model.q = (Double.parseDouble(b[5]));
 						continue;
 					}
 
 					if (line.startsWith("(p1="))
 					{
 						b = line.split("\\s+");
-						model.setP1(Double.parseDouble(b[1].replaceAll("\\)", "")));
-						model.set_w(Double.parseDouble(b[3]));
+						model.p1 = (Double.parseDouble(b[1].replaceAll("\\)", "")));
+						model._w = (Double.parseDouble(b[3]));
 						continue;
 					}
 
-					if (model.getDnDS() == -1
+					if (model.dnDS == -1
 							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
 					{
 						b = line.split("\\s+");
-						model.setDnDS(Double.parseDouble(b[4]));
+						model.dnDS = (Double.parseDouble(b[4]));
 					}
 				} catch (RuntimeException e)
 				{
@@ -104,7 +104,7 @@ public class Model8Parser extends CMLResultParser
 				else if (line.startsWith("Positively selected sites"))
 					start = false;
 			}
-			model.setPss(pss.toString());
+			model.pss = (pss.toString());
 			in.close();
 
 		} catch (Exception e)

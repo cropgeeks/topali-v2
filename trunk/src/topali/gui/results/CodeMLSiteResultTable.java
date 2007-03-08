@@ -16,15 +16,15 @@ import javax.swing.table.*;
 
 import topali.data.*;
 
-public class CodeMLResultTable extends JTable implements ListSelectionListener
+public class CodeMLSiteResultTable extends JTable implements ListSelectionListener
 {
-	CodeMLResultPanel panel;
+	CodeMLSiteResultPanel panel;
 	
 	float threshold = 0.95f;
 	
 	Vector<CMLModel> models;
 	
-	public CodeMLResultTable(CodeMLResult result, CodeMLResultPanel panel) {
+	public CodeMLSiteResultTable(CodeMLResult result, CodeMLSiteResultPanel panel) {
 		this.panel = panel;
 		this.models = result.models;
 		
@@ -76,46 +76,46 @@ public class CodeMLResultTable extends JTable implements ListSelectionListener
 			switch (columnIndex)
 			{
 			case 0:
-				res = "" + model.getName();
+				res = "" + model.name;
 				break;
 			case 1:
-				res = "" + model.getNParameter();
+				res = "" + model.nParameter;
 				break;
 			case 2:
-				res = "" + model.getLikelihood();
+				res = "" + model.likelihood;
 				break;
 			case 3:
-				res = "" + model.getDnDS();
+				res = "" + model.dnDS;
 				break;
 			case 4:
-				res = "" + model.getW();
+				res = "" + model.w;
 				break;
 			case 5:
-				res = "" + model.getP0();
+				res = "" + model.p0;
 				break;
 			case 6:
-				res = "" + model.getP1();
+				res = "" + model.p1;
 				break;
 			case 7:
-				res = "" + model.getP2();
+				res = "" + model.p2;
 				break;
 			case 8:
-				res = "" + model.getW0();
+				res = "" + model.w0;
 				break;
 			case 9:
-				res = "" + model.getW1();
+				res = "" + model.w1;
 				break;
 			case 10:
-				res = "" + model.getW2();
+				res = "" + model.w2;
 				break;
 			case 11:
-				res = "" + model.getP();
+				res = "" + model.p;
 				break;
 			case 12:
-				res = "" + model.getQ();
+				res = "" + model.q;
 				break;
 			case 13:
-				res = "" + model.get_w();
+				res = "" + model._w;
 				break;
 			case 14:
 				return model.getPSS(threshold);
