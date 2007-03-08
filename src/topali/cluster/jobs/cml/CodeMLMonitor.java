@@ -40,22 +40,41 @@ public class CodeMLMonitor
 		
 		String text = "";
 
-		for (int i = 0; i < result.models.size(); i++)
-		{
-			File runDir = new File(jobDir, "run" + (i+1));
-
-			boolean ok = new File(runDir, "model.xml").exists();
-			text += result.models.get(i).getAbbr() + "=" + ok + " ";
-
-			// But also check if an error file for this run exists
-			if (new File(runDir, "error.txt").exists())
+		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+			for (int i = 0; i < result.models.size(); i++)
 			{
-				logger.severe(jobDir.getName() + " - error.txt found for run "
-						+ i);
-				throw new Exception("CML error.txt (run " + i + ")");
+				File runDir = new File(jobDir, "run" + (i+1));
+	
+				boolean ok = new File(runDir, "model.xml").exists();
+				text += result.models.get(i).abbr + "=" + ok + " ";
+	
+				// But also check if an error file for this run exists
+				if (new File(runDir, "error.txt").exists())
+				{
+					logger.severe(jobDir.getName() + " - error.txt found for run "
+							+ i);
+					throw new Exception("CML error.txt (run " + (i+1) + ")");
+				}
 			}
 		}
-
+		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL) {
+			for (int i = 0; i < result.hypos.size(); i++)
+			{
+				File runDir = new File(jobDir, "run" + (i+1));
+	
+				boolean ok = new File(runDir, "hypo.xml").exists();
+				text += "H"+i+"=" + ok + " ";
+	
+				// But also check if an error file for this run exists
+				if (new File(runDir, "error.txt").exists())
+				{
+					logger.severe(jobDir.getName() + " - error.txt found for run "
+							+ i);
+					throw new Exception("CML error.txt (run " + (i+1) + ")");
+				}
+			}
+		}
+		
 		if (text.contains("false"))
 			return new JobStatus(0, 0, text);
 		else
@@ -73,18 +92,33 @@ public class CodeMLMonitor
 			"submit.xml"));
 		}
 		
-		// Populate it with the results from each run
-		for (int i = 0; i < result.models.size(); i++)
-		{
-			File runDir = new File(jobDir, "run" + (i+1));
-
-			File modelFile = new File(runDir, "model.xml");
-			CMLModel model = (CMLModel) Castor.unmarshall(modelFile);
-
-			result.models.remove(i);
-			result.models.add(i, model);
+		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+//			 Populate it with the results from each run
+			for (int i = 0; i < result.models.size(); i++)
+			{
+				File runDir = new File(jobDir, "run" + (i+1));
+	
+				File modelFile = new File(runDir, "model.xml");
+				CMLModel model = (CMLModel) Castor.unmarshall(modelFile);
+	
+				result.models.remove(i);
+				result.models.add(i, model);
+			}
+			//Throw away repeated models with bad likeklihood
+			result.filterModels();
 		}
-
+		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL) {
+			for (int i = 0; i < result.hypos.size(); i++)
+			{
+				File runDir = new File(jobDir, "run" + (i+1));
+	
+				File hypoFile = new File(runDir, "hypo.xml");
+				CMLHypothesis hypo = (CMLHypothesis) Castor.unmarshall(hypoFile);
+	
+				result.hypos.remove(i);
+				result.hypos.add(i, hypo);
+			}
+		}
 		// Return it
 		return result;
 	}

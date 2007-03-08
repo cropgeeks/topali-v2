@@ -29,7 +29,7 @@ public abstract class CMLResultParser
 	{
 		CMLResultParser parser = null;
 
-		switch (model.getModel())
+		switch (model.model)
 		{
 		case CMLModel.MODEL_M0:
 			parser = new Model0Parser(model);

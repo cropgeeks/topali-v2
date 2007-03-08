@@ -59,16 +59,31 @@ public class CodeMLInitializer extends Thread
 		// Store the sequence data in phylip sequential
 		ss.save(new File(jobDir, "seq.phy"), indices, Filters.PHY_S, false);
 
-//		 We want to run each of the models, making *8* runs in total
-		for(int i=0; i<result.models.size(); i++) {
-			if (LocalJobs.isRunning(result.jobId) == false)
-				return;
-
-			File runDir = new File(jobDir, "run" + (i+1));
-			runDir.mkdirs();
-
-			if (result.isRemote == false)
-				new CodeMLAnalysis(runDir).start(LocalJobs.manager);
+		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+	//		 We want to run each of the models
+			for(int i=0; i<result.models.size(); i++) {
+				if (LocalJobs.isRunning(result.jobId) == false)
+					return;
+	
+				File runDir = new File(jobDir, "run" + (i+1));
+				runDir.mkdirs();
+	
+				if (result.isRemote == false)
+					new CodeMLSiteAnalysis(runDir).start(LocalJobs.manager);
+			}
+		}
+		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL) {
+			//		 We want to run each of the hypothesis
+			for(int i=0; i<result.hypos.size(); i++) {
+				if (LocalJobs.isRunning(result.jobId) == false)
+					return;
+	
+				File runDir = new File(jobDir, "run" + (i+1));
+				runDir.mkdirs();
+	
+				if (result.isRemote == false)
+					new CodeMLBranchAnalysis(runDir).start(LocalJobs.manager);
+			}
 		}
 		
 		if (result.isRemote)

@@ -504,26 +504,56 @@ public class WinMain extends JFrame
 		submitJob(data, result);
 	}
 
-	public void menuAnlsRunCodeML()
+	public void menuAnlsRunCodeMLSite()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		SequenceSet ss = data.getSequenceSet();
-
-		CodeMLResult result = new CodeMLSettingsDialog(this, data)
-				.getCodeMLResult();
-		if (result == null)
-			return;
-
-		int runNum = data.getTracker().getCodeMLRunCount() + 1;
-		data.getTracker().setCodeMLRunCount(runNum);
-		result.guiName = "CodeML Result " + runNum;
-		result.jobName = "CodeML Analysis " + runNum + " on " + data.name
-				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
-
-		submitJob(data, result);
+		
+		CMLSiteSettingsDialog dlg = new CMLSiteSettingsDialog(this, data);
+		dlg.setVisible(true);
 	}
 
+	public void menuAnlsRunCodeMLBranch()
+	{
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		
+		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data);
+		dlg.setVisible(true);
+		
+//		CodeMLResult res = new CodeMLResult(CodeMLResult.TYPE_BRANCHMODEL);
+//		if (Prefs.isWindows)
+//			res.codemlPath = Utils.getLocalPath() + "codeml.exe";
+//		else
+//			res.codemlPath = Utils.getLocalPath() + "codeml/codeml";
+//
+//		res.selectedSeqs = ss.getSelectedSequenceSafeNames();
+//		res.isRemote = false;
+//		int runNum = data.getTracker().getCodeMLRunCount() + 1;
+//		data.getTracker().setCodeMLRunCount(runNum);
+//		res.guiName = "CodeML Result " + runNum;
+//		res.jobName = "CodeML Analysis " + runNum + " on " + data.name
+//				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
+//				+ " sequences)";
+//		
+//		CMLHypothesis h0 = new CMLHypothesis();
+//		h0.setTree("(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom)),(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
+//		h0.setModel(0);
+//		res.hypos.add(h0);
+//		CMLHypothesis h1 = new CMLHypothesis();
+//		h1.setTree("(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom))#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
+//		h1.setModel(2);
+//		res.hypos.add(h1);
+//		CMLHypothesis h2 = new CMLHypothesis();
+//		h2.setTree("(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
+//		h2.setModel(2);
+//		res.hypos.add(h2);
+//		CMLHypothesis h3 = new CMLHypothesis();
+//		h3.setTree("(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1 #2,U28410OG2 #2)#2)");
+//		h3.setModel(2);
+//		res.hypos.add(h3);
+		
+		//submitJob(data, res);
+	}
+	
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
@@ -557,7 +587,7 @@ public class WinMain extends JFrame
 			submitJob(data, result);
 	}
 
-	private void submitJob(AlignmentData data, AnalysisResult result)
+	public void submitJob(AlignmentData data, AnalysisResult result)
 	{
 		data.getResults().add(result);
 

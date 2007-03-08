@@ -11,12 +11,15 @@ import java.util.logging.Level;
 import org.apache.axis.AxisFault;
 
 import topali.cluster.*;
-import topali.data.CodeMLResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 
 public class CodeMLWebService extends WebService
 {
+	//TODO: Assumes that submit() is called before runScript(), really always true?
+	static int nRuns = -1;
+	static int type = -1;
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -27,7 +30,12 @@ public class CodeMLWebService extends WebService
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
-
+			type = result.type;
+			if(type==CodeMLResult.TYPE_SITEMODEL)
+				nRuns = result.models.size();
+			else if(type==CodeMLResult.TYPE_BRANCHMODEL)
+				nRuns = result.hypos.size();
+			
 			result.codemlPath = webappPath + "/binaries/src/codeml/codeml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
@@ -89,7 +97,12 @@ public class CodeMLWebService extends WebService
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
-
+		template = template.replaceAll("\\$RUNS", Integer.toString(nRuns));
+		if(type==CodeMLResult.TYPE_BRANCHMODEL)
+			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLBranchAnalysis");
+		else if(type==CodeMLResult.TYPE_SITEMODEL)
+			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLSiteAnalysis");
+		
 		// Write...
 		writeFile(template, new File(jobDir, "cml.sh"));
 

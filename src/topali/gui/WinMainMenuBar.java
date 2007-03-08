@@ -36,9 +36,11 @@ public class WinMainMenuBar extends JMenuBar
 
 	JMenu mAnls;
 
+	public static JMenu mAnlsRunCodeML;
+	
 	JMenuItem mAnlsRunPDM, mAnlsRunDSS, mAnlsRunHMM, mAnlsCreateTree,
 			mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove,
-			mAnlsSettings, mAnlsRunLRT, mAnlsRunPDM2, mAnlsRunCodeML;
+			mAnlsSettings, mAnlsRunLRT, mAnlsRunPDM2, mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
 
 	JMenu mVamsas;
 
@@ -65,7 +67,7 @@ public class WinMainMenuBar extends JMenuBar
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
 			aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
 			aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2,
-			aAnlsRunCodeML;
+			aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
 
 	public static AbstractAction aVamSelectSession, aVamImport, aVamExport;
 
@@ -381,15 +383,24 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeML = new AbstractAction(Text.Gui
-				.getString("aAnlsRunCodeML"))
+		aAnlsRunCodeMLSite = new AbstractAction(Text.Gui
+				.getString("aAnlsRunCodeMLSite"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuAnlsRunCodeML();
+				winMain.menuAnlsRunCodeMLSite();
 			}
 		};
 
+		aAnlsRunCodeMLBranch = new AbstractAction(Text.Gui
+				.getString("aAnlsRunCodeMLBranch"))
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsRunCodeMLBranch();
+			}
+		};
+		
 		aAnlsCreateTree = new AbstractAction(Text.Gui
 				.getString("aAnlsCreateTree"))
 		{
@@ -645,7 +656,8 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
-		mAnlsRunCodeML = getItem(aAnlsRunCodeML, KeyEvent.VK_O, 0, 0);
+		mAnlsRunCodeMLSite = getItem(aAnlsRunCodeMLSite, KeyEvent.VK_S, 0, 0);
+		mAnlsRunCodeMLBranch = getItem(aAnlsRunCodeMLBranch, KeyEvent.VK_B, 0, 0);
 		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T,
 				KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
@@ -657,6 +669,10 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
+		mAnlsRunCodeML = new JMenu(Text.Gui.getString("menuRunCodeML"));
+		mAnlsRunCodeML.add(mAnlsRunCodeMLSite);
+		mAnlsRunCodeML.add(mAnlsRunCodeMLBranch);
+		
 		mAnls.add(mAnlsRunPDM);
 		// mAnls.add(mAnlsRunPDM2);
 		mAnls.add(mAnlsRunHMM);
@@ -805,7 +821,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunHMM.setEnabled(false);
 		aAnlsRunDSS.setEnabled(false);
 		aAnlsRunLRT.setEnabled(false);
-		aAnlsRunCodeML.setEnabled(false);
+		mAnlsRunCodeML.setEnabled(false);
 		aAnlsCreateTree.setEnabled(false);
 		aAnlsPartition.setEnabled(false);
 		aAnlsRename.setEnabled(false);

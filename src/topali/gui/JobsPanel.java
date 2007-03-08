@@ -129,7 +129,7 @@ public class JobsPanel extends JPanel
 	{
 		// Count the jobs types
 		int lCount = 0, rCount = 0;
-		float progress = 0;
+		//float progress = 0;
 		for (JobsPanelEntry entry : jobs)
 		{
 			AnalysisJob job = entry.getJob();

@@ -25,7 +25,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import topali.data.*;
 import topali.gui.*;
 
-public class CodeMLGraphPanel extends JPanel
+public class CodeMLSiteGraphPanel extends JPanel
 {
 
 	JFreeChart chart;
@@ -40,7 +40,7 @@ public class CodeMLGraphPanel extends JPanel
 	
 	CMLModel model;
 	
-	public CodeMLGraphPanel(AlignmentData data, AlignmentResult aResult)
+	public CodeMLSiteGraphPanel(AlignmentData data, AlignmentResult aResult)
 	{
 		this.data = data;
 		this.result = aResult;
@@ -85,7 +85,7 @@ public class CodeMLGraphPanel extends JPanel
 	}
 	
 	private void annotate(float threshold) {
-		if(!model.isSupportsPSS())
+		if(!model.supportsPSS)
 			return;
 		
 		//draw thresholds line
@@ -121,7 +121,7 @@ public class CodeMLGraphPanel extends JPanel
 	
 	private XYSeriesCollection getDataSet(CMLModel m)
 	{
-		if(!m.isSupportsPSS())
+		if(!m.supportsPSS)
 			return null;
 		
 		XYSeriesCollection dataset = new XYSeriesCollection();

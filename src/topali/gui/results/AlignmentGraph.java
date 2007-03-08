@@ -162,7 +162,7 @@ public class AlignmentGraph extends JPanel implements Printable
 		yAxis.setUpperBound(max * 1.05);
 	}
 
-	GraphPanel getGraphPanel()
+	public GraphPanel getGraphPanel()
 	{
 		return graph;
 	}

@@ -13,8 +13,7 @@ import pal.tree.NeighborJoiningTree;
 import pal.tree.Tree;
 import sbrn.commons.file.FileUtils;
 import topali.cluster.StreamCatcher;
-import topali.data.CMLModel;
-import topali.data.CodeMLResult;
+import topali.data.*;
 
 class RunCodeML
 {
@@ -59,6 +58,15 @@ class RunCodeML
 
 		File ctlFile = new File(wrkDir, "codeml.ctl");
 		FileUtils.writeFile(ctlFile, settings);
+	}
+	
+	void saveCTLSettings(CMLHypothesis hypo) throws IOException
+	{
+		String settings = hypo.getCTL();
+		File ctlFile = new File(wrkDir, "codeml.ctl");
+		FileUtils.writeFile(ctlFile, settings);
+		
+		FileUtils.writeFile(new File(wrkDir, "tree.txt"), hypo.tree);
 	}
 
 	// Fast method to generate a JC/NJ tree from the alignment to be analysed

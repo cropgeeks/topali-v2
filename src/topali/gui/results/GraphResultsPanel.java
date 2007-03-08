@@ -22,7 +22,7 @@ import topali.gui.dialog.AnalysisInfoDialog;
 import topali.mod.Filters;
 import doe.MsgBox;
 
-abstract class GraphResultsPanel extends JPanel implements IThresholdListener
+public abstract class GraphResultsPanel extends JPanel implements IThresholdListener
 {
 	protected AlignmentData data;
 
@@ -30,7 +30,7 @@ abstract class GraphResultsPanel extends JPanel implements IThresholdListener
 
 	protected GraphResultsToolBar toolbar;
 
-	GraphResultsPanel(AlignmentData data, AlignmentResult aResult)
+	public GraphResultsPanel(AlignmentData data, AlignmentResult aResult)
 	{
 		this.data = data;
 		this.aResult = aResult;
