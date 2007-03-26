@@ -18,6 +18,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
+import topali.var.Utils;
 import doe.DoeLayout;
 import doe.MsgBox;
 
@@ -217,6 +218,7 @@ public class ExportDialog extends JDialog implements ActionListener
 				return true;
 			} catch (Exception e)
 			{
+				TOPALi.log.warning("Export failed.\n"+e.toString());
 				MsgBox.msg(filename
 						+ " could not be saved due to the following error:\n "
 						+ e, MsgBox.ERR);

@@ -34,6 +34,7 @@ public class MakeNA
 			pro = new SequenceSet(proFile, false);
 		} catch (AlignmentLoadException e)
 		{
+			TOPALi.log.warning(e.toString());
 			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
 					+ e.getReason()), MsgBox.ERR);
 			return false;

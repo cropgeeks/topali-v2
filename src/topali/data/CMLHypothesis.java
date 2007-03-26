@@ -5,45 +5,56 @@
 
 package topali.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class CMLHypothesis
 {
 	static String nl = System.getProperty("line.separator");
 	
 	public int model;
 	public String tree;
-	public String settings;
+	public Map<String, String> settings = new HashMap<String, String>();
 	
 	public double likelihood;
+	public double[] omegas;
 	public String omegaTree;
 	
 	public CMLHypothesis() {
-		StringBuffer set = new StringBuffer();
-		set.append("seqfile = seq.phy" + nl);
-		set.append("treefile = tree.txt" + nl);
-		set.append("outfile = results.txt" + nl);
-		set.append("noisy = 9" + nl);
-		set.append("verbose = 0" + nl);
-		set.append("runmode = 0" + nl);
-		set.append("seqtype = 1" + nl);
-		set.append("CodonFreq = 2" + nl);
-		set.append("NSsites = 0" + nl);
-		set.append("icode = 0" + nl);
-		set.append("fix_kappa = 0" + nl);
-		set.append("kappa = 2" + nl);
-		set.append("fix_omega = 0" + nl);
-		set.append("omega = 0.2" + nl);
-		
-		settings = set.toString();
-	}
+		settings.put("seqfile", "seq.phy");
+		settings.put("treefile ", " tree.txt" );
+		settings.put("outfile ", " results.txt" );
+		settings.put("noisy ", " 9" );
+		settings.put("verbose ", " 0" );
+		settings.put("runmode ", " 0" );
+		settings.put("seqtype ", " 1" );
+		settings.put("CodonFreq ", " 2" );
+		settings.put("NSsites ", " 0" );
+		settings.put("icode ", " 0" );
+		settings.put("fix_kappa ", " 0" );
+		settings.put("kappa ", " 2" );
+		settings.put("fix_omega ", " 0" );
+		settings.put("omega ", " 0.2" );
+		}
 
 	public String getCTL() {
-		String settings = this.settings;
-		settings += "model = "+model+" "+nl;
-		return settings;
+		StringBuffer sb = new StringBuffer();
+		for(String k : settings.keySet()) {
+			sb.append(k+" = "+settings.get(k)+nl);
+		}
+		sb.append("model = "+model+nl);
+		return sb.toString();
 	}
 	
-	public String getNoBranchLengthTree() {
-		String result = tree.replaceAll(":\\d+.\\d+", "");
-		return result;
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(tree+"\n");
+		sb.append("Settings:\n");
+		for(String k : settings.keySet()) {
+			if(!k.contains("file"))
+				sb.append(k+" = "+settings.get(k)+"\n");
+		}
+		return sb.toString();
 	}
 }

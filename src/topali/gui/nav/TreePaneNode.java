@@ -7,6 +7,8 @@ package topali.gui.nav;
 
 import static topali.gui.WinMainMenuBar.*;
 
+import java.awt.print.Printable;
+
 import javax.swing.JComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -55,19 +57,19 @@ public class TreePaneNode extends INode implements IPrintable
 
 		aVamExport.setEnabled(true);
 	}
-
+	
+	void setTreeNode(DefaultMutableTreeNode node)
+	{
+		treePane.setTreeNode(node);
+	}
+	
 	public boolean isPrintable()
 	{
 		return treePane.isPrintable();
 	}
-
-	public void print()
+	
+	public Printable[] getPrintables()
 	{
-		treePane.print();
-	}
-
-	void setTreeNode(DefaultMutableTreeNode node)
-	{
-		treePane.setTreeNode(node);
+		return treePane.getPrintables();
 	}
 }

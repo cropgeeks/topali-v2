@@ -66,7 +66,7 @@ public class FileDropAdapter extends DropTargetAdapter
 			dtde.dropComplete(true);
 		} catch (Exception e)
 		{
-			System.out.println(e);
+			TOPALi.log.warning(e.toString());
 		}
 	}
 

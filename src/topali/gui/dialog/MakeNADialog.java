@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import topali.analyses.MakeNA;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 import doe.MsgBox;
 

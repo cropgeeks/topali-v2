@@ -68,12 +68,10 @@ public class Icons
 					field.set(null, icon);
 				}
 			}
-			System.out.println((System.currentTimeMillis() - s)
-					+ "ms to load icons");
+			TOPALi.log.info((System.currentTimeMillis() - s)+ "ms to load icons");
 		} catch (Exception e)
 		{
-			System.out.println("Can't load icons: " + e);
-			System.exit(1);
+			TOPALi.log.warning("Cannot load icon\n"+e);
 		}
 	}
 }

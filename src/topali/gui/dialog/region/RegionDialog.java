@@ -16,6 +16,7 @@ import topali.data.*;
 import topali.data.RegionAnnotations.Region;
 import topali.gui.*;
 import topali.gui.dialog.ExportDialog;
+import topali.var.Utils;
 import doe.MsgBox;
 
 public class RegionDialog extends JDialog implements ActionListener,
@@ -194,7 +195,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			}
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			TOPALi.log.warning(e.toString());
 		}
 		return null;
 	}
@@ -221,7 +222,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			}
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			TOPALi.log.warning(e.toString());
 		}
 		return result;
 	}

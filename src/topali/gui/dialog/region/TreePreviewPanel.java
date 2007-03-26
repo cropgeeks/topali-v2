@@ -116,7 +116,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 
 				tree = tc.getTree(false);
 				long e = System.currentTimeMillis();
-				System.out.println("Tree creation " + (e - s) + "ms");
+				TOPALi.log.info("Tree creation " + (e - s) + "ms");
 
 				if (tree != null)
 				{

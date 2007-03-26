@@ -11,6 +11,7 @@ import java.io.IOException;
 import sbrn.commons.bioinf.ReadSeq;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
+import topali.gui.TOPALi;
 import doe.MsgBox;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
@@ -34,7 +35,7 @@ class FileReadSeq extends FileGeneric
 			readSeq.convertFile();
 		} catch (Exception e)
 		{
-			System.out.println(e);
+			TOPALi.log.warning(e.toString());
 			success = false;
 			ss.reset();
 

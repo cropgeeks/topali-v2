@@ -16,7 +16,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.dialog.PrinterDialog;
 
 public class TreePane extends JDesktopPane implements InternalFrameListener
 {
@@ -62,7 +61,7 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 			n = ((++n > 10) ? 1 : n);
 		} catch (Exception e)
 		{
-			System.out.println(e);
+			TOPALi.log.warning("Problem showing tree.\n"+e);
 		}
 	}
 
@@ -117,6 +116,7 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 	private void checkStatus()
 	{
 		WinMainMenuBar.aFilePrint.setEnabled(isPrintable());
+		WinMainMenuBar.aFilePrintPreview.setEnabled(isPrintable());
 		WinMain.navPanel.getModel().nodeChanged(node);
 	}
 
@@ -125,15 +125,11 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 		return (getSelectedFrame() == null) ? false : true;
 	}
 
-	public void print()
-	{
+	public Printable[] getPrintables() {
 		InternalTreeFrame iFrame = (InternalTreeFrame) getSelectedFrame();
-
-		Printable[] toPrint =
-		{ iFrame.panel.canvas };
-		new PrinterDialog(toPrint);
+		return new Printable[]{ iFrame.panel.canvas };
 	}
-
+	
 	// Responds to a TreeFrame being closed - removes the tree from both the
 	// GUI and the underlying project
 	public void internalFrameClosed(InternalFrameEvent e)

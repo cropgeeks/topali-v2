@@ -87,7 +87,6 @@ public class ResultsTracker
 
 	public int getCodeMLRunCount()
 	{
-		System.out.println("get count, is " + codeMLRunCount);
 		return (this.codeMLRunCount);
 	}
 

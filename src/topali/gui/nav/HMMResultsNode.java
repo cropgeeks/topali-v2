@@ -5,22 +5,23 @@
 
 package topali.gui.nav;
 
+import java.awt.print.Printable;
+
 import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
 import topali.data.HMMResult;
 import topali.gui.WinMainTipsPanel;
-import topali.gui.results.HMMResultsPanel;
+import topali.gui.results.HMMResultPanel;
 
-public class HMMResultsNode extends ResultsNode
+public class HMMResultsNode extends ResultsNode 
 {
-	private HMMResultsPanel panel;
 
 	HMMResultsNode(AlignmentData data, HMMResult result)
 	{
 		super(data, result);
 
-		panel = new HMMResultsPanel(data, result);
+		panel = new HMMResultPanel(data, result);
 	}
 
 	public String toString()
@@ -41,5 +42,15 @@ public class HMMResultsNode extends ResultsNode
 	public JComponent getPanel()
 	{
 		return panel;
+	}
+	
+	public boolean isPrintable()
+	{
+		return true;
+	}
+	
+	public Printable[] getPrintables()
+	{
+		return panel.getPrintables();
 	}
 }

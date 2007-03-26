@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import topali.gui.*;
+import topali.var.Utils;
 import doe.MsgBox;
 
 public class SettingsDialog extends JDialog implements ActionListener

@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import topali.data.*;
+import topali.gui.TOPALi;
 import doe.MsgBox;
 
 class MosaicPanel extends JPanel implements ActionListener
@@ -155,7 +156,7 @@ class MosaicPanel extends JPanel implements ActionListener
 					breakpoints.addElement(new BreakPoint(bp, tp));
 			} catch (Exception e)
 			{
-				System.out.println(i + " " + e);
+				TOPALi.log.warning("Problem adding breakpoint "+i+"\n"+e);
 				continue;
 			}
 		}
@@ -262,7 +263,7 @@ class MosaicPanel extends JPanel implements ActionListener
 
 	private void populateTableFromTDS()
 	{
-		System.out.println("Populating via TDS...");
+		TOPALi.log.info("Populating via TDS...");
 
 		int[] indices = ss.getSelectedSequences();
 		StringBuffer[] buffers = new StringBuffer[indices.length];

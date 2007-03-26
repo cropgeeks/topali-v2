@@ -5,27 +5,30 @@
 
 package topali.gui.nav;
 
+import java.awt.print.Printable;
+
 import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
 import topali.data.CodeMLResult;
-import topali.gui.IPrintable;
-import topali.gui.results.CodeMLBranchResultPanel;
-import topali.gui.results.CodeMLSiteResultPanel;
+import topali.gui.results.CMLBranchResultPanel;
+import topali.gui.results.CMLSiteResultPanel;
 
-public class CodeMLResultsNode extends ResultsNode implements IPrintable
+public class CodeMLResultsNode extends ResultsNode
 {
-	private JComponent panel;
 
 	CodeMLResultsNode(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
 
-		if(result.type==CodeMLResult.TYPE_SITEMODEL)
-			panel = new CodeMLSiteResultPanel(data, result);
+		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+			//panel = new CodeMLSiteResultPanel(data, result);
+			panel = new CMLSiteResultPanel(data, result);
+		}
 		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL)
-			panel = new CodeMLBranchResultPanel(data, result);
-	}
+			//panel = new CodeMLBranchResultPanel(data, result);
+			panel = new CMLBranchResultPanel(data, result);
+		}
 
 	public String toString()
 	{
@@ -44,11 +47,12 @@ public class CodeMLResultsNode extends ResultsNode implements IPrintable
 
 	public boolean isPrintable()
 	{
-		return false;
+		return true;
 	}
 
-	public void print()
+	public Printable[] getPrintables()
 	{
-		// panel.print();
+		return panel.getPrintables();
 	}
+	
 }

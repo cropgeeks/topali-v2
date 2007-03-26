@@ -14,6 +14,7 @@ import javax.swing.*;
 import pal.alignment.Alignment;
 import topali.data.*;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.MsgBox;
 
 public class CreateTreeDialog extends JDialog implements ActionListener

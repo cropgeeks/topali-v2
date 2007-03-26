@@ -10,6 +10,7 @@ import pal.distance.AlignmentDistanceMatrix;
 import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.NeighborJoiningTree;
+import topali.gui.TOPALi;
 
 public class ParamEstimateThread extends Thread
 {
@@ -73,7 +74,7 @@ public class ParamEstimateThread extends Thread
 		{
 			// Work out Alpha
 			alpha = estimateParameter(0.1, 200, 1, true);
-			System.out.println("Iter: " + iteration + ": alpha = " + alpha
+			TOPALi.log.info("Iter: " + iteration + ": alpha = " + alpha
 					+ ", " + cLL);
 
 			if (isDifferenceSignificant())
@@ -81,7 +82,7 @@ public class ParamEstimateThread extends Thread
 
 			// Work out the T/T Ratio
 			ratio = estimateParameter(0.5, 100, 1, false);
-			System.out.println("Iter: " + iteration + ": ratio = " + ratio
+			TOPALi.log.info("Iter: " + iteration + ": ratio = " + ratio
 					+ ", " + cLL);
 
 			if (isDifferenceSignificant())
