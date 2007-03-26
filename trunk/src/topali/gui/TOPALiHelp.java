@@ -16,6 +16,7 @@ import javax.swing.*;
 
 public class TOPALiHelp
 {
+	
 	public static HelpSet hs;
 
 	public static HelpBroker hb;
@@ -34,8 +35,7 @@ public class TOPALiHelp
 			// ((DefaultHelpBroker)hb).setActivationWindow(doe.MsgBox.frm);
 		} catch (Exception e)
 		{
-			System.out.println("Error loading help");
-			System.out.println(e);
+			TOPALi.log.warning("Error loading help\n"+e);
 		}
 	}
 

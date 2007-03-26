@@ -13,6 +13,7 @@ import javax.swing.*;
 
 import topali.data.SequenceSet;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 import doe.MsgBox;
 

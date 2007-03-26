@@ -15,6 +15,7 @@ import topali.cluster.JobStatus;
 import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.jobs.*;
+import topali.var.Utils;
 import doe.GradientPanel;
 
 public class JobsPanel extends JPanel

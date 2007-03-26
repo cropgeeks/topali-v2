@@ -16,7 +16,7 @@ import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener
-{
+{	
 	private JScrollPane sp;
 
 	JScrollBar hBar, vBar;
@@ -868,8 +868,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	/**
 	 * Scrolls the canvas. Set up, right, down and/or left (the value determines
 	 * the scrolling speed) and set running=true.
-	 * 
-	 * @author dlindn
 	 */
 	class Scroller extends Thread
 	{
@@ -928,7 +926,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 						Thread.sleep(10);
 					} catch (InterruptedException e)
 					{
-						e.printStackTrace();
+						TOPALi.log.warning(e.toString());
 					}
 				}
 				this.up = 0;
@@ -943,7 +941,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 						wait();
 					} catch (InterruptedException e)
 					{
-						e.printStackTrace();
 					}
 				}
 			}

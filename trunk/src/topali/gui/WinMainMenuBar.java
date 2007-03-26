@@ -17,7 +17,7 @@ public class WinMainMenuBar extends JMenuBar
 	JMenu mFile, mFileRecent;
 
 	JMenuItem mFileNewProject, mFileOpenProject, mFileSave, mFileSaveAs,
-			mFileImportDataSet, mFilePrintSetup, mFilePrint, mFileExit,
+			mFileImportDataSet, mFilePrintSetup, mFilePrintPreview, mFilePrint, mFileExit,
 			mFileExportDataSet;
 
 	JMenu mView;
@@ -52,7 +52,7 @@ public class WinMainMenuBar extends JMenuBar
 			mHelpTestMethod;
 
 	public static AbstractAction aFileNewProject, aFileOpenProject, aFileSave,
-			aFileSaveAs, aFileImportDataSet, aFilePrintSetup, aFilePrint,
+			aFileSaveAs, aFileImportDataSet, aFilePrintSetup, aFilePrintPreview, aFilePrint,
 			aFileExit, aFileExportDataSet;
 
 	public static AbstractAction aViewToolBar, aViewStatusBar, aViewTipsPanel,
@@ -155,6 +155,15 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
+		aFilePrintPreview = new AbstractAction(Text.Gui
+				.getString("aFilePrintPreview"))
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuFilePrintPreview();
+			}
+		};
+		
 		aFilePrint = new AbstractAction(Text.Gui.getString("aFilePrint"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -388,7 +397,7 @@ public class WinMainMenuBar extends JMenuBar
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuAnlsRunCodeMLSite();
+				winMain.menuAnlsRunCodeMLSite(null);
 			}
 		};
 
@@ -536,6 +545,7 @@ public class WinMainMenuBar extends JMenuBar
 				Icons.IMPORT16);
 		mFileExportDataSet = getItem(aFileExportDataSet, KeyEvent.VK_E, 0, 0);
 		mFilePrintSetup = getItem(aFilePrintSetup, KeyEvent.VK_U, 0, 0);
+		mFilePrintPreview = getItem(aFilePrintPreview, KeyEvent.VK_V, 0, 0);
 		mFilePrint = getItem(aFilePrint, KeyEvent.VK_P, KeyEvent.VK_P,
 				KeyEvent.CTRL_MASK, Icons.PRINT16);
 		mFileExit = getItem(aFileExit, KeyEvent.VK_X, 0, 0);
@@ -550,6 +560,7 @@ public class WinMainMenuBar extends JMenuBar
 		mFile.add(mFileExportDataSet);
 		mFile.addSeparator();
 		mFile.add(mFilePrintSetup);
+		mFile.add(mFilePrintPreview);
 		mFile.add(mFilePrint);
 		mFile.addSeparator();
 		mFile.add(mFileRecent);
@@ -781,6 +792,7 @@ public class WinMainMenuBar extends JMenuBar
 		aFileSave.setEnabled(false);
 		aFileSaveAs.setEnabled(true);
 		aFileImportDataSet.setEnabled(true);
+		aFilePrintPreview.setEnabled(false);
 		aFilePrint.setEnabled(false);
 
 		aAlgnShowOvDialog.setEnabled(true);
@@ -799,6 +811,7 @@ public class WinMainMenuBar extends JMenuBar
 	public static void setMenusForNavChange()
 	{
 		aFileExportDataSet.setEnabled(false);
+		aFilePrintPreview.setEnabled(false);
 		aFilePrint.setEnabled(false);
 
 		aAlgnDisplaySummary.setEnabled(false);

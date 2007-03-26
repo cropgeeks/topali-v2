@@ -9,8 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.print.Printable;
-import java.awt.print.PrinterJob;
+import java.awt.print.*;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -23,7 +22,7 @@ public class PrinterDialog extends JDialog
 {
 	private static PrinterJob job = PrinterJob.getPrinterJob();
 
-	private static PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+	public static PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 
 	private JLabel label;
 
@@ -56,7 +55,6 @@ public class PrinterDialog extends JDialog
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(MsgBox.frm);
 		setResizable(false);
-		setVisible(true);
 	}
 
 	// Display the Java Printer PageSetup dialog
@@ -85,6 +83,7 @@ public class PrinterDialog extends JDialog
 			SwingUtilities.invokeAndWait(r);
 		} catch (Exception e)
 		{
+			TOPALi.log.warning(e.toString());
 		}
 	}
 
@@ -105,6 +104,7 @@ public class PrinterDialog extends JDialog
 					}
 				} catch (Exception e)
 				{
+					TOPALi.log.warning("Printing failed.\n"+e.toString());
 					MsgBox.msg(Text.format(Text.GuiDiag
 							.getString("PrinterDialog.err01"), e), MsgBox.ERR);
 				}

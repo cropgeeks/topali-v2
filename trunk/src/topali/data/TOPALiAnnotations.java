@@ -7,6 +7,8 @@ package topali.data;
 
 import java.util.Vector;
 
+import topali.gui.TOPALi;
+
 // Helper class for AlignmentAnnotations, providing code and methods to deal
 // with annotations that would otherwise clog up the AlignmentData class
 public class TOPALiAnnotations
@@ -53,7 +55,7 @@ public class TOPALiAnnotations
 				annotations.add(result);
 			} catch (Exception e)
 			{
-				e.printStackTrace();
+				TOPALi.log.warning(e.toString());
 			}
 		}
 		return result;

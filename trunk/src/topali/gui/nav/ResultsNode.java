@@ -8,15 +8,17 @@ package topali.gui.nav;
 import static topali.gui.WinMainMenuBar.*;
 import topali.data.AlignmentData;
 import topali.data.AnalysisResult;
+import topali.gui.IPrintable;
+import topali.gui.results.ResultPanel;
 
-public abstract class ResultsNode extends INode
+public abstract class ResultsNode extends INode implements IPrintable
 {
 	protected AnalysisResult result;
-
+	protected ResultPanel panel;
+	
 	public ResultsNode(AlignmentData data, AnalysisResult result)
 	{
 		super(data);
-
 		this.result = result;
 	}
 

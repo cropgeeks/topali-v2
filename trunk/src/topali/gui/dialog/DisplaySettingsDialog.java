@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 import doe.MsgBox;
 

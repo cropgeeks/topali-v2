@@ -10,6 +10,7 @@ import javax.xml.namespace.QName;
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.fileio.Castor;
+import topali.gui.TOPALi;
 
 public class CodeMLRemoteJob extends RemoteJob
 {
@@ -39,7 +40,7 @@ public class CodeMLRemoteJob extends RemoteJob
 		result.jobId = (String) call.invoke(new Object[]
 		{ alignmentXML, resultXML });
 
-		System.out.println("Job in progress: " + result.jobId);
+		TOPALi.log.info("Job in progress: " + result.jobId);
 
 		result.status = JobStatus.QUEUING;
 		return result.jobId;

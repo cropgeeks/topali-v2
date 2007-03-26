@@ -13,9 +13,9 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
+import topali.var.Utils;
 
-public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
-		MouseListener
+public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 {
 
 	private AlignmentData data;
@@ -79,16 +79,66 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 	/**
 	 * @param owner
 	 */
-	public CMLSiteSettingsDialog(WinMain winMain, AlignmentData data)
+	public CMLSiteSettingsDialog(WinMain winMain, AlignmentData data, CodeMLResult res)
 	{
 		super(winMain, "Positive Selection - Site Models", true);
 		this.data = data;
 		this.winMain = winMain;
 		initModels();
 		initialize();
+		
+		if(res!=null)
+			initPreviousResult(res);
+		
 		setLocationRelativeTo(winMain);
 	}
 
+	private void initPreviousResult(CodeMLResult res) {
+		cM0.setSelected(false);
+		cM1.setSelected(false);
+		cM2.setSelected(false);
+		cM1a.setSelected(false);
+		cM2a.setSelected(false);
+		cM3.setSelected(false);
+		cM7.setSelected(false);
+		cM8.setSelected(false);
+		
+		for(CMLModel m : res.models) {
+			if(m.abbr.equals(m0.abbr)) {
+				cM0.setSelected(true);
+				m0 = m;
+			}
+			if(m.abbr.equals(m1.abbr)) {
+				cM1.setSelected(true);
+				m1 = m;
+			}
+			if(m.abbr.equals(m2.abbr)) {
+				cM2.setSelected(true);
+				m2 = m;
+			}
+			if(m.abbr.equals(m1a.abbr)) {
+				cM1a.setSelected(true);
+				m1a = m;
+			}
+			if(m.abbr.equals(m2a.abbr)) {
+				cM2a.setSelected(true);
+				m2a = m;
+			}
+			if(m.abbr.equals(m3.abbr)) {
+				cM3.setSelected(true);
+				m3 = m;
+			}
+			if(m.abbr.equals(m7.abbr)) {
+				cM7.setSelected(true);
+				m7 = m;
+			}
+			if(m.abbr.equals(m8.abbr)) {
+				cM8.setSelected(true);
+				m8 = m;
+			}
+		}
+	}
+	
 	private void initModels() {
 		m0 = new CMLModel(CMLModel.MODEL_M0);
 		m1 = new CMLModel(CMLModel.MODEL_M1);
@@ -535,26 +585,22 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 	}
 	
 	private void cancelAction() {
-		
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == bCancel)
-			setVisible(false);
-
-		else if (e.getSource() == bRun)
-		{
-			runAction(e);
-			setVisible(false);
-		}
+		this.setVisible(false);
 	}
 
 	public void mouseClicked(MouseEvent e)
 	{
 		if (e.getSource().equals(lM0))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m0.w_start, m0.w_end, m0.w_inc);
+			double w_start = m0.w_start;
+			double w_end = m0.w_end;
+			double w_inc = m0.w_inc;
+			if(m0.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m0.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
 			d.setVisible(true);
 			if(!d.canceled) {
 				m0.w_start = d.start;
@@ -563,7 +609,15 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 			}
 		} else if (e.getSource().equals(lM1a))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m1a.w_start, m1a.w_end, m1a.w_inc);
+			double w_start = m1a.w_start;
+			double w_end = m1a.w_end;
+			double w_inc = m1a.w_inc;
+			if(m1a.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m1a.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
 			d.setVisible(true);
 			if(!d.canceled) {
 				m1a.w_start = d.start;
@@ -572,7 +626,15 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 			}
 		} else if (e.getSource().equals(lM2a))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m2a.w_start, m2a.w_end, m2a.w_inc);
+			double w_start = m2a.w_start;
+			double w_end = m2a.w_end;
+			double w_inc = m2a.w_inc;
+			if(m2a.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m2a.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
 			d.setVisible(true);
 			if(!d.canceled) {
 				m2a.w_start = d.start;
@@ -581,7 +643,16 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 			}
 		} else if (e.getSource().equals(lM3))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m3.w_start, m3.w_end, m3.w_inc);
+			double w_start = m3.w_start;
+			double w_end = m3.w_end;
+			double w_inc = m3.w_inc;
+			if(m3.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m3.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			
 			d.setVisible(true);
 			if(!d.canceled) {
 				m3.w_start = d.start;
@@ -590,7 +661,15 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 			}
 		} else if (e.getSource().equals(lM7))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m7.w_start, m7.w_end, m7.w_inc);
+			double w_start = m7.w_start;
+			double w_end = m7.w_end;
+			double w_inc = m7.w_inc;
+			if(m7.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m7.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
 			d.setVisible(true);
 			if(!d.canceled) {
 				m7.w_start = d.start;
@@ -599,7 +678,15 @@ public class CMLSiteSettingsDialog extends JDialog implements ActionListener,
 			}
 		} else if (e.getSource().equals(lM8))
 		{
-			OmegaEstDialog d = new OmegaEstDialog(this, m8.w_start, m8.w_end, m8.w_inc);
+			double w_start = m8.w_start;
+			double w_end = m8.w_end;
+			double w_inc = m8.w_inc;
+			if(m8.settings.get("omega")!=null) {
+				w_start = Double.parseDouble(m8.settings.get("omega"));
+				w_end = w_start;
+				w_inc = 1;
+			}
+			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
 			d.setVisible(true);
 			if(!d.canceled) {
 				m8.w_start = d.start;

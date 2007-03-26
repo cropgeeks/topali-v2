@@ -5,22 +5,22 @@
 
 package topali.gui.nav;
 
+import java.awt.print.Printable;
+
 import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
 import topali.data.LRTResult;
-import topali.gui.IPrintable;
-import topali.gui.results.LRTResultsPanel;
+import topali.gui.results.LRTResultPanel;
 
-public class LRTResultsNode extends ResultsNode implements IPrintable
+public class LRTResultsNode extends ResultsNode 
 {
-	private LRTResultsPanel panel;
 
 	LRTResultsNode(AlignmentData data, LRTResult result)
 	{
 		super(data, result);
 
-		panel = new LRTResultsPanel(data, result);
+		panel = new LRTResultPanel(data, result);
 	}
 
 	public String toString()
@@ -42,9 +42,9 @@ public class LRTResultsNode extends ResultsNode implements IPrintable
 	{
 		return true;
 	}
-
-	public void print()
+	
+	public Printable[] getPrintables()
 	{
-		panel.print();
+		return panel.getPrintables();
 	}
 }

@@ -16,6 +16,8 @@ public class AlignmentResult extends AnalysisResult
 	// If so, what window size is used when creating the trees?
 	public int treeToolTipWindow = 500;
 
+	public double threshold = 0.95;
+	
 	public AlignmentResult()
 	{
 	}

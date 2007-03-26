@@ -15,6 +15,7 @@ import topali.analyses.PartitionMaker;
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 import doe.MsgBox;
 

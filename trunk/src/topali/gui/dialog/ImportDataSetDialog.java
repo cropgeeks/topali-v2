@@ -129,6 +129,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 			winMain.addNewAlignmentData(data);
 		} catch (AlignmentLoadException e)
 		{
+			TOPALi.log.warning("Import failed.\n"+e.toString());
 			int code = e.getReason();
 			MsgBox.msg(Text.GuiFile
 					.getString("ImportDataSetDialog.err0" + code), MsgBox.ERR);

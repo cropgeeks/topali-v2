@@ -238,4 +238,14 @@ public class CMLModel
 		return res;
 	}
 	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Model: "+name+"\n");
+		sb.append("Settings: \n");
+		Set<String> keys = settings.keySet();
+		for(String s : keys) {
+			sb.append(s+" = "+settings.get(s)+"\n");
+		}
+		return sb.toString();
+	}
 }

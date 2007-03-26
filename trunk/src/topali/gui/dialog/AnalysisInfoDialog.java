@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.MsgBox;
 
 public class AnalysisInfoDialog extends JDialog implements ActionListener
@@ -118,5 +119,13 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		// Resubmit a LRT job
 		else if (aResult instanceof LRTResult)
 			TOPALi.winMain.menuAnlsRunLRT((LRTResult) aResult);
+		
+		else if (aResult instanceof CodeMLResult) {
+			CodeMLResult res = (CodeMLResult) aResult;
+			if(res.type==CodeMLResult.TYPE_SITEMODEL)
+				TOPALi.winMain.menuAnlsRunCodeMLSite(res);
+			else if(res.type==CodeMLResult.TYPE_BRANCHMODEL)
+				TOPALi.winMain.menuAnlsRunCodeMLBranch();
+		}
 	}
 }

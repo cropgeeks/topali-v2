@@ -15,6 +15,7 @@ import pal.alignment.Alignment;
 import pal.distance.JukesCantorDistanceMatrix;
 import pal.misc.Identifier;
 import pal.tree.*;
+import topali.gui.TOPALi;
 import topali.gui.Text;
 import doe.MsgBox;
 
@@ -61,6 +62,7 @@ public class TreeCreator extends JDialog
 			tree = TreeRooter.getMidpointRooted(tree);
 		} catch (Exception e)
 		{
+			TOPALi.log.warning(e.toString());
 			MsgBox.msg(Text.format(
 					Text.Analyses.getString("TreeCreator.err01"), e),
 					MsgBox.ERR);

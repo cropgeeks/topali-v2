@@ -5,23 +5,22 @@
 
 package topali.gui.nav;
 
+import java.awt.print.Printable;
+
 import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
 import topali.data.PDM2Result;
-import topali.gui.IPrintable;
 import topali.gui.WinMainTipsPanel;
-import topali.gui.results.PDM2ResultsPanel;
 
-public class PDM2ResultsNode extends ResultsNode implements IPrintable
+public class PDM2ResultsNode extends ResultsNode 
 {
-	private PDM2ResultsPanel panel;
 
 	PDM2ResultsNode(AlignmentData data, PDM2Result result)
 	{
 		super(data, result);
 
-		panel = new PDM2ResultsPanel(data, result);
+		//panel = new PDM2ResultsPanel(data, result);
 	}
 
 	public String toString()
@@ -48,9 +47,9 @@ public class PDM2ResultsNode extends ResultsNode implements IPrintable
 	{
 		return true;
 	}
-
-	public void print()
+	
+	public Printable[] getPrintables()
 	{
-		panel.print();
+		return panel.getPrintables();
 	}
 }

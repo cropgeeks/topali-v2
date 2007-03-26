@@ -18,6 +18,7 @@ import pal.tree.Tree;
 import topali.analyses.TreeCreator;
 import topali.data.SequenceSet;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 
 public class MovieDialog extends JDialog implements ActionListener,

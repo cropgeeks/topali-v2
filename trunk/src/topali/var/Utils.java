@@ -3,19 +3,20 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui;
+package topali.var;
 
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Random;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import topali.cluster.ClusterUtils;
+import topali.gui.*;
 import doe.MsgBox;
 
 /**
@@ -24,6 +25,7 @@ import doe.MsgBox;
  */
 public class Utils
 {
+	
 	/* Ensures the scratch directory exists */
 	public static void createScratch()
 	{
@@ -33,7 +35,7 @@ public class Utils
 	/* Deletes all the files in the scratch directory */
 	public static void emptyScratch()
 	{
-		System.out.println("Clearing scratch files");
+		TOPALi.log.info("Clearing scratch files");
 		ClusterUtils.emptyDirectory(Prefs.tmpDir, true);
 	}
 
@@ -98,6 +100,22 @@ public class Utils
 
 		MsgBox.msg(Text.Gui.getString("clipboard_2"), MsgBox.INF);
 	}
+	
+	public static String getClipboardContent()
+	{
+		Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+		Transferable transfer = sysClip.getContents(null);
+		try
+		{
+			String data = (String) transfer
+					.getTransferData(DataFlavor.stringFlavor);
+			return data;
+		} catch (Exception e)
+		{
+			//Content not a String
+		}
+		return null;
+	}
 
 	public static void saveComponent(Component cmp, File file, int w, int h)
 			throws Exception
@@ -111,7 +129,13 @@ public class Utils
 		Graphics2D g2d = (Graphics2D) bi.createGraphics();
 
 		// Redraw the component using the image
-		SwingUtilities.paintComponent(g2d, cmp, new Container(), 0, 0, w, h);
+		try
+		{
+			SwingUtilities.paintComponent(g2d, cmp, new Container(), 0, 0, w, h);
+		} catch (RuntimeException e)
+		{
+			TOPALi.log.warning("Painting component failed\n"+e);
+		}
 		g2d.setColor(Color.black);
 		g2d.drawRect(0, 0, w - 1, h - 1);
 
@@ -131,5 +155,41 @@ public class Utils
 			return System.getProperty("user.dir") + "/web/binaries/src/";
 		else
 			return System.getProperty("user.dir") + "/web/binaries/src/";
+	}
+	
+	public static String mapToString(Map<String, String> map, char keyValueDelim, char delim) {
+		StringBuffer sb = new StringBuffer();
+		Set<String> keys = map.keySet();
+		Iterator<String> it = keys.iterator();
+		while(it.hasNext()) {
+			String k = it.next();
+			sb.append(k);
+			sb.append(keyValueDelim);
+			sb.append(map.get(k));
+			if(it.hasNext())
+				sb.append(delim);
+		}
+		return sb.toString();
+	}
+	
+	public static Map<String, String> stringToMap(String map, char keyValueDelim, char delim) {
+		Map<String, String> result = new HashMap<String, String>();
+		String[] tokens = map.split(Character.toString(delim));
+		for(String token : tokens) {
+			String[] tmp = token.split(Character.toString(keyValueDelim));
+			result.put(tmp[0], tmp[1]);
+		}
+		return result;
+	}
+	
+	public static double[][] float2doubleArray(float[][] data) {
+		double[][] ddata  = new double[0][0];
+		if(data.length>0) {
+			ddata = new double[data.length][data[0].length];
+			for(int i=0; i<data.length; i++)
+				for(int j=0; j<data[i].length; j++)
+					ddata[i][j] = (double)data[i][j];
+		}
+		return ddata;
 	}
 }

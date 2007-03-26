@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Locale;
+import java.util.logging.*;
 
 import javax.swing.*;
 
@@ -19,9 +20,13 @@ import sbrn.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.mod.EncryptionException;
 import topali.mod.StringEncrypter;
+import topali.var.ClientLogHandler;
+import topali.var.Utils;
 
 public class TOPALi extends Applet
 {
+	public static Logger log = Logger.getLogger("topali.client");
+	
 	private boolean isApplet = false;
 
 	private JWindow splash = null;
@@ -32,9 +37,17 @@ public class TOPALi extends Applet
 
 	public static void main(String[] args)
 	{
-		System.out.println("Locale is " + Locale.getDefault());
-		System.out
-				.println("Running Java " + System.getProperty("java.version"));
+		Handler handler = new ClientLogHandler(Level.SEVERE, true);
+		log.addHandler(handler);
+		Level level = Level.INFO;
+		Logger l = log;
+		do
+			l.setLevel(level);
+		while((l=l.getParent())!=null);
+		
+		
+		log.info("Locale is " + Locale.getDefault());
+		log.info("Running Java " + System.getProperty("java.version"));
 
 		// Let axis know where its config file is
 		System.setProperty("axis.ClientConfigFile", "res/client-config.wsdd");
@@ -53,12 +66,18 @@ public class TOPALi extends Applet
 
 		Icons.loadIcons();
 
-		new TOPALi(initialProject);
+		try
+		{
+			new TOPALi(initialProject);
+		} catch (Exception e)
+		{
+			log.severe(e.getMessage());
+		}
 	}
 
 	public void init()
 	{
-		System.out.println("Applet init()");
+		TOPALi.log.info("Applet init()");
 		isApplet = true;
 		// new TOPALi();
 	}
@@ -94,6 +113,7 @@ public class TOPALi extends Applet
 				UIManager.put("OptionPane.informationIcon", Icons.WIN_INFORM);
 				UIManager.put("OptionPane.warningIcon", Icons.WIN_WARN);
 				UIManager.put("OptionPane.questionIcon", Icons.WIN_QUESTION);
+				
 			} else if (Prefs.isMacOSX)
 				UIManager.setLookAndFeel(UIManager
 						.getSystemLookAndFeelClassName());
@@ -102,11 +122,12 @@ public class TOPALi extends Applet
 						.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (Exception e)
 		{
-			System.out.println(e);
+			log.warning("Cannot set Look and Feel\n"+e);
 		}
 
 		// Create and initialise the main window
 		winMain = new WinMain();
+
 		winMain.addWindowListener(new WindowAdapter()
 		{
 			public void windowClosing(WindowEvent e)
@@ -235,6 +256,7 @@ public class TOPALi extends Applet
 							.decrypt(Prefs.web_proxy_password);
 				} catch (EncryptionException e)
 				{
+					log.warning("Cannot decrypt.\n"+e);
 				}
 			} else
 			{
@@ -244,10 +266,12 @@ public class TOPALi extends Applet
 							.encrypt(Prefs.web_proxy_password);
 				} catch (EncryptionException e)
 				{
+					log.warning("Cannot encrypt.\n"+e);
 				}
 			}
 		} catch (Exception e)
 		{
+			//log.warning("En/Decryption failed\n"+e);
 		}
 	}
 }

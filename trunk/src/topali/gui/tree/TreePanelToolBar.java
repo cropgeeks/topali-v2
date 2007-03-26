@@ -19,7 +19,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 
 	private TreePanel panel;
 
-	JButton bExport, bCluster, bATV;
+	JButton bExport, bCluster;
 
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit,
 			bFloat, bViewCluster;
@@ -49,8 +49,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bSizedToFit.setSelected(tree.isSizedToFit);
 		bCluster = (JButton) WinMainToolBar.getButton(false, null, "tre08",
 				Icons.CLUSTER, null);
-		bATV = new JButton("ATV");
-		bATV.setToolTipText("Open in ATV");
 		
 		bFloat = (JToggleButton) WinMainToolBar.getButton(true, null, "tre07",
 				Icons.FLOAT, null);
@@ -65,7 +63,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bFloat.addActionListener(this);
 		bCluster.addActionListener(this);
 		bViewCluster.addActionListener(this);
-		bATV.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -87,9 +84,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		group.add(bDrawCircular);
 		group.add(bDrawNewHamp);
 		group.add(bViewCluster);
-		
-		add(new JLabel(" "));
-		add(bATV);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -117,9 +111,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 
 		else if (e.getSource() == bViewCluster)
 			panel.setViewMode(TreeResult.CLUSTER);
-		
-		else if(e.getSource()==bATV)
-			panel.launchATV();
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}

@@ -45,13 +45,6 @@ class AnnotationsPanel extends JPanel
 		add(cdsSP);
 	}
 
-	void test()
-	{
-		System.out.println("aBar.value="
-				+ cdsSP.getHorizontalScrollBar().getValue());
-		System.out.println(cdsCanvas.getWidth());
-	}
-
 	// void setScrollBarValue(int value)
 	// {
 	// // cdsSP.getHorizontalScrollBar().setValue(value);
@@ -71,21 +64,6 @@ class AnnotationsPanel extends JPanel
 
 	private class CDSCanvas extends JPanel
 	{
-		CDSCanvas()
-		{
-			addMouseMotionListener(new CanvasMouseMotionListener());
-		}
-
-		class CanvasMouseMotionListener extends
-				java.awt.event.MouseMotionAdapter
-		{
-			String str = null;
-
-			public void mouseMoved(java.awt.event.MouseEvent e)
-			{
-				System.out.println("a.canvas: " + e.getPoint().x);
-			}
-		}
 
 		public Dimension getSize()
 		{

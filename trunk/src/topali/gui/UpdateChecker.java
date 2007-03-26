@@ -41,9 +41,8 @@ class UpdateChecker extends Thread
 			webVersion = Integer.parseInt(in.readLine());
 			in.close();
 
-			System.out.println("Connection to " + url);
-			System.out.println("webVersion: " + webVersion + " (current: "
-					+ RELEASE + ")");
+			TOPALi.log.info("Connection to " + url);
+			TOPALi.log.info("webVersion: " + webVersion + " (current: "+ RELEASE + ")");
 		} catch (Exception e)
 		{
 			if (useGUI)

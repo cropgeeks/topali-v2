@@ -217,6 +217,10 @@
 		<bind-xml node="attribute"/></field>
 	
 	<field name="selectedSeqs" type="string" direct="true" collection="array"/>
+  
+  <field name="threshold" type="double" direct="true">
+    <bind-xml node="attribute"/></field>
+  
 </class>
 
 <!-- CodeMLResult (extends AlignmentResult) -->
@@ -226,6 +230,7 @@
 	<field name="type" type="integer" direct="true"/>
 	<field name="models" type="topali.data.CMLModel" direct="true" collection="vector"/>
 	<field name="hypos" type="topali.data.CMLHypothesis" direct="true" collection="vector"/>
+    <field name="threshold" type="double" direct="true"/>
 </class>
 
 <!-- CMLHypothesis -->
@@ -234,12 +239,12 @@
 		<bind-xml node="attribute"/></field>
   <field name="tree" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
-  <field name="settings" type="string" direct="true">
-    <bind-xml node="attribute"/></field>
+  <field name="settings" collection="map" direct="true"/>
   <field name="omegaTree" type="string" direct="true">
     <bind-xml node="attribute"/></field>
   <field name="likelihood" type="double" direct="true">
     <bind-xml node="attribute"/></field>
+  <field name="omegas" type="double" direct="true" collection="array"/>
 </class>
 
 <!-- CMLModel -->

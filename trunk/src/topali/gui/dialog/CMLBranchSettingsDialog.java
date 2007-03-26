@@ -14,10 +14,11 @@ import pal.alignment.Alignment;
 import pal.distance.JukesCantorDistanceMatrix;
 import pal.tree.NeighborJoiningTree;
 import pal.tree.Tree;
-
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
+import topali.var.NHTreeUtils;
+import topali.var.Utils;
 
 public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 {
@@ -62,6 +63,8 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		JukesCantorDistanceMatrix dm = new JukesCantorDistanceMatrix(alignment);
 		Tree tree = new NeighborJoiningTree(dm);
 		this.tree = tree.toString();
+		this.tree = this.tree.replaceAll(";", "");
+		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
 		listModel.addElement(this.tree);
 		
 		this.setSize(400, 300);
@@ -89,9 +92,29 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 			String tree = (String)listModel.getElementAt(i);
 			CMLHypothesis hypo = new CMLHypothesis();
 			hypo.tree = tree;
-			hypo.model = 0;
+			if(i==0)
+				hypo.model = 0;
+			else
+				hypo.model = 2;
 			result.hypos.add(hypo);
 		}
+		
+//		CMLHypothesis h0 = new CMLHypothesis();
+//		h0.tree = "(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom)),(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
+//		h0.model = 0;
+//		result.hypos.add(h0);
+//		CMLHypothesis h1 = new CMLHypothesis();
+//		h1.tree = "(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom))#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
+//		h1.model = 0;
+//		result.hypos.add(h1);
+//		CMLHypothesis h2 = new CMLHypothesis();
+//		h2.tree = "(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
+//		h2.model = 0;
+//		result.hypos.add(h2);
+//		CMLHypothesis h3 = new CMLHypothesis();
+//		h3.tree = "(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1 #2,U28410OG2 #2)#2)";
+//		h3.model = 0;
+//		result.hypos.add(h3);
 		
 		int runNum = data.getTracker().getCodeMLRunCount() + 1;
 		data.getTracker().setCodeMLRunCount(runNum);
@@ -111,8 +134,8 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		
 	}
 	
-	private void addAction() {			
-		atv = new ATV(this.tree, data.name, this);
+	private void addAction() {		
+		atv = new ATV(this.tree, data.name, winMain, this);
 		SwingUtilities.invokeLater(atv);
 	}
 	
@@ -377,7 +400,9 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 	public void windowClosed(WindowEvent e)
 	{	
 		String tree = atv.getCodeMLHypothesis();
-		if(!tree.equals(this.tree))
+		tree = tree.replaceAll("_#", " #");
+		//tree = NHTreeUtils.removeBranchLengths(tree);
+		if(!listModel.contains(tree))
 			listModel.addElement(tree);
 	}
 

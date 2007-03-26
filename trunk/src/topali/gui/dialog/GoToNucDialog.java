@@ -13,6 +13,7 @@ import javax.swing.*;
 
 import topali.data.SequenceSet;
 import topali.gui.*;
+import topali.var.Utils;
 
 public class GoToNucDialog extends JDialog implements ActionListener
 {

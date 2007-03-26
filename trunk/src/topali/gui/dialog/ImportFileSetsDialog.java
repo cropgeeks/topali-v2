@@ -14,7 +14,9 @@ import javax.swing.*;
 
 import topali.data.AlignmentData;
 import topali.data.SequenceSet;
+import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
+import topali.var.Utils;
 import doe.DoeLayout;
 
 public class ImportFileSetsDialog extends JDialog implements ActionListener
@@ -121,16 +123,16 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 			{
 				SequenceSet ss = null;
 
-				try
-				{
-					ss = new SequenceSet(file);
-					data.addReference(file.getPath(), ss);
-					text.append("Loaded: " + file.getName() + "\n");
-				} catch (Exception e)
-				{
-					// TODO: catch proper error and report why it failed
-					text.append("FAILED: " + file.getName() + "\n");
-				}
+					try
+					{
+						ss = new SequenceSet(file);
+						data.addReference(file.getPath(), ss);
+						text.append("Loaded: " + file.getName() + "\n");
+					} catch (AlignmentLoadException e)
+					{
+						TOPALi.log.warning("Could not load alignment.\n"+e.toString());
+						text.append("Loading alignment '"+file.getName()+"' failed. Error:\n"+e.getLocalizedMessage());
+					}
 
 				text.setCaretPosition(text.getText().length() - 1);
 			}

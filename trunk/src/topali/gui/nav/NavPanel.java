@@ -422,11 +422,14 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 			splits.setRightComponent(blankPanel);
 
 		// Can the user print now?
-		if (nodeInfo instanceof IPrintable
-				&& ((IPrintable) nodeInfo).isPrintable())
+		if (nodeInfo instanceof ResultsNode && ((ResultsNode) nodeInfo).isPrintable()) {
 			WinMainMenuBar.aFilePrint.setEnabled(true);
-		else
+			WinMainMenuBar.aFilePrintPreview.setEnabled(true);
+		}
+		else {
 			WinMainMenuBar.aFilePrint.setEnabled(false);
+			WinMainMenuBar.aFilePrintPreview.setEnabled(false);
+		}
 
 		splits.setDividerLocation(location);
 	}

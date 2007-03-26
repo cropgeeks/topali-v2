@@ -104,9 +104,6 @@ public class AlignmentData
 	public void replaceResult(AnalysisResult oldR, AnalysisResult newR)
 	{
 		int index = results.indexOf(oldR);
-
-		System.out.println("Index is " + index);
-
 		results.remove(index);
 		results.add(index, newR);
 	}

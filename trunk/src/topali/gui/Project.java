@@ -137,7 +137,7 @@ public class Project
 			MsgBox.msg(Text.format(Text.Gui.getString("Project.err01"),
 					filename, e), MsgBox.ERR);
 
-			e.printStackTrace(System.out);
+			TOPALi.log.warning("Error opening file\n"+e);
 			return null;
 		}
 	}
@@ -171,14 +171,13 @@ public class Project
 			cOut.close();
 			zOut.close();
 
-			System.out.println("XML/Zip Write: "
-					+ (System.currentTimeMillis() - s));
+			TOPALi.log.info("XML/Zip Write: "+ (System.currentTimeMillis() - s));
 		} catch (Exception e)
 		{
 			MsgBox.msg(Text.format(Text.Gui.getString("Project.err02"),
 					p.filename, e.getMessage()), MsgBox.ERR);
 
-			e.printStackTrace(System.out);
+			TOPALi.log.warning("Error saving file\n"+e);
 			return false;
 		}
 
