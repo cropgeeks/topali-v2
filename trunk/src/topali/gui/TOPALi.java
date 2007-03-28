@@ -25,7 +25,7 @@ import topali.var.Utils;
 
 public class TOPALi extends Applet
 {
-	public static Logger log = Logger.getLogger("topali.client");
+	public static Logger log = Logger.getAnonymousLogger();
 	
 	private boolean isApplet = false;
 
@@ -35,15 +35,16 @@ public class TOPALi extends Applet
 
 	public static WinMain winMain;
 
+	public static TOPALi instance;
+	
 	public static void main(String[] args)
 	{
-		Handler handler = new ClientLogHandler(Level.SEVERE, true);
+		//Initialize logger
+		ClientLogHandler handler = new ClientLogHandler(Level.SEVERE, TOPALi.log);
+		Thread.setDefaultUncaughtExceptionHandler(handler);
 		log.addHandler(handler);
-		Level level = Level.INFO;
-		Logger l = log;
-		do
-			l.setLevel(level);
-		while((l=l.getParent())!=null);
+		log.setLevel(Level.INFO);
+		//log.setUseParentHandlers(false);
 		
 		
 		log.info("Locale is " + Locale.getDefault());
@@ -66,13 +67,7 @@ public class TOPALi extends Applet
 
 		Icons.loadIcons();
 
-		try
-		{
-			new TOPALi(initialProject);
-		} catch (Exception e)
-		{
-			log.severe(e.getMessage());
-		}
+		new TOPALi(initialProject);
 	}
 
 	public void init()
@@ -87,8 +82,10 @@ public class TOPALi extends Applet
 		exit();
 	}
 
-	public TOPALi(final File initialProject)
+	private TOPALi(final File initialProject)
 	{
+		instance = this;
+		
 		showSplash();
 
 		// Load the preferences
@@ -185,7 +182,7 @@ public class TOPALi extends Applet
 		}
 	}
 
-	private void exit()
+	public void exit()
 	{
 		// Check it's ok to exit
 		if (!winMain.okToContinue())
@@ -240,6 +237,9 @@ public class TOPALi extends Applet
 	// Decrypts/encrypts passwords that have been written to disk by TOPALi
 	private void doEncryption(boolean decrypt)
 	{
+		if(Prefs.web_proxy_password==null || Prefs.web_proxy_password.equals(""))
+			return;
+		
 		// About as secure as a chocolate teapot is functional...
 		String key = "287e283d5737552c5a72277561745452";
 		String scheme = StringEncrypter.DESEDE_ENCRYPTION_SCHEME;
@@ -271,7 +271,9 @@ public class TOPALi extends Applet
 			}
 		} catch (Exception e)
 		{
-			//log.warning("En/Decryption failed\n"+e);
+			log.warning("En/Decryption failed\n"+e);
 		}
 	}
+	
+	
 }

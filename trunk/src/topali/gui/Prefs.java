@@ -58,6 +58,7 @@ public class Prefs extends PreferencesXML
 	public static int gui_filter_tree = Filters.PNG;
 	public static int gui_filter_algn = Filters.FAS;
 	public static int gui_filter_graph = Filters.CSV;
+	public static int gui_filter_table = Filters.CSV;
 	public static int gui_goto_nuc = 1;
 	public static int gui_project_count = 1;
 	public static boolean gui_menu_icons = true;
@@ -222,6 +223,7 @@ public class Prefs extends PreferencesXML
 		gui_filter_tree = getInt("gui_filter_tree", gui_filter_tree);
 		gui_filter_algn = getInt("gui_filter_algn", gui_filter_algn);
 		gui_filter_graph = getInt("gui_filter_graph", gui_filter_graph);
+		gui_filter_table = getInt("gui_filter_table", gui_filter_table);
 		gui_goto_nuc = getInt("gui_goto_nuc", gui_goto_nuc);
 		gui_project_count = getInt("gui_project_count", gui_project_count);
 		gui_menu_icons = getBool("gui_menu_icons", gui_menu_icons);
@@ -386,6 +388,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_filter_tree", "" + gui_filter_tree);
 		p.setProperty("gui_filter_algn", "" + gui_filter_algn);
 		p.setProperty("gui_filter_graph", "" + gui_filter_graph);
+		p.setProperty("gui_filter_table", "" + gui_filter_table);
 		p.setProperty("gui_goto_nuc", "" + gui_goto_nuc);
 		p.setProperty("gui_project_count", "" + gui_project_count);
 		p.setProperty("gui_menu_icons", "" + gui_menu_icons);

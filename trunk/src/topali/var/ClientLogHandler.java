@@ -6,24 +6,32 @@
 package topali.var;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 import java.util.logging.*;
 
 import javax.swing.*;
 
-public class ClientLogHandler extends Handler
+import topali.gui.TOPALi;
+
+public class ClientLogHandler extends Handler implements UncaughtExceptionHandler
 {
 
 	LinkedList<String> msg;
-	int cap = 5;
+	int cap = 10;
 	
+	Logger log;
 	Level userWarnLevel;
-	boolean shutdown;
 	
-	public ClientLogHandler(Level userWarnLevel, boolean shutdown) {
+	/**
+	 * @param userWarnLevel The level when the user will be warned with a message popup
+	 * @param shutdown Shutdown application when warning message is closed
+	 */
+	public ClientLogHandler(Level userWarnLevel, Logger log) {
 		super();
+		this.log = log;
 		this.userWarnLevel = userWarnLevel;
-		this.shutdown = shutdown;
 		msg = new LinkedList<String>();
 		setFormatter(new SimpleFormatter());
 	}
@@ -50,7 +58,7 @@ public class ClientLogHandler extends Handler
 		if(!isLoggable(record))
 			return;
 		
-		msg.add(this.getFormatter().format(record));
+		msg.add(getFormatter().format(record));
 		if(msg.size()>cap)
 			msg.removeFirst();
 		
@@ -62,18 +70,29 @@ public class ClientLogHandler extends Handler
 				sb.append(msg.get(i));
 			
 			ta.setText(sb.toString());
-			JLabel l;
-			if(shutdown)
-				l = new JLabel("<html>A <b>fatal error</b> occurred!<br>Application must be shutted down.<br><br>Log details:</html>");
-			else
-				l = new JLabel("<html>An <b>error</b> occurred!<br><br>Log details:</html>");
+			ta.setEditable(false);
+			
+			JLabel l = new JLabel("<html>An <b>unexpected error</b> occurred!<br><br>Log details:</html>");
 			JPanel p = new JPanel(new BorderLayout());
 			p.add(l, BorderLayout.NORTH);
 			p.add(new JScrollPane(ta), BorderLayout.CENTER);
-			JOptionPane.showMessageDialog(null, p, "Error", JOptionPane.ERROR_MESSAGE);
-			if(shutdown)
-				System.exit(1);
+			p.add(new JLabel("Shutdown application?"), BorderLayout.SOUTH);
+			p.setPreferredSize(new Dimension(400,300));
+			
+			int x = JOptionPane.showConfirmDialog(null, p, "Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+			
+			if(x==JOptionPane.YES_OPTION) {
+				if(TOPALi.instance!=null)
+					TOPALi.instance.exit();
+				else
+					System.exit(1);
+			}
 		}
 	}
 
+	
+	public void uncaughtException(Thread t, Throwable e)
+	{
+		log.log(Level.SEVERE, "Uncaught exception in thread '"+t.getName()+"'", e);
+	}	
 }

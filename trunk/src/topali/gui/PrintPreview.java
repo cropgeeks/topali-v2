@@ -1,21 +1,5 @@
 package topali.gui;
 
-/** 
- *  Copyright 1999-2002 Matthew Robinson and Pavel Vorobiev. 
- *  All Rights Reserved. 
- * 
- *  =================================================== 
- *  This program contains code from the book "Swing" 
- *  2nd Edition by Matthew Robinson and Pavel Vorobiev 
- *  http://www.spindoczine.com/sbe 
- *  =================================================== 
- * 
- *  The above paragraph must be included in full, unmodified 
- *  and completely intact in the beginning of any source code 
- *  file that references, copies or uses (in any way, shape 
- *  or form) code contained in this file. 
- */
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +14,9 @@ import doe.MsgBox;
 
 import topali.gui.dialog.PrinterDialog;
 
+/**
+ * Based on Matthew Robinson, Pavel Vorobiev "Swing - Second Edition"
+ */
 public class PrintPreview extends JFrame implements ActionListener
 {
 	

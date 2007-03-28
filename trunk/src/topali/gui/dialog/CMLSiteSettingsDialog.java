@@ -90,6 +90,7 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 		if(res!=null)
 			initPreviousResult(res);
 		
+		setModal(false);
 		setLocationRelativeTo(winMain);
 	}
 
@@ -409,14 +410,7 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 	{
 		if (bHelp == null)
 		{
-			bHelp = new JButton();
-			bHelp.setText("Help");
-			bHelp.addActionListener(new java.awt.event.ActionListener()
-			{
-				public void actionPerformed(ActionEvent e) {
-					helpAction();
-				}
-			});
+			bHelp = TOPALiHelp.getHelpButton("cmlsite_settings");
 		}
 		return bHelp;
 	}
@@ -538,10 +532,6 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 		return cM8;
 	}
 
-	private void helpAction() {
-		
-	}
-	
 	private void runAction(ActionEvent e) {
 		setVisible(false);
 		
@@ -592,107 +582,28 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 	{
 		if (e.getSource().equals(lM0))
 		{
-			double w_start = m0.w_start;
-			double w_end = m0.w_end;
-			double w_inc = m0.w_inc;
-			if(m0.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m0.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			OmegaEstDialog d = new OmegaEstDialog(null, m0);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m0.w_start = d.start;
-				m0.w_end = d.end;
-				m0.w_inc = d.stepsize;
-			}
 		} else if (e.getSource().equals(lM1a))
 		{
-			double w_start = m1a.w_start;
-			double w_end = m1a.w_end;
-			double w_inc = m1a.w_inc;
-			if(m1a.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m1a.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			OmegaEstDialog d = new OmegaEstDialog(null, m1a);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m1a.w_start = d.start;
-				m1a.w_end = d.end;
-				m1a.w_inc = d.stepsize;
-			}
 		} else if (e.getSource().equals(lM2a))
 		{
-			double w_start = m2a.w_start;
-			double w_end = m2a.w_end;
-			double w_inc = m2a.w_inc;
-			if(m2a.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m2a.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			OmegaEstDialog d = new OmegaEstDialog(null, m2a);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m2a.w_start = d.start;
-				m2a.w_end = d.end;
-				m2a.w_inc = d.stepsize;
-			}
 		} else if (e.getSource().equals(lM3))
 		{
-			double w_start = m3.w_start;
-			double w_end = m3.w_end;
-			double w_inc = m3.w_inc;
-			if(m3.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m3.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
-			
+			OmegaEstDialog d = new OmegaEstDialog(null, m3);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m3.w_start = d.start;
-				m3.w_end = d.end;
-				m3.w_inc = d.stepsize;
-			}
 		} else if (e.getSource().equals(lM7))
 		{
-			double w_start = m7.w_start;
-			double w_end = m7.w_end;
-			double w_inc = m7.w_inc;
-			if(m7.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m7.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			OmegaEstDialog d = new OmegaEstDialog(null, m7);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m7.w_start = d.start;
-				m7.w_end = d.end;
-				m7.w_inc = d.stepsize;
-			}
 		} else if (e.getSource().equals(lM8))
 		{
-			double w_start = m8.w_start;
-			double w_end = m8.w_end;
-			double w_inc = m8.w_inc;
-			if(m8.settings.get("omega")!=null) {
-				w_start = Double.parseDouble(m8.settings.get("omega"));
-				w_end = w_start;
-				w_inc = 1;
-			}
-			OmegaEstDialog d = new OmegaEstDialog(this, w_start, w_end, w_inc);
+			OmegaEstDialog d = new OmegaEstDialog(null, m8);
 			d.setVisible(true);
-			if(!d.canceled) {
-				m8.w_start = d.start;
-				m8.w_end = d.end;
-				m8.w_inc = d.stepsize;
-			}
 		}
 	}
 

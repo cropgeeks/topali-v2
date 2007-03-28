@@ -10,6 +10,7 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import javax.imageio.ImageIO;
@@ -105,20 +106,22 @@ public class Utils
 	{
 		Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		Transferable transfer = sysClip.getContents(null);
+		
 		try
 		{
-			String data = (String) transfer
-					.getTransferData(DataFlavor.stringFlavor);
-			return data;
+			Object o = transfer.getTransferData(DataFlavor.stringFlavor);
+			if(o instanceof String)
+				return (String)o;
+			else
+				return null;
 		} catch (Exception e)
 		{
-			//Content not a String
+			TOPALi.log.warning("Clipboard content is not a String\n"+e);
+			return null;
 		}
-		return null;
 	}
 
-	public static void saveComponent(Component cmp, File file, int w, int h)
-			throws Exception
+	public static void saveComponent(Component cmp, File file, int w, int h) throws IOException
 	{
 		// Store the container's current parent
 		Container parent = cmp.getParent();
@@ -129,13 +132,9 @@ public class Utils
 		Graphics2D g2d = (Graphics2D) bi.createGraphics();
 
 		// Redraw the component using the image
-		try
-		{
-			SwingUtilities.paintComponent(g2d, cmp, new Container(), 0, 0, w, h);
-		} catch (RuntimeException e)
-		{
-			TOPALi.log.warning("Painting component failed\n"+e);
-		}
+
+		SwingUtilities.paintComponent(g2d, cmp, new Container(), 0, 0, w, h);
+
 		g2d.setColor(Color.black);
 		g2d.drawRect(0, 0, w - 1, h - 1);
 

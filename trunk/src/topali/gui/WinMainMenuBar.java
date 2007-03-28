@@ -406,7 +406,7 @@ public class WinMainMenuBar extends JMenuBar
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuAnlsRunCodeMLBranch();
+				winMain.menuAnlsRunCodeMLBranch(null);
 			}
 		};
 		

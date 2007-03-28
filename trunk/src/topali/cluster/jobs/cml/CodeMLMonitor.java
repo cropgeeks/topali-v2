@@ -104,7 +104,7 @@ public class CodeMLMonitor
 				result.models.remove(i);
 				result.models.add(i, model);
 			}
-			//Throw away repeated models with bad likeklihood
+//			Throw away repeated models with bad likeklihood
 			result.filterModels();
 		}
 		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL) {

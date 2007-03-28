@@ -16,6 +16,9 @@ import topali.data.AlignmentData;
 import topali.data.AlignmentResult;
 import topali.gui.Icons;
 
+/**
+ * Base class for all alignment result panels
+ */
 public abstract class ResultPanel extends JPanel
 {
 	public static final NumberFormat branchLengthFormat = new DecimalFormat("#.###");

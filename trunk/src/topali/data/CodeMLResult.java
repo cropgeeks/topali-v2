@@ -61,7 +61,6 @@ public class CodeMLResult extends AlignmentResult
 			}
 		}
 		models.add(lastModel);
-		
 		this.models = models;
 	}
 }

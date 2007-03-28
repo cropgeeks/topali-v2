@@ -529,11 +529,11 @@ public class WinMain extends JFrame
 		dlg.setVisible(true);
 	}
 
-	public void menuAnlsRunCodeMLBranch()
+	public void menuAnlsRunCodeMLBranch(CodeMLResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
-		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data);
+		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data, result);
 		dlg.setVisible(true);
 
 		// CodeMLResult res = new CodeMLResult(CodeMLResult.TYPE_BRANCHMODEL);

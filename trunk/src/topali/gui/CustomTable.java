@@ -6,12 +6,17 @@
 package topali.gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.*;
 
+/**
+ * Table which supports multiple line cells (with auto-linebreak),
+ * export to CSV and PNG, is printable, and can be set (not) editable.
+ */
 public class CustomTable extends JTable implements Printable
 {
 	boolean editable = false;
@@ -43,7 +48,11 @@ public class CustomTable extends JTable implements Printable
 			c.setCellEditor(new MyEditor());
 		}
 		
-		//Adjust the row heights
+		adjustRowHeight();
+	}
+
+	public void adjustRowHeight() {
+//		Adjust the row heights
 		for(int i=0; i<getRowCount(); i++) {
 			int hmax = 0;
 			for(int j=0; j<getColumnCount(); j++) {
@@ -58,7 +67,57 @@ public class CustomTable extends JTable implements Printable
 			setRowHeight(i, hmax);
 		}
 	}
+	
+	public BufferedImage getPNGImage() {
+		int selected = getSelectedRow();
+		getSelectionModel().clearSelection();
+		
+		BufferedImage bi = new BufferedImage(getSize().width, getSize().height+getTableHeader().getSize().height,BufferedImage.TYPE_BYTE_INDEXED);
+		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		getTableHeader().paint(g2d);
+		g2d.translate(0, getTableHeader().getSize().height);
+		paint(g2d);
+		
+		getSelectionModel().setSelectionInterval(selected, selected);
+		
+		return bi;
+	}
+	
+	public String getCSV()
+	{
+		String nl = System.getProperty("line.separator");
 
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < getColumnCount() - 1; i++)
+		{
+			sb.append(getModel().getColumnName(i));
+			sb.append(',');
+		}
+		if (getColumnCount() > 0)
+		{
+			sb.append(getModel().getColumnName(getColumnCount() - 1));
+			sb.append(nl);
+		}
+
+		for (int i=0; i<getRowCount(); i++)
+		{
+			for (int j = 0; j < getColumnCount() - 1; j++)
+			{
+				String tmp = getValueAt(i, j).toString();
+				sb.append(tmp);
+				sb.append(',');
+			}
+			if (getColumnCount() > 0)
+			{
+				String tmp = getValueAt(i, getColumnCount()-1).toString();
+				sb.append(tmp);
+				sb.append(nl);
+			}
+		}
+
+		return sb.toString();
+	}
+	
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 			throws PrinterException
 	{

@@ -59,12 +59,6 @@ public class Model1aParser extends CMLResultParser
 						continue;
 					}
 
-					if (model.dnDS == -1
-							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
-					{
-						b = line.split("\\s+");
-						model.dnDS = Double.parseDouble(b[4]);
-					}
 				} catch (RuntimeException e)
 				{
 					e.printStackTrace();

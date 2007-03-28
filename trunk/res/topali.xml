@@ -261,10 +261,6 @@
 		<bind-xml node="attribute"/></field>
   <field name="fixedOmega" type="boolean" direct="true">
     <bind-xml node="attribute"/></field>
-  <field name="dnDS" type="double"  direct="true">
-		<bind-xml node="attribute"/></field>
-  <field name="w" type="double"  direct="true">
-		<bind-xml node="attribute"/></field>
   <field name="p0" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
   <field name="p1" type="double" direct="true">
@@ -281,12 +277,11 @@
 		<bind-xml node="attribute"/></field>
   <field name="q" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-  <field name="_w" type="double" direct="true">
-		<bind-xml node="attribute"/></field>
   <field name="likelihood" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
   <field name="pss" type="string" direct="true"/>
   <field name="settings" collection="map" direct="true"/>
+  <field name="wStart" collection="vector" direct="true"/>
 </class>
 
 <!-- DSSResult (extends AlignmentResult) -->

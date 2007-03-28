@@ -33,14 +33,12 @@ public class CMLModel
 	public boolean supportsPSS;
 	public boolean fixedOmega;
 	public Map<String, String> settings = new HashMap<String, String>();
-	public double w_start, w_end, w_inc;
+	public Vector<Double> wStart = new Vector<Double>();
 	
 	//Result values
-	public double dnDS = -1;
-	public double w = -1;
 	public double p0 = -1, p1 = -1, p2 = -1;
 	public double w0 = -1, w1 = -1, w2 = -1;
-	public double p = -1, q = -1, _w = -1;
+	public double p = -1, q = -1;
 	public double likelihood = -1;
 	public String pss = null;
 	public List<PSSite> pssList; //not stored in Castor XML!
@@ -71,9 +69,7 @@ public class CMLModel
 			nParameter = 1;
 			supportsPSS = false;
 			fixedOmega = false;
-			w_start = 5;
-			w_end = 5;
-			w_inc = 1;
+			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","0");
 			break;
@@ -83,9 +79,7 @@ public class CMLModel
 			nParameter = 2;
 			supportsPSS = false;
 			fixedOmega = false;
-			w_start = 5;
-			w_end = 5;
-			w_inc = 1;
+			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","1");
 			break;
@@ -95,9 +89,12 @@ public class CMLModel
 			nParameter = 4;
 			supportsPSS = true;
 			fixedOmega = false;
-			w_start = 0.1;
-			w_end = 10;
-			w_inc = 2;
+			wStart.add(0.1);
+			wStart.add(0.2);
+			wStart.add(0.4);
+			wStart.add(0.8);
+			wStart.add(1.6);
+			wStart.add(3.2);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","2");
 			break;
@@ -127,9 +124,7 @@ public class CMLModel
 			nParameter = 5;
 			supportsPSS = true;
 			fixedOmega = false;
-			w_start = 5;
-			w_end = 5;
-			w_inc = 1;
+			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","3");
 			settings.put("ncatG","3");
@@ -140,9 +135,7 @@ public class CMLModel
 			nParameter = 2;
 			supportsPSS = false;
 			fixedOmega = false;
-			w_start = 5;
-			w_end = 5;
-			w_inc = 1;
+			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","7");
 			settings.put("ncatG","10");
@@ -153,9 +146,12 @@ public class CMLModel
 			nParameter = 4;
 			supportsPSS = true;
 			fixedOmega = false;
-			w_start = 0.1;
-			w_end = 10;
-			w_inc = 2;
+			wStart.add(0.1);
+			wStart.add(0.2);
+			wStart.add(0.4);
+			wStart.add(0.8);
+			wStart.add(1.6);
+			wStart.add(3.2);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","8");
 			settings.put("ncatG","10");
@@ -170,14 +166,12 @@ public class CMLModel
 			return res;
 		}
 		
-		for(; w_start<=w_end; w_start*=w_inc) {
+		for(double d : wStart) {
 			CMLModel m = new CMLModel(model);
-			m.settings.put("omega", String.valueOf((float)w_start));
+			m.settings.put("omega", String.valueOf(d));
 			res.add(m);
-			
-			if(w_inc==1)
-				break;
 		}
+		
 		return res;
 	}
 	

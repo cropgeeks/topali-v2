@@ -59,6 +59,8 @@ public class HMMResultPanel extends ResultPanel
 		p.add(graph3, c3);
 		
 		addContent(p, true);
+		
+		setThreshold(result.threshold);
 	}
 
 	@Override
