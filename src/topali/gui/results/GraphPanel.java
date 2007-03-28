@@ -14,25 +14,29 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.io.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.jfree.chart.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.*;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import doe.MsgBox;
-
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
-import topali.var.Utils;
+import doe.MsgBox;
 
+/**
+ * Panel for displaying a graph
+ */
 public class GraphPanel extends JPanel implements Printable
 {
 	public static final int NO = 0;
@@ -134,6 +138,7 @@ public class GraphPanel extends JPanel implements Printable
 				s1, null, null, 0.1f);
 
 		plot.addRangeMarker(marker);
+		repaint();
 	}
 
 	@Override
@@ -219,12 +224,14 @@ public class GraphPanel extends JPanel implements Printable
 		out.close();
 	}
 
-	private void savePNG(File filename) throws Exception
+	private void savePNG(File filename) throws IOException
 	{
-		Utils.saveComponent(chartPanel, filename, 600, 250);
+		BufferedImage bi = new BufferedImage(chartPanel.getSize().width, chartPanel.getSize().height, BufferedImage.TYPE_BYTE_INDEXED);
+		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		chartPanel.paint(g2d);
 		updateUI();
-
-		MsgBox.msg("Graph data successfully saved to " + filename, MsgBox.INF);
+		
+		ImageIO.write(bi, "png", filename);
 	}
 	
 	// ----------------
@@ -291,17 +298,18 @@ public class GraphPanel extends JPanel implements Printable
 			try
 			{
 				if (Prefs.gui_filter_graph == CSV)
-				{
 					saveCSV(file);
-					MsgBox.msg("Graph data successfully saved to " + file,
-							MsgBox.INF);
-				} else if (Prefs.gui_filter_graph == PNG)
+				else if (Prefs.gui_filter_graph == PNG)
 					savePNG(file);
+				
+				MsgBox.msg("Graph data successfully saved to " + file,
+						MsgBox.INF);
 			} catch (Exception e)
 			{
 				MsgBox.msg(
 						"There was an unexpected error while saving graph data:\n "
 								+ e, MsgBox.ERR);
+				TOPALi.log.warning(e.toString());
 			}
 
 			return;

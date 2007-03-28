@@ -43,6 +43,11 @@
     <tocitem text="The LRT Method" target="lrt_method" image="topic" />
     <tocitem text="LRT Settings" target="lrt_settings" image="topic" />		
   </tocitem>
+  <tocitem text="Positive Selection" expand="true">
+    <tocitem text="PAML/CodeML" target="paml" image="topic" />
+  	<tocitem text="CodeML site model settings" target="cmlsite_settings" image="topic" />
+    <tocitem text="CodeML branch model settings" target="cmlbranch_settings" image="topic" />		
+  </tocitem>
   <tocitem text="Estimating Phylogenetic Trees" target="estimate_tree" image="topic" />
 </tocitem>
 

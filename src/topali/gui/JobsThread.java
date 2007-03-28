@@ -119,6 +119,7 @@ public class JobsThread extends Thread
 							job.ws_cancelJob();
 						} catch (Exception e)
 						{
+							TOPALi.log.warning(e.toString());
 						}
 
 						SwingUtilities.invokeLater(new Runnable()
@@ -144,8 +145,8 @@ public class JobsThread extends Thread
 							entry.getJob().setStatus(error);
 						}
 					});
-
 					job.errorInfo = e.dumpToString();
+					TOPALi.log.warning(e.toString());
 				} catch (Exception e)
 				{
 					SwingUtilities.invokeLater(new Runnable()
@@ -156,6 +157,7 @@ public class JobsThread extends Thread
 						}
 					});
 					job.errorInfo = e.toString();
+					TOPALi.log.warning(e.toString());
 				}
 
 				SwingUtilities.invokeLater(new Runnable()

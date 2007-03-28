@@ -53,8 +53,9 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 
 	private JButton bHelp = null;
 
+	private CodeMLResult result;
 	
-	public CMLBranchSettingsDialog(WinMain winMain, AlignmentData data) {
+	public CMLBranchSettingsDialog(WinMain winMain, AlignmentData data, CodeMLResult result) {
 		super(winMain, "Positive Selection - Branch Models", false);
 		this.winMain = winMain;
 		this.data = data;
@@ -67,6 +68,14 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
 		listModel.addElement(this.tree);
 		
+		if(result!=null) {
+			for(int i=1; i<result.hypos.size(); i++)
+				listModel.addElement(result.hypos.get(i).tree);
+			this.result = result;
+		}
+		else
+			this.result = new CodeMLResult(CodeMLResult.TYPE_BRANCHMODEL);
+		
 		this.setSize(400, 300);
 		this.setContentPane(getJContentPane());
 		
@@ -77,7 +86,6 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		setVisible(false);
 		
 		SequenceSet ss = data.getSequenceSet();
-		CodeMLResult result = new CodeMLResult(CodeMLResult.TYPE_BRANCHMODEL);
 		
 		if (Prefs.isWindows)
 			result.codemlPath = Utils.getLocalPath() + "codeml.exe";
@@ -87,6 +95,7 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		result.isRemote = ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 		
+		result.hypos.clear();
 		int size =  listModel.getSize();
 		for(int i=0; i<size; i++) {
 			String tree = (String)listModel.getElementAt(i);
@@ -98,23 +107,6 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 				hypo.model = 2;
 			result.hypos.add(hypo);
 		}
-		
-//		CMLHypothesis h0 = new CMLHypothesis();
-//		h0.tree = "(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom)),(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
-//		h0.model = 0;
-//		result.hypos.add(h0);
-//		CMLHypothesis h1 = new CMLHypothesis();
-//		h1.tree = "(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom))#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
-//		h1.model = 0;
-//		result.hypos.add(h1);
-//		CMLHypothesis h2 = new CMLHypothesis();
-//		h2.tree = "(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))";
-//		h2.model = 0;
-//		result.hypos.add(h2);
-//		CMLHypothesis h3 = new CMLHypothesis();
-//		h3.tree = "(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus #1,U13680Hom #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1 #2,U28410OG2 #2)#2)";
-//		h3.model = 0;
-//		result.hypos.add(h3);
 		
 		int runNum = data.getTracker().getCodeMLRunCount() + 1;
 		data.getTracker().setCodeMLRunCount(runNum);
@@ -129,11 +121,7 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 	private void cancelAction() {
 		setVisible(false);
 	}
-	
-	private void helpAction() {
-		
-	}
-	
+
 	private void addAction() {		
 		atv = new ATV(this.tree, data.name, winMain, this);
 		SwingUtilities.invokeLater(atv);
@@ -380,15 +368,7 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 	{
 		if (bHelp == null)
 		{
-			bHelp = new JButton();
-			bHelp.setText("Help");
-			bHelp.addActionListener(new java.awt.event.ActionListener()
-			{
-				public void actionPerformed(java.awt.event.ActionEvent e)
-				{
-					helpAction();
-				}
-			});
+			bHelp = TOPALiHelp.getHelpButton("cmlbranch_settings");
 		}
 		return bHelp;
 	}

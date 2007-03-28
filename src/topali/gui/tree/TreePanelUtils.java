@@ -77,6 +77,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
+			TOPALi.log.warning(e.toString());
 		}
 	}
 
@@ -95,6 +96,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
+			TOPALi.log.warning(e.toString());
 		}
 
 		try
@@ -102,6 +104,7 @@ class TreePanelUtils
 			out.close();
 		} catch (Exception e)
 		{
+			TOPALi.log.warning(e.toString());
 		}
 	}
 
@@ -116,6 +119,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
+			TOPALi.log.warning(e.toString());
 		}
 
 		try
@@ -123,6 +127,7 @@ class TreePanelUtils
 			out.close();
 		} catch (Exception e)
 		{
+			TOPALi.log.warning(e.toString());
 		}
 	}
 
@@ -157,6 +162,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg("Please ensure a valid number (greater than zero) is "
 					+ "entered.", MsgBox.ERR);
+			TOPALi.log.warning(e.toString());
 			return;
 		}
 

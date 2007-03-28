@@ -50,6 +50,8 @@ class UpdateChecker extends Thread
 						"TOPALi was unable to check for a new version due to "
 								+ "the following unexpected error:\n  " + e,
 						MsgBox.ERR);
+			
+			TOPALi.log.warning("Unable to check for updates.\n"+e);
 
 			return;
 		}

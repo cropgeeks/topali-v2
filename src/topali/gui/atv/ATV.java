@@ -20,6 +20,9 @@ import org.forester.phylogeny.parsers.nhx.NHXParser;
 
 import topali.gui.TOPALi;
 
+/**
+ * Helper class for launching ATV
+ */
 public class ATV extends Thread
 {
 	ATVapplicationFrame atvframe;

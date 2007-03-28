@@ -58,6 +58,8 @@ public class PDMResultPanel extends ResultPanel
 //		p.setDividerLocation((int)(h/2));
 		
 		addContent(p, true);
+		
+		setThreshold(result.threshold);
 	}
 
 	@Override

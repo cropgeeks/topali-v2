@@ -46,7 +46,7 @@ public class Model0Parser extends CMLResultParser
 					if (line.startsWith("omega (dN/dS)"))
 					{
 						b = line.split("\\s+");
-						model.dnDS = Double.parseDouble(b[3]);
+						model.w0= Double.parseDouble(b[3]);
 					}
 				} catch (RuntimeException e)
 				{

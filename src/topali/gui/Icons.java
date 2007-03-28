@@ -71,7 +71,7 @@ public class Icons
 			TOPALi.log.info((System.currentTimeMillis() - s)+ "ms to load icons");
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Cannot load icon\n"+e);
+			throw new RuntimeException("Cannot load icons", e);
 		}
 	}
 }

@@ -72,7 +72,7 @@ public class CMLBranchResultParser
 		//Detect how much categories we have
 		int max = 1;
 		for(String s : split) {
-			if(s.matches("\\w*#\\d+")) {
+			if(s.matches(".*#\\d+[^\\.]*")) {
 				int i = s.indexOf('#');
 				int n = Integer.parseInt(s.substring(i+1));
 				n += 1;
@@ -88,7 +88,7 @@ public class CMLBranchResultParser
 			if(s.matches("#\\d+\\.\\d+")) {
 				double w = Double.parseDouble(s.substring(1));
 				String s2 = split[i-1];
-				if(s2.matches("\\w*#\\d")) {
+				if(s2.matches(".*#\\d+[^\\.]*")) {
 					int index = s2.indexOf('#');
 					int pos = Integer.parseInt(s2.substring(index+1));
 					omegas[pos] = w;

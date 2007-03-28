@@ -16,7 +16,7 @@ import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener
-{	
+{
 	private JScrollPane sp;
 
 	JScrollBar hBar, vBar;
@@ -40,6 +40,8 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	private FontMetrics fm;
 
 	private Font font;
+
+	final int nSeq, nNuc;
 
 	// //////////////////////////////////////////////////////////////////////////
 	// Canvas width and height. Total dimensions for the canvas (which will
@@ -84,6 +86,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	{
 		this.data = data;
 		ss = data.getSequenceSet();
+
+		nSeq = ss.getSize();
+		nNuc = ss.getLength();
 
 		sp = new JScrollPane();
 		hBar = sp.getHorizontalScrollBar();
@@ -569,24 +574,19 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 
 				Point p = e.getPoint();
 
-				try
-				{
-					// (offset/charW) gives char number of current display
-					// then + to starting char to get actual char
-					int nuc = (((p.x - pX) / charW) + (pX / charW)) + 1;
-					int seq = p.y / charH;
+				// (offset/charW) gives char number of current display
+				// then + to starting char to get actual char
+				int nuc = (((p.x - pX) / charW) + (pX / charW)) + 1;
+				int seq = p.y / charH;
 
-					if (!holdMouseHighlight)
-					{
-						highlight(seq, nuc, true);
-					}
-				} catch (Exception ne)
+				if (!holdMouseHighlight)
 				{
-					if (!holdMouseHighlight)
-					{
+					if (seq >= 0 && seq < nSeq && nuc > 0 && nuc <= nNuc)
+						highlight(seq, nuc, true);
+					else
 						highlight(-1, -1, true);
-					}
 				}
+
 			}
 
 			@Override
@@ -610,7 +610,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 					return;
 				}
 
-				if (mouseStartSeq >= 0 && mouseStartNuc >= 0)
+				if (mouseStartSeq >= 0 && mouseStartSeq < nSeq && mouseStartNuc >= 0 && mouseStartNuc <= nNuc)
 				{
 					int nuc = (((e.getX() - pX) / charW) + (pX / charW)) + 1;
 					int seq = e.getY() / charH;

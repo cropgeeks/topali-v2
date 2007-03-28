@@ -58,16 +58,10 @@ public class Model8Parser extends CMLResultParser
 					{
 						b = line.split("\\s+");
 						model.p1 = (Double.parseDouble(b[1].replaceAll("\\)", "")));
-						model._w = (Double.parseDouble(b[3]));
+						model.w2 = (Double.parseDouble(b[3]));
 						continue;
 					}
 
-					if (model.dnDS == -1
-							&& line.matches("\\d\\.\\.\\d(\\s+\\d+\\.\\d+){8}"))
-					{
-						b = line.split("\\s+");
-						model.dnDS = (Double.parseDouble(b[4]));
-					}
 				} catch (RuntimeException e)
 				{
 					e.printStackTrace();
