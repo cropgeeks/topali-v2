@@ -27,6 +27,7 @@ import doe.MsgBox;
  */
 public class TablePanel extends JPanel implements Printable
 {
+	//Toolbar positions
 	public static final int NO = 0;
 
 	public static final int TOP = 1;
@@ -80,6 +81,10 @@ public class TablePanel extends JPanel implements Printable
 			setBorder(BorderFactory.createTitledBorder(title));
 	}
 
+	/**
+	 * Sets the data for the table
+	 * @param rowData
+	 */
 	public void setData(Vector rowData)
 	{
 		for (int i = 0; i < rowData.size(); i++)
@@ -92,6 +97,10 @@ public class TablePanel extends JPanel implements Printable
 		table.repaint();
 	}
 
+	/**
+	 * Just to have public access to the table (e. g. for adding selection listeneres)
+	 * @return
+	 */
 	public JTable accessTable()
 	{
 		return table;
@@ -178,6 +187,9 @@ public class TablePanel extends JPanel implements Printable
 		return aExport;
 	}
 
+	/**
+	 * @see java.awt.print.Printable
+	 */
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
 			throws PrinterException
 	{

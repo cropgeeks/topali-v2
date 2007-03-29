@@ -37,6 +37,13 @@ public class ATV extends Thread
 
 	boolean showBranchLengths;
 	
+	/**
+	 * Launches ATV
+	 * @param tree The tree to be displayed (New Hampshire (extended) format)
+	 * @param title The window title
+	 * @param parent The Component which launches ATV
+	 * @param listener WindowListener which should be informed about ATV events
+	 */
 	public ATV(String tree, String title, Component parent, WindowListener listener)
 	{
 		this.parent = parent;
@@ -52,6 +59,10 @@ public class ATV extends Thread
 		}
 	}
 
+	/**
+	 * Should ATV display the branch lengths (default: false)?
+	 * @param b
+	 */
 	public void showBranchLengths(boolean b) {
 		showBranchLengths = b;
 	}
@@ -89,7 +100,11 @@ public class ATV extends Thread
 			parent.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	public String getCodeMLHypothesis()
+	/**
+	 * Get the (modified) tree
+	 * @return
+	 */
+	public String getTree()
 	{
 		Phylogeny phyl = atvframe.getPhylogeny();
 		return phyl.toNewHampshire(false);

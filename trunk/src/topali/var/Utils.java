@@ -156,6 +156,13 @@ public class Utils
 			return System.getProperty("user.dir") + "/web/binaries/src/";
 	}
 	
+	/**
+	 * Get a String representation of a map
+	 * @param map The map
+	 * @param keyValueDelim key-value delimiter
+	 * @param delim delimiter between each key-value pairs
+	 * @return
+	 */
 	public static String mapToString(Map<String, String> map, char keyValueDelim, char delim) {
 		StringBuffer sb = new StringBuffer();
 		Set<String> keys = map.keySet();
@@ -171,6 +178,13 @@ public class Utils
 		return sb.toString();
 	}
 	
+	/**
+	 * Create a map of a String containing key-value pairs
+	 * @param map Separated key-value pairs
+	 * @param keyValueDelim key-value delimiter
+	 * @param delim delimiter between each key-value pairs
+	 * @return
+	 */
 	public static Map<String, String> stringToMap(String map, char keyValueDelim, char delim) {
 		Map<String, String> result = new HashMap<String, String>();
 		String[] tokens = map.split(Character.toString(delim));
@@ -181,6 +195,11 @@ public class Utils
 		return result;
 	}
 	
+	/**
+	 * Converts a float into a double array (as simple casting is not possible)
+	 * @param data
+	 * @return
+	 */
 	public static double[][] float2doubleArray(float[][] data) {
 		double[][] ddata  = new double[0][0];
 		if(data.length>0) {

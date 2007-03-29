@@ -379,7 +379,7 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 
 	public void windowClosed(WindowEvent e)
 	{	
-		String tree = atv.getCodeMLHypothesis();
+		String tree = atv.getTree();
 		tree = tree.replaceAll("_#", " #");
 		//tree = NHTreeUtils.removeBranchLengths(tree);
 		if(!listModel.contains(tree))

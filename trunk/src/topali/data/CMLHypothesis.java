@@ -9,16 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Holds all data of a codeml hypothesis
+ */
 public class CMLHypothesis
 {
 	static String nl = System.getProperty("line.separator");
 	
+	//the model to use (0 for H0, 2 for the other hypothesis)
 	public int model;
+	//the actual hypothesis
 	public String tree;
 	public Map<String, String> settings = new HashMap<String, String>();
 	
+	//result values
 	public double likelihood;
 	public double[] omegas;
+	//tree with added omega values, how it is produced by codeml
 	public String omegaTree;
 	
 	public CMLHypothesis() {

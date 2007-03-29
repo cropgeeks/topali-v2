@@ -21,6 +21,7 @@ import topali.gui.Icons;
  */
 public abstract class ResultPanel extends JPanel
 {
+	//Some predefined number formatters
 	public static final NumberFormat branchLengthFormat = new DecimalFormat("#.###");
 	public static final NumberFormat omegaFormat = new DecimalFormat("#.###");
 	public static final NumberFormat lrtFormat = new DecimalFormat("#.###");
@@ -50,15 +51,33 @@ public abstract class ResultPanel extends JPanel
 		
 	}
 
+	/**
+	 * Add the actual content to this ResultPanel 
+	 * (this method is meant to be called by subclasses of ResultPanel)
+	 * @param comp
+	 * @param containGraphs
+	 */
 	public void addContent(JComponent comp, boolean containGraphs) {
 		this.contentPanel.add(comp);
 		toolbar.enableGraphButtons(containGraphs);
 	}
 	
+	/**
+	 * Get detailed information about the analysis
+	 * @return 
+	 */
 	public abstract String getAnalysisInfo();
 	
+	/**
+	 * Set the threshold
+	 * @param t
+	 */
 	public abstract void setThreshold(double t);
 	
+	/**
+	 * Get the printable content of this ResultPanel
+	 * @return
+	 */
 	public abstract Printable[] getPrintables();
 	
 }

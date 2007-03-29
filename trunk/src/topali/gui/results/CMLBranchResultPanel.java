@@ -18,6 +18,9 @@ import topali.data.*;
 import topali.gui.atv.ATV;
 import topali.var.NHTreeUtils;
 
+/**
+ * Panel for displaying codeml branch model results
+ */
 public class CMLBranchResultPanel extends ResultPanel
 {
 
@@ -42,7 +45,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		panel.add(p1, c);
 		c.gridy = 2;
 		panel.add(p2, c);
-
+		
 		addContent(panel, false);
 	}
 
@@ -76,10 +79,10 @@ public class CMLBranchResultPanel extends ResultPanel
 		return p;
 	}
 
-	public TablePanel createTable1()
+	private TablePanel createTable1()
 	{
 		CodeMLResult result = (CodeMLResult) super.result;
-
+		
 		Vector<String> names = new Vector<String>();
 		names.add("Hypothesis");
 		int n = 0;
@@ -116,7 +119,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		return p;
 	}
 
-	public TablePanel createTable2()
+	private TablePanel createTable2()
 	{
 		CodeMLResult result = (CodeMLResult) super.result;
 		Vector<String> names = new Vector<String>();
@@ -202,8 +205,7 @@ public class CMLBranchResultPanel extends ResultPanel
 	 * visualized in ATV.
 	 * 
 	 * @param tree
-	 * @param w
-	 *            omega value, added to each node
+	 * @param w fixed omega value, added to each node
 	 * @return
 	 */
 	private String tree2ATV(String tree, double w)
@@ -262,6 +264,9 @@ public class CMLBranchResultPanel extends ResultPanel
 		return p;
 	}
 
+	/**
+	 * Clickable HTML label
+	 */
 	class HypoLabel extends JLabel implements MouseListener
 	{
 		int i;
