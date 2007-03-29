@@ -13,6 +13,7 @@
 		<jar href="commons-httpclient-3.0.jar"/>
 		<jar href="commons-logging-1.0.4.jar"/>
 		<jar href="doe.jar"/>
+		<jar href="forester.jar"/>
 		<jar href="jaxrpc.jar"/>
 		<jar href="jcommon-1.0.0.jar"/>
 		<jar href="jfreechart-1.0.1.jar"/>
