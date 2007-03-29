@@ -33,6 +33,10 @@ public class CustomTable extends JTable implements Printable
 		init();
 	}
 
+	/**
+	 * If the table should be editable or not.
+	 * @param b 
+	 */
 	public void setEditable(boolean b) {
 		this.editable = b;
 	}
@@ -51,8 +55,10 @@ public class CustomTable extends JTable implements Printable
 		adjustRowHeight();
 	}
 
+	/**
+	 * Adjusts the row height according to the highest cell
+	 */
 	public void adjustRowHeight() {
-//		Adjust the row heights
 		for(int i=0; i<getRowCount(); i++) {
 			int hmax = 0;
 			for(int j=0; j<getColumnCount(); j++) {
@@ -68,6 +74,10 @@ public class CustomTable extends JTable implements Printable
 		}
 	}
 	
+	/**
+	 * 
+	 * @return PNG encoded image of the table
+	 */
 	public BufferedImage getPNGImage() {
 		int selected = getSelectedRow();
 		getSelectionModel().clearSelection();
@@ -83,6 +93,10 @@ public class CustomTable extends JTable implements Printable
 		return bi;
 	}
 	
+	/**
+	 * 
+	 * @return Table data in "comma separated values" format
+	 */
 	public String getCSV()
 	{
 		String nl = System.getProperty("line.separator");
@@ -118,6 +132,9 @@ public class CustomTable extends JTable implements Printable
 		return sb.toString();
 	}
 	
+	/**
+	 * @see java.awt.print.Printable
+	 */
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 			throws PrinterException
 	{

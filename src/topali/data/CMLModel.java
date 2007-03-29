@@ -159,6 +159,11 @@ public class CMLModel
 		}
 	}
 	
+	/**
+	 * Use this method, if start omega is not fixed, and there are
+	 * different start omega values.
+	 * @return A list of models, each with a certain start omage value
+	 */
 	public List<CMLModel> generateModels() {
 		List<CMLModel> res = new ArrayList<CMLModel>();
 		if(fixedOmega) {

@@ -6,9 +6,16 @@
 package topali.var;
 
 
+/**
+ * Utilities to deal with New Hampshire trees
+ */
 public class NHTreeUtils
 {
-	
+	/**
+	 * Removes the branch lengths of a tree
+	 * @param tree
+	 * @return
+	 */
 	public static String removeBranchLengths(String tree) {
 		String result = tree.replaceAll(":\\s*\\d+.\\d+", "");
 		return result;

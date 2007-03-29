@@ -16,6 +16,9 @@ import javax.swing.event.ListSelectionListener;
 
 import topali.data.*;
 
+/**
+ * Panel for displaying codeml site model result
+ */
 public class CMLSiteResultPanel extends ResultPanel implements
 		ListSelectionListener
 {

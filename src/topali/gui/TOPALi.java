@@ -23,9 +23,10 @@ import topali.mod.StringEncrypter;
 import topali.var.ClientLogHandler;
 import topali.var.Utils;
 
-public class TOPALi extends Applet
+public class TOPALi extends Applet implements Application
 {
-	public static Logger log = Logger.getAnonymousLogger();
+	public static final Logger log = Logger.getAnonymousLogger();
+	private static final ClientLogHandler handler = new ClientLogHandler(null, TOPALi.log, Level.SEVERE);
 	
 	private boolean isApplet = false;
 
@@ -34,13 +35,10 @@ public class TOPALi extends Applet
 	private Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
-
-	public static TOPALi instance;
 	
 	public static void main(String[] args)
 	{
 		//Initialize logger
-		ClientLogHandler handler = new ClientLogHandler(Level.SEVERE, TOPALi.log);
 		Thread.setDefaultUncaughtExceptionHandler(handler);
 		log.addHandler(handler);
 		log.setLevel(Level.INFO);
@@ -79,12 +77,12 @@ public class TOPALi extends Applet
 
 	public void destroy()
 	{
-		exit();
+		shutdown();
 	}
 
 	private TOPALi(final File initialProject)
 	{
-		instance = this;
+		handler.setApplication(this);
 		
 		showSplash();
 
@@ -129,7 +127,7 @@ public class TOPALi extends Applet
 		{
 			public void windowClosing(WindowEvent e)
 			{
-				exit();
+				shutdown();
 			}
 
 			public void windowOpened(WindowEvent e)
@@ -182,8 +180,10 @@ public class TOPALi extends Applet
 		}
 	}
 
-	public void exit()
+	public void shutdown()
 	{
+		log.info("Shutting down TOPALi");
+		
 		// Check it's ok to exit
 		if (!winMain.okToContinue())
 			return;

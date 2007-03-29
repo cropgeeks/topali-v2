@@ -13,29 +13,46 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
-import topali.gui.TOPALi;
+import topali.gui.Application;
 
+/**
+ * A custom log handler, which pops up an error message, when receiving a 'severe' log message.
+ * The user then can deceide whether to savely close the application (writing unsaved data to disk) or
+ * ignore the error message.
+ * Can also be used as UncaughtExceptionHandler, to catch uncaught exeptions.
+ * (@see Thread.UncaughtExceptionHandler )
+ */
 public class ClientLogHandler extends Handler implements UncaughtExceptionHandler
 {
 
 	LinkedList<String> msg;
 	int cap = 10;
 	
+	Application app;
 	Logger log;
 	Level userWarnLevel;
 	
 	/**
+	 * @param app The application this handler is connected to (null allowed)
+	 * @param log The logger this handler is connected to
 	 * @param userWarnLevel The level when the user will be warned with a message popup
-	 * @param shutdown Shutdown application when warning message is closed
 	 */
-	public ClientLogHandler(Level userWarnLevel, Logger log) {
+	public ClientLogHandler(Application app, Logger log, Level userWarnLevel) {
 		super();
+		this.app = app;
 		this.log = log;
 		this.userWarnLevel = userWarnLevel;
 		msg = new LinkedList<String>();
 		setFormatter(new SimpleFormatter());
 	}
 	
+	public void setApplication(Application app) {
+		this.app = app;
+	}
+	
+	/**
+	 * @param cap Number of log records this logger will store (default: 10)
+	 */
 	public void setCapacity(int cap) {
 		this.cap = cap;
 	}
@@ -76,14 +93,14 @@ public class ClientLogHandler extends Handler implements UncaughtExceptionHandle
 			JPanel p = new JPanel(new BorderLayout());
 			p.add(l, BorderLayout.NORTH);
 			p.add(new JScrollPane(ta), BorderLayout.CENTER);
-			p.add(new JLabel("Shutdown application?"), BorderLayout.SOUTH);
+			p.add(new JLabel("<html><br>Shutdown application?</html>"), BorderLayout.SOUTH);
 			p.setPreferredSize(new Dimension(400,300));
 			
 			int x = JOptionPane.showConfirmDialog(null, p, "Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 			
 			if(x==JOptionPane.YES_OPTION) {
-				if(TOPALi.instance!=null)
-					TOPALi.instance.exit();
+				if(app!=null)
+					app.shutdown();
 				else
 					System.exit(1);
 			}
