@@ -1,6 +1,15 @@
-<%= request.getQueryString() %>
+<%
+	// This is a block of code that will only run when the URL requested is
+	// version.jsp?client=topali
+	// (which gets sent by TOPALi when it makes the request)
 
-
+	String str = request.getQueryString();
+	
+	if (str != null && str.equals("client=topali"))
+	{
+		// TODO: some logging!
+	}
+%>
 
 <pre>
 
