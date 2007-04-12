@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.*;
 import java.util.*;
 
 import javax.imageio.ImageIO;
@@ -121,6 +122,18 @@ public class Utils
 		}
 	}
 
+	public static boolean openBrowser(String url) throws URISyntaxException, IOException {
+		URI uri = new URI(url);
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			if(desktop.isSupported(Desktop.Action.BROWSE)) {
+				desktop.browse(uri);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static void saveComponent(Component cmp, File file, int w, int h) throws IOException
 	{
 		// Store the container's current parent

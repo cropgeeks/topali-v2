@@ -46,7 +46,13 @@ public class TablePanel extends JPanel implements Printable
 	JScrollPane scroll;
 	Vector rowData, columnNames;
 
-	public TablePanel(Vector rowData, Vector columnNames, String title,
+	/**
+	 * Panel for displaying a table
+	 * @param rowData
+	 * @param columnNames
+	 * @param toolbarPos Position where the toolbar should be placed
+	 */
+	public TablePanel(Vector rowData, Vector columnNames,
 			int toolbarPos)
 	{
 		this.rowData = rowData;
@@ -56,29 +62,30 @@ public class TablePanel extends JPanel implements Printable
 		CustomTable table = new CustomTable(rowData, columnNames);
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		this.table = table;
-		this.toolbar = createToolbar();
 
 		this.setLayout(new BorderLayout());
 		this.scroll = new JScrollPane(table);
 		this.add(scroll, BorderLayout.CENTER);
+		
 		switch (toolbarPos)
 		{
 		case TOP:
+			this.toolbar = createToolbar();
 			this.add(this.toolbar, BorderLayout.NORTH);
 			break;
 		case RIGHT:
+			this.toolbar = createToolbar();
 			this.add(this.toolbar, BorderLayout.EAST);
 			break;
 		case BOTTOM:
+			this.toolbar = createToolbar();
 			this.add(this.toolbar, BorderLayout.SOUTH);
 			break;
 		case LEFT:
+			this.toolbar = createToolbar();
 			this.add(this.toolbar, BorderLayout.WEST);
 			break;
 		}
-
-		if (title != null)
-			setBorder(BorderFactory.createTitledBorder(title));
 	}
 
 	/**
