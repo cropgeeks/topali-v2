@@ -32,13 +32,25 @@ class UpdateChecker extends Thread
 		try
 		{
 			URL url = new URL(
-					"http://www.bioss.ac.uk/knowledge/topali/version.txt");
+					"http://gruffalo.scri.ac.uk/topali/version.jsp");
 			URLConnection uc = url.openConnection();
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
 					.getInputStream()));
+				
+			String str = null;
+			while ((str = in.readLine()) != null)
+			{
+				System.out.println(str);
+				
+				if (str.startsWith("Current = "))
+				{
+					webVersion = Integer.parseInt(str.substring(10));
+					break;
+				}
+			}
 
-			webVersion = Integer.parseInt(in.readLine());
+//			webVersion = Integer.parseInt(in.readLine());
 			in.close();
 
 			TOPALi.log.info("Connection to " + url);
