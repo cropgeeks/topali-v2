@@ -5,16 +5,21 @@
 
 package topali.gui;
 
+import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.swing.*;
+
+import topali.var.LinkLabel;
+
 import doe.MsgBox;
 
 class UpdateChecker extends Thread
 {
-	private static int RELEASE = 16;
+	private static int RELEASE = 14;
 
 	private int webVersion = 0;
 
@@ -70,10 +75,15 @@ class UpdateChecker extends Thread
 
 		if (webVersion > RELEASE)
 		{
-			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
-					+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
-
-			MsgBox.msg(msg, MsgBox.INF);
+			JPanel p = new JPanel(new BorderLayout());
+			p.add(new JLabel("<html>A new version of TOPALi v2 is available.<br>Please visit our website to obtain it.</html>"), BorderLayout.CENTER);
+			p.add(new LinkLabel("http://www.bioss.ac.uk/knowledge/topali"), BorderLayout.SOUTH);
+			JOptionPane.showMessageDialog(null, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
+			
+//			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
+//					+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
+//
+//			MsgBox.msg(msg, MsgBox.INF);
 		} else if (useGUI)
 		{
 			MsgBox.msg("You already have the latest version of TOPALi v2.",

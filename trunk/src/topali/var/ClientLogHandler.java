@@ -16,7 +16,7 @@ import javax.swing.*;
 import topali.gui.Application;
 
 /**
- * A custom log handler, which pops up an error message, when receiving a 'severe' log message.
+ * A custom log handler, which pops up an error message, when receiving a log message of a certain level.
  * The user then can deceide whether to savely close the application (writing unsaved data to disk) or
  * ignore the error message.
  * Can also be used as UncaughtExceptionHandler, to catch uncaught exeptions.

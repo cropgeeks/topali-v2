@@ -57,6 +57,14 @@ public class GraphPanel extends JPanel implements Printable
 	ChartPanel chartPanel;
 	JToolBar toolbar;
 	
+	/**
+	 * Panel for displaying a graph
+	 * @param aData	
+	 * @param aResult
+	 * @param data
+	 * @param fixedYBound Use a fixed max y
+	 * @param toolbarPos Position where the toolbar should be placed
+	 */
 	public GraphPanel(AlignmentData aData, AlignmentResult aResult,
 			double[][] data, double fixedYBound, int toolbarPos)
 	{
@@ -69,15 +77,15 @@ public class GraphPanel extends JPanel implements Printable
 		setChartData(data);
 		this.chartPanel = new ChartPanel(this.chart);
 		this.chartPanel.addMouseListener(new ChartPanelPopupMenuAdapter());
-		this.toolbar = createToolbar(toolbarPos);
 		
 		this.setLayout(new BorderLayout());
-		this.add(chartPanel);
+		this.add(chartPanel, BorderLayout.CENTER);
+		
 		switch(toolbarPos) {
-		case TOP: this.add(toolbar, BorderLayout.NORTH); break;
-		case RIGHT: this.add(toolbar, BorderLayout.EAST); break;
-		case BOTTOM: this.add(toolbar, BorderLayout.SOUTH); break;
-		case LEFT: this.add(toolbar, BorderLayout.WEST); break;
+		case TOP: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.NORTH); break;
+		case RIGHT: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.EAST); break;
+		case BOTTOM: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.SOUTH); break;
+		case LEFT: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.WEST); break;
 		}
 	}
 	
@@ -141,6 +149,14 @@ public class GraphPanel extends JPanel implements Printable
 		repaint();
 	}
 
+	public int getNucleotideFromPoint(int xPos)
+	{
+		if(this.chartPanel==null)
+			return -1;
+		else
+			return this.chartPanel.getNucleotideFromPoint(xPos);
+	}
+	
 	@Override
 	public Dimension getPreferredSize()
 	{
@@ -411,6 +427,10 @@ public class GraphPanel extends JPanel implements Printable
 				WinMainStatusBar.setText("");
 				setCursor(DEFAULT);
 			}
+			
+			//forward event to parent component
+			MouseEvent e2 = SwingUtilities.convertMouseEvent(this, e, this.getParent());
+			this.getParent().dispatchEvent(e2);
 		}
 
 		public void mouseDragged(MouseEvent e)

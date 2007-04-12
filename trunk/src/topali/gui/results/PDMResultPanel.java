@@ -5,8 +5,8 @@
 
 package topali.gui.results;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.print.Printable;
 
 import javax.swing.BorderFactory;
@@ -16,10 +16,11 @@ import topali.data.AlignmentData;
 import topali.data.PDMResult;
 import topali.var.Utils;
 
-public class PDMResultPanel extends ResultPanel
+public class PDMResultPanel extends ResultPanel implements MouseMotionListener, MouseListener
 {
 
 	GraphPanel graph1, graph2;
+	HistogramPanel histoPanel;
 	
 	public PDMResultPanel(AlignmentData data, PDMResult result)
 	{
@@ -33,12 +34,20 @@ public class PDMResultPanel extends ResultPanel
 		graph2.setBorder(BorderFactory
 				.createTitledBorder("Local divergence measure"));
 		
+		graph1.addMouseListener(this);
+		graph1.addMouseMotionListener(this);
+		graph2.addMouseListener(this);
+		graph2.addMouseMotionListener(this);
+		
+		histoPanel = new HistogramPanel();
+		histoPanel.setBorder(BorderFactory.createTitledBorder(""));
+		
 		JPanel p = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0.5;
+		c.weighty = 0.45;
 		//c.insets = new Insets(0,0,2,0);
 		c.fill = GridBagConstraints.BOTH;
 		p.add(graph1, c);
@@ -46,10 +55,18 @@ public class PDMResultPanel extends ResultPanel
 		c2.gridx = 0;
 		c2.gridy = 1;
 		c2.weightx = 1;
-		c2.weighty = 0.5;
+		c2.weighty = 0.45;
 		//c2.insets = new Insets(2,0,0,0);
 		c2.fill = GridBagConstraints.BOTH;
 		p.add(graph2, c2);
+		GridBagConstraints c3 = new GridBagConstraints();
+		c3.gridx = 0;
+		c3.gridy = 2;
+		c3.weightx = 1;
+		c3.weighty = 0.1;
+		c3.insets = new Insets(2,2,2,2);
+		c3.fill = GridBagConstraints.BOTH;
+		p.add(histoPanel, c3);
 		
 //		JSplitPane p = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graph1, graph2);
 //		p.setDividerLocation(0.5d);
@@ -116,4 +133,33 @@ public class PDMResultPanel extends ResultPanel
 		graph2.setThreshold(t);
 	}
 
+	public void mouseMoved(MouseEvent e)
+	{		
+		PDMResult result = (PDMResult)this.result;
+		
+		int nuc = graph2.getNucleotideFromPoint(e.getX());
+		
+		int pos = -1;
+		
+		if (nuc >= result.locData[0][0] - result.pdm_step)
+			// Position: +stepSize moves right one window to avoid -0.x and
+			// +0.x both giving the same window
+			pos = (int) ( (nuc-result.locData[0][0]+result.pdm_step ) / (float)result.pdm_step);
+		
+	
+		if (pos < 0 || pos >= result.histograms.length)
+			histoPanel.setData(null);
+		else
+			histoPanel.setData(result.histograms[pos]);
+	}
+	
+	public void mouseExited(MouseEvent e)
+		{ histoPanel.setData(null);	}
+	
+	public void mouseDragged(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}	
+	
 }

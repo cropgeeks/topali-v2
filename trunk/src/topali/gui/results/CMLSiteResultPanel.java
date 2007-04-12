@@ -66,7 +66,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 
 		Vector data = getTableVector(result.threshold);
 
-		TablePanel p = new TablePanel(data, names, null, TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
 		p.accessTable().getColumnModel().getColumn(11).setMinWidth(120);

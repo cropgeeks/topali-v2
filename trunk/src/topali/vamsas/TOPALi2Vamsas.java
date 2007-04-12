@@ -5,12 +5,18 @@
 
 package topali.vamsas;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import topali.data.CodeMLResult;
 import topali.data.PartitionAnnotations;
 import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
 class TOPALi2Vamsas
 {
+	//TODO: Add CodeMLResult
+	
 	private VAMSAS vVAMSAS = null;
 
 	// private boolean isUpdating = false;
@@ -128,7 +134,10 @@ class TOPALi2Vamsas
 						.addAlignmentAnnotation(createAnnotationsForDataArray(
 								tResult.guiName,
 								((topali.data.LRTResult) tResult).data));
-
+			if(tResult instanceof topali.data.CodeMLResult) {
+				
+			}
+			
 			if (tResult instanceof topali.data.TreeResult)
 				vAlignment
 						.addTree(createTree((topali.data.TreeResult) tResult));
@@ -137,7 +146,7 @@ class TOPALi2Vamsas
 		vAlignment.setProvenance(createProvenance());
 		return vAlignment;
 	}
-
+	
 	// Returns a VAMSAS Sequence object
 	Sequence createSequence(topali.data.Sequence tSequence)
 	{
@@ -325,6 +334,24 @@ class TOPALi2Vamsas
 
 		return vAlignmentAnnotation;
 	}
+	
+	List<AlignmentAnnotation> getCodeMLAnnotation(CodeMLResult res) {
+		
+		List<AlignmentAnnotation> annos = new LinkedList<AlignmentAnnotation>();
+		
+		if(res.type==CodeMLResult.TYPE_BRANCHMODEL) {
+				for(int i=0; i<res.hypos.size(); i++) {
+					AlignmentAnnotation anno = new AlignmentAnnotation();
+					anno.setType(res.guiName+" H"+i);
+				}
+		}
+		else if(res.type==CodeMLResult.TYPE_SITEMODEL) {
+			
+		}
+		
+		return annos;
+	}
+	
 	/*
 	 * void createAnnotations(Alignment vAlignment) { // For now, let's just
 	 * take the current graph display (partition) annotations (F6) // and ignore

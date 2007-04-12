@@ -113,9 +113,9 @@ public class CMLBranchResultPanel extends ResultPanel
 			data.add(row);
 		}
 
-		TablePanel p = new TablePanel(data, names, "Likelihood/Omega values",
-				TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.setBackground(Color.WHITE);
+		p.setBorder(BorderFactory.createTitledBorder("Likelihood/Omega values"));
 		return p;
 	}
 
@@ -168,9 +168,10 @@ public class CMLBranchResultPanel extends ResultPanel
 			data.add(row);
 		}
 
-		TablePanel p = new TablePanel(data, names, "LRT - p values",
+		TablePanel p = new TablePanel(data, names,
 				TablePanel.RIGHT);
 		p.setBackground(Color.WHITE);
+		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));
 		return p;
 	}
 

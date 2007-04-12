@@ -637,7 +637,7 @@ public class Prefs extends PreferencesXML
 		web_broker_url = "http://gruffalo.scri.ac.uk/broker";
 		web_use_rbroker = true;
 		web_check_secs = 30;
-		web_check_startup = false;
+		web_check_startup = true;
 		web_proxy_port = 8080;
 		web_proxy_server = "";
 		web_proxy_username = "";
