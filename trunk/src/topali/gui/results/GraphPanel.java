@@ -21,6 +21,7 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -39,6 +40,8 @@ import doe.MsgBox;
  */
 public class GraphPanel extends JPanel implements Printable
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	public static final int NO = 0;
 	public static final int TOP = 1;
 	public static final int LEFT = 2;
@@ -325,7 +328,7 @@ public class GraphPanel extends JPanel implements Printable
 				MsgBox.msg(
 						"There was an unexpected error while saving graph data:\n "
 								+ e, MsgBox.ERR);
-				TOPALi.log.warning(e.toString());
+				log.warn(e);
 			}
 
 			return;

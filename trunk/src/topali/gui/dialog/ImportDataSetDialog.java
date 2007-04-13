@@ -15,6 +15,8 @@ import java.io.File;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import pal.alignment.Alignment;
 import topali.analyses.SequenceSetUtils;
 import topali.data.AlignmentData;
@@ -26,6 +28,8 @@ import doe.MsgBox;
 
 public class ImportDataSetDialog extends JDialog implements Runnable
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private AlignmentData data;
 
 	private WinMain winMain;
@@ -129,7 +133,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 			winMain.addNewAlignmentData(data);
 		} catch (AlignmentLoadException e)
 		{
-			TOPALi.log.warning("Import failed.\n"+e.toString());
+			log.warn("Import failed.\n",e);
 			int code = e.getReason();
 			MsgBox.msg(Text.GuiFile
 					.getString("ImportDataSetDialog.err0" + code), MsgBox.ERR);

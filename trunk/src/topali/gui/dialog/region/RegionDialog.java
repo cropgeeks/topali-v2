@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.log4j.Logger;
+
 import topali.data.*;
 import topali.data.RegionAnnotations.Region;
 import topali.gui.*;
@@ -22,7 +24,8 @@ import doe.MsgBox;
 public class RegionDialog extends JDialog implements ActionListener,
 		ListSelectionListener, ItemListener
 {
-
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// Holds all currently supported RegionAnnotation classes
 	private final Class[] supportedAnnotations = new Class[]
 	{ PartitionAnnotations.class, CDSAnnotations.class };
@@ -195,7 +198,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			}
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 		return null;
 	}
@@ -222,7 +225,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			}
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 		return result;
 	}

@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import pal.tree.TreeDistanceMatrix;
 import pal.tree.TreeUtils;
 import topali.data.SequenceCluster;
@@ -24,6 +26,8 @@ import doe.MsgBox;
 
 class TreePanelUtils
 {
+	static Logger log = Logger.getLogger(TreePanelUtils.class);
+	
 	static void exportTree(TreePanel panel)
 	{
 		JFileChooser fc = new JFileChooser();
@@ -77,7 +81,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 
@@ -96,7 +100,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 
 		try
@@ -104,7 +108,7 @@ class TreePanelUtils
 			out.close();
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 
@@ -119,7 +123,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg(Text.format(Text.GuiTree
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 
 		try
@@ -127,7 +131,7 @@ class TreePanelUtils
 			out.close();
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 
@@ -162,7 +166,7 @@ class TreePanelUtils
 		{
 			MsgBox.msg("Please ensure a valid number (greater than zero) is "
 					+ "entered.", MsgBox.ERR);
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 			return;
 		}
 

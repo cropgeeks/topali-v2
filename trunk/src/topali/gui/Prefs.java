@@ -9,8 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.LinkedList;
-import java.util.Locale;
+import java.util.*;
 
 import javax.swing.UIManager;
 
@@ -189,8 +188,19 @@ public class Prefs extends PreferencesXML
 	public static int web_proxy_port;
 	public static String web_proxy_username, web_proxy_password;
 
+	public static Long ident;
+	
 	protected void getPreferences()
 	{
+		Object prop = p.getProperty("ident");
+		try
+		{
+			ident = Long.parseLong(prop.toString());
+		} catch (Exception e)
+		{
+			ident = (new Random()).nextLong();
+		}
+		
 		setDisplayDefaults();
 		setPDMDefaults();
 		setPDM2Defaults();
@@ -522,6 +532,8 @@ public class Prefs extends PreferencesXML
 		p.setProperty("web_proxy_port", "" + web_proxy_port);
 		setStr("web_proxy_username", web_proxy_username);
 		setStr("web_proxy_password", web_proxy_password);
+		
+		setStr("ident", String.valueOf(ident));
 	}
 
 	public static void setDisplayDefaults()

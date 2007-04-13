@@ -15,11 +15,15 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.gui.*;
 import doe.MsgBox;
 
 public class PrinterDialog extends JDialog
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private static PrinterJob job = PrinterJob.getPrinterJob();
 
 	public static PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
@@ -83,7 +87,7 @@ public class PrinterDialog extends JDialog
 			SwingUtilities.invokeAndWait(r);
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 
@@ -104,7 +108,7 @@ public class PrinterDialog extends JDialog
 					}
 				} catch (Exception e)
 				{
-					TOPALi.log.warning("Printing failed.\n"+e.toString());
+					log.warn("Printing failed.\n",e);
 					MsgBox.msg(Text.format(Text.GuiDiag
 							.getString("PrinterDialog.err01"), e), MsgBox.ERR);
 				}

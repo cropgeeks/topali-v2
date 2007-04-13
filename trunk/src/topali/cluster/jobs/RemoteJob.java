@@ -9,14 +9,16 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
+import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.data.AnalysisResult;
 import topali.gui.Prefs;
-import topali.gui.TOPALi;
 
 public abstract class RemoteJob extends AnalysisJob
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	protected Call call = null;
 
 	protected String url = null;
@@ -34,7 +36,7 @@ public abstract class RemoteJob extends AnalysisJob
 
 		// Set the URL to its current value (which will be null for a new job,
 		// but a real URL for a job that's been in progress before)
-		TOPALi.log.info("RemoteJob: setting URL to " + result.url);
+		log.info("RemoteJob: setting URL to " + result.url);
 		url = result.url;
 	}
 
@@ -67,7 +69,7 @@ public abstract class RemoteJob extends AnalysisJob
 			result.url = url;
 		}
 
-		TOPALi.log.info("RemoteJob: actual URL is now " + result.url);
+		log.info("RemoteJob: actual URL is now " + result.url);
 	}
 
 	protected Call getCall() throws Exception

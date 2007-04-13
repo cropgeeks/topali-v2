@@ -7,13 +7,16 @@ package topali.cluster.jobs;
 
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
+
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.fileio.Castor;
-import topali.gui.TOPALi;
 
 public class PDM2RemoteJob extends RemoteJob
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private SequenceSet ss;
 
 	public PDM2RemoteJob(PDM2Result result, AlignmentData data)
@@ -40,7 +43,7 @@ public class PDM2RemoteJob extends RemoteJob
 		result.jobId = (String) call.invoke(new Object[]
 		{ alignmentXML, resultXML });
 
-		TOPALi.log.info("Job in progress: " + result.jobId);
+		log.info("Job in progress: " + result.jobId);
 
 		result.status = JobStatus.QUEUING;
 		return result.jobId;

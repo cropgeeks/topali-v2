@@ -10,6 +10,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import pal.alignment.SimpleAlignment;
 import pal.gui.TreePainter;
 import pal.gui.TreePainterNormal;
@@ -22,6 +24,8 @@ import doe.MsgBox;
 
 public class TreePreviewPanel extends JPanel implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// Current alignment data and partition info
 	private SequenceSet ss;
 
@@ -116,7 +120,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 
 				tree = tc.getTree(false);
 				long e = System.currentTimeMillis();
-				TOPALi.log.info("Tree creation " + (e - s) + "ms");
+				log.info("Tree creation " + (e - s) + "ms");
 
 				if (tree != null)
 				{

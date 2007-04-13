@@ -11,16 +11,19 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import pal.alignment.Alignment;
 import pal.distance.JukesCantorDistanceMatrix;
 import pal.misc.Identifier;
 import pal.tree.*;
-import topali.gui.TOPALi;
 import topali.gui.Text;
 import doe.MsgBox;
 
 public class TreeCreator extends JDialog
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private Alignment alignment;
 
 	private Tree tree;
@@ -62,7 +65,7 @@ public class TreeCreator extends JDialog
 			tree = TreeRooter.getMidpointRooted(tree);
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 			MsgBox.msg(Text.format(
 					Text.Analyses.getString("TreeCreator.err01"), e),
 					MsgBox.ERR);

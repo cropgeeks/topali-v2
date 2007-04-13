@@ -14,6 +14,7 @@ import java.util.zip.*;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
@@ -25,6 +26,8 @@ import doe.MsgBox;
 
 public class Project
 {
+	static Logger log = Logger.getLogger(Project.class);
+	
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
 	public File filename;
@@ -137,7 +140,7 @@ public class Project
 			MsgBox.msg(Text.format(Text.Gui.getString("Project.err01"),
 					filename, e), MsgBox.ERR);
 
-			TOPALi.log.warning("Error opening file\n"+e);
+			log.warn("Error opening file\n",e);
 			return null;
 		}
 	}
@@ -171,13 +174,13 @@ public class Project
 			cOut.close();
 			zOut.close();
 
-			TOPALi.log.info("XML/Zip Write: "+ (System.currentTimeMillis() - s));
+			log.info("XML/Zip Write: "+ (System.currentTimeMillis() - s));
 		} catch (Exception e)
 		{
 			MsgBox.msg(Text.format(Text.Gui.getString("Project.err02"),
 					p.filename, e.getMessage()), MsgBox.ERR);
 
-			TOPALi.log.warning("Error saving file\n"+e);
+			log.warn("Error saving file\n",e);
 			return false;
 		}
 

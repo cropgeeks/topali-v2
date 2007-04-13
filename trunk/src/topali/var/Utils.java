@@ -17,6 +17,8 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.cluster.ClusterUtils;
 import topali.gui.*;
 import doe.MsgBox;
@@ -27,6 +29,7 @@ import doe.MsgBox;
  */
 public class Utils
 {
+	static Logger log = Logger.getLogger(Utils.class);
 	
 	/* Ensures the scratch directory exists */
 	public static void createScratch()
@@ -37,7 +40,7 @@ public class Utils
 	/* Deletes all the files in the scratch directory */
 	public static void emptyScratch()
 	{
-		TOPALi.log.info("Clearing scratch files");
+		log.info("Clearing scratch files");
 		ClusterUtils.emptyDirectory(Prefs.tmpDir, true);
 	}
 
@@ -117,7 +120,7 @@ public class Utils
 				return null;
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Clipboard content is not a String\n"+e);
+			log.warn("Clipboard content is not a String", e);
 			return null;
 		}
 	}

@@ -7,12 +7,14 @@ package topali.data;
 
 import java.util.Vector;
 
-import topali.gui.TOPALi;
+import org.apache.log4j.Logger;
 
 // Helper class for AlignmentAnnotations, providing code and methods to deal
 // with annotations that would otherwise clog up the AlignmentData class
 public class TOPALiAnnotations
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// A list (where each element is itself a list) of annotation wrappers
 	private Vector<AlignmentAnnotations> annotations;
 
@@ -55,7 +57,7 @@ public class TOPALiAnnotations
 				annotations.add(result);
 			} catch (Exception e)
 			{
-				TOPALi.log.warning(e.toString());
+				log.warn(e);
 			}
 		}
 		return result;

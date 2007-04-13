@@ -14,11 +14,15 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.apache.log4j.Logger;
+
 import topali.data.*;
 import topali.gui.*;
 
 public class TreePane extends JDesktopPane implements InternalFrameListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// The AlignmentData object that stores the trees for this pane
 	private AlignmentData data;
 
@@ -61,7 +65,7 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 			n = ((++n > 10) ? 1 : n);
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Problem showing tree.\n"+e);
+			log.warn("Problem showing tree.\n",e);
 		}
 	}
 

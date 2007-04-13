@@ -12,19 +12,20 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
 import org.forester.atv.ATVapplicationFrame;
 import org.forester.phylogeny.Phylogeny;
 import org.forester.phylogeny.factories.ParserBasedPhylogenyFactory;
 import org.forester.phylogeny.factories.PhylogenyFactory;
 import org.forester.phylogeny.parsers.nhx.NHXParser;
 
-import topali.gui.TOPALi;
-
 /**
  * Helper class for launching ATV
  */
 public class ATV extends Thread
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	ATVapplicationFrame atvframe;
 	
 	Phylogeny phyl;
@@ -50,12 +51,13 @@ public class ATV extends Thread
 		this.title = title;
 		this.listener = listener;
 		PhylogenyFactory factory = ParserBasedPhylogenyFactory.getInstance();
+
 		try
 		{
 			phyl = factory.create(tree, new NHXParser())[0];
 		} catch (IOException e)
 		{
-			TOPALi.log.warning("Error launching ATV\n"+e);
+			log.warn("Error launching ATV\n",e);
 		}
 	}
 
@@ -91,7 +93,7 @@ public class ATV extends Thread
 			UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Error resetting Look and Feel\n"+e);
+			log.warn("Error resetting Look and Feel\n",e);
 		}
 		
 		atvframe.showFrame();

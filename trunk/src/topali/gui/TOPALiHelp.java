@@ -14,8 +14,11 @@ import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 public class TOPALiHelp
 {
+	static Logger log = Logger.getLogger(TOPALiHelp.class);
 	
 	public static HelpSet hs;
 
@@ -35,7 +38,7 @@ public class TOPALiHelp
 			// ((DefaultHelpBroker)hb).setActivationWindow(doe.MsgBox.frm);
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Error loading help\n"+e);
+			log.warn("Error loading help",e);
 		}
 	}
 

@@ -8,16 +8,19 @@ package topali.fileio;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import sbrn.commons.bioinf.ReadSeq;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
-import topali.gui.TOPALi;
 import doe.MsgBox;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
 // delegating the actual work to the ReadSeq util class (web/cgi service)
 class FileReadSeq extends FileGeneric
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	FileReadSeq(SequenceSet s)
 	{
 		ss = s;
@@ -35,7 +38,7 @@ class FileReadSeq extends FileGeneric
 			readSeq.convertFile();
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 			success = false;
 			ss.reset();
 

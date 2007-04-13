@@ -12,6 +12,8 @@ import java.io.File;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.data.AlignmentData;
 import topali.data.SequenceSet;
 import topali.fileio.AlignmentLoadException;
@@ -21,6 +23,8 @@ import doe.DoeLayout;
 
 public class ImportFileSetsDialog extends JDialog implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private WinMain winMain;
 
 	private JTextArea text;
@@ -130,7 +134,7 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 						text.append("Loaded: " + file.getName() + "\n");
 					} catch (AlignmentLoadException e)
 					{
-						TOPALi.log.warning("Could not load alignment.\n"+e.toString());
+						log.warn("Could not load alignment.\n",e);
 						text.append("Loading alignment '"+file.getName()+"' failed. Error:\n"+e.getLocalizedMessage());
 					}
 

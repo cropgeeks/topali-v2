@@ -13,6 +13,8 @@ import java.io.File;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import pal.alignment.Alignment;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
@@ -24,6 +26,8 @@ import doe.MsgBox;
 
 public class ExportDialog extends JDialog implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private WinMain winMain;
 
 	private AlignmentData data;
@@ -218,7 +222,7 @@ public class ExportDialog extends JDialog implements ActionListener
 				return true;
 			} catch (Exception e)
 			{
-				TOPALi.log.warning("Export failed.\n"+e.toString());
+				log.warn("Export failed.\n",e);
 				MsgBox.msg(filename
 						+ " could not be saved due to the following error:\n "
 						+ e, MsgBox.ERR);
