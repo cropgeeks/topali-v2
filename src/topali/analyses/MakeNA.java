@@ -7,6 +7,8 @@ package topali.analyses;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.TOPALi;
@@ -15,6 +17,8 @@ import doe.MsgBox;
 
 public class MakeNA
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private File dnaFile, proFile;
 
 	public MakeNA(File dnaFile, File proFile)
@@ -34,7 +38,7 @@ public class MakeNA
 			pro = new SequenceSet(proFile, false);
 		} catch (AlignmentLoadException e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
 					+ e.getReason()), MsgBox.ERR);
 			return false;

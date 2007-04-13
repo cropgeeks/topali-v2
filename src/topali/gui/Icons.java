@@ -10,12 +10,16 @@ import java.lang.reflect.Field;
 
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.Logger;
+
 /*
  * Simple helper class that contains statically allocated ImageIcon objects that
  * can be accessed by anyone/anywhere elsewhere in the code.
  */
 public class Icons
 {
+	public static Logger log = Logger.getLogger(Icons.class);
+	
 	// Globally used colours
 	public static Color grayBackground = new Color(119, 126, 143);
 
@@ -68,7 +72,7 @@ public class Icons
 					field.set(null, icon);
 				}
 			}
-			TOPALi.log.info((System.currentTimeMillis() - s)+ "ms to load icons");
+			log.info((System.currentTimeMillis() - s)+ "ms to load icons");
 		} catch (Exception e)
 		{
 			throw new RuntimeException("Cannot load icons", e);

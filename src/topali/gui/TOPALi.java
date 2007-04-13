@@ -12,21 +12,29 @@ import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Locale;
-import java.util.logging.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import sbrn.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
+import topali.logging.GracefulShutdownHandler;
 import topali.mod.EncryptionException;
 import topali.mod.StringEncrypter;
-import topali.var.ClientLogHandler;
 import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application
-{
-	public static final Logger log = Logger.getAnonymousLogger();
-	private static final ClientLogHandler handler = new ClientLogHandler(null, TOPALi.log, Level.SEVERE);
+{	
+	static Logger root;
+	static Logger log;
+	
+	static {
+		PropertyConfigurator.configure("clientlogger.properties");
+		root = Logger.getRootLogger();
+		log = Logger.getLogger(TOPALi.class);
+	}
 	
 	private boolean isApplet = false;
 
@@ -37,16 +45,10 @@ public class TOPALi extends Applet implements Application
 	public static WinMain winMain;
 	
 	public static void main(String[] args)
-	{
-		//Initialize logger
-		Thread.setDefaultUncaughtExceptionHandler(handler);
-		log.addHandler(handler);
-		log.setLevel(Level.INFO);
-		//log.setUseParentHandlers(false);
+	{	
 		
-		
-		log.info("Locale is " + Locale.getDefault());
-		log.info("Running Java " + System.getProperty("java.version"));
+		root.info("Locale is " + Locale.getDefault());
+		root.info("Running Java " + System.getProperty("java.version"));
 
 		// Let axis know where its config file is
 		System.setProperty("axis.ClientConfigFile", "res/client-config.wsdd");
@@ -70,7 +72,7 @@ public class TOPALi extends Applet implements Application
 
 	public void init()
 	{
-		TOPALi.log.info("Applet init()");
+		root.info("Applet init()");
 		isApplet = true;
 		// new TOPALi();
 	}
@@ -82,7 +84,11 @@ public class TOPALi extends Applet implements Application
 
 	private TOPALi(final File initialProject)
 	{
-		handler.setApplication(this);
+		//Add the ShutdownAppender to the logger and set it as UncaughtExceptionHandler
+		GracefulShutdownHandler app = new GracefulShutdownHandler();
+		app.setApplication(this);
+		root.addAppender(app);
+		Thread.setDefaultUncaughtExceptionHandler(app);
 		
 		showSplash();
 
@@ -117,7 +123,7 @@ public class TOPALi extends Applet implements Application
 						.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (Exception e)
 		{
-			log.warning("Cannot set Look and Feel\n"+e);
+			log.warn("Cannot set Look and Feel", e);
 		}
 
 		// Create and initialise the main window
@@ -256,7 +262,7 @@ public class TOPALi extends Applet implements Application
 							.decrypt(Prefs.web_proxy_password);
 				} catch (EncryptionException e)
 				{
-					log.warning("Cannot decrypt.\n"+e);
+					log.warn("Cannot decrypt.\n", e);
 				}
 			} else
 			{
@@ -266,12 +272,12 @@ public class TOPALi extends Applet implements Application
 							.encrypt(Prefs.web_proxy_password);
 				} catch (EncryptionException e)
 				{
-					log.warning("Cannot encrypt.\n"+e);
+					log.warn("Cannot encrypt.", e);
 				}
 			}
 		} catch (Exception e)
 		{
-			log.warning("En/Decryption failed\n"+e);
+			log.warn("En/Decryption failed", e);
 		}
 	}
 	

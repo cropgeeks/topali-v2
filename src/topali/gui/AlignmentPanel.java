@@ -10,6 +10,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.data.AlignmentData;
 import topali.data.SequenceSet;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
@@ -17,6 +19,8 @@ import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private JScrollPane sp;
 
 	JScrollBar hBar, vBar;
@@ -926,7 +930,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 						Thread.sleep(10);
 					} catch (InterruptedException e)
 					{
-						TOPALi.log.warning(e.toString());
+						log.warn(e);
 					}
 				}
 				this.up = 0;

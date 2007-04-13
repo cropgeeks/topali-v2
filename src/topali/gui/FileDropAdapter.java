@@ -11,8 +11,12 @@ import java.awt.dnd.*;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class FileDropAdapter extends DropTargetAdapter
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private WinMain winMain;
 
 	FileDropAdapter(WinMain winMain)
@@ -66,7 +70,7 @@ public class FileDropAdapter extends DropTargetAdapter
 			dtde.dropComplete(true);
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 

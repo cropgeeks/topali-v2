@@ -9,12 +9,16 @@ import static topali.cluster.JobStatus.*;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.data.AnalysisResult;
 
 public class JobsThread extends Thread
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private final JobsPanel jobsPanel;
 
 	private TimerThread timerThread;
@@ -119,7 +123,7 @@ public class JobsThread extends Thread
 							job.ws_cancelJob();
 						} catch (Exception e)
 						{
-							TOPALi.log.warning(e.toString());
+							log.warn(e);
 						}
 
 						SwingUtilities.invokeLater(new Runnable()
@@ -146,7 +150,7 @@ public class JobsThread extends Thread
 						}
 					});
 					job.errorInfo = e.dumpToString();
-					TOPALi.log.warning(e.toString());
+					log.warn(e);
 				} catch (Exception e)
 				{
 					SwingUtilities.invokeLater(new Runnable()
@@ -157,7 +161,7 @@ public class JobsThread extends Thread
 						}
 					});
 					job.errorInfo = e.toString();
-					TOPALi.log.warning(e.toString());
+					log.warn(e);
 				}
 
 				SwingUtilities.invokeLater(new Runnable()

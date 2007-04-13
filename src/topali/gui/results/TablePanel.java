@@ -18,6 +18,8 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.gui.*;
 import topali.mod.Filters;
 import doe.MsgBox;
@@ -27,6 +29,8 @@ import doe.MsgBox;
  */
 public class TablePanel extends JPanel implements Printable
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	//Toolbar positions
 	public static final int NO = 0;
 
@@ -186,7 +190,7 @@ public class TablePanel extends JPanel implements Printable
 						MsgBox.msg(
 								"There was an unexpected error while saving data:\n "
 										+ e, MsgBox.ERR);
-						TOPALi.log.warning(e.toString());
+						log.warn(e);
 					}
 				}
 			}

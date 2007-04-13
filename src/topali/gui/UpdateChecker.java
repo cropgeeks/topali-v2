@@ -13,12 +13,16 @@ import java.net.URLConnection;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.var.LinkLabel;
 
 import doe.MsgBox;
 
 class UpdateChecker extends Thread
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private static int RELEASE = 14;
 
 	private int webVersion = 0;
@@ -58,8 +62,8 @@ class UpdateChecker extends Thread
 //			webVersion = Integer.parseInt(in.readLine());
 			in.close();
 
-			TOPALi.log.info("Connection to " + url);
-			TOPALi.log.info("webVersion: " + webVersion + " (current: "+ RELEASE + ")");
+			log.info("Connection to " + url);
+			log.info("webVersion: " + webVersion + " (current: "+ RELEASE + ")");
 		} catch (Exception e)
 		{
 			if (useGUI)
@@ -68,7 +72,7 @@ class UpdateChecker extends Thread
 								+ "the following unexpected error:\n  " + e,
 						MsgBox.ERR);
 			
-			TOPALi.log.warning("Unable to check for updates.\n"+e);
+			log.warn("Unable to check for updates.",e);
 
 			return;
 		}

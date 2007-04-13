@@ -5,15 +5,18 @@
 
 package topali.analyses;
 
+import org.apache.log4j.Logger;
+
 import pal.alignment.*;
 import pal.distance.AlignmentDistanceMatrix;
 import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.NeighborJoiningTree;
-import topali.gui.TOPALi;
 
 public class ParamEstimateThread extends Thread
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private Alignment alignment = null;
 
 	private LikelihoodValue likelihood = null;
@@ -74,7 +77,7 @@ public class ParamEstimateThread extends Thread
 		{
 			// Work out Alpha
 			alpha = estimateParameter(0.1, 200, 1, true);
-			TOPALi.log.info("Iter: " + iteration + ": alpha = " + alpha
+			log.info("Iter: " + iteration + ": alpha = " + alpha
 					+ ", " + cLL);
 
 			if (isDifferenceSignificant())
@@ -82,7 +85,7 @@ public class ParamEstimateThread extends Thread
 
 			// Work out the T/T Ratio
 			ratio = estimateParameter(0.5, 100, 1, false);
-			TOPALi.log.info("Iter: " + iteration + ": ratio = " + ratio
+			log.info("Iter: " + iteration + ": ratio = " + ratio
 					+ ", " + cLL);
 
 			if (isDifferenceSignificant())

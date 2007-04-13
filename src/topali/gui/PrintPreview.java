@@ -10,6 +10,8 @@ import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 
+import org.apache.log4j.Logger;
+
 import doe.MsgBox;
 
 import topali.gui.dialog.PrinterDialog;
@@ -19,6 +21,7 @@ import topali.gui.dialog.PrinterDialog;
  */
 public class PrintPreview extends JFrame implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
 	
 	protected int m_wPage;
 
@@ -109,7 +112,7 @@ public class PrintPreview extends JFrame implements ActionListener
 			}
 		} catch (Exception e)
 		{
-			TOPALi.log.warning("Cannot print image\n"+e);
+			log.warn("Cannot print image\n",e);
 		}
 		m_preview.repaint();
 	}

@@ -13,15 +13,18 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import pal.gui.*;
 import pal.tree.Tree;
 import topali.data.*;
 import topali.gui.Prefs;
-import topali.gui.TOPALi;
 import topali.var.Utils;
 
 class TreePanel extends JPanel
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// Reference back to the SequenceSet containing the sequences in this tree
 	private SequenceSet ss;
 
@@ -78,7 +81,7 @@ class TreePanel extends JPanel
 			txtNewHamp.setText(palTree.toString());
 		} catch (Exception e)
 		{
-			TOPALi.log.warning(e.toString());
+			log.warn(e);
 		}
 	}
 
