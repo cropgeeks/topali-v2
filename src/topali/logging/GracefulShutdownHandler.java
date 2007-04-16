@@ -25,16 +25,20 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements Uncaugh
 	
 	public GracefulShutdownHandler() {
 		super();
-		
-		Layout l = new TTCCLayout();
-		setLayout(l);
 	}
 	
 	@Override
 	protected void append(LoggingEvent arg0)
 	{
 		String mes = this.layout.format(arg0);
+		if(this.layout.ignoresThrowable()) {
+			String[] throwStrings = arg0.getThrowableStrRep();
+			if(throwStrings!=null)
+				for(String s : throwStrings)
+					mes += s+"\n";
+		}
 		messages.add(mes);
+		
 		if(messages.size()>capacity)
 			messages.removeFirst();
 		

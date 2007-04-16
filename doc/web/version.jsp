@@ -1,14 +1,55 @@
-<%
-	// This is a block of code that will only run when the URL requested is
-	// version.jsp?client=topali
-	// (which gets sent by TOPALi when it makes the request)
+<%@ page import="java.io.*" %>
 
-	String str = request.getQueryString();
-	
-	if (str != null && str.equals("client=topali"))
-	{
-		// TODO: some logging!
-	}
+<%
+	synchronized (request)
+		{
+			ServletContext sc = request.getSession().getServletContext();
+			String filename = sc.getRealPath("/")+"/logs/users.log";
+			
+			Object o = request.getParameter("client");
+			if (o!=null && o.equals("topali")) 
+			{
+				o = request.getParameter("id");
+				if(o!=null) {
+					try
+					{
+						long ident = Long.parseLong(o.toString());
+						long maxAge = System.currentTimeMillis()-(30*24*60*60*1000);
+						
+						File file = new File(filename);
+						if(!file.exists())
+							file.createNewFile();
+							
+						StringBuffer sb = new StringBuffer();
+						BufferedReader read = new BufferedReader(new FileReader(file));
+						String line = null;
+						while((line=read.readLine())!=null) {
+							String[] tmp = line.split("\\s+");
+							long id = Long.parseLong(tmp[0]);
+							long age = Long.parseLong(tmp[1]);
+							if(id==ident || age>maxAge)
+								continue;
+							else {
+								sb.append(line);
+								sb.append('\n');
+								}
+						}
+						sb.append(ident+"\t"+System.currentTimeMillis());
+						sb.append('\n');
+						read.close();
+						
+						BufferedWriter write = new BufferedWriter(new FileWriter(file));
+						write.write(sb.toString());
+						write.flush();
+						write.close();
+						
+					} catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 %>
 
 <pre>
