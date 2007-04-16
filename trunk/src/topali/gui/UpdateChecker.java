@@ -23,7 +23,7 @@ class UpdateChecker extends Thread
 {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static int RELEASE = 14;
+	private static int RELEASE = 16;
 
 	private int webVersion = 0;
 
@@ -41,7 +41,7 @@ class UpdateChecker extends Thread
 		try
 		{
 			URL url = new URL(
-					"http://gruffalo.scri.ac.uk/topali/version.jsp");
+					"http://gruffalo.scri.ac.uk/topali/version.jsp?client=topali&id="+Prefs.ident);
 			URLConnection uc = url.openConnection();
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
@@ -50,7 +50,6 @@ class UpdateChecker extends Thread
 			String str = null;
 			while ((str = in.readLine()) != null)
 			{
-				System.out.println(str);
 				
 				if (str.startsWith("Current = "))
 				{

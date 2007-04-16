@@ -13,11 +13,15 @@ import java.util.*;
 
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
+
 import topali.mod.Filters;
 import doe.PreferencesXML;
 
 public class Prefs extends PreferencesXML
 {
+	static Logger log = Logger.getLogger(Prefs.class);
+	
 	// Variables not definable by the user...
 	public static Locale locale = Locale.getDefault();
 
@@ -188,17 +192,22 @@ public class Prefs extends PreferencesXML
 	public static int web_proxy_port;
 	public static String web_proxy_username, web_proxy_password;
 
+	//Id for identifying this client
 	public static Long ident;
 	
 	protected void getPreferences()
 	{
+		//Generate a ident number if there is none.
 		Object prop = p.getProperty("ident");
 		try
 		{
 			ident = Long.parseLong(prop.toString());
 		} catch (Exception e)
 		{
-			ident = (new Random()).nextLong();
+			log.info("Generating application id.");
+			long l = (new Random()).nextLong(); 
+			l = (l<0) ? -l : l;
+			ident = l;
 		}
 		
 		setDisplayDefaults();

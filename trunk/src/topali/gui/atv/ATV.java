@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.UIManager;
 
@@ -72,13 +73,14 @@ public class ATV extends Thread
 	@Override
 	public void run()
 	{		
-		String config_filename;
-		
-		if(showBranchLengths)
-			config_filename = "res/ATVConfig-branchlengths.conf";
-		else
-			config_filename = "res/ATVConfig.conf";
+		URL url;
+		if(showBranchLengths) 
+			url =ATV.class.getResource("/res/ATVConfig-branchlengths.conf");
+		else 
+			url = ATV.class.getResource("/res/ATVConfig.conf");
 		 
+		String config_filename = url.toString();
+			
 		atvframe = new ATVapplicationFrame(phyl,
 				config_filename, title);
 		

@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.Enumeration;
 import java.util.Locale;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class TOPALi extends Applet implements Application
 	static Logger log;
 	
 	static {
-		PropertyConfigurator.configure("clientlogger.properties");
+		PropertyConfigurator.configure(TOPALi.class.getResource("/res/clientlogger.properties"));
 		root = Logger.getRootLogger();
 		log = Logger.getLogger(TOPALi.class);
 	}
@@ -84,11 +85,17 @@ public class TOPALi extends Applet implements Application
 
 	private TOPALi(final File initialProject)
 	{
-		//Add the ShutdownAppender to the logger and set it as UncaughtExceptionHandler
-		GracefulShutdownHandler app = new GracefulShutdownHandler();
-		app.setApplication(this);
-		root.addAppender(app);
-		Thread.setDefaultUncaughtExceptionHandler(app);
+		//If there is a GracefulShutdownHandler, tell it about TOPALi
+		//and also use it as UncaughtExceptionHandler
+		Enumeration en = root.getAllAppenders();
+		while(en.hasMoreElements()) {
+			Object o = en.nextElement();
+			if(o instanceof GracefulShutdownHandler) {
+				GracefulShutdownHandler sh = (GracefulShutdownHandler)o;
+				sh.setApplication(this);
+				Thread.setDefaultUncaughtExceptionHandler(sh);
+			}
+		}
 		
 		showSplash();
 
