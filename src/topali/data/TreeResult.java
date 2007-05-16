@@ -17,7 +17,7 @@ import pal.tree.*;
  * string. Trees created from a SequenceSet alignment track their sequences in
  * safeName form (SEQ001 etc)
  */
-public class TreeResult extends AnalysisResult
+public class TreeResult extends AlignmentResult
 {
 	// Codes for deciding how to display the tree
 	public static final int NORMAL = 0;

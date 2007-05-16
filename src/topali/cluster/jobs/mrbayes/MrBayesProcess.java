@@ -3,18 +3,19 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.trees;
+package topali.cluster.jobs.mrbayes;
 
 import java.io.*;
 
 import topali.cluster.*;
 import topali.data.MBTreeResult;
 
-class RunMrBayes extends StoppableProcess
+public class MrBayesProcess extends StoppableProcess
 {
+
 	private File wrkDir;
 
-	RunMrBayes(File wrkDir, MBTreeResult result)
+	MrBayesProcess(File wrkDir, MBTreeResult result)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
@@ -50,4 +51,5 @@ class RunMrBayes extends StoppableProcess
 				throw new Exception("cancel");
 		}
 	}
+	
 }

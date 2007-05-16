@@ -55,8 +55,9 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 		} else if (result != null)
 			resultsCombo.setSelectedItem(result);
 
+		setPreferredSize(new Dimension(300,160));
 		pack();
-		setResizable(false);
+		//setResizable(false);
 		setLocationRelativeTo(winMain);
 		setVisible(true);
 	}

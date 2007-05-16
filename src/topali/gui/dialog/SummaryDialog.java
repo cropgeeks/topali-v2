@@ -156,7 +156,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			for (int i = 0; i < values.length; i++)
 				str[i] = values[i] / total * 100;
 
-			str[5] = ss.getParams().getAvgDistance();
+			str[5] = ss.getParams().getAvgDist();
 			str[6] = ss.getParams().getTRatio();
 			str[7] = ss.getParams().getAlpha();
 			str[8] = ss.getParams().getKappa();

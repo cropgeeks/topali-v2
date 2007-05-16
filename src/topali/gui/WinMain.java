@@ -11,6 +11,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
 import java.awt.print.*;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -26,6 +27,7 @@ import topali.gui.nav.NavPanel;
 import topali.gui.nav.SequenceSetNode;
 import topali.gui.tree.TreePane;
 import topali.vamsas.VamsasClient;
+import topali.var.Utils;
 import doe.MsgBox;
 
 public class WinMain extends JFrame
@@ -73,6 +75,7 @@ public class WinMain extends JFrame
 
 		if (Prefs.gui_maximized)
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 	}
 
 	public Project getProject()
@@ -117,7 +120,6 @@ public class WinMain extends JFrame
 		{
 			if (WinMainMenuBar.aFileSave.isEnabled())
 			{
-				// TODO: warn about shutting down with local jobs active
 				String msg = "The current project has unsaved changes. Save now?";
 				if (jobsPanel.hasJobs())
 					msg = "The current project has unsaved changes (and analysis jobs are still running!). Save now?";
@@ -374,7 +376,7 @@ public class WinMain extends JFrame
 	{
 		rDialog.setVisible(true);
 	}
-
+	
 	/* Removes an alignment from the current project. */
 	void menuAlgnRemove()
 	{
@@ -402,6 +404,7 @@ public class WinMain extends JFrame
 
 	public void menuAnlsRunPDM(PDMResult iResult)
 	{
+	
 		// Perform an initial check on the data and selected sequences
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
@@ -413,20 +416,12 @@ public class WinMain extends JFrame
 		if (result == null)
 			return;
 
-		// TODO: move this (and hmm/dss) into the SettingsDialog for each job
-		// type
-		int runNum = data.getTracker().getPdmRunCount() + 1;
-		data.getTracker().setPdmRunCount(runNum);
-		result.guiName = "PDM Result " + runNum;
-		result.jobName = "PDM Analysis " + runNum + " on " + data.name + " ("
-				+ ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
-
 		submitJob(data, result);
 	}
 
 	public void menuAnlsRunPDM2(PDM2Result iResult)
 	{
+
 		// Perform an initial check on the data and selected sequences
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
@@ -453,6 +448,7 @@ public class WinMain extends JFrame
 
 	public void menuAnlsRunHMM(HMMResult iResult)
 	{
+
 		// Perform an initial check on the data and selected sequences
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
@@ -464,18 +460,12 @@ public class WinMain extends JFrame
 		if (result == null)
 			return;
 
-		int runNum = data.getTracker().getHmmRunCount() + 1;
-		data.getTracker().setHmmRunCount(runNum);
-		result.guiName = "HMM Result " + runNum;
-		result.jobName = "HMM Analysis " + runNum + " on " + data.name + " ("
-				+ ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
-
 		submitJob(data, result);
 	}
 
 	public void menuAnlsRunDSS(DSSResult iResult)
 	{
+
 		// Perform an initial check on the data and selected sequences
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
@@ -486,13 +476,6 @@ public class WinMain extends JFrame
 				.getDSSResult();
 		if (result == null)
 			return;
-
-		int runNum = data.getTracker().getDssRunCount() + 1;
-		data.getTracker().setDssRunCount(runNum);
-		result.guiName = "DSS Result " + runNum;
-		result.jobName = "DSS Analysis " + runNum + " on " + data.name + " ("
-				+ ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
 
 		submitJob(data, result);
 	}
@@ -510,13 +493,6 @@ public class WinMain extends JFrame
 		if (result == null)
 			return;
 
-		int runNum = data.getTracker().getLrtRunCount() + 1;
-		data.getTracker().setLrtRunCount(runNum);
-		result.guiName = "LRT Result " + runNum;
-		result.jobName = "LRT Analysis " + runNum + " on " + data.name + " ("
-				+ ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
-
 		submitJob(data, result);
 	}
 
@@ -533,49 +509,45 @@ public class WinMain extends JFrame
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
-		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data, result);
+		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,
+				result);
 		dlg.setVisible(true);
-
-		// CodeMLResult res = new CodeMLResult(CodeMLResult.TYPE_BRANCHMODEL);
-		// if (Prefs.isWindows)
-		// res.codemlPath = Utils.getLocalPath() + "codeml.exe";
-		// else
-		// res.codemlPath = Utils.getLocalPath() + "codeml/codeml";
-		//
-		// res.selectedSeqs = ss.getSelectedSequenceSafeNames();
-		// res.isRemote = false;
-		// int runNum = data.getTracker().getCodeMLRunCount() + 1;
-		// data.getTracker().setCodeMLRunCount(runNum);
-		// res.guiName = "CodeML Result " + runNum;
-		// res.jobName = "CodeML Analysis " + runNum + " on " + data.name
-		// + " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
-		// + " sequences)";
-		//		
-		// CMLHypothesis h0 = new CMLHypothesis();
-		// h0.setTree("(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom)),(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
-		// h0.setModel(0);
-		// res.hypos.add(h0);
-		// CMLHypothesis h1 = new CMLHypothesis();
-		// h1.setTree("(((((X04752Mus,U07177Rat),AF070995C),(U95378Sus,U13680Hom))#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
-		// h1.setModel(2);
-		// res.hypos.add(h1);
-		// CMLHypothesis h2 = new CMLHypothesis();
-		// h2.setTree("(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus
-		// #1,U13680Hom
-		// #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1,U28410OG2))");
-		// h2.setModel(2);
-		// res.hypos.add(h2);
-		// CMLHypothesis h3 = new CMLHypothesis();
-		// h3.setTree("(((((X04752Mus #1,U07177Rat #1),AF070995C #1),(U95378Sus
-		// #1,U13680Hom
-		// #1)#1)#1,(((U07178Sus,X02152Hom),M22585rab),(U13687Mus,NM017025R))),(X53828OG1
-		// #2,U28410OG2 #2)#2)");
-		// h3.setModel(2);
-		// res.hypos.add(h3);
-
-		// submitJob(data, res);
 	}
+	
+	public void menuAnlsRunMG(boolean remote)
+	{
 
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		SequenceSet ss = data.getSequenceSet();
+		
+		MGResult result = new MGResult();
+		result.mgPath = Utils.getLocalPath() + "modelgenerator.jar";
+		result.isRemote = remote;
+		result.javaPath = "java";
+		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
+		
+		int runNum = data.getTracker().getMgRunCount() + 1;
+		data.getTracker().setMgRunCount(runNum);
+		result.guiName = "Modelgenerator Result " + runNum;
+		result.jobName = "Modelgenerator on " + data.name
+				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
+				+ " sequences)";
+
+		submitJob(data, result);
+	}
+	
+	public void menuAnlsRunCW(CodonWResult res) {
+		
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		
+		CodonWDialog cwd = new CodonWDialog(data, res);
+		cwd.setVisible(true);
+		CodonWResult result = cwd.getResult();
+		
+		if(result!=null) 
+			submitJob(data, result);
+	}
+	
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
@@ -731,8 +703,10 @@ public class WinMain extends JFrame
 			return;
 		}
 
-		AlignmentData data = navPanel.getCurrentAlignmentData();
-		vClient.writeToFile(data);
+		// AlignmentData data = navPanel.getCurrentAlignmentData();
+		List<AlignmentData> data = navPanel.getAllAlignmentData();
+
+		vClient.writeToFile(data.toArray(new AlignmentData[data.size()]));
 	}
 
 	void menuVamsasImport()
@@ -815,7 +789,8 @@ public class WinMain extends JFrame
 		System.out.println("Time: " + (e - s) + "ms");
 		//		
 	}
-
+	
+	//VAMSAS stuff
 	public void vamsasMouseOver(String seqName, int pos)
 	{
 		for (AlignmentData data : project.getDatasets())
@@ -838,4 +813,5 @@ public class WinMain extends JFrame
 			}
 		}
 	}
+
 }

@@ -8,15 +8,15 @@ package topali.vamsas;
 import java.util.LinkedList;
 import java.util.List;
 
-import topali.data.CodeMLResult;
-import topali.data.PartitionAnnotations;
+import topali.data.*;
 import uk.ac.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.core.AnnotationElement;
+import uk.ac.vamsas.objects.core.Sequence;
 import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
 class TOPALi2Vamsas
 {
-	//TODO: Add CodeMLResult
-	
+
 	private VAMSAS vVAMSAS = null;
 
 	// private boolean isUpdating = false;
@@ -98,44 +98,46 @@ class TOPALi2Vamsas
 			if (tResult instanceof topali.data.PDMResult)
 			{
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
-								tResult.guiName + " (Global)",
+						.addAlignmentAnnotation(createAnnotationsForDataArray("PDMResult|(Global)",
+								tResult.guiName,
 								((topali.data.PDMResult) tResult).glbData));
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
-								tResult.guiName + " (Local)",
+						.addAlignmentAnnotation(createAnnotationsForDataArray("PDMResult|(Local)",
+								tResult.guiName,
 								((topali.data.PDMResult) tResult).locData));
 			}
 
 			if (tResult instanceof topali.data.HMMResult)
 			{
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
-								tResult.guiName + " (Graph1)",
+						.addAlignmentAnnotation(createAnnotationsForDataArray("HMMResult|Graph1",
+								tResult.guiName,
 								((topali.data.HMMResult) tResult).data1));
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
-								tResult.guiName + " (Graph2)",
+						.addAlignmentAnnotation(createAnnotationsForDataArray("HMMResult|Graph2",
+								tResult.guiName,
 								((topali.data.HMMResult) tResult).data3));
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
-								tResult.guiName + " (Graph3)",
+						.addAlignmentAnnotation(createAnnotationsForDataArray("HMMResult|Graph3",
+								tResult.guiName,
 								((topali.data.HMMResult) tResult).data2));
 			}
 
 			if (tResult instanceof topali.data.DSSResult)
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
+						.addAlignmentAnnotation(createAnnotationsForDataArray("DSSResult",
 								tResult.guiName,
 								((topali.data.DSSResult) tResult).data));
 
 			if (tResult instanceof topali.data.LRTResult)
 				vAlignment
-						.addAlignmentAnnotation(createAnnotationsForDataArray(
+						.addAlignmentAnnotation(createAnnotationsForDataArray("LRTResult", 
 								tResult.guiName,
 								((topali.data.LRTResult) tResult).data));
 			if(tResult instanceof topali.data.CodeMLResult) {
-				
+				List<AlignmentAnnotation> annos = createCodeMLAnnotations((CodeMLResult)tResult);
+				for(AlignmentAnnotation anno : annos)
+					vAlignment.addAlignmentAnnotation(anno);
 			}
 			
 			if (tResult instanceof topali.data.TreeResult)
@@ -292,30 +294,12 @@ class TOPALi2Vamsas
 		return vTree;
 	}
 
-	AlignmentAnnotation createDSSAnnotations(topali.data.DSSResult result)
-	{
-		return createAnnotationsForDataArray(result.jobName, result.data);
-	}
-
-	AlignmentAnnotation createHMMAnnotations(topali.data.HMMResult result,
-			int graph)
-	{
-		float[][] data = null;
-		if (graph == 1)
-			data = result.data1;
-		else if (graph == 2)
-			data = result.data2;
-		else if (graph == 3)
-			data = result.data3;
-
-		return createAnnotationsForDataArray(result.jobName, data);
-	}
-
-	private AlignmentAnnotation createAnnotationsForDataArray(String name,
+	private AlignmentAnnotation createAnnotationsForDataArray(String type, String name,
 			float[][] data)
 	{
 		AlignmentAnnotation vAlignmentAnnotation = new AlignmentAnnotation();
-		vAlignmentAnnotation.setType(name);
+		vAlignmentAnnotation.setType(type);
+		vAlignmentAnnotation.setDescription(name);
 		vAlignmentAnnotation.setGraph(true);
 		vAlignmentAnnotation.setSeg(new Seg[]
 		{ createAlignmentSegment() });
@@ -335,23 +319,29 @@ class TOPALi2Vamsas
 		return vAlignmentAnnotation;
 	}
 	
-	List<AlignmentAnnotation> getCodeMLAnnotation(CodeMLResult res) {
-		
+	private List<AlignmentAnnotation> createCodeMLAnnotations(CodeMLResult res) {
 		List<AlignmentAnnotation> annos = new LinkedList<AlignmentAnnotation>();
-		
-		if(res.type==CodeMLResult.TYPE_BRANCHMODEL) {
-				for(int i=0; i<res.hypos.size(); i++) {
-					AlignmentAnnotation anno = new AlignmentAnnotation();
-					anno.setType(res.guiName+" H"+i);
+		for(CMLModel model : res.models) {
+			if(model.supportsPSS) {
+				AlignmentAnnotation anno = new AlignmentAnnotation();
+				anno.setSeg(new Seg[]{ createAlignmentSegment() });
+				anno.setProvenance(createProvenance());
+				anno.setType("CodeML|"+model.abbr);
+				anno.setDescription(res.guiName);
+				anno.setGraph(true);
+				List<PSSite> sites = model.getPSS(0);
+				for(PSSite ps : sites) {
+					AnnotationElement el = new AnnotationElement();
+					el.setPosition(ps.getPos()*3-1);
+					el.setValue(new float[]{(float)ps.getP()});
+					anno.addAnnotationElement(el);
 				}
+				annos.add(anno);
+			}
 		}
-		else if(res.type==CodeMLResult.TYPE_SITEMODEL) {
-			
-		}
-		
 		return annos;
 	}
-	
+
 	/*
 	 * void createAnnotations(Alignment vAlignment) { // For now, let's just
 	 * take the current graph display (partition) annotations (F6) // and ignore

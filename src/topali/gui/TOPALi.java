@@ -69,6 +69,8 @@ public class TOPALi extends Applet implements Application
 		Icons.loadIcons();
 
 		new TOPALi(initialProject);
+		
+		
 	}
 
 	public void init()
@@ -84,7 +86,7 @@ public class TOPALi extends Applet implements Application
 	}
 
 	private TOPALi(final File initialProject)
-	{
+	{		
 		//If there is a GracefulShutdownHandler, tell it about TOPALi
 		//and also use it as UncaughtExceptionHandler
 		Enumeration en = root.getAllAppenders();
@@ -287,6 +289,4 @@ public class TOPALi extends Applet implements Application
 			log.warn("En/Decryption failed", e);
 		}
 	}
-	
-	
 }

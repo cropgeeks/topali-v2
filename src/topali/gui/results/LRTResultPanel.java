@@ -8,8 +8,7 @@ package topali.gui.results;
 import java.awt.print.Printable;
 
 import topali.analyses.AnalysisUtils;
-import topali.data.AlignmentData;
-import topali.data.LRTResult;
+import topali.data.*;
 import topali.var.Utils;
 
 public class LRTResultPanel extends ResultPanel
@@ -56,7 +55,10 @@ public class LRTResultPanel extends ResultPanel
 	public void setThreshold(double t)
 	{
 		LRTResult res = (LRTResult) this.result;
-		result.threshold = t;
+		if(res.thresholds==null)
+			return;
+		
+		((AlignmentResult)result).threshold = t;
 		float thres = AnalysisUtils.getArrayValue(res.thresholds,(float)t);
 
 		graph.setThreshold((double)thres);

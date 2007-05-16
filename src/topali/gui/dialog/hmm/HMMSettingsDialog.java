@@ -10,6 +10,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import topali.analyses.SequenceSetUtils;
 import topali.data.AlignmentData;
 import topali.data.HMMResult;
 import topali.gui.*;
@@ -117,6 +118,9 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		result.bpArray = mosaicPanel.getBreakpointArray();
 		result.isRemote = makeRemote;
 
+		if (data.getSequenceSet().hasParametersEstimated() == false)
+			SequenceSetUtils.estimateParameters(data.getSequenceSet());
+		
 		result.hmm_model = Prefs.hmm_model;
 		result.hmm_initial = Prefs.hmm_initial;
 		result.hmm_freq_est_1 = Prefs.hmm_freq_est_1;
@@ -139,6 +143,13 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		result.hmm_station = Prefs.hmm_station;
 		result.hmm_update = Prefs.hmm_update;
 		result.hmm_branch = Prefs.hmm_branch;
+		
+		int runNum = data.getTracker().getHmmRunCount() + 1;
+		data.getTracker().setHmmRunCount(runNum);
+		result.guiName = "HMM Result " + runNum;
+		result.jobName = "HMM Analysis " + runNum + " on " + data.name + " ("
+				+ data.getSequenceSet().getSelectedSequences().length + "/" + data.getSequenceSet().getSize()
+				+ " sequences)";
 	}
 
 	private void setInitialSettings(HMMResult iResult)

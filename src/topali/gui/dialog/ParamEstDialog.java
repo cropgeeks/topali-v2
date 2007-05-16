@@ -13,17 +13,21 @@ import javax.swing.*;
 
 import pal.alignment.SimpleAlignment;
 import topali.analyses.ParamEstimateThread;
+import topali.data.SequenceSet;
 import topali.gui.Text;
 import doe.MsgBox;
 
 public class ParamEstDialog extends JDialog
 {
 	private ParamEstimateThread estThread;
-
-	public ParamEstDialog(SimpleAlignment alignment)
+	
+	public ParamEstDialog(SequenceSet ss, int[] indices)
 	{
 		super(MsgBox.frm, Text.Analyses.getString("ParamEstDialog.gui01"), true);
 
+		SimpleAlignment alignment = ss.getAlignment(indices, 1, ss.getLength(),
+				true);
+		
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.add(new JLabel(Text.Analyses.getString("ParamEstDialog.gui02")),
 				BorderLayout.NORTH);
@@ -32,8 +36,10 @@ public class ParamEstDialog extends JDialog
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		add(p1, BorderLayout.CENTER);
 
-		estThread = new ParamEstimateThread(alignment);
-
+		if(ss.isDNA()) {
+			estThread = new ParamEstimateThread(alignment);
+		}
+		
 		addWindowListener(new WindowAdapter()
 		{
 			public void windowOpened(WindowEvent event)
@@ -42,9 +48,10 @@ public class ParamEstDialog extends JDialog
 				{
 					public void run()
 					{
-						estThread.start();
+						if(estThread!=null)
+							estThread.start();
 
-						while (estThread.isAlive())
+						while (estThread!=null&&estThread.isAlive())
 							try
 							{
 								Thread.sleep(250);
@@ -57,6 +64,7 @@ public class ParamEstDialog extends JDialog
 				};
 
 				new Thread(r).start();
+				
 			}
 		});
 

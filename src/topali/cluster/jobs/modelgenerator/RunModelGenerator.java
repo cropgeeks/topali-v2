@@ -3,27 +3,27 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.trees;
+package topali.cluster.jobs.modelgenerator;
 
 import java.io.File;
 
 import topali.cluster.ClusterUtils;
 import topali.cluster.LocalJobs;
-import topali.data.MBTreeResult;
 import topali.data.SequenceSet;
+import topali.data.MGResult;
 import topali.fileio.Castor;
 
-public class RunMBTree extends Thread
+public class RunModelGenerator extends Thread
 {
 
 	private SequenceSet ss;
 
-	private MBTreeResult result;
+	private MGResult result;
 
 	// Directory where the job will run
 	private File jobDir;
 
-	public RunMBTree(File jobDir, SequenceSet ss, MBTreeResult result)
+	public RunModelGenerator(File jobDir, SequenceSet ss, MGResult result)
 	{
 		this.jobDir = jobDir;
 		this.ss = ss;
@@ -54,8 +54,9 @@ public class RunMBTree extends Thread
 		Castor.saveXML(ss, new File(jobDir, "ss.xml"));
 
 		if (result.isRemote)
-			MBTreeWebService.runScript(jobDir);
+			MGWebservice.runScript(jobDir);
 		else
-			new MBTreeAnalysis(jobDir).start(LocalJobs.manager);
+			new MGAnalysis(jobDir).start(LocalJobs.manager);
 	}
+	
 }

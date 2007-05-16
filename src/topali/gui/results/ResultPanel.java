@@ -7,13 +7,10 @@ package topali.gui.results;
 
 import java.awt.BorderLayout;
 import java.awt.print.Printable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import javax.swing.*;
 
-import topali.data.AlignmentData;
-import topali.data.AlignmentResult;
+import topali.data.*;
 import topali.gui.Icons;
 
 /**
@@ -21,34 +18,31 @@ import topali.gui.Icons;
  */
 public abstract class ResultPanel extends JPanel
 {
-	//Some predefined number formatters
-	public static final NumberFormat branchLengthFormat = new DecimalFormat("#.###");
-	public static final NumberFormat omegaFormat = new DecimalFormat("#.###");
-	public static final NumberFormat lrtFormat = new DecimalFormat("#.###");
-	public static final NumberFormat likelihoodFormat = new DecimalFormat("#####.##");
 	
 	AlignmentData data;
-	AlignmentResult result;
+	AnalysisResult result;
 	
 	JPanel contentPanel;
 	ResultPanelToolbar toolbar;
 	
-	public ResultPanel(AlignmentData data, AlignmentResult result) {
+	public ResultPanel(AlignmentData data, AnalysisResult result) {
 		this.data = data;
 		this.result = result;
 		
+		this.setLayout(new BorderLayout());
+		
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createLineBorder(Icons.grayBackground,4));
-		toolbar = new ResultPanelToolbar(this, data, result);
+		add(contentPanel, BorderLayout.CENTER);
+		
+		if(result instanceof AlignmentResult) {
+		toolbar = new ResultPanelToolbar(this, data, (AlignmentResult)result);
 		toolbar.setFloatable(false);
 		toolbar.setBorderPainted(false);
 		toolbar.setOrientation(JToolBar.HORIZONTAL);
 		toolbar.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		
-		this.setLayout(new BorderLayout());
-		add(contentPanel, BorderLayout.CENTER);
 		add(toolbar, BorderLayout.NORTH);
-		
+		}
 	}
 
 	/**
@@ -58,8 +52,9 @@ public abstract class ResultPanel extends JPanel
 	 * @param containGraphs
 	 */
 	public void addContent(JComponent comp, boolean containGraphs) {
-		this.contentPanel.add(comp);
-		toolbar.enableGraphButtons(containGraphs);
+		this.contentPanel.add(comp, BorderLayout.CENTER);
+		if(toolbar!=null)
+			toolbar.enableGraphButtons(containGraphs);
 	}
 	
 	/**

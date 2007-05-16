@@ -9,6 +9,7 @@ import topali.cluster.JobStatus;
 
 public class AnalysisResult
 {
+	
 	// Simple name for this result (used by navpanel)
 	public String guiName;
 

@@ -73,7 +73,13 @@ public class SequenceSetNode extends INode
 		aAnlsRunHMM.setEnabled(true);
 		aAnlsRunDSS.setEnabled(true);
 		aAnlsRunLRT.setEnabled(true);
-		mAnlsRunCodeML.setEnabled(true);
+		aAnlsRunCodeMLBranch.setEnabled(true);
+		aAnlsRunCodeMLSite.setEnabled(true);
+		aAnlsRunMG.setEnabled(true);
+		if(data.getSequenceSet().isDNA())
+			aAnlsRunCW.setEnabled(true);
+		else
+			aAnlsRunCW.setEnabled(false);
 		aAnlsCreateTree.setEnabled(true);
 
 		aVamExport.setEnabled(true);

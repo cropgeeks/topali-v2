@@ -5,13 +5,18 @@
 
 package topali.gui.tree;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import topali.data.TreeResult;
+import pal.tree.TreeParseException;
+
+import topali.data.*;
 import topali.gui.*;
+import topali.gui.atv.ATV;
+import topali.gui.dialog.AnalysisInfoDialog;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
@@ -19,16 +24,22 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 
 	private TreePanel panel;
 
+	private TreeResult tResult;
+	private SequenceSet ss;
+	
 	JButton bExport, bCluster;
+	JButton bATV, bInfo;
 
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit,
 			bFloat, bViewCluster;
 
-	TreePanelToolBar(TreePane treePane, TreePanel panel, TreeResult tree)
+	TreePanelToolBar(TreePane treePane, TreePanel panel, TreeResult tree, SequenceSet ss)
 	{
 		this.treePane = treePane;
 		this.panel = panel;
-
+		this.tResult = tree;
+		this.ss = ss;
+		
 		setFloatable(false);
 		setBorderPainted(false);
 		setVisible(Prefs.gui_toolbar_visible);
@@ -55,6 +66,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bViewCluster = (JToggleButton) WinMainToolBar.getButton(true, null,
 				"tre09", Icons.TREE_NEWHAMP, null);
 
+		bATV = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.PLAYER_PLAY, null);
+		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
+		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
 		bDrawCircular.addActionListener(this);
@@ -63,6 +77,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bFloat.addActionListener(this);
 		bCluster.addActionListener(this);
 		bViewCluster.addActionListener(this);
+		bATV.addActionListener(this);
+		bInfo.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -76,6 +92,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		addSeparator();
 		add(bSizedToFit);
 		add(bFloat);
+		add(bATV);
+		addSeparator();
+		add(bInfo);
 		add(new JLabel(" "));
 
 		// Add the toggle buttons into a group so that only one can be selected
@@ -112,6 +131,38 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		else if (e.getSource() == bViewCluster)
 			panel.setViewMode(TreeResult.CLUSTER);
 
+		else if(e.getSource() == bATV) {
+			try
+			{
+				ATV atv = new ATV(tResult.getTreeStrActual(ss), tResult.getTitle(), null, null);
+				SwingUtilities.invokeLater(atv);
+			} catch (TreeParseException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
+		else if(e.getSource() == bInfo) {
+			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult);
+			ad.setText(getTreeInfo());
+			ad.setVisible(true);
+		}
 		WinMainMenuBar.aFileSave.setEnabled(true);
+	}
+	
+	private String getTreeInfo() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("\nSelected sequences:\n");
+		for (String seq : tResult.selectedSeqs)
+			sb.append("\n  " + ss.getNameForSafeName(seq));
+		sb.append("\n\nSelected Partition: "+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
+		
+		if(tResult instanceof MBTreeResult) {
+			sb.append("\n\nMrBayes parameters:\n\n");
+			sb.append(((MBTreeResult)tResult).mbCmds);
+		}
+		
+		sb.append('\n');
+		
+		return sb.toString();
 	}
 }

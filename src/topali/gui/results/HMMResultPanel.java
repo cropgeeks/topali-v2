@@ -12,8 +12,7 @@ import java.awt.print.Printable;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import topali.data.AlignmentData;
-import topali.data.HMMResult;
+import topali.data.*;
 import topali.var.Utils;
 
 public class HMMResultPanel extends ResultPanel
@@ -29,7 +28,7 @@ public class HMMResultPanel extends ResultPanel
 		graph3 = new GraphPanel(data, result, Utils.float2doubleArray(result.data3), 1.01, GraphPanel.RIGHT);
 		
 		graph1.setBorder(BorderFactory
-				.createTitledBorder("Probability of topology 1 (1,2), (2,3):"));
+				.createTitledBorder("Probability of topology 1 (1,2), (3,4):"));
 		graph2.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 2 (1,3), (2,4):"));
 		graph3.setBorder(BorderFactory
@@ -115,7 +114,7 @@ public class HMMResultPanel extends ResultPanel
 	@Override
 	public void setThreshold(double t)
 	{
-		result.threshold = t;
+		((AlignmentResult)result).threshold = t;
 		graph1.setThreshold(t);
 		graph2.setThreshold(t);
 		graph3.setThreshold(t);

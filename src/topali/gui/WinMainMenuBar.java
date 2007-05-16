@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import topali.logging.GracefulShutdownHandler;
+
 public class WinMainMenuBar extends JMenuBar
 {
 	private WinMain winMain;
@@ -38,10 +40,20 @@ public class WinMainMenuBar extends JMenuBar
 
 	public static JMenu mAnlsRunCodeML;
 	
+	//Recombination
 	JMenuItem mAnlsRunPDM, mAnlsRunDSS, mAnlsRunHMM, mAnlsCreateTree,
 			mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove,
-			mAnlsSettings, mAnlsRunLRT, mAnlsRunPDM2, mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
+			mAnlsSettings, mAnlsRunLRT, mAnlsRunPDM2;
+	
+	//Positive Selection
+	JMenuItem mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
+	
+	//Model test
+	JMenuItem mAnlsRunMG;
 
+	//CodonW
+	JMenuItem mAnlsRunCW;
+	
 	JMenu mVamsas;
 
 	JMenuItem mVamSelectSession, mVamImport, mVamExport;
@@ -61,13 +73,21 @@ public class WinMainMenuBar extends JMenuBar
 	public static AbstractAction aAlgnFindSeq, aAlgnSelectAll, aAlgnSelectNone,
 			aAlgnSelectUnique, aAlgnSelectInvert, aAlgnSelectHighlighted,
 			aAlgnRename, aAlgnMoveUp, aAlgnMoveDown, aAlgnMoveTop, aAlgnRemove,
-			aAlgnDisplaySummary, aAlgnGoTo, aAlgnPhyloView, aAlgnShowPDialog,
-			aAlgnShowOvDialog;
+			aAlgnDisplaySummary, aAlgnGoTo, aAlgnPhyloView, aAlgnShowPDialog, aAlgnShowOvDialog;
 
+	//Recombination
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
 			aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
-			aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2,
-			aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
+			aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2;
+	
+	//Positive Selection
+	public static AbstractAction aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
+	
+	//Model test
+	public static AbstractAction aAnlsRunMG;
+	
+	//CodonW
+	public static AbstractAction aAnlsRunCW;
 
 	public static AbstractAction aVamSelectSession, aVamImport, aVamExport;
 
@@ -90,6 +110,16 @@ public class WinMainMenuBar extends JMenuBar
 		setBorderPainted(false);
 		// setStartupState();
 		setProjectOpenedState();
+		
+		//Register a shortcut for showing log messages
+		KeyStroke showLogs = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
+		Action aShowLogs = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if(GracefulShutdownHandler.instance!=null)
+					GracefulShutdownHandler.instance.showLogs(false);
+			}
+		};
+		registerKeyboardAction(aShowLogs, showLogs, JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void createActions()
@@ -392,8 +422,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLSite = new AbstractAction(Text.Gui
-				.getString("aAnlsRunCodeMLSite"))
+		aAnlsRunCodeMLSite = new AbstractAction("Site Model Analysis")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -401,12 +430,26 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLBranch = new AbstractAction(Text.Gui
-				.getString("aAnlsRunCodeMLBranch"))
+		aAnlsRunCodeMLBranch = new AbstractAction("Branch Model Analysis")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunCodeMLBranch(null);
+			}
+		};
+		
+		aAnlsRunMG = new AbstractAction("Subst. Model Test") {
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
+				winMain.menuAnlsRunMG(remote);
+			}
+		};
+		
+		aAnlsRunCW = new AbstractAction("Codon Usage Analysis") {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsRunCW(null);
 			}
 		};
 		
@@ -629,7 +672,7 @@ public class WinMainMenuBar extends JMenuBar
 				KeyEvent.VK_F3, 0);
 		mAlgnShowOvDialog = getItem(aAlgnShowOvDialog, KeyEvent.VK_V,
 				KeyEvent.VK_F7, 0);
-
+		
 		mAlgnSelect.add(mAlgnSelectAll);
 		mAlgnSelect.add(mAlgnSelectNone);
 		mAlgnSelect.add(mAlgnSelectHighlighted);
@@ -667,8 +710,14 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
+		
 		mAnlsRunCodeMLSite = getItem(aAnlsRunCodeMLSite, KeyEvent.VK_S, 0, 0);
 		mAnlsRunCodeMLBranch = getItem(aAnlsRunCodeMLBranch, KeyEvent.VK_B, 0, 0);
+		
+		mAnlsRunMG = getItem(aAnlsRunMG, KeyEvent.VK_M, 0, 0);
+		
+		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
+		
 		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T,
 				KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
@@ -680,27 +729,25 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
-		mAnlsRunCodeML = new JMenu(Text.Gui.getString("menuRunCodeML"));
-		mAnlsRunCodeML.add(mAnlsRunCodeMLSite);
-		mAnlsRunCodeML.add(mAnlsRunCodeMLBranch);
-		
 		mAnls.add(mAnlsRunPDM);
-		// mAnls.add(mAnlsRunPDM2);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
 		mAnls.addSeparator();
-		mAnls.add(mAnlsRunCodeML);
+		mAnls.add(mAnlsRunCodeMLSite);
+		mAnls.add(mAnlsRunCodeMLBranch);
 		mAnls.addSeparator();
+		mAnls.add(mAnlsRunMG);
+		mAnls.add(mAnlsRunCW);
 		mAnls.add(mAnlsCreateTree);
+		mAnls.addSeparator();
 		mAnls.add(mAnlsPartition);
-		mAnls.addSeparator();
-		mAnls.add(mAnlsShowJobs);
-		mAnls.addSeparator();
 		mAnls.add(mAnlsRename);
 		mAnls.add(mAnlsRemove);
 		mAnls.addSeparator();
+		mAnls.add(mAnlsShowJobs);
 		mAnls.add(mAnlsSettings);
+		
 
 		add(mAnls);
 	}
@@ -834,7 +881,10 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunHMM.setEnabled(false);
 		aAnlsRunDSS.setEnabled(false);
 		aAnlsRunLRT.setEnabled(false);
-		mAnlsRunCodeML.setEnabled(false);
+		aAnlsRunCodeMLBranch.setEnabled(false);
+		aAnlsRunCodeMLSite.setEnabled(false);
+		aAnlsRunMG.setEnabled(false);
+		aAnlsRunCW.setEnabled(false);
 		aAnlsCreateTree.setEnabled(false);
 		aAnlsPartition.setEnabled(false);
 		aAnlsRename.setEnabled(false);

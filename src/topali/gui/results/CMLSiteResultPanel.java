@@ -15,6 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import topali.data.*;
+import topali.gui.Prefs;
 
 /**
  * Panel for displaying codeml site model result
@@ -39,11 +40,12 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		addContent(sp, true);
 
 		setThreshold(result.threshold);
+		
 	}
 
 	private GraphPanel createGraphPanel()
 	{
-		GraphPanel p = new GraphPanel(data, result, new double[][]
+		GraphPanel p = new GraphPanel(data, (AlignmentResult)result, new double[][]
 		{}, 1.05, GraphPanel.RIGHT);
 		return p;
 	}
@@ -64,7 +66,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		names.add("Q");
 		names.add("PSS");
 
-		Vector data = getTableVector(result.threshold);
+		Vector data = getTableVector(((AlignmentResult)result).threshold);
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
@@ -83,37 +85,37 @@ public class CMLSiteResultPanel extends ResultPanel implements
 			Vector<String> v = new Vector<String>();
 			v.add(m.name);
 			v.add("" + m.nParameter);
-			v.add(ResultPanel.likelihoodFormat.format(m.likelihood));
+			v.add(Prefs.d2.format(m.likelihood));
 			if (m.p0 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.p0));
+				v.add(Prefs.d3.format(m.p0));
 			else
 				v.add("");
 			if (m.p1 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.p1));
+				v.add(Prefs.d3.format(m.p1));
 			else
 				v.add("");
 			if (m.p2 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.p2));
+				v.add(Prefs.d3.format(m.p2));
 			else
 				v.add("");
 			if (m.w0 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.w0));
+				v.add(Prefs.d3.format(m.w0));
 			else
 				v.add("");
 			if (m.w1 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.w1));
+				v.add(Prefs.d3.format(m.w1));
 			else
 				v.add("");
 			if (m.w2 != -1)
-				v.add(ResultPanel.omegaFormat.format(m.w2));
+				v.add(Prefs.d3.format(m.w2));
 			else
 				v.add("");
 			if (m.p != -1)
-				v.add(ResultPanel.omegaFormat.format(m.p));
+				v.add(Prefs.d3.format(m.p));
 			else
 				v.add("");
 			if (m.q != -1)
-				v.add(ResultPanel.omegaFormat.format(m.q));
+				v.add(Prefs.d3.format(m.q));
 			else
 				v.add("");
 
@@ -154,7 +156,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	@Override
 	public void setThreshold(double t)
 	{
-		this.result.threshold = t;
+		((AlignmentResult)this.result).threshold = t;
 		graph.setThreshold(t);
 		Vector data = getTableVector(t);
 		table.setData(data);

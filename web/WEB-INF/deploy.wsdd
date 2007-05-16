@@ -37,8 +37,20 @@
   <parameter name="scope" value="request"/>
 </service>
 
-<service name="topali-mbt" provider="java:RPC">
-  <parameter name="className" value="topali.cluster.jobs.trees.MBTreeWebService"/>
+<service name="topali-mb" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.mrbayes.MrBayesWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-mg" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebservice"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-cw" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.codonw.CodonWWebservice"/>
   <parameter name="allowedMethods" value="*"/>
   <parameter name="scope" value="request"/>
 </service>

@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.trees;
+package topali.cluster.jobs.mrbayes;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -12,13 +12,14 @@ import topali.cluster.JobStatus;
 import topali.data.MBTreeResult;
 import topali.fileio.Castor;
 
-public class CollateMBTree
+public class MrBayesMonitor
 {
+
 	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
-	public CollateMBTree(File jobDir) throws Exception
+	public MrBayesMonitor(File jobDir) throws Exception
 	{
 		this.jobDir = jobDir;
 	}
@@ -43,4 +44,5 @@ public class CollateMBTree
 	{
 		return (MBTreeResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 	}
+	
 }

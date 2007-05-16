@@ -56,7 +56,7 @@ class TreePanel extends JPanel
 
 		// Initialise the GUI controls
 		canvas = new TreeCanvas(palTree);
-		toolbar = new TreePanelToolBar(treePane, this, tree);
+		toolbar = new TreePanelToolBar(treePane, this, tree, ss);
 		sp = new JScrollPane(canvas);
 		sp.getHorizontalScrollBar().setUnitIncrement(25);
 		sp.getVerticalScrollBar().setUnitIncrement(25);

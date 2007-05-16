@@ -102,8 +102,7 @@ public class JobsPanel extends JPanel
 		// Move its results into main window
 		if (getResults)
 		{
-			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), job
-					.getResult());
+			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), job.getResult());
 		} else
 			job.getAlignmentData().removeResult(job.getResult());
 
@@ -232,12 +231,28 @@ public class JobsPanel extends JPanel
 		else if (result instanceof MBTreeResult)
 		{
 			if (result.isRemote)
-				job = new MBTreeRemoteJob((MBTreeResult) result, data);
+				job = new MrBayesRemoteJob((MBTreeResult) result, data);
 			else
-				job = new MBTreeLocalJob((MBTreeResult) result, data);
+				job = new MrBayesLocalJob((MBTreeResult) result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
 
+		else if(result instanceof MGResult) {
+			if(result.isRemote)
+				job = new MGRemoteJob((MGResult)result, data);
+			else
+				job = new MGLocalJob((MGResult)result, data);
+			entry = new NoTrackingJobEntry(job);
+		}
+		
+		else if(result instanceof CodonWResult) {
+			if(result.isRemote)
+				job = new CodonWRemoteJob((CodonWResult)result, data);
+			else
+				job = new CodonWLocalJob((CodonWResult)result, data);
+			entry = new NoTrackingJobEntry(job);
+		}
+		
 		addJob(entry);
 	}
 

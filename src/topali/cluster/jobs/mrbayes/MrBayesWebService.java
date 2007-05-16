@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.trees;
+package topali.cluster.jobs.mrbayes;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -15,8 +15,9 @@ import topali.data.MBTreeResult;
 import topali.data.SequenceSet;
 import topali.fileio.Castor;
 
-public class MBTreeWebService extends WebService
+public class MrBayesWebService extends WebService
 {
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -34,11 +35,11 @@ public class MBTreeWebService extends WebService
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			RunMBTree runMBTree = new RunMBTree(jobDir, ss, result);
+			RunMrBayes runMBTree = new RunMrBayes(jobDir, ss, result);
 			runMBTree.start();
 
-			accessLog.info("MBT request from " + jobId);
-			logger.info(jobId + " - MBT request received");
+			accessLog.info("MB request from " + jobId);
+			logger.info(jobId + " - MB request received");
 			return jobId;
 		} catch (Exception e)
 		{
@@ -51,7 +52,7 @@ public class MBTreeWebService extends WebService
 	{
 		try
 		{
-			return new CollateMBTree(jobDir).getPercentageComplete();
+			return new MrBayesMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
 			logger.log(Level.SEVERE, e.getMessage(), e);
@@ -65,7 +66,7 @@ public class MBTreeWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
-			MBTreeResult result = new CollateMBTree(jobDir).getResult();
+			MBTreeResult result = new MrBayesMonitor(jobDir).getResult();
 
 			logger.info(jobId + " - returning result");
 			return Castor.getXML(result);
@@ -84,7 +85,7 @@ public class MBTreeWebService extends WebService
 	static void runScript(File jobDir) throws Exception
 	{
 		// Read...
-		String template = ClusterUtils.readFile(new File(scriptsDir, "mbt.sh"));
+		String template = ClusterUtils.readFile(new File(scriptsDir, "mb.sh"));
 
 		// Replace...
 		template = template.replaceAll("\\$JAVA", javaPath);
@@ -92,10 +93,11 @@ public class MBTreeWebService extends WebService
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 
 		// Write...
-		writeFile(template, new File(jobDir, "mbt.sh"));
+		writeFile(template, new File(jobDir, "mb.sh"));
 
 		// Run...
 		logger.info(jobDir.getName() + " - submitting to cluster");
-		submitJob("mbt.sh", jobDir);
+		submitJob("mb.sh", jobDir);
 	}
+
 }

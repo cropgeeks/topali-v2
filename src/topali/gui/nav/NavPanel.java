@@ -11,8 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -255,8 +254,9 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 				new ResultsNodeFolder(data));
 		parent.add(resultsFolder);
 
-		for (AnalysisResult result : data.getResults())
+		for (AnalysisResult result : data.getResults()) {
 			addResultsNode(resultsFolder, data, result);
+		}
 	}
 
 	// For each results object, we need to decide whether it is a completed
@@ -302,6 +302,14 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 				node.setUserObject(new CodeMLResultsNode(data,
 						(CodeMLResult) result));
 
+			if(result instanceof MGResult) {
+				node.setUserObject(new MGResultsNode(data, (MGResult)result));
+			}
+			
+			if(result instanceof CodonWResult) {
+				node.setUserObject(new CodonWResultsNode(data, (CodonWResult)result));
+			}
+			
 			model.insertNodeInto(node, parent, parent.getChildCount());
 			return;
 		}
@@ -333,6 +341,13 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		return null;
 	}
 
+	public List<AlignmentData> getAllAlignmentData() {
+		List<AlignmentData> res = new LinkedList<AlignmentData>();
+		for (SequenceSetNode node : seqNodes)
+			res.add(node.getAlignmentData());
+		return res;
+	}
+	
 	// Can be called at any time, as all nodes can return the Alignment info
 	public AlignmentData getCurrentAlignmentData()
 	{

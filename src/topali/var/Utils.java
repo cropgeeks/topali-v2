@@ -9,9 +9,10 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.*;
 
 import javax.imageio.ImageIO;
@@ -226,4 +227,26 @@ public class Utils
 		}
 		return ddata;
 	}
+	
+	public static byte[] readFile(URI uri) throws IOException {
+		File inFile = new File(uri);
+		FileInputStream fis = new FileInputStream(inFile);
+		FileChannel inChannel = fis.getChannel();
+		ByteBuffer buf = ByteBuffer.allocate((int)inChannel.size());
+		inChannel.read(buf);
+		inChannel.close();
+		return buf.array();
+	}
+	
+	public static String intArrayToString(int[] array) {
+		StringBuffer sb = new StringBuffer();
+		sb.append('[');
+		for(int i : array) {
+			sb.append(i);
+			sb.append(',');
+		}
+		sb.replace(sb.length()-1, sb.length()-1, "]");
+		return sb.toString();
+	}
+	
 }

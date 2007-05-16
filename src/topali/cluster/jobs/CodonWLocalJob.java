@@ -8,20 +8,21 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.trees.CollateMBTree;
-import topali.cluster.jobs.trees.RunMBTree;
+import topali.cluster.jobs.codonw.CodonWMonitor;
+import topali.cluster.jobs.codonw.RunCodonW;
 import topali.data.*;
 import topali.gui.Prefs;
 
-public class MBTreeLocalJob extends AnalysisJob
+public class CodonWLocalJob extends AnalysisJob
 {
+
 	private SequenceSet ss;
 
 	private File jobDir;
 
-	public MBTreeLocalJob(MBTreeResult result, AlignmentData data)
+	public CodonWLocalJob(CodonWResult result, AlignmentData data)
 	{
-		this.result = result;
+		this.result = result;    
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		result.startTime = System.currentTimeMillis();
@@ -37,8 +38,7 @@ public class MBTreeLocalJob extends AnalysisJob
 	{
 		try
 		{
-			RunMBTree mb = new RunMBTree(jobDir, ss, (MBTreeResult) result);
-			mb.start();
+			new RunCodonW(jobDir, ss, (CodonWResult) result).start();
 
 			result.status = JobStatus.RUNNING;
 			return result.jobId;
@@ -52,12 +52,12 @@ public class MBTreeLocalJob extends AnalysisJob
 
 	public JobStatus ws_getProgress() throws Exception
 	{
-		return new CollateMBTree(jobDir).getPercentageComplete();
+		return new CodonWMonitor(jobDir).getPercentageComplete();
 	}
 
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
-		result = new CollateMBTree(jobDir).getResult();
+		result = new CodonWMonitor(jobDir).getResult();
 		result.status = JobStatus.COMPLETING;
 
 		return result;

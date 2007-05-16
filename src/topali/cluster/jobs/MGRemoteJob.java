@@ -13,15 +13,16 @@ import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.fileio.Castor;
 
-public class MBTreeRemoteJob extends RemoteJob
+public class MGRemoteJob extends RemoteJob
 {
+
 	Logger log = Logger.getLogger(this.getClass());
 	
 	private SequenceSet ss;
 
-	public MBTreeRemoteJob(MBTreeResult result, AlignmentData data)
+	public MGRemoteJob(MGResult result, AlignmentData data)
 	{
-		super("topali-mbt", result);
+		super("topali-mg", result);
 
 		this.data = data;
 		this.ss = data.getSequenceSet();
@@ -35,7 +36,7 @@ public class MBTreeRemoteJob extends RemoteJob
 		determineClusterURL();
 
 		call = getCall();
-		call.setOperationName(new QName("topali-mbt", "submit"));
+		call.setOperationName(new QName("topali-mg", "submit"));
 
 		String alignmentXML = Castor.getXML(ss);
 		String resultXML = Castor.getXML(result);
@@ -52,7 +53,7 @@ public class MBTreeRemoteJob extends RemoteJob
 	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
-		call.setOperationName(new QName("topali-mbt", "getPercentageComplete"));
+		call.setOperationName(new QName("topali-mg", "getPercentageComplete"));
 
 		String statusXML = (String) call.invoke(new Object[]
 		{ result.jobId });
@@ -65,13 +66,14 @@ public class MBTreeRemoteJob extends RemoteJob
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();
-		call.setOperationName(new QName("topali-mbt", "getResult"));
+		call.setOperationName(new QName("topali-mg", "getResult"));
 
 		String resultXML = (String) call.invoke(new Object[]
 		{ result.jobId });
-		result = (MBTreeResult) Castor.unmarshall(resultXML);
+		result = (MGResult) Castor.unmarshall(resultXML);
 
 		result.status = JobStatus.COMPLETING;
 		return result;
 	}
+
 }

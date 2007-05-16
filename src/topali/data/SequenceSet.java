@@ -18,6 +18,7 @@ import pal.datatype.AminoAcids;
 import pal.datatype.Nucleotides;
 import pal.gui.NameColouriser;
 import pal.misc.Identifier;
+import topali.analyses.SequenceSetUtils;
 import topali.fileio.AlignmentHandler;
 import topali.fileio.AlignmentLoadException;
 
@@ -29,10 +30,6 @@ public class SequenceSet
 
 	private int length;
 
-	private boolean isAligned = true;
-
-	private boolean isDNA;
-
 	private String overview;
 
 	// Tracks currently selected sequences
@@ -40,17 +37,20 @@ public class SequenceSet
 
 	// Various parameters related to this alignment that must be computed
 	private SequenceSetParams params = null;
-
+	
 	// Runtime only objects (ie, not saved to XML)
 	private NameColouriser nameColouriser;
 
 	public SequenceSet()
 	{
+		params = new SequenceSetParams();
 	}
 
 	// Creates a new SequenceSet object using a PAL alignment as input
 	public SequenceSet(Alignment alignment) throws AlignmentLoadException
 	{
+		this();
+		
 		for (int i = 0; i < alignment.getSequenceCount(); i++)
 		{
 			Sequence seq = new Sequence(alignment.getIdentifier(i).getName());
@@ -65,6 +65,8 @@ public class SequenceSet
 	// Creates a new SequenceSet object by loading it in from disk
 	public SequenceSet(File filename) throws AlignmentLoadException
 	{
+		this();
+		
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
@@ -77,10 +79,12 @@ public class SequenceSet
 	public SequenceSet(File filename, boolean isAligned)
 			throws AlignmentLoadException
 	{
+		this();
+		
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
-		this.isAligned = isAligned;
+		this.params.setAligned(isAligned);
 		checkValidity();
 	}
 
@@ -125,12 +129,12 @@ public class SequenceSet
 	/* Returns whether this alignment is DNA (true) or Protein (false). */
 	public boolean isDNA()
 	{
-		return isDNA;
+		return params.isDNA();
 	}
 
 	public void setIsDNA(boolean isDNA)
 	{
-		this.isDNA = isDNA;
+		this.params.setDNA(isDNA);
 	}
 
 	/* Returns the array of selected sequences information. */
@@ -195,7 +199,7 @@ public class SequenceSet
 	/* Returns true if this alignment has had its parameters estimated. */
 	public boolean hasParametersEstimated()
 	{
-		return (params != null) ? true : false;
+		return !params.isNeedCalculation();
 	}
 
 	public SequenceSetParams getParams()
@@ -206,6 +210,17 @@ public class SequenceSet
 	public void setParams(SequenceSetParams params)
 	{
 		this.params = params;
+	}
+
+	
+	public String getCodonUsage()
+	{
+		return params.getCodonUsage();
+	}
+
+	public void setCodonUsage(String codonUsage)
+	{
+		this.params.setCodonUsage(codonUsage);
 	}
 
 	/* Returns the current index of the Sequence with the given name. */
@@ -261,7 +276,7 @@ public class SequenceSet
 
 		// 3) Is it a proper alignment, (are all sequences of the same length?)
 		// (ignore check if we're not expecting an alignment)
-		if (isAligned)
+		if (params.isAligned())
 		{
 			int size = sequences.get(0).getLength();
 			for (Sequence seq : sequences)
@@ -293,9 +308,9 @@ public class SequenceSet
 		length = ((Sequence) sequences.get(0)).getLength();
 
 		// if (resetSelection)
-		isDNA = isSequenceDNA();
+		params.setDNA(SequenceSetUtils.isSequenceDNA(this)); 
 
-		if (isAligned)
+		if (params.isAligned())
 			calculateOverview();
 
 		/*
@@ -376,7 +391,7 @@ public class SequenceSet
 			seqs[i] = getSequence(indices[i]).getPartition(start, end);
 
 		// Create a PAL alignment
-		if (isDNA)
+		if (params.isDNA())
 			return new SimpleAlignment(ids, seqs, new Nucleotides());
 		else
 			return new SimpleAlignment(ids, seqs, new AminoAcids());
@@ -404,63 +419,6 @@ public class SequenceSet
 		}
 
 		return nameColouriser;
-	}
-
-	/*
-	 * Simple algorithm to decide if the alignment is DNA or protein. Basically,
-	 * if 85% of the data (not including '-' or '?') is ACGT U or N then the
-	 * alignment is assumed to be DNA.
-	 */
-	private boolean isSequenceDNA()
-	{
-		int a = 0, c = 0, g = 0, t = 0, u = 0, n = 0;
-		int count = 0;
-
-		for (Sequence seq : sequences)
-		{
-			StringBuffer buffer = seq.getBuffer();
-
-			for (int ch = 0; ch < buffer.length(); ch++)
-			{
-				count++;
-
-				switch (buffer.charAt(ch))
-				{
-				case 'A':
-					a++;
-					break;
-				case 'C':
-					c++;
-					break;
-				case 'G':
-					g++;
-					break;
-				case 'T':
-					t++;
-					break;
-				case 'U':
-					u++;
-					break;
-				case 'N':
-					n++;
-					break;
-
-				case '-':
-					count--;
-					break;
-				case '?':
-					count--;
-					break;
-				}
-			}
-		}
-
-		int total = a + c + g + t + u + n;
-
-		if ((((float) total / (float) count) * 100) > 85)
-			return true;
-		else
-			return false;
 	}
 
 	/*
