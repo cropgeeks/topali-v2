@@ -27,6 +27,7 @@ public class Prefs extends PreferencesXML
 
 	public static DecimalFormat d1 = new DecimalFormat("0.0");
 	public static DecimalFormat d2 = new DecimalFormat("0.00");
+	public static DecimalFormat d3 = new DecimalFormat("0.000");
 	public static DecimalFormat d4 = new DecimalFormat("0.0000");
 	public static DecimalFormat d5 = new DecimalFormat("0.00000");
 	public static DecimalFormat i2 = new DecimalFormat("00");

@@ -9,7 +9,29 @@
 
 <h1>Likelihood Ratio Test</h1>
 
-<p>TODO: Explain LRT.</p>
+A common approach to comparing trees estimated from 2 alignments (that contain the same "species") <br>
+is to carry out a Likelihood Ratio Test.  <br>
+The idea is that you compare 2 hyptheses: <br>
+(A) the same tree for both alignments and <br>
+(B) Different trees for both alignments.  <br>
+<br><br>
+The test statistic is the difference in the Log Likelihood (or 2 times the difference in the Log Likelihood<br>
+as this is distributed as a Chi squared distribution).   The Log Likihood is usually obtained by doing <br>
+a standard Maximum Likelihood (ML) phylogenetic analysis of each alignment.<br>
+ <br><br>
+We do an approximate ML analysis by estimating a Neighbor Joining tree (NJ)<br>  
+(using optimised parameters for the F84 nucleotide substitution model) and computing<br> 
+the Log Likelihod for this NJ tree.  So instead of using a heuristic search method<br> 
+(like NNI or SPR or TBR in PAUP) we just use NJ as the search method.<br>  
+This is therefore faster but approximate.<br>
+ <br><br>
+This means we can move a window along the alignment, just like the DSS method,<br> 
+but do a fast LRT test between the 2 half-windows. <br>
+Like DSS, we use parametric bootstrapping (simulating alignments with no recombination,<br> 
+and then estimating a significant threshold) to test statistical significance of peaks <br>
+produced bt the LRT method.<br>
+
+
 
 </body>
 </html>

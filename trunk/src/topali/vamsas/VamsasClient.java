@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import topali.data.AlignmentData;
+import uk.ac.vamsas.objects.core.DataSet;
 import uk.ac.vamsas.objects.core.VAMSAS;
 import uk.ac.vamsas.test.simpleclient.ArchiveClient;
 import uk.ac.vamsas.test.simpleclient.ClientDoc;
@@ -18,7 +19,7 @@ public class VamsasClient extends ArchiveClient implements Runnable
 {
 	// public PickHandler msgHandler = new PickHandler();
 
-	private Hashtable<AlignmentData, String> hashtable = new Hashtable<AlignmentData, String>();
+	private Hashtable<AlignmentData[], String> hashtable = new Hashtable<AlignmentData[], String>();
 
 	public VamsasClient(File sessionFile)
 	{
@@ -27,7 +28,7 @@ public class VamsasClient extends ArchiveClient implements Runnable
 		new Thread(this).start();
 	}
 
-	public void writeToFile(AlignmentData data)
+	public void writeToFile(AlignmentData... data)
 	{
 		System.out.println("Hash for dataset is: " + data.hashCode());
 
@@ -52,14 +53,18 @@ public class VamsasClient extends ArchiveClient implements Runnable
 			}
 		}
 
-		TOPALi2Vamsas writer = null;
-		if (vVAMSAS == null)
-			writer = new TOPALi2Vamsas();
-		else
-			writer = new TOPALi2Vamsas(vVAMSAS);
+		//TOPALi2Vamsas writer = null;
+		//if (vVAMSAS == null)
+			//writer = new TOPALi2Vamsas();
+		//else
+			//writer = new TOPALi2Vamsas(vVAMSAS);
 
-		vVAMSAS = writer.createVAMSAS(data);
-
+		//vVAMSAS = writer.createVAMSAS(data);
+		
+		vVAMSAS = new VAMSAS();
+		DataSet ds = VamsasMapper.createVamsasDataSet(data);
+		vVAMSAS.setDataSet(new DataSet[]{ds});
+		
 		// The dataset can now be used as a key to store the ID assigned to its
 		// VAMSAS partner for later use
 		String vID = cDoc.registerObject(vVAMSAS).getId();
@@ -89,15 +94,19 @@ public class VamsasClient extends ArchiveClient implements Runnable
 
 		for (int i = 0; i < roots.length; i++)
 		{
-			Vamsas2TOPALi reader = new Vamsas2TOPALi();
+			//Vamsas2TOPALi reader = new Vamsas2TOPALi();
 
 			try
 			{
-				AlignmentData[] data = reader.createTOPALi(roots[i]);
-				for (AlignmentData d : data)
+				//AlignmentData[] data = reader.createTOPALi(roots[i]);
+				AlignmentData[] data = VamsasMapper.createTopaliDataSet(roots[i].getDataSet(0));
+				for (AlignmentData d : data) {
+					d.name = "Vamsas "+(i+i);
 					vector.add(d);
+				}
 			} catch (Exception e)
 			{
+				e.printStackTrace();
 			}
 		}
 

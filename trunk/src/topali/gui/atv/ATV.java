@@ -84,8 +84,7 @@ public class ATV extends Thread
 		atvframe = new ATVapplicationFrame(phyl,
 				config_filename, title);
 		
-		if(parent!=null)
-			atvframe.setLocationRelativeTo(parent);
+		atvframe.setLocationRelativeTo(parent);
 		
 		atvframe.addWindowListener(listener);
 		

@@ -29,6 +29,9 @@ public class DSSResultPanel extends ResultPanel
 	public void setThreshold(double threshold)
 	{
 		DSSResult res = (DSSResult)result;
+		if(res.thresholds==null)
+			return;
+		
 		res.threshold= threshold;
 
 		float thres= AnalysisUtils.getArrayValue(res.thresholds,

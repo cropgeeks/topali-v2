@@ -26,3 +26,7 @@ make
 echo "Compiling CodeML"
 cd ../codeml
 make
+
+echo "Compiling CodonW"
+cd ../codonW
+make

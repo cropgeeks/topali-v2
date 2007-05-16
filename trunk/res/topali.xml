@@ -26,15 +26,20 @@
   <field name="tRatio" type="double"/>
   <field name="alpha" type="double"/>
   <field name="kappa" type="double"/>
-  <field name="avgDistance" type="double"/>
-  <field name="frequencies" type="double" collection="array"/>
+  <field name="avgDist" type="double"/>
+  <field name="freqs" type="double" collection="array"/>
+  <field name="isDNA" type="boolean" get-method="isDNA" set-method="setDNA" />
+  <field name="isAligned" type="boolean" get-method="isAligned" set-method="setAligned" />
+  <field name="codonUsage" type="string" />
+  <field name="geneticCode" type="string" />
+  <field name="model" type="string" />
+  <field name="modelGamma" type="boolean" get-method="isModelGamma" set-method="setModelGamma" />
+  <field name="modelInv" type="boolean" get-method="isModelInv" set-method="setModelInv" />
 </class>
 
 <!-- SequenceSet -->
 <class name="topali.data.SequenceSet">
   <field name="length" type="int">
-  	<bind-xml node="attribute"/></field>
-  <field name="isDNA" type="boolean" get-method="isDNA" set-method="setIsDNA">
   	<bind-xml node="attribute"/></field>
   	
   <field name="overview" type="string"/>
@@ -102,6 +107,10 @@
   <field name="lrtRunCount" type="integer">
     <bind-xml node="attribute"/></field>
   <field name="codeMLRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="mgRunCount" type="integer">
+    <bind-xml node="attribute"/></field>
+  <field name="cwRunCount" type="integer">
     <bind-xml node="attribute"/></field>
 </class>
 
@@ -179,8 +188,8 @@
   	<bind-xml node="attribute"/></field>
 </class>
 
-<!-- TreeResult (extends AnalysisReult) -->
-<class name="topali.data.TreeResult" extends="topali.data.AnalysisResult">
+<!-- TreeResult (extends AlignmentResult) -->
+<class name="topali.data.TreeResult" extends="topali.data.AlignmentResult">
   <field name="partitionStart" type="int">
   	<bind-xml node="attribute"/></field>
   <field name="partitionEnd" type="int">
@@ -200,13 +209,12 @@
   <field name="treeStr" type="string"/>
   <field name="clusters" type="topali.data.SequenceCluster" collection="collection"/>
 </class>
-
+  
 <!-- MBTreeResult (extends TreeResult) -->
 <class name="topali.data.MBTreeResult" extends="topali.data.TreeResult">
 	<field name="mbPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
-	
-	<field name="selectedSeqs" type="string" direct="true" collection="array"/>
+    <field name="mbCmds" type="string" direct="true"/>
 </class>
 
 <!-- AlignmentResult (extends AnalysisReult) -->
@@ -418,5 +426,37 @@
   <field name="data2" type="string"/>
   <field name="data3" type="string"/>
 </class>
-
+  
+  <class name="topali.data.MGResult" extends="topali.data.AlignmentResult">
+    <field name="mgPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+    <field name="javaPath" type="string" direct="true"><bind-xml node="attribute"/></field>    
+    <field name="models" type="topali.data.SubstitutionModel" direct="true" collection="arraylist"/>
+  </class>
+  
+  <class name="topali.data.CodonWResult" extends="topali.data.AlignmentResult">
+    <field name="codonwPath" type="string" direct="true"><bind-xml node="attribute"/></field>  
+    <field name="geneticCode" type="string" direct="true"><bind-xml node="attribute"/></field>
+    <field name="result" type="string" direct="true"/>
+  </class>
+  
+  <!-- SubstitutionModel -->
+  <class name="topali.data.SubstitutionModel">
+    <field name="name" type="string">
+      <bind-xml node="attribute"/></field>
+    <field name="I" type="boolean" get-method="isI" set-method="setI">
+      <bind-xml node="attribute"/></field>
+    <field name="G" type="boolean" get-method="isG" set-method="setG">
+      <bind-xml node="attribute"/></field>
+    <field name="F" type="boolean" get-method="isF" set-method="setF">
+      <bind-xml node="attribute"/></field>
+    <field name="aic1" type="double">
+      <bind-xml node="attribute"/></field>     
+    <field name="aic2" type="double">
+      <bind-xml node="attribute"/></field>     
+    <field name="bic" type="double">
+      <bind-xml node="attribute"/></field>        
+    <field name="lnl" type="double">
+      <bind-xml node="attribute"/></field>       
+  </class>
+  
 </mapping>

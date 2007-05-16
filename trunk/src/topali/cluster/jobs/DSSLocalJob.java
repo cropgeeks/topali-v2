@@ -21,7 +21,7 @@ public class DSSLocalJob extends AnalysisJob
 
 	public DSSLocalJob(DSSResult result, AlignmentData data)
 	{
-		this.result = result;
+		this.result = result;    
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		result.startTime = System.currentTimeMillis();

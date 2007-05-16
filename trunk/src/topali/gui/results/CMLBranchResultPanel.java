@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import pal.statistics.ChiSquareDistribution;
 import topali.data.*;
+import topali.gui.Prefs;
 import topali.gui.atv.ATV;
 import topali.var.NHTreeUtils;
 
@@ -104,11 +105,11 @@ public class CMLBranchResultPanel extends ResultPanel
 			for (int j = 0; j < n; j++)
 			{
 				if (j < hypo.omegas.length)
-					row.add(ResultPanel.omegaFormat.format(hypo.omegas[j]));
+					row.add(Prefs.d3.format(hypo.omegas[j]));
 				else
 					row.add("");
 			}
-			row.add(ResultPanel.likelihoodFormat
+			row.add(Prefs.d2
 					.format(result.hypos.get(i).likelihood));
 			data.add(row);
 		}
@@ -244,7 +245,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		}
 
 		sb.append("\nSelected sequences:\n");
-		for (String seq : result.selectedSeqs)
+		for (String seq : res.selectedSeqs)
 			sb.append("\n  " + data.getSequenceSet().getNameForSafeName(seq));
 
 		return sb.toString();

@@ -138,11 +138,18 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		result.pdm_theta_tune = Prefs.pdm_theta_tune;
 		result.pdm_beta_tune = Prefs.pdm_beta_tune;
 
-		result.frequencies = ss.getParams().getFrequencies();
+		result.frequencies = ss.getParams().getFreqs();
 		result.kappa = ss.getParams().getKappa();
 
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
+		
+		int runNum = data.getTracker().getPdmRunCount() + 1;
+		data.getTracker().setPdmRunCount(runNum);
+		result.guiName = "PDM Result " + runNum;
+		result.jobName = "PDM Analysis " + runNum + " on " + data.name + " ("
+				+ ss.getSelectedSequences().length + "/" + ss.getSize()
+				+ " sequences)";
 	}
 
 	private void setInitialSettings(PDMResult iResult)

@@ -127,6 +127,13 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.avgDist = topali.cluster.jobs.dss.DSS.getAverageDistance(ss);
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
+		
+		int runNum = data.getTracker().getDssRunCount() + 1;
+		data.getTracker().setDssRunCount(runNum);
+		result.guiName = "DSS Result " + runNum;
+		result.jobName = "DSS Analysis " + runNum + " on " + data.name + " ("
+				+ ss.getSelectedSequences().length + "/" + ss.getSize()
+				+ " sequences)";
 	}
 
 	private void setInitialSettings(DSSResult iResult)

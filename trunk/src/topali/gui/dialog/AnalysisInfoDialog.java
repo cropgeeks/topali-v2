@@ -127,5 +127,10 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 			else if(res.type==CodeMLResult.TYPE_BRANCHMODEL)
 				TOPALi.winMain.menuAnlsRunCodeMLBranch(res);
 		}
+		
+		else if(aResult instanceof CodonWResult) {
+			CodonWResult res = (CodonWResult) aResult;
+			TOPALi.winMain.menuAnlsRunCW(res);
+		}
 	}
 }

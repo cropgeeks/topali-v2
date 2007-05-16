@@ -60,7 +60,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		basicPanel = new BasicTreePanel();
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		bayesPanel = new MrBayesSettingsPanel();
+		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet());
 		bayesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		tabs = new JTabbedPane();
@@ -90,7 +90,8 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	private void onOK(boolean makeRemote)
 	{
 		basicPanel.onOK();
-
+		bayesPanel.onOK();
+		
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else
@@ -141,6 +142,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 
+		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		result.guiName = "Tree " + runNum;
 		result.jobName = "Tree Estimation " + runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()

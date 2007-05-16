@@ -208,8 +208,8 @@ public class CMLModel
 	 */
 	public List<PSSite> getPSS(double minP)
 	{
-		if (pss == null)
-			return null;
+//		if (pss == null)
+//			return null;
 
 		//parse the pss string just one time
 		if (pssList == null)

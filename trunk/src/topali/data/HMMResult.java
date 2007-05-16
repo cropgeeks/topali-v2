@@ -12,7 +12,7 @@ import sbrn.commons.MatrixXML;
  * settings required to make the run (although not the data itself).
  */
 public class HMMResult extends AlignmentResult
-{
+{	
 	// The location of the BARCE binary
 	public String barcePath;
 
@@ -111,4 +111,6 @@ public class HMMResult extends AlignmentResult
 	{
 		data3 = MatrixXML.stringTo2DFloatArray(str);
 	}
+	
+	
 }

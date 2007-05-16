@@ -12,8 +12,8 @@ import java.awt.print.Printable;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import topali.data.AlignmentData;
-import topali.data.PDMResult;
+import topali.analyses.AnalysisUtils;
+import topali.data.*;
 import topali.var.Utils;
 
 public class PDMResultPanel extends ResultPanel implements MouseMotionListener, MouseListener
@@ -129,13 +129,20 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener, 
 	@Override
 	public void setThreshold(double t)
 	{
-		result.threshold = t;
-		graph2.setThreshold(t);
+		((AlignmentResult)result).threshold = t;
+		PDMResult res = (PDMResult)result;
+		
+		float thres= AnalysisUtils.getArrayValue(res.thresholds,
+				(float)t);
+		
+		graph2.setThreshold(thres);
 	}
 
 	public void mouseMoved(MouseEvent e)
 	{		
 		PDMResult result = (PDMResult)this.result;
+		if(result.histograms==null)
+			return;
 		
 		int nuc = graph2.getNucleotideFromPoint(e.getX());
 		

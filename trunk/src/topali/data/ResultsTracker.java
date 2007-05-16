@@ -20,6 +20,10 @@ public class ResultsTracker
 	private int lrtRunCount;
 
 	private int codeMLRunCount;
+	
+	private int mgRunCount;
+	
+	private int cwRunCount;
 
 	public ResultsTracker()
 	{
@@ -94,4 +98,26 @@ public class ResultsTracker
 	{
 		this.codeMLRunCount = codeMLRunCount;
 	}
+
+	public int getCwRunCount()
+	{
+		return cwRunCount;
+	}
+
+	public void setCwRunCount(int cwRunCount)
+	{
+		this.cwRunCount = cwRunCount;
+	}
+
+	public int getMgRunCount()
+	{
+		return mgRunCount;
+	}
+
+	public void setMgRunCount(int mgRunCount)
+	{
+		this.mgRunCount = mgRunCount;
+	}
+	
+	
 }

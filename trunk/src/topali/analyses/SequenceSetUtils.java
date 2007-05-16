@@ -6,10 +6,10 @@
 package topali.analyses;
 
 import java.util.ListIterator;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import pal.alignment.SimpleAlignment;
 import topali.data.*;
 import topali.gui.Text;
 import topali.gui.WinMainMenuBar;
@@ -135,14 +135,21 @@ public class SequenceSetUtils
 	{
 		int[] indices = getSequencesForParamEstimation(ss);
 
-		SimpleAlignment align = ss.getAlignment(indices, 1, ss.getLength(),
-				true);
-		ParamEstDialog dialog = new ParamEstDialog(align);
-
-		SequenceSetParams params = new SequenceSetParams(dialog.getRatio(),
-				dialog.getAlpha(), dialog.getKappa(), dialog.getAvgDistance(),
-				dialog.getFreqs());
-
+		ParamEstDialog dialog = new ParamEstDialog(ss, indices);
+		SequenceSetParams params = new SequenceSetParams();
+		
+		if(ss.isDNA()) {
+			params.setAlpha(dialog.getAlpha());
+			params.setKappa(dialog.getKappa());
+			params.setAvgDist(dialog.getAvgDistance());
+			params.setFreqs(dialog.getFreqs());
+			params.setTRatio(dialog.getRatio());
+			
+		}
+		
+		
+		params.setNeedCalculation(false);
+		
 		ss.setParams(params);
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}
@@ -339,4 +346,62 @@ public class SequenceSetUtils
 
 		return ssNew;
 	}
+	
+	/*
+	 * Simple algorithm to decide if the alignment is DNA or protein. Basically,
+	 * if 85% of the data (not including '-' or '?') is ACGT U or N then the
+	 * alignment is assumed to be DNA.
+	 */
+	public static boolean isSequenceDNA(SequenceSet ss)
+	{
+		int a = 0, c = 0, g = 0, t = 0, u = 0, n = 0;
+		int count = 0;
+		Vector<Sequence> sequences = ss.getSequences();
+		for (Sequence seq : sequences)
+		{
+			StringBuffer buffer = seq.getBuffer();
+
+			for (int ch = 0; ch < buffer.length(); ch++)
+			{
+				count++;
+
+				switch (buffer.charAt(ch))
+				{
+				case 'A':
+					a++;
+					break;
+				case 'C':
+					c++;
+					break;
+				case 'G':
+					g++;
+					break;
+				case 'T':
+					t++;
+					break;
+				case 'U':
+					u++;
+					break;
+				case 'N':
+					n++;
+					break;
+
+				case '-':
+					count--;
+					break;
+				case '?':
+					count--;
+					break;
+				}
+			}
+		}
+
+		int total = a + c + g + t + u + n;
+
+		if ((((float) total / (float) count) * 100) > 85)
+			return true;
+		else
+			return false;
+	}
+	
 }

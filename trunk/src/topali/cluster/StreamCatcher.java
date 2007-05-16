@@ -13,14 +13,21 @@ import java.io.*;
 public class StreamCatcher extends Thread
 {
 	protected BufferedReader reader = null;
-
+	protected StringBuffer output = null;
 	protected boolean showOutput = false;
-
-	public StreamCatcher(InputStream in, boolean showOutput)
+	
+	public StreamCatcher(InputStream in, boolean showOutput) {
+		this(in, showOutput, false);
+	}
+	
+	public StreamCatcher(InputStream in, boolean showOutput, boolean keepOutput)
 	{
 		reader = new BufferedReader(new InputStreamReader(in));
 		this.showOutput = showOutput;
-
+		
+		if(keepOutput) 
+			output = new StringBuffer();
+		
 		start();
 	}
 
@@ -35,6 +42,11 @@ public class StreamCatcher extends Thread
 				if (showOutput)
 					System.out.println(line);
 
+				if(output!=null) {
+					output.append(line);
+					output.append('\n');
+				}
+				
 				line = reader.readLine();
 			}
 		} catch (Exception e)
@@ -47,5 +59,11 @@ public class StreamCatcher extends Thread
 		} catch (IOException e)
 		{
 		}
+	}
+	
+	public String getOutput() {
+		if(output==null)
+			return null;
+		return output.toString();
 	}
 }

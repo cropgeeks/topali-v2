@@ -23,7 +23,7 @@ class UpdateChecker extends Thread
 {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static int RELEASE = 16;
+	private static int RELEASE = 17;
 
 	private int webVersion = 0;
 

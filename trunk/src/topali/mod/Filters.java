@@ -38,6 +38,8 @@ public class Filters extends FileFilter
 	public static final int NEX_B = 14;
 
 	public static final int CLU = 15;
+	
+	public static final int TXT = 16;
 
 	private Hashtable<String, Object> filters = new Hashtable<String, Object>();
 
@@ -136,6 +138,11 @@ public class Filters extends FileFilter
 			filter.setDescription("Grouped Cluster Files");
 			break;
 
+		case TXT:
+			filter.addExtension("txt", TXT);
+			filter.setDescription("Text Files");
+			break;
+			
 		/*
 		 * case 2 : filter.addExtension("csv"); filter.setDescription("CSV
 		 * (Comma Delimited) Files"); break;
