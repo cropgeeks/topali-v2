@@ -7,7 +7,7 @@
 	<resources>
 		<j2se version="1.5+"/>
 		<jar href="axis.jar"/>
-		<jar href="castor-1.0.4-xml.jar"/>
+		<jar href="castor-1.1-xml.jar"/>
 		<jar href="commons-codec-1.3.jar"/>
 		<jar href="commons-discovery-0.2.jar"/>
 		<jar href="commons-httpclient-3.0.jar"/>
@@ -26,7 +26,7 @@
 		<jar href="sbrn-commons.jar"/>
 		<jar href="swing-layout-1.0.jar"/>
 		<jar href="topali.jar" main="true"/>
-		<jar href="vamsas.jar"/>
+		<jar href="vamsas-client.jar"/>
 		<jar href="xercesImpl.jar"/>
 	</resources>
 	<application-desc main-class="topali.gui.TOPALi">
