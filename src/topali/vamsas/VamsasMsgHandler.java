@@ -10,14 +10,16 @@ import javax.swing.SwingUtilities;
 import topali.gui.TOPALi;
 import uk.ac.vamsas.client.picking.*;
 
-public class PickHandler implements IMessageHandler
+public class VamsasMsgHandler implements IMessageHandler
 {
 	private IPickManager manager;
 
-	public PickHandler(IPickManager manager)
+	public VamsasMsgHandler(IPickManager manager)
 	{
 		this.manager = manager;
 		manager.registerMessageHandler(this);
+		
+		System.out.println("Successfully created VamsasMsgHandler");
 	}
 
 	public void sendMessage(Message message)
@@ -41,13 +43,9 @@ public class PickHandler implements IMessageHandler
 	private void processMessage(Message message)
 	{
 		if (message instanceof MouseOverMessage)
-		{
-			MouseOverMessage mom = (MouseOverMessage) message;
-
-			String seqID = mom.getVorbaID();
-			int position = mom.getPosition();
-
-			TOPALi.winMain.vamsasMouseOver(seqID, position);
+		{			
+			TOPALi.winMain.vEvents.processAlignmentPanelMouseOverEvent(
+				(MouseOverMessage) message);
 		}
 	}
 }
