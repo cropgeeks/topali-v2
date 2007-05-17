@@ -269,17 +269,12 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	{
 		if (localCall)
 		{
-
-			if (WinMain.vClient != null && seq >= 0)
+			if (WinMain.vEvents != null && seq >= 0)
 			{
-				// String seqName = ss.getSequence(seq).name;
-
-				// uk.ac.vamsas.client.picking.MouseOverMessage message =
-				// new uk.ac.vamsas.client.picking.MouseOverMessage(
-				// seqName, nuc);
-				// WinMain.vClient.msgHandler.sendMessage(message);
+				String seqName = ss.getSequence(seq).name;
+				
+				WinMain.vEvents.sendAlignmentPanelMouseOverEvent(seqName, nuc);
 			}
-
 		}
 
 		if (!localCall && nuc > -1 && seq > -1)

@@ -26,7 +26,7 @@ import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.NavPanel;
 import topali.gui.nav.SequenceSetNode;
 import topali.gui.tree.TreePane;
-import topali.vamsas.VamsasClient;
+import topali.vamsas.*;
 import topali.var.Utils;
 import doe.MsgBox;
 
@@ -36,7 +36,8 @@ public class WinMain extends JFrame
 	private Project project = new Project();
 
 	// And associated vamsas session (if any)
-	public static VamsasClient vClient = null;
+	public VamsasManager vamsas = null;
+	public static VamsasEvents vEvents = null;
 
 	// GUI controls...
 	private WinMainMenuBar menubar;
@@ -668,7 +669,7 @@ public class WinMain extends JFrame
 	void menuVamsasSelectSession()
 	{
 		// First ensure it's ok to begin a new session
-		if (vClient != null)
+		if (vamsas != null)
 		{
 			String msg = "An association with an existing VAMSAS session has "
 					+ "already been established. Would you like to drop this\n"
@@ -676,9 +677,18 @@ public class WinMain extends JFrame
 			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
 				return;
 		}
+		
+		vamsas = new VamsasManager();
+		vEvents = new VamsasEvents(this);
+		
+		if (vamsas.initializeVamsas())
+		{
+			MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
+				+ "session.", MsgBox.INF);
+		}
 
 		// Create a dialog to select the session file
-		JFileChooser fc = new JFileChooser();
+/*		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 		fc.setSelectedFile(new File("vamsas-session.zip"));
 		fc.setDialogTitle("Select (or Create) VAMSAS Session File");
@@ -690,11 +700,12 @@ public class WinMain extends JFrame
 
 			vClient = new VamsasClient(file);
 		}
+*/
 	}
 
 	void menuVamsasExport()
 	{
-		if (vClient == null)
+/*		if (vClient == null)
 		{
 			MsgBox
 					.msg(
@@ -707,11 +718,12 @@ public class WinMain extends JFrame
 		List<AlignmentData> data = navPanel.getAllAlignmentData();
 
 		vClient.writeToFile(data.toArray(new AlignmentData[data.size()]));
+*/
 	}
 
 	void menuVamsasImport()
 	{
-		if (vClient == null)
+/*		if (vClient == null)
 		{
 			MsgBox
 					.msg(
@@ -739,6 +751,7 @@ public class WinMain extends JFrame
 						+ " alignments have been imported into TOPALi.",
 						MsgBox.INF);
 		}
+*/
 	}
 
 	void menuHelpUpdate(boolean useGUI)
@@ -789,29 +802,4 @@ public class WinMain extends JFrame
 		System.out.println("Time: " + (e - s) + "ms");
 		//		
 	}
-	
-	//VAMSAS stuff
-	public void vamsasMouseOver(String seqName, int pos)
-	{
-		for (AlignmentData data : project.getDatasets())
-		{
-			int i = 0;
-			for (Sequence seq : data.getSequenceSet().getSequences())
-			{
-				if (seq.name.equals(seqName))
-				{
-
-					AlignmentPanel panel = navPanel
-							.getCurrentAlignmentPanel(data);
-
-					panel.highlight(i, pos, false);
-
-					break;
-				}
-
-				i++;
-			}
-		}
-	}
-
 }
