@@ -7,6 +7,9 @@ package topali.vamsas;
 
 import java.beans.*;
 import java.io.*;
+import java.util.*;
+
+import topali.data.*;
 
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.client.simpleclient.*;
@@ -16,18 +19,16 @@ import doe.*;
 
 public class VamsasManager
 {
-	// Lookup table for TOPALi->VASMAS mappings
-	public HashTV hashTV = new HashTV();
-
-	// Lookup table for VASMAS->TOPALi mappings
-	public HashVT hashVT = new HashVT();
-
 	// An instance of the pickmanager for dealing with inter-app messages
 	public VamsasMsgHandler msgHandler;
 
 	private IClientFactory clientfactory;
 	private IClient vorbaclient;
+	
+	static UserHandle user;
+	static ClientHandle app;
 
+	private ObjectMapper vMap = new ObjectMapper();
 
 	public VamsasManager()
 	{
@@ -62,8 +63,8 @@ public class VamsasManager
 		}
 		
 		// Get an Iclient with session data
-		ClientHandle app = new ClientHandle("topali", "2");
-		UserHandle user = new UserHandle(System.getProperty("user.name"), "");
+		app = new ClientHandle("topali", "2");
+		user = new UserHandle(System.getProperty("user.name"), "");
 		// TODO: session can hold the ID of an existing session that the user
 		// wants to connect to
 		String session = null;
@@ -74,8 +75,6 @@ public class VamsasManager
 				vorbaclient = clientfactory.getIClient(app, user, session);
 			else
 				vorbaclient = clientfactory.getIClient(app, user);
-			
-			
 		}
 		catch (NoDefaultSessionException e)
 		{
@@ -237,6 +236,33 @@ public class VamsasManager
 		catch (Exception e)
 		{
 			MsgBox.msg("TOPALi encountered a problem while accessing the "
+				+ "document.\n" + e, MsgBox.ERR);
+		}
+	}
+	
+	/**
+	 * Opens a reference to the vamsas session and uses the DocumentHandler to
+	 * store the current TOPALi datasets in it.
+	 */
+	public void writeToDocument(LinkedList<AlignmentData> datasets)
+	{
+		System.out.println();
+		System.out.println();
+		
+		try
+		{
+			IClientDocument cdoc = vorbaclient.getClientDocument();
+			
+			DocumentHandler handler = new DocumentHandler(vMap, cdoc);
+			handler.writeToDocument(datasets);			
+			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
+			vorbaclient.updateDocument(cdoc);
+			
+			MsgBox.msg("VAMSAS document updated.", MsgBox.INF);
+		}
+		catch (Exception e)
+		{
+			MsgBox.msg("TOPALi encountered a problem while writing the VAMSAS "
 				+ "document.\n" + e, MsgBox.ERR);
 		}
 	}
