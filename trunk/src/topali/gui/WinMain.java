@@ -705,20 +705,12 @@ public class WinMain extends JFrame
 
 	void menuVamsasExport()
 	{
-/*		if (vClient == null)
+		if (vamsas != null)
 		{
-			MsgBox
-					.msg(
-							"TOPALi has not been associated with a VAMSAS session yet.",
-							MsgBox.WAR);
-			return;
+			vamsas.writeToDocument(project.getDatasets());
 		}
-
-		// AlignmentData data = navPanel.getCurrentAlignmentData();
-		List<AlignmentData> data = navPanel.getAllAlignmentData();
-
-		vClient.writeToFile(data.toArray(new AlignmentData[data.size()]));
-*/
+		else
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
 	}
 
 	void menuVamsasImport()
