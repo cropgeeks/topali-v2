@@ -10,6 +10,9 @@ import java.io.*;
 import java.util.*;
 
 import topali.data.*;
+import topali.gui.Project;
+import topali.gui.WinMain;
+import topali.gui.nav.NavPanel;
 
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.client.simpleclient.*;
@@ -244,7 +247,7 @@ public class VamsasManager
 	 * Opens a reference to the vamsas session and uses the DocumentHandler to
 	 * store the current TOPALi datasets in it.
 	 */
-	public void writeToDocument(LinkedList<AlignmentData> datasets)
+	public void writeToDocument(Project project)
 	{
 		System.out.println();
 		System.out.println();
@@ -253,11 +256,10 @@ public class VamsasManager
 		{
 			IClientDocument cdoc = vorbaclient.getClientDocument();
 			
-			DocumentHandler handler = new DocumentHandler(vMap, cdoc);
-			handler.writeToDocument(datasets);			
+			DocumentHandler handler = new DocumentHandler(project, vMap, cdoc);
+			handler.writeToDocument();			
 			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
 			vorbaclient.updateDocument(cdoc);
-			
 			MsgBox.msg("VAMSAS document updated.", MsgBox.INF);
 		}
 		catch (Exception e)
@@ -265,5 +267,6 @@ public class VamsasManager
 			MsgBox.msg("TOPALi encountered a problem while writing the VAMSAS "
 				+ "document.\n" + e, MsgBox.ERR);
 		}
+		
 	}
 }
