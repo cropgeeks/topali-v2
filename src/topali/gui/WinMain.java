@@ -707,7 +707,8 @@ public class WinMain extends JFrame
 	{
 		if (vamsas != null)
 		{
-			vamsas.writeToDocument(project.getDatasets());
+			vamsas.writeToDocument(project);
+			//vamsas.writeToDocument(project.getDatasets());
 		}
 		else
 			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);

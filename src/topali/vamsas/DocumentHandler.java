@@ -3,112 +3,172 @@ package topali.vamsas;
 import java.util.*;
 
 import topali.data.*;
+import topali.data.Sequence;
+import topali.gui.Project;
 
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.objects.core.*;
+import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
 class DocumentHandler
 {
-	private ObjectMapper vMap;
-	private IClientDocument cdoc;
+	private Project project;
+	private ObjectMapper mapper;
+	private DataSet dataset;
 	
-	DocumentHandler(ObjectMapper vMap, IClientDocument cdoc)
-	{
-		this.vMap = vMap;
-		this.cdoc = cdoc;
+	public DocumentHandler(Project proj, ObjectMapper mapper, IClientDocument doc) {
+		this.project = proj;
+		this.mapper = mapper;
 		
-		vMap.registerClientDocument(cdoc);
-	}
-	
-	void writeToDocument(LinkedList<AlignmentData> tDataSets)
-		throws Exception
-	{
-		// For each dataset in the current TOPALi project...
-		for (AlignmentData tAlignmentData: tDataSets)
-			writeAlignmentData(tAlignmentData);
-	}
-	
-	// Given an existing TOPALi dataset, attempts to either find it within the
-	// vamsas document, or creates a new vamsas DataSet to link it with, and
-	// adds that to the document instead.
-	private void writeAlignmentData(AlignmentData tAlignmentData)
-		throws Exception
-	{
-		VAMSAS root = null;
-		
-		// Do we have an existing mapping between T/V for this object?
-		DataSet vDataSet = (DataSet) vMap.getVamsasObject(tAlignmentData);
-	
-		if (vDataSet == null)
-		{
-			System.out.println("Dataset is null - making a new one");
-			
-			root = cdoc.getVamsasRoots()[0];
-			
-			// Create a new vamsas data set
-			vDataSet = new DataSet();
-			root.addDataSet(vDataSet);
-			
-			// Link it with the TOPALi data set
-			vMap.registerObjects(tAlignmentData, vDataSet);
-			
-			// TODO: speak to Jim about this?
-			vDataSet.setProvenance(getDummyProvenance());
+		//We will just deal with the first DataSet
+		if(doc.getVamsasRoots()[0].getDataSetCount()<1) {
+			this.dataset = new DataSet();
+			//TODO: speak to Jim about this?
+			this.dataset.setProvenance(getDummyProvenance());
+			doc.getVamsasRoots()[0].addDataSet(this.dataset);
 		}
 		else
-		{
-			root = (VAMSAS) vDataSet.getV_parent();
-			
-			System.out.println("Found existing dataset in vamsas");
-		}
+			this.dataset = doc.getVamsasRoots()[0].getDataSet(0);
 		
+		mapper.registerClientDocument(doc);
 		
-//		SequenceSet tSequenceSet = tAlignmentData.getSequenceSet();
-//		writeAlignmentSequences(tSequenceSet, vDataSet, tAlignmentData.name);
 	}
 	
-	private void writeAlignmentSequences(SequenceSet tSequenceSet, DataSet vDataSet, String alignmentName)
-	{
-		// Do we have an existing mapping between T/V for this object?
-		Alignment vAlignment = (Alignment) vMap.getVamsasObject(tSequenceSet);
+	void writeToDocument() {
+		LinkedList<AlignmentData> tDatasets = project.getDatasets();
 		
-		if (vAlignment == null)
+		for(AlignmentData tAlign : tDatasets) {
+			writeAlignment(tAlign);
+		}
+		
+	}
+	
+	void readFromDocument() {
+		Alignment[] tDatasets = dataset.getAlignment();
+		for(Alignment vAlign : tDatasets) {
+			AlignmentData tAlign = (AlignmentData)mapper.getTopaliObject(vAlign);
+			if(tAlign==null) {
+				tAlign = new AlignmentData(); 
+				project.getDatasets().add(tAlign);
+			}
+			readAlignment(vAlign, tAlign);
+		}
+	}
+	
+	//----------
+	//Vamsas -> TOPALi methods:
+	
+	private void readAlignment(Alignment vAlign, AlignmentData tAlign) {
+		tAlign.name = getAlignmentName(vAlign);
+		SequenceSet ss = tAlign.getSequenceSet();
+		if(ss==null) {
+			ss = new SequenceSet();
+			tAlign.setSequenceSet(ss);
+		}
+		readSequences(ss, vAlign);
+	}
+	
+	private void readSequences(SequenceSet ss, Alignment vAlign){
+		for(AlignmentSequence vSeq : vAlign.getAlignmentSequence()) {
+			Sequence tSeq = (Sequence)mapper.getTopaliObject(vSeq);
+			
+			if(tSeq==null) {
+				tSeq = new Sequence();
+				ss.addSequence(tSeq);
+			}
+			
+			tSeq.setSequence(vSeq.getSequence());
+			tSeq.name = vSeq.getName();
+		}
+	}
+	
+	private String getAlignmentName(Alignment vAlign) {
+		Property[] props = vAlign.getProperty();
+		for(Property prop : props) {
+			if(prop.getName().equals("title")) 
+				return prop.getContent();
+		}
+		return "Vamsas";
+	}
+	
+	//-----------
+	//TOPALi -> Vamsas methods:
+	
+	//Given an existing TOPALi dataset, attempts to either find it within the
+	// vamsas document, or creates a new vamsas Alignment to link it with, and
+	// adds that to the document instead.
+	private void writeAlignment(AlignmentData tAlign) {
+		
+		//Do we have an existing mapping between T/V for this object?
+		Alignment vAlign = (Alignment) mapper.getVamsasObject(tAlign);
+	
+		if (vAlign == null)
 		{
-			// Create a new vamsas data set
-			vAlignment = new Alignment();
+			System.out.println("Alignment is null - making a new one");
 			
-			// Link it with the TOPALi data set
-			vMap.registerObjects(tSequenceSet, vAlignment);
-			
-			vAlignment.setProvenance(getDummyProvenance("added"));
-			vAlignment.setGapChar("-");
-			
+			// Create a new vamsas alignment
+			vAlign = new Alignment();
+			vAlign.setProvenance(getDummyProvenance("added"));
+			vAlign.setGapChar("-");
 			Property title = new Property();
 			title.setName("title");
 			title.setType("string");
-			title.setContent(alignmentName);
-			vAlignment.addProperty(title);
+			title.setContent(tAlign.name);
+			vAlign.addProperty(title);
 			
-			// TODO: Add sequences
+			dataset.addAlignment(vAlign);
 			
-			vDataSet.addAlignment(vAlignment);
+			// Link it with the TOPALi data set
+			mapper.registerObjects(tAlign, vAlign);
+		}
+		
+		SequenceSet tSequenceSet = tAlign.getSequenceSet();
+		writeAlignmentSequences(tSequenceSet, vAlign);
+	}
+	
+	private void writeAlignmentSequences(SequenceSet tSequenceSet, Alignment vAlign)
+	{		
+		for(Sequence tSeq : tSequenceSet.getSequences()) {
+			AlignmentSequence vSeq = (AlignmentSequence)mapper.getVamsasObject(tSeq);
+			
+			uk.ac.vamsas.objects.core.Sequence vDSSequence = null;
+			
+			if(vSeq==null) {
+				vSeq = new AlignmentSequence();
+				mapper.registerObjects(tSeq, vSeq);
+				vAlign.addAlignmentSequence(vSeq);
+				
+				//Add sequence to vamsas dataset:
+				vDSSequence = new uk.ac.vamsas.objects.core.Sequence();
+				vDSSequence.setSequence(tSeq.getSequence());
+				vDSSequence.setName(tSeq.name);
+				vDSSequence.setStart(0);
+				vDSSequence.setEnd(tSeq.getLength()-1);
+				if(tSequenceSet.getParams().isDNA())
+					vDSSequence.setDictionary(SymbolDictionary.STANDARD_NA);
+				else
+					vDSSequence.setDictionary(SymbolDictionary.STANDARD_AA);
+				dataset.addSequence(vDSSequence);
+			}
+			
+			vSeq.setSequence(tSeq.getSequence());
+			vSeq.setName(tSeq.name);
+			vSeq.setStart(0);
+			vSeq.setEnd(tSeq.getLength()-1);
+			vSeq.setRefid(vDSSequence);
 		}
 	}
 	
 	
-	void readFromDocument()
-	{
-		// TODO!!!
-	}
+	//--------------------
+	//some dummy methods:
 	
-	
-	
-	Provenance getDummyProvenance()
+	private Provenance getDummyProvenance()
 	{
 		return getDummyProvenance(null);
 	}
 	
-	Provenance getDummyProvenance(String action)
+	private Provenance getDummyProvenance(String action)
 	{
 		Provenance p = new Provenance();
 		p.addEntry(getDummyEntry(action));
@@ -116,7 +176,7 @@ class DocumentHandler
 		return p;
 	}
 	
-	Entry getDummyEntry(String action)
+	private Entry getDummyEntry(String action)
 	{
 		Entry e = new Entry();
 		
