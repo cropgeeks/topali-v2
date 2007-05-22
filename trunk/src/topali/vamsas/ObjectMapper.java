@@ -48,11 +48,14 @@ class ObjectMapper
 	 */
 	Object getTopaliObject(Vobject vamsasObject)
 	{
+		System.out.print("Looking for key for " + vamsasObject);
+		
 		// Does this vamsas object have a key (it won't if it's never been part
 		// of the document, ie, only just been created)
 		VorbaId id = vamsasObject.getVorbaId();
 		if (id == null)
 		{
+			System.out.println("id==null; registering new vamsas object.");
 			// Register the object for use within the session document
 			cdoc.registerObject(vamsasObject);
 			return null;
