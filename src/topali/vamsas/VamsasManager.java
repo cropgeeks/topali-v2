@@ -51,7 +51,7 @@ public class VamsasManager
 		// This can fail - just means pick events won't work
 		createPickHandler();
 		
-		processVamsasDocument();
+		//processVamsasDocument();
 		
 		return true;
 	}
@@ -247,7 +247,7 @@ public class VamsasManager
 	 * Opens a reference to the vamsas session and uses the DocumentHandler to
 	 * store the current TOPALi datasets in it.
 	 */
-	public void writeToDocument(Project project)
+	public void writeToDocument(Project project) throws Exception
 	{
 		System.out.println();
 		System.out.println();
@@ -268,5 +268,18 @@ public class VamsasManager
 				+ "document.\n" + e, MsgBox.ERR);
 		}
 		
+	}
+	
+	public void readFromDocument(Project project) throws Exception {
+		try
+		{
+			IClientDocument cdoc = vorbaclient.getClientDocument();
+			DocumentHandler handler = new DocumentHandler(project, vMap, cdoc);
+			handler.readFromDocument();
+		} catch (IOException e)
+		{
+			MsgBox.msg("TOPALi encountered a problem while reading the VAMSAS "
+					+ "document.\n" + e, MsgBox.ERR);
+		}
 	}
 }

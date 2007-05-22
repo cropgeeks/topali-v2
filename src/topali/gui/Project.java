@@ -7,6 +7,8 @@ package topali.gui;
 
 import static topali.mod.Filters.TOP;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.zip.*;
@@ -42,6 +44,8 @@ public class Project
 	// Is this project associated with a VAMSAS session
 	private String vamsasID;
 
+	LinkedList<PropertyChangeListener> changeListeners = new LinkedList<PropertyChangeListener>();
+	
 	public Project()
 	{
 	}
@@ -56,9 +60,19 @@ public class Project
 		this.datasets = datasets;
 	}
 
+	public void addDataSet(AlignmentData data) {
+		this.datasets.add(data);
+		for(PropertyChangeListener l : changeListeners) {
+			l.propertyChange(new PropertyChangeEvent(this, "", null, data));
+		}
+	}
+	
 	void removeDataSet(AlignmentData data)
 	{
 		datasets.remove(data);
+		for(PropertyChangeListener l : changeListeners) {
+			l.propertyChange(new PropertyChangeEvent(this, "", data, null));
+		}
 	}
 
 	public int[] getTreePath()

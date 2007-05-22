@@ -10,6 +10,8 @@ import java.awt.Cursor;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
 import java.awt.print.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
 
@@ -30,7 +32,7 @@ import topali.vamsas.*;
 import topali.var.Utils;
 import doe.MsgBox;
 
-public class WinMain extends JFrame
+public class WinMain extends JFrame implements PropertyChangeListener
 {
 	// The user's project
 	private Project project = new Project();
@@ -77,6 +79,7 @@ public class WinMain extends JFrame
 		if (Prefs.gui_maximized)
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+		project.changeListeners.add(this);
 	}
 
 	public Project getProject()
@@ -158,6 +161,7 @@ public class WinMain extends JFrame
 			return;
 
 		project = new Project();
+		project.changeListeners.add(this);
 
 		setTitle(Text.Gui.getString("WinMain.gui01"));
 		menubar.setProjectOpenedState();
@@ -176,8 +180,10 @@ public class WinMain extends JFrame
 			return;
 
 		LoadMonitorDialog dialog = new LoadMonitorDialog(this, menubar, name);
-		if (dialog.getProject() != null)
+		if (dialog.getProject() != null) {
 			project = dialog.getProject();
+			project.changeListeners.add(this);
+		}
 	}
 
 	public void menuFileImportDataSet()
@@ -214,9 +220,10 @@ public class WinMain extends JFrame
 	{
 		if (data != null)
 		{
-			project.getDatasets().add(data);
+			//project.getDatasets().add(data);
+			project.addDataSet(data);
 			WinMainMenuBar.aFileSave.setEnabled(true);
-			navPanel.addAlignmentFolder(data);
+			//navPanel.addAlignmentFolder(data);
 		}
 	}
 
@@ -395,9 +402,9 @@ public class WinMain extends JFrame
 			// Then remove it from both the project and the navigation panel
 			project.removeDataSet(data);
 
-			navPanel.removeSelectedNode();
-			rDialog.setAlignmentData(null);
-			ovDialog.setAlignmentPanel(null);
+//			navPanel.removeSelectedNode();
+//			rDialog.setAlignmentData(null);
+//			ovDialog.setAlignmentPanel(null);
 
 			WinMainMenuBar.aFileSave.setEnabled(true);
 		}
@@ -707,7 +714,13 @@ public class WinMain extends JFrame
 	{
 		if (vamsas != null)
 		{
-			vamsas.writeToDocument(project);
+			try
+			{
+				vamsas.writeToDocument(project);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 			//vamsas.writeToDocument(project.getDatasets());
 		}
 		else
@@ -716,6 +729,26 @@ public class WinMain extends JFrame
 
 	void menuVamsasImport()
 	{
+		if(vamsas != null) {
+//			
+//			boolean emptyProject = (project.getDatasets().size()==0);
+//			
+			try
+			{
+				vamsas.readFromDocument(project);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+//			
+//			if(emptyProject) {
+//				for(AlignmentData data : project.getDatasets())
+//					navPanel.addAlignmentFolder(data);
+//			}
+		}
+		else
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
+		
 /*		if (vClient == null)
 		{
 			MsgBox
@@ -795,4 +828,25 @@ public class WinMain extends JFrame
 		System.out.println("Time: " + (e - s) + "ms");
 		//		
 	}
+
+	/**
+	 * This is called when the current project is modified (data added/removed)
+	 */
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		//a new dataset was added
+		if(evt.getOldValue()==null && evt.getNewValue()!=null) {
+			navPanel.addAlignmentFolder((AlignmentData)evt.getNewValue());
+		}
+		
+		//a dataset was removed
+		if(evt.getOldValue()!=null && evt.getNewValue()==null) {
+			navPanel.removeSelectedNode();
+			rDialog.setAlignmentData(null);
+			ovDialog.setAlignmentPanel(null);
+		}
+		
+	}
+	
+	
 }

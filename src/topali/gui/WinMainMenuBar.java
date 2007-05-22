@@ -889,7 +889,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRemove.setEnabled(false);
 
 		aVamExport.setEnabled(false);
-		aVamImport.setEnabled(false);
+		//aVamImport.setEnabled(false);
 	}
 
 	public void updateRecentFileList(Project project)
