@@ -171,7 +171,9 @@ public abstract class WebService
 			// Exceptions thrown in here mean a job (or sub job) has failed. We
 			// may as well cancel the entire job at this point and free up the
 			// cluster
-			deleteJob(jobId);
+			File jobDir = new File(getParameter("job-dir"), jobId);
+			ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
+			cluster.deleteJob(jobDir);
 			
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
