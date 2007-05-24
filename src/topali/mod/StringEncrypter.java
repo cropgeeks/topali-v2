@@ -9,8 +9,10 @@ import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Decoder;
+//import sun.misc.BASE64Encoder;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class StringEncrypter
 {
@@ -91,8 +93,11 @@ public class StringEncrypter
 			byte[] cleartext = unencryptedString.getBytes(UNICODE_FORMAT);
 			byte[] ciphertext = cipher.doFinal(cleartext);
 
-			BASE64Encoder base64encoder = new BASE64Encoder();
-			return base64encoder.encode(ciphertext);
+//			BASE64Encoder base64encoder = new BASE64Encoder();
+//			return base64encoder.encode(ciphertext);
+			
+			return new String(new Base64().encodeBase64(ciphertext));
+
 		} catch (Exception e)
 		{
 			throw new EncryptionException(e);
@@ -109,8 +114,9 @@ public class StringEncrypter
 		{
 			SecretKey key = keyFactory.generateSecret(keySpec);
 			cipher.init(Cipher.DECRYPT_MODE, key);
-			BASE64Decoder base64decoder = new BASE64Decoder();
-			byte[] cleartext = base64decoder.decodeBuffer(encryptedString);
+//			BASE64Decoder base64decoder = new BASE64Decoder();
+//			byte[] cleartext = base64decoder.decodeBuffer(encryptedString);			
+			byte[] cleartext = new Base64().decodeBase64(encryptedString.getBytes());
 			byte[] ciphertext = cipher.doFinal(cleartext);
 
 			return bytes2String(ciphertext);
