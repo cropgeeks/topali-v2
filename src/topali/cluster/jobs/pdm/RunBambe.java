@@ -116,9 +116,11 @@ class RunBambe
 		// out.write(sep + "tree-file = " + result.pdm_tree_file);
 
 		out.write(sep + "window-interval = 10000");
-		out.write(sep + "sample-interval = 200"); // also in
+//		out.write(sep + "sample-interval = " + ((int)(result.pdm_cycles / 30))); // also in
 													// AutoCorrelationTime.lengthBurnIn()
 													// and sampleSize()
+		out.write(sep + "sample-interval = 200");													
+													
 		out.write(sep + "file-root = run1");
 		out.write(sep + "newick-format = true");
 		out.write(sep + "likelihood-model = F84");
