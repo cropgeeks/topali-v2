@@ -4,4 +4,5 @@
 #$ -cwd
 #$ -j y
 
-$JAVA -cp $TOPALi topali.cluster.jobs.mrbayes.MrBayesAnalysis "$JOB_DIR"
+hostname
+$JAVA -Xmx256m -cp $TOPALi topali.cluster.jobs.mrbayes.MrBayesAnalysis "$JOB_DIR"
