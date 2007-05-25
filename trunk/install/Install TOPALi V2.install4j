@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="3.2.4">
+<install4j version="3.2.5">
   <directoryPresets config=".." />
-  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.15" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
+  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.bioss.ac.uk" version="2.16" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false">
     <searchSequence>
       <registry />
       <envVar name="JAVA_HOME" />
@@ -83,20 +83,19 @@
     <customScreens />
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2" allLaunchers="true" includedJRE="windows-x86-1.5.0_06" manualJREEntry="false" bundleType="2" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" programGroup="TOPALi v2" allowUserDisableStartMenuCreation="false" reboot="false" rebootUninstaller="false" modeQuickLaunchIon="1">
+    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2" allLaunchers="true" includedJRE="windows-x86-1.6.0_01" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" programGroup="TOPALi v2" allowUserDisableStartMenuCreation="false" reboot="false" rebootUninstaller="false" modeQuickLaunchIon="1">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
+        <entry location="web/logs" launcher="false" />
         <entry location="web/WEB-INF/cluster" launcher="false" />
-        <entry location="web/WEB-INF/deploy.bat" launcher="false" />
         <entry location="web/WEB-INF/deploy.sh" launcher="false" />
         <entry location="web/WEB-INF/deploy.wsdd" launcher="false" />
         <entry location="web/WEB-INF/lib/axis-ant.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j-1.2.8.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j.properties" launcher="false" />
-        <entry location="web/WEB-INF/lib/looks-1.3.2.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/wsdl4j-1.5.1.jar" launcher="false" />
-        <entry location="web/WEB-INF/server-config.wsdd" launcher="false" />
+        <entry location="web/WEB-INF/lib/junit-4.1.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/looks-2.0.2.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/servlet-api.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/wsdl4j.jar" launcher="false" />
         <entry location="web/WEB-INF/web.xml" launcher="false" />
         <entry location="binaries" launcher="false" />
       </exclude>
@@ -104,19 +103,19 @@
       <excludedScreenIds />
       <additionalStartMenuEntries />
     </win32>
-    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" allLaunchers="true" includedJRE="linux-x86-1.5.0_06" manualJREEntry="false" bundleType="2" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
+    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" allLaunchers="true" includedJRE="linux-x86-1.6.0_01" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
+        <entry location="web/logs" launcher="false" />
         <entry location="web/WEB-INF/cluster" launcher="false" />
-        <entry location="web/WEB-INF/deploy.bat" launcher="false" />
         <entry location="web/WEB-INF/deploy.sh" launcher="false" />
         <entry location="web/WEB-INF/deploy.wsdd" launcher="false" />
         <entry location="web/WEB-INF/lib/axis-ant.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j-1.2.8.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j.properties" launcher="false" />
-        <entry location="web/WEB-INF/lib/wsdl4j-1.5.1.jar" launcher="false" />
-        <entry location="web/WEB-INF/server-config.wsdd" launcher="false" />
+        <entry location="web/WEB-INF/lib/junit-4.1.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/office-2.0.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/servlet-api.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/wsdl4j.jar" launcher="false" />
         <entry location="web/WEB-INF/web.xml" launcher="false" />
         <entry location="binaries" launcher="false" />
       </exclude>
@@ -124,19 +123,19 @@
       <excludedScreenIds />
       <customScriptLines />
     </unixInstaller>
-    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" allLaunchers="true" includedJRE="solaris-sparc-1.5.0_06" manualJREEntry="false" bundleType="2" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
+    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" allLaunchers="true" includedJRE="solaris-sparc-1.6.0_01" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
+        <entry location="web/logs" launcher="false" />
         <entry location="web/WEB-INF/cluster" launcher="false" />
-        <entry location="web/WEB-INF/deploy.bat" launcher="false" />
         <entry location="web/WEB-INF/deploy.sh" launcher="false" />
         <entry location="web/WEB-INF/deploy.wsdd" launcher="false" />
         <entry location="web/WEB-INF/lib/axis-ant.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j-1.2.8.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j.properties" launcher="false" />
-        <entry location="web/WEB-INF/lib/wsdl4j-1.5.1.jar" launcher="false" />
-        <entry location="web/WEB-INF/server-config.wsdd" launcher="false" />
+        <entry location="web/WEB-INF/lib/junit-4.1.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/office-2.0.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/servlet-api.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/wsdl4j.jar" launcher="false" />
         <entry location="web/WEB-INF/web.xml" launcher="false" />
         <entry location="binaries" launcher="false" />
       </exclude>
@@ -150,17 +149,16 @@
       </selectedLaunchers>
       <messageSet language="English" />
       <exclude>
+        <entry location="web/logs" launcher="false" />
         <entry location="web/WEB-INF/cluster" launcher="false" />
-        <entry location="web/WEB-INF/deploy.bat" launcher="false" />
         <entry location="web/WEB-INF/deploy.sh" launcher="false" />
         <entry location="web/WEB-INF/deploy.wsdd" launcher="false" />
         <entry location="web/WEB-INF/lib/axis-ant.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j-1.2.8.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/log4j.properties" launcher="false" />
-        <entry location="web/WEB-INF/lib/looks-1.3.2.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/junit-4.1.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/looks-2.0.2.jar" launcher="false" />
         <entry location="web/WEB-INF/lib/office-2.0.jar" launcher="false" />
-        <entry location="web/WEB-INF/lib/wsdl4j-1.5.1.jar" launcher="false" />
-        <entry location="web/WEB-INF/server-config.wsdd" launcher="false" />
+        <entry location="web/WEB-INF/lib/servlet-api.jar" launcher="false" />
+        <entry location="web/WEB-INF/lib/wsdl4j.jar" launcher="false" />
         <entry location="web/WEB-INF/web.xml" launcher="false" />
         <entry location="binaries" launcher="false" />
       </exclude>
