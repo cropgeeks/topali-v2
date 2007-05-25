@@ -62,6 +62,16 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+  - [NF] Mouse highlighting (is it worth to mention that?)
+  - [NF] New Webservice "Codon Usage Analysis", which uses CodonW to analyse
+    Codon Usage. 
+  - [NF] New Webservice "Subst. Model Test", which uses Modelgenerator to find
+    the most appropriate DNA/AA substitution model.
+  - [NF] MrBayes Webservice can now create trees from DNA as well as protein 
+    sequence alignments, and accepts more parameters (DNA/AA models, invariant 
+    sites, gamma)
+  - [NF] New methods for positive selection (CodeML site model and branch model
+    analysis)
   - [NF] The job status panel will now tell you what position in the queue (on
     the remote cluster) you job is currently in while waiting to run.
   - [NF] Improvements to job feedback (finer percentage levels) for LRT and DSS
