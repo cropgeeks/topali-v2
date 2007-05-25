@@ -1,59 +1,25 @@
+<%@ page import="org.apache.log4j.*" %>
 <%@ page import="java.io.*" %>
 
 <%
-	synchronized (request)
-		{
-			ServletContext sc = request.getSession().getServletContext();
-			String filename = sc.getRealPath("/")+"/logs/users.log";
-			
-			Object o = request.getParameter("client");
-			if (o!=null && o.equals("topali")) 
-			{
-				o = request.getParameter("id");
-				if(o!=null) {
-					try
-					{
-						long ident = Long.parseLong(o.toString());
-						long maxAge = System.currentTimeMillis()-(30*24*60*60*1000);
-						
-						File file = new File(filename);
-						if(!file.exists())
-							file.createNewFile();
-							
-						StringBuffer sb = new StringBuffer();
-						BufferedReader read = new BufferedReader(new FileReader(file));
-						String line = null;
-						while((line=read.readLine())!=null) {
-							String[] tmp = line.split("\\s+");
-							long id = Long.parseLong(tmp[0]);
-							long age = Long.parseLong(tmp[1]);
-							if(id==ident || age>maxAge)
-								continue;
-							else {
-								sb.append(line);
-								sb.append('\n');
-								}
-						}
-						sb.append(ident+"\t"+System.currentTimeMillis());
-						sb.append('\n');
-						read.close();
-						
-						BufferedWriter write = new BufferedWriter(new FileWriter(file));
-						write.write(sb.toString());
-						write.flush();
-						write.close();
-						
-					} catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+	String path = application.getRealPath("/");
+	PropertyConfigurator.configure(path + "/tracking.properties");
+	Logger logger = Logger.getLogger("topali.logger");
+	
+	
+	String client = request.getParameter("client");
+	String id = request.getParameter("id");
+	
+	if (client != null && id != null)
+	{
+		String host = request.getRemoteHost();
+		String addr = request.getRemoteAddr();
+		
+		logger.info(host + " - " + addr + " - " + id);
+	}
 %>
 
 <pre>
-
 Current = 16
 
 Release History:
@@ -63,13 +29,15 @@ Release History:
 [SC] = Source Code
 
   - [NF] Mouse highlighting (is it worth to mention that?)
+  - [NF] Failed jobs now clear from the cluster as soon as they are detected,
+    rather than waiting on the user to delete them.
   - [NF] New Webservice "Codon Usage Analysis", which uses CodonW to analyse
     Codon Usage. 
   - [NF] New Webservice "Subst. Model Test", which uses Modelgenerator to find
     the most appropriate DNA/AA substitution model.
   - [NF] MrBayes Webservice can now create trees from DNA as well as protein 
     sequence alignments, and accepts more parameters (DNA/AA models, invariant 
-    sites, gamma)
+    sites, gamma).
   - [NF] New methods for positive selection (CodeML site model and branch model
     analysis)
   - [NF] The job status panel will now tell you what position in the queue (on
