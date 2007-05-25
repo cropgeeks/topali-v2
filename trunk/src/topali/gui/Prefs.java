@@ -193,23 +193,15 @@ public class Prefs extends PreferencesXML
 	public static int web_proxy_port;
 	public static String web_proxy_username, web_proxy_password;
 
-	//Id for identifying this client
-	public static Long ident;
+	// Id for identifying this client
+	public static String appId = new String();
 	
 	protected void getPreferences()
 	{
-		//Generate a ident number if there is none.
-		Object prop = p.getProperty("ident");
-		try
-		{
-			ident = Long.parseLong(prop.toString());
-		} catch (Exception e)
-		{
-			log.info("Generating application id.");
-			long l = (new Random()).nextLong(); 
-			l = (l<0) ? -l : l;
-			ident = l;
-		}
+		// Generate a "unique" 32 character id number
+		Random rnd = new Random();
+		for (int i = 0; i < 32; i++)
+			appId += rnd.nextInt(10);
 		
 		setDisplayDefaults();
 		setPDMDefaults();
@@ -218,6 +210,7 @@ public class Prefs extends PreferencesXML
 		setDSSDefaults();
 		setLRTDefaults();
 		setWebDefaults();
+
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -386,6 +379,8 @@ public class Prefs extends PreferencesXML
 		web_proxy_port = getInt("web_proxy_port", web_proxy_port);
 		web_proxy_username = getStr("web_proxy_username", web_proxy_username);
 		web_proxy_password = getStr("web_proxy_password", web_proxy_password);
+		
+		appId = getStr("appId", appId);
 	}
 
 	protected void setPreferences()
@@ -543,7 +538,7 @@ public class Prefs extends PreferencesXML
 		setStr("web_proxy_username", web_proxy_username);
 		setStr("web_proxy_password", web_proxy_password);
 		
-		setStr("ident", String.valueOf(ident));
+		setStr("appId", appId);
 	}
 
 	public static void setDisplayDefaults()

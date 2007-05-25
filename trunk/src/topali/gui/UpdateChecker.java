@@ -23,7 +23,7 @@ class UpdateChecker extends Thread
 {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static int RELEASE = 17;
+	private static int RELEASE = 16;
 
 	private int webVersion = 0;
 
@@ -41,8 +41,10 @@ class UpdateChecker extends Thread
 		try
 		{
 			URL url = new URL(
-					"http://gruffalo.scri.ac.uk/topali/version.jsp?client=topali&id="+Prefs.ident);
+					"http://gruffalo.scri.ac.uk/topali/tracking.jsp?client=topali&id="+Prefs.appId);
 			URLConnection uc = url.openConnection();
+			
+			System.out.println(url);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
 					.getInputStream()));
@@ -80,7 +82,7 @@ class UpdateChecker extends Thread
 		{
 			JPanel p = new JPanel(new BorderLayout());
 			p.add(new JLabel("<html>A new version of TOPALi v2 is available.<br>Please visit our website to obtain it.</html>"), BorderLayout.CENTER);
-			p.add(new LinkLabel("http://www.bioss.ac.uk/knowledge/topali"), BorderLayout.SOUTH);
+			p.add(new LinkLabel("http://www.topali.org"), BorderLayout.SOUTH);
 			JOptionPane.showMessageDialog(null, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
 			
 //			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
