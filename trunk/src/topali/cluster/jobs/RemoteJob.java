@@ -48,14 +48,11 @@ public abstract class RemoteJob extends AnalysisJob
 			url = Prefs.web_broker_url + "/services/resource-broker";
 
 			getCall();
-			call
-					.setOperationName(new QName("ResourceBroker",
-							"getAvailableURL"));
+			call.setOperationName(new QName("ResourceBroker", "queryForResource"));
 
 			// The URL is now set to the return from this call - which will be
 			// the actual server we run the job on
-			String broker = (String) call.invoke(new Object[]
-			{ "topali" });
+			String broker = (String) call.invoke(new Object[] {});
 
 			// Append what we need for a TOPALi job onto the server's URL
 			url = broker + "/services/" + serviceName;
@@ -63,7 +60,8 @@ public abstract class RemoteJob extends AnalysisJob
 
 			// Reset the call object
 			call = null;
-		} else
+		}
+		else
 		{
 			url = Prefs.web_direct_url + "/services/" + serviceName;
 			result.url = url;
@@ -92,7 +90,8 @@ public abstract class RemoteJob extends AnalysisJob
 				// Boolean.TRUE);
 				// Compress response (if possible)
 				// call.setProperty(HTTPConstants.MC_ACCEPT_GZIP, Boolean.TRUE);
-			} catch (Exception exception)
+			}
+			catch (Exception exception)
 			{
 				call = null;
 				throw exception;
@@ -106,8 +105,7 @@ public abstract class RemoteJob extends AnalysisJob
 	{
 		call = getCall();
 		call.setOperationName(new QName(serviceName, "cleanup"));
-		call.invoke(new Object[]
-		{ result.jobId });
+		call.invoke(new Object[] { result.jobId });
 
 		result.status = JobStatus.COMPLETED;
 	}
@@ -116,8 +114,7 @@ public abstract class RemoteJob extends AnalysisJob
 	{
 		call = getCall();
 		call.setOperationName(new QName(serviceName, "deleteJob"));
-		call.invoke(new Object[]
-		{ result.jobId });
+		call.invoke(new Object[] { result.jobId });
 
 		result.status = JobStatus.CANCELLED;
 	}
