@@ -183,18 +183,21 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		if (m.supportsPSS)
 		{
 			List<PSSite> pss = m.getPSS(-1f);
-			data = new double[pss.size() * 3][2];
+			data = new double[super.data.getSequenceSet().getLength()][2];
 			for (int i = 0; i < pss.size(); i++)
 			{
 				PSSite pssite = pss.get(i);
-				int n = pssite.getPos() * 3 - 1;
+				int n = pssite.getPos();
 				double p = pssite.getP();
+				
+				// n[1,length] -> data[x][y], x[0, length-1] 
 				data[n - 2][0] = n - 1;
-				data[n - 2][1] = p;
 				data[n - 1][0] = n;
-				data[n - 1][1] = p;
 				data[n][0] = n + 1;
+				
 				data[n - 2][1] = p;
+				data[n - 1][1] = p;
+				data[n][1] = p;
 			}
 		} else
 		{

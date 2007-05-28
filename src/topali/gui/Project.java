@@ -21,12 +21,13 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
 import topali.data.AlignmentData;
+import topali.data.ViewableDataObject;
 import topali.fileio.Castor;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
 import doe.MsgBox;
 
-public class Project
+public class Project extends ViewableDataObject
 {
 	static Logger log = Logger.getLogger(Project.class);
 	
@@ -44,8 +45,6 @@ public class Project
 	// Is this project associated with a VAMSAS session
 	private String vamsasID;
 
-	LinkedList<PropertyChangeListener> changeListeners = new LinkedList<PropertyChangeListener>();
-	
 	public Project()
 	{
 	}

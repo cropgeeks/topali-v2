@@ -17,11 +17,11 @@ public class MGResult extends AlignmentResult
 		
 	}
 	
-	public SubstitutionModel getModel(String name, boolean I, boolean G, boolean F) {
+	public SubstitutionModel getModel(String name) {
 		SubstitutionModel res = null;
 		
 		for(SubstitutionModel m : models) {
-			if(m.name.equals(name) && m.I==I && m.G==G && m.F==F) {
+			if(m.name.equals(name)) {
 				res = m;
 				break;
 			}

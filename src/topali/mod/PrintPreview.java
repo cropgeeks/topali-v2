@@ -1,4 +1,4 @@
-package topali.gui;
+package topali.mod;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import doe.MsgBox;
 
+import topali.gui.Icons;
 import topali.gui.dialog.PrinterDialog;
 
 /**

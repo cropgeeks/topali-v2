@@ -46,7 +46,7 @@ public class CodeMLMonitor
 				File runDir = new File(jobDir, "run" + (i+1));
 	
 				boolean ok = new File(runDir, "model.xml").exists();
-				text += result.models.get(i).abbr + "=" + ok + " ";
+				text += result.models.get(i).model + "=" + ok + " ";
 	
 				// But also check if an error file for this run exists
 				if (new File(runDir, "error.txt").exists())

@@ -51,7 +51,7 @@ public class CodeMLResult extends AlignmentResult
 				continue;
 			}
 			
-			if(thisModel.abbr.equals(lastModel.abbr)) {
+			if(thisModel.model.equals(lastModel.model)) {
 				if(thisModel.likelihood>lastModel.likelihood)
 					lastModel = thisModel;
 			}

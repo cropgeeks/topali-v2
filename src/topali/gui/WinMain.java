@@ -28,6 +28,7 @@ import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.NavPanel;
 import topali.gui.nav.SequenceSetNode;
 import topali.gui.tree.TreePane;
+import topali.mod.PrintPreview;
 import topali.vamsas.*;
 import topali.var.Utils;
 import doe.MsgBox;
@@ -79,7 +80,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (Prefs.gui_maximized)
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		project.changeListeners.add(this);
+		project.addChangeListener(this);
 	}
 
 	public Project getProject()
@@ -161,7 +162,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			return;
 
 		project = new Project();
-		project.changeListeners.add(this);
+		project.addChangeListener(this);
 
 		setTitle(Text.Gui.getString("WinMain.gui01"));
 		menubar.setProjectOpenedState();
@@ -182,7 +183,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		LoadMonitorDialog dialog = new LoadMonitorDialog(this, menubar, name);
 		if (dialog.getProject() != null) {
 			project = dialog.getProject();
-			project.changeListeners.add(this);
+			project.addChangeListener(this);
 		}
 	}
 

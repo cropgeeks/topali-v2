@@ -14,21 +14,20 @@ import java.util.*;
 public class CMLModel
 {
 	//Predefined models
-	public final static int MODEL_M0 = 1;
-	public final static int MODEL_M1a = 2;
-	public final static int MODEL_M2a = 3;
-	public final static int MODEL_M1 = 4;
-	public final static int MODEL_M2 = 5;
-	public final static int MODEL_M3 = 6;
-	public final static int MODEL_M7 = 7;
-	public final static int MODEL_M8 = 8;
-
+	public final static String MODEL_M0 = "M0";
+	public final static String MODEL_M1a = "M1a";
+	public final static String MODEL_M2a = "M2a";
+	public final static String MODEL_M1 = "M1";
+	public final static String MODEL_M2 = "M2";
+	public final static String MODEL_M3 = "M3";
+	public final static String MODEL_M7 = "M7";
+	public final static String MODEL_M8 = "M8";
+	
 	private static String nl = System.getProperty("line.separator");
 	
 	//Init Parameters
-	public int model;
+	public String model;
 	public String name;
-	public String abbr;
 	public int nParameter;
 	public boolean supportsPSS;
 	public boolean fixedOmega;
@@ -51,7 +50,7 @@ public class CMLModel
 	 * Instantiate a certain predefined model
 	 * @param model
 	 */
-	public CMLModel(int model) {
+	public CMLModel(String model) {
 		
 		this.model = model;
 
@@ -62,30 +61,26 @@ public class CMLModel
 		settings.put("fix_kappa","0");
 		settings.put("kappa","2");
 		
-		switch(model) {
-		case MODEL_M0:
+		if(model.equals(MODEL_M0)) {
 			name = "M0 (one-ratio)";
-			abbr = "M0";
 			nParameter = 1;
 			supportsPSS = false;
 			fixedOmega = false;
 			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","0");
-			break;
-		case MODEL_M1a:
+		}
+		else if(model.equals(MODEL_M1a)) {
 			name = "M1a (NearlyNeutral)";
-			abbr = "M1a";
 			nParameter = 2;
 			supportsPSS = false;
 			fixedOmega = false;
 			wStart.add(5.0);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","1");
-			break;
-		case MODEL_M2a:
+		}
+		else if(model.equals(MODEL_M2a)) {
 			name = "M2a (PositiveSelection)";
-			abbr = "M2a";
 			nParameter = 4;
 			supportsPSS = true;
 			fixedOmega = false;
@@ -97,30 +92,27 @@ public class CMLModel
 			wStart.add(3.2);
 			settings.put("fix_omega","0");
 			settings.put("NSsites","2");
-			break;
-		case MODEL_M1:
+		}
+		else if(model.equals(MODEL_M1)) {
 			name = "M1 (NearlyNeutral)";
-			abbr = "M1";
 			nParameter = 1;
 			supportsPSS = false;
 			fixedOmega = true;
 			settings.put("fix_omega","1");
 			settings.put("omega","1");
 			settings.put("NSsites","1");
-			break;
-		case MODEL_M2:
+		}
+		else if(model.equals(MODEL_M2)) {
 			name = "M2 (PositiveSelection)";
-			abbr = "M2";
 			nParameter = 3;
 			supportsPSS = true;
 			fixedOmega = true;
 			settings.put("fix_omega","1");
 			settings.put("omega","1");
 			settings.put("NSsites","2");
-			break;
-		case MODEL_M3:
+		}
+		else if(model.equals(MODEL_M3)) {
 			name = "M3 (discrete (3 categories))";
-			abbr = "M3";
 			nParameter = 5;
 			supportsPSS = true;
 			fixedOmega = false;
@@ -128,10 +120,9 @@ public class CMLModel
 			settings.put("fix_omega","0");
 			settings.put("NSsites","3");
 			settings.put("ncatG","3");
-			break;
-		case MODEL_M7:
+		}
+		else if(model.equals(MODEL_M7)) {
 			name = "M7 (beta (10 categories))";
-			abbr = "M7";
 			nParameter = 2;
 			supportsPSS = false;
 			fixedOmega = false;
@@ -139,10 +130,9 @@ public class CMLModel
 			settings.put("fix_omega","0");
 			settings.put("NSsites","7");
 			settings.put("ncatG","10");
-			break;
-		case MODEL_M8:
+		}
+		else if(model.equals(MODEL_M8)) {
 			name = "M8 (beta&w>1 (11 categories))";
-			abbr = "M8";
 			nParameter = 4;
 			supportsPSS = true;
 			fixedOmega = false;
@@ -155,7 +145,6 @@ public class CMLModel
 			settings.put("fix_omega","0");
 			settings.put("NSsites","8");
 			settings.put("ncatG","10");
-			break;
 		}
 	}
 	
@@ -235,6 +224,32 @@ public class CMLModel
 				res.add(ps);
 		}
 		return res;
+	}
+	
+	public float[][] getGraph() {
+		if(supportsPSS) {
+			List<PSSite> sites = getPSS(0);
+			float[][] result = new float[sites.size()][2];
+			for(int i=0; i<sites.size(); i++) {
+				result[i][0] = (float)(sites.get(i).pos);
+				result[i][1] = (float)sites.get(i).p;
+			}
+			return result;
+		}
+		return null;
+	}
+	
+	public void setGraph(float[][] graph) {
+		if(supportsPSS) {
+			pssList = null;
+			StringBuffer sb = new StringBuffer();
+			for(int i=0; i<graph.length; i++) {
+				int pos = (int)(graph[i][0]);
+				float value = graph[i][1];
+				sb.append(pos+"|.|"+value+" ");
+			}
+			pss = sb.toString();
+		}
 	}
 	
 	public String toString() {

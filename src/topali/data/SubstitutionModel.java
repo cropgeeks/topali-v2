@@ -7,7 +7,6 @@ package topali.data;
 
 public class SubstitutionModel {
 	String name;
-	boolean I, G, F;
 	double aic1, aic2, bic, lnl;
 	
 	public SubstitutionModel() {
@@ -44,36 +43,6 @@ public class SubstitutionModel {
 		this.bic = bic;
 	}
 
-	public boolean isF()
-	{
-		return F;
-	}
-
-	public void setF(boolean f)
-	{
-		F = f;
-	}
-
-	public boolean isG()
-	{
-		return G;
-	}
-
-	public void setG(boolean g)
-	{
-		G = g;
-	}
-
-	public boolean isI()
-	{
-		return I;
-	}
-
-	public void setI(boolean i)
-	{
-		I = i;
-	}
-
 	public double getLnl()
 	{
 		return lnl;
@@ -104,9 +73,6 @@ public class SubstitutionModel {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("SubstitutionModel[");
 			buffer.append("name = ").append(name);
-			buffer.append(", I = ").append(I);
-			buffer.append(", G = ").append(G);
-			buffer.append(", F = ").append(F);
 			buffer.append(", aic1 = ").append(aic1);
 			buffer.append(", aic2 = ").append(aic2);
 			buffer.append(", bic = ").append(bic);
