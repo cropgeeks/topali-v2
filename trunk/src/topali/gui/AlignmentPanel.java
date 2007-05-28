@@ -122,6 +122,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 
 		scroller = new Scroller();
 		scroller.start();
+
 	}
 
 	public SequenceListPanel getListPanel()

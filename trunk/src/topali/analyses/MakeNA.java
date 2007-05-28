@@ -77,7 +77,7 @@ public class MakeNA
 
 			//TODO: Why gapless!?
 			for (int p = 0; p < proBuf.length(); p++)
-				//if (proBuf.charAt(p) != '-')
+				if (proBuf.charAt(p) != '-')
 					gaplessCount++;
 
 			if ((gaplessCount * 3) != dnaBuf.length())

@@ -5,11 +5,13 @@
 
 package topali.data;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.LinkedList;
 
 /* Represents an Alignment and the results/analyses run upon it. */
-public class AlignmentData
+public class AlignmentData extends ViewableDataObject
 {
 	// The alignment's name
 	public String name;
@@ -106,13 +108,24 @@ public class AlignmentData
 		int index = results.indexOf(oldR);
 		results.remove(index);
 		results.add(index, newR);
+		
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "replaceResult", oldR, newR));
 	}
 
 	public void removeResult(AnalysisResult result)
 	{
 		results.remove(result);
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "removeResult", result, null));
 	}
 
+	public void addResult(AnalysisResult result) {
+		results.add(result);
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "addResult", null, result));
+	}
+	
 	public ResultsTracker getTracker()
 	{
 		return tracker;
@@ -139,16 +152,21 @@ public class AlignmentData
 	{
 		if (start == -1 || end == -1)
 		{
-			this.activeRegionS = 1;
-			this.activeRegionE = sequenceSet.getLength();
+			setActiveRegionS(1);
+			setActiveRegionE(sequenceSet.getLength());
 		} else
 		{
-			this.activeRegionS = start;
-			this.activeRegionE = end;
+			setActiveRegionS(start);
+			setActiveRegionE(end);
 		}
 	}
 
 	// ------------------
+	public int getActiveRegionS()
+	{
+		return activeRegionS;
+	}
+	
 	public int getActiveRegionE()
 	{
 		return activeRegionE;
@@ -156,16 +174,17 @@ public class AlignmentData
 
 	public void setActiveRegionE(int activeRegionE)
 	{
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "activeRegionE", this.activeRegionE, activeRegionE));
+		
 		this.activeRegionE = activeRegionE;
-	}
-
-	public int getActiveRegionS()
-	{
-		return activeRegionS;
 	}
 
 	public void setActiveRegionS(int activeRegionS)
 	{
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "activeRegionS", this.activeRegionS, activeRegionS));
+		
 		this.activeRegionS = activeRegionS;
 	}
 

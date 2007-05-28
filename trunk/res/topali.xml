@@ -35,6 +35,7 @@
   <field name="model" type="string" />
   <field name="modelGamma" type="boolean" get-method="isModelGamma" set-method="setModelGamma" />
   <field name="modelInv" type="boolean" get-method="isModelInv" set-method="setModelInv" />
+  <field name="needCalculation" type="boolean" get-method="isNeedCalculation" set-method="setNeedCalculation" />
 </class>
 
 <!-- SequenceSet -->
@@ -259,9 +260,7 @@
 <class name="topali.data.CMLModel" auto-complete="false">
   <field name="name" type="string"  direct="true">
 		<bind-xml node="attribute"/></field>
-  <field name="abbr" type="string"  direct="true">
-		<bind-xml node="attribute"/></field>	
-  <field name="model" type="integer"  direct="true">
+  <field name="model" type="string"  direct="true">
 		<bind-xml node="attribute"/></field>
   <field name="nParameter" type="integer"  direct="true">
 		<bind-xml node="attribute"/></field>
@@ -442,12 +441,6 @@
   <!-- SubstitutionModel -->
   <class name="topali.data.SubstitutionModel">
     <field name="name" type="string">
-      <bind-xml node="attribute"/></field>
-    <field name="I" type="boolean" get-method="isI" set-method="setI">
-      <bind-xml node="attribute"/></field>
-    <field name="G" type="boolean" get-method="isG" set-method="setG">
-      <bind-xml node="attribute"/></field>
-    <field name="F" type="boolean" get-method="isF" set-method="setF">
       <bind-xml node="attribute"/></field>
     <field name="aic1" type="double">
       <bind-xml node="attribute"/></field>     

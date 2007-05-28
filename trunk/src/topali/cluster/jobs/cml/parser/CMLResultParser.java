@@ -29,33 +29,30 @@ public abstract class CMLResultParser
 	{
 		CMLResultParser parser = null;
 
-		switch (model.model)
-		{
-		case CMLModel.MODEL_M0:
+		if(model.model.equals(CMLModel.MODEL_M0))
 			parser = new Model0Parser(model);
-			break;
-		case CMLModel.MODEL_M1:
+		
+		else if(model.model.equals(CMLModel.MODEL_M1)) 
 			parser = new Model1aParser(model);
-			break; // same as M1a
-		case CMLModel.MODEL_M2:
+		
+		else if(model.model.equals(CMLModel.MODEL_M2))
 			parser = new Model2aParser(model);
-			break; // same as M2a
-		case CMLModel.MODEL_M1a:
+		
+		else if(model.model.equals(CMLModel.MODEL_M1a))
 			parser = new Model1aParser(model);
-			break;
-		case CMLModel.MODEL_M2a:
+			
+		else if(model.model.equals(CMLModel.MODEL_M2a))
 			parser = new Model2aParser(model);
-			break;
-		case CMLModel.MODEL_M3:
+			
+		else if(model.model.equals(CMLModel.MODEL_M3))
 			parser = new Model3Parser(model);
-			break;
-		case CMLModel.MODEL_M7:
+			
+		else if(model.model.equals(CMLModel.MODEL_M7))
 			parser = new Model7Parser(model);
-			break;
-		case CMLModel.MODEL_M8:
+			
+		else if(model.model.equals(CMLModel.MODEL_M8))
 			parser = new Model8Parser(model);
-			break;
-		}
+			
 
 		if (parser == null)
 			throw new RuntimeException(

@@ -87,7 +87,7 @@ public class Model3Parser extends CMLResultParser
 					int pos = Integer.parseInt(tmp[0]);
 					char aa = tmp[1].charAt(0);
 					float prob = Float.parseFloat(tmp[4]);
-					pss.append(pos);
+					pss.append(pos*3-1); //transform the aa position into a nuc. position
 					pss.append('|');
 					pss.append(aa);
 					pss.append('|');

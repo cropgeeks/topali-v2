@@ -48,54 +48,28 @@ public class MGParser
 					String s2 = tmp[5];
 					String s3 = tmp[8];
 					
-					String[] tmp2 = s1.split("\\+");
-					String name = tmp2[0];
-					boolean i = s1.contains("+I");
-					boolean g = s1.contains("+G");
-					boolean f = s1.contains("+F");
-					SubstitutionModel mod = models.getModel(name, i, g, f);
+					SubstitutionModel mod = models.getModel(s1);
 					if(mod==null) {
 						mod = new SubstitutionModel();
-						mod.setName(name);
-						mod.setI(i);
-						mod.setG(g);
-						mod.setF(f);
+						mod.setName(s1);
 						models.models.add(mod);
 					}
 					mod.setAic1(aic1);
 					mod.setLnl(lnl1);
 					
-					tmp2 = s2.split("\\+");
-					name = tmp2[0];
-					i = s2.contains("+I");
-					g = s2.contains("+G");
-					f = s2.contains("+F");
-					
-					mod = models.getModel(name, i, g, f);
+					mod = models.getModel(s2);
 					if(mod==null) {
 						mod = new SubstitutionModel();
-						mod.setName(name);
-						mod.setI(i);
-						mod.setG(g);
-						mod.setF(f);
+						mod.setName(s2);
 						models.models.add(mod);
 					}
 					mod.setAic2(aic2);
 					mod.setLnl(lnl2);
-					
-					tmp2 = s3.split("\\+");
-					name = tmp2[0];
-					i = s3.contains("+I");
-					g = s3.contains("+G");
-					f = s3.contains("+F");
-					
-					mod = models.getModel(name, i, g, f);
+
+					mod = models.getModel(s3);
 					if(mod==null) {
 						mod = new SubstitutionModel();
-						mod.setName(name);
-						mod.setI(i);
-						mod.setG(g);
-						mod.setF(f);
+						mod.setName(s3);
 						models.models.add(mod);
 					}
 					mod.setBic(bic);

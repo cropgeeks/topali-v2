@@ -105,35 +105,35 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 		cM8.setSelected(false);
 		
 		for(CMLModel m : res.models) {
-			if(m.abbr.equals(m0.abbr)) {
+			if(m.model.equals(m0.model)) {
 				cM0.setSelected(true);
 				m0 = m;
 			}
-			if(m.abbr.equals(m1.abbr)) {
+			if(m.model.equals(m1.model)) {
 				cM1.setSelected(true);
 				m1 = m;
 			}
-			if(m.abbr.equals(m2.abbr)) {
+			if(m.model.equals(m2.model)) {
 				cM2.setSelected(true);
 				m2 = m;
 			}
-			if(m.abbr.equals(m1a.abbr)) {
+			if(m.model.equals(m1a.model)) {
 				cM1a.setSelected(true);
 				m1a = m;
 			}
-			if(m.abbr.equals(m2a.abbr)) {
+			if(m.model.equals(m2a.model)) {
 				cM2a.setSelected(true);
 				m2a = m;
 			}
-			if(m.abbr.equals(m3.abbr)) {
+			if(m.model.equals(m3.model)) {
 				cM3.setSelected(true);
 				m3 = m;
 			}
-			if(m.abbr.equals(m7.abbr)) {
+			if(m.model.equals(m7.model)) {
 				cM7.setSelected(true);
 				m7 = m;
 			}
-			if(m.abbr.equals(m8.abbr)) {
+			if(m.model.equals(m8.model)) {
 				cM8.setSelected(true);
 				m8 = m;
 			}

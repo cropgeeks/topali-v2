@@ -10,7 +10,7 @@ package topali.data;
  */
 public class PSSite
 {
-	//aa position
+	//nuc position
 	int pos;
 	//one-letter aa
 	char aa;

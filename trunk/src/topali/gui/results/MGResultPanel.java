@@ -44,12 +44,6 @@ public class MGResultPanel extends ResultPanel
 		for(SubstitutionModel m : result.models) {
 			Vector<Object> row = new Vector<Object>();
 			String name = m.getName();
-			if(m.isI())
-				name+="+I";
-			if(m.isG())
-				name+="+G";
-			if(m.isF())
-				name+="+F";
 			row.add(name);
 			row.add(Prefs.d2.format(m.getLnl()));
 			row.add(Prefs.d2.format(m.getAic1()));

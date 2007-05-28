@@ -249,4 +249,10 @@ public class Utils
 		return sb.toString();
 	}
 	
+//	public static void printMemUsage() {
+//		long freeMem = Runtime.getRuntime().freeMemory();
+//		long maxMem = Runtime.getRuntime().maxMemory();
+//		System.out.println("MemUsage: "+((maxMem-freeMem)/1024/1024)+" MB\n");
+//	}
+	
 }

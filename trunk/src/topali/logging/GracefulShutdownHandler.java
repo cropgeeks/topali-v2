@@ -65,6 +65,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 			sb.append(messages.get(i));
 
 		ta.setText(sb.toString());
+		ta.setCaretPosition(sb.length()-1);
 		ta.setEditable(false);
 
 		JLabel l;
