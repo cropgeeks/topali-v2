@@ -33,7 +33,8 @@ class RunMrBayes
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		new StreamCatcher(proc.getInputStream(), false);
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.start();
 
 		// writer.println("Y");
 		writer.close();

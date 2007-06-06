@@ -18,11 +18,13 @@ public abstract class ViewableDataObject
 	}
 	
 	public void addChangeListener(PropertyChangeListener listener) {
-		this.changeListeners.add(listener);
+		if(!changeListeners.contains(listener))
+			this.changeListeners.add(listener);
 	}
 	
 	public void removeChangeListener(PropertyChangeListener listener) {
-		this.changeListeners.remove(listener);
+		if(changeListeners.contains(listener))
+			this.changeListeners.remove(listener);
 	}
 	
 }

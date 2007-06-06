@@ -155,21 +155,21 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 		{
 			HMMResult hmm = (HMMResult) result;
 			pm.autoPartitionHMM(hmm.data1, hmm.data2, hmm.data3,
-					hmm.thresholdCutoff);
+					(float)hmm.threshold);
 		}
 
 		else if (result instanceof DSSResult)
 		{
 			DSSResult dss = (DSSResult) result;
 			pm.autoPartition(dss.data, AnalysisUtils.getArrayValue(
-					dss.thresholds, dss.thresholdCutoff));
+					dss.thresholds, (float)dss.threshold));
 		}
 
 		else if (result instanceof LRTResult)
 		{
 			LRTResult lrt = (LRTResult) result;
 			pm.autoPartition(lrt.data, AnalysisUtils.getArrayValue(
-					lrt.thresholds, lrt.thresholdCutoff));
+					lrt.thresholds, (float)lrt.threshold));
 		}
 
 		cleanup();

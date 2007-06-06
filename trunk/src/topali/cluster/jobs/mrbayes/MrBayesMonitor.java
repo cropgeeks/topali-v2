@@ -33,8 +33,19 @@ public class MrBayesMonitor
 			logger.severe(jobDir.getName() + " - error.txt found");
 			throw new Exception("MBTree error.txt");
 		}
+		
+		try
+		{
+			progress = (float)new File(jobDir, "percent").listFiles().length;
+			//prevent progress to be 100% (otherwise the result will be requested before it's created)
+			if(progress==100)
+				progress = 99;
+		} catch (RuntimeException e)
+		{
+			progress = 0;
+		}
 
-		if (new File(jobDir, "tree.txt").exists())
+		if (new File(jobDir, "result.xml").exists())
 			progress = 100f;
 
 		return new JobStatus(progress, 0, "_status");

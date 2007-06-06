@@ -5,14 +5,12 @@
 
 package topali.gui.tree;
 
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 import pal.tree.TreeParseException;
-
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
@@ -66,7 +64,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bViewCluster = (JToggleButton) WinMainToolBar.getButton(true, null,
 				"tre09", Icons.TREE_NEWHAMP, null);
 
-		bATV = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.PLAYER_PLAY, null);
+		bATV = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.UP16, null);
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		
 		bExport.addActionListener(this);

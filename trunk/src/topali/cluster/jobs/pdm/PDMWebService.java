@@ -6,6 +6,7 @@
 package topali.cluster.jobs.pdm;
 
 import java.io.File;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
 
 import org.apache.axis.AxisFault;
@@ -26,6 +27,14 @@ public class PDMWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			try
+			{
+				checkJob(ss);
+			} catch (RejectedExecutionException e)
+			{
+				throw AxisFault.makeFault(e);
+			}
+			
 			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
 
 			result.bambePath = webappPath + "/binaries/src/bambe/bambe";

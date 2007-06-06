@@ -55,7 +55,8 @@ public class GraphPanel extends JPanel implements Printable
 	double[][] data;
 
 	double fixedYBound = -1;
-
+	double threshold = 0f;
+	
 	JFreeChart chart;
 	ChartPanel chartPanel;
 	JToolBar toolbar;
@@ -75,7 +76,8 @@ public class GraphPanel extends JPanel implements Printable
 		this.aResult = aResult;
 		this.data = data;
 		this.fixedYBound = fixedYBound;
-
+		this.threshold = aResult.threshold;
+		
 		this.chart = createChart();
 		setChartData(data);
 		this.chartPanel = new ChartPanel(this.chart);
@@ -138,6 +140,8 @@ public class GraphPanel extends JPanel implements Printable
 	}
 
 	public void setThreshold(double thres) {
+		this.threshold = thres;
+		
 		XYPlot plot = chart.getXYPlot();
 		plot.clearRangeMarkers();
 
@@ -147,8 +151,10 @@ public class GraphPanel extends JPanel implements Printable
 				BasicStroke.JOIN_MITER, 10, dashPattern, 0);
 		ValueMarker marker = new ValueMarker(thres, new Color(0, 0, 255, 64),
 				s1, null, null, 0.1f);
-
 		plot.addRangeMarker(marker);
+		
+		adjustUpperYBound();
+		
 		repaint();
 	}
 
@@ -164,6 +170,20 @@ public class GraphPanel extends JPanel implements Printable
 	public Dimension getPreferredSize()
 	{
 		return chartPanel.getPreferredSize();
+	}
+
+	
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		super.setEnabled(enabled);
+		if(!enabled)
+			this.remove(chartPanel);
+		else
+			this.add(chartPanel, BorderLayout.CENTER);
+		
+		validate();
+		//chartPanel.setEnabled(enabled);
 	}
 
 	private JFreeChart createChart()
@@ -217,9 +237,12 @@ public class GraphPanel extends JPanel implements Printable
 				if (data[i][1] > max)
 					max = data[i][1];
 
-			if (aResult.threshold > max)
-				max = aResult.threshold;
-
+//			if (aResult.threshold > max)
+//				max = aResult.threshold;
+			
+			if(threshold > max)
+				max = threshold;
+			
 			max *= 1.05;
 		}
 		XYPlot plot = chart.getXYPlot();
@@ -598,6 +621,7 @@ public class GraphPanel extends JPanel implements Printable
 			return (int) translateJava2DToScreen(new Point2D.Double(x, 0))
 					.getX();
 		}
+		
 	}
 	
 	class ChartPanelPopupMenuAdapter extends PopupMenuAdapter

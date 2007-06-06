@@ -6,6 +6,7 @@
 package topali.cluster;
 
 import java.io.*;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.*;
 
 import javax.servlet.ServletContext;
@@ -17,6 +18,7 @@ import org.apache.axis.transport.http.HTTPConstants;
 
 import sbrn.commons.file.FileUtils;
 import topali.cluster.control.*;
+import topali.data.SequenceSet;
 import topali.fileio.Castor;
 
 /**
@@ -128,6 +130,25 @@ public abstract class WebService
 	{
 		ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 		cluster.submitJob(jobDir, cmd);
+	}
+	
+	/**
+	 * Check if alignment is too big for a certain webservice
+	 * (limits can be set in cluster.properties, default: no limit)
+	 * @param ss
+	 * @throws RejectedExecutionException
+	 */
+	protected void checkJob(SequenceSet ss) throws RejectedExecutionException {
+		int size = ss.getSelectedSequences().length*ss.getLength();
+		String tmp = getParameter(this.getClass().getSimpleName());
+		if(tmp==null || tmp.equals(""))
+			return;
+		
+		int max = Integer.parseInt(tmp);
+		if(size>max) {
+			String msg = "Max. alignment size for this job type is limited to "+max+" bases in total.";
+			throw new RejectedExecutionException(msg);
+		}
 	}
 
 	// ////////////////////////////////////////////////

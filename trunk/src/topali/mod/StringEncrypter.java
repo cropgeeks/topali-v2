@@ -96,7 +96,7 @@ public class StringEncrypter
 //			BASE64Encoder base64encoder = new BASE64Encoder();
 //			return base64encoder.encode(ciphertext);
 			
-			return new String(new Base64().encodeBase64(ciphertext));
+			return new String(Base64.encodeBase64(ciphertext));
 
 		} catch (Exception e)
 		{
@@ -116,7 +116,7 @@ public class StringEncrypter
 			cipher.init(Cipher.DECRYPT_MODE, key);
 //			BASE64Decoder base64decoder = new BASE64Decoder();
 //			byte[] cleartext = base64decoder.decodeBuffer(encryptedString);			
-			byte[] cleartext = new Base64().decodeBase64(encryptedString.getBytes());
+			byte[] cleartext = Base64.decodeBase64(encryptedString.getBytes());
 			byte[] ciphertext = cipher.doFinal(cleartext);
 
 			return bytes2String(ciphertext);

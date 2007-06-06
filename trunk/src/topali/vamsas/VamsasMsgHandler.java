@@ -7,7 +7,7 @@ package topali.vamsas;
 
 import javax.swing.SwingUtilities;
 
-import topali.gui.TOPALi;
+import topali.gui.WinMain;
 import uk.ac.vamsas.client.picking.*;
 
 public class VamsasMsgHandler implements IMessageHandler
@@ -44,7 +44,7 @@ public class VamsasMsgHandler implements IMessageHandler
 	{
 		if (message instanceof MouseOverMessage)
 		{			
-			TOPALi.winMain.vEvents.processAlignmentPanelMouseOverEvent(
+			WinMain.vEvents.processAlignmentPanelMouseOverEvent(
 				(MouseOverMessage) message);
 		}
 	}

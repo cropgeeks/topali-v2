@@ -30,7 +30,7 @@ public class VamsasEvents
 			int i = 0;
 			for (Sequence seq : data.getSequenceSet().getSequences())
 			{
-				if (seq.name.equals(seqID))
+				if (seq.getName().equals(seqID))
 				{
 					AlignmentPanel panel = winMain.navPanel.getCurrentAlignmentPanel(data);
 

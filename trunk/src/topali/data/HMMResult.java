@@ -64,9 +64,6 @@ public class HMMResult extends AlignmentResult
 	// The three graphs
 	public float[][] data1, data2, data3;
 
-	// And current threshold cutoff point
-	public float thresholdCutoff = 0.95f;
-
 	public HMMResult()
 	{
 	}
@@ -111,6 +108,5 @@ public class HMMResult extends AlignmentResult
 	{
 		data3 = MatrixXML.stringTo2DFloatArray(str);
 	}
-	
-	
+
 }

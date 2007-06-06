@@ -326,7 +326,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 		void printOutput(StringBuffer buffer)
 		{
 			for (Sequence seq : sequences)
-				buffer.append("\n    " + seq.name);
+				buffer.append("\n    " + seq.getName());
 		}
 	}
 }

@@ -8,6 +8,7 @@ package topali.data;
 import static topali.fileio.AlignmentLoadException.*;
 
 import java.awt.Color;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -23,7 +24,7 @@ import topali.fileio.AlignmentHandler;
 import topali.fileio.AlignmentLoadException;
 
 // Class representing a set of sequences (an alignment).
-public class SequenceSet
+public class SequenceSet extends ViewableDataObject
 {
 	// Actual alignment data
 	private Vector<Sequence> sequences = new Vector<Sequence>();
@@ -191,7 +192,7 @@ public class SequenceSet
 	{
 		for (Sequence seq : sequences)
 			if (seq.safeName.equals(safeName))
-				return seq.name;
+				return seq.getName();
 
 		return "";
 	}
@@ -229,8 +230,8 @@ public class SequenceSet
 		int index = 0;
 		for (Sequence seq : sequences)
 		{
-			if ((matchCase && seq.name.equals(name))
-					|| (!matchCase && seq.name.equalsIgnoreCase(name)))
+			if ((matchCase && seq.getName().equals(name))
+					|| (!matchCase && seq.getName().equalsIgnoreCase(name)))
 				return index;
 			else
 				index++;
@@ -282,7 +283,7 @@ public class SequenceSet
 			for (Sequence seq : sequences)
 				if (seq.getLength() != size)
 				{
-					System.out.println(seq.name + " : " + seq.getLength());
+					System.out.println(seq.getName() + " : " + seq.getLength());
 					throw new AlignmentLoadException(NOT_ALIGNED);
 				}
 		}
@@ -291,12 +292,12 @@ public class SequenceSet
 		ListIterator<Sequence> itor1 = sequences.listIterator(0);
 		for (int i = 0; itor1.hasNext(); i++)
 		{
-			String iName = itor1.next().name;
+			String iName = itor1.next().getName();
 
 			ListIterator<Sequence> itor2 = sequences.listIterator(i + 1);
 			while (itor2.hasNext())
 			{
-				String jName = itor2.next().name;
+				String jName = itor2.next().getName();
 				if (iName.equals(jName))
 				{
 					System.out.println(jName);
@@ -383,7 +384,7 @@ public class SequenceSet
 			if (useSafeNames)
 				ids[i] = new Identifier(getSequence(indices[i]).safeName);
 			else
-				ids[i] = new Identifier(getSequence(indices[i]).name);
+				ids[i] = new Identifier(getSequence(indices[i]).getName());
 
 		// Determine data
 		String[] seqs = new String[indices.length];
@@ -415,7 +416,7 @@ public class SequenceSet
 			Random r = new Random(colorSeed + 1253 + (i++));
 			Color c = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
 
-			nameColouriser.addMapping(seq.name, c);
+			nameColouriser.addMapping(seq.getName(), c);
 		}
 
 		return nameColouriser;
@@ -513,4 +514,14 @@ public class SequenceSet
 
 		return indices;
 	}
+
+	@Override
+	public void addChangeListener(PropertyChangeListener listener)
+	{
+		super.addChangeListener(listener);
+		for(Sequence s : sequences)
+			s.addChangeListener(listener);
+	}
+	
+	
 }

@@ -6,6 +6,8 @@
 package topali.cluster;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 // Basic class to handle reading from a stream so that TOPALi can execute
 // external programs. Reads from a stream until it ends - programs will not run
@@ -15,6 +17,7 @@ public class StreamCatcher extends Thread
 	protected BufferedReader reader = null;
 	protected StringBuffer output = null;
 	protected boolean showOutput = false;
+	protected List<ProcessOutputParser> parsers = new LinkedList<ProcessOutputParser>();
 	
 	public StreamCatcher(InputStream in, boolean showOutput) {
 		this(in, showOutput, false);
@@ -28,9 +31,13 @@ public class StreamCatcher extends Thread
 		if(keepOutput) 
 			output = new StringBuffer();
 		
-		start();
+		//start();
 	}
 
+	public void addParser(ProcessOutputParser parser) {
+		this.parsers.add(parser);
+	}
+	
 	public void run()
 	{
 		try
@@ -39,6 +46,9 @@ public class StreamCatcher extends Thread
 
 			while (line != null)
 			{
+				for(ProcessOutputParser p : parsers)
+					p.parseLine(line);
+				
 				if (showOutput)
 					System.out.println(line);
 

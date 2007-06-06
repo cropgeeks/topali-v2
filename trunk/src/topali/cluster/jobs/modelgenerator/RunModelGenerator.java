@@ -54,7 +54,7 @@ public class RunModelGenerator extends Thread
 		Castor.saveXML(ss, new File(jobDir, "ss.xml"));
 
 		if (result.isRemote)
-			MGWebservice.runScript(jobDir);
+			MGWebService.runScript(jobDir);
 		else
 			new MGAnalysis(jobDir).start(LocalJobs.manager);
 	}

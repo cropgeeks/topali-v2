@@ -10,21 +10,28 @@ import java.io.*;
 import topali.cluster.*;
 import topali.data.MBTreeResult;
 
-public class MrBayesProcess extends StoppableProcess
+public class MrBayesProcess extends StoppableProcess implements ProcessOutputParser
 {
 
 	private File wrkDir;
-
-	MrBayesProcess(File wrkDir, MBTreeResult result)
+	private File pctDir;
+	int totalGen;
+	
+	boolean parse = false;
+	
+	MrBayesProcess(File wrkDir, MBTreeResult result, int totalGen)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
-
+		this.totalGen = totalGen;
+		
 		runCancelMonitor();
 	}
 
 	void run() throws Exception
 	{
+		pctDir = new File(wrkDir, "percent");
+		
 		MBTreeResult mbResult = (MBTreeResult) result;
 
 		ProcessBuilder pb = new ProcessBuilder(mbResult.mbPath, "mb.nex");
@@ -36,8 +43,10 @@ public class MrBayesProcess extends StoppableProcess
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		new StreamCatcher(proc.getInputStream(), true);
-
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.addParser(this);
+		sc.start();
+		
 		// writer.println("Y");
 		writer.close();
 
@@ -51,5 +60,27 @@ public class MrBayesProcess extends StoppableProcess
 				throw new Exception("cancel");
 		}
 	}
+
+	public void parseLine(String line)
+	{
+		line = line.trim();
+		String tmp[] = line.split("\\s+");
+		if(tmp[0].equals("Chain"))
+			parse = true;
+		else if(tmp[0].equals("Analysis"))
+			parse = false;
+		
+		if(parse) {
+			try
+			{
+				int gen = Integer.parseInt(tmp[0]);
+				int percent = (int)((double)gen/(double)totalGen*100);
+				ClusterUtils.setPercent(pctDir, percent);
+			} catch (Exception e)
+			{
+			}
+		}
+	}
+	
 	
 }

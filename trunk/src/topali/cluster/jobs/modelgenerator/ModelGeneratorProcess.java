@@ -10,21 +10,23 @@ import java.io.*;
 import topali.cluster.*;
 import topali.data.MGResult;
 
-public class ModelGeneratorProcess extends StoppableProcess
+public class ModelGeneratorProcess extends StoppableProcess implements ProcessOutputParser
 {
 
 	private File wrkDir;
-
+	private File pctDir;
+	
 	ModelGeneratorProcess(File wrkDir, MGResult result)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
-
 		runCancelMonitor();
 	}
 
 	void run() throws Exception
 	{
+		pctDir = new File(wrkDir, "percent");
+		
 		MGResult result = (MGResult) this.result;
 
 		//sbrn.commons.file.FileUtils.writeFile(new File(wrkDir, "wibble"), result.mgPath);
@@ -38,8 +40,10 @@ public class ModelGeneratorProcess extends StoppableProcess
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		new StreamCatcher(proc.getInputStream(), true);
-
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.addParser(this);
+		sc.start();
+		
 		writer.close();
 
 		try
@@ -52,5 +56,21 @@ public class ModelGeneratorProcess extends StoppableProcess
 				throw new Exception("cancel");
 		}
 	}
+
+	public void parseLine(String line)
+	{
+		try
+		{
+			String[] tmp = line.split("\\s+");
+			double x = Double.parseDouble(tmp[2]);
+			double total = Double.parseDouble(tmp[4].substring(0, tmp[4].length()-1));
+			int percent = (int)(x/total*100);
+			ClusterUtils.setPercent(pctDir, percent);
+		} catch (Exception e)
+		{
+			//e.printStackTrace();
+		}
+	}
+	
 	
 }

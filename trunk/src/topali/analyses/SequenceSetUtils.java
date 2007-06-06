@@ -94,7 +94,7 @@ public class SequenceSetUtils
 			newname = (String) JOptionPane.showInputDialog(MsgBox.frm,
 					Text.Analyses.getString("SequenceSetUtils.gui01"),
 					Text.Analyses.getString("SequenceSetUtils.gui02"),
-					JOptionPane.PLAIN_MESSAGE, null, null, selected.name);
+					JOptionPane.PLAIN_MESSAGE, null, null, selected.getName());
 
 			if (newname == null)
 				return false;
@@ -115,7 +115,7 @@ public class SequenceSetUtils
 			ok = true;
 			for (Sequence seq : ss.getSequences())
 			{
-				if (seq != selected && seq.name.equals(newname))
+				if (seq != selected && seq.getName().equals(newname))
 				{
 					String msg = Text.format(Text.Analyses
 							.getString("SequenceSetUtils.err02"), newname);
@@ -127,7 +127,7 @@ public class SequenceSetUtils
 			}
 		}
 
-		selected.name = newname;
+		selected.setName(newname);
 		return true;
 	}
 
@@ -210,13 +210,13 @@ public class SequenceSetUtils
 
 		for (Sequence seq : ss.getSequences())
 		{
-			String oldName = seq.name;
-			String newName = verifyName(seq.name, ++seqID);
+			String oldName = seq.getName();
+			String newName = verifyName(seq.getName(), ++seqID);
 
 			if (oldName.equals(newName) == false)
 			{
 				ok = false;
-				seq.name = newName;
+				seq.setName(newName);
 			}
 		}
 
@@ -323,7 +323,7 @@ public class SequenceSetUtils
 		{
 			// Create (and add) the sequence to the set
 			Sequence seqOld = ssOld.getSequence(seqIndex);
-			Sequence seqNew = new Sequence(seqOld.name);
+			Sequence seqNew = new Sequence(seqOld.getName());
 
 			// Concatenate and add each partition to the sequence's data
 			StringBuffer buffer = seqNew.getBuffer();

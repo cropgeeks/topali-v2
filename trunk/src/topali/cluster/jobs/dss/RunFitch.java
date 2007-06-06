@@ -146,8 +146,9 @@ class RunFitch
 		pb.redirectErrorStream(true);
 
 		Process proc = pb.start();
-		new StreamCatcher(proc.getInputStream(), false);
-
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.start();
+		
 		try
 		{
 			proc.waitFor();

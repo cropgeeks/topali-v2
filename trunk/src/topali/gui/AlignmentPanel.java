@@ -7,6 +7,8 @@ package topali.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
@@ -17,7 +19,7 @@ import topali.data.SequenceSet;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 
 /* Parent container for the canvas used to draw the sequence data. */
-public class AlignmentPanel extends JPanel implements AdjustmentListener
+public class AlignmentPanel extends JPanel implements AdjustmentListener, PropertyChangeListener
 {
 	Logger log = Logger.getLogger(this.getClass());
 	
@@ -89,6 +91,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	public AlignmentPanel(AlignmentData data)
 	{
 		this.data = data;
+		this.data.addChangeListener(this);
 		ss = data.getSequenceSet();
 
 		nSeq = ss.getSize();
@@ -272,7 +275,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 		{
 			if (WinMain.vEvents != null && seq >= 0)
 			{
-				String seqName = ss.getSequence(seq).name;
+				String seqName = ss.getSequence(seq).getName();
 				
 				WinMain.vEvents.sendAlignmentPanelMouseOverEvent(seqName, nuc);
 			}
@@ -319,19 +322,19 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 			{
 				if (nucRange > 0 && Prefs.gui_show_vertical_highlight)
 					text = "Seq " + (seq + 1) + "-" + (seq + 1 + seqRange)
-							+ ": " + ss.getSequence(seq).name + "-"
-							+ ss.getSequence(seq + seqRange).name + " (" + nuc
+							+ ": " + ss.getSequence(seq).getName() + "-"
+							+ ss.getSequence(seq + seqRange).getName() + " (" + nuc
 							+ "-" + (nuc + nucRange) + ")";
 				else
 					text = "Seq " + (seq + 1) + "-" + (seq + 1 + seqRange)
-							+ ": " + ss.getSequence(seq).name + "-"
-							+ ss.getSequence(seq + seqRange).name;
+							+ ": " + ss.getSequence(seq).getName() + "-"
+							+ ss.getSequence(seq + seqRange).getName();
 			} else
 			{
 				if (nucRange > 0 && Prefs.gui_show_vertical_highlight)
 					text = "(" + nuc + "-" + (nuc + nucRange) + ")";
 				else
-					text = "Seq " + (seq + 1) + ": " + ss.getSequence(seq).name
+					text = "Seq " + (seq + 1) + ": " + ss.getSequence(seq).getName()
 							+ " (" + nuc + ")";
 			}
 
@@ -398,6 +401,14 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener
 	{
 		WinMain.ovDialog.setPanelPosition((pX / charW), charCount,
 				(pY / charH), charDepth);
+	}
+	
+	
+
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if(evt.getPropertyName().equals("sequence"))
+			canvas.setData();
 	}
 
 	// Secondary canvas (row header) that appears along the top of the alignment

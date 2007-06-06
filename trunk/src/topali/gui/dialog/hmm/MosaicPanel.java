@@ -368,14 +368,14 @@ class MosaicPanel extends JPanel implements ActionListener
 	{
 		Sequence[] seqArray = ss.getSequencesArray(ss.getSelectedSequences());
 
-		top1 = "1: (" + seqArray[0].name + ", " + seqArray[1].name + "), ("
-				+ seqArray[2].name + ", " + seqArray[3].name + ")";
+		top1 = "1: (" + seqArray[0].getName() + ", " + seqArray[1].getName() + "), ("
+				+ seqArray[2].getName() + ", " + seqArray[3].getName() + ")";
 
-		top2 = "2: (" + seqArray[0].name + ", " + seqArray[2].name + "), ("
-				+ seqArray[1].name + ", " + seqArray[3].name + ")";
+		top2 = "2: (" + seqArray[0].getName() + ", " + seqArray[2].getName() + "), ("
+				+ seqArray[1].getName() + ", " + seqArray[3].getName() + ")";
 
-		top3 = "3: (" + seqArray[0].name + ", " + seqArray[3].name + "), ("
-				+ seqArray[1].name + ", " + seqArray[2].name + ")";
+		top3 = "3: (" + seqArray[0].getName() + ", " + seqArray[3].getName() + "), ("
+				+ seqArray[1].getName() + ", " + seqArray[2].getName() + ")";
 	}
 
 	private int getTopology(String str)

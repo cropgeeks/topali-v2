@@ -23,8 +23,9 @@ class RunTreeDist
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		new StreamCatcher(proc.getInputStream(), false);
-
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.start();
+		
 		writer.println("D");
 		writer.println("2");
 		writer.println("P");
