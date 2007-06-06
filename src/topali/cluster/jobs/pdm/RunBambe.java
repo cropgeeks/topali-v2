@@ -62,7 +62,8 @@ class RunBambe
 
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
-		new StreamCatcher(proc.getInputStream(), true);
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.start();
 
 		writeFile(out);
 		out.close();

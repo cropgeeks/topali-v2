@@ -198,5 +198,32 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 		{
 			this.e = e;
 		}
+
+		@Override
+		public int hashCode()
+		{
+			final int PRIME = 31;
+			int result = 1;
+			result = PRIME * result + e;
+			result = PRIME * result + s;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			final Region other = (Region) obj;
+			if (e != other.e)
+				return false;
+			if (s != other.s)
+				return false;
+			return true;
+		}
 	}
 }

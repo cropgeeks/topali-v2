@@ -228,6 +228,22 @@ public class Utils
 		return ddata;
 	}
 	
+	/**
+	 * Converts a double into a float array (as simple casting is not possible)
+	 * @param data
+	 * @return
+	 */
+	public static float[][] double2floatArray(double[][] data) {
+		float[][] ddata  = new float[0][0];
+		if(data.length>0) {
+			ddata = new float[data.length][data[0].length];
+			for(int i=0; i<data.length; i++)
+				for(int j=0; j<data[i].length; j++)
+					ddata[i][j] = (float)data[i][j];
+		}
+		return ddata;
+	}
+	
 	public static byte[] readFile(URI uri) throws IOException {
 		File inFile = new File(uri);
 		FileInputStream fis = new FileInputStream(inFile);

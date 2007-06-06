@@ -154,7 +154,7 @@ class FileMSF extends FileGeneric
 			if (useSafeNames)
 				out.write(" Name: " + ss.getSequence(index[seq]).safeName);
 			else
-				out.write(" Name: " + ss.getSequence(index[seq]).name);
+				out.write(" Name: " + ss.getSequence(index[seq]).getName());
 			out.write(" Len: " + ss.getLength());
 			out.write(" Check: 0");
 			out.write(" Weight: 1.00");

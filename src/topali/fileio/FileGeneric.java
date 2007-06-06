@@ -63,8 +63,8 @@ class FileGeneric implements ISeqFile
 		for (int i = 0; i < index.length; i++)
 		{
 			Sequence s = ss.getSequence(index[i]);
-			if (s.name.length() > longest)
-				longest = s.name.length();
+			if (s.getName().length() > longest)
+				longest = s.getName().length();
 		}
 
 		return longest;

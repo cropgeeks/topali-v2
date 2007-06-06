@@ -6,6 +6,7 @@
 package topali.cluster.jobs.cml;
 
 import java.io.File;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
 
 import org.apache.axis.AxisFault;
@@ -29,6 +30,14 @@ public class CodeMLWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			try
+			{
+				checkJob(ss);
+			} catch (RejectedExecutionException e)
+			{
+				throw AxisFault.makeFault(e);
+			}
+			
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
 			type = result.type;
 			if(type==CodeMLResult.TYPE_SITEMODEL)

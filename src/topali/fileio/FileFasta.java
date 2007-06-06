@@ -81,7 +81,7 @@ class FileFasta extends FileGeneric
 			if (useSafeNames)
 				out.write(">" + sequence.safeName);
 			else
-				out.write(">" + sequence.name);
+				out.write(">" + sequence.getName());
 
 			for (int i = 0, j = 0; j < str.length(); i++, j++)
 			{

@@ -38,8 +38,9 @@ class RunCodeML
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		new StreamCatcher(proc.getInputStream(), true);
-
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		sc.start();
+		
 		writer.close();
 
 		try

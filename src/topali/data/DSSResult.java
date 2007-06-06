@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import org.apache.log4j.spi.ThrowableInformation;
+
 import sbrn.commons.MatrixXML;
 
 /*
@@ -42,11 +44,9 @@ public class DSSResult extends AlignmentResult
 	// Bootstrap information (maximum y found for each run)
 	public float[] thresholds;
 
-	// And current threshold cutoff point
-	public float thresholdCutoff = 0.95f;
-
 	public DSSResult()
 	{
+		
 	}
 
 	// Castor conversion methods so that the 2D data array is saved as a string
@@ -59,4 +59,5 @@ public class DSSResult extends AlignmentResult
 	{
 		data = MatrixXML.stringTo2DFloatArray(str);
 	}
+	
 }

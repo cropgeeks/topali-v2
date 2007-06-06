@@ -375,7 +375,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (SequenceSetUtils.renameSequence(data.getSequenceSet()))
 		{
 			// Force the display to redraw itself
-			navPanel.getCurrentAlignmentPanel(data).refreshAndRepaint();
+			//navPanel.getCurrentAlignmentPanel(data).refreshAndRepaint();
 			// And mark the project as modified
 			WinMainMenuBar.aFileSave.setEnabled(true);
 		}
@@ -579,7 +579,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				result.status = topali.cluster.JobStatus.COMPLETED;
 
 				// Add the tree to the project
-				data.getResults().add(result);
+				//data.getResults().add(result);
+				data.addResult(result);
 
 				treePane.displayTree(data.getSequenceSet(), result);
 				WinMainMenuBar.aFileSave.setEnabled(true);
@@ -592,7 +593,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	public void submitJob(AlignmentData data, AnalysisResult result)
 	{
-		data.getResults().add(result);
+		//data.getResults().add(result);
+		data.addResult(result);
 
 		jobsPanel.createJob(result, data);
 		menuAnlsShowJobs();
@@ -835,17 +837,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	 */
 	public void propertyChange(PropertyChangeEvent evt)
 	{
-		//a new dataset was added
-		if(evt.getOldValue()==null && evt.getNewValue()!=null) {
-			navPanel.addAlignmentFolder((AlignmentData)evt.getNewValue());
+		if(evt.getPropertyName().equals("alignmentData")) {
+			//a new dataset was added
+			if(evt.getOldValue()==null && evt.getNewValue()!=null) {
+				navPanel.addAlignmentFolder((AlignmentData)evt.getNewValue());
+			}
+			//a dataset was removed
+			if(evt.getOldValue()!=null && evt.getNewValue()==null) {
+				navPanel.removeSelectedNode();
+				rDialog.setAlignmentData(null);
+				ovDialog.setAlignmentPanel(null);
+			}
 		}
 		
-		//a dataset was removed
-		if(evt.getOldValue()!=null && evt.getNewValue()==null) {
-			navPanel.removeSelectedNode();
-			rDialog.setAlignmentData(null);
-			ovDialog.setAlignmentPanel(null);
-		}
 		
 	}
 	

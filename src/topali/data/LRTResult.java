@@ -33,9 +33,6 @@ public class LRTResult extends AlignmentResult
 	// Bootstrap information (maximum y found for each run)
 	public float[] thresholds;
 
-	// And current threshold cutoff point
-	public float thresholdCutoff = 0.95f;
-
 	public LRTResult()
 	{
 	}
@@ -50,4 +47,5 @@ public class LRTResult extends AlignmentResult
 	{
 		data = MatrixXML.stringTo2DFloatArray(str);
 	}
+
 }

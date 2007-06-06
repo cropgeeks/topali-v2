@@ -33,9 +33,6 @@ public class PDM2Result extends AlignmentResult
 	// Bootstrap information (maximum y found for each run)
 	public float[] thresholds;
 
-	// And current threshold cutoff point
-	public float thresholdCutoff = 0.95f;
-
 	// Data for the (tree) histograms
 	// public float[][] histograms;
 
@@ -58,4 +55,5 @@ public class PDM2Result extends AlignmentResult
 	{
 		locData = MatrixXML.stringTo2DFloatArray(str);
 	}
+	
 }

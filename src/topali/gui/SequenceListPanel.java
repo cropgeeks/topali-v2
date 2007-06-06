@@ -9,6 +9,8 @@ import static topali.gui.WinMainMenuBar.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -18,7 +20,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import doe.MsgBox;
 
-public class SequenceListPanel extends JPanel implements ListSelectionListener
+public class SequenceListPanel extends JPanel implements ListSelectionListener, PropertyChangeListener
 {
 	private AlignmentPanel disPanel;
 
@@ -36,7 +38,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 	{
 		this.disPanel = disPanel;
 		this.ss = ss;
-
+		this.ss.addChangeListener(this);
+		
 		// Create the JList of sequence names
 		model = new DefaultListModel();
 		list = new JList(model);
@@ -79,7 +82,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 
 		model.clear();
 		for (int i = 0; i < ss.getSize(); i++)
-			model.add(i, ss.getSequence(i).name + " \n");
+			model.add(i, ss.getSequence(i).getName() + " \n");
 
 		list.setSelectedIndices(ss.getSelectedSequences());
 		list.addListSelectionListener(this);
@@ -262,6 +265,13 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener
 			WinMain.rDialog.updateTreePreview(false);
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
+	}
+
+	
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if(evt.getPropertyName().equals("name"))
+			refreshAndRepaint();
 	}
 
 	class SequenceRenderer extends JLabel implements ListCellRenderer

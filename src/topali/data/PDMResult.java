@@ -86,9 +86,6 @@ public class PDMResult extends AlignmentResult
 	// Data for the (tree) histograms
 	public float[][] histograms;
 
-	// And current threshold cutoff point
-	public float thresholdCutoff = 0.95f;
-
 	// Variables required to work out threshold
 	public int df, N;
 
@@ -101,10 +98,10 @@ public class PDMResult extends AlignmentResult
 		// Old or new method of threshold calculation?
 		if (thresholds != null)
 		{
-			return AnalysisUtils.getArrayValue(thresholds, thresholdCutoff);
+			return AnalysisUtils.getArrayValue(thresholds, (float)threshold);
 		} else
 		{
-			double chi2 = ChiSquareDistribution.quantile(thresholdCutoff, df);
+			double chi2 = ChiSquareDistribution.quantile(threshold, df);
 			float threshold = (float) chi2 / (2 * N);
 
 			return threshold;
@@ -141,4 +138,5 @@ public class PDMResult extends AlignmentResult
 	{
 		histograms = MatrixXML.stringTo2DFloatArray(str);
 	}
+	
 }

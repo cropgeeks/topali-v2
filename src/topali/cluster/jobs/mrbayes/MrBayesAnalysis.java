@@ -20,6 +20,8 @@ public class MrBayesAnalysis extends AnalysisThread
 
 	private MBTreeResult result;
 
+	int nGen = 100000;
+	
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 	{
@@ -41,18 +43,18 @@ public class MrBayesAnalysis extends AnalysisThread
 		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
 
 		// Temporary working directory
-		wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
-				"mrbayes");
+//		wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
+//				"mrbayes");
 
 		// We need to save out the SequenceSet for MrBayes to read, ensuring
 		// that only the sequences meant to be processed are saved
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(wrkDir, "mb.nex"), indices, Filters.NEX_B, true);
+		ss.save(new File(runDir, "mb.nex"), indices, Filters.NEX_B, true);
 
 		// Add nexus commands to tell MrBayes what to do
 		addNexusCommands();
 
-		MrBayesProcess mb = new MrBayesProcess(wrkDir, result);
+		MrBayesProcess mb = new MrBayesProcess(runDir, result, nGen);
 		mb.run();
 
 		readTree();
@@ -60,14 +62,15 @@ public class MrBayesAnalysis extends AnalysisThread
 		// Save final data back to drive where it can be retrieved
 		Castor.saveXML(result, new File(runDir, "result.xml"));
 
-		ClusterUtils.emptyDirectory(wrkDir, true);
+		//ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 
 	private void addNexusCommands() throws Exception
 	{
 		MrBayesCmdBuilder cmd = new MrBayesCmdBuilder(ss.isDNA());
+		cmd.setNgen(nGen);
+		
 		SequenceSetParams para = ss.getParams();
-
 		String gCode = para.getGeneticCode();
 		if (gCode.equals(SequenceSetParams.GENETICCODE_UNIVERSAL))
 		{
@@ -167,7 +170,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		if(para.isModelGamma() && para.isModelInv())
 			cmd.setRate(MrBayesCmdBuilder.RATE_INVGAMMA);
 		
-		 BufferedWriter out = new BufferedWriter(new FileWriter(new File(wrkDir,
+		 BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		 "mb.nex"), true));
 		 out.write("\n\n"+cmd.getCommands());
 		 out.flush();
@@ -218,7 +221,7 @@ public class MrBayesAnalysis extends AnalysisThread
 	private void readTree() throws Exception
 	{
 
-		File mbFile = new File(wrkDir, "mb.nex.con");
+		File mbFile = new File(runDir, "mb.nex.con");
 		if (mbFile.exists() == false)
 			throw new Exception("MrBayes did not create a tree file");
 

@@ -44,13 +44,13 @@
 </service>
 
 <service name="topali-mg" provider="java:RPC">
-  <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebservice"/>
+  <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebService"/>
   <parameter name="allowedMethods" value="*"/>
   <parameter name="scope" value="request"/>
 </service>
 
 <service name="topali-cw" provider="java:RPC">
-  <parameter name="className" value="topali.cluster.jobs.codonw.CodonWWebservice"/>
+  <parameter name="className" value="topali.cluster.jobs.codonw.CodonWWebService"/>
   <parameter name="allowedMethods" value="*"/>
   <parameter name="scope" value="request"/>
 </service>

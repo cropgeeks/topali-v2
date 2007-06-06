@@ -1,9 +1,9 @@
 package topali.vamsas;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.IdentityHashMap;
 
 import uk.ac.vamsas.client.*;
-import uk.ac.vamsas.objects.core.*;
 
 class ObjectMapper
 {

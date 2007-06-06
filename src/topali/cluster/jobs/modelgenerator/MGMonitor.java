@@ -23,8 +23,18 @@ public class MGMonitor
 
 	public JobStatus getPercentageComplete() throws Exception
 	{
-		float progress = 0;
-
+		float progress;
+		try
+		{
+			progress = (float)new File(jobDir, "percent").listFiles().length;
+			//prevent progress to be 100% (otherwise the result will be requested before it's created)
+			if(progress==100)
+				progress = 99;
+		} catch (RuntimeException e)
+		{
+			progress = 0;
+		}
+		
 		if (new File(jobDir, "result.xml").exists())
 			progress = 100f;
 

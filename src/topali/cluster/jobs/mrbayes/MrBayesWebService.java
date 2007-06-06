@@ -6,6 +6,7 @@
 package topali.cluster.jobs.mrbayes;
 
 import java.io.File;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
 
 import org.apache.axis.AxisFault;
@@ -27,6 +28,14 @@ public class MrBayesWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			try
+			{
+				checkJob(ss);
+			} catch (RejectedExecutionException e)
+			{
+				throw AxisFault.makeFault(e);
+			}
+			
 			MBTreeResult result = (MBTreeResult) Castor.unmarshall(resultXML);
 
 			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";

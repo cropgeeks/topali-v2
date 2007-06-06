@@ -229,10 +229,12 @@ public class CMLModel
 	public float[][] getGraph() {
 		if(supportsPSS) {
 			List<PSSite> sites = getPSS(0);
-			float[][] result = new float[sites.size()][2];
+			float[][] result = new float[sites.size()][3];
 			for(int i=0; i<sites.size(); i++) {
-				result[i][0] = (float)(sites.get(i).pos);
-				result[i][1] = (float)sites.get(i).p;
+				PSSite s = sites.get(i);
+				result[i][0] = (float)s.pos;
+				result[i][1] = (float)s.p;
+				result[i][2] = (float)s.aa;
 			}
 			return result;
 		}
@@ -246,7 +248,8 @@ public class CMLModel
 			for(int i=0; i<graph.length; i++) {
 				int pos = (int)(graph[i][0]);
 				float value = graph[i][1];
-				sb.append(pos+"|.|"+value+" ");
+				char aa = (char)graph[i][2];
+				sb.append(pos+"|"+aa+"|"+value+" ");
 			}
 			pss = sb.toString();
 		}

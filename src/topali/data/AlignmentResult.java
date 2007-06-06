@@ -21,4 +21,5 @@ public class AlignmentResult extends AnalysisResult
 	public AlignmentResult()
 	{
 	}
+
 }

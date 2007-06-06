@@ -7,6 +7,7 @@ package topali.gui;
 
 import static topali.cluster.JobStatus.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -139,7 +140,20 @@ public class JobsThread extends Thread
 				} catch (org.apache.axis.AxisFault e)
 				{
 					String fault = e.getFaultString();
-
+					
+					//--- Catch the error, which is thrown when the webservice (alignment size) limit has been exceeded.
+					String msg = e.getMessage();
+					//TODO: Look for better way to do this
+					//msg = java.util.concurrent.RejectedExecutionException: Max. alignment size for this job type is limited to 10000 bases in total.
+					if(msg.contains("Max. alignment")) {
+						String[] tmp = msg.split("\\s+");
+						int limit = Integer.parseInt(tmp[11]);
+						int nSeq = limit/job.getAlignmentData().getSequenceSet().getLength();
+						JOptionPane.showMessageDialog(null, "Please deselect some sequences to run this job (max. "+(limit/1000)+" kb allowed, equ. to "+nSeq+" seq.)", "Webservice limit exceeded", JOptionPane.ERROR_MESSAGE);
+						jobsPanel.removeJobEntry(entry, false);
+					}
+					//---
+					
 					final int error = (fault.startsWith("java.net.")) ? COMMS_ERROR
 							: FATAL_ERROR;
 					SwingUtilities.invokeLater(new Runnable()

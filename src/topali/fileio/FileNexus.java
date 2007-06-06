@@ -245,7 +245,7 @@ class FileNexus extends FileGeneric
 			if (useSafeNames)
 				out.write("    " + ss.getSequence(index[seq]).safeName + nl);
 			else
-				out.write("    " + ss.getSequence(index[seq]).name + nl);
+				out.write("    " + ss.getSequence(index[seq]).getName() + nl);
 		}
 		out.write("  ;" + nl + "end;" + nl);
 		out.newLine();

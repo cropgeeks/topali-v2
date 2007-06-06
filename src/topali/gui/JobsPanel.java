@@ -234,7 +234,7 @@ public class JobsPanel extends JPanel
 				job = new MrBayesRemoteJob((MBTreeResult) result, data);
 			else
 				job = new MrBayesLocalJob((MBTreeResult) result, data);
-			entry = new NoTrackingJobEntry(job);
+			entry = new ProgressBarJobEntry(job);
 		}
 
 		else if(result instanceof MGResult) {
@@ -242,7 +242,8 @@ public class JobsPanel extends JPanel
 				job = new MGRemoteJob((MGResult)result, data);
 			else
 				job = new MGLocalJob((MGResult)result, data);
-			entry = new NoTrackingJobEntry(job);
+			//entry = new NoTrackingJobEntry(job);
+			entry = new ProgressBarJobEntry(job);
 		}
 		
 		else if(result instanceof CodonWResult) {

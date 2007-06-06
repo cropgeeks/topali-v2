@@ -33,7 +33,8 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		super(data, result);
 		this.table = createTablePanel();
 		this.graph = createGraphPanel();
-
+		this.graph.setEnabled(false);
+		
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		sp.setLeftComponent(table);
 		sp.setRightComponent(graph);
@@ -199,6 +200,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[n - 1][1] = p;
 				data[n][1] = p;
 			}
+			graph.setEnabled(true);
 		} else
 		{
 			data = new double[this.data.getSequenceSet().getLength()][2];
@@ -207,6 +209,8 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[i][0] = i;
 				data[i][1] = 0;
 			}
+			
+			graph.setEnabled(false);
 		}
 		graph.setChartData(data);
 	}

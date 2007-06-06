@@ -5,20 +5,15 @@
 
 package topali.vamsas;
 
-import java.beans.*;
-import java.io.*;
-import java.util.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
-import topali.data.*;
 import topali.gui.Project;
-import topali.gui.WinMain;
-import topali.gui.nav.NavPanel;
-
 import uk.ac.vamsas.client.*;
-import uk.ac.vamsas.client.simpleclient.*;
 import uk.ac.vamsas.client.picking.IPickManager;
-
-import doe.*;
+import uk.ac.vamsas.client.simpleclient.SimpleClientFactory;
+import doe.MsgBox;
 
 public class VamsasManager
 {
@@ -187,7 +182,7 @@ public class VamsasManager
 	
 	private void handleCloseEvent(PropertyChangeEvent e)
 	{
-		System.out.println("handleCloseEvent...");
+		System.out.println("handleCloseEvent...\n"+e);
 		// TODO: ask user for a fileto save to then pass it to the vorba object
 		// vorbaclient.storeDocument(java.io.File);
 	}
@@ -222,7 +217,7 @@ public class VamsasManager
 	{
 		// Tell app to finalize its session data prior to the storage of the
 		// current session as an archive.
-		System.out.println("Application received a DOCUMENT_FINALIZEAPPDATA event.");   
+		System.out.println("Application received a DOCUMENT_FINALIZEAPPDATA event.\n"+e);   
 	}
 	
 	private void processVamsasDocument()
@@ -266,6 +261,7 @@ public class VamsasManager
 		{
 			MsgBox.msg("TOPALi encountered a problem while writing the VAMSAS "
 				+ "document.\n" + e, MsgBox.ERR);
+			e.printStackTrace();
 		}
 		
 	}
@@ -280,6 +276,7 @@ public class VamsasManager
 		{
 			MsgBox.msg("TOPALi encountered a problem while reading the VAMSAS "
 					+ "document.\n" + e, MsgBox.ERR);
+			e.printStackTrace();
 		}
 	}
 }

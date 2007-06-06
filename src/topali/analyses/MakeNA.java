@@ -63,10 +63,10 @@ public class MakeNA
 			StringBuffer dnaBuf = dnaSeq.getBuffer();
 
 			// ... and try to find its matching protein sequence
-			Sequence proSeq = getSequenceByName(pro, dnaSeq.name);
+			Sequence proSeq = getSequenceByName(pro, dnaSeq.getName());
 			if (proSeq == null)
 			{
-				MsgBox.msg("The sequence " + dnaSeq.name + " was not found in "
+				MsgBox.msg("The sequence " + dnaSeq.getName() + " was not found in "
 						+ "the protein alignment.", MsgBox.ERR);
 				return false;
 			}
@@ -82,7 +82,7 @@ public class MakeNA
 
 			if ((gaplessCount * 3) != dnaBuf.length())
 			{
-				MsgBox.msg("The length of DNA sequence " + dnaSeq.name
+				MsgBox.msg("The length of DNA sequence " + dnaSeq.getName()
 						+ " is not "
 						+ "3x the protein length.\n(DNA length is "
 						+ dnaBuf.length() + ", protein length (minus gaps) is "
@@ -110,7 +110,7 @@ public class MakeNA
 			}
 
 			// Create the new sequence
-			Sequence newSequence = new Sequence(dnaSeq.name);
+			Sequence newSequence = new Sequence(dnaSeq.getName());
 			newSequence.getBuffer().append(seqBuf);
 			// And add it to the dataset
 			newSS.addSequence(newSequence);
@@ -140,7 +140,7 @@ public class MakeNA
 	private Sequence getSequenceByName(SequenceSet pro, String dnaName)
 	{
 		for (Sequence seq : pro.getSequences())
-			if (seq.name.equals(dnaName))
+			if (seq.getName().equals(dnaName))
 				return seq;
 
 		return null;

@@ -1,15 +1,13 @@
 package topali.vamsas;
 
-import java.util.*;
-
-import pal.tree.TreeParseException;
+import java.util.Date;
+import java.util.LinkedList;
 
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.data.Sequence;
 import topali.data.RegionAnnotations.Region;
 import topali.gui.Project;
-import topali.gui.dialog.CreateTreeDialog;
 import uk.ac.vamsas.client.IClientDocument;
 import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.core.AnnotationElement;
@@ -17,11 +15,6 @@ import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
 class DocumentHandler
 {
-	//TODO: 
-	// * Implement CodeMLResult (works to great extend)
-	// * MGResult (Done)
-	// * CodonWResult
-	// * Annotations
 	
 	private Project project;
 
@@ -29,19 +22,12 @@ class DocumentHandler
 
 	private DataSet dataset;
 
-	// TODO: General problem: Mapping between one topali object and several
-	// vamsas objects
-	// e.g. tSequence -> vSequence and vDataSetSequence
-	// tAnalysisResult -> several vAnnotations
-
 	public DocumentHandler(Project proj, ObjectMapper mapper,
 			IClientDocument doc)
 	{
 		this.project = proj;
 		this.mapper = mapper;
 
-		// We will just deal with the first DataSet
-		// TODO: Jalview doesn't!
 		if (doc.getVamsasRoots()[0].getDataSetCount() < 1)
 		{
 			this.dataset = new DataSet();
@@ -119,13 +105,13 @@ class DocumentHandler
 				tSeq = new Sequence();
 				// actual sequence must be set before adding to sequenceset
 				tSeq.setSequence(vSeq.getSequence());
-				tSeq.name = vSeq.getName();
+				tSeq.setName(vSeq.getName());
 				mapper.registerObjects(tSeq, vSeq);
 				ss.addSequence(tSeq);
 			} else
 			{
 				tSeq.setSequence(vSeq.getSequence());
-				tSeq.name = vSeq.getName();
+				tSeq.setName(vSeq.getName());
 			}
 		}
 	}
@@ -152,7 +138,7 @@ class DocumentHandler
 					res.thresholds = thresholds;
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
-					tAlign.getResults().add(res);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				}
 
@@ -169,7 +155,7 @@ class DocumentHandler
 					res.data3 = data3;
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
-					tAlign.getResults().add(res);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				} 
 				
@@ -184,7 +170,7 @@ class DocumentHandler
 					res.thresholds = thresholds;
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
-					tAlign.getResults().add(res);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				}
 				
@@ -199,45 +185,14 @@ class DocumentHandler
 					res.thresholds = thresholds;
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
-					tAlign.getResults().add(res);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				} 
 				
 				else if (vAnno.getType().equals("CodeMLResult"))
 				{
-					CodeMLResult res = new CodeMLResult();
-					res.guiName = vAnno.getDescription();
-					
-					float[][] graph = getGraph(vAnno, CMLModel.MODEL_M2a);
-					if(graph!=null) {
-						CMLModel model = new CMLModel(CMLModel.MODEL_M2a);
-						model.setGraph(graph);
-						res.models.add(model);
-					}
-					
-					graph = getGraph(vAnno, CMLModel.MODEL_M2);
-					if(graph!=null) {
-						CMLModel model = new CMLModel(CMLModel.MODEL_M2);
-						model.setGraph(graph);
-						res.models.add(model);
-					}
-					
-					graph = getGraph(vAnno, CMLModel.MODEL_M3);
-					if(graph!=null) {
-						CMLModel model = new CMLModel(CMLModel.MODEL_M3);
-						model.setGraph(graph);
-						res.models.add(model);
-					}
-					
-					graph = getGraph(vAnno, CMLModel.MODEL_M8);
-					if(graph!=null) {
-						CMLModel model = new CMLModel(CMLModel.MODEL_M8);
-						model.setGraph(graph);
-						res.models.add(model);
-					}
-					
-					res.status = JobStatus.COMPLETED;
-					tAlign.getResults().add(res);
+					CodeMLResult res = getCodeMLResult(vAnno);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				} 
 				
@@ -255,7 +210,7 @@ class DocumentHandler
 						mod.setBic(data[3]);
 						res.models.add(mod);
 					}
-					tAlign.getResults().add(res);
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				}
 				
@@ -264,8 +219,9 @@ class DocumentHandler
 					res.guiName = vAnno.getDescription();
 					res.status = JobStatus.COMPLETED;
 					AnnotationElement el = vAnno.getAnnotationElement(0);
-					res.result = el.getDescription();
-					tAlign.getResults().add(res);
+					//unmask the new line characters
+					res.result = el.getDescription().replaceAll("\\[n\\]", "\n");
+					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				}
 			}
@@ -285,35 +241,111 @@ class DocumentHandler
 						else if(prop.getName().equals("end"))
 							tTree.setPartitionEnd(Integer.parseInt(prop.getContent()));
 					}
-					tAlign.getResults().add(tTree);
+					tAlign.addResult(tTree);
 					mapper.registerObjects(tTree, vTree);
 				}
 			}
 		}
 	}
 
+	private CodeMLResult getCodeMLResult(AlignmentAnnotation vAnno) {
+		CodeMLResult res = new CodeMLResult();
+		res.status = JobStatus.COMPLETED;
+		res.guiName = vAnno.getDescription();
+		res.threshold = getData(vAnno, "threshold")[0];
+		
+		//deal with site models
+		String[] models = new String[] {CMLModel.MODEL_M0, CMLModel.MODEL_M1, CMLModel.MODEL_M1a, CMLModel.MODEL_M2, CMLModel.MODEL_M2a, CMLModel.MODEL_M3, CMLModel.MODEL_M7, CMLModel.MODEL_M8};
+		for(String m : models) {
+			res.type = CodeMLResult.TYPE_SITEMODEL;
+			CMLModel cmlModel = new CMLModel(m);
+			boolean hasData = false;
+			boolean hasGraph = false;
+			
+			float[][] graph = getGraph(vAnno, m);
+			float [] data = getData(vAnno, m+"|parameters");
+			if(data!=null && data.length>8) {
+				cmlModel.likelihood = data[0];
+				cmlModel.p = data[1];
+				cmlModel.p0 = data[2];
+				cmlModel.p1 = data[3];
+				cmlModel.p2 = data[4];
+				cmlModel.q = data[5];
+				cmlModel.w0 = data[6];
+				cmlModel.w1 = data[7];
+				cmlModel.w2 = data[8];
+				hasData = true;
+			}
+			if(graph!=null) {
+				cmlModel.setGraph(graph);
+				hasGraph = true;
+			}
+			
+			if(hasData || hasGraph)
+				res.models.add(cmlModel);
+		}
+		
+		//deal with branch models
+		float[] data = null;
+		int h = 0;
+		while((data=getData(vAnno, "H"+h+"|omegas"))!=null) {
+			res.type = CodeMLResult.TYPE_BRANCHMODEL;
+			CMLHypothesis hypo = new CMLHypothesis();
+			double[] omegas = new double[data.length];
+			for(int j=0; j<data.length; j++)
+				omegas[j] = (double)data[j];
+			hypo.omegas = omegas;
+			hypo.likelihood = getData(vAnno, "H"+h+"|likelihood")[0];
+			
+			for(Property p : vAnno.getProperty()) {	
+				if(p.getName().equals("H"+h+"|tree")) {
+					hypo.tree = p.getContent();
+				}
+				else if(p.getName().equals("H"+h+"|omegatree")) {
+					hypo.omegaTree = p.getContent();
+				}
+			}
+			res.hypos.add(hypo);
+			h++;
+		}
+		
+		return res;
+	}
+	
 	private void readAnnotations(AlignmentData tAlign, Alignment vAlign) {
 		for (AlignmentAnnotation vAnno : vAlign.getAlignmentAnnotation())
 		{
-			if(vAnno.getType().equals("Partition")) {
-				Region region = (Region)mapper.getTopaliObject(vAnno);
-				if(region==null) {
-					PartitionAnnotations partAnnos = (PartitionAnnotations)tAlign.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class);
-					Seg seg = vAnno.getSeg(0);
-					Region reg = new Region(seg.getStart(), seg.getEnd());
-					mapper.registerObjects(reg, vAnno);
-					partAnnos.addRegion(reg);
+			Object tmp = mapper.getTopaliObject(vAnno);
+			if(tmp==null) {
+				if(vAnno.getType().equals("Partitions")) {
+					PartitionAnnotations pAnnos = (PartitionAnnotations)tAlign.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class);
+					for(Seg s : vAnno.getSeg()) {
+						pAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
+					}
+					mapper.registerObjects(pAnnos, vAnno);
+				}
+				else if(vAnno.getType().equals("CodingRegions")) {
+					CDSAnnotations cAnnos = (CDSAnnotations)tAlign.getTopaliAnnotations().getAnnotations(CDSAnnotations.class);
+					for(Seg s : vAnno.getSeg()) {
+						cAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
+					}
+					mapper.registerObjects(cAnnos, vAnno);
 				}
 			}
-			
-			else if(vAnno.getType().equals("Coding Region")) {
-				Region region = (Region)mapper.getTopaliObject(vAnno);
-				if(region==null) {
-					CDSAnnotations cdsAnnos = (CDSAnnotations)tAlign.getTopaliAnnotations().getAnnotations(CDSAnnotations.class);
-					Seg seg = vAnno.getSeg(0);
-					Region reg = new Region(seg.getStart(), seg.getEnd());
-					mapper.registerObjects(reg, vAnno);
-					cdsAnnos.addRegion(reg);
+			else {
+				if(tmp instanceof PartitionAnnotations) {
+					PartitionAnnotations pAnnos = (PartitionAnnotations)tmp;
+					pAnnos.deleteAll();
+					for(Seg s : vAnno.getSeg()) {
+						pAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
+					}
+				}
+				else if(tmp instanceof CDSAnnotations) {
+					CDSAnnotations cAnnos = (CDSAnnotations)tmp;
+					cAnnos.deleteAll();
+					for(Seg s : vAnno.getSeg()) {
+						cAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
+					}
 				}
 			}
 		}
@@ -323,14 +355,14 @@ class DocumentHandler
 	{
 
 		LinkedList<Float> positions = new LinkedList<Float>();
-		LinkedList<Float> values = new LinkedList<Float>();
+		LinkedList<float[]> values = new LinkedList<float[]>();
 
 		AnnotationElement[] els = vAnno.getAnnotationElement();
 
 		for (int i = 0; i < els.length; i++)
 		{
 			int pos = (int) els[i].getPosition();
-			float value = els[i].getValue(0);
+			float[] value = els[i].getValue();
 			String description = els[i].getDescription();
 			if (description.equals(desc))
 			{
@@ -339,18 +371,31 @@ class DocumentHandler
 			}
 		}
 
-		float[][] result = new float[positions.size()][2];
+		//if there is no data matching the desc return null
+		if(positions.size()<=0)
+			return null;
+		
+		//determine the max. size of the values array
+		int maxSize = 0;
+		for (int j = 0; j < positions.size(); j++){
+			if(values.get(j).length>maxSize)
+				maxSize = values.get(j).length;
+		}
+	
+		float[][] result = new float[positions.size()][maxSize+1];
 		for (int j = 0; j < positions.size(); j++)
 		{
 			result[j][0] = positions.get(j);
-			result[j][1] = values.get(j);
+			
+			for(int k=0; k<values.get(j).length; k++)
+				result[j][k+1] = values.get(j)[k];
 		}
 
 		return result;
 	}
 	
 	private float[] getData(AlignmentAnnotation vAnno, String desc)
-	{
+	{		
 		AnnotationElement[] els = vAnno.getAnnotationElement();
 		for (int i = 0; i < els.length; i++)
 		{
@@ -430,7 +475,7 @@ class DocumentHandler
 				// Add sequence to vamsas dataset:
 				vDSSequence = new uk.ac.vamsas.objects.core.Sequence();
 				vDSSequence.setSequence(tSeq.getSequence());
-				vDSSequence.setName(tSeq.name);
+				vDSSequence.setName(tSeq.getName());
 				vDSSequence.setStart(0);
 				vDSSequence.setEnd(tSeq.getLength() - 1);
 				if (tSequenceSet.getParams().isDNA())
@@ -448,7 +493,7 @@ class DocumentHandler
 			}
 
 			vSeq.setSequence(tSeq.getSequence());
-			vSeq.setName(tSeq.name);
+			vSeq.setName(tSeq.getName());
 			vSeq.setStart(0);
 			vSeq.setEnd(tSeq.getLength() - 1);
 			// new sequences have to be linked to the corresponding dataset
@@ -462,8 +507,17 @@ class DocumentHandler
 	{
 		for (AnalysisResult tRes : tAlign.getResults())
 		{
-			AlignmentAnnotation vAnno = (AlignmentAnnotation) mapper
-					.getVamsasObject(tRes);
+			//the corresponding vamsas object to tRes could be either a 
+			//AlignmentAnnotation or a Tree
+			Object tmp = mapper.getVamsasObject(tRes);
+			AlignmentAnnotation vAnno = null;
+			Tree vTree = null;
+			if(tmp!=null) {
+				if(tmp instanceof AlignmentAnnotation)
+					vAnno = (AlignmentAnnotation)tmp;
+				else if(tmp instanceof Tree)
+					vTree = (Tree)tmp;
+			}
 
 			if (vAnno == null)
 			{
@@ -543,12 +597,41 @@ class DocumentHandler
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
 					vAnno.setProvenance(getDummyProvenance());
+					//applies for site models
 					for(int i=0; i<result.models.size(); i++) {
-						float[][] graph = result.models.get(i).getGraph();
+						CMLModel mod = result.models.get(i);
+						float[][] graph = mod.getGraph();
 						if(graph!=null) {
-							addGraph(vAnno, graph, result.models.get(i).model);
+							addGraph(vAnno, graph, mod.model);
+						}
+						if(mod.likelihood>-1 || mod.p>-1 || mod.p0>-1 || mod.p1>-1 || mod.p2>-1 || mod.q>-1 || mod.w0>-1 || mod.w1>-1 || mod.w2>-1) {
+							float[] data = new float[]{(float)mod.likelihood, (float)mod.p, (float)mod.p0, (float)mod.p1, (float)mod.p2, (float)mod.q, (float)mod.w0, (float)mod.w1, (float)mod.w2};
+							addData(vAnno, data, mod.model+"|parameters");
 						}
 					}
+					//applies for branch models
+					for(int i=0; i<result.hypos.size(); i++) {
+						CMLHypothesis hypo = result.hypos.get(i);
+						addData(vAnno, (float)hypo.likelihood, "H"+i+"|likelihood");
+						float[] data = new float[hypo.omegas.length];
+						for(int j=0; j<data.length; j++)
+							data[j] = (float)hypo.omegas[j];
+						addData(vAnno, data, "H"+i+"|omegas");
+						
+						Property prop = new Property();
+						prop.setName("H"+i+"|tree");
+						prop.setType("tree");
+						prop.setContent(hypo.tree);
+						vAnno.addProperty(prop);
+						
+						Property prop2 = new Property();
+						prop2.setName("H"+i+"|omegatree");
+						prop2.setType("tree");
+						prop2.setContent(hypo.omegaTree);
+						vAnno.addProperty(prop2);
+					}
+					
+					addData(vAnno, (float)result.threshold, "threshold");
 					mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				} 
@@ -580,7 +663,10 @@ class DocumentHandler
 					
 					AnnotationElement el = new AnnotationElement();
 					el.setPosition(-1);
-					el.setDescription(result.result);
+					String res = result.result;
+					//mask new line characters in some way, so that they are not removed
+					res = res.replaceAll("\n", "\\[n\\]");
+					el.setDescription(res);
 					el.setValue(new float[] {});
 					vAnno.addAnnotationElement(el);
 					
@@ -588,84 +674,109 @@ class DocumentHandler
 					mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
-				
-				else if (tRes instanceof TreeResult)
-				{
-					TreeResult result = (TreeResult)tRes;
-					Tree vTree = new Tree();
-					vTree.setTitle(result.getTitle());
-					Newick nw = new Newick();
-					nw.setContent(result.getTreeStr());
-					vTree.addNewick(nw);
-					
-					Property p1 = new Property();
-					p1.setType("int");
-					p1.setName("start");
-					p1.setContent(""+result.getPartitionStart());
-					vTree.addProperty(p1);
-					
-					Property p2 = new Property();
-					p2.setType("int");
-					p2.setName("end");
-					p2.setContent(""+result.getPartitionEnd());
-					vTree.addProperty(p2);
-					
-					vTree.setTitle(result.guiName);
-					
-					vTree.setProvenance(getDummyProvenance());
-					mapper.registerObjects(tRes, vTree);
-					vAlign.addTree(vTree);
-				}
-
 			}
-
+			
+			if(tRes instanceof TreeResult && vTree==null) {
+				TreeResult result = (TreeResult)tRes;
+				vTree = new Tree();
+				vTree.setTitle(result.getTitle());
+				Newick nw = new Newick();
+				nw.setContent(result.getTreeStr());
+				vTree.addNewick(nw);
+				
+				Property p1 = new Property();
+				p1.setType("int");
+				p1.setName("start");
+				p1.setContent(""+result.getPartitionStart());
+				vTree.addProperty(p1);
+				
+				Property p2 = new Property();
+				p2.setType("int");
+				p2.setName("end");
+				p2.setContent(""+result.getPartitionEnd());
+				vTree.addProperty(p2);
+				
+				vTree.setTitle(result.guiName);
+				
+				vTree.setProvenance(getDummyProvenance());
+				mapper.registerObjects(tRes, vTree);
+				vAlign.addTree(vTree);
+			}
 		}
 	}
 
 	private void writeAnnotations(AlignmentData tAlign, Alignment vAlign) {
 		PartitionAnnotations partAnnos = (PartitionAnnotations)tAlign.getTopaliAnnotations().getAnnotations(PartitionAnnotations.class);
-		for(Region region : partAnnos) {
-			AlignmentAnnotation vAnno = (AlignmentAnnotation)mapper.getVamsasObject(region);
-			if(vAnno==null) {
-				vAnno = new AlignmentAnnotation();
-				vAnno.setProvenance(getDummyProvenance());
-				vAnno.setType("Partition");
-				vAnno.setGraph(false);
+		AlignmentAnnotation vAnno = (AlignmentAnnotation)mapper.getVamsasObject(partAnnos);
+		if(vAnno==null) {
+			vAnno = new AlignmentAnnotation();
+			vAnno.setProvenance(getDummyProvenance());
+			vAnno.setType("Partitions");
+			vAnno.setGraph(false);
+			boolean added = false;
+			for(Region region : partAnnos) {
 				int start = region.getS();
 				int end = region.getE();
 				Seg seg = new Seg();
+				seg.setInclusive(true);
 				seg.setStart(start);
 				seg.setEnd(end);
-				seg.setInclusive(true);
-				vAnno.setSeg(new Seg[]
-				{ seg });
-				
-				mapper.registerObjects(region, vAnno);
+				vAnno.addSeg(seg);
+				added = true;
+			}
+			if(added) {
+				mapper.registerObjects(partAnnos, vAnno);
 				vAlign.addAlignmentAnnotation(vAnno);
+			}
+		}
+		else {
+			vAnno.removeAllSeg();
+			for(Region region : partAnnos) {
+				int start = region.getS();
+				int end = region.getE();
+				Seg seg = new Seg();
+				seg.setInclusive(true);
+				seg.setStart(start);
+				seg.setEnd(end);
+				vAnno.addSeg(seg);
 			}
 		}
 		
-		CDSAnnotations cdsAnno = (CDSAnnotations)tAlign.getTopaliAnnotations().getAnnotations(CDSAnnotations.class);
-		for(Region region : cdsAnno) {
-			AlignmentAnnotation vAnno = (AlignmentAnnotation)mapper.getVamsasObject(region);
-			if(vAnno==null) {
-				vAnno = new AlignmentAnnotation();
-				vAnno.setProvenance(getDummyProvenance());
-				vAnno.setType("Coding Region");
-				vAnno.setGraph(false);
+		CDSAnnotations cdsAnnos = (CDSAnnotations)tAlign.getTopaliAnnotations().getAnnotations(CDSAnnotations.class);
+		vAnno = (AlignmentAnnotation)mapper.getVamsasObject(cdsAnnos);
+		if(vAnno==null) {
+			vAnno = new AlignmentAnnotation();
+			vAnno.setProvenance(getDummyProvenance());
+			vAnno.setType("CodingRegions");
+			vAnno.setGraph(false);
+			boolean added = false;
+			for(Region region : cdsAnnos) {
 				int start = region.getS();
 				int end = region.getE();
 				Seg seg = new Seg();
+				seg.setInclusive(true);
 				seg.setStart(start);
 				seg.setEnd(end);
-				seg.setInclusive(true);
-				vAnno.setSeg(new Seg[]
-				{ seg });
-				
-				mapper.registerObjects(region, vAnno);
+				vAnno.addSeg(seg);
+				added = true;
+			}
+			if(added) {
+				mapper.registerObjects(cdsAnnos, vAnno);
 				vAlign.addAlignmentAnnotation(vAnno);
 			}
 		}
+		else {
+			vAnno.removeAllSeg();
+			for(Region region : cdsAnnos) {
+				int start = region.getS();
+				int end = region.getE();
+				Seg seg = new Seg();
+				seg.setInclusive(true);
+				seg.setStart(start);
+				seg.setEnd(end);
+				vAnno.addSeg(seg);
+			}
+		}	
 	}
 	
 	private void addGraph(AlignmentAnnotation anno, float[][] data, String desc)
@@ -673,13 +784,14 @@ class DocumentHandler
 		for (int i = 0; i < data.length; i++)
 		{
 			int pos = (int) (data[i][0]);
-			float value = data[i][1];
+			float[] values = new float[data[i].length-1];
+			for(int j=1; j<data[i].length; j++)
+				values[j-1] = data[i][j];
 
 			AnnotationElement el = new AnnotationElement();
 			el.setDescription(desc);
 			el.setPosition(pos);
-			el.setValue(new float[]
-			{ value });
+			el.setValue(values);
 			anno.addAnnotationElement(el);
 		}
 	}

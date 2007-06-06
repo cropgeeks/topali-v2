@@ -1,0 +1,42 @@
+Current state of affairs
+-----------------------
+Last modifications:
+- Added vamsas read/write support for TOPALi annotations (Partitions, Coding Regions)
+- Made MrBayes and Modelgenerator Webservice progress trackable
+- Implemented a basic server side limit mechanism (limited alignment size)
+- Added "Load example alignment" to help menu
+
+Current problems:
+- Concurrent VAMSAS sessions not possible (file lock?)
+
+Some ideas:
+- What's about the third import alignment option (clustal)?
+- Just one settings dialog for all settings?
+- Remove "Check for update" in Help menu (as it's done automatically)?
+- Not just limit max. alignment size, also limit number of active jobs per user?
+- Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)?
+ 
+
+Some URLs
+---------
+Tomcat Manager:
+http://gruffalo:8080/
+
+Grid Report
+http://gruffalo/ganglia/ (doesn't work anymore?)
+
+SCRI Cluster:
+http://gruffalo.scri.ac.uk/topali
+http://gruffalo.scri.ac.uk/broker
+
+
+
+Misc.
+-----
+To run a script in a certain queue:
+#$ -q fast.q@n1
+
+If libs changes, edit:
+- j.bat (for testing)
+- build.xml (generates meta-inf classpath for topali.jar) (used by installer)
+- webstart/topali.jnlp

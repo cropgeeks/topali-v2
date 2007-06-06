@@ -62,7 +62,7 @@ public class Project extends ViewableDataObject
 	public void addDataSet(AlignmentData data) {
 		this.datasets.add(data);
 		for(PropertyChangeListener l : changeListeners) {
-			l.propertyChange(new PropertyChangeEvent(this, "", null, data));
+			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class Project extends ViewableDataObject
 	{
 		datasets.remove(data);
 		for(PropertyChangeListener l : changeListeners) {
-			l.propertyChange(new PropertyChangeEvent(this, "", data, null));
+			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", data, null));
 		}
 	}
 

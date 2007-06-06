@@ -53,7 +53,7 @@ public class RunCodonW extends Thread
 		Castor.saveXML(ss, new File(jobDir, "ss.xml"));
 
 		if (result.isRemote)
-			CodonWWebservice.runScript(jobDir);
+			CodonWWebService.runScript(jobDir);
 		else
 			new CodonWAnalysis(jobDir).start(LocalJobs.manager);
 	}

@@ -37,8 +37,9 @@ class RunBarce extends StoppableProcess
 				.getOutputStream()));
 
 		// Read output from barce
-		new BarceCatcher(proc.getInputStream(), false);
-
+		StreamCatcher sc = new BarceCatcher(proc.getInputStream(), false);
+		sc.start();
+		
 		// Send barce all its settings!
 
 		// Model settings

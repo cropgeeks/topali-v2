@@ -3,20 +3,25 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.pdm2;
+package topali.cluster.jobs.modelgenerator;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.logging.Level;
 
 import org.apache.axis.AxisFault;
+import org.apache.log4j.Logger;
 
 import topali.cluster.*;
-import topali.data.PDM2Result;
+import topali.data.MGResult;
 import topali.data.SequenceSet;
 import topali.fileio.Castor;
 
-public class PDMWebService extends WebService
+public class MGWebService extends WebService
 {
+
+	Logger log = Logger.getLogger(this.getClass());
+	
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -34,26 +39,24 @@ public class PDMWebService extends WebService
 				throw AxisFault.makeFault(e);
 			}
 			
-			PDM2Result result = (PDM2Result) Castor.unmarshall(resultXML);
+			MGResult result = (MGResult) Castor.unmarshall(resultXML);
 
-			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";
-			result.treeDistPath = webappPath
-					+ "/binaries/src/treedist/treedist";
+			result.mgPath = webappPath + "/binaries/src/modelgenerator.jar";
+			result.javaPath = javaPath;
 			result.tmpDir = getParameter("tmp-dir");
-			result.nProcessors = Integer.parseInt(getParameter("n-processors"));
 			result.jobId = jobId;
-
+			
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			PDMInitializer pdm = new PDMInitializer(jobDir, ss, result);
-			pdm.start();
+			RunModelGenerator run = new RunModelGenerator(jobDir, ss, result);
+			run.start();
 
-			accessLog.info("PDM2 request from " + jobId);
-			logger.info("PDM2 request from " + jobId);
+			accessLog.info("MG request from " + jobId);
+			logger.info(jobId + " - MG request received");
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -62,11 +65,11 @@ public class PDMWebService extends WebService
 	{
 		try
 		{
-			return new PDMMonitor(jobDir).getPercentageComplete();
+			return (new MGMonitor(jobDir)).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
-			throw AxisFault.makeFault(e);
+			log.warn(e);
+			return new JobStatus(0, JobStatus.FATAL_ERROR);
 		}
 	}
 
@@ -76,13 +79,13 @@ public class PDMWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
-			PDM2Result result = new PDMMonitor(jobDir).getResult();
-
-			logger.info("returning result for " + jobId);
+			MGResult result = (new MGMonitor(jobDir)).getResult();
+			
+			logger.info(jobId + " - returning result");
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -90,24 +93,24 @@ public class PDMWebService extends WebService
 	/*
 	 * Creates the script that each instance of a job running on the cluster
 	 * calls to execute that job. In this case, a java command to run an
-	 * PDMAnalysis on a given directory.
+	 * MBTreeAnalysis on a given directory.
 	 */
-	static void runScript(File jobDir, int partitions) throws Exception
+	static void runScript(File jobDir) throws Exception
 	{
 		// Read...
-		String template = ClusterUtils
-				.readFile(new File(scriptsDir, "pdm2.sh"));
+		String template = ClusterUtils.readFile(new File(scriptsDir, "mg.sh"));
 
 		// Replace...
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
-		template = template.replaceAll("\\$RUN_COUNT", "" + partitions);
 
 		// Write...
-		writeFile(template, new File(jobDir, "pdm2.sh"));
+		writeFile(template, new File(jobDir, "mg.sh"));
 
 		// Run...
-		submitJob("pdm2.sh", jobDir);
+		logger.info(jobDir.getName() + " - submitting to cluster");
+		submitJob("mg.sh", jobDir);
 	}
+
 }

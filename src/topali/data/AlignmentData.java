@@ -110,20 +110,20 @@ public class AlignmentData extends ViewableDataObject
 		results.add(index, newR);
 		
 		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "replaceResult", oldR, newR));
+			l.propertyChange(new PropertyChangeEvent(this, "result", oldR, newR));
 	}
 
 	public void removeResult(AnalysisResult result)
 	{
 		results.remove(result);
 		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "removeResult", result, null));
+			l.propertyChange(new PropertyChangeEvent(this, "result", result, null));
 	}
 
 	public void addResult(AnalysisResult result) {
 		results.add(result);
 		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "addResult", null, result));
+			l.propertyChange(new PropertyChangeEvent(this, "result", null, result));
 	}
 	
 	public ResultsTracker getTracker()
@@ -174,18 +174,22 @@ public class AlignmentData extends ViewableDataObject
 
 	public void setActiveRegionE(int activeRegionE)
 	{
-		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "activeRegionE", this.activeRegionE, activeRegionE));
-		
+		int oldValue = this.activeRegionE;
 		this.activeRegionE = activeRegionE;
+		
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionE));
+		
 	}
 
 	public void setActiveRegionS(int activeRegionS)
 	{
-		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "activeRegionS", this.activeRegionS, activeRegionS));
-		
+		int oldValue = this.activeRegionS;
 		this.activeRegionS = activeRegionS;
+		
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionS));
+		
 	}
 
 }

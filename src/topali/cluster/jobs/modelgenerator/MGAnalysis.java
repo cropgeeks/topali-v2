@@ -41,22 +41,22 @@ public class MGAnalysis extends AnalysisThread
 		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
 
 		// Temporary working directory
-		wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
-				"modelgenerator");
-
+//		wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
+//				"modelgenerator");
+		
 //		 Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(wrkDir, "mg.fasta"), indices, Filters.FAS, true);
+		ss.save(new File(runDir, "mg.fasta"), indices, Filters.FAS, true); //was wrkDir
 
-		ModelGeneratorProcess mg = new ModelGeneratorProcess(wrkDir, result);
+		ModelGeneratorProcess mg = new ModelGeneratorProcess(runDir, result); //was wrkDir
 		mg.run();
 
-		result = MGParser.parse(new File(wrkDir, "modelgenerator0.out"), result);
+		result = MGParser.parse(new File(runDir, "modelgenerator0.out"), result); //was wrkDir
 
 		// Save final data back to drive where it can be retrieved
 		Castor.saveXML(result, new File(runDir, "result.xml"));
 
-		ClusterUtils.emptyDirectory(wrkDir, true);
+		//ClusterUtils.emptyDirectory(runDir, true); //was wrkDir
 		
 	}
 	

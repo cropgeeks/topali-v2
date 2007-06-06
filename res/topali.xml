@@ -313,9 +313,6 @@
 		<bind-xml node="attribute"/></field>
 	<field name="alpha" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="thresholdCutoff" type="float" direct="true">
-		<bind-xml node="attribute"/></field>		
-	
 	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
@@ -333,10 +330,7 @@
 	<field name="tRatio" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
 	<field name="alpha" type="double" direct="true">
-		<bind-xml node="attribute"/></field>
-	<field name="thresholdCutoff" type="float" direct="true">
-		<bind-xml node="attribute"/></field>		
-	
+		<bind-xml node="attribute"/></field>	
 	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
@@ -368,12 +362,10 @@
 	<field name="pdm_theta_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_beta_tune" type="float" direct="true"><bind-xml node="attribute"/></field>
 	<field name="kappa" type="double" direct="true"><bind-xml node="attribute"/></field>
-	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
 	<field name="df" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="N" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="tRatio" type="double" direct="true"><bind-xml node="attribute"/></field>
 	<field name="alpha" type="double" direct="true"><bind-xml node="attribute"/></field>
-	
 	<field name="frequencies" type="double" direct="true" collection="array"/>
 	<field name="glbData" type="string"/>
 	<field name="locData" type="string"/>
@@ -388,8 +380,6 @@
 	<field name="nProcessors" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_window" type="int" direct="true"><bind-xml node="attribute"/></field>
 	<field name="pdm_step" type="int" direct="true"><bind-xml node="attribute"/></field>
-	<field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
-	
 	<field name="data" type="string"/>
 	<field name="thresholds" type="float" direct="true" collection="array"/>
 </class>
@@ -418,8 +408,6 @@
   <field name="hmm_station" type="string" direct="true"><bind-xml node="attribute"/></field>
   <field name="hmm_update" type="string" direct="true"><bind-xml node="attribute"/></field>
   <field name="hmm_branch" type="float" direct="true"><bind-xml node="attribute"/></field>
-  <field name="thresholdCutoff" type="float" direct="true"><bind-xml node="attribute"/></field>
-  
   <field name="bpArray" type="string"/>
   <field name="data1" type="string"/>
   <field name="data2" type="string"/>

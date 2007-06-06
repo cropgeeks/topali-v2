@@ -5,8 +5,11 @@
 
 package topali.data;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 // Class representing a single sequence.
-public class Sequence
+public class Sequence extends ViewableDataObject
 {
 	// Sequence's actual name
 	public String name;
@@ -42,7 +45,11 @@ public class Sequence
 
 	public void setSequence(String sequence)
 	{
+		String oldValue = (this.sequence!=null) ? this.sequence.toString() : null;
 		this.sequence = new StringBuffer(sequence);
+		
+		for(PropertyChangeListener l : changeListeners)
+			l.propertyChange(new PropertyChangeEvent(this, "sequence", oldValue, sequence));
 	}
 
 	public String toString()
@@ -107,4 +114,20 @@ public class Sequence
 			str += " ";
 		return str;
 	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		String oldName = this.name;
+		this.name = name;
+		
+		for(PropertyChangeListener l : changeListeners)
+			l.propertyChange(new PropertyChangeEvent(this, "name", oldName, name));
+	}
+	
+	
 }
