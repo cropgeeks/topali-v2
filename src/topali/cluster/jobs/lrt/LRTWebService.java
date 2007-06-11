@@ -7,7 +7,7 @@ package topali.cluster.jobs.lrt;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 
@@ -50,7 +50,7 @@ public class LRTWebService extends WebService
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -62,7 +62,7 @@ public class LRTWebService extends WebService
 			return new CollateLRT(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -76,10 +76,11 @@ public class LRTWebService extends WebService
 			LRTResult result = new CollateLRT(jobDir).getResult();
 
 			logger.info(jobId + " - returning result");
+			accessLog.info("LRT result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

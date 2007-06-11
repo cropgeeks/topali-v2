@@ -7,7 +7,7 @@ package topali.cluster.jobs.pdm;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 
@@ -53,7 +53,7 @@ public class PDMWebService extends WebService
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -65,7 +65,7 @@ public class PDMWebService extends WebService
 			return new CollatePDM(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -79,10 +79,11 @@ public class PDMWebService extends WebService
 			PDMResult result = new CollatePDM(jobDir).getResult();
 
 			logger.info(jobId + "- returning result");
+			accessLog.info("PDM result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

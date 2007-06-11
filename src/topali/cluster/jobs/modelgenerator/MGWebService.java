@@ -7,7 +7,7 @@ package topali.cluster.jobs.modelgenerator;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 import org.apache.log4j.Logger;
@@ -51,12 +51,12 @@ public class MGWebService extends WebService
 			RunModelGenerator run = new RunModelGenerator(jobDir, ss, result);
 			run.start();
 
-			accessLog.info("MG request from " + jobId);
+			accessLog.info("MG  request from " + jobId);
 			logger.info(jobId + " - MG request received");
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -82,10 +82,11 @@ public class MGWebService extends WebService
 			MGResult result = (new MGMonitor(jobDir)).getResult();
 			
 			logger.info(jobId + " - returning result");
+			accessLog.info("MG  result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

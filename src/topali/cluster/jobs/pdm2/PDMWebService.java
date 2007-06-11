@@ -53,7 +53,7 @@ public class PDMWebService extends WebService
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
+			logger.warn("" + e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -65,7 +65,7 @@ public class PDMWebService extends WebService
 			return new PDMMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
+			logger.warn("" + e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -79,10 +79,11 @@ public class PDMWebService extends WebService
 			PDM2Result result = new PDMMonitor(jobDir).getResult();
 
 			logger.info("returning result for " + jobId);
+			accessLog.info("PDM2 result to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.warning("" + e);
+			logger.warn("" + e);
 			throw AxisFault.makeFault(e);
 		}
 	}

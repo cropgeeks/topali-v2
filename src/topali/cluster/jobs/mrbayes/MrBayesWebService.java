@@ -7,7 +7,7 @@ package topali.cluster.jobs.mrbayes;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 
@@ -47,12 +47,12 @@ public class MrBayesWebService extends WebService
 			RunMrBayes runMBTree = new RunMrBayes(jobDir, ss, result);
 			runMBTree.start();
 
-			accessLog.info("MB request from " + jobId);
+			accessLog.info("MB  request from " + jobId);
 			logger.info(jobId + " - MB request received");
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -64,7 +64,7 @@ public class MrBayesWebService extends WebService
 			return new MrBayesMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -78,10 +78,11 @@ public class MrBayesWebService extends WebService
 			MBTreeResult result = new MrBayesMonitor(jobDir).getResult();
 
 			logger.info(jobId + " - returning result");
+			accessLog.info("MB  result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
