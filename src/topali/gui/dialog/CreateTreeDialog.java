@@ -143,7 +143,11 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		data.getTracker().setTreeRunCount(runNum);
 
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
-		result.guiName = "Tree " + runNum;
+		if(Prefs.gui_tree_method==0)
+			result.guiName = "JC-Tree " + runNum;
+		else
+			result.guiName = "MrB-Tree " + runNum;
+		
 		result.jobName = "Tree Estimation " + runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";

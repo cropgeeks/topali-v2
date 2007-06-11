@@ -155,6 +155,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		sb.append("\n\nSelected Partition: "+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
 		
 		if(tResult instanceof MBTreeResult) {
+			MBTreeResult res = (MBTreeResult)tResult;
 			sb.append("\n\nMrBayes parameters:\n\n");
 			sb.append(((MBTreeResult)tResult).mbCmds);
 		}

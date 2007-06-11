@@ -11,6 +11,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import javax.swing.*;
@@ -25,7 +27,8 @@ import topali.gui.dialog.LoadMonitorDialog;
 import topali.gui.tree.TreePane;
 import doe.GradientPanel;
 
-public class NavPanel extends JPanel implements TreeSelectionListener
+public class NavPanel extends JPanel implements TreeSelectionListener,
+		PropertyChangeListener
 {
 	static JPanel blankPanel;
 
@@ -192,6 +195,9 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		// 3) Add the Results Node
 		addResultsFolder(dataNode, data);
 
+		// 4) register as changelistener
+		data.addChangeListener(this);
+
 		// Update the tree with the new node(s)
 		tree.setSelectionPath(new TreePath(node.getPath()));
 		tree.scrollPathToVisible(new TreePath(node.getPath()));
@@ -254,7 +260,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 				new ResultsNodeFolder(data));
 		parent.add(resultsFolder);
 
-		for (AnalysisResult result : data.getResults()) {
+		for (AnalysisResult result : data.getResults())
+		{
 			addResultsNode(resultsFolder, data, result);
 		}
 	}
@@ -302,14 +309,17 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 				node.setUserObject(new CodeMLResultsNode(data,
 						(CodeMLResult) result));
 
-			if(result instanceof MGResult) {
-				node.setUserObject(new MGResultsNode(data, (MGResult)result));
+			if (result instanceof MGResult)
+			{
+				node.setUserObject(new MGResultsNode(data, (MGResult) result));
 			}
-			
-			if(result instanceof CodonWResult) {
-				node.setUserObject(new CodonWResultsNode(data, (CodonWResult)result));
+
+			if (result instanceof CodonWResult)
+			{
+				node.setUserObject(new CodonWResultsNode(data,
+						(CodonWResult) result));
 			}
-			
+
 			model.insertNodeInto(node, parent, parent.getChildCount());
 			return;
 		}
@@ -317,6 +327,33 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		// If it can't be added as a final result, then it needs to be added as
 		// a running job back in the JobsPanel
 		WinMain.jobsPanel.createJob(result, data);
+	}
+
+	public void removeResultsNode(AlignmentData data, AnalysisResult result)
+	{
+		DefaultMutableTreeNode resultsFolder = getResultsFolderNodeForData(data);
+		DefaultMutableTreeNode node = null;
+		for (int i = 0; i < resultsFolder.getChildCount(); i++)
+		{
+			DefaultMutableTreeNode n = (DefaultMutableTreeNode) resultsFolder
+					.getChildAt(i);
+			ResultsNode rn = (ResultsNode)n.getUserObject();
+			if (rn.result.equals(result))
+			{
+				node = n;
+			}
+		}
+
+		if (node != null)
+		{
+			model.removeNodeFromParent(node);
+
+			int location = splits.getDividerLocation();
+			splits.setRightComponent(blankPanel);
+			splits.setDividerLocation(location);
+
+			setPanelTitle();
+		}
 	}
 
 	// This can only be called when NavPanel has allowed the aFilePrint action
@@ -341,13 +378,14 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 		return null;
 	}
 
-	public List<AlignmentData> getAllAlignmentData() {
+	public List<AlignmentData> getAllAlignmentData()
+	{
 		List<AlignmentData> res = new LinkedList<AlignmentData>();
 		for (SequenceSetNode node : seqNodes)
 			res.add(node.getAlignmentData());
 		return res;
 	}
-	
+
 	// Can be called at any time, as all nodes can return the Alignment info
 	public AlignmentData getCurrentAlignmentData()
 	{
@@ -437,11 +475,13 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 			splits.setRightComponent(blankPanel);
 
 		// Can the user print now?
-		if (nodeInfo instanceof ResultsNode && ((ResultsNode) nodeInfo).isPrintable()) {
+		if (nodeInfo instanceof ResultsNode
+				&& ((ResultsNode) nodeInfo).isPrintable())
+		{
 			WinMainMenuBar.aFilePrint.setEnabled(true);
 			WinMainMenuBar.aFilePrintPreview.setEnabled(true);
-		}
-		else {
+		} else
+		{
 			WinMainMenuBar.aFilePrint.setEnabled(false);
 			WinMainMenuBar.aFilePrintPreview.setEnabled(false);
 		}
@@ -539,7 +579,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 	{
 		protected void handlePopup(int x, int y)
 		{
-			
+
 			// Create the menu
 			p = new JPopupMenu();
 
@@ -581,4 +621,26 @@ public class NavPanel extends JPanel implements TreeSelectionListener
 			}
 		}
 	}
+
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if (evt.getPropertyName().equals("result"))
+		{
+			//a new AnalysisResult has been added:
+			if(evt.getNewValue()!=null && evt.getOldValue()==null)
+			{
+				addResultsNode(null, (AlignmentData) evt.getSource(),
+						(AnalysisResult) evt.getNewValue());
+			}
+
+			// an AnalysisResult has been removed:
+			if (evt.getNewValue() == null && evt.getOldValue()!=null)
+			{
+				removeResultsNode((AlignmentData) evt.getSource(),
+						(AnalysisResult) evt.getOldValue());
+			}
+		}
+
+	}
+
 }

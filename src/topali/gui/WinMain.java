@@ -596,7 +596,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		//data.getResults().add(result);
 		data.addResult(result);
 
-		jobsPanel.createJob(result, data);
+		//jobsPanel.createJob(result, data);
 		menuAnlsShowJobs();
 	}
 
@@ -633,7 +633,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 			// Then remove it from both the alignment and the navigation panel
 			data.removeResult(result);
-			navPanel.removeSelectedNode();
+			//navPanel.removeSelectedNode();
 
 			WinMainMenuBar.aFileSave.setEnabled(true);
 		}
@@ -691,7 +691,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		vamsas = new VamsasManager();
 		vEvents = new VamsasEvents(this);
 		
-		if (vamsas.initializeVamsas())
+		if (vamsas.initializeVamsas(project))
 		{
 			MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
 				+ "session.", MsgBox.INF);
@@ -719,7 +719,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			try
 			{
-				vamsas.writeToDocument(project);
+				vamsas.writeToDocument();
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -738,7 +738,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 //			
 			try
 			{
-				vamsas.readFromDocument(project);
+				vamsas.readFromDocument();
 			} catch (Exception e)
 			{
 				e.printStackTrace();

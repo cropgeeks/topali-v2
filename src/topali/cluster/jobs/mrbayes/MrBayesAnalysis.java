@@ -49,7 +49,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		// We need to save out the SequenceSet for MrBayes to read, ensuring
 		// that only the sequences meant to be processed are saved
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(runDir, "mb.nex"), indices, Filters.NEX_B, true);
+		ss.save(new File(runDir, "mb.nex"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.NEX_B, true);
 
 		// Add nexus commands to tell MrBayes what to do
 		addNexusCommands();
@@ -130,8 +130,7 @@ public class MrBayesAnalysis extends AnalysisThread
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_WAG);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_JC)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC);
-			cmd.prset = "prset statefreqpr=fixed(equal)";
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_JC);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_F81)) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC);
@@ -146,12 +145,10 @@ public class MrBayesAnalysis extends AnalysisThread
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_K80)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY);
-			cmd.prset = "prset statefreqpr=fixed(equal)";
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_K80);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_SIM)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR);
-			cmd.prset = "prset statefreqpr=fixed(equal)";
+		else if(model.equals(SequenceSetParams.MODEL_DNA_SYM)) {
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_SYM);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_TIM)) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR);

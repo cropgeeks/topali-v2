@@ -18,8 +18,11 @@ public class MrBayesCmdBuilder
 	public static final String MODEL_DOUBLET = "doublet";
 	String model = MODEL_4BY4;
 	
+	public static final String DNAMODEL_JC = "1";
 	public static final String DNAMODEL_F81JC = "1";
+	public static final String DNAMODEL_K80 = "2";
 	public static final String DNAMODEL_HKY = "2";
+	public static final String DNAMODEL_SYM = "6";
 	public static final String DNAMODEL_GTR = "6";
 	String dnaModel = DNAMODEL_F81JC;
 	
@@ -69,7 +72,7 @@ public class MrBayesCmdBuilder
 		if(isDNA) {
 			sb.append("\tlset nucmodel="+model+";\n");
 			if(prset!=null)
-				sb.append("+\t"+prset+"\n");
+				sb.append("\t"+prset+";\n");
 			sb.append("\tlset nst="+dnaModel+";\n");
 			sb.append("\tlset code="+code+";\n");
 			sb.append("\tlset rates="+rate+";\n");
@@ -120,6 +123,12 @@ public class MrBayesCmdBuilder
 
 	public void setDnaModel(String dnaModel)
 	{
+		//jc, k80, sim are submodels of existing models with fixed freq.
+		if(dnaModel.equals(DNAMODEL_JC) || dnaModel.equals(DNAMODEL_K80) || dnaModel.equals(DNAMODEL_SYM))
+			prset = "prset statefreqpr=fixed(equal)";
+		else
+			prset = null;
+		
 		this.dnaModel = dnaModel;
 	}
 
