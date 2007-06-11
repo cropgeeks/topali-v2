@@ -4,7 +4,7 @@
 <%
 	String path = application.getRealPath("/");
 	PropertyConfigurator.configure(path + "/tracking.properties");
-	Logger logger = Logger.getLogger("topali.logger");
+	Logger tracker = Logger.getLogger("topali.tracker");
 	
 	
 	String client = request.getParameter("client");
@@ -15,7 +15,7 @@
 		String host = request.getRemoteHost();
 		String addr = request.getRemoteAddr();
 		
-		logger.info(host + " - " + addr + " - " + id);
+		tracker.info(host + " - " + addr + " - " + id);
 %>
 Current = 16
 <%
