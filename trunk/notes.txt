@@ -1,10 +1,12 @@
 Current state of affairs
 -----------------------
+
+F84+G set ts/tv=2, alpha=4
+
 Last modifications:
-- Added vamsas read/write support for TOPALi annotations (Partitions, Coding Regions)
-- Made MrBayes and Modelgenerator Webservice progress trackable
-- Implemented a basic server side limit mechanism (limited alignment size)
-- Added "Load example alignment" to help menu
+- MrBayes webservice regards partitions
+- Tree result titles are now called JC-Tree or MrB-Tree
+ 
 
 Current problems:
 - Concurrent VAMSAS sessions not possible (file lock?)

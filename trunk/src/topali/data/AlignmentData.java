@@ -10,6 +10,9 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.LinkedList;
 
+import topali.gui.WinMain;
+import topali.gui.nav.NavPanel;
+
 /* Represents an Alignment and the results/analyses run upon it. */
 public class AlignmentData extends ViewableDataObject
 {
@@ -116,12 +119,16 @@ public class AlignmentData extends ViewableDataObject
 	public void removeResult(AnalysisResult result)
 	{
 		results.remove(result);
+		
+		//NavPanel.propertyChange() should be called:
 		for(PropertyChangeListener l : changeListeners) 
 			l.propertyChange(new PropertyChangeEvent(this, "result", result, null));
 	}
 
 	public void addResult(AnalysisResult result) {
 		results.add(result);
+		
+		//NavPanel.propertyChange() should be called:
 		for(PropertyChangeListener l : changeListeners) 
 			l.propertyChange(new PropertyChangeEvent(this, "result", null, result));
 	}

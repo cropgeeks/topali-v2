@@ -26,14 +26,18 @@ public class VamsasManager
 	static UserHandle user;
 	static ClientHandle app;
 
+	Project topaliProject;
+	
 	private ObjectMapper vMap = new ObjectMapper();
 
 	public VamsasManager()
 	{
 	}
 	
-	public boolean initializeVamsas()
+	public boolean initializeVamsas(Project project)
 	{
+		this.topaliProject = project;
+		
 		if (initVamsas() == false)
 			return false;
 		
@@ -177,7 +181,14 @@ public class VamsasManager
 			+ e.getPropertyName() + ": " + e.getOldValue()
 			+ " to " + e.getNewValue());
 		
-		processVamsasDocument();
+		//processVamsasDocument();
+		try
+		{
+			readFromDocument();
+		} catch (Exception e1)
+		{
+			e1.printStackTrace();
+		}
 	}
 	
 	private void handleCloseEvent(PropertyChangeEvent e)
@@ -242,7 +253,7 @@ public class VamsasManager
 	 * Opens a reference to the vamsas session and uses the DocumentHandler to
 	 * store the current TOPALi datasets in it.
 	 */
-	public void writeToDocument(Project project) throws Exception
+	public void writeToDocument() throws Exception
 	{
 		System.out.println();
 		System.out.println();
@@ -251,7 +262,7 @@ public class VamsasManager
 		{
 			IClientDocument cdoc = vorbaclient.getClientDocument();
 			
-			DocumentHandler handler = new DocumentHandler(project, vMap, cdoc);
+			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
 			handler.writeToDocument();			
 			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
 			vorbaclient.updateDocument(cdoc);
@@ -266,12 +277,14 @@ public class VamsasManager
 		
 	}
 	
-	public void readFromDocument(Project project) throws Exception {
+	public void readFromDocument() throws Exception {
 		try
 		{
 			IClientDocument cdoc = vorbaclient.getClientDocument();
-			DocumentHandler handler = new DocumentHandler(project, vMap, cdoc);
+			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
 			handler.readFromDocument();
+			vorbaclient.updateDocument(cdoc);
+			cdoc = null;
 		} catch (IOException e)
 		{
 			MsgBox.msg("TOPALi encountered a problem while reading the VAMSAS "

@@ -35,12 +35,12 @@ public class SequenceSetParams
 	public static final String MODEL_DNA_K3P = "K3P";
 	public static final String MODEL_DNA_TIM = "TIM";
 	public static final String MODEL_DNA_TVM = "TVM";
-	public static final String MODEL_DNA_SIM = "SIM";
+	public static final String MODEL_DNA_SYM = "SYM";
 	public static final String MODEL_DNA_GTR = "GTR";
 	
 	public static final String[] availCodes = new String[] {GENETICCODE_UNIVERSAL, GENETICCODE_CILIATES, GENETICCODE_METMT, GENETICCODE_MYCOPLASMA, GENETICCODE_VERTMT, GENETICCODE_YEAST};
 	public static final String[] availAAModels = new String[] {MODEL_AA_WAG, MODEL_AA_BLOSUM, MODEL_AA_CPREV, MODEL_AA_DAYHOFF, MODEL_AA_EQUALIN, MODEL_AA_GTR, MODEL_AA_JONES, MODEL_AA_MTMAM, MODEL_AA_MTREV, MODEL_AA_POISSON, MODEL_AA_RTREV, MODEL_AA_VT};
-	public static final String[] availDNAModels = new String[] {MODEL_DNA_F81, MODEL_DNA_JC, MODEL_DNA_HKY, MODEL_DNA_GTR};
+	public static final String[] availDNAModels = new String[] {MODEL_DNA_JC, MODEL_DNA_F81, MODEL_DNA_K80, MODEL_DNA_HKY, MODEL_DNA_SYM, MODEL_DNA_GTR};
 	
 	// Transition/transvertion ratio for this alignment
 	private double tRatio = -1;

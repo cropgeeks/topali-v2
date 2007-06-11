@@ -38,7 +38,7 @@ public class MrBayesMonitor
 		{
 			progress = (float)new File(jobDir, "percent").listFiles().length;
 			//prevent progress to be 100% (otherwise the result will be requested before it's created)
-			if(progress==100)
+			if(progress>99)
 				progress = 99;
 		} catch (RuntimeException e)
 		{
