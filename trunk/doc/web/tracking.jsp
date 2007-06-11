@@ -16,12 +16,14 @@
 		String addr = request.getRemoteAddr();
 		
 		logger.info(host + " - " + addr + " - " + id);
+%>
+Current = 16
+<%
+		return;
 	}
 %>
 
 <pre>
-Current = 16
-
 Release History:
 
 [NF] = New Feature

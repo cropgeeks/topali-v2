@@ -7,7 +7,7 @@ package topali.cluster.jobs.dss;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 
@@ -51,7 +51,7 @@ public class DSSWebService extends WebService
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -63,7 +63,7 @@ public class DSSWebService extends WebService
 			return new CollateDSS(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -77,10 +77,11 @@ public class DSSWebService extends WebService
 			DSSResult result = new CollateDSS(jobDir).getResult();
 
 			logger.info(jobId + " -  returning result");
+			accessLog.info("DSS result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

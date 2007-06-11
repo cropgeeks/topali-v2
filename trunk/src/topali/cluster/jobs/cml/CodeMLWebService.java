@@ -7,7 +7,7 @@ package topali.cluster.jobs.cml;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
 
@@ -58,7 +58,7 @@ public class CodeMLWebService extends WebService
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -70,7 +70,7 @@ public class CodeMLWebService extends WebService
 			return new CodeMLMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -84,10 +84,11 @@ public class CodeMLWebService extends WebService
 			CodeMLResult result = new CodeMLMonitor(jobDir).getResult();
 
 			logger.info(jobId + " -  returning result");
+			accessLog.info("CML result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

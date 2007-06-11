@@ -7,10 +7,9 @@ package topali.cluster.jobs.codonw;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
-import org.apache.log4j.Logger;
 
 import topali.cluster.*;
 import topali.data.CodonWResult;
@@ -50,12 +49,12 @@ public class CodonWWebService extends WebService
 			RunCodonW run = new RunCodonW(jobDir, ss, result);
 			run.start();
 
-			accessLog.info("CW request from " + jobId);
+			accessLog.info("CW  request from " + jobId);
 			logger.info(jobId + " - CW request received");
 			return jobId;
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}
@@ -81,10 +80,11 @@ public class CodonWWebService extends WebService
 			CodonWResult result = (new CodonWMonitor(jobDir)).getResult();
 
 			logger.info(jobId + " - returning result");
+			accessLog.info("CW  result  to   " + jobId);
 			return Castor.getXML(result);
 		} catch (Exception e)
 		{
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

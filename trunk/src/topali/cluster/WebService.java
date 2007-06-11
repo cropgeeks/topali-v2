@@ -7,14 +7,13 @@ package topali.cluster;
 
 import java.io.*;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.axis.AxisFault;
-import org.apache.axis.MessageContext;
-import org.apache.axis.transport.http.HTTPConstants;
+import org.apache.axis.*;
+import org.apache.axis.transport.http.*;
+import org.apache.log4j.*;
 
 import sbrn.commons.file.FileUtils;
 import topali.cluster.control.*;
@@ -50,7 +49,6 @@ public abstract class WebService
 
 	private void initializeProperties()
 	{
-
 		HttpServletRequest req = getHttpServletRequest();
 		ServletContext sc = req.getSession().getServletContext();
 
@@ -68,32 +66,22 @@ public abstract class WebService
 		topaliPath = FileUtils.getFile(webappPath, "WEB-INF", "lib",
 				"topali.jar").getPath();
 
-		// Now that the properties are loaded, set the log FileHandler
-		// TODO: Get all this into a logging.properties file
-
-		// We set two loggers - one to log access only, and one for more detail
-		FileHandler fh1 = null, fh2 = null;
+		// Initialize logging
+		logger = Logger.getLogger("topali.cluster.info-log");
+		accessLog = Logger.getLogger("topali.cluster.access-log");
+		
 		try
 		{
-			File logsDir = new File(webappPath, "logs");
-			File fAccessLog = new File(logsDir, "access-log");
-			File fInfoLog = new File(logsDir, "info-log");
+			File logDir = new File(webappPath, "logs");
+			File infoFile = new File(logDir, "info-log.txt");
+			File accessFile = new File(logDir, "access-log.txt");
 
-			fh1 = new FileHandler(fAccessLog.getPath(), 0, 1, true);
-			fh2 = new FileHandler(fInfoLog.getPath(), 0, 1, true);
-			fh1.setFormatter(new SimpleFormatter());
-			fh2.setFormatter(new SimpleFormatter());
-		} catch (IOException e)
-		{
+			PatternLayout pLayout = new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} - %m\r\n");
+		
+			logger.addAppender(new FileAppender(pLayout, infoFile.getPath()));
+			accessLog.addAppender(new FileAppender(pLayout, accessFile.getPath()));
 		}
-
-		accessLog = Logger.getLogger("topali.cluster.access-log");
-		logger = Logger.getLogger("topali.cluster.info-log");
-
-		accessLog.addHandler(fh1);
-		logger.addHandler(fh2);
-
-		logger.info("Initializing properties");
+		catch (Exception e) {}
 	}
 
 	protected String getJobId()
@@ -196,7 +184,7 @@ public abstract class WebService
 			ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 			cluster.deleteJob(jobDir);
 			
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
 	}

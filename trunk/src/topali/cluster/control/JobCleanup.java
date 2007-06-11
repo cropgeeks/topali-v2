@@ -6,7 +6,7 @@
 package topali.cluster.control;
 
 import java.io.File;
-import java.util.logging.Level;
+import org.apache.log4j.*;
 import java.util.logging.Logger;
 
 import topali.cluster.JobStatus;
@@ -22,7 +22,7 @@ public class JobCleanup
 	public static void main(String[] args)
 	{
 		// Disable logging (and SGE feedback)
-		Logger.getLogger("topali.cluster.info-log").setLevel(Level.OFF);
+//		Logger.getLogger("topali.cluster.info-log").setLevel(Level.OFF);
 
 		if (args.length == 0)
 		{
