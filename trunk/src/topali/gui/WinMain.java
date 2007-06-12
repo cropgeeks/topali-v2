@@ -18,8 +18,7 @@ import java.util.List;
 import javax.swing.*;
 
 import pal.tree.Tree;
-import topali.analyses.SequenceSetUtils;
-import topali.analyses.TreeCreator;
+import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
@@ -570,7 +569,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (Prefs.gui_tree_method == 0)
 		{
 			TreePane treePane = navPanel.getCurrentTreePane(data, true);
-			TreeCreator creator = new TreeCreator(dialog.getAlignment());
+			//TreeCreator creator = new TreeCreator(dialog.getAlignment());
+			F84TreeCreator creator = new F84TreeCreator(dialog.getAlignment());
 			Tree palTree = creator.getTree(true);
 
 			if (palTree != null)
