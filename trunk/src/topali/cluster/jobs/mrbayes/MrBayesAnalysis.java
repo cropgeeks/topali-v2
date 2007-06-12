@@ -130,34 +130,34 @@ public class MrBayesAnalysis extends AnalysisThread
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_WAG);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_JC)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_JC);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_JC, true);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_F81)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_GTR)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_HKY)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_K3P)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_K80)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_K80);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_K80, true);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_SYM)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_SYM);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_SYM, true);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_TIM)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_TRN)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
 		else if(model.equals(SequenceSetParams.MODEL_DNA_TVM)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR);
+			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
 		
 		if(para.isModelGamma())
@@ -173,7 +173,25 @@ public class MrBayesAnalysis extends AnalysisThread
 		 out.flush();
 		 out.close();
 		 
-		 ((MBTreeResult)result).mbCmds = cmd.getCommands();
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("Genetic Code: "+para.getGeneticCode()+"\n");
+		 sb.append("Sub. Model: "+para.getModel()+"\n");
+		 sb.append("Rate Model: ");
+		 if(!(para.isModelGamma() || para.isModelInv()))
+			 sb.append("Uniform\n");
+		 if(para.isModelGamma() && para.isModelInv())
+			 sb.append("Gamma + Inv. sites\n");
+		 else 
+			 {
+			 if(para.isModelGamma())
+				 sb.append("Gamma\n");
+			 if(para.isModelInv())
+				 sb.append("Inv. sites\n");
+			 }
+		 sb.append("Algorithm: MrBayes\n\n");
+		 sb.append("MrBayes Commands:\n");
+		 sb.append(cmd.getCommands());
+		 result.info = sb.toString();
 	}
 
 	// private void addNexusCommands() throws Exception

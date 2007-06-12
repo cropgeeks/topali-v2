@@ -46,6 +46,9 @@ public class TreeResult extends AlignmentResult
 
 	public int width, height;
 
+	// additional info about how the tree was created
+	public String info;
+	
 	public TreeResult()
 	{
 		clusters = new LinkedList<SequenceCluster>();

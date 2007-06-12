@@ -136,7 +136,7 @@ class DocumentHandler
 
 			if (tResult == null)
 			{
-				
+
 				if (vAnno.getType().equals("PDMResult"))
 				{
 					PDMResult res = new PDMResult();
@@ -244,38 +244,37 @@ class DocumentHandler
 					res.status = JobStatus.COMPLETED;
 					AnnotationElement el = vAnno.getAnnotationElement(0);
 					// unmask the new line characters
-					res.result = el.getDescription()
-							.replaceAll("\\[n\\]", "\n");
+					res.result = decodeString(el.getDescription());
 					tAlign.addResult(res);
 					mapper.registerObjects(res, vAnno);
 				}
 			}
-
-			Tree[] vTrees = vAlign.getTree();
-			for (Tree vTree : vTrees)
+		}
+		
+		Tree[] vTrees = vAlign.getTree();
+		for (Tree vTree : vTrees)
+		{
+			TreeResult tTree = (TreeResult) mapper.getTopaliObject(vTree);
+			if (tTree == null)
 			{
-				TreeResult tTree = (TreeResult) mapper.getTopaliObject(vTree);
-				if (tTree == null)
-				{
-					tTree = new TreeResult();
-					tTree.setTreeStr(vTree.getNewick(0).getContent());
-					tTree.guiName = vTree.getTitle();
-					tTree.status = JobStatus.COMPLETED;
+				tTree = new TreeResult();
+				tTree.setTreeStr(vTree.getNewick(0).getContent());
+				tTree.guiName = vTree.getTitle();
+				tTree.status = JobStatus.COMPLETED;
 
-					for (Property prop : vTree.getProperty())
-					{
-						if (prop.getName().equals("start"))
-							tTree.setPartitionStart(Integer.parseInt(prop
-									.getContent()));
-						else if (prop.getName().equals("end"))
-							tTree.setPartitionEnd(Integer.parseInt(prop
-									.getContent()));
-					}
-					
-					readResultProvenance(vTree.getProvenance(), tTree);
-					tAlign.addResult(tTree);
-					mapper.registerObjects(tTree, vTree);
+				for (Property prop : vTree.getProperty())
+				{
+					if (prop.getName().equals("start"))
+						tTree.setPartitionStart(Integer.parseInt(prop
+								.getContent()));
+					else if (prop.getName().equals("end"))
+						tTree.setPartitionEnd(Integer.parseInt(prop
+								.getContent()));
 				}
+
+				readResultProvenance(vTree.getProvenance(), tTree);
+				tAlign.addResult(tTree);
+				mapper.registerObjects(tTree, vTree);
 			}
 		}
 	}
@@ -738,10 +737,9 @@ class DocumentHandler
 
 					AnnotationElement el = new AnnotationElement();
 					el.setPosition(-1);
-					String res = result.result;
 					// mask new line characters in some way, so that they are
 					// not removed
-					res = res.replaceAll("\n", "\\[n\\]");
+					String res = encodeString(result.result);
 					el.setDescription(res);
 					el.setValue(new float[]
 					{});
@@ -776,7 +774,7 @@ class DocumentHandler
 
 				vTree.setTitle(result.guiName);
 
-				//vTree.setProvenance(getDummyProvenance());
+				// vTree.setProvenance(getDummyProvenance());
 				vTree.setProvenance(getResultProvenance(tRes));
 				mapper.registerObjects(tRes, vTree);
 				vAlign.addTree(vTree);
@@ -948,22 +946,23 @@ class DocumentHandler
 		for (Field field : c.getFields())
 		{
 			int mod = field.getModifiers();
-			//don't set protected variables:
-			if(Modifier.isFinal(mod) || Modifier.isPrivate(mod) || Modifier.isProtected(mod) || Modifier.isStatic(mod))
+			// don't set protected variables:
+			if (Modifier.isFinal(mod) || Modifier.isPrivate(mod)
+					|| Modifier.isProtected(mod) || Modifier.isStatic(mod))
 				continue;
-			
+
 			if (field.getType().isPrimitive()
 					|| field.getType() == String.class)
 			{
 				try
 				{
 					Object o = field.get(result);
-					if(o==null)
+					if (o == null)
 						continue;
 					Property prop = new Property();
 					prop.setName(field.getName());
 					prop.setType(field.getType().getName());
-					prop.setContent(o.toString());
+					prop.setContent(encodeString(o.toString()));
 					entry.addProperty(prop);
 				} catch (Exception e)
 				{
@@ -972,14 +971,16 @@ class DocumentHandler
 			}
 		}
 		p.addEntry(entry);
-		
-		if(result instanceof AlignmentResult) {
+
+		if (result instanceof AlignmentResult)
+		{
 			entry = new Entry();
 			entry.setApp(VamsasManager.app.getClientUrn());
 			entry.setUser(VamsasManager.user.getFullName());
 			entry.setDate(new Date());
 			entry.setAction("Sequences");
-			for(String seq : ((AlignmentResult)result).selectedSeqs) {
+			for (String seq : ((AlignmentResult) result).selectedSeqs)
+			{
 				Property prop = new Property();
 				prop.setName("Sequence");
 				prop.setType("String");
@@ -988,14 +989,14 @@ class DocumentHandler
 			}
 			p.addEntry(entry);
 		}
-		
+
 		return p;
 	}
 
 	private void readResultProvenance(Provenance prov, AnalysisResult result)
 	{
 		Entry entry = prov.getEntry(0);
-		
+
 		Class c;
 		try
 		{
@@ -1005,52 +1006,72 @@ class DocumentHandler
 			e1.printStackTrace();
 			return;
 		}
-		
+
 		for (Property prop : entry.getProperty())
 		{
 			try
 			{
 				Field field = c.getField(prop.getName());
 				int mod = field.getModifiers();
-				//don't set protected variables:
-				if(Modifier.isFinal(mod) || Modifier.isPrivate(mod) || Modifier.isProtected(mod) || Modifier.isStatic(mod))
+				// don't set protected variables:
+				if (Modifier.isFinal(mod) || Modifier.isPrivate(mod)
+						|| Modifier.isProtected(mod) || Modifier.isStatic(mod))
 					continue;
-				
+
 				Class type = field.getType();
 				Object value = null;
-				if(type.isPrimitive()) {
-					if(field.getGenericType()==Boolean.TYPE)
+				if (type.isPrimitive())
+				{
+					if (field.getGenericType() == Boolean.TYPE)
 						value = Boolean.parseBoolean(prop.getContent());
-					else if(field.getGenericType()==Character.TYPE)
+					else if (field.getGenericType() == Character.TYPE)
 						value = new Character(prop.getContent().charAt(0));
-					else if(field.getGenericType()==Integer.TYPE)
+					else if (field.getGenericType() == Integer.TYPE)
 						value = Integer.parseInt(prop.getContent());
-					else if(field.getGenericType()==Long.TYPE)
+					else if (field.getGenericType() == Long.TYPE)
 						value = Long.parseLong(prop.getContent());
-					else if(field.getGenericType()==Float.TYPE)
+					else if (field.getGenericType() == Float.TYPE)
 						value = Float.parseFloat(prop.getContent());
-					else if(field.getGenericType()==Double.TYPE)
+					else if (field.getGenericType() == Double.TYPE)
 						value = Double.parseDouble(prop.getContent());
-				}
-				else
-					value = type.cast((Object)prop.getContent());
-				
+				} else
+					value = type.cast((Object) prop.getContent());
+
+				if (value instanceof String)
+					value = decodeString((String) value);
+
 				field.set(result, value);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-		
-		if(result instanceof AlignmentResult) {
+
+		if (result instanceof AlignmentResult)
+		{
 			entry = prov.getEntry(1);
 			LinkedList<String> tmp = new LinkedList<String>();
-			for(Property p : entry.getProperty()) {
+			for (Property p : entry.getProperty())
+			{
 				tmp.add(p.getContent());
 			}
 			String[] seqs = new String[tmp.size()];
 			seqs = tmp.toArray(seqs);
-			((AlignmentResult)result).selectedSeqs = seqs;
+			((AlignmentResult) result).selectedSeqs = seqs;
 		}
+	}
+
+	private String encodeString(String s)
+	{
+		s = s.replaceAll("\n", "{n}");
+		s = s.replaceAll("\t", "{t}");
+		return s;
+	}
+
+	private String decodeString(String s)
+	{
+		s = s.replaceAll("\\{n\\}", "\n");
+		s = s.replaceAll("\\{t\\}", "\t");
+		return s;
 	}
 }

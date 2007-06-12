@@ -13,8 +13,6 @@ public class MBTreeResult extends TreeResult
 {
 	// The location of the MrBayes binary
 	public String mbPath;
-
-	public String mbCmds;
 	
 	public MBTreeResult()
 	{

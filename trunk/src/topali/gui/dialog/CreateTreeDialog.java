@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import pal.alignment.Alignment;
 import topali.data.*;
@@ -144,9 +146,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		if(Prefs.gui_tree_method==0)
-			result.guiName = "JC-Tree " + runNum;
+			result.guiName = "F84+G Tree " + runNum;
 		else
-			result.guiName = "MrB-Tree " + runNum;
+			result.guiName = "MrBayes Tree " + runNum;
 		
 		result.jobName = "Tree Estimation " + runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
@@ -172,19 +174,21 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 					.getSelectedSequenceSafeNames();
 	}
 
-	static class BasicTreePanel extends JPanel
+	class BasicTreePanel extends JPanel implements ChangeListener
 	{
 		private JRadioButton rMethod0, rMethod1, rSelectAll, rSelectCurrent;
 
 		BasicTreePanel()
 		{
 			rMethod0 = new JRadioButton(
-					"Jukes cantor + uniform rates model/neighbor joining",
+					"F84+Gamma/neighbor joining (fast, approximate)",
 					Prefs.gui_tree_method == 0);
+			rMethod0.addChangeListener(this);
 			rMethod0.setMnemonic(KeyEvent.VK_J);
 			rMethod1 = new JRadioButton(
-					"Bayesian phylogenetic analysis (using MrBayes)",
+					"Bayesian phylogenetic analysis (using MrBayes) (sophisticated)",
 					Prefs.gui_tree_method == 1);
+			rMethod1.addChangeListener(this);
 			rMethod1.setMnemonic(KeyEvent.VK_B);
 			ButtonGroup g1 = new ButtonGroup();
 			g1.add(rMethod0);
@@ -226,5 +230,20 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 			Prefs.gui_tree_useall = rSelectAll.isSelected();
 		}
+
+		public void stateChanged(ChangeEvent e)
+		{
+			if(tabs==null)
+				return;
+			
+			if(rMethod0.isSelected()) {
+				tabs.setEnabledAt(1, false);
+			}
+			else if(rMethod1.isSelected()) {
+				tabs.setEnabledAt(1, true);
+			}
+		}
+		
+		
 	}
 }

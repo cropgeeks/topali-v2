@@ -1,23 +1,20 @@
 Current state of affairs
 -----------------------
 
-F84+G set ts/tv=2, alpha=4
-
 Last modifications:
-- MrBayes webservice regards partitions
-- Tree result titles are now called JC-Tree or MrB-Tree
+- Replaced JC tree construction with F84+G (needs to be tested!)
+- Added a VAMSAS icon to the toolbar, to connect to/synchronize a VAMSAS session
  
 
 Current problems:
-- Concurrent VAMSAS sessions not possible (file lock?)
 
 Some ideas:
 - What's about the third import alignment option (clustal)?
 - Just one settings dialog for all settings?
-- Remove "Check for update" in Help menu (as it's done automatically)?
 - Not just limit max. alignment size, also limit number of active jobs per user?
 - Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)?
- 
+- Load example dataset
+- Import alignment from URL
 
 Some URLs
 ---------

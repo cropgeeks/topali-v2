@@ -47,6 +47,9 @@ public class Icons
 
 	public static ImageIcon WIN_WARN, WIN_INFORM, WIN_ERROR, WIN_QUESTION;
 	
+	public static ImageIcon VAMSASON, VAMSASOFF;
+	
+	
 	private Icons()
 	{
 	}

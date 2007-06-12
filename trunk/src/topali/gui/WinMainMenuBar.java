@@ -7,16 +7,11 @@ package topali.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.gui.atv.ATV;
-import topali.gui.dialog.ImportDataSetDialog;
 import topali.logging.GracefulShutdownHandler;
 
 public class WinMainMenuBar extends JMenuBar
@@ -69,7 +64,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	JMenu mHelp;
 
-	JMenuItem mHelpContents, mHelpLoadExample, mHelpLicense, mHelpAbout, mHelpUpdate,
+	JMenuItem mHelpContents, mHelpLicense, mHelpAbout, mHelpUpdate,
 			mHelpTestMethod;
 
 	public static AbstractAction aFileNewProject, aFileOpenProject, aFileSave,
@@ -100,7 +95,9 @@ public class WinMainMenuBar extends JMenuBar
 
 	public static AbstractAction aVamSelectSession, aVamImport, aVamExport;
 
-	public static AbstractAction aHelpContents, aHelpLoadExample, aHelpLicense, aHelpAbout,
+	public static AbstractAction aVamsas;
+	
+	public static AbstractAction aHelpContents, aHelpLicense, aHelpAbout,
 			aHelpUpdate, aHelpTestMethod;
 
 	WinMainMenuBar(WinMain winMain)
@@ -537,25 +534,22 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
+		aVamsas = new AbstractAction("VAMSAS") {
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean success = winMain.vamsasUpdate();
+				if(success) 
+					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASON);
+				else
+					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASOFF);
+				//TODO: That's really not a nice way to toggle the icon
+			}
+		};
+		
 		aHelpContents = new AbstractAction(Text.Gui.getString("aHelpContents"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-			}
-		};
-
-		aHelpLoadExample = new AbstractAction(Text.Gui.getString("aHelpLoadExample")) {
-			public void actionPerformed(ActionEvent e)
-			{
-				try
-				{
-					URL url =ATV.class.getResource("/res/example-alignment.phy");
-					ImportDataSetDialog d = new ImportDataSetDialog(winMain);
-					d.loadAlignment(new File(url.toURI()));
-				} catch (Exception ex)
-				{
-					log.warn("Couldn't load example alignment.", ex);
-				}
 			}
 		};
 		
@@ -800,7 +794,6 @@ public class WinMainMenuBar extends JMenuBar
 
 		mHelpContents = getItem(aHelpContents, KeyEvent.VK_H, KeyEvent.VK_F1,
 				0, Icons.HELP16);
-		mHelpLoadExample = getItem(aHelpLoadExample, KeyEvent.VK_E, 0, 0);
 		mHelpLicense = getItem(aHelpLicense, KeyEvent.VK_L, 0, 0);
 		mHelpAbout = getItem(aHelpAbout, KeyEvent.VK_A, 0, 0);
 		mHelpUpdate = getItem(aHelpUpdate, KeyEvent.VK_C, 0, 0);
@@ -810,14 +803,13 @@ public class WinMainMenuBar extends JMenuBar
 		TOPALiHelp.enableHelpOnButton(mHelpLicense, "license");
 
 		mHelp.add(mHelpContents);
-		mHelp.add(mHelpLoadExample);
+		mHelp.add(mHelpLicense);
 		mHelp.addSeparator();
 		mHelp.add(mHelpUpdate);
 	    mHelp.addSeparator();
 		// mHelp.add(mHelpTestMethod);
 		// mHelp.addSeparator();
 		mHelp.add(mHelpAbout);
-		mHelp.add(mHelpLicense);
 
 		add(mHelp);
 	}

@@ -13,14 +13,10 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.alignment.Alignment;
-import pal.alignment.SitePattern;
+import pal.alignment.*;
 import pal.distance.AlignmentDistanceMatrix;
-import pal.distance.JukesCantorDistanceMatrix;
 import pal.misc.Identifier;
-import pal.misc.Parameterized;
-import pal.substmodel.F84;
-import pal.substmodel.SubstitutionModel;
+import pal.substmodel.*;
 import pal.tree.*;
 import topali.gui.Text;
 import doe.MsgBox;
@@ -28,6 +24,9 @@ import doe.MsgBox;
 public class F84TreeCreator extends JDialog
 {
 
+	private final double tsTv = 2;
+	private final double alpha = 4;
+	
 Logger log = Logger.getLogger(this.getClass());
 	
 	private Alignment alignment;
@@ -63,10 +62,20 @@ Logger log = Logger.getLogger(this.getClass());
 	{
 		try
 		{
-			
-			F84 f84 = new F84(2, new double[]{0.25, 0.25, 0.25, 0.25});
-			AlignmentDistanceMatrix matrix = new AlignmentDistanceMatrix(new SitePattern(alignment), SubstitutionModel.Utils.createSubstitutionModel(f84));
+			long start = System.currentTimeMillis();
+
+			double[] freqs = AlignmentUtils.estimateFrequencies(alignment);
+			F84 f84 = new F84(tsTv, freqs);
+			GammaRates rates = new GammaRates(4, alpha);
+			SubstitutionModel sModel = SubstitutionModel.Utils.createSubstitutionModel(f84, rates);
+			AlignmentDistanceMatrix matrix = new AlignmentDistanceMatrix(new SitePattern(alignment), sModel);
 			tree = new NeighborJoiningTree(matrix);
+			
+			tree.getRoot().setIdentifier(new Identifier(""));
+			// Midpoint route...
+			tree = TreeRooter.getMidpointRooted(tree);
+			
+			log.info("Tree creation took: "+(System.currentTimeMillis()-start)+"ms");
 			
 		} catch (Exception e)
 		{
@@ -82,11 +91,6 @@ Logger log = Logger.getLogger(this.getClass());
 		// Does nothing if the dialog wasn't visible, but unblocks the thread if
 		// it was, allowing control to return to the caller
 		setVisible(false);
-	}
-
-	public JukesCantorDistanceMatrix getJCDistanceMatrix()
-	{
-		return new JukesCantorDistanceMatrix(alignment);
 	}
 
 	private void createDialog()

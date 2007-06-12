@@ -151,14 +151,11 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nSelected sequences:\n");
 		for (String seq : tResult.selectedSeqs)
-			sb.append("\n  " + ss.getNameForSafeName(seq));
-		sb.append("\n\nSelected Partition: "+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
+			sb.append("\n" + ss.getNameForSafeName(seq));
+		sb.append("\n\nSelected Partition:\n"+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
 		
-		if(tResult instanceof MBTreeResult) {
-			MBTreeResult res = (MBTreeResult)tResult;
-			sb.append("\n\nMrBayes parameters:\n\n");
-			sb.append(((MBTreeResult)tResult).mbCmds);
-		}
+		sb.append("\n\nAdditional parameters:\n");
+		sb.append(tResult.info);
 		
 		sb.append('\n');
 		
