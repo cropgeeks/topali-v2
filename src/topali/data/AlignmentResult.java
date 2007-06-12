@@ -8,7 +8,7 @@ package topali.data;
 public class AlignmentResult extends AnalysisResult
 {
 	// Sequences to be analysed
-	public String[] selectedSeqs;
+	public String[] selectedSeqs = new String[0];
 
 	// Are tree tooltips enabled for this result?
 	public boolean useTreeToolTips = false;

@@ -1,6 +1,7 @@
 package topali.vamsas;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -270,6 +271,8 @@ class DocumentHandler
 							tTree.setPartitionEnd(Integer.parseInt(prop
 									.getContent()));
 					}
+					
+					readResultProvenance(vTree.getProvenance(), tTree);
 					tAlign.addResult(tTree);
 					mapper.registerObjects(tTree, vTree);
 				}
@@ -773,7 +776,8 @@ class DocumentHandler
 
 				vTree.setTitle(result.guiName);
 
-				vTree.setProvenance(getDummyProvenance());
+				//vTree.setProvenance(getDummyProvenance());
+				vTree.setProvenance(getResultProvenance(tRes));
 				mapper.registerObjects(tRes, vTree);
 				vAlign.addTree(vTree);
 			}
@@ -943,12 +947,19 @@ class DocumentHandler
 		Class c = result.getClass();
 		for (Field field : c.getFields())
 		{
+			int mod = field.getModifiers();
+			//don't set protected variables:
+			if(Modifier.isFinal(mod) || Modifier.isPrivate(mod) || Modifier.isProtected(mod) || Modifier.isStatic(mod))
+				continue;
+			
 			if (field.getType().isPrimitive()
 					|| field.getType() == String.class)
 			{
 				try
 				{
 					Object o = field.get(result);
+					if(o==null)
+						continue;
 					Property prop = new Property();
 					prop.setName(field.getName());
 					prop.setType(field.getType().getName());
@@ -984,6 +995,7 @@ class DocumentHandler
 	private void readResultProvenance(Provenance prov, AnalysisResult result)
 	{
 		Entry entry = prov.getEntry(0);
+		
 		Class c;
 		try
 		{
@@ -998,7 +1010,12 @@ class DocumentHandler
 		{
 			try
 			{
-				Field field = result.getClass().asSubclass(c).getField(prop.getName());
+				Field field = c.getField(prop.getName());
+				int mod = field.getModifiers();
+				//don't set protected variables:
+				if(Modifier.isFinal(mod) || Modifier.isPrivate(mod) || Modifier.isProtected(mod) || Modifier.isStatic(mod))
+					continue;
+				
 				Class type = field.getType();
 				Object value = null;
 				if(type.isPrimitive()) {
