@@ -16,6 +16,7 @@ import pal.alignment.SimpleAlignment;
 import pal.gui.TreePainter;
 import pal.gui.TreePainterNormal;
 import pal.tree.Tree;
+import topali.analyses.F84TreeCreator;
 import topali.analyses.TreeCreator;
 import topali.data.AlignmentData;
 import topali.data.SequenceSet;
@@ -116,8 +117,9 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 				long s = System.currentTimeMillis();
 				SimpleAlignment alignment = ss.getAlignment(indices, start,
 						end, false);
-				TreeCreator tc = new TreeCreator(alignment);
-
+				//TreeCreator tc = new TreeCreator(alignment);
+				F84TreeCreator tc = new F84TreeCreator(alignment);
+				
 				tree = tc.getTree(false);
 				long e = System.currentTimeMillis();
 				log.info("Tree creation " + (e - s) + "ms");

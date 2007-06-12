@@ -44,6 +44,8 @@ public class WinMainToolBar extends JToolBar
 
 	private JButton bAnlsRunLRT;
 
+	public JButton bVamsas;
+	
 	private JButton bHelpDisplay;
 
 	// private JButton bVamExport;
@@ -88,6 +90,8 @@ public class WinMainToolBar extends JToolBar
 		// bVamExport = (JButton) getButton(false, null, "gui20",
 		// null, WinMainMenuBar.aVamExport);
 
+		bVamsas = (JButton)getButton(false, null, "gui20", Icons.VAMSASOFF, WinMainMenuBar.aVamsas);
+		
 		bHelpDisplay = (JButton) getButton(false, null, "gui14", Icons.HELP16,
 				null);
 		bHelpDisplay.addActionListener(new ActionListener()
@@ -123,6 +127,8 @@ public class WinMainToolBar extends JToolBar
 		add(bAnlsRunHMM);
 		add(bAnlsRunDSS);
 		add(bAnlsRunLRT);
+		addSeparator();
+		add(bVamsas);
 		addSeparator();
 		add(bHelpDisplay);
 

@@ -57,12 +57,17 @@ public class TreeCreator extends JDialog
 	{
 		try
 		{
+			long start = System.currentTimeMillis();
+			
 			createLocJCNJTree();
 
 			tree.getRoot().setIdentifier(new Identifier(""));
 
 			// Midpoint route...
 			tree = TreeRooter.getMidpointRooted(tree);
+			
+			log.info("Tree creation took: "+(System.currentTimeMillis()-start)+"ms");
+			
 		} catch (Exception e)
 		{
 			log.warn(e);

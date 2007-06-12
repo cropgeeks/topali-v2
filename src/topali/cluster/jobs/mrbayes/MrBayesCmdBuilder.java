@@ -121,10 +121,10 @@ public class MrBayesCmdBuilder
 	}
 
 
-	public void setDnaModel(String dnaModel)
+	public void setDnaModel(String dnaModel, boolean jcK80Sim)
 	{
 		//jc, k80, sim are submodels of existing models with fixed freq.
-		if(dnaModel.equals(DNAMODEL_JC) || dnaModel.equals(DNAMODEL_K80) || dnaModel.equals(DNAMODEL_SYM))
+		if(jcK80Sim)
 			prset = "prset statefreqpr=fixed(equal)";
 		else
 			prset = null;

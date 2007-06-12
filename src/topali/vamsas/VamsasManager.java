@@ -257,24 +257,13 @@ public class VamsasManager
 	{
 		System.out.println();
 		System.out.println();
-		
-		try
-		{
-			IClientDocument cdoc = vorbaclient.getClientDocument();
+
+		IClientDocument cdoc = vorbaclient.getClientDocument();
 			
-			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
-			handler.writeToDocument();			
-			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
-			vorbaclient.updateDocument(cdoc);
-			MsgBox.msg("VAMSAS document updated.", MsgBox.INF);
-		}
-		catch (Exception e)
-		{
-			MsgBox.msg("TOPALi encountered a problem while writing the VAMSAS "
-				+ "document.\n" + e, MsgBox.ERR);
-			e.printStackTrace();
-		}
-		
+		DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
+		handler.writeToDocument();			
+		cdoc.setVamsasRoots(cdoc.getVamsasRoots());
+		vorbaclient.updateDocument(cdoc);		
 	}
 	
 	public void readFromDocument() throws Exception {
@@ -287,9 +276,8 @@ public class VamsasManager
 			cdoc = null;
 		} catch (IOException e)
 		{
-			MsgBox.msg("TOPALi encountered a problem while reading the VAMSAS "
-					+ "document.\n" + e, MsgBox.ERR);
 			e.printStackTrace();
+			throw e;
 		}
 	}
 }

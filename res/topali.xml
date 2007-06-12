@@ -208,6 +208,7 @@
   <field name="isSizedToFit" type="boolean" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="treeStr" type="string"/>
+  <field name="info" type="string" direct="true"/>
   <field name="clusters" type="topali.data.SequenceCluster" collection="collection"/>
 </class>
   
@@ -215,7 +216,6 @@
 <class name="topali.data.MBTreeResult" extends="topali.data.TreeResult">
 	<field name="mbPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
-    <field name="mbCmds" type="string" direct="true"/>
 </class>
 
 <!-- AlignmentResult (extends AnalysisReult) -->

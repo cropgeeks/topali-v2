@@ -44,7 +44,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	// GUI controls...
 	private WinMainMenuBar menubar;
 
-	private WinMainToolBar toolbar;
+	public WinMainToolBar toolbar;
 
 	private WinMainStatusBar sbar;
 
@@ -577,12 +577,13 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				result.setTreeStr(palTree.toString());
 				result.status = topali.cluster.JobStatus.COMPLETED;
-
+				result.info = "Sub. Model: F84\nRate Model: Gamma\nAlgorithm: Neighbour Joining";
+			
 				// Add the tree to the project
 				//data.getResults().add(result);
 				data.addResult(result);
 
-				treePane.displayTree(data.getSequenceSet(), result);
+				//treePane.displayTree(data.getSequenceSet(), result);
 				WinMainMenuBar.aFileSave.setEnabled(true);
 			}
 		}
@@ -730,6 +731,42 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
 	}
 
+	boolean vamsasUpdate() {
+		if(vamsas == null) {
+			vamsas = new VamsasManager();
+			vEvents = new VamsasEvents(this);
+			
+			if (!vamsas.initializeVamsas(project))
+			{
+				MsgBox.msg("Connection to a VAMSAS session could not be established", MsgBox.ERR);
+				return false;
+			}
+			
+			try
+			{
+				vamsas.readFromDocument();
+			} catch (Exception e)
+			{
+				MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
+				return false;
+			}
+			
+			return true;
+		}
+		else {
+			try
+			{
+				vamsas.writeToDocument();
+				return true;
+			} catch (Exception e)
+			{
+				MsgBox.msg("There was an error while synchronizing VAMSAS session", MsgBox.ERR);
+				e.printStackTrace();
+				return false;
+			}
+		}
+	}
+	
 	void menuVamsasImport()
 	{
 		if(vamsas != null) {
