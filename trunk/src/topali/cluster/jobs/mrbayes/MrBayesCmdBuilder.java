@@ -12,6 +12,7 @@ public class MrBayesCmdBuilder
 	
 	int ngen = 100000;
 	int sampleFreq = 10;
+	double burnin = 0.25;
 	
 	public static final String MODEL_4BY4 = "4by4";
 	public static final String MODEL_CODON = "codon";
@@ -88,9 +89,9 @@ public class MrBayesCmdBuilder
 			sb.append("\tlset ngammacat="+nGammaCat+";\n");
 		}
 		sb.append("\tmcmc nruns=1 ngen="+ngen+" samplefreq="+sampleFreq+";\n");
-		int burnin = (int)((ngen/sampleFreq)*0.25);
-		sb.append("\tsump burnin="+burnin+";\n");
-		sb.append("\tsumt burnin="+burnin+";\n");
+		int burn = (int)((ngen/sampleFreq)*burnin);
+		sb.append("\tsump burnin="+burn+";\n");
+		sb.append("\tsumt burnin="+burn+";\n");
 		sb.append("end;\n");
 		return sb.toString();
 	}
@@ -120,6 +121,16 @@ public class MrBayesCmdBuilder
 		this.ngen = ngen;
 	}
 
+	
+	public double getBurnin()
+	{
+		return burnin;
+	}
+
+	public void setBurnin(double burnin)
+	{
+		this.burnin = burnin;
+	}
 
 	public void setDnaModel(String dnaModel, boolean jcK80Sim)
 	{

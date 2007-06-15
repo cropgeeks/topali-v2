@@ -37,6 +37,8 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private MrBayesSettingsPanel bayesPanel;
 
+	MBTreeResult mbResult = new MBTreeResult();
+	
 	public CreateTreeDialog(WinMain winMain, AlignmentData data)
 	{
 		super(winMain, "Estimate New Tree", true);
@@ -62,7 +64,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		basicPanel = new BasicTreePanel();
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet());
+		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet(), mbResult);
 		bayesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		tabs = new JTabbedPane();
@@ -97,7 +99,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else
-			result = new MBTreeResult();
+			result = mbResult;
 
 		result.isRemote = makeRemote;
 		initTreeResult(result);

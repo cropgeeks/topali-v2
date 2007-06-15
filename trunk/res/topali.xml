@@ -216,6 +216,9 @@
 <class name="topali.data.MBTreeResult" extends="topali.data.TreeResult">
 	<field name="mbPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
+  <field name="nGen" type="int" direct="true"/>
+  <field name="burnin" type="double" direct="true"/>
+  <field name="sampleFreq" type="int" direct="true"/>
 </class>
 
 <!-- AlignmentResult (extends AnalysisReult) -->

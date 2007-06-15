@@ -5,15 +5,23 @@
 
 package topali.gui.dialog;
 
-import java.awt.*;
+import java.awt.GridBagLayout;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.BorderLayout;
 
 import javax.swing.*;
 
 import topali.data.*;
 
-class MrBayesSettingsPanel extends JPanel
+import java.awt.Insets;
+
+public class MrBSetPanel extends JPanel
 {
-	
+
+	private static final long serialVersionUID = 1L;
 	private JLabel label = null;
 	private JPanel panel = null;
 	private JLabel l1 = null;
@@ -39,7 +47,7 @@ class MrBayesSettingsPanel extends JPanel
 	/**
 	 * This is the default constructor
 	 */
-	public MrBayesSettingsPanel(SequenceSet ss, MBTreeResult result)
+	public MrBSetPanel(SequenceSet ss, MBTreeResult result)
 	{
 		super();
 		this.ss = ss;
@@ -80,21 +88,20 @@ class MrBayesSettingsPanel extends JPanel
 		SpinnerNumberModel mFreq = new SpinnerNumberModel(result.sampleFreq, 1, 1000, 1);
 		this.sample.setModel(mFreq);
 		
-		SpinnerNumberModel mBurn = new SpinnerNumberModel((int)(result.burnin*100), 1, 99, 1);
+		SpinnerNumberModel mBurn = new SpinnerNumberModel(result.burnin, 0.01, 0.99, 0.01);
 		this.burnin.setModel(mBurn);
 	}
 	
-	public void onOK() {
+	private void onOk() {
 		ss.getParams().setGeneticCode((String)code.getSelectedItem());
 		ss.getParams().setModel((String)model.getSelectedItem());
 		ss.getParams().setModelGamma(gamma.isSelected());
 		ss.getParams().setModelInv(sites.isSelected());
 		
-		result.burnin = ((Integer)burnin.getValue()).doubleValue()/100d;
+		result.burnin = (Double)burnin.getValue();
 		result.nGen = (Integer)ngen.getValue();
 		result.sampleFreq = (Integer)sample.getValue();
 	}
-	
 	
 	/**
 	 * This method initializes this
@@ -339,7 +346,6 @@ class MrBayesSettingsPanel extends JPanel
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 1;
 			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.insets = new Insets(0, 2, 0, 0);
 			l8 = new JLabel();
 			l8.setText("%");
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
@@ -367,4 +373,4 @@ class MrBayesSettingsPanel extends JPanel
 		return burnin;
 	}
 
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"

@@ -63,6 +63,8 @@ public class Project extends ViewableDataObject
 		this.datasets.add(data);
 		for(PropertyChangeListener l : changeListeners) {
 			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
+			//propagate listeners to alignment datasets
+			data.addChangeListener(l);
 		}
 	}
 	

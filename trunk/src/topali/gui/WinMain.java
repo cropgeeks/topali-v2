@@ -13,12 +13,12 @@ import java.awt.print.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.*;
 
 import pal.tree.Tree;
-import topali.analyses.*;
+import topali.analyses.F84TreeCreator;
+import topali.analyses.SequenceSetUtils;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
@@ -26,9 +26,8 @@ import topali.gui.dialog.hmm.HMMSettingsDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.NavPanel;
 import topali.gui.nav.SequenceSetNode;
-import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
-import topali.vamsas.*;
+import topali.vamsas.VamsasManager;
 import topali.var.Utils;
 import doe.MsgBox;
 
@@ -568,7 +567,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		// Tree being created on-the-fly as part of TOPALi
 		if (Prefs.gui_tree_method == 0)
 		{
-			TreePane treePane = navPanel.getCurrentTreePane(data, true);
+			//TreePane treePane = navPanel.getCurrentTreePane(data, true);
 			//TreeCreator creator = new TreeCreator(dialog.getAlignment());
 			F84TreeCreator creator = new F84TreeCreator(dialog.getAlignment());
 			Tree palTree = creator.getTree(true);
@@ -725,7 +724,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				e.printStackTrace();
 			}
-			//vamsas.writeToDocument(project.getDatasets());
 		}
 		else
 			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
