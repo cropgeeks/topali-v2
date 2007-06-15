@@ -19,11 +19,11 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 	
 	boolean parse = false;
 	
-	MrBayesProcess(File wrkDir, MBTreeResult result, int totalGen)
+	MrBayesProcess(File wrkDir, MBTreeResult result)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
-		this.totalGen = totalGen;
+		this.totalGen = result.nGen;
 		
 		runCancelMonitor();
 	}

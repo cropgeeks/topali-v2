@@ -19,8 +19,6 @@ public class MrBayesAnalysis extends AnalysisThread
 	private SequenceSet ss;
 
 	private MBTreeResult result;
-
-	int nGen = 100000;
 	
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
@@ -54,7 +52,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		// Add nexus commands to tell MrBayes what to do
 		addNexusCommands();
 
-		MrBayesProcess mb = new MrBayesProcess(runDir, result, nGen);
+		MrBayesProcess mb = new MrBayesProcess(runDir, result);
 		mb.run();
 
 		readTree();
@@ -68,7 +66,9 @@ public class MrBayesAnalysis extends AnalysisThread
 	private void addNexusCommands() throws Exception
 	{
 		MrBayesCmdBuilder cmd = new MrBayesCmdBuilder(ss.isDNA());
-		cmd.setNgen(nGen);
+		cmd.setNgen(result.nGen);
+		cmd.setSampleFreq(result.sampleFreq);
+		cmd.setBurnin(result.burnin);
 		
 		SequenceSetParams para = ss.getParams();
 		String gCode = para.getGeneticCode();

@@ -1,12 +1,16 @@
 Current state of affairs
 -----------------------
+TODO:
+- Check: Midpointing routing of MrBayes Trees?
+- Implement PhyML Webservice
 
 Last modifications:
-- Replaced JC tree construction with F84+G (needs to be tested!)
-- Added a VAMSAS icon to the toolbar, to connect to/synchronize a VAMSAS session
- 
+- Extended MrBayes Webservice to support more parameters
+
 
 Current problems:
+- Resubmit of MrBayes jobs currently not possible
+- VAMSAS: one Topali sequence -> two Vamsas sequences just causes trouble
 
 Some ideas:
 - What's about the third import alignment option (clustal)?
@@ -15,6 +19,11 @@ Some ideas:
 - Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)?
 - Load example dataset
 - Import alignment from URL
+
+
+VAMSAS:
+- Can Jalview get the Topali data?
+- What can Topali get from Jalview?
 
 Some URLs
 ---------

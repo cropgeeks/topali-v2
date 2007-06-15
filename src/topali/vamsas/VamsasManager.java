@@ -9,6 +9,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import topali.gui.Project;
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.client.picking.IPickManager;
@@ -17,6 +19,9 @@ import doe.MsgBox;
 
 public class VamsasManager
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	
 	// An instance of the pickmanager for dealing with inter-app messages
 	public VamsasMsgHandler msgHandler;
 
@@ -50,8 +55,6 @@ public class VamsasManager
 		// This can fail - just means pick events won't work
 		createPickHandler();
 		
-		//processVamsasDocument();
-		
 		return true;
 	}
 
@@ -60,7 +63,7 @@ public class VamsasManager
 		try { clientfactory = new SimpleClientFactory(); }
 		catch (IOException e)
 		{
-			MsgBox.msg("" + e, MsgBox.ERR);
+			log.warn("Creating VAMSAS ClientFactory failed.", e);
 			return false;
 		}
 		
@@ -150,8 +153,7 @@ public class VamsasManager
 		try { vorbaclient.joinSession(); }
 		catch (Exception e)
 		{
-			MsgBox.msg("TOPALi was unable to join a VAMSAS session due to the "
-				+ "following error:\n " +  e, MsgBox.ERR);
+			log.warn("Could not join session", e);
 			return false;
 		}
 		
@@ -164,15 +166,59 @@ public class VamsasManager
 		
 		if (manager == null)
 		{
-			MsgBox.msg("TOPALi could not initiate a VAMSAS session pick "
+			log.warn("TOPALi could not initiate a VAMSAS session pick "
 				+ "handler. You will be unable to trasmit events\nbetween "
-				+ "VAMSAS applications.", MsgBox.ERR);
+				+ "VAMSAS applications.");
 
 			return false;
 		}
 		
 		msgHandler = new VamsasMsgHandler(manager);		
 		return true;
+	}
+
+	/**
+	 * Opens a reference to the vamsas session and uses the DocumentHandler to
+	 * store the current TOPALi datasets in it.
+	 */
+	public boolean writeToDocument()
+	{
+		try
+		{
+			IClientDocument cdoc = vorbaclient.getClientDocument();
+				
+			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
+			handler.writeToDocument();			
+			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
+			vorbaclient.updateDocument(cdoc);
+			return true;
+		} catch (Exception e)
+		{
+			log.warn("Writing to VAMSAS document failed.", e);
+			return false;
+		} 
+	}
+	
+	/**
+	 * Reads the data from the current VAMSAS session and updates 
+	 * the Topali project
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean readFromDocument() {
+		try
+		{
+			IClientDocument cdoc = vorbaclient.getClientDocument();
+			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
+			handler.readFromDocument();
+			vorbaclient.updateDocument(cdoc);
+			cdoc = null;
+			return true;
+		} catch (Exception e)
+		{
+			log.warn("Reading from VAMSAS document failed.", e);
+			return false;
+		}
 	}
 	
 	private void handleDocumentUpdate(PropertyChangeEvent e)
@@ -181,14 +227,7 @@ public class VamsasManager
 			+ e.getPropertyName() + ": " + e.getOldValue()
 			+ " to " + e.getNewValue());
 		
-		//processVamsasDocument();
-		try
-		{
-			readFromDocument();
-		} catch (Exception e1)
-		{
-			e1.printStackTrace();
-		}
+		readFromDocument();
 	}
 	
 	private void handleCloseEvent(PropertyChangeEvent e)
@@ -231,53 +270,4 @@ public class VamsasManager
 		System.out.println("Application received a DOCUMENT_FINALIZEAPPDATA event.\n"+e);   
 	}
 	
-	private void processVamsasDocument()
-	{
-		try
-		{
-			IClientDocument cdoc = vorbaclient.getClientDocument();
-			
-			// TODO: black magic
-			
-			
-			vorbaclient.updateDocument(cdoc);
-		}
-		catch (Exception e)
-		{
-			MsgBox.msg("TOPALi encountered a problem while accessing the "
-				+ "document.\n" + e, MsgBox.ERR);
-		}
-	}
-	
-	/**
-	 * Opens a reference to the vamsas session and uses the DocumentHandler to
-	 * store the current TOPALi datasets in it.
-	 */
-	public void writeToDocument() throws Exception
-	{
-		System.out.println();
-		System.out.println();
-
-		IClientDocument cdoc = vorbaclient.getClientDocument();
-			
-		DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
-		handler.writeToDocument();			
-		cdoc.setVamsasRoots(cdoc.getVamsasRoots());
-		vorbaclient.updateDocument(cdoc);		
-	}
-	
-	public void readFromDocument() throws Exception {
-		try
-		{
-			IClientDocument cdoc = vorbaclient.getClientDocument();
-			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
-			handler.readFromDocument();
-			vorbaclient.updateDocument(cdoc);
-			cdoc = null;
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
-	}
 }
