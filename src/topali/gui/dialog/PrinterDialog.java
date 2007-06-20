@@ -5,14 +5,11 @@
 
 package topali.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.print.*;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.*;
 import javax.swing.*;
 
 import org.apache.log4j.Logger;

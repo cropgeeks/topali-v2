@@ -8,8 +8,7 @@ package topali.gui.nav;
 import javax.swing.JComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import topali.data.AlignmentData;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.gui.WinMainTipsPanel;
 
 // Note: used to be an interface (hence the name), now a superclass

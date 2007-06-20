@@ -9,8 +9,7 @@ import java.awt.print.Printable;
 
 import javax.swing.JComponent;
 
-import topali.data.AlignmentData;
-import topali.data.PDM2Result;
+import topali.data.*;
 import topali.gui.WinMainTipsPanel;
 
 public class PDM2ResultsNode extends ResultsNode 

@@ -8,13 +8,10 @@ package topali.cluster.jobs.dss;
 import java.io.File;
 
 import pal.alignment.SimpleAlignment;
-import pal.distance.DistanceMatrix;
-import pal.distance.JukesCantorDistanceMatrix;
-import pal.tree.NeighborJoiningTree;
-import pal.tree.Tree;
+import pal.distance.*;
+import pal.tree.*;
 import topali.analyses.TreeUtilities;
-import topali.data.DSSResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 
 public class DSS
 {

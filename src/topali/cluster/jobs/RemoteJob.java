@@ -7,8 +7,7 @@ package topali.cluster.jobs;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
+import org.apache.axis.client.*;
 import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;

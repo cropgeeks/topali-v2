@@ -43,6 +43,12 @@
   <parameter name="scope" value="request"/>
 </service>
 
+<service name="topali-phyml" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.phyml.PhymlWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
 <service name="topali-mg" provider="java:RPC">
   <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebService"/>
   <parameter name="allowedMethods" value="*"/>

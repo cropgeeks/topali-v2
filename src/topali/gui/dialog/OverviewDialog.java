@@ -9,8 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import topali.gui.*;
 

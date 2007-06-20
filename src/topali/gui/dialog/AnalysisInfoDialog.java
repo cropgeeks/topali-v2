@@ -5,10 +5,8 @@
 
 package topali.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -25,11 +23,18 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 	private JTextArea text;
 
-	public AnalysisInfoDialog(AlignmentResult aResult)
+	private boolean submit = true;
+	
+	public AnalysisInfoDialog(AlignmentResult aResult) {
+		this(aResult, true);
+	}
+	
+	public AnalysisInfoDialog(AlignmentResult aResult, boolean submit)
 	{
 		super(MsgBox.frm, "Analysis Information", true);
 		this.aResult = aResult;
-
+		this.submit = submit;
+		
 		add(createControls());
 		getRootPane().setDefaultButton(bClose);
 		Utils.addCloseHandler(this, bClose);
@@ -62,7 +67,8 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 		p2.add(bClose);
-		p2.add(bSubmit);
+		if(submit)
+			p2.add(bSubmit);
 		p2.add(bHelp);
 
 		JPanel p3 = new JPanel(new BorderLayout());

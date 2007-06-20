@@ -6,14 +6,12 @@
 package topali.gui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.Prefs;
-import topali.gui.Text;
+import topali.gui.*;
 import topali.var.Utils;
 
 public class CodonWDialog extends JDialog implements ActionListener

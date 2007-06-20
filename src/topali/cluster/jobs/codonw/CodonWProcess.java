@@ -8,8 +8,7 @@ package topali.cluster.jobs.codonw;
 import java.io.*;
 
 import topali.cluster.*;
-import topali.data.CodonWResult;
-import topali.data.SequenceSetParams;
+import topali.data.*;
 
 public class CodonWProcess extends StoppableProcess
 {

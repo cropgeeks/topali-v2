@@ -6,13 +6,10 @@
 package topali.fileio;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
+import java.util.*;
 
-import pal.alignment.AlignmentUtils;
-import pal.alignment.SimpleAlignment;
-import topali.data.Sequence;
-import topali.data.SequenceSet;
+import pal.alignment.*;
+import topali.data.*;
 
 class FileClustal extends FileGeneric
 {

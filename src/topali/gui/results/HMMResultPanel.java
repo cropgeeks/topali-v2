@@ -5,12 +5,10 @@
 
 package topali.gui.results;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.print.Printable;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import topali.data.*;
 import topali.var.Utils;

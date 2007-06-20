@@ -5,8 +5,7 @@
 
 package topali.fileio;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import org.apache.log4j.Logger;
 

@@ -6,8 +6,7 @@
 package topali.analyses;
 
 import pal.alignment.*;
-import pal.distance.AlignmentDistanceMatrix;
-import pal.distance.JukesCantorDistanceMatrix;
+import pal.distance.*;
 import pal.substmodel.*;
 
 public class TreeUtilities

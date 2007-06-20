@@ -5,8 +5,7 @@
 
 package topali.data;
 
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 public abstract class RegionAnnotations extends AlignmentAnnotations implements
 		Iterable<RegionAnnotations.Region>

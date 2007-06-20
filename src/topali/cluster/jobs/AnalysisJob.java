@@ -6,8 +6,7 @@
 package topali.cluster.jobs;
 
 import topali.cluster.JobStatus;
-import topali.data.AlignmentData;
-import topali.data.AnalysisResult;
+import topali.data.*;
 
 public abstract class AnalysisJob
 {

@@ -8,8 +8,7 @@ package topali.fileio;
 import java.io.*;
 import java.util.StringTokenizer;
 
-import topali.data.Sequence;
-import topali.data.SequenceSet;
+import topali.data.*;
 
 class FileFasta extends FileGeneric
 {

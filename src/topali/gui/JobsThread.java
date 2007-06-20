@@ -7,8 +7,7 @@ package topali.gui;
 
 import static topali.cluster.JobStatus.*;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
 

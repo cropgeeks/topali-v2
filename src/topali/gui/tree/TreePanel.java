@@ -7,8 +7,7 @@ package topali.gui.tree;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
+import java.awt.print.*;
 import java.util.LinkedList;
 
 import javax.swing.*;

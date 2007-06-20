@@ -5,15 +5,12 @@
 
 package topali.gui.results;
 
-import static topali.gui.WinMainMenuBar.aAnlsCreateTree;
-import static topali.gui.WinMainMenuBar.aAnlsPartition;
-import static topali.mod.Filters.CSV;
-import static topali.mod.Filters.PNG;
+import static topali.gui.WinMainMenuBar.*;
+import static topali.mod.Filters.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.io.*;
@@ -22,13 +19,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.*;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.*;
 
 import topali.data.*;
 import topali.gui.*;

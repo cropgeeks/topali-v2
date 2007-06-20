@@ -7,8 +7,7 @@ package topali.fileio;
 
 import java.io.*;
 
-import topali.data.Sequence;
-import topali.data.SequenceSet;
+import topali.data.*;
 
 class FileBambe extends FileGeneric
 {

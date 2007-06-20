@@ -7,13 +7,12 @@ package topali.cluster.jobs.dss;
 
 import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
-import org.apache.log4j.*;
 
 import org.apache.axis.AxisFault;
+import org.apache.log4j.Level;
 
 import topali.cluster.*;
-import topali.data.DSSResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 
 public class DSSWebService extends WebService

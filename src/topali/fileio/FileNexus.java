@@ -6,11 +6,9 @@
 package topali.fileio;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
+import java.util.*;
 
-import topali.data.Sequence;
-import topali.data.SequenceSet;
+import topali.data.*;
 
 class FileNexus extends FileGeneric
 {

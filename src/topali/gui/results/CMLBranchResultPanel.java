@@ -6,8 +6,7 @@
 package topali.gui.results;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.print.Printable;
 import java.util.Vector;
 

@@ -8,8 +8,7 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.lrt.CollateLRT;
-import topali.cluster.jobs.lrt.RunLRT;
+import topali.cluster.jobs.lrt.*;
 import topali.data.*;
 import topali.gui.Prefs;
 

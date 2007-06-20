@@ -5,8 +5,7 @@
 
 package topali.gui.dialog;
 
-import java.awt.FlowLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
@@ -14,8 +13,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.data.AlignmentData;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.var.Utils;

@@ -7,8 +7,7 @@ package topali.cluster.jobs.modelgenerator;
 
 import java.io.*;
 
-import topali.data.MGResult;
-import topali.data.SubstitutionModel;
+import topali.data.*;
 
 public class MGParser
 {

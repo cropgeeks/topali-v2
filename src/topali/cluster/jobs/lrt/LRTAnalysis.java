@@ -9,8 +9,7 @@ import java.io.*;
 
 import pal.alignment.SimpleAlignment;
 import topali.cluster.*;
-import topali.data.LRTResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 
 class LRTAnalysis extends AnalysisThread

@@ -7,17 +7,15 @@ package topali.gui.nav;
 
 import static topali.gui.WinMainMenuBar.*;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.*;
 import javax.swing.tree.*;
 
 import topali.cluster.JobStatus;

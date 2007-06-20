@@ -8,8 +8,7 @@ package topali.gui.nav;
 import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
-import topali.gui.FileListPanel;
-import topali.gui.WinMainTipsPanel;
+import topali.gui.*;
 
 class FileListNode extends INode
 {

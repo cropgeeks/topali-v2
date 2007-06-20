@@ -6,24 +6,19 @@
 package topali.gui;
 
 import java.applet.Applet;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.util.Enumeration;
-import java.util.Locale;
+import java.net.*;
+import java.util.*;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.*;
 
 import sbrn.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.logging.GracefulShutdownHandler;
-import topali.mod.EncryptionException;
-import topali.mod.StringEncrypter;
+import topali.mod.*;
 import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application

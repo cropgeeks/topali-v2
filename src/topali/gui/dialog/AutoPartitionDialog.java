@@ -10,14 +10,12 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.analyses.AnalysisUtils;
-import topali.analyses.PartitionMaker;
+import topali.analyses.*;
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 public class AutoPartitionDialog extends JDialog implements ActionListener
 {

@@ -1,24 +1,25 @@
 Current state of affairs
 -----------------------
 TODO:
-- Check: Midpointing routing of MrBayes Trees?
-- Implement PhyML Webservice
-
+- Check Sub. models
+ 
 Last modifications:
 - Extended MrBayes Webservice to support more parameters
-
+- Implemented Phyml Webservice
+- Added midpoint routing option to TreePanel
 
 Current problems:
-- Resubmit of MrBayes jobs currently not possible
+- Midpoint routing results in loosing bootstrap values
 - VAMSAS: one Topali sequence -> two Vamsas sequences just causes trouble
 
 Some ideas:
-- What's about the third import alignment option (clustal)?
+- What's about the third import alignment option (clustal)? (not important at the moment)
 - Just one settings dialog for all settings?
 - Not just limit max. alignment size, also limit number of active jobs per user?
-- Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)?
+- Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)? ((not important at the moment)
 - Load example dataset
-- Import alignment from URL
+- Import alignment from URL (not important at the moment)
+- Spread Phyml job over several nodes (bootstrapping)? (not important at the moment)
 
 
 VAMSAS:
@@ -31,7 +32,7 @@ Tomcat Manager:
 http://gruffalo:8080/
 
 Grid Report
-http://gruffalo/ganglia/ (doesn't work anymore?)
+http://gruffalo/scri/ganglia/
 
 SCRI Cluster:
 http://gruffalo.scri.ac.uk/topali

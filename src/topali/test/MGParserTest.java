@@ -6,8 +6,7 @@
 package topali.test;
 
 import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 
 import topali.cluster.jobs.modelgenerator.MGParser;
 import topali.data.MGResult;

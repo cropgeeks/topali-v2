@@ -7,10 +7,8 @@ package topali.cluster.jobs.codonw;
 
 import java.io.File;
 
-import topali.cluster.AnalysisThread;
-import topali.cluster.ClusterUtils;
-import topali.data.CodonWResult;
-import topali.data.SequenceSet;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

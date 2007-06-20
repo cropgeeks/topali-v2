@@ -1,8 +1,7 @@
 package topali.mod;
 
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;

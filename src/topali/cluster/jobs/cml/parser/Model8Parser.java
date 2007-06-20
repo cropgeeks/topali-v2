@@ -5,10 +5,8 @@
 
 package topali.cluster.jobs.cml.parser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.util.regex.*;
 
 import topali.data.CMLModel;
 

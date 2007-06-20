@@ -21,8 +21,7 @@ import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 public class ExportDialog extends JDialog implements ActionListener
 {

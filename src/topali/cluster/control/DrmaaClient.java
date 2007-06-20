@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 
 import org.ggf.drmaa.*;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.JobStatus;
+import topali.cluster.*;
 
 public class DrmaaClient implements ICluster
 {

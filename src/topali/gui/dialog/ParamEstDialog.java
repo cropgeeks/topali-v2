@@ -6,8 +6,7 @@
 package topali.gui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 

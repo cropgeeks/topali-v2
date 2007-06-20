@@ -5,8 +5,7 @@
 
 package topali.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
@@ -15,8 +14,7 @@ import javax.swing.*;
 import topali.analyses.MakeNA;
 import topali.gui.*;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 public class MakeNADialog extends JDialog implements ActionListener
 {

@@ -9,8 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.print.Printable;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import topali.analyses.AnalysisUtils;
 import topali.data.*;

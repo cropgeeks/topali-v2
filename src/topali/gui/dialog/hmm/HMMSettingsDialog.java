@@ -11,12 +11,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.analyses.SequenceSetUtils;
-import topali.data.AlignmentData;
-import topali.data.HMMResult;
+import topali.data.*;
 import topali.gui.*;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 public class HMMSettingsDialog extends JDialog implements ActionListener
 {

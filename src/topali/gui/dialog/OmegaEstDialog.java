@@ -9,9 +9,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import doe.MsgBox;
-
 import topali.data.CMLModel;
+import doe.MsgBox;
 
 /**
  * Dialog for selecting omega start values for the codeml site models

@@ -5,14 +5,12 @@
 
 package topali.analyses;
 
-import java.util.ListIterator;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.JOptionPane;
 
 import topali.data.*;
-import topali.gui.Text;
-import topali.gui.WinMainMenuBar;
+import topali.gui.*;
 import topali.gui.dialog.ParamEstDialog;
 import doe.MsgBox;
 

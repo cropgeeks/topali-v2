@@ -6,8 +6,7 @@
 package topali.cluster;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 public class CountLogs
 {

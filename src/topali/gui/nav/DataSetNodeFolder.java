@@ -7,11 +7,9 @@ package topali.gui.nav;
 
 import static topali.gui.WinMainMenuBar.*;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import topali.data.AlignmentData;
 
