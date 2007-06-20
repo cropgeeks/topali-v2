@@ -7,10 +7,8 @@ package topali.gui.dialog;
 
 import static topali.mod.Filters.*;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 
 import javax.swing.*;
@@ -19,8 +17,7 @@ import org.apache.log4j.Logger;
 
 import pal.alignment.Alignment;
 import topali.analyses.SequenceSetUtils;
-import topali.data.AlignmentData;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.mod.Filters;

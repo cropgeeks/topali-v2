@@ -8,10 +8,8 @@ package topali.gui.tree;
 import java.awt.print.Printable;
 import java.util.LinkedList;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
+import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.log4j.Logger;

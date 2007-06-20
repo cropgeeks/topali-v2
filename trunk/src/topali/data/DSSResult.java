@@ -5,8 +5,6 @@
 
 package topali.data;
 
-import org.apache.log4j.spi.ThrowableInformation;
-
 import sbrn.commons.MatrixXML;
 
 /*

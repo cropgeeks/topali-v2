@@ -9,8 +9,7 @@ import java.io.*;
 
 import pal.distance.DistanceMatrix;
 import pal.tree.Tree;
-import topali.cluster.ClusterUtils;
-import topali.cluster.StreamCatcher;
+import topali.cluster.*;
 import topali.data.DSSResult;
 
 class RunFitch

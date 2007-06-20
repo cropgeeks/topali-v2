@@ -220,6 +220,16 @@
   <field name="burnin" type="double" direct="true"/>
   <field name="sampleFreq" type="int" direct="true"/>
 </class>
+  
+<!-- PhymlResult (extends TreeResult) -->
+<class name="topali.data.PhymlResult" extends="topali.data.TreeResult">
+  <field name="phymlPath" type="string" direct="true">
+    <bind-xml node="attribute"/></field>
+  <field name="bootstrap" type="int" direct="true"/>
+  <field name="optTopology" type="boolean" direct="true"/>
+  <field name="optBranchPara" type="boolean" direct="true"/>
+  <field name="phymlParameters" type="string" direct="true" collection="array"/>
+</class>
 
 <!-- AlignmentResult (extends AnalysisReult) -->
 <class name="topali.data.AlignmentResult" extends="topali.data.AnalysisResult">

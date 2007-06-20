@@ -1,7 +1,6 @@
 package topali.vamsas;
 
-import java.util.Hashtable;
-import java.util.IdentityHashMap;
+import java.util.*;
 
 import uk.ac.vamsas.client.*;
 

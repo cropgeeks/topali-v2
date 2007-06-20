@@ -5,8 +5,7 @@
 
 package topali.cluster.jobs.cml.parser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 
 import topali.data.CMLModel;
 

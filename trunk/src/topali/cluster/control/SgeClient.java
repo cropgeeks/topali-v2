@@ -8,8 +8,7 @@ package topali.cluster.control;
 import java.io.*;
 import java.util.logging.Logger;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.JobStatus;
+import topali.cluster.*;
 
 public class SgeClient implements ICluster
 {

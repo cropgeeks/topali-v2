@@ -9,8 +9,7 @@ import static topali.cluster.JobStatus.*;
 import static topali.gui.WinMainStatusBar.*;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Date;
 
 import javax.swing.*;

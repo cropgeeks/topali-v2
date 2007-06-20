@@ -5,8 +5,7 @@
 
 package topali.gui.dialog;
 
-import java.awt.FlowLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;

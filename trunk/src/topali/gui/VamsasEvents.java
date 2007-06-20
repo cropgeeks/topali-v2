@@ -1,9 +1,7 @@
 package topali.gui;
 
 import topali.data.*;
-import topali.vamsas.*;
-
-import uk.ac.vamsas.client.picking.*;
+import uk.ac.vamsas.client.picking.MouseOverMessage;
 
 public class VamsasEvents
 {
@@ -32,7 +30,7 @@ public class VamsasEvents
 			{
 				if (seq.getName().equals(seqID))
 				{
-					AlignmentPanel panel = winMain.navPanel.getCurrentAlignmentPanel(data);
+					AlignmentPanel panel = WinMain.navPanel.getCurrentAlignmentPanel(data);
 
 					panel.highlight(i, position, false);
 

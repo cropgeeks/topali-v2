@@ -7,10 +7,8 @@ package topali.cluster.jobs.modelgenerator;
 
 import java.io.File;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.LocalJobs;
-import topali.data.SequenceSet;
-import topali.data.MGResult;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 
 public class RunModelGenerator extends Thread

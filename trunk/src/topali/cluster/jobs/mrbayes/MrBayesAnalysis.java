@@ -8,7 +8,6 @@ package topali.cluster.jobs.mrbayes;
 import java.io.*;
 
 import topali.cluster.AnalysisThread;
-import topali.cluster.ClusterUtils;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;

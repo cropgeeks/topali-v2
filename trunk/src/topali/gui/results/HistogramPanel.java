@@ -6,10 +6,11 @@
 package topali.gui.results;
 
 import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
 
-import topali.gui.*;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+
+import topali.gui.Prefs;
 import topali.var.Utils;
 
 class HistogramPanel extends JPanel

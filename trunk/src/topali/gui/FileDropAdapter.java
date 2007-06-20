@@ -5,8 +5,7 @@
 
 package topali.gui;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.File;
 import java.util.List;

@@ -9,8 +9,7 @@ import java.io.*;
 
 import pal.alignment.SimpleAlignment;
 import topali.cluster.*;
-import topali.data.DSSResult;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 
 class DSSAnalysis extends AnalysisThread

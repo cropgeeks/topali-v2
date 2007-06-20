@@ -9,8 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.JobStatus;
+import topali.cluster.*;
 import topali.data.PDMResult;
 import topali.fileio.Castor;
 

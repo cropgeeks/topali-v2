@@ -9,8 +9,7 @@ import pal.alignment.*;
 import pal.distance.DistanceMatrix;
 import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
-import pal.tree.NeighborJoiningTree;
-import pal.tree.Tree;
+import pal.tree.*;
 import topali.analyses.TreeUtilities;
 import topali.data.LRTResult;
 

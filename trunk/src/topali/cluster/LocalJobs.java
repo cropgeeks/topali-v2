@@ -5,8 +5,7 @@
 
 package topali.cluster;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 import sbrn.commons.multicore.TokenManager;
 

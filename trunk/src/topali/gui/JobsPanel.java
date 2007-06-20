@@ -5,8 +5,7 @@
 
 package topali.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -236,7 +235,15 @@ public class JobsPanel extends JPanel
 				job = new MrBayesLocalJob((MBTreeResult) result, data);
 			entry = new ProgressBarJobEntry(job);
 		}
-
+		
+		else if(result instanceof PhymlResult) {
+			if(result.isRemote)
+				job = new PhymlRemoteJob((PhymlResult)result, data);
+			else
+				job = new PhymlLocalJob((PhymlResult)result, data);
+			entry = new NoTrackingJobEntry(job);
+		}
+		
 		else if(result instanceof MGResult) {
 			if(result.isRemote)
 				job = new MGRemoteJob((MGResult)result, data);

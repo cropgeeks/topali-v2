@@ -13,15 +13,12 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import pal.alignment.Alignment;
-import pal.alignment.SimpleAlignment;
-import pal.datatype.AminoAcids;
-import pal.datatype.Nucleotides;
+import pal.alignment.*;
+import pal.datatype.*;
 import pal.gui.NameColouriser;
 import pal.misc.Identifier;
 import topali.analyses.SequenceSetUtils;
-import topali.fileio.AlignmentHandler;
-import topali.fileio.AlignmentLoadException;
+import topali.fileio.*;
 
 // Class representing a set of sequences (an alignment).
 public class SequenceSet extends ViewableDataObject

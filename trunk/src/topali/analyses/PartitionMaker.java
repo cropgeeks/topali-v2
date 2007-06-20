@@ -5,8 +5,7 @@
 
 package topali.analyses;
 
-import topali.data.AlignmentData;
-import topali.data.PartitionAnnotations;
+import topali.data.*;
 
 public class PartitionMaker
 {

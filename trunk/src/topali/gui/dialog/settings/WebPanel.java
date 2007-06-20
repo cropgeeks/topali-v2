@@ -5,11 +5,9 @@
 
 package topali.gui.dialog.settings;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-import javax.swing.ButtonGroup;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 
 import topali.gui.Prefs;
 import doe.MsgBox;

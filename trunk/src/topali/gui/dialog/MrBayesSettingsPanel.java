@@ -13,9 +13,6 @@ import topali.data.*;
 
 class MrBayesSettingsPanel extends JPanel
 {
-	
-	private JLabel label = null;
-	private JPanel panel = null;
 	private JLabel l1 = null;
 	private JLabel l2 = null;
 	private JLabel l3 = null;
@@ -103,144 +100,123 @@ class MrBayesSettingsPanel extends JPanel
 	 */
 	private void initialize()
 	{
-		label = new JLabel();
-		label.setText("Advanced MrBayes Settings");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		this.setSize(437, 273);
-		this.setLayout(new BorderLayout());
-		this.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		this.add(label, BorderLayout.NORTH);
-		this.add(getPanel(), BorderLayout.CENTER);
-	}
-
-	/**
-	 * This method initializes panel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getPanel()
-	{
-		if (panel == null)
-		{
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 1;
-			gridBagConstraints13.anchor = GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 6;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints12.gridy = 5;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints12.anchor = GridBagConstraints.WEST;
-			gridBagConstraints12.gridx = 1;
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints11.gridy = 4;
-			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.anchor = GridBagConstraints.WEST;
-			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints11.gridx = 1;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 1;
-			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints10.anchor = GridBagConstraints.WEST;
-			gridBagConstraints10.gridy = 3;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 1;
-			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints9.anchor = GridBagConstraints.WEST;
-			gridBagConstraints9.gridy = 2;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints8.gridy = 1;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints8.anchor = GridBagConstraints.WEST;
-			gridBagConstraints8.gridx = 1;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.anchor = GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridx = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints6.weightx = 1.0;
-			gridBagConstraints6.anchor = GridBagConstraints.EAST;
-			gridBagConstraints6.gridy = 6;
-			l7 = new JLabel();
-			l7.setText("Burnin:");
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.anchor = GridBagConstraints.EAST;
-			gridBagConstraints5.gridy = 5;
-			l6 = new JLabel();
-			l6.setText("Sample Frequency:");
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints4.weightx = 1.0;
-			gridBagConstraints4.anchor = GridBagConstraints.EAST;
-			gridBagConstraints4.gridy = 4;
-			l5 = new JLabel();
-			l5.setText("nGenerations:");
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.anchor = GridBagConstraints.EAST;
-			gridBagConstraints3.gridy = 3;
-			l4 = new JLabel();
-			l4.setText("Gamma");
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.weighty = 0.0;
-			gridBagConstraints2.anchor = GridBagConstraints.EAST;
-			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 2;
-			l3 = new JLabel();
-			l3.setText("Invariant Sites");
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.anchor = GridBagConstraints.EAST;
-			gridBagConstraints1.gridy = 1;
-			l2 = new JLabel();
-			l2.setText("Substituion Model:");
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints.weightx = 1.0;
-			gridBagConstraints.anchor = GridBagConstraints.EAST;
-			gridBagConstraints.gridy = 0;
-			l1 = new JLabel();
-			l1.setText("Genetic Code:");
-			panel = new JPanel();
-			panel.setLayout(new GridBagLayout());
-			panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-			panel.add(l1, gridBagConstraints);
-			panel.add(l2, gridBagConstraints1);
-			panel.add(l3, gridBagConstraints2);
-			panel.add(l4, gridBagConstraints3);
-			panel.add(l5, gridBagConstraints4);
-			panel.add(l6, gridBagConstraints5);
-			panel.add(l7, gridBagConstraints6);
-			panel.add(getCode(), gridBagConstraints7);
-			panel.add(getModel(), gridBagConstraints8);
-			panel.add(getSites(), gridBagConstraints9);
-			panel.add(getGamma(), gridBagConstraints10);
-			panel.add(getNgen(), gridBagConstraints11);
-			panel.add(getSample(), gridBagConstraints12);
-			panel.add(getSubpanel(), gridBagConstraints13);
-		}
-		return panel;
+		this.setLayout(new GridBagLayout());
+		this.setBorder(BorderFactory.createTitledBorder("Advanced MrBayes Settings"));
+		
+		GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+		gridBagConstraints13.gridx = 1;
+		gridBagConstraints13.anchor = GridBagConstraints.WEST;
+		gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints13.gridy = 6;
+		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+		gridBagConstraints12.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints12.gridy = 5;
+		gridBagConstraints12.weightx = 1.0;
+		gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints12.anchor = GridBagConstraints.WEST;
+		gridBagConstraints12.gridx = 1;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints11.gridy = 4;
+		gridBagConstraints11.weightx = 1.0;
+		gridBagConstraints11.anchor = GridBagConstraints.WEST;
+		gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints11.gridx = 1;
+		GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+		gridBagConstraints10.gridx = 1;
+		gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints10.anchor = GridBagConstraints.WEST;
+		gridBagConstraints10.gridy = 3;
+		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+		gridBagConstraints9.gridx = 1;
+		gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints9.anchor = GridBagConstraints.WEST;
+		gridBagConstraints9.gridy = 2;
+		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+		gridBagConstraints8.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints8.gridy = 1;
+		gridBagConstraints8.weightx = 1.0;
+		gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints8.anchor = GridBagConstraints.WEST;
+		gridBagConstraints8.gridx = 1;
+		GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+		gridBagConstraints7.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints7.gridy = 0;
+		gridBagConstraints7.weightx = 1.0;
+		gridBagConstraints7.anchor = GridBagConstraints.WEST;
+		gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints7.gridx = 1;
+		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints6.weightx = 1.0;
+		gridBagConstraints6.anchor = GridBagConstraints.EAST;
+		gridBagConstraints6.gridy = 6;
+		l7 = new JLabel();
+		l7.setText("Burnin:");
+		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+		gridBagConstraints5.gridx = 0;
+		gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints5.weightx = 1.0;
+		gridBagConstraints5.anchor = GridBagConstraints.EAST;
+		gridBagConstraints5.gridy = 5;
+		l6 = new JLabel();
+		l6.setText("Sample Frequency:");
+		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.gridx = 0;
+		gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints4.weightx = 1.0;
+		gridBagConstraints4.anchor = GridBagConstraints.EAST;
+		gridBagConstraints4.gridy = 4;
+		l5 = new JLabel();
+		l5.setText("nGenerations:");
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints3.weightx = 1.0;
+		gridBagConstraints3.anchor = GridBagConstraints.EAST;
+		gridBagConstraints3.gridy = 3;
+		l4 = new JLabel();
+		l4.setText("Gamma");
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.gridx = 0;
+		gridBagConstraints2.weightx = 1.0;
+		gridBagConstraints2.weighty = 0.0;
+		gridBagConstraints2.anchor = GridBagConstraints.EAST;
+		gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints2.gridy = 2;
+		l3 = new JLabel();
+		l3.setText("Invariant Sites");
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints1.weightx = 1.0;
+		gridBagConstraints1.anchor = GridBagConstraints.EAST;
+		gridBagConstraints1.gridy = 1;
+		l2 = new JLabel();
+		l2.setText("Substituion Model:");
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints.weightx = 1.0;
+		gridBagConstraints.anchor = GridBagConstraints.EAST;
+		gridBagConstraints.gridy = 0;
+		l1 = new JLabel();
+		l1.setText("Genetic Code:");
+		this.add(l1, gridBagConstraints);
+		this.add(l2, gridBagConstraints1);
+		this.add(l3, gridBagConstraints2);
+		this.add(l4, gridBagConstraints3);
+		this.add(l5, gridBagConstraints4);
+		this.add(l6, gridBagConstraints5);
+		this.add(l7, gridBagConstraints6);
+		this.add(getCode(), gridBagConstraints7);
+		this.add(getModel(), gridBagConstraints8);
+		this.add(getSites(), gridBagConstraints9);
+		this.add(getGamma(), gridBagConstraints10);
+		this.add(getNgen(), gridBagConstraints11);
+		this.add(getSample(), gridBagConstraints12);
+		this.add(getSubpanel(), gridBagConstraints13);
 	}
 
 	/**
@@ -253,6 +229,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (code == null)
 		{
 			code = new JComboBox();
+			code.setToolTipText("Genetic Code to use");
 		}
 		return code;
 	}
@@ -267,6 +244,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (model == null)
 		{
 			model = new JComboBox();
+			model.setToolTipText("Substitution model to use");
 		}
 		return model;
 	}
@@ -281,6 +259,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (sites == null)
 		{
 			sites = new JCheckBox();
+			sites.setToolTipText("Allow invariant sites");
 		}
 		return sites;
 	}
@@ -295,6 +274,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (gamma == null)
 		{
 			gamma = new JCheckBox();
+			gamma.setToolTipText("Use gamma distribution");
 		}
 		return gamma;
 	}
@@ -309,6 +289,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (ngen == null)
 		{
 			ngen = new JSpinner();
+			ngen.setToolTipText("Total number of trees to generate");
 		}
 		return ngen;
 	}
@@ -323,6 +304,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (sample == null)
 		{
 			sample = new JSpinner();
+			sample.setToolTipText("Sample frequency");
 		}
 		return sample;
 	}
@@ -363,6 +345,7 @@ class MrBayesSettingsPanel extends JPanel
 		if (burnin == null)
 		{
 			burnin = new JSpinner();
+			burnin.setToolTipText("Length of burnin period");
 		}
 		return burnin;
 	}

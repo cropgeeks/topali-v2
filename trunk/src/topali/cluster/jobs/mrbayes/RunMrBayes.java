@@ -7,10 +7,8 @@ package topali.cluster.jobs.mrbayes;
 
 import java.io.File;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.LocalJobs;
-import topali.data.MBTreeResult;
-import topali.data.SequenceSet;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 
 public class RunMrBayes extends Thread

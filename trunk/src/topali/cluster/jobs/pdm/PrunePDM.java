@@ -6,12 +6,10 @@
 package topali.cluster.jobs.pdm;
 
 import java.io.*;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
 import pal.distance.ReadDistanceMatrix;
-import pal.tree.ClusterTree;
-import pal.tree.Node;
+import pal.tree.*;
 import topali.data.PDMResult;
 
 /*

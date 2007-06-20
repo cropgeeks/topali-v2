@@ -8,8 +8,7 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.mrbayes.MrBayesMonitor;
-import topali.cluster.jobs.mrbayes.RunMrBayes;
+import topali.cluster.jobs.mrbayes.*;
 import topali.data.*;
 import topali.gui.Prefs;
 

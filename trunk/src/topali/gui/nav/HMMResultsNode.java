@@ -9,8 +9,7 @@ import java.awt.print.Printable;
 
 import javax.swing.JComponent;
 
-import topali.data.AlignmentData;
-import topali.data.HMMResult;
+import topali.data.*;
 import topali.gui.WinMainTipsPanel;
 import topali.gui.results.HMMResultPanel;
 

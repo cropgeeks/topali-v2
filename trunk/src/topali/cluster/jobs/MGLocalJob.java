@@ -8,8 +8,7 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.modelgenerator.MGMonitor;
-import topali.cluster.jobs.modelgenerator.RunModelGenerator;
+import topali.cluster.jobs.modelgenerator.*;
 import topali.data.*;
 import topali.gui.Prefs;
 

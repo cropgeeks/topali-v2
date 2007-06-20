@@ -7,15 +7,13 @@ package topali.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.data.AlignmentData;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 
 /* Parent container for the canvas used to draw the sequence data. */

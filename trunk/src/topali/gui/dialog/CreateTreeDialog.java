@@ -5,13 +5,11 @@
 
 package topali.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 
 import pal.alignment.Alignment;
 import topali.data.*;
@@ -36,8 +34,12 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	private BasicTreePanel basicPanel;
 
 	private MrBayesSettingsPanel bayesPanel;
-
+	
+	private PhymlSettingsPanel phymlPanel;
+	
 	MBTreeResult mbResult = new MBTreeResult();
+	
+	PhymlResult phymlResult = new PhymlResult();
 	
 	public CreateTreeDialog(WinMain winMain, AlignmentData data)
 	{
@@ -45,7 +47,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		this.data = data;
 
 		ss = data.getSequenceSet();
-
+		
 		setLayout(new BorderLayout());
 		add(createControls());
 		add(getButtons(), BorderLayout.SOUTH);
@@ -65,11 +67,21 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet(), mbResult);
-		bayesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
+		
+		phymlPanel = new PhymlSettingsPanel(data.getSequenceSet(), phymlResult);
+		
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
-		tabs.add(bayesPanel, "Advanced");
+		if(Prefs.gui_tree_method==0) {
+			tabs.add(new JPanel(), "Advanced");
+			tabs.setEnabledAt(1, false);
+		}
+		else if(Prefs.gui_tree_method==1) {
+			tabs.add(phymlPanel, "Advanced");
+		}
+		else if(Prefs.gui_tree_method==2) {
+			tabs.add(bayesPanel, "Advanced");
+		}
 
 		return tabs;
 	}
@@ -94,12 +106,18 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	private void onOK(boolean makeRemote)
 	{
 		basicPanel.onOK();
-		bayesPanel.onOK();
+		
 		
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
-		else
+		else if(Prefs.gui_tree_method == 1) {
+			phymlPanel.onOK();
+			result = phymlResult;
+		}
+		else if(Prefs.gui_tree_method == 2) {
+			bayesPanel.onOK();
 			result = mbResult;
+		}
 
 		result.isRemote = makeRemote;
 		initTreeResult(result);
@@ -149,17 +167,39 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
 		if(Prefs.gui_tree_method==0)
 			result.guiName = "F84+G Tree " + runNum;
-		else
+		else if(Prefs.gui_tree_method==1)
+			result.guiName = "ML Tree "+runNum;
+		else if(Prefs.gui_tree_method==2)
 			result.guiName = "MrBayes Tree " + runNum;
 		
 		result.jobName = "Tree Estimation " + runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
+		
+		if(Prefs.gui_tree_method==1)
+			initPhymlTreeResult((PhymlResult)tr);
 
-		if (Prefs.gui_tree_method == 1)
+		if (Prefs.gui_tree_method == 2)
 			initMBTreeResult((MBTreeResult) tr);
 	}
 
+	private void initPhymlTreeResult(PhymlResult tr) {
+		//Path to Phyml
+		if (Prefs.isWindows)
+			tr.phymlPath = Utils.getLocalPath() + "phyml\\phyml_win32.exe";
+		else if(Prefs.isMacOSX)
+			tr.phymlPath = Utils.getLocalPath() + "phyml/phyml_macOSX";
+		else
+			tr.phymlPath = Utils.getLocalPath() + "phyml/phyml_linux";
+		
+		//Use all sequences, or just those selected?
+		if (Prefs.gui_tree_useall)
+			tr.selectedSeqs = data.getSequenceSet().getAllSequenceSafeNames();
+		else
+			tr.selectedSeqs = data.getSequenceSet()
+					.getSelectedSequenceSafeNames();
+	}
+	
 	private void initMBTreeResult(MBTreeResult tr)
 	{
 		// Path to MrBayes
@@ -178,7 +218,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	class BasicTreePanel extends JPanel implements ChangeListener
 	{
-		private JRadioButton rMethod0, rMethod1, rSelectAll, rSelectCurrent;
+		private JRadioButton rMethod0, rMethod1, rMethod2, rSelectAll, rSelectCurrent;
 
 		BasicTreePanel()
 		{
@@ -186,15 +226,19 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 					"F84+Gamma/neighbor joining (fast, approximate)",
 					Prefs.gui_tree_method == 0);
 			rMethod0.addChangeListener(this);
-			rMethod0.setMnemonic(KeyEvent.VK_J);
-			rMethod1 = new JRadioButton(
-					"Bayesian phylogenetic analysis (using MrBayes) (sophisticated)",
-					Prefs.gui_tree_method == 1);
+			rMethod0.setMnemonic(KeyEvent.VK_F);
+			rMethod1 = new JRadioButton("Maximum Likelihood (using PhyML) (moderate)", Prefs.gui_tree_method == 1);
 			rMethod1.addChangeListener(this);
-			rMethod1.setMnemonic(KeyEvent.VK_B);
+			rMethod1.setMnemonic(KeyEvent.VK_M);
+			rMethod2 = new JRadioButton(
+					"Bayesian phylogenetic analysis (using MrBayes) (sophisticated)",
+					Prefs.gui_tree_method == 2);
+			rMethod2.addChangeListener(this);
+			rMethod2.setMnemonic(KeyEvent.VK_B);
 			ButtonGroup g1 = new ButtonGroup();
 			g1.add(rMethod0);
 			g1.add(rMethod1);
+			g1.add(rMethod2);
 
 			rSelectAll = new JRadioButton("Use all sequences in the alignment",
 					Prefs.gui_tree_useall);
@@ -207,11 +251,12 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			g2.add(rSelectAll);
 			g2.add(rSelectCurrent);
 
-			JPanel p1 = new JPanel(new GridLayout(2, 1, 5, 0));
+			JPanel p1 = new JPanel(new GridLayout(3, 1, 5, 0));
 			p1.setBorder(BorderFactory
 					.createTitledBorder("Tree creation method:"));
 			p1.add(rMethod0);
 			p1.add(rMethod1);
+			p1.add(rMethod2);
 			JPanel p2 = new JPanel(new GridLayout(2, 1, 5, 0));
 			p2.setBorder(BorderFactory
 					.createTitledBorder("Sequence selection:"));
@@ -227,9 +272,11 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		{
 			if (rMethod0.isSelected())
 				Prefs.gui_tree_method = 0;
-			if (rMethod1.isSelected())
+			if(rMethod1.isSelected())
 				Prefs.gui_tree_method = 1;
-
+			if (rMethod2.isSelected())
+				Prefs.gui_tree_method = 2;
+			
 			Prefs.gui_tree_useall = rSelectAll.isSelected();
 		}
 
@@ -242,8 +289,17 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 				tabs.setEnabledAt(1, false);
 			}
 			else if(rMethod1.isSelected()) {
+				tabs.remove(1);
+				tabs.add(phymlPanel, "Advanced");
 				tabs.setEnabledAt(1, true);
 			}
+			else if(rMethod2.isSelected()) {
+				tabs.remove(1);
+				tabs.add(bayesPanel, "Advanced");
+				tabs.setEnabledAt(1, true);
+			}
+			validate();
+			repaint();
 		}
 		
 		

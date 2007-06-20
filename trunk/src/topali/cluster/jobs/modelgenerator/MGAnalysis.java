@@ -8,9 +8,7 @@ package topali.cluster.jobs.modelgenerator;
 import java.io.File;
 
 import topali.cluster.AnalysisThread;
-import topali.cluster.ClusterUtils;
-import topali.data.SequenceSet;
-import topali.data.MGResult;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

@@ -9,8 +9,7 @@ import java.io.*;
 
 import pal.alignment.ReadAlignment;
 import pal.distance.JukesCantorDistanceMatrix;
-import pal.tree.NeighborJoiningTree;
-import pal.tree.Tree;
+import pal.tree.*;
 import sbrn.commons.file.FileUtils;
 import topali.cluster.StreamCatcher;
 import topali.data.*;

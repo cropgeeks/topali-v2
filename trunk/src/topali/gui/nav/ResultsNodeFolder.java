@@ -5,17 +5,13 @@
 
 package topali.gui.nav;
 
-import static topali.gui.WinMainMenuBar.aFileExportDataSet;
-import static topali.gui.WinMainMenuBar.aVamExport;
+import static topali.gui.WinMainMenuBar.*;
 
-import java.awt.Color;
-import java.awt.Insets;
+import java.awt.*;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-import topali.data.AlignmentData;
-import topali.data.AnalysisResult;
+import topali.data.*;
 import topali.gui.Text;
 import doe.DoeLayout;
 

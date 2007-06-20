@@ -13,13 +13,10 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import pal.alignment.SimpleAlignment;
-import pal.gui.TreePainter;
-import pal.gui.TreePainterNormal;
+import pal.gui.*;
 import pal.tree.Tree;
 import topali.analyses.F84TreeCreator;
-import topali.analyses.TreeCreator;
-import topali.data.AlignmentData;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.gui.*;
 import doe.MsgBox;
 

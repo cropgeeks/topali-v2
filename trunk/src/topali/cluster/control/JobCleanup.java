@@ -6,8 +6,6 @@
 package topali.cluster.control;
 
 import java.io.File;
-import org.apache.log4j.*;
-import java.util.logging.Logger;
 
 import topali.cluster.JobStatus;
 

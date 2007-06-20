@@ -5,13 +5,9 @@
 
 package topali.data;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.File;
 import java.util.LinkedList;
-
-import topali.gui.WinMain;
-import topali.gui.nav.NavPanel;
 
 /* Represents an Alignment and the results/analyses run upon it. */
 public class AlignmentData extends ViewableDataObject

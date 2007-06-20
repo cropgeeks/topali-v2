@@ -7,8 +7,7 @@ package topali.gui.results;
 
 import java.awt.print.Printable;
 
-import topali.data.AlignmentData;
-import topali.data.CodonWResult;
+import topali.data.*;
 
 public class CodonWResultPanel extends ResultPanel
 {

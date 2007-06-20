@@ -6,8 +6,7 @@
 package topali.cluster;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 // Basic class to handle reading from a stream so that TOPALi can execute
 // external programs. Reads from a stream until it ends - programs will not run

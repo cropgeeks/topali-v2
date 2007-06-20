@@ -5,8 +5,7 @@
 
 package topali.vamsas;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;

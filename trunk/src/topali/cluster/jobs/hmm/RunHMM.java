@@ -7,10 +7,8 @@ package topali.cluster.jobs.hmm;
 
 import java.io.File;
 
-import topali.cluster.ClusterUtils;
-import topali.cluster.LocalJobs;
-import topali.data.HMMResult;
-import topali.data.SequenceSet;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

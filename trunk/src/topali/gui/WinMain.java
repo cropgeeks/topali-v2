@@ -5,27 +5,23 @@
 
 package topali.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
+import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.WindowEvent;
 import java.awt.print.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.File;
 
 import javax.swing.*;
 
 import pal.tree.Tree;
-import topali.analyses.F84TreeCreator;
-import topali.analyses.SequenceSetUtils;
+import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.hmm.HMMSettingsDialog;
 import topali.gui.dialog.region.RegionDialog;
-import topali.gui.nav.NavPanel;
-import topali.gui.nav.SequenceSetNode;
+import topali.gui.nav.*;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
 import topali.var.Utils;

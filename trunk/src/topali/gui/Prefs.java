@@ -5,8 +5,7 @@
 
 package topali.gui;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;

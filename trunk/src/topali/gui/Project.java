@@ -7,21 +7,17 @@ package topali.gui;
 
 import static topali.mod.Filters.TOP;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.zip.*;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.*;
 
-import topali.data.AlignmentData;
-import topali.data.ViewableDataObject;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;

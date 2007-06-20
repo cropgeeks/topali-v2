@@ -12,13 +12,11 @@ import javax.swing.*;
 
 import pal.alignment.Alignment;
 import pal.distance.JukesCantorDistanceMatrix;
-import pal.tree.NeighborJoiningTree;
-import pal.tree.Tree;
+import pal.tree.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
-import topali.var.NHTreeUtils;
-import topali.var.Utils;
+import topali.var.*;
 
 public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 {

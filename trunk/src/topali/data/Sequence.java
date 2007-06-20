@@ -5,8 +5,7 @@
 
 package topali.data;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 // Class representing a single sequence.
 public class Sequence extends ViewableDataObject

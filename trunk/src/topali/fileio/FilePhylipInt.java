@@ -7,8 +7,7 @@ package topali.fileio;
 
 import java.io.*;
 
-import pal.alignment.AlignmentUtils;
-import pal.alignment.SimpleAlignment;
+import pal.alignment.*;
 import topali.data.SequenceSet;
 
 public class FilePhylipInt extends FileGeneric

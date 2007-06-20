@@ -11,8 +11,7 @@ import java.util.concurrent.RejectedExecutionException;
 import org.apache.axis.AxisFault;
 
 import topali.cluster.*;
-import topali.data.PDM2Result;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 
 public class PDMWebService extends WebService

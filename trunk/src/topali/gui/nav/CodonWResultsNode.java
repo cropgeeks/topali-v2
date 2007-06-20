@@ -10,7 +10,7 @@ import java.awt.print.Printable;
 import javax.swing.JComponent;
 
 import topali.data.*;
-import topali.gui.results.*;
+import topali.gui.results.CodonWResultPanel;
 
 public class CodonWResultsNode extends ResultsNode
 {

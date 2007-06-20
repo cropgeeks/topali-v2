@@ -12,7 +12,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis.*;
-import org.apache.axis.transport.http.*;
+import org.apache.axis.transport.http.HTTPConstants;
 import org.apache.log4j.*;
 
 import sbrn.commons.file.FileUtils;

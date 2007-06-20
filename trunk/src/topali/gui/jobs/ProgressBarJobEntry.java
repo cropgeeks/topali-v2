@@ -5,11 +5,9 @@
 
 package topali.gui.jobs;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.JComponent;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;

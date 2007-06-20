@@ -6,11 +6,9 @@
 package topali.cluster.jobs.hmm;
 
 import java.io.*;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
-import topali.cluster.AnalysisThread;
-import topali.cluster.ClusterUtils;
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;

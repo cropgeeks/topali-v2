@@ -7,9 +7,8 @@ package topali.test;
 
 import java.util.Vector;
 
-import topali.data.CMLModel;
-import topali.data.CodeMLResult;
 import junit.framework.TestCase;
+import topali.data.*;
 
 public class CMLModelFilterTest extends TestCase
 {

@@ -6,8 +6,7 @@
 package topali.gui.nav;
 
 import static topali.gui.WinMainMenuBar.*;
-import topali.data.AlignmentData;
-import topali.data.AnalysisResult;
+import topali.data.*;
 import topali.gui.IPrintable;
 import topali.gui.results.ResultPanel;
 

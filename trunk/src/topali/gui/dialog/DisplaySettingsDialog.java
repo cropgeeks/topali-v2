@@ -10,13 +10,11 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 
 import topali.gui.*;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 /* Displays a dialog containing options for choosing the colours and fonts
  * used to display the sequence data within the main display.

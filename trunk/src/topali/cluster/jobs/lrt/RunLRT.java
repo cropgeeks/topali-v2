@@ -10,13 +10,10 @@ import java.io.File;
 import pal.alignment.SimpleAlignment;
 import pal.distance.JukesCantorDistanceMatrix;
 import pal.substmodel.SubstitutionModel;
-import pal.tree.NeighborJoiningTree;
-import pal.tree.SimulatedAlignment;
+import pal.tree.*;
 import topali.analyses.TreeUtilities;
-import topali.cluster.ClusterUtils;
-import topali.cluster.LocalJobs;
-import topali.data.LRTResult;
-import topali.data.SequenceSet;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

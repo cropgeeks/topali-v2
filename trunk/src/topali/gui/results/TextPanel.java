@@ -16,8 +16,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.gui.Icons;
-import topali.gui.Prefs;
+import topali.gui.*;
 import topali.mod.Filters;
 import topali.var.Utils;
 import doe.MsgBox;

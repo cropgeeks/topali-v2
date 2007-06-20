@@ -9,14 +9,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 
 import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
 import topali.analyses.F84TreeCreator;
-import topali.analyses.TreeCreator;
 import topali.data.SequenceSet;
 import topali.gui.*;
 import topali.var.Utils;

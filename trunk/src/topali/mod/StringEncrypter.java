@@ -1,16 +1,11 @@
 package topali.mod;
 
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.spec.KeySpec;
 
 import javax.crypto.*;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.DESedeKeySpec;
-
-//import sun.misc.BASE64Decoder;
-//import sun.misc.BASE64Encoder;
+import javax.crypto.spec.*;
 
 import org.apache.commons.codec.binary.Base64;
 

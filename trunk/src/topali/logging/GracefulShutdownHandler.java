@@ -5,8 +5,7 @@
 
 package topali.logging;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 

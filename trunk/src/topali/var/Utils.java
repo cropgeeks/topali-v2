@@ -20,6 +20,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import pal.tree.*;
 import topali.cluster.ClusterUtils;
 import topali.gui.*;
 import doe.MsgBox;
@@ -271,4 +272,17 @@ public class Utils
 //		System.out.println("MemUsage: "+((maxMem-freeMem)/1024/1024)+" MB\n");
 //	}
 	
+	public static String midPointRoot(String tree) {
+		try
+		{
+			PushbackReader pbread = new PushbackReader(new StringReader(tree));
+			ReadTree t = new ReadTree(pbread);
+			Tree t2 = TreeRooter.getMidpointRooted(t);
+			return t2.toString();
+		} catch (TreeParseException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

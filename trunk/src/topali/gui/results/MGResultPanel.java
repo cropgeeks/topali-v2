@@ -6,8 +6,7 @@
 package topali.gui.results;
 
 import java.awt.print.Printable;
-import java.util.Comparator;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.table.TableRowSorter;
 

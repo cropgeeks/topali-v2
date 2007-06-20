@@ -1,8 +1,7 @@
 package topali.mod;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.*;
 
@@ -12,10 +11,9 @@ import javax.swing.border.MatteBorder;
 
 import org.apache.log4j.Logger;
 
-import doe.MsgBox;
-
 import topali.gui.Icons;
 import topali.gui.dialog.PrinterDialog;
+import doe.MsgBox;
 
 /**
  * Based on Matthew Robinson, Pavel Vorobiev "Swing - Second Edition"

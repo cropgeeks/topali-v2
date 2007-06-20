@@ -9,10 +9,8 @@ import java.awt.print.Printable;
 
 import javax.swing.JComponent;
 
-import topali.data.AlignmentData;
-import topali.data.CodeMLResult;
-import topali.gui.results.CMLBranchResultPanel;
-import topali.gui.results.CMLSiteResultPanel;
+import topali.data.*;
+import topali.gui.results.*;
 
 public class CodeMLResultsNode extends ResultsNode
 {

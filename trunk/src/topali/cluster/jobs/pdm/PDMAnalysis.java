@@ -7,10 +7,8 @@ package topali.cluster.jobs.pdm;
 
 import java.io.*;
 
-import topali.cluster.AnalysisThread;
-import topali.cluster.ClusterUtils;
-import topali.data.PDMResult;
-import topali.data.SequenceSet;
+import topali.cluster.*;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

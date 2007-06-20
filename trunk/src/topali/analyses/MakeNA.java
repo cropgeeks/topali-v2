@@ -11,8 +11,7 @@ import org.apache.log4j.Logger;
 
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
-import topali.gui.TOPALi;
-import topali.gui.Text;
+import topali.gui.*;
 import doe.MsgBox;
 
 public class MakeNA

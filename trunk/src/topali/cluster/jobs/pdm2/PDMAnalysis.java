@@ -6,12 +6,10 @@
 package topali.cluster.jobs.pdm2;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import topali.cluster.*;
-import topali.data.PDM2Result;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

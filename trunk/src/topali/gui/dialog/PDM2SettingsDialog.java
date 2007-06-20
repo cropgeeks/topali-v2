@@ -6,16 +6,14 @@
 package topali.gui.dialog;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
 import topali.var.Utils;
-import doe.DoeLayout;
-import doe.MsgBox;
+import doe.*;
 
 public class PDM2SettingsDialog extends JDialog implements ActionListener
 {

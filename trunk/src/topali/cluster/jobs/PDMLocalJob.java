@@ -8,8 +8,7 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.pdm.CollatePDM;
-import topali.cluster.jobs.pdm.RunPDM;
+import topali.cluster.jobs.pdm.*;
 import topali.data.*;
 import topali.gui.Prefs;
 

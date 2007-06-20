@@ -5,11 +5,9 @@
 
 package topali.gui.results;
 
-import static topali.mod.Filters.CSV;
-import static topali.mod.Filters.PNG;
+import static topali.mod.Filters.*;
 
-import java.awt.BorderLayout;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.print.*;
 import java.io.*;

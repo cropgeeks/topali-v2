@@ -5,8 +5,7 @@
 
 package topali.gui.atv;
 
-import java.awt.Component;
-import java.awt.Cursor;
+import java.awt.*;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URL;
@@ -16,8 +15,7 @@ import javax.swing.UIManager;
 import org.apache.log4j.Logger;
 import org.forester.atv.ATVapplicationFrame;
 import org.forester.phylogeny.Phylogeny;
-import org.forester.phylogeny.factories.ParserBasedPhylogenyFactory;
-import org.forester.phylogeny.factories.PhylogenyFactory;
+import org.forester.phylogeny.factories.*;
 import org.forester.phylogeny.parsers.nhx.NHXParser;
 
 /**

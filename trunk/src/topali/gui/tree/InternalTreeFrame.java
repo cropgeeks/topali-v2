@@ -6,13 +6,11 @@
 package topali.gui.tree;
 
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.*;
 
 import javax.swing.JInternalFrame;
 
-import topali.data.SequenceSet;
-import topali.data.TreeResult;
+import topali.data.*;
 import topali.gui.*;
 
 class InternalTreeFrame extends JInternalFrame implements ComponentListener

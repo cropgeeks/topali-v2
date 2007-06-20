@@ -7,12 +7,10 @@ package topali.gui.results;
 
 import java.awt.Color;
 import java.awt.print.Printable;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.JSplitPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 
 import topali.data.*;
 import topali.gui.Prefs;

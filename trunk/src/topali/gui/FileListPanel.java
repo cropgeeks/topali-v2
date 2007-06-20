@@ -11,13 +11,10 @@ import java.io.File;
 import java.util.LinkedList;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
-import topali.data.AlignmentData;
-import topali.data.AlignmentFileStat;
+import topali.data.*;
 import topali.gui.dialog.ImportDataSetDialog;
 import doe.MsgBox;
 

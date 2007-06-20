@@ -6,8 +6,7 @@
 package topali.data;
 
 import java.awt.Rectangle;
-import java.io.PushbackReader;
-import java.io.StringReader;
+import java.io.*;
 import java.util.LinkedList;
 
 import pal.misc.Identifier;
@@ -59,6 +58,40 @@ public class TreeResult extends AlignmentResult
 		this.treeStr = treeStr;
 	}
 
+	public TreeResult(TreeResult original) {
+		this.treeStr = original.treeStr;
+		this.pS = original.pS;
+		this.pE = original.pE;
+		if(original.clusters!=null) {
+			this.clusters = new LinkedList<SequenceCluster>();
+			for(SequenceCluster c : original.clusters)
+				this.clusters.add(c);
+		}
+		this.viewMode = original.viewMode;
+		this.isSizedToFit = original.isSizedToFit;
+		this.x = original.x;
+		this.y = original.y;
+		this.width = original.width;
+		this.height = original.height;
+		this.info = original.info;
+		
+		this.endTime = original.endTime;
+		this.guiName = original.guiName;
+		this.isRemote = original.isRemote;
+		this.jobId = original.jobId;
+		this.jobName = original.jobName;
+		this.selectedSeqs = new String[original.selectedSeqs.length];
+		for(int i=0; i<original.selectedSeqs.length; i++)
+			this.selectedSeqs[i] = original.selectedSeqs[i];
+		this.startTime = original.startTime;
+		this.status = original.status;
+		this.threshold = original.threshold;
+		this.tmpDir = original.tmpDir;
+		this.treeToolTipWindow = original.treeToolTipWindow;
+		this.url = original.url;
+		this.useTreeToolTips = original.useTreeToolTips;
+	}
+	
 	public String getTreeStr()
 	{
 		return treeStr;

@@ -9,8 +9,7 @@ import java.awt.print.Printable;
 
 import javax.swing.JComponent;
 
-import topali.data.AlignmentData;
-import topali.data.LRTResult;
+import topali.data.*;
 import topali.gui.results.LRTResultPanel;
 
 public class LRTResultsNode extends ResultsNode 

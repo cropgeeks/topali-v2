@@ -8,8 +8,7 @@ package topali.gui.results;
 import java.awt.print.Printable;
 
 import topali.analyses.AnalysisUtils;
-import topali.data.AlignmentData;
-import topali.data.DSSResult;
+import topali.data.*;
 import topali.var.Utils;
 
 public class DSSResultPanel extends ResultPanel

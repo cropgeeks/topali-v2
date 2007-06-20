@@ -8,8 +8,7 @@ package topali.fileio;
 import java.io.*;
 
 import pal.alignment.ReadAlignment;
-import topali.data.Sequence;
-import topali.data.SequenceSet;
+import topali.data.*;
 
 class FileGeneric implements ISeqFile
 {

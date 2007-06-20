@@ -8,8 +8,7 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.codonw.CodonWMonitor;
-import topali.cluster.jobs.codonw.RunCodonW;
+import topali.cluster.jobs.codonw.*;
 import topali.data.*;
 import topali.gui.Prefs;
 

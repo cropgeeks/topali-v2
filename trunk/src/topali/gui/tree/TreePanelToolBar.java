@@ -5,8 +5,7 @@
 
 package topali.gui.tree;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -15,6 +14,7 @@ import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
 import topali.gui.dialog.AnalysisInfoDialog;
+import topali.var.Utils;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
@@ -28,6 +28,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	JButton bExport, bCluster;
 	JButton bATV, bInfo;
 
+	JButton bRoot;
+	
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit,
 			bFloat, bViewCluster;
 
@@ -67,6 +69,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bATV = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.UP16, null);
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		
+		bRoot = new JButton("Reroot");
+		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
 		bDrawCircular.addActionListener(this);
@@ -77,6 +81,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bViewCluster.addActionListener(this);
 		bATV.addActionListener(this);
 		bInfo.addActionListener(this);
+		
+		bRoot.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -95,6 +101,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bInfo);
 		add(new JLabel(" "));
 
+		add(bRoot);
+		
 		// Add the toggle buttons into a group so that only one can be selected
 		ButtonGroup group = new ButtonGroup();
 		group.add(bDrawNormal);
@@ -140,9 +148,28 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			}
 		}
 		else if(e.getSource() == bInfo) {
-			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult);
+			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult, false);
 			ad.setText(getTreeInfo());
 			ad.setVisible(true);
+		}
+		
+		else if(e.getSource()==bRoot) {
+			try
+			{
+				TreeResult res = new TreeResult(tResult);
+				res.x = tResult.x+50;
+				res.y = tResult.y+50;
+				res.setTreeStr(Utils.midPointRoot(tResult.getTreeStr()));
+				res.guiName = tResult.guiName+" (midpoint rooted)";
+				InternalTreeFrame tmp = new InternalTreeFrame(treePane, ss, res, 0);
+				tmp.addInternalFrameListener(treePane);
+				tmp.setVisible(true);
+				treePane.add(tmp);
+				tmp.setSelected(true);
+			} catch (Exception e1)
+			{
+				e1.printStackTrace();
+			}
 		}
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}

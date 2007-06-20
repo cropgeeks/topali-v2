@@ -7,8 +7,7 @@ package topali.gui;
 
 import java.awt.*;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import topali.data.*;
 

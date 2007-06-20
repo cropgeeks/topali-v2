@@ -8,8 +8,7 @@ package topali.fileio;
 import java.io.*;
 
 import org.apache.log4j.Logger;
-import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.mapping.MappingException;
+import org.exolab.castor.mapping.*;
 import org.exolab.castor.xml.*;
 
 public class Castor

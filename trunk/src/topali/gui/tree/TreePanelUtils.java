@@ -12,13 +12,11 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.tree.TreeDistanceMatrix;
-import pal.tree.TreeUtils;
+import pal.tree.*;
 import topali.data.SequenceCluster;
 import topali.gui.*;
 import topali.mod.Filters;
