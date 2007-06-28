@@ -147,8 +147,7 @@ public class JobsThread extends Thread
 					if(msg.contains("Max. alignment")) {
 						String[] tmp = msg.split("\\s+");
 						int limit = Integer.parseInt(tmp[11]);
-						int nSeq = limit/job.getAlignmentData().getSequenceSet().getLength();
-						JOptionPane.showMessageDialog(null, "Please deselect some sequences to run this job (max. "+(limit/1000)+" kb allowed, equ. to "+nSeq+" seq.)", "Webservice limit exceeded", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Please deselect some sequences to run this job (max. "+limit+" sequences allowed for this webservice).", "Webservice limit exceeded", JOptionPane.ERROR_MESSAGE);
 						jobsPanel.removeJobEntry(entry, false);
 					}
 					//---
