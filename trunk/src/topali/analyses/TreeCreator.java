@@ -12,9 +12,10 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.alignment.Alignment;
-import pal.distance.JukesCantorDistanceMatrix;
+import pal.alignment.*;
+import pal.distance.*;
 import pal.misc.Identifier;
+import pal.substmodel.*;
 import pal.tree.*;
 import topali.gui.Text;
 import doe.MsgBox;
@@ -22,46 +23,48 @@ import doe.MsgBox;
 public class TreeCreator extends JDialog
 {
 	Logger log = Logger.getLogger(this.getClass());
+
+	private boolean dna = true;
+	private double tsTv = 2;
+	private double alpha = 4;
 	
 	private Alignment alignment;
-
 	private Tree tree;
-
-	// Constructor for TreeCreator - assumes the dialog will always be shown
-	// although we don't make it visible here
-	public TreeCreator(Alignment alignment)
+	
+	public TreeCreator(Alignment alignment, boolean isDNA)
 	{
 		super(MsgBox.frm, Text.Analyses.getString("TreeCreator.gui01"), true);
 
 		this.alignment = alignment;
+		this.dna = isDNA;
+		
 		createDialog();
 	}
-
-	public Tree getTree(boolean showDialog)
-	{
-		// Both of these calls should block - either by popping open the dialog
-		// and not returning from it until createTree() is finished, or by
-		// calling createTree directly.
-		if (showDialog)
-			setVisible(true);
-		else
-			createTree();
-
-		dispose();
-
-		return tree;
-	}
-
+	
 	private void createTree()
 	{
 		try
 		{
 			long start = System.currentTimeMillis();
+			double[] freqs = AlignmentUtils.estimateFrequencies(alignment);
 			
-			createLocJCNJTree();
-
+			AbstractRateMatrix ratematrix = null;
+			RateDistribution rate = null;
+			
+			if(dna) {
+				ratematrix = new F84(tsTv, freqs);
+				rate = new GammaRates(4, alpha);
+			}
+			else {
+				ratematrix = new WAG(freqs);
+				rate = new GammaRates(4, alpha);
+			}
+			
+			SubstitutionModel sModel = SubstitutionModel.Utils.createSubstitutionModel(ratematrix, rate);
+			AlignmentDistanceMatrix distmatrix = new AlignmentDistanceMatrix(new SitePattern(alignment), sModel);
+			tree = new NeighborJoiningTree(distmatrix);
+			
 			tree.getRoot().setIdentifier(new Identifier(""));
-
 			// Midpoint route...
 			tree = TreeRooter.getMidpointRooted(tree);
 			
@@ -82,22 +85,22 @@ public class TreeCreator extends JDialog
 		// it was, allowing control to return to the caller
 		setVisible(false);
 	}
-
-	// Creates a PAL tree using a JC distance matrix and NJ tree
-	private void createLocJCNJTree() throws Exception
+	
+	public Tree getTree(boolean showDialog)
 	{
-		// Compute the distance matrix for this alignment file
-		JukesCantorDistanceMatrix distance = getJCDistanceMatrix();
+		// Both of these calls should block - either by popping open the dialog
+		// and not returning from it until createTree() is finished, or by
+		// calling createTree directly.
+		if (showDialog)
+			setVisible(true);
+		else
+			createTree();
 
-		// Finally, construct the tree using the matrix
-		tree = new NeighborJoiningTree(distance);
+		dispose();
+
+		return tree;
 	}
-
-	public JukesCantorDistanceMatrix getJCDistanceMatrix()
-	{
-		return new JukesCantorDistanceMatrix(alignment);
-	}
-
+	
 	private void createDialog()
 	{
 		addWindowListener(new WindowAdapter()

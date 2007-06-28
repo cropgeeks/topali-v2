@@ -32,7 +32,7 @@ public class VamsasManager
 
 	Project topaliProject;
 	
-	private ObjectMapper vMap = new ObjectMapper();
+	public static ObjectMapper mapper = new ObjectMapper();
 
 	public VamsasManager()
 	{
@@ -186,7 +186,7 @@ public class VamsasManager
 		{
 			IClientDocument cdoc = vorbaclient.getClientDocument();
 				
-			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
+			DocumentHandler handler = new DocumentHandler(topaliProject, mapper, cdoc);
 			handler.writeToDocument();			
 			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
 			vorbaclient.updateDocument(cdoc);
@@ -208,7 +208,7 @@ public class VamsasManager
 		try
 		{
 			IClientDocument cdoc = vorbaclient.getClientDocument();
-			DocumentHandler handler = new DocumentHandler(topaliProject, vMap, cdoc);
+			DocumentHandler handler = new DocumentHandler(topaliProject, mapper, cdoc);
 			handler.readFromDocument();
 			vorbaclient.updateDocument(cdoc);
 			cdoc = null;

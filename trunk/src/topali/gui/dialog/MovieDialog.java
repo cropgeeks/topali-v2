@@ -14,7 +14,7 @@ import javax.swing.event.*;
 import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
-import topali.analyses.F84TreeCreator;
+import topali.analyses.*;
 import topali.data.SequenceSet;
 import topali.gui.*;
 import topali.var.Utils;
@@ -312,8 +312,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 		// Create a PAL alignment that can be used to create this tree
 		SimpleAlignment alignment = ss.getAlignment(indices, start, end, false);
-		//TreeCreator tc = new TreeCreator(alignment);
-		F84TreeCreator tc = new F84TreeCreator(alignment);
+		TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 		
 		tree = tc.getTree(false);
 		// tree = tc.createTree(TreeCreator.JC_NJ);

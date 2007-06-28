@@ -113,6 +113,10 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 		this.node = node;
 	}
 
+	public void addNewTree(TreeResult res) {
+		data.addResult(res);
+	}
+	
 	// 1) Checks to see if this view should still allow printing
 	// 2) Checks to see if the tree node for this view needs repainting
 	private void checkStatus()

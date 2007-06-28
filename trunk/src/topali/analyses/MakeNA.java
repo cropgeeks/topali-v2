@@ -17,31 +17,28 @@ import doe.MsgBox;
 public class MakeNA
 {
 	Logger log = Logger.getLogger(this.getClass());
+
+	private SequenceSet dna = null, pro = null;
+	private String name;
 	
-	private File dnaFile, proFile;
-
-	public MakeNA(File dnaFile, File proFile)
-	{
-		this.dnaFile = dnaFile;
-		this.proFile = proFile;
+	private AlignmentData data;
+	
+	public MakeNA(File dnaFile, File proFile) throws AlignmentLoadException
+	{	
+		dna = new SequenceSet(dnaFile, false);
+		pro = new SequenceSet(proFile, false);
+		name = createName(dnaFile.getName());
 	}
-
+	
+	public MakeNA(SequenceSet dna, SequenceSet pro, String name) {
+		this.dna = dna;
+		this.pro = pro;
+		this.name = name;
+	}
+	
 	public boolean doConversion()
 	{
-		SequenceSet dna, pro;
 		SequenceSet newSS = new SequenceSet();
-
-		try
-		{
-			dna = new SequenceSet(dnaFile, false);
-			pro = new SequenceSet(proFile, false);
-		} catch (AlignmentLoadException e)
-		{
-			log.warn(e);
-			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
-					+ e.getReason()), MsgBox.ERR);
-			return false;
-		}
 
 		// How many sequences are we dealing with
 		int dnaCount = dna.getSize();
@@ -74,7 +71,6 @@ public class MakeNA
 			int gaplessCount = 0;
 			StringBuffer proBuf = proSeq.getBuffer();
 
-			//TODO: Why gapless!?
 			for (int p = 0; p < proBuf.length(); p++)
 				if (proBuf.charAt(p) != '-')
 					gaplessCount++;
@@ -130,8 +126,8 @@ public class MakeNA
 			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"),
 					MsgBox.WAR);
 
-		AlignmentData data = new AlignmentData(getNewName(), newSS);
-		TOPALi.winMain.addNewAlignmentData(data);
+		this.data = new AlignmentData(name, newSS);
+		//TOPALi.winMain.addNewAlignmentData(data);
 
 		return true;
 	}
@@ -145,12 +141,16 @@ public class MakeNA
 		return null;
 	}
 
-	private String getNewName()
+	private String createName(String name)
 	{
-		String name = dnaFile.getName();
 		if (name.indexOf(".") != -1)
 			name = name.substring(0, name.lastIndexOf("."));
 
 		return name;
 	}
+	
+	public AlignmentData getAlignmentData() {
+		return this.data;
+	}
+	
 }

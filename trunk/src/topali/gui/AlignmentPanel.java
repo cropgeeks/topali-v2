@@ -273,9 +273,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		{
 			if (WinMain.vEvents != null && seq >= 0)
 			{
-				String seqName = ss.getSequence(seq).getName();
-				
-				WinMain.vEvents.sendAlignmentPanelMouseOverEvent(seqName, nuc);
+				WinMain.vEvents.sendAlignmentPanelMouseOverEvent(ss.getSequence(seq), nuc);
 			}
 		}
 

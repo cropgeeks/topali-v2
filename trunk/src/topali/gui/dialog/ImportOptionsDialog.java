@@ -15,7 +15,7 @@ import topali.var.Utils;
 
 public class ImportOptionsDialog extends JDialog implements ActionListener
 {
-	private JRadioButton rImport, rCDNA, rAlign, rMulti;
+	private JRadioButton rImport, rCDNA, rAlign, rMulti, rExSeq;
 
 	private JButton bOK, bCancel;
 
@@ -61,6 +61,10 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
 
+		rExSeq = new JRadioButton("Load Example sequence alignment");
+		rExSeq.setMnemonic(KeyEvent.VK_E);
+		rExSeq.addMouseListener(dblListener);
+		
 		switch (Prefs.gui_import_method)
 		{
 		case 0:
@@ -75,6 +79,9 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		case 3:
 			rMulti.setSelected(true);
 			break;
+		case 4:
+			rExSeq.setSelected(true);
+			break;
 		}
 
 		ButtonGroup group = new ButtonGroup();
@@ -82,8 +89,9 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		group.add(rCDNA);
 		group.add(rAlign);
 		group.add(rMulti);
+		group.add(rExSeq);
 
-		JPanel p1 = new JPanel(new GridLayout(4, 1));
+		JPanel p1 = new JPanel(new GridLayout(5, 1));
 		p1.setBorder(BorderFactory
 				.createTitledBorder("Please select how you'd "
 						+ "like to import data into TOPALi:"));
@@ -91,6 +99,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		p1.add(rCDNA);
 		p1.add(rAlign);
 		p1.add(rMulti);
+		p1.add(rExSeq);
 
 		JPanel p2 = new JPanel(new BorderLayout());
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -122,7 +131,8 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 				Prefs.gui_import_method = 2;
 			else if (rMulti.isSelected())
 				Prefs.gui_import_method = 3;
-
+			else if (rExSeq.isSelected())
+				Prefs.gui_import_method = 4;
 			isOK = true;
 			setVisible(false);
 		}

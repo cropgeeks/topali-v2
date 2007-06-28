@@ -29,6 +29,7 @@ public class SequenceSetParams
 	
 	public static final String MODEL_DNA_JC = "JC";
 	public static final String MODEL_DNA_F81 = "F81";
+	public static final String MODEL_DNA_F84 = "F84";
 	public static final String MODEL_DNA_K80 = "K80";
 	public static final String MODEL_DNA_HKY = "HKY";
 	public static final String MODEL_DNA_TRN = "TRN";
@@ -40,8 +41,8 @@ public class SequenceSetParams
 	
 	public static final String[] availCodes = new String[] {GENETICCODE_UNIVERSAL, GENETICCODE_CILIATES, GENETICCODE_METMT, GENETICCODE_MYCOPLASMA, GENETICCODE_VERTMT, GENETICCODE_YEAST};
 	//These are subsets of models, which are support by every single application (MrBayes and Phyml)
-	public static final String[] availAAModels = new String[] {MODEL_AA_WAG, MODEL_AA_BLOSUM, MODEL_AA_CPREV, MODEL_AA_DAYHOFF, MODEL_AA_GTR, MODEL_AA_JONES, MODEL_AA_MTMAM, MODEL_AA_MTREV, MODEL_AA_RTREV, MODEL_AA_VT};
-	public static final String[] availDNAModels = new String[] {MODEL_DNA_JC, MODEL_DNA_F81, MODEL_DNA_K80, MODEL_DNA_HKY, MODEL_DNA_GTR};
+	public static final String[] availAAModels = new String[] {MODEL_AA_MTMAM, MODEL_AA_MTREV, MODEL_AA_RTREV, MODEL_AA_VT, MODEL_AA_CPREV, MODEL_AA_BLOSUM, MODEL_AA_JONES, MODEL_AA_DAYHOFF, MODEL_AA_WAG, MODEL_AA_GTR};
+	public static final String[] availDNAModels = new String[] {MODEL_DNA_JC, MODEL_DNA_K80, MODEL_DNA_F81, MODEL_DNA_HKY, MODEL_DNA_GTR};
 	
 	// Transition/transvertion ratio for this alignment
 	private double tRatio = -1;

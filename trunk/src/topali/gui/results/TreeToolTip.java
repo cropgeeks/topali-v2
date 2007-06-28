@@ -12,7 +12,7 @@ import javax.swing.JToolTip;
 import pal.alignment.SimpleAlignment;
 import pal.gui.TreePainterNormal;
 import pal.tree.Tree;
-import topali.analyses.F84TreeCreator;
+import topali.analyses.*;
 import topali.data.*;
 import topali.gui.Prefs;
 
@@ -56,8 +56,7 @@ public class TreeToolTip extends JToolTip
 		int[] indices = ss.getIndicesFromNames(seqNames);
 		SimpleAlignment alignment = ss.getAlignment(indices, n1, n2, false);
 
-		//TreeCreator tc = new TreeCreator(alignment);
-		F84TreeCreator tc = new F84TreeCreator(alignment);
+		TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 
 		Tree tree = tc.getTree(false);
 		if (tree != null)

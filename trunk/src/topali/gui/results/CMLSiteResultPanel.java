@@ -136,10 +136,14 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	@Override
 	public String getAnalysisInfo()
 	{
+		CodeMLResult result = (CodeMLResult) this.result;
+		
 		StringBuffer sb = new StringBuffer();
+		sb.append(result.guiName+"\n\n");
+		sb.append("Runtime: " + ((result.endTime - result.startTime) / 1000)+ " seconds\n");
+		
 		sb.append("Analysis type: Site model\n\n");
 
-		CodeMLResult result = (CodeMLResult) this.result;
 		for (CMLModel m : result.models)
 		{
 			sb.append(m.toString() + "\n");

@@ -11,8 +11,11 @@ import java.awt.event.WindowEvent;
 import java.awt.print.*;
 import java.beans.*;
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.*;
+
+import org.apache.log4j.Logger;
 
 import pal.tree.Tree;
 import topali.analyses.*;
@@ -29,6 +32,8 @@ import doe.MsgBox;
 
 public class WinMain extends JFrame implements PropertyChangeListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// The user's project
 	private Project project = new Project();
 
@@ -201,6 +206,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			case 3:
 				new ImportFileSetsDialog(this);
 				break;
+			case 4: {
+				ImportDataSetDialog d = new ImportDataSetDialog(this);
+				URL url = this.getClass().getResource("/res/example-alignment.phy");
+				System.out.println(url);
+				try
+				{
+					d.loadAlignment(new File(url.toURI()));
+				} catch (Exception e)
+				{
+					log.warn("Couldn't find example dataset");
+					MsgBox.msg("Couldn't load example dataset", MsgBox.ERR);
+				}
+			}
 			}
 		}
 	}
@@ -565,14 +583,15 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			//TreePane treePane = navPanel.getCurrentTreePane(data, true);
 			//TreeCreator creator = new TreeCreator(dialog.getAlignment());
-			F84TreeCreator creator = new F84TreeCreator(dialog.getAlignment());
+			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data.getSequenceSet().getParams().isDNA());
 			Tree palTree = creator.getTree(true);
 
 			if (palTree != null)
 			{
 				result.setTreeStr(palTree.toString());
 				result.status = topali.cluster.JobStatus.COMPLETED;
-				result.info = "Sub. Model: F84\nRate Model: Gamma\nAlgorithm: Neighbour Joining";
+				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)" : "WAG";
+				result.info = "Sub. Model: "+model+"\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
 			
 				// Add the tree to the project
 				//data.getResults().add(result);

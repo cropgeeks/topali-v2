@@ -127,14 +127,13 @@ public abstract class WebService
 	 * @throws RejectedExecutionException
 	 */
 	protected void checkJob(SequenceSet ss) throws RejectedExecutionException {
-		int size = ss.getSelectedSequences().length*ss.getLength();
 		String tmp = getParameter(this.getClass().getSimpleName());
 		if(tmp==null || tmp.equals(""))
 			return;
 		
 		int max = Integer.parseInt(tmp);
-		if(size>max) {
-			String msg = "Max. alignment size for this job type is limited to "+max+" bases in total.";
+		if(ss.getSelectedSequences().length>max) {
+			String msg = "Max. alignment size for this job type is limited to "+max+" sequences.";
 			throw new RejectedExecutionException(msg);
 		}
 	}
