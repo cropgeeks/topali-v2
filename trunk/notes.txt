@@ -4,9 +4,10 @@ TODO:
 - Check Sub. models
  
 Last modifications:
-- Extended MrBayes Webservice to support more parameters
-- Implemented Phyml Webservice
-- Added midpoint routing option to TreePanel
+- Implemented fast WAG/NJ tree for protein alignments
+- Changed webservice limit from total number of bases to number of sequences 
+- Added "Load example alignment" option to "Import alignment" dialog
+- Added MrBayes cDNA tree estimation
 
 Current problems:
 - Midpoint routing results in loosing bootstrap values
@@ -15,16 +16,11 @@ Current problems:
 Some ideas:
 - What's about the third import alignment option (clustal)? (not important at the moment)
 - Just one settings dialog for all settings?
-- Not just limit max. alignment size, also limit number of active jobs per user?
+- Not just limit max. alignment size, also limit number of active jobs per user? (not an easy task)
 - Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)? ((not important at the moment)
-- Load example dataset
 - Import alignment from URL (not important at the moment)
 - Spread Phyml job over several nodes (bootstrapping)? (not important at the moment)
 
-
-VAMSAS:
-- Can Jalview get the Topali data?
-- What can Topali get from Jalview?
 
 Some URLs
 ---------
