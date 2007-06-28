@@ -2,10 +2,14 @@ package topali.vamsas;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import uk.ac.vamsas.client.*;
 
-class ObjectMapper
+public class ObjectMapper
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	// Resolves vamsas IDs to TOPALi data objects
 	private Hashtable<VorbaId, Object> hashVT = new Hashtable<VorbaId, Object>();
 	
@@ -29,15 +33,13 @@ class ObjectMapper
 	 */
 	Vobject getVamsasObject(Object topaliObject)
 	{
-		System.out.print("Looking for key for " + topaliObject);
-		
 		if (hashTV.containsKey(topaliObject))
 		{
-			System.out.println("...found it " + hashTV.get(topaliObject));
+			log.info("Found corresponding VAMSAS object for "+topaliObject+", it's "+hashTV.get(topaliObject));
 			return cdoc.getObject(hashTV.get(topaliObject));
 		}
 		
-		System.out.println("...didn't find it");
+		log.info("Didn't find corresponding VAMSAS object for "+topaliObject);
 		return null;
 	}
 	
@@ -47,14 +49,12 @@ class ObjectMapper
 	 */
 	Object getTopaliObject(Vobject vamsasObject)
 	{
-		System.out.print("Looking for key for " + vamsasObject);
-		
 		// Does this vamsas object have a key (it won't if it's never been part
 		// of the document, ie, only just been created)
 		VorbaId id = vamsasObject.getVorbaId();
 		if (id == null)
 		{
-			System.out.println("id==null; registering new vamsas object.");
+			log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
 			// Register the object for use within the session document
 			cdoc.registerObject(vamsasObject);
 			return null;
@@ -62,6 +62,10 @@ class ObjectMapper
 		
 		// If it does exist...do we have a mapping for it?
 		return hashVT.get(id);
+	}
+	
+	Object getTopaliObject(String vorbaId) {
+		return hashVT.get(vorbaId);
 	}
 	
 	/**
@@ -74,16 +78,22 @@ class ObjectMapper
 		
 		if (id == null)
 		{
-			System.out.println("is null");
 			id = cdoc.registerObject(vamsasObject);
-			System.out.println("id is now " + id);
+			log.info(vamsasObject+" is now registered, id is "+id);
 		}
 		else
-			System.out.println("is " + id);
+			log.info(vamsasObject+" was already registered, id is "+id);
 		
 		hashTV.put(topaliObject, id);		
 		hashVT.put(id, topaliObject);
-		
-		System.out.println("Added hashtable links for " + topaliObject);
+		log.info("Updated hashtables for "+topaliObject);
+	}
+	
+	public String getVorbaID(Object topaliObject) {
+		Vobject vObj = getVamsasObject(topaliObject);
+		if(vObj!=null)
+			return vObj.getVorbaId().getId();
+		else
+			return null;
 	}
 }

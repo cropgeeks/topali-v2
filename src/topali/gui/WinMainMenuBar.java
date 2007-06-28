@@ -5,6 +5,7 @@
 
 package topali.gui;
 
+import java.awt.Font;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -746,17 +747,22 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
+		mAnls.add(new MenuHeading("Recombination"));
 		mAnls.add(mAnlsRunPDM);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
 		mAnls.addSeparator();
+		mAnls.add(new MenuHeading("Positive Selection"));
 		mAnls.add(mAnlsRunCodeMLSite);
 		mAnls.add(mAnlsRunCodeMLBranch);
 		mAnls.addSeparator();
+		mAnls.add(new MenuHeading("Phylogeny"));
 		mAnls.add(mAnlsRunMG);
-		mAnls.add(mAnlsRunCW);
 		mAnls.add(mAnlsCreateTree);
+		mAnls.addSeparator();
+		mAnls.add(new MenuHeading("Misc."));
+		mAnls.add(mAnlsRunCW);
 		mAnls.addSeparator();
 		mAnls.add(mAnlsPartition);
 		mAnls.add(mAnlsRename);
@@ -987,5 +993,27 @@ public class WinMainMenuBar extends JMenuBar
 		});
 
 		mFileRecent.add(item);
+	}
+	
+	class MenuHeading extends JMenuItem {
+		public MenuHeading(String text) {
+			super(text);
+			Font f = getFont();
+			setFont(f.deriveFont(Font.ITALIC));
+		}
+
+		@Override
+		public void processMouseEvent(MouseEvent e, MenuElement[] path, MenuSelectionManager manager)
+		{
+			
+		}
+
+		@Override
+		protected void processMouseEvent(MouseEvent e)
+		{
+			
+		}
+		
+		
 	}
 }

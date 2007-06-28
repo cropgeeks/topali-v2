@@ -65,6 +65,7 @@ public class MrBayesAnalysis extends AnalysisThread
 	private void addNexusCommands() throws Exception
 	{
 		MrBayesCmdBuilder cmd = new MrBayesCmdBuilder(ss.isDNA());
+		cmd.setCDNA(result.isCDNA);
 		cmd.setNgen(result.nGen);
 		cmd.setSampleFreq(result.sampleFreq);
 		cmd.setBurnin(result.burnin);
@@ -173,64 +174,33 @@ public class MrBayesAnalysis extends AnalysisThread
 		 out.close();
 		 
 		 StringBuffer sb = new StringBuffer();
-		 sb.append("Genetic Code: "+para.getGeneticCode()+"\n");
-		 sb.append("Sub. Model: "+para.getModel()+"\n");
-		 sb.append("Rate Model: ");
-		 if(!(para.isModelGamma() || para.isModelInv()))
-			 sb.append("Uniform\n");
-		 if(para.isModelGamma() && para.isModelInv())
-			 sb.append("Gamma + Inv. sites\n");
-		 else 
-			 {
-			 if(para.isModelGamma())
-				 sb.append("Gamma\n");
-			 if(para.isModelInv())
-				 sb.append("Inv. sites\n");
-			 }
-		 sb.append("Algorithm: MrBayes\n\n");
+		 if(!result.isCDNA) {
+			 sb.append("Genetic Code: "+para.getGeneticCode()+"\n");
+			 sb.append("Sub. Model: "+para.getModel()+"\n");
+			 sb.append("Rate Model: ");
+			 if(!(para.isModelGamma() || para.isModelInv()))
+				 sb.append("Uniform\n");
+			 if(para.isModelGamma() && para.isModelInv())
+				 sb.append("Gamma + Inv. sites\n");
+			 else 
+				 {
+				 if(para.isModelGamma())
+					 sb.append("Gamma\n");
+				 if(para.isModelInv())
+					 sb.append("Inv. sites\n");
+				 }
+		 }
+		 else {
+			 sb.append("Model: cDNA\n");
+		 }
+		 sb.append("Algorithm: MrBayes\n");
+		 sb.append("Generations: "+result.nGen+"\n");
+		 sb.append("Sample Freq.: "+result.sampleFreq+"\n");
+		 sb.append("Burnin: "+((int)(result.burnin*100))+"%\n\n");
 		 sb.append("MrBayes Commands:\n");
 		 sb.append(cmd.getCommands());
 		 result.info = sb.toString();
 	}
-
-	// private void addNexusCommands() throws Exception
-	// {
-	// BufferedWriter out = new BufferedWriter(new FileWriter(new File(wrkDir,
-	// "mb.nex"), true));
-	//
-	//		
-	// out.newLine();
-	// out.newLine();
-	// out.write("begin mrbayes;");
-	// out.newLine();
-	//
-	// if(ss.isDNA()) {
-	// out.write(" lset nst=6 rates=gamma;");
-	// out.newLine();
-	// out.write(" mcmc nruns=1 ngen=10000 samplefreq=10;");
-	// out.newLine();
-	// out.write(" sump burnin=1000;");
-	// out.newLine();
-	// out.write(" sumt burnin=1000;");
-	// }
-	// else {
-	// //out.write("lset aamodel=jones mcmcp samplefreq=50 printfreq=50
-	// nchains=2 startingtree=random mcmcp savebrlens=yes filename=testseq1c
-	// mcmc ngen=20000 sump;");
-	// out.write("prset aamodelpr=fixed(jones);");
-	// out.write("mcmcp samplefreq=50 printfreq=50 nchains=2
-	// startingtree=random;");
-	// out.write("mcmcp savebrlens=yes;");
-	// out.write("mcmc ngen=20000;");
-	// out.write("sump;");
-	// out.write("sumt;");
-	// }
-	//		
-	// out.newLine();
-	// out.write("end;");
-	//
-	// out.close();
-	// }
 
 	private void readTree() throws Exception
 	{

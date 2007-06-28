@@ -219,6 +219,7 @@
   <field name="nGen" type="int" direct="true"/>
   <field name="burnin" type="double" direct="true"/>
   <field name="sampleFreq" type="int" direct="true"/>
+  <field name="isCDNA" type="boolean" direct="true"/>
 </class>
   
 <!-- PhymlResult (extends TreeResult) -->

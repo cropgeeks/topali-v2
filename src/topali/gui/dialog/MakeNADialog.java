@@ -11,13 +11,19 @@ import java.io.File;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import topali.analyses.MakeNA;
+import topali.data.AlignmentData;
+import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.var.Utils;
 import doe.*;
 
 public class MakeNADialog extends JDialog implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private JTextField dnaText, proText;
 
 	private JButton dnaBrowse, proBrowse;
@@ -125,8 +131,19 @@ public class MakeNADialog extends JDialog implements ActionListener
 			return;
 		}
 
-		MakeNA makeNA = new MakeNA(new File(dna), new File(pro));
-		if (makeNA.doConversion())
-			setVisible(false);
+		try
+		{
+			MakeNA makeNA = new MakeNA(new File(dna), new File(pro));
+			if (makeNA.doConversion())
+				setVisible(false);
+			AlignmentData data = makeNA.getAlignmentData();
+			if(data!=null)
+				TOPALi.winMain.addNewAlignmentData(data);
+		} catch (AlignmentLoadException e)
+		{
+			log.warn(e);
+			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
+					+ e.getReason()), MsgBox.ERR);
+		}
 	}
 }

@@ -9,10 +9,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import pal.tree.TreeParseException;
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.atv.ATV;
 import topali.gui.dialog.AnalysisInfoDialog;
 import topali.var.Utils;
 
@@ -26,7 +24,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	private SequenceSet ss;
 	
 	JButton bExport, bCluster;
-	JButton bATV, bInfo;
+	JButton bInfo;
 
 	JButton bRoot;
 	
@@ -65,11 +63,10 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				Icons.FLOAT, null);
 		bViewCluster = (JToggleButton) WinMainToolBar.getButton(true, null,
 				"tre09", Icons.TREE_NEWHAMP, null);
-
-		bATV = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.UP16, null);
+		
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		
-		bRoot = new JButton("Reroot");
+		bRoot = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.MIDPOINT_ROOT, null);
 		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
@@ -79,7 +76,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bFloat.addActionListener(this);
 		bCluster.addActionListener(this);
 		bViewCluster.addActionListener(this);
-		bATV.addActionListener(this);
 		bInfo.addActionListener(this);
 		
 		bRoot.addActionListener(this);
@@ -91,17 +87,16 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bDrawCircular);
 		add(bDrawNewHamp);
 		addSeparator();
+		add(bRoot);
+		addSeparator();
 		add(bCluster);
 		add(bViewCluster);
 		addSeparator();
 		add(bSizedToFit);
 		add(bFloat);
-		add(bATV);
 		addSeparator();
 		add(bInfo);
 		add(new JLabel(" "));
-
-		add(bRoot);
 		
 		// Add the toggle buttons into a group so that only one can be selected
 		ButtonGroup group = new ButtonGroup();
@@ -137,16 +132,6 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		else if (e.getSource() == bViewCluster)
 			panel.setViewMode(TreeResult.CLUSTER);
 
-		else if(e.getSource() == bATV) {
-			try
-			{
-				ATV atv = new ATV(tResult.getTreeStrActual(ss), tResult.getTitle(), null, null);
-				SwingUtilities.invokeLater(atv);
-			} catch (TreeParseException e1)
-			{
-				e1.printStackTrace();
-			}
-		}
 		else if(e.getSource() == bInfo) {
 			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult, false);
 			ad.setText(getTreeInfo());
@@ -161,11 +146,12 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				res.y = tResult.y+50;
 				res.setTreeStr(Utils.midPointRoot(tResult.getTreeStr()));
 				res.guiName = tResult.guiName+" (midpoint rooted)";
-				InternalTreeFrame tmp = new InternalTreeFrame(treePane, ss, res, 0);
-				tmp.addInternalFrameListener(treePane);
-				tmp.setVisible(true);
-				treePane.add(tmp);
-				tmp.setSelected(true);
+				treePane.addNewTree(res);
+//				InternalTreeFrame tmp = new InternalTreeFrame(treePane, ss, res, 0);
+//				tmp.addInternalFrameListener(treePane);
+//				tmp.setVisible(true);
+//				treePane.add(tmp);
+//				tmp.setSelected(true);
 			} catch (Exception e1)
 			{
 				e1.printStackTrace();
@@ -176,6 +162,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	
 	private String getTreeInfo() {
 		StringBuffer sb = new StringBuffer();
+		sb.append(tResult.guiName+"\n\n");
+		sb.append("Runtime: " + ((tResult.endTime - tResult.startTime) / 1000)+ " seconds\n");
 		sb.append("\nSelected sequences:\n");
 		for (String seq : tResult.selectedSeqs)
 			sb.append("\n" + ss.getNameForSafeName(seq));

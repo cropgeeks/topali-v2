@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
-import topali.analyses.F84TreeCreator;
+import topali.analyses.*;
 import topali.data.*;
 import topali.gui.*;
 import doe.MsgBox;
@@ -114,8 +114,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 				long s = System.currentTimeMillis();
 				SimpleAlignment alignment = ss.getAlignment(indices, start,
 						end, false);
-				//TreeCreator tc = new TreeCreator(alignment);
-				F84TreeCreator tc = new F84TreeCreator(alignment);
+				TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 				
 				tree = tc.getTree(false);
 				long e = System.currentTimeMillis();

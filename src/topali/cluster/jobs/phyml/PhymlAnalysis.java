@@ -64,24 +64,18 @@ public class PhymlAnalysis extends AnalysisThread
 		 if(!(para.isModelGamma() || para.isModelInv()))
 			 sb.append("Uniform\n");
 		 if(para.isModelGamma() && para.isModelInv())
-			 sb.append("Gamma + Inv. sites\n");
+			 sb.append("Gamma + Inv. sites (est. parameters)\n");
 		 else 
 			 {
 			 if(para.isModelGamma())
-				 sb.append("Gamma\n");
+				 sb.append("Gamma (est. parameters)\n");
 			 if(para.isModelInv())
-				 sb.append("Inv. sites\n");
+				 sb.append("Inv. sites (est. parameters)\n");
 			 }
 		 sb.append("Algorithm: Maximum Likelihood (PhyML)\n");
 		 sb.append("Bootstrap runs: "+result.bootstrap+"\n");
 		 sb.append("Optimize Topology: "+result.optTopology+"\n");
 		 sb.append("Optimize branch lengths/rate para.: "+result.optBranchPara+"\n\n");
-		 sb.append("PhyML command line:\n");
-		 sb.append("phyml ");
-		 String[] tmp = determinePhymlParameters(result, para);
-		 for(int i=1; i<tmp.length; i++)
-			 sb.append(tmp[i]+" ");
-		 sb.append("\n\n");
 		 
 		 return sb.toString();
 	}
@@ -126,16 +120,22 @@ public class PhymlAnalysis extends AnalysisThread
 			model = "VT";
 		if(para.getModel().equals(SequenceSetParams.MODEL_AA_WAG))
 			model = "WAG";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_F81))
-			model = "F81";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_GTR))
-			model = "GTR";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_HKY))
-			model = "HKY85";
+		
 		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_JC))
 			model = "JC69";
 		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_K80))
 			model = "K80";
+		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_F81))
+			model = "F81";
+		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_F84))
+			model = "F84";
+		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_HKY))
+			model = "HKY85";
+		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_TRN))
+			model = "TN93";
+		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_GTR))
+			model = "GTR";
+		
 		list.add(model);
 		//ts/tv
 		if(para.isDNA())

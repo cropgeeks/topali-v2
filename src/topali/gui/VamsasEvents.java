@@ -1,6 +1,7 @@
 package topali.gui;
 
 import topali.data.*;
+import topali.vamsas.*;
 import uk.ac.vamsas.client.picking.MouseOverMessage;
 
 public class VamsasEvents
@@ -12,23 +13,24 @@ public class VamsasEvents
 		this.winMain = winMain;
 	}
 	
-	void sendAlignmentPanelMouseOverEvent(String seqName, int nuc)
+	void sendAlignmentPanelMouseOverEvent(Sequence seq, int pos)
 	{
-		MouseOverMessage message = new MouseOverMessage(seqName, nuc);
-		winMain.vamsas.msgHandler.sendMessage(message);
+		String id = VamsasManager.mapper.getVorbaID(seq);
+		if(id!=null) {
+			MouseOverMessage message = new MouseOverMessage(id, pos-1);
+			winMain.vamsas.msgHandler.sendMessage(message);
+		}
 	}
 	
-	public void processAlignmentPanelMouseOverEvent(MouseOverMessage message)
+	public void processAlignmentPanelMouseOverEvent(Sequence sequence, int position)
 	{
-		String seqID = message.getVorbaID();
-		int position = message.getPosition();
 		
 		for (AlignmentData data : winMain.getProject().getDatasets())
 		{
 			int i = 0;
 			for (Sequence seq : data.getSequenceSet().getSequences())
 			{
-				if (seq.getName().equals(seqID))
+				if (seq.equals(sequence))
 				{
 					AlignmentPanel panel = WinMain.navPanel.getCurrentAlignmentPanel(data);
 

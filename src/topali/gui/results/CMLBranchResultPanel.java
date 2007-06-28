@@ -232,10 +232,15 @@ public class CMLBranchResultPanel extends ResultPanel
 	@Override
 	public String getAnalysisInfo()
 	{
+		CodeMLResult res = (CodeMLResult) result;
+		
 		StringBuffer sb = new StringBuffer();
+		sb.append(res.guiName+"\n\n");
+		sb.append("Runtime: " + ((res.endTime - res.startTime) / 1000)+ " seconds\n");
+		
 		sb.append("Analysis type: Branch model\n\n");
 
-		CodeMLResult res = (CodeMLResult) result;
+		
 		for (int i = 0; i < res.hypos.size(); i++)
 		{
 			sb.append("Hypothesis H" + i + "\n");

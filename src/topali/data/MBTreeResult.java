@@ -16,6 +16,7 @@ public class MBTreeResult extends TreeResult
 	public int nGen = 100000;
 	public double burnin = 0.25;
 	public int sampleFreq = 10;
+	public boolean isCDNA = false;
 	
 	public MBTreeResult()
 	{
