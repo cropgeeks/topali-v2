@@ -53,4 +53,12 @@ public class JobStatus
 		this.status = status;
 		this.text = text;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "progress="+progress+"; status="+status+" text="+text;
+	}
+	
+	
 }

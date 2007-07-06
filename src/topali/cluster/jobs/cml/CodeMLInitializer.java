@@ -56,7 +56,7 @@ public class CodeMLInitializer extends Thread
 		// Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 		// Store the sequence data in phylip sequential
-		ss.save(new File(jobDir, "seq.phy"), indices, Filters.PHY_S, false);
+		ss.save(new File(jobDir, "seq.phy"), indices, Filters.PHY_S, true);
 
 		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
 	//		 We want to run each of the models

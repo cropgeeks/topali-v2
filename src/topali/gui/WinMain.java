@@ -569,6 +569,12 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			submitJob(data, result);
 	}
 	
+	public void anlsRunFastML(FastMLResult res) {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		res.alignment.name = data.name+" (+ancestral seq.)";
+		submitJob(data, res);
+	}
+	
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();

@@ -9,13 +9,19 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
+import pal.tree.TreeParseException;
+
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.dialog.AnalysisInfoDialog;
+import topali.gui.dialog.*;
 import topali.var.Utils;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private TreePane treePane;
 
 	private TreePanel panel;
@@ -28,9 +34,11 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 
 	JButton bRoot;
 	
+	JButton bAncestor;
+	
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit,
 			bFloat, bViewCluster;
-
+	
 	TreePanelToolBar(TreePane treePane, TreePanel panel, TreeResult tree, SequenceSet ss)
 	{
 		this.treePane = treePane;
@@ -68,6 +76,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		bRoot = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.MIDPOINT_ROOT, null);
 		
+		bAncestor = (JButton)WinMainToolBar.getButton(false, null, "tre12", Icons.TREE_TREE, null);
+		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
 		bDrawCircular.addActionListener(this);
@@ -79,6 +89,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bInfo.addActionListener(this);
 		
 		bRoot.addActionListener(this);
+		
+		bAncestor.addActionListener(this);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -94,6 +106,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		addSeparator();
 		add(bSizedToFit);
 		add(bFloat);
+		addSeparator();
+		add(bAncestor);
 		addSeparator();
 		add(bInfo);
 		add(new JLabel(" "));
@@ -157,6 +171,32 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				e1.printStackTrace();
 			}
 		}
+		
+		else if(e.getSource()==bAncestor) {
+			
+			boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
+			
+			FastMLResult fastml = new FastMLResult();
+			fastml.isRemote = remote;
+			if(Prefs.isWindows)
+				fastml.fastmlPath = Utils.getLocalPath() + "fastml.exe";
+			else
+				fastml.fastmlPath = Utils.getLocalPath() + "fastml/fastml";
+			
+			fastml.selectedSeqs = tResult.selectedSeqs;
+			try
+			{
+				fastml.origTree = tResult.getTreeStrActual(ss);
+			} catch (TreeParseException e1)
+			{
+				log.warn("Problem creating tree with real seq. names.", e1);
+				return;
+			}
+			fastml.guiName = "Ancestor";
+			fastml.jobName = "Ancestral sequence creation based on '"+tResult.guiName+"'";
+			TOPALi.winMain.anlsRunFastML(fastml);
+		}
+		
 		WinMainMenuBar.aFileSave.setEnabled(true);
 	}
 	

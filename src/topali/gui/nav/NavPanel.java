@@ -317,6 +317,13 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				node.setUserObject(new CodonWResultsNode(data,
 						(CodonWResult) result));
 			}
+			
+			if(result instanceof FastMLResult) {
+				FastMLResult fres = (FastMLResult)result;
+				WinMain.navPanel.addAlignmentFolder(fres.alignment);
+				data.removeResult(result);
+				return;
+			}
 
 			model.insertNodeInto(node, parent, parent.getChildCount());
 			return;

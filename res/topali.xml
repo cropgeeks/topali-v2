@@ -440,6 +440,12 @@
     <field name="result" type="string" direct="true"/>
   </class>
   
+  <class name="topali.data.FastMLResult" extends="topali.data.AlignmentResult">
+    <field name="fastmlPath" type="string" direct="true"><bind-xml node="attribute"/></field>  
+    <field name="origTree" type="string" direct="true"/>
+    <field name="alignment" type="topali.data.AlignmentData" direct="true"/>
+  </class>
+  
   <!-- SubstitutionModel -->
   <class name="topali.data.SubstitutionModel">
     <field name="name" type="string">
