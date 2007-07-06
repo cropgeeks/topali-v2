@@ -7,9 +7,11 @@ package topali.vamsas;
 
 import java.beans.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import topali.data.Sequence;
 import topali.gui.Project;
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.client.picking.IPickManager;
@@ -27,13 +29,18 @@ public class VamsasManager
 	private IClientFactory clientfactory;
 	private IClient vorbaclient;
 	
+	private IClientDocument cdoc;
+	
 	static UserHandle user;
 	static ClientHandle app;
 
 	Project topaliProject;
 	
 	public static ObjectMapper mapper = new ObjectMapper();
-
+	//a mapping between topali dna and protein sequences
+	//(used for storing the link between sequences when doing the guided alignment)
+	public static HashMap<Sequence, Sequence> tDNAProtMapping = new HashMap<Sequence, Sequence>();
+	
 	public VamsasManager()
 	{
 	}
@@ -184,10 +191,9 @@ public class VamsasManager
 	{
 		try
 		{
-			IClientDocument cdoc = vorbaclient.getClientDocument();
-				
-			DocumentHandler handler = new DocumentHandler(topaliProject, mapper, cdoc);
-			handler.writeToDocument();			
+			cdoc = vorbaclient.getClientDocument();
+			DocumentHandler docHandler = new DocumentHandler(topaliProject, cdoc);
+			docHandler.writeToDocument();			
 			cdoc.setVamsasRoots(cdoc.getVamsasRoots());
 			vorbaclient.updateDocument(cdoc);
 			return true;
@@ -207,9 +213,9 @@ public class VamsasManager
 	public boolean readFromDocument() {
 		try
 		{
-			IClientDocument cdoc = vorbaclient.getClientDocument();
-			DocumentHandler handler = new DocumentHandler(topaliProject, mapper, cdoc);
-			handler.readFromDocument();
+			cdoc = vorbaclient.getClientDocument();
+			DocumentHandler docHandler = new DocumentHandler(topaliProject, cdoc);
+			docHandler.readFromDocument();
 			vorbaclient.updateDocument(cdoc);
 			cdoc = null;
 			return true;

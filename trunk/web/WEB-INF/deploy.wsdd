@@ -61,6 +61,12 @@
   <parameter name="scope" value="request"/>
 </service>
 
+<service name="topali-fm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.fastml.FastMLWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
 </deployment>
 
 <!-- Deploy via:

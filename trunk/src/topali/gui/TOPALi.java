@@ -23,6 +23,8 @@ import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application
 {	
+	private final String prefsFile = ".TOPALiV2-16.xml";
+	
 	static Logger root;
 	static Logger log;
 	
@@ -98,7 +100,7 @@ public class TOPALi extends Applet implements Application
 
 		// Load the preferences
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
-				".TOPALiV2.xml"));
+				prefsFile));
 		doEncryption(true);
 
 		setProxy();
@@ -215,7 +217,7 @@ public class TOPALi extends Applet implements Application
 		// Save the preferences
 		doEncryption(false);
 		prefs.savePreferences(new File(System.getProperty("user.home"),
-				".TOPALiV2.xml"));
+				prefsFile));
 		// Remove tmp files
 		// Utils.emptyScratch();
 

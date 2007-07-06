@@ -6,7 +6,6 @@ import java.util.*;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.jfree.data.general.Dataset;
 
 import topali.analyses.MakeNA;
 import topali.cluster.JobStatus;
@@ -20,25 +19,27 @@ import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.core.AnnotationElement;
 import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
+
 class DocumentHandler
 {
 	Logger log = Logger.getLogger(this.getClass());
 
 	private Project project;
 
-	private ObjectMapper mapper;
-
 	private IClientDocument doc;
 
 	private DataSet dataset;
 
 	private LinkedList<AlignmentData> cdnaAlignments = new LinkedList<AlignmentData>();
-
-	public DocumentHandler(Project proj, ObjectMapper mapper,
-			IClientDocument doc)
+	
+	private String tGapChar = "-";
+	private String tGapCharEscaped = "-";
+	private String vGapChar = ".";
+	private String vGapCharEscaped = "\\.";
+	
+	public DocumentHandler(Project proj, IClientDocument doc)
 	{
 		this.project = proj;
-		this.mapper = mapper;
 		this.doc = doc;
 
 		if (doc.getVamsasRoots()[0].getDataSetCount() < 1)
@@ -47,10 +48,11 @@ class DocumentHandler
 			this.dataset = new DataSet();
 			this.dataset.setProvenance(getDummyProvenance());
 			doc.getVamsasRoots()[0].addDataSet(this.dataset);
-		} // else
-		// this.dataset = doc.getVamsasRoots()[0].getDataSet(0);
+		}
+		else
+			this.dataset = doc.getVamsasRoots()[0].getDataSet(0);
 
-		mapper.registerClientDocument(doc);
+		VamsasManager.mapper.registerClientDocument(doc);
 
 	}
 
@@ -77,14 +79,10 @@ class DocumentHandler
 	 */
 	void readFromDocument() throws Exception
 	{
-		for (DataSet ds : doc.getVamsasRoots()[0].getDataSet())
-		{
-			this.dataset = ds;
-
 			Alignment[] tDatasets = dataset.getAlignment();
 			for (Alignment vAlign : tDatasets)
 			{
-				AlignmentData tAlign = (AlignmentData) mapper
+				AlignmentData tAlign = (AlignmentData) VamsasManager.mapper
 						.getTopaliObject(vAlign);
 				if (tAlign == null) // it's a new alignment
 				{
@@ -96,7 +94,7 @@ class DocumentHandler
 
 					tAlign.setActiveRegion(1, tAlign.getSequenceSet()
 							.getLength());
-					mapper.registerObjects(tAlign, vAlign);
+					VamsasManager.mapper.registerObjects(tAlign, vAlign);
 					project.addDataSet(tAlign);
 				} else
 				// it's a existing alignment, update it
@@ -118,7 +116,6 @@ class DocumentHandler
 				
 				cdnaAlignments.clear();
 			}
-		}
 	}
 
 	// ----------
@@ -132,6 +129,12 @@ class DocumentHandler
 	{
 		String name = getAlignmentName(vAlign);
 
+		this.vGapChar = vAlign.getGapChar();
+		if(vGapChar.equals("."))
+			vGapCharEscaped = "\\"+vGapChar;
+		else
+			vGapCharEscaped = vGapChar;
+		
 		log.info("Read alignment " + name);
 
 		tAlign.name = name;
@@ -149,7 +152,7 @@ class DocumentHandler
 			ss.checkValidity();
 		} catch (AlignmentLoadException e)
 		{
-			e.printStackTrace();
+			log.info(tAlign.name+" is not aligned.");
 			ss.getParams().setAligned(false);
 		}
 
@@ -171,18 +174,18 @@ class DocumentHandler
 
 		for (AlignmentSequence vSeq : vAlign.getAlignmentSequence())
 		{
-			Sequence tSeq = (Sequence) mapper.getTopaliObject(vSeq);
+			Sequence tSeq = (Sequence) VamsasManager.mapper.getTopaliObject(vSeq);
 
 			if (tSeq == null)
 			{
 				tSeq = new Sequence();
 				// actual sequence must be set before adding to sequenceset
-				tSeq.setSequence(vSeq.getSequence().replaceAll("\\.", "-"));
-				tSeq.setName(vSeq.getName());
+				tSeq.setSequence(vSeq.getSequence().replaceAll(vGapCharEscaped, tGapChar));
+				tSeq.setName(vSeq.getName().replaceAll("\\s+", "_"));
 
 				log.info("Read sequence " + vSeq.getName());
 
-				mapper.registerObjects(tSeq, vSeq);
+				VamsasManager.mapper.registerObjects(tSeq, vSeq);
 				ss.addSequence(tSeq);
 
 				// check the referenced dataset sequence, if we deal with a
@@ -191,18 +194,18 @@ class DocumentHandler
 				Object tmp = vSeq.getRefid();
 				if (tmp != null)
 				{
-					uk.ac.vamsas.objects.core.Sequence seq = (uk.ac.vamsas.objects.core.Sequence) tmp;
-					if (seq.getDictionary()
+					uk.ac.vamsas.objects.core.Sequence refSeq = (uk.ac.vamsas.objects.core.Sequence) tmp;
+					if (refSeq.getDictionary()
 							.equals(SymbolDictionary.STANDARD_AA))
 					{
-						readCDNA(cdnaSS, seq);
+						readCDNA(cdnaSS, refSeq, vSeq);
 					}
 				}
 
 			} else
 			{
 				tSeq.setSequence(vSeq.getSequence());
-				tSeq.setName(vSeq.getName());
+				tSeq.setName(vSeq.getName().replaceAll("\\s+", "_"));
 			}
 		}
 
@@ -211,32 +214,36 @@ class DocumentHandler
 			String name = getAlignmentName(vAlign);
 			MakeNA mna = new MakeNA(cdnaSS, ss, name+" (cDNA)");
 			log.info("Generating protein guided alignment for "+name);
-			mna.doConversion();
-			AlignmentData cdnaData = mna.getAlignmentData();
-			for(Sequence s : cdnaData.getSequenceSet().getSequences())
-				s.setName(s.getName()+"(cDNA)");
-			cdnaAlignments.add(cdnaData);
+			if(mna.doConversion(false, VamsasManager.tDNAProtMapping)) {
+				AlignmentData cdnaData = mna.getAlignmentData();
+				for(Sequence s : cdnaData.getSequenceSet().getSequences()) {
+					s.setName(s.getName()+"_cDNA");
+				}
+				cdnaAlignments.add(cdnaData);
+			}
+			else
+				log.warn("Could not create guided alignment!");
 		}
 	}
-
+	
 	/**
 	 * Looks for a corresponding cDNA and adds it to the given SequenceSet
 	 * 
 	 * @param cdnaSS
-	 * @param seq
+	 * @param dsProtSeq
 	 */
 	private void readCDNA(SequenceSet cdnaSS,
-			uk.ac.vamsas.objects.core.Sequence seq)
+			uk.ac.vamsas.objects.core.Sequence dsProtSeq, AlignmentSequence protSeq)
 	{
 		Sequence tSeq = null;
 
-		log.info("Try to get cdna for " + seq);
+		log.info("Try to get cdna for " + dsProtSeq.getName());
 
 		for (DataSet dataset : doc.getVamsasRoots()[0].getDataSet())
 		{
 			// either find corresponding DNA dbref
 			boolean found = false;
-			for (DbRef dbref : seq.getDbRef())
+			for (DbRef dbref : dsProtSeq.getDbRef())
 			{
 				for (uk.ac.vamsas.objects.core.Sequence dnaSeq : dataset
 						.getSequence())
@@ -253,19 +260,18 @@ class DocumentHandler
 							int end;
 							try
 							{
-								start = dnadbref.getMap().getLocal().getSeg(0).getStart()-1;
-								end = dnadbref.getMap().getLocal().getSeg(0).getEnd()-3;
+								start = dnadbref.getMap()[0].getLocal().getSeg(0).getStart()-1;
+								end = dnadbref.getMap()[0].getLocal().getSeg(0).getEnd()-3;
 							} catch (Exception e)
 							{
-								//e.printStackTrace();
 								continue;
 							}
 							tSeq = new Sequence();
-							String seqString = dnaSeq.getSequence().replaceAll("\\.", "-"); 
+							String seqString = dnaSeq.getSequence().replaceAll(vGapCharEscaped, tGapChar); 
 							tSeq.setSequence(seqString.substring(start, end));
-							tSeq.setName(seq.getName());
+							tSeq.setName(protSeq.getName().replaceAll("\\s+", "_"));
 							found = true;
-							log.info("Found matching dbrefs: "+dnaSeq);
+							log.info("Found matching dbrefs: "+dnaSeq.getName());
 							break;
 						}
 					}
@@ -287,30 +293,35 @@ class DocumentHandler
 				for (SequenceMapping smap : dataset.getSequenceMapping())
 				{
 					uk.ac.vamsas.objects.core.Sequence map = (uk.ac.vamsas.objects.core.Sequence) smap.getMap();
-					if (map.equals(seq))
+					if (map.equals(dsProtSeq))
 					{
-						log.info("Found matching sequence mapping.");
+						log.info("Found matching sequence mapping: "+dsProtSeq.getName());
 						uk.ac.vamsas.objects.core.Sequence dna = (uk.ac.vamsas.objects.core.Sequence) smap
 								.getLoc();
 						int s1 = (int)dna.getStart();
 						int s2 = smap.getLocal().getSeg()[0].getStart();
-						int e1 = (int)dna.getEnd(); 
+						//int e1 = (int)dna.getEnd(); 
 						int e2 = smap.getLocal().getSeg()[0].getEnd();
 						int start = s2-s1;
 						int end = start+(e2-s2)+1; 
-						String sequence = dna.getSequence().substring(start, end);
-						String name = dna.getName();
+						String seqString = dna.getSequence().replaceAll(vGapCharEscaped, tGapChar); 
+						String sequence = seqString.substring(start, end);
 						tSeq = new Sequence();
 						tSeq.setSequence(sequence);
-						tSeq.setName(name);
+						tSeq.setName(protSeq.getName().replaceAll("\\s+", "_"));
+						found = true;
 					}
+					
+					if(found)
+						break;
 				}
 			}
 		}
 
 		// if a cdna was found, add it to the sequenceset
-		if (tSeq != null)
+		if (tSeq != null) {
 			cdnaSS.addSequence(tSeq);
+		}
 	}
 
 	private boolean compareDBRef(DbRef ref1, DbRef ref2)
@@ -336,7 +347,7 @@ class DocumentHandler
 			AnalysisResult tResult;
 			try
 			{
-				tResult = (AnalysisResult) mapper.getTopaliObject(vAnno);
+				tResult = (AnalysisResult) VamsasManager.mapper.getTopaliObject(vAnno);
 			} catch (RuntimeException e)
 			{
 				// Can throw class cast exception, because
@@ -365,7 +376,7 @@ class DocumentHandler
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("HMMResult"))
@@ -383,7 +394,7 @@ class DocumentHandler
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("LRTResult"))
@@ -399,7 +410,7 @@ class DocumentHandler
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("DSSResult"))
@@ -415,7 +426,7 @@ class DocumentHandler
 					res.threshold = threshold;
 					res.status = JobStatus.COMPLETED;
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("CodeMLResult"))
@@ -423,7 +434,7 @@ class DocumentHandler
 					CodeMLResult res = getCodeMLResult(vAnno);
 					readResultProvenance(vAnno.getProvenance(), res);
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("MGResult"))
@@ -444,7 +455,7 @@ class DocumentHandler
 						res.models.add(mod);
 					}
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 
 				else if (vAnno.getType().equals("CodonWResult"))
@@ -457,7 +468,7 @@ class DocumentHandler
 					// unmask the new line characters
 					res.result = decodeString(el.getDescription());
 					tAlign.addResult(res);
-					mapper.registerObjects(res, vAnno);
+					VamsasManager.mapper.registerObjects(res, vAnno);
 				}
 			}
 		}
@@ -465,7 +476,7 @@ class DocumentHandler
 		Tree[] vTrees = vAlign.getTree();
 		for (Tree vTree : vTrees)
 		{
-			TreeResult tTree = (TreeResult) mapper.getTopaliObject(vTree);
+			TreeResult tTree = (TreeResult) VamsasManager.mapper.getTopaliObject(vTree);
 			if (tTree == null)
 			{
 				tTree = new TreeResult();
@@ -487,7 +498,7 @@ class DocumentHandler
 
 				readResultProvenance(vTree.getProvenance(), tTree);
 				tAlign.addResult(tTree);
-				mapper.registerObjects(tTree, vTree);
+				VamsasManager.mapper.registerObjects(tTree, vTree);
 			}
 		}
 	}
@@ -584,7 +595,7 @@ class DocumentHandler
 	{
 		for (AlignmentAnnotation vAnno : vAlign.getAlignmentAnnotation())
 		{
-			Object tmp = mapper.getTopaliObject(vAnno);
+			Object tmp = VamsasManager.mapper.getTopaliObject(vAnno);
 			if (tmp == null)
 			{
 				if (vAnno.getType().equals("Partitions"))
@@ -596,7 +607,7 @@ class DocumentHandler
 					{
 						pAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
 					}
-					mapper.registerObjects(pAnnos, vAnno);
+					VamsasManager.mapper.registerObjects(pAnnos, vAnno);
 				} else if (vAnno.getType().equals("CodingRegions"))
 				{
 					CDSAnnotations cAnnos = (CDSAnnotations) tAlign
@@ -606,7 +617,7 @@ class DocumentHandler
 					{
 						cAnnos.addRegion(new Region(s.getStart(), s.getEnd()));
 					}
-					mapper.registerObjects(cAnnos, vAnno);
+					VamsasManager.mapper.registerObjects(cAnnos, vAnno);
 				}
 			} else
 			{
@@ -726,10 +737,8 @@ class DocumentHandler
 	private void writeAlignment(AlignmentData tAlign)
 	{
 
-		this.dataset = doc.getVamsasRoots()[0].getDataSet(0);
-
 		// Do we have an existing mapping between T/V for this object?
-		Alignment vAlign = (Alignment) mapper.getVamsasObject(tAlign);
+		Alignment vAlign = (Alignment) VamsasManager.mapper.getVamsasObject(tAlign);
 		
 		if (vAlign == null)
 		{
@@ -738,7 +747,7 @@ class DocumentHandler
 			// Create a new vamsas alignment
 			vAlign = new Alignment();
 			vAlign.setProvenance(getDummyProvenance("added"));
-			vAlign.setGapChar("-");
+			vAlign.setGapChar(vGapChar);
 			Property title = new Property();
 			title.setName("title");
 			title.setType("string");
@@ -748,7 +757,7 @@ class DocumentHandler
 			dataset.addAlignment(vAlign);
 
 			// Link it with the TOPALi data set
-			mapper.registerObjects(tAlign, vAlign);
+			VamsasManager.mapper.registerObjects(tAlign, vAlign);
 		}
 
 		SequenceSet tSequenceSet = tAlign.getSequenceSet();
@@ -770,20 +779,22 @@ class DocumentHandler
 	{
 		for (Sequence tSeq : tSequenceSet.getSequences())
 		{
-			AlignmentSequence vSeq = (AlignmentSequence) mapper
+			AlignmentSequence vSeq = (AlignmentSequence) VamsasManager.mapper
 					.getVamsasObject(tSeq);
 
 			uk.ac.vamsas.objects.core.Sequence vDSSequence = null;
 
+			String seqString = tSeq.getSequence().replaceAll(tGapCharEscaped, vGapChar);
+			
 			if (vSeq == null)
 			{
 				vSeq = new AlignmentSequence();
-				mapper.registerObjects(tSeq, vSeq);
+				VamsasManager.mapper.registerObjects(tSeq, vSeq);
 				vAlign.addAlignmentSequence(vSeq);
 
 				// Add sequence to vamsas dataset:
 				vDSSequence = new uk.ac.vamsas.objects.core.Sequence();
-				vDSSequence.setSequence(tSeq.getSequence());
+				vDSSequence.setSequence(seqString);
 				vDSSequence.setName(tSeq.getName());
 				vDSSequence.setStart(0);
 				vDSSequence.setEnd(tSeq.getLength() - 1);
@@ -793,11 +804,39 @@ class DocumentHandler
 					vDSSequence.setDictionary(SymbolDictionary.STANDARD_AA);
 				dataset.addSequence(vDSSequence);
 
-				mapper.registerObjects(tSeq, vDSSequence);
-				mapper.registerObjects(tSeq, vSeq);
+				if(VamsasManager.tDNAProtMapping.containsKey(tSeq)) {
+					AlignmentSequence seq1 = (AlignmentSequence)VamsasManager.mapper.getVamsasObject(tSeq);
+					Sequence tmp = VamsasManager.tDNAProtMapping.get(tSeq);
+					if(tmp==null)
+						break;
+					AlignmentSequence seq2 = (AlignmentSequence)VamsasManager.mapper.getVamsasObject(tmp);
+					SequenceMapping mapping = new SequenceMapping();
+					mapping.setLoc(seq1);
+					mapping.setMap(seq2);
+					Local local = new Local();
+					Seg seg = new Seg();
+					seg.setStart(1);
+					seg.setEnd(tSeq.getLength());
+					seg.setInclusive(true);
+					local.addSeg(seg);
+					mapping.setLocal(local);
+					Mapped mapped = new Mapped();
+					Seg seg2 = new Seg();
+					seg2.setStart(1);
+					seg2.setEnd(seq2.getSequence().length());
+					seg2.setInclusive(true);
+					mapped.addSeg(seg2);
+					mapping.setMapped(mapped);
+					mapping.setProvenance(getDummyProvenance("Protein guided cDNA alignment"));
+					dataset.addSequenceMapping(mapping);
+					VamsasManager.tDNAProtMapping.remove(tSeq);
+				}
+				
+				VamsasManager.mapper.registerObjects(tSeq, vDSSequence);
+				VamsasManager.mapper.registerObjects(tSeq, vSeq);
 			}
 
-			vSeq.setSequence(tSeq.getSequence());
+			vSeq.setSequence(seqString);
 			vSeq.setName(tSeq.getName());
 			vSeq.setStart(0);
 			vSeq.setEnd(tSeq.getLength() - 1);
@@ -809,12 +848,12 @@ class DocumentHandler
 			{
 				// if sequence already exists, we also have to update the
 				// reference dataset sequence
-				vDSSequence = (uk.ac.vamsas.objects.core.Sequence) vSeq
-						.getRefid();
-				vDSSequence.setSequence(tSeq.getSequence());
-				vDSSequence.setName(tSeq.getName());
-				vDSSequence.setStart(0);
-				vDSSequence.setEnd(tSeq.getLength() - 1);
+//				vDSSequence = (uk.ac.vamsas.objects.core.Sequence) vSeq
+//						.getRefid();
+//				vDSSequence.setSequence(tSeq.getSequence());
+//				vDSSequence.setName(tSeq.getName());
+//				vDSSequence.setStart(0);
+//				vDSSequence.setEnd(tSeq.getLength() - 1);
 			}
 		}
 	}
@@ -831,7 +870,7 @@ class DocumentHandler
 		{
 			// the corresponding vamsas object to tRes could be either a
 			// AlignmentAnnotation or a Tree
-			Object tmp = mapper.getVamsasObject(tRes);
+			Object tmp = VamsasManager.mapper.getVamsasObject(tRes);
 			AlignmentAnnotation vAnno = null;
 			Tree vTree = null;
 			if (tmp != null)
@@ -868,7 +907,7 @@ class DocumentHandler
 					addGraph(vAnno, result.histograms, "histograms");
 					addData(vAnno, result.thresholds, "thresholds");
 					addData(vAnno, (float) result.threshold, "threshold");
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -883,7 +922,7 @@ class DocumentHandler
 					addGraph(vAnno, result.data2, "data2");
 					addGraph(vAnno, result.data3, "data3");
 					addData(vAnno, (float) result.threshold, "threshold");
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -897,7 +936,7 @@ class DocumentHandler
 					addGraph(vAnno, result.data, "data");
 					addData(vAnno, result.thresholds, "thresholds");
 					addData(vAnno, (float) result.threshold, "threshold");
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -911,7 +950,7 @@ class DocumentHandler
 					addGraph(vAnno, result.data, "data");
 					addData(vAnno, result.thresholds, "thresholds");
 					addData(vAnno, (float) result.threshold, "threshold");
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -969,7 +1008,7 @@ class DocumentHandler
 					}
 
 					addData(vAnno, (float) result.threshold, "threshold");
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -992,7 +1031,7 @@ class DocumentHandler
 						vAnno.addAnnotationElement(el);
 					}
 
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 
@@ -1014,7 +1053,7 @@ class DocumentHandler
 					vAnno.addAnnotationElement(el);
 
 					// vAnno.setProvenance(getDummyProvenance());
-					mapper.registerObjects(tRes, vAnno);
+					VamsasManager.mapper.registerObjects(tRes, vAnno);
 					vAlign.addAlignmentAnnotation(vAnno);
 				}
 			}
@@ -1028,8 +1067,8 @@ class DocumentHandler
 				{
 					Newick nw = new Newick();
 					// Jalview needs real names
-					nw.setContent(result.getTreeStrActual(tAlign
-							.getSequenceSet()));
+					String treeString = result.getTreeStrActual(tAlign.getSequenceSet());			
+					nw.setContent(treeString);
 					vTree.addNewick(nw);
 				} catch (Exception e)
 				{
@@ -1061,7 +1100,7 @@ class DocumentHandler
 
 				// vTree.setProvenance(getDummyProvenance());
 				vTree.setProvenance(getResultProvenance(tRes));
-				mapper.registerObjects(tRes, vTree);
+				VamsasManager.mapper.registerObjects(tRes, vTree);
 				vAlign.addTree(vTree);
 			}
 		}
@@ -1078,7 +1117,7 @@ class DocumentHandler
 		PartitionAnnotations partAnnos = (PartitionAnnotations) tAlign
 				.getTopaliAnnotations().getAnnotations(
 						PartitionAnnotations.class);
-		AlignmentAnnotation vAnno = (AlignmentAnnotation) mapper
+		AlignmentAnnotation vAnno = (AlignmentAnnotation) VamsasManager.mapper
 				.getVamsasObject(partAnnos);
 		if (vAnno == null)
 		{
@@ -1100,7 +1139,7 @@ class DocumentHandler
 			}
 			if (added)
 			{
-				mapper.registerObjects(partAnnos, vAnno);
+				VamsasManager.mapper.registerObjects(partAnnos, vAnno);
 				vAlign.addAlignmentAnnotation(vAnno);
 			}
 		} else
@@ -1120,7 +1159,7 @@ class DocumentHandler
 
 		CDSAnnotations cdsAnnos = (CDSAnnotations) tAlign
 				.getTopaliAnnotations().getAnnotations(CDSAnnotations.class);
-		vAnno = (AlignmentAnnotation) mapper.getVamsasObject(cdsAnnos);
+		vAnno = (AlignmentAnnotation)VamsasManager. mapper.getVamsasObject(cdsAnnos);
 		if (vAnno == null)
 		{
 			vAnno = new AlignmentAnnotation();
@@ -1141,7 +1180,7 @@ class DocumentHandler
 			}
 			if (added)
 			{
-				mapper.registerObjects(cdsAnnos, vAnno);
+				VamsasManager.mapper.registerObjects(cdsAnnos, vAnno);
 				vAlign.addAlignmentAnnotation(vAnno);
 			}
 		} else

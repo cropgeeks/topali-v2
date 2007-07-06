@@ -6,12 +6,13 @@
 package topali.analyses;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
-import topali.gui.*;
+import topali.gui.Text;
 import doe.MsgBox;
 
 public class MakeNA
@@ -36,7 +37,11 @@ public class MakeNA
 		this.name = name;
 	}
 	
-	public boolean doConversion()
+	public boolean doConversion() {
+		return doConversion(true, null);
+	}
+	
+	public boolean doConversion(boolean showMessages, HashMap<Sequence, Sequence> mapping)
 	{
 		SequenceSet newSS = new SequenceSet();
 
@@ -45,9 +50,12 @@ public class MakeNA
 		int proCount = pro.getSize();
 		if (dnaCount != proCount)
 		{
-			MsgBox.msg("The number of sequences in the cDNAs file (" + dnaCount
-					+ ") differs from the number in the protein file ("
-					+ proCount + ")", MsgBox.ERR);
+			String msg = "The number of sequences in the cDNAs file (" + dnaCount
+			+ ") differs from the number in the protein file ("
+			+ proCount + ")";
+			log.warn(msg);
+			if(showMessages)
+				MsgBox.msg(msg, MsgBox.ERR);
 			return false;
 		}
 
@@ -62,8 +70,11 @@ public class MakeNA
 			Sequence proSeq = getSequenceByName(pro, dnaSeq.getName());
 			if (proSeq == null)
 			{
-				MsgBox.msg("The sequence " + dnaSeq.getName() + " was not found in "
-						+ "the protein alignment.", MsgBox.ERR);
+				String msg = "The sequence " + dnaSeq.getName() + " was not found in "
+				+ "the protein alignment.";
+				log.warn(msg);
+				if(showMessages)
+					MsgBox.msg(msg, MsgBox.ERR);
 				return false;
 			}
 
@@ -77,11 +88,16 @@ public class MakeNA
 
 			if ((gaplessCount * 3) != dnaBuf.length())
 			{
-				MsgBox.msg("The length of DNA sequence " + dnaSeq.getName()
-						+ " is not "
-						+ "3x the protein length.\n(DNA length is "
-						+ dnaBuf.length() + ", protein length (minus gaps) is "
-						+ gaplessCount + ")", MsgBox.ERR);
+				String msg = "The length of DNA sequence " + dnaSeq.getName()
+				+ " is not "
+				+ "3x the protein length.\n(DNA length is "
+				+ dnaBuf.length() + ", protein length (minus gaps) is "
+				+ gaplessCount + ")";
+				
+				log.warn(msg);
+				
+				if(showMessages)
+					MsgBox.msg(msg, MsgBox.ERR);
 				return false;
 			}
 
@@ -109,6 +125,8 @@ public class MakeNA
 			newSequence.getBuffer().append(seqBuf);
 			// And add it to the dataset
 			newSS.addSequence(newSequence);
+			if(mapping!=null)
+				mapping.put(newSequence, proSeq);
 		}
 
 		// Perform some final checks on the new alignment before OKing it
@@ -117,14 +135,21 @@ public class MakeNA
 			newSS.checkValidity();
 		} catch (AlignmentLoadException e)
 		{
-			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
-					+ e.getReason()), MsgBox.ERR);
+			String msg = Text.GuiFile.getString("ImportDataSetDialog.err0"
+					+ e.getReason());
+			log.warn(msg);
+			if(showMessages)
+				MsgBox.msg(msg, MsgBox.ERR);
 			return false;
 		}
 
-		if (SequenceSetUtils.verifySequenceNames(newSS) == false)
-			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"),
+		if (SequenceSetUtils.verifySequenceNames(newSS) == false) {
+			String msg = Text.GuiFile.getString("ImportDataSetDialog.err05");
+			log.warn(msg);
+			if(showMessages)
+				MsgBox.msg(msg,
 					MsgBox.WAR);
+		}
 
 		this.data = new AlignmentData(name, newSS);
 		//TOPALi.winMain.addNewAlignmentData(data);

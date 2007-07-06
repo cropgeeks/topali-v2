@@ -39,7 +39,7 @@ public abstract class AnalysisThread extends TokenThread
 		// Catch the error, but only log it if it wasn't a cancel request
 		catch (Exception e)
 		{
-			if (e.getMessage().equals("cancel") == false)
+			if (e.getMessage()!=null && e.getMessage().equals("cancel") == false)
 				ClusterUtils.writeError(new File(runDir, "error.txt"), e);
 		}
 

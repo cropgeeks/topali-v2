@@ -153,7 +153,10 @@ public class TreeResult extends AlignmentResult
 			Node node = palTree.getExternalNode(i);
 
 			String safeName = node.getIdentifier().getName();
-			node.setIdentifier(new Identifier(ss.getNameForSafeName(safeName)));
+			String seqName = ss.getNameForSafeName(safeName);
+			if(seqName.equals(""))
+				seqName = safeName;
+			node.setIdentifier(new Identifier(seqName));
 		}
 
 		return palTree;

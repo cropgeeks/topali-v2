@@ -80,6 +80,8 @@ public class JobsThread extends Thread
 					case COMMS_ERROR:
 					{
 						final JobStatus status = job.ws_getProgress();
+						log.info("Requested JobStatus for "+job.getJobId()+": "+status);
+						
 						SwingUtilities.invokeLater(new Runnable()
 						{
 							public void run()

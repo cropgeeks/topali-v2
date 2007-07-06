@@ -261,6 +261,14 @@ public class JobsPanel extends JPanel
 			entry = new NoTrackingJobEntry(job);
 		}
 		
+		else if(result instanceof FastMLResult) {
+			if(result.isRemote) 
+				job = new FastMLRemoteJob((FastMLResult)result, data);
+			else
+				job = new FastMLLocalJob((FastMLResult)result, data);
+			entry = new NoTrackingJobEntry(job);
+		}
+		
 		addJob(entry);
 	}
 
