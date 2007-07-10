@@ -1,181 +1,148 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
 package topali.analyses;
 
-import java.io.File;
-import java.util.HashMap;
+import java.io.*;
 
-import org.apache.log4j.Logger;
+import doe.*;
 
 import topali.data.*;
-import topali.fileio.AlignmentLoadException;
-import topali.gui.Text;
-import doe.MsgBox;
+import topali.fileio.*;
+import topali.gui.*;
 
 public class MakeNA
 {
-	Logger log = Logger.getLogger(this.getClass());
-
-	private SequenceSet dna = null, pro = null;
-	private String name;
+	private File dnaFile, proFile;
 	
-	private AlignmentData data;
-	
-	public MakeNA(File dnaFile, File proFile) throws AlignmentLoadException
-	{	
-		dna = new SequenceSet(dnaFile, false);
-		pro = new SequenceSet(proFile, false);
-		name = createName(dnaFile.getName());
-	}
-	
-	public MakeNA(SequenceSet dna, SequenceSet pro, String name) {
-		this.dna = dna;
-		this.pro = pro;
-		this.name = name;
-	}
-	
-	public boolean doConversion() {
-		return doConversion(true, null);
-	}
-	
-	public boolean doConversion(boolean showMessages, HashMap<Sequence, Sequence> mapping)
+	public MakeNA(File dnaFile, File proFile)
 	{
+		this.dnaFile = dnaFile;
+		this.proFile = proFile;
+	}
+	
+	public boolean doConversion()
+	{
+		SequenceSet dna, pro;
 		SequenceSet newSS = new SequenceSet();
-
+		
+		try
+		{
+			dna = new SequenceSet(dnaFile, false);
+			pro = new SequenceSet(proFile, false);
+		}
+		catch (AlignmentLoadException e)
+		{
+			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
+				+ e.getReason()), MsgBox.ERR);				
+			return false;
+		}
+		
 		// How many sequences are we dealing with
 		int dnaCount = dna.getSize();
 		int proCount = pro.getSize();
 		if (dnaCount != proCount)
 		{
-			String msg = "The number of sequences in the cDNAs file (" + dnaCount
-			+ ") differs from the number in the protein file ("
-			+ proCount + ")";
-			log.warn(msg);
-			if(showMessages)
-				MsgBox.msg(msg, MsgBox.ERR);
+			MsgBox.msg("The number of sequences in the cDNAs file (" + dnaCount
+				+ ") differs from the number in the protein file (" + proCount
+				+ ")", MsgBox.ERR);
 			return false;
 		}
-
+				
 		// Attempt to convert each sequence
 		for (int i = 0; i < dnaCount; i++)
 		{
 			// Find the dna...
-			Sequence dnaSeq = dna.getSequence(i);
+			Sequence dnaSeq = dna.getSequence(i);			
 			StringBuffer dnaBuf = dnaSeq.getBuffer();
-
+			
 			// ... and try to find its matching protein sequence
-			Sequence proSeq = getSequenceByName(pro, dnaSeq.getName());
+			Sequence proSeq = getSequenceByName(pro, dnaSeq.name);
 			if (proSeq == null)
 			{
-				String msg = "The sequence " + dnaSeq.getName() + " was not found in "
-				+ "the protein alignment.";
-				log.warn(msg);
-				if(showMessages)
-					MsgBox.msg(msg, MsgBox.ERR);
+				MsgBox.msg("The sequence " + dnaSeq.name + " was not found in "
+					+ "the protein alignment.", MsgBox.ERR);
 				return false;
-			}
-
+			}			
+			
 			// Then check that the lengths are ok
 			int gaplessCount = 0;
-			StringBuffer proBuf = proSeq.getBuffer();
-
+			StringBuffer proBuf = proSeq.getBuffer();			
+			
 			for (int p = 0; p < proBuf.length(); p++)
 				if (proBuf.charAt(p) != '-')
 					gaplessCount++;
-
+			
 			if ((gaplessCount * 3) != dnaBuf.length())
 			{
-				String msg = "The length of DNA sequence " + dnaSeq.getName()
-				+ " is not "
-				+ "3x the protein length.\n(DNA length is "
-				+ dnaBuf.length() + ", protein length (minus gaps) is "
-				+ gaplessCount + ")";
-				
-				log.warn(msg);
-				
-				if(showMessages)
-					MsgBox.msg(msg, MsgBox.ERR);
+				MsgBox.msg("The length of DNA sequence " + dnaSeq.name + " is not "
+					+ "3x the protein length.\n(DNA length is "
+					+ dnaBuf.length() + ", protein length (minus gaps) is "
+					+ gaplessCount + ")", MsgBox.ERR);
 				return false;
 			}
-
+			
 			// Finally, create the new sequence
-			StringBuffer seqBuf = new StringBuffer(proBuf.length() * 3);
-
+			StringBuffer seqBuf = new StringBuffer(proBuf.length()*3);
+			
 			for (int p = 0, d = 0; p < proBuf.length(); p++)
 			{
 				if (proBuf.charAt(p) == '-')
 					seqBuf.append("---");
-
+				
 				else
 				{
 					if (d < dnaBuf.length())
-						seqBuf.append(dnaBuf.substring(d, d + 3));
+						seqBuf.append(dnaBuf.substring(d, d+3));
 					else
 						seqBuf.append(dnaBuf.substring(d));
-
+					
 					d += 3;
 				}
 			}
-
+			
 			// Create the new sequence
-			Sequence newSequence = new Sequence(dnaSeq.getName());
+			Sequence newSequence = new Sequence(dnaSeq.name);
 			newSequence.getBuffer().append(seqBuf);
 			// And add it to the dataset
 			newSS.addSequence(newSequence);
-			if(mapping!=null)
-				mapping.put(newSequence, proSeq);
 		}
-
+		
 		// Perform some final checks on the new alignment before OKing it
-		try
+		try { newSS.checkValidity(); }
+		catch (AlignmentLoadException e)
 		{
-			newSS.checkValidity();
-		} catch (AlignmentLoadException e)
-		{
-			String msg = Text.GuiFile.getString("ImportDataSetDialog.err0"
-					+ e.getReason());
-			log.warn(msg);
-			if(showMessages)
-				MsgBox.msg(msg, MsgBox.ERR);
+			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err0"
+				+ e.getReason()), MsgBox.ERR);				
 			return false;
 		}
-
-		if (SequenceSetUtils.verifySequenceNames(newSS) == false) {
-			String msg = Text.GuiFile.getString("ImportDataSetDialog.err05");
-			log.warn(msg);
-			if(showMessages)
-				MsgBox.msg(msg,
-					MsgBox.WAR);
-		}
-
-		this.data = new AlignmentData(name, newSS);
-		//TOPALi.winMain.addNewAlignmentData(data);
-
+		
+		if (SequenceSetUtils.verifySequenceNames(newSS) == false)
+			MsgBox.msg(Text.GuiFile.getString("ImportDataSetDialog.err05"), MsgBox.WAR);
+		
+		AlignmentData data = new AlignmentData(getNewName(), newSS);		
+		TOPALi.winMain.addNewAlignmentData(data);
+		
 		return true;
 	}
-
+	
 	private Sequence getSequenceByName(SequenceSet pro, String dnaName)
 	{
-		for (Sequence seq : pro.getSequences())
-			if (seq.getName().equals(dnaName))
+		for (Sequence seq: pro.getSequences())
+			if (seq.name.equals(dnaName))
 				return seq;
-
+		
 		return null;
 	}
-
-	private String createName(String name)
+	
+	private String getNewName()
 	{
+		String name = dnaFile.getName();
 		if (name.indexOf(".") != -1)
 			name = name.substring(0, name.lastIndexOf("."));
-
+		
 		return name;
 	}
-	
-	public AlignmentData getAlignmentData() {
-		return this.data;
-	}
-	
 }

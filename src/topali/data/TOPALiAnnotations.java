@@ -1,65 +1,43 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
 package topali.data;
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
+import java.util.*;
 
 // Helper class for AlignmentAnnotations, providing code and methods to deal
 // with annotations that would otherwise clog up the AlignmentData class
 public class TOPALiAnnotations
 {
-	Logger log = Logger.getLogger(this.getClass());
-	
 	// A list (where each element is itself a list) of annotation wrappers
 	private Vector<AlignmentAnnotations> annotations;
-
+	
 	public TOPALiAnnotations()
 	{
-		annotations = new Vector<AlignmentAnnotations>();
+		annotations = new Vector<AlignmentAnnotations>(2);
 	}
-
-	public Vector<AlignmentAnnotations> getAnnotations()
+	
+	public TOPALiAnnotations(int alignmentLength)
 	{
-		return annotations;
+		annotations = new Vector<AlignmentAnnotations>(2);
+		
+		// Create a set of partition annotations
+		PartitionAnnotations pAnnotations = new PartitionAnnotations(alignmentLength);
+		// And add them as the first element of the list
+		annotations.add(pAnnotations);
 	}
+	
+	public Vector<AlignmentAnnotations> getAnnotations()
+		{ return annotations; }
 
 	public void setAnnotations(Vector<AlignmentAnnotations> annotations)
+		{ this.annotations = annotations; }
+	
+	// Returns the PartitionAnnotations (element 0 in the list)
+	public PartitionAnnotations getPartitionAnnotations()
 	{
-		this.annotations = annotations;
-	}
-
-	public AlignmentAnnotations getAnnotations(Class type)
-	{
-		if (!AlignmentAnnotations.class.isAssignableFrom(type))
-			throw new IllegalArgumentException(
-					"Just subclasses of AlignmentAnnotations are allowed!");
-
-		AlignmentAnnotations result = null;
-		for (AlignmentAnnotations anno : annotations)
-		{
-			if (anno.getClass().equals(type))
-			{
-				result = anno;
-				break;
-			}
-		}
-
-		if (result == null)
-		{
-			try
-			{
-				result = (AlignmentAnnotations) type.newInstance();
-				annotations.add(result);
-			} catch (Exception e)
-			{
-				log.warn(e);
-			}
-		}
-		return result;
+		return (PartitionAnnotations) annotations.get(0);
 	}
 }

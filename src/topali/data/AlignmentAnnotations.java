@@ -1,57 +1,42 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
 package topali.data;
 
-import java.util.Vector;
+import java.util.*;
 
 public class AlignmentAnnotations
 {
 	protected Vector<AnnotationElement> annotations;
-
+	
 	protected String label;
-
 	protected String description;
-
+	
 	public AlignmentAnnotations()
 	{
 		annotations = new Vector<AnnotationElement>();
 	}
-
+	
 	public Vector<AnnotationElement> getAnnotations()
-	{
-		return annotations;
-	}
-
+		{ return annotations; }
+	
 	public void setAnnotations(Vector<AnnotationElement> annotations)
-	{
-		this.annotations = annotations;
-	}
-
+		{ this.annotations = annotations; }
+	
 	public String getLabel()
-	{
-		return label;
-	}
-
+		{ return label; }
+	
 	public void setLabel(String label)
-	{
-		this.label = label;
-	}
-
+		{ this.label = label; }
+	
 	public String getDescription()
-	{
-		return description;
-	}
-
+		{ return description; }
+	
 	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
+		{ this.description = description; }
+	
 	public int size()
-	{
-		return annotations.size();
-	}
+		{ return annotations.size(); }
 }

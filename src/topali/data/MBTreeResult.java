@@ -1,4 +1,4 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
@@ -13,11 +13,11 @@ public class MBTreeResult extends TreeResult
 {
 	// The location of the MrBayes binary
 	public String mbPath;
-	public int nGen = 100000;
-	public double burnin = 0.25;
-	public int sampleFreq = 10;
-	public boolean isCDNA = false;
 	
+	// Sequences to be analysed
+	public String[] selectedSeqs;
+	
+		
 	public MBTreeResult()
 	{
 	}

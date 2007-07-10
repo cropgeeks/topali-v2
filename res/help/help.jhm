@@ -41,10 +41,6 @@
      <mapID target="lrt_settings" url="html/lrt_settings.html" />
      
      <mapID target="estimate_tree" url="html/estimate_tree.html" />
-     
-     <mapID target="paml" url="html/paml.html" />
-     <mapID target="cmlsite_settings" url="html/cmlsite_settings.html" />
-     <mapID target="cmlbranch_settings" url="html/cmlbranch_settings.html" />
    
    <mapID target="display_settings" url="html/display_settings.html" /> 
    <mapID target="settings" url="html/settings.html" />

@@ -2,31 +2,19 @@ echo ""
 echo "Compiling BAMBE..."
 cd bambe
 make
-
 echo ""
 echo "Compiling BARCE..."
 cd ../barce
 make
-
 echo ""
 echo "Compiling Fitch..."
 cd ../fitch
 make
-
 echo ""
 echo "Compiling TreeDist..."
 cd ../treedist
 make
-
 echo ""
 echo "Compiling MrBayes"
 cd ../mrbayes
-make
-
-echo "Compiling CodeML"
-cd ../codeml
-make
-
-echo "Compiling CodonW"
-cd ../codonW
 make

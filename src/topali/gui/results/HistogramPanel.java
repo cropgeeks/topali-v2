@@ -1,4 +1,4 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
@@ -6,12 +6,10 @@
 package topali.gui.results;
 
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
-import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.gui.*;
 
 class HistogramPanel extends JPanel
 {

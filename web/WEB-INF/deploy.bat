@@ -1,0 +1,1 @@
+java -cp .;lib\activation.jar;lib\mailapi.jar;lib\saaj.jar;lib\commons-discovery-0.2.jar;lib\commons-logging-1.0.4.jar;lib\jaxrpc.jar;lib\axis.jar org.apache.axis.client.AdminClient -lhttp://localhost:8080/topali/services/AxisServlet deploy.wsdd

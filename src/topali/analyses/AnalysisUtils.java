@@ -1,4 +1,4 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
@@ -13,8 +13,8 @@ public class AnalysisUtils
 	{
 		int index = (int) Math.round(percentile * values.length);
 		if (index >= values.length)
-			index = values.length - 1;
-
+			index = values.length-1;
+		
 		return values[index];
 	}
 }

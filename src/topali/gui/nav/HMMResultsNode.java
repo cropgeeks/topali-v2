@@ -1,55 +1,36 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
+// (C) 2003-2006 Iain Milne
 //
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
 package topali.gui.nav;
 
-import java.awt.print.Printable;
-
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.WinMainTipsPanel;
-import topali.gui.results.HMMResultPanel;
+import topali.gui.*;
+import topali.gui.results.*;
 
-public class HMMResultsNode extends ResultsNode 
+public class HMMResultsNode extends ResultsNode
 {
-
+	private HMMResultsPanel panel;
+	
 	HMMResultsNode(AlignmentData data, HMMResult result)
 	{
 		super(data, result);
-
-		panel = new HMMResultPanel(data, result);
+		
+		panel = new HMMResultsPanel(data, result);
 	}
-
+	
 	public String toString()
-	{
-		return result.guiName;
-	}
-
+		{ return result.guiName; }
+		
 	public int getTipsKey()
-	{
-		return WinMainTipsPanel.TIPS_NONE;
-	}
-
+		{ return WinMainTipsPanel.TIPS_NONE; }
+	
 	public String getHelpKey()
-	{
-		return "hmm_method";
-	}
-
+		{ return "hmm_method"; }
+	
 	public JComponent getPanel()
-	{
-		return panel;
-	}
-	
-	public boolean isPrintable()
-	{
-		return true;
-	}
-	
-	public Printable[] getPrintables()
-	{
-		return panel.getPrintables();
-	}
+		{ return panel; }
 }

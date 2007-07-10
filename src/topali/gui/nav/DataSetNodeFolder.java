@@ -1,17 +1,10 @@
-// (C) 2003-2007 Biomathematics & Statistics Scotland
-//
-// This package may be distributed under the
-// terms of the GNU General Public License (GPL)
-
 package topali.gui.nav;
 
-import static topali.gui.WinMainMenuBar.*;
-
 import java.awt.*;
-
 import javax.swing.*;
 
-import topali.data.AlignmentData;
+import topali.data.*;
+import static topali.gui.WinMainMenuBar.*;
 
 class DataSetNodeFolder extends INode
 {
@@ -19,21 +12,19 @@ class DataSetNodeFolder extends INode
 	{
 		super(data);
 	}
-
+	
 	public String toString()
-	{
-		return data.name;
-	}
-
+		{ return data.name; }
+		
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
-
+		
 		aAlgnRemove.setEnabled(true);
-
+		
 		aVamExport.setEnabled(true);
 	}
-
+	
 	public JPanel getPanel()
 	{
 		JPanel p = new JPanel(new BorderLayout());
