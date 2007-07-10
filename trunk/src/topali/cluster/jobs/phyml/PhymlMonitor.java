@@ -26,7 +26,7 @@ public class PhymlMonitor
 
 	public JobStatus getPercentageComplete() throws Exception
 	{
-float progress = 0;
+		float progress = 0;
 		
 		if (new File(jobDir, "error.txt").exists())
 		{

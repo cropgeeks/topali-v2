@@ -60,6 +60,12 @@ public class FastMLWebService extends WebService
 
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
+		if (new File(jobDir, "error.txt").exists())
+		{
+			logger.log(Level.ERROR, "error.txt found");
+			throw AxisFault.makeFault(new Exception("FastML error.txt"));
+		}
+		
 		if(new File(jobDir, "result.xml").exists())
 			return new JobStatus(100, 0, "_status");
 		else

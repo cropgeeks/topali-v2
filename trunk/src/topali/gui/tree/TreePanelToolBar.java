@@ -11,11 +11,9 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.tree.TreeParseException;
-
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.dialog.*;
+import topali.gui.dialog.AnalysisInfoDialog;
 import topali.var.Utils;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
@@ -91,6 +89,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bRoot.addActionListener(this);
 		
 		bAncestor.addActionListener(this);
+		bAncestor.setEnabled(tResult instanceof MBTreeResult || tResult instanceof PhymlResult);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -184,14 +183,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				fastml.fastmlPath = Utils.getLocalPath() + "fastml/fastml";
 			
 			fastml.selectedSeqs = tResult.selectedSeqs;
-			try
-			{
-				fastml.origTree = tResult.getTreeStrActual(ss);
-			} catch (TreeParseException e1)
-			{
-				log.warn("Problem creating tree with real seq. names.", e1);
-				return;
-			}
+			fastml.origTree = tResult.getTreeStr();
+			
+			
 			fastml.guiName = "Ancestor";
 			fastml.jobName = "Ancestral sequence creation based on '"+tResult.guiName+"'";
 			TOPALi.winMain.anlsRunFastML(fastml);

@@ -289,6 +289,14 @@ public class SequenceSetUtils
 
 			return false;
 		}
+		
+		if (ss.isDNA() == false)
+		{
+			String msg = Text.Analyses.getString("SequenceSetUtils.msg04");
+			MsgBox.msg(msg, MsgBox.ERR);
+
+			return false;
+		}
 
 		return true;
 	}
@@ -302,10 +310,52 @@ public class SequenceSetUtils
 
 			return false;
 		}
+		
+		if (ss.isDNA() == false)
+		{
+			String msg = Text.Analyses.getString("SequenceSetUtils.msg04");
+			MsgBox.msg(msg, MsgBox.ERR);
+
+			return false;
+		}
 
 		return true;
 	}
+	
+	public static boolean canRunCodeML(SequenceSet ss)
+	{
+		if (ss.getSelectedSequences().length < 3)
+		{
+			String msg = Text.Analyses.getString("SequenceSetUtils.msg08");
+			MsgBox.msg(msg, MsgBox.ERR);
 
+			return false;
+		}
+
+		if (ss.isDNA() == false)
+		{
+			String msg = Text.Analyses.getString("SequenceSetUtils.msg04");
+			MsgBox.msg(msg, MsgBox.ERR);
+
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean canRunCodonW(SequenceSet ss)
+	{
+		if (ss.isDNA() == false)
+		{
+			String msg = Text.Analyses.getString("SequenceSetUtils.msg04");
+			MsgBox.msg(msg, MsgBox.ERR);
+
+			return false;
+		}
+		
+		return true;
+	}
+	
 	// Creates and returns a new SequenceSet using the existing SequenceSet from
 	// the alignment data. This method will *only* use sequences and partitions
 	// that have been selected by the user

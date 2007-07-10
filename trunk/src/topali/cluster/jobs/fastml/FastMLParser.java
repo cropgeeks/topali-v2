@@ -27,6 +27,7 @@ public class FastMLParser
 				sb.append(line);
 			
 			TreeResult tree = new TreeResult(sb.toString());
+			tree.guiName = "Ancestral sequence tree";
 			tree.status = JobStatus.COMPLETED;
 			result.alignment.addResult(tree);
 			
@@ -42,6 +43,9 @@ public class FastMLParser
 		try
 		{
 			SequenceSet ss = new SequenceSet(file, true);
+			for(Sequence s : ss.getSequences()) {
+				s.setSequence(s.getSequence().replaceAll("\\*", "-"));
+			}
 			result.alignment.setSequenceSet(ss);
 		} catch (AlignmentLoadException e)
 		{

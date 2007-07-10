@@ -7,12 +7,15 @@ package topali.cluster.jobs.modelgenerator;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import topali.cluster.JobStatus;
 import topali.data.MGResult;
 import topali.fileio.Castor;
 
 public class MGMonitor
 {
+	Logger log = Logger.getLogger(this.getClass());
 	
 	private File jobDir;
 
@@ -23,6 +26,12 @@ public class MGMonitor
 
 	public JobStatus getPercentageComplete() throws Exception
 	{
+		if (new File(jobDir, "error.txt").exists())
+		{
+			log.warn(jobDir.getName() + " - error.txt found");
+			throw new Exception("ModelGenerator error.txt");
+		}
+		
 		float progress;
 		try
 		{

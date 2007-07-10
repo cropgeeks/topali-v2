@@ -12,6 +12,7 @@ import java.awt.print.*;
 import java.beans.*;
 import java.io.File;
 import java.net.URL;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -520,7 +521,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public void menuAnlsRunCodeMLSite(CodeMLResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-
+		SequenceSet ss = data.getSequenceSet();
+		if (SequenceSetUtils.canRunCodeML(ss) == false)
+			return;
+		
 		CMLSiteSettingsDialog dlg = new CMLSiteSettingsDialog(this, data,
 				result);
 		dlg.setVisible(true);
@@ -529,7 +533,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public void menuAnlsRunCodeMLBranch(CodeMLResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-
+		SequenceSet ss = data.getSequenceSet();
+		if (SequenceSetUtils.canRunCodeML(ss) == false)
+			return;
+		
 		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,
 				result);
 		dlg.setVisible(true);
@@ -560,6 +567,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public void menuAnlsRunCW(CodonWResult res) {
 		
 		AlignmentData data = navPanel.getCurrentAlignmentData();
+		SequenceSet ss = data.getSequenceSet();
+		if (SequenceSetUtils.canRunCodonW(ss) == false)
+			return;
 		
 		CodonWDialog cwd = new CodonWDialog(data, res);
 		cwd.setVisible(true);
@@ -571,6 +581,35 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	
 	public void anlsRunFastML(FastMLResult res) {
 		AlignmentData data = navPanel.getCurrentAlignmentData();
+		
+		Vector<Sequence> seqs = data.getSequenceSet().getSequences();
+		String[][] seqNames = new String[seqs.size()][2];
+		for(int i=0; i<seqs.size(); i++) {
+			seqNames[i][0] = seqs.get(i).safeName;
+			seqNames[i][1] = seqs.get(i).name;
+		}
+		res.seqNameMapping = seqNames;
+		
+		if(!data.getSequenceSet().isDNA()) {
+		SequenceSetParams p = data.getSequenceSet().getParams();
+		if(p.getModel()==SequenceSetParams.MODEL_AA_CPREV)
+			res.model = FastMLResult.MODEL_AA_CPREV;
+		else if(p.getModel()==SequenceSetParams.MODEL_AA_DAYHOFF)
+			res.model = FastMLResult.MODEL_AA_DAY;
+		else if(p.getModel()==SequenceSetParams.MODEL_AA_JONES)
+			res.model = FastMLResult.MODEL_AA_JTT;
+		else if(p.getModel()==SequenceSetParams.MODEL_AA_MTREV || p.getModel()==SequenceSetParams.MODEL_AA_MTMAM)
+			res.model = FastMLResult.MODEL_AA_MTREV;
+		else if(p.getModel()==SequenceSetParams.MODEL_AA_WAG)
+			res.model = FastMLResult.MODEL_AA_WAG;
+		else
+			res.model = FastMLResult.MODEL_AA_WAG;
+		}
+		else
+			res.model = FastMLResult.MODEL_DNA_JC;
+		
+		res.gamma = data.getSequenceSet().getParams().isModelGamma();
+		
 		res.alignment.name = data.name+" (+ancestral seq.)";
 		submitJob(data, res);
 	}
@@ -578,7 +617,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-
+		
 		CreateTreeDialog dialog = new CreateTreeDialog(this, data);
 		TreeResult result = dialog.getTreeResult();
 		if (result == null)

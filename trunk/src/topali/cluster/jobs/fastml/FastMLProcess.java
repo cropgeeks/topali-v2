@@ -6,6 +6,9 @@
 package topali.cluster.jobs.fastml;
 
 import java.io.*;
+import java.util.*;
+
+import org.apache.log4j.Logger;
 
 import topali.cluster.*;
 import topali.data.FastMLResult;
@@ -13,6 +16,8 @@ import topali.data.FastMLResult;
 public class FastMLProcess extends StoppableProcess
 {
 
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private File wrkDir;
 	
 	FastMLProcess(File wrkDir, FastMLResult result)
@@ -25,8 +30,27 @@ public class FastMLProcess extends StoppableProcess
 	void run() throws Exception
 	{
 		FastMLResult result = (FastMLResult) this.result;
-
-		String[] cmds = {result.fastmlPath, "-g", "-b", "-s", "seq.fasta", "-t", "tree.txt"};
+		
+		LinkedList<String> cmdList = new LinkedList<String>();
+		cmdList.add(result.fastmlPath);
+		if(result.gamma)
+			cmdList.add("-g");
+		cmdList.add("-b");
+		if(result.model!=null)
+			cmdList.add("-"+result.model);
+		cmdList.add("-s");
+		cmdList.add("seq.fasta");
+		cmdList.add("-t");
+		cmdList.add("tree.txt");
+		
+		String[] cmds = new String[cmdList.size()];
+		cmds = cmdList.toArray(cmds);
+		
+		String tmp = "";
+		for(String s : cmds)
+			tmp += s+" ";
+		log.info("Running FastML with: "+tmp);
+		
 		//sbrn.commons.file.FileUtils.writeFile(new File(wrkDir, "wibble"), result.mgPath);
 		ProcessBuilder pb = new ProcessBuilder(cmds);
 	

@@ -7,6 +7,8 @@ package topali.cluster.jobs;
 
 import java.io.File;
 
+import org.apache.log4j.*;
+
 import topali.cluster.*;
 import topali.cluster.jobs.fastml.RunFastML;
 import topali.data.*;
@@ -15,6 +17,8 @@ import topali.gui.Prefs;
 
 public class FastMLLocalJob extends AnalysisJob
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	private SequenceSet ss;
 
 	private File jobDir;
@@ -51,6 +55,12 @@ public class FastMLLocalJob extends AnalysisJob
 
 	public JobStatus ws_getProgress() throws Exception
 	{
+		if (new File(jobDir, "error.txt").exists())
+		{
+			log.log(Level.ERROR, "error.txt found");
+			throw new Exception("FastML error.txt");
+		}
+		
 		if(new File(jobDir, "result.xml").exists())
 			return new JobStatus(100, 0, "_status");
 		else
