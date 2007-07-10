@@ -128,5 +128,11 @@ public class Sequence extends ViewableDataObject
 			l.propertyChange(new PropertyChangeEvent(this, "name", oldName, name));
 	}
 	
-	
+	public boolean matches(Sequence seq, boolean ignoreGaps) {
+		String seq1 = ignoreGaps ? sequence.toString().replaceAll("-", "") : sequence.toString();
+		String seq2 = ignoreGaps ? seq.getSequence().replaceAll("-", "") : seq.getSequence();
+		boolean equalSeq = seq1.equals(seq2);
+		boolean equalName = name.equals(seq.name);
+		return equalSeq && equalName;
+	}
 }

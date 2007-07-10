@@ -444,6 +444,9 @@
     <field name="fastmlPath" type="string" direct="true"><bind-xml node="attribute"/></field>  
     <field name="origTree" type="string" direct="true"/>
     <field name="alignment" type="topali.data.AlignmentData" direct="true"/>
+    <field name="model" type="string" direct="true"/>
+    <field name="gamma" type="boolean" direct="true"/>
+    <field name="seqNameMapping" type="string" get-method="getCastorSeqNameMapping" set-method="setCastorSeqNameMapping"/> 
   </class>
   
   <!-- SubstitutionModel -->

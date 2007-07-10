@@ -107,7 +107,6 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	{
 		basicPanel.onOK();
 		
-		
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else if(Prefs.gui_tree_method == 1) {

@@ -40,7 +40,7 @@ public class FastMLAnalysis extends AnalysisThread
 
 //		 Sequences that should be selected/saved for processing
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(runDir, "seq.fasta"), indices, Filters.FAS, false); 
+		ss.save(new File(runDir, "seq.fasta"), indices, Filters.FAS, true); 
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(runDir,  "tree.txt")));
 		writer.write(result.origTree);

@@ -320,7 +320,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 			
 			if(result instanceof FastMLResult) {
 				FastMLResult fres = (FastMLResult)result;
-				WinMain.navPanel.addAlignmentFolder(fres.alignment);
+				fres.restoreSeqNames();
+				winMain.addNewAlignmentData(fres.alignment);
 				data.removeResult(result);
 				return;
 			}

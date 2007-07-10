@@ -723,11 +723,17 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls = new JMenu(Text.Gui.getString("menuAnls"));
 		mAnls.setMnemonic(KeyEvent.VK_N);
 
-		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
-		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
-		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
-		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
-		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
+//		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
+//		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
+//		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
+//		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
+//		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
+		//same without icons:
+		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0);
+		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0);
+		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0);
+		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0);
+		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0);
 		
 		mAnlsRunCodeMLSite = getItem(aAnlsRunCodeMLSite, KeyEvent.VK_S, 0, 0);
 		mAnlsRunCodeMLBranch = getItem(aAnlsRunCodeMLBranch, KeyEvent.VK_B, 0, 0);
@@ -736,8 +742,8 @@ public class WinMainMenuBar extends JMenuBar
 		
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
 		
-		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T,
-				KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
+		//mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
+		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
 		mAnlsCreateTree.setDisplayedMnemonicIndex(20);
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
