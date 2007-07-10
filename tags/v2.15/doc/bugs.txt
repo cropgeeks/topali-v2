@@ -1,0 +1,5 @@
+PAL alignment reading code goes into an infinite loop on PNG images
+
+Screen drawing errors on SequenceListPanel.findSequence when the number of
+sequences is less than a screen's worth, and the horizontal scrollbar is not
+at position 0

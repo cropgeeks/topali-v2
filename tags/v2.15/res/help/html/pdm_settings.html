@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>PDM Settings</title
+</title>
+
+<body>
+
+<h1>PDM Settings</h1>
+
+<p>PDM stands for <i><a href="pdm_method.html">Probabilistic Divergence Measures</a></i>.</p>
+
+<p>Please ensure that at least 4 sequences have been selected from your 
+alignment before attempting to run PDM. See <a href="select_seqs.html">
+selecting sequences</a> for further information.</p>
+
+<p>To run the PDM analysis method, select <b>Analysis | Run PDM</b> from the menu 
+bar. This brings up the Settings dialog that provides two groups of parameters
+that can be customized before starting the DSS run.</p>
+
+<p><b>Basic settings:</b><br>
+Basic settings are available by selecting the <b>Basic</b> tabbed pane.
+<ul>
+  <li><b>Step size</b> - step size (in nucleotides) to use when moving along the 
+  alignment.</li>
+  <li><b>Window size</b> - window size (in nucleotides) to use when analyzing along the 
+  alignment.</li>
+</ul>
+</p>
+
+<p><b>Advanced settings</b><br>
+Advanced settings are available by selecting the <b>Advanced</b> tabbed pane. It is
+advisable not to change these settings unless you understand the methodology behind PDM.
+<ul>
+  <li><b>Number of bootstrapping threshold runs</b> - number of times to re-run the analysis 
+  to calculate the threshold values.</li>
+  <li><b>Prune histogram results</b> - toggle whether or not to use Pruned PDM (recommended
+for large numbers of sequences).</li>
+  <li><b>Seed</b> - 1 < odd integer < 2147483647 (2^31 - 1).</li>
+  <li><b>Burn-in time</b> - number of cycles to run burn algorithm.</li>
+  <li><b>Cycles</b> - number of cycles to run main algorithm.</li>
+  <li><b>Burn-algorithm</b> - </li>
+  <li><b>Main-algorithm</b> - </li>
+  <li><b>Use-beta</b> - use scaled beta distribution modification of local.</li>
+  <li><b>Molecular-clock</b> - if true, assume constant rate of evolution for all branches.</li>
+  <li><b>Category-list</b> - one site category.</li>
+  <li><b>Initial-theta</b> - </li>
+  <li><b>Parameter-update-interval</b> - number of tree updates after each parameter update.</li>
+  <li><b>Update-theta</b> - substitution rate parameters.</li>
+  <li><b>Tune-interval</b> - interval to adapt to global-tune during burn-in.</li>
+  <li><b>Global-tune</b> - half window width for global.</li>
+  <li><b>Local-tune</b> - stretch parameter for local.</li>
+  <li><b>Theta-tune</b> - Dirichlet parameter for theta update.</li>
+  <li><b>Beta-tune</b> - half window width for beta update.</li>
+  <li><b>Outgroup</b> - </li>
+</ul>
+
+<p>Once you are happy with the settings, click <b>Run</b> to begin the analysis.</p>
+
+</body>
+</html>

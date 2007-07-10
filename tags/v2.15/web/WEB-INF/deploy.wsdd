@@ -1,0 +1,44 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+<service name="topali-hmm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.hmm.HMMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
+
+<service name="topali-pdm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.pdm.PDMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
+
+<service name="topali-pdm2" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.pdm2.PDMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
+
+<service name="topali-dss" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.dss.DSSWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+ </service>
+
+<service name="topali-lrt" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.lrt.LRTWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+ </service>
+
+<service name="topali-mbt" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.trees.MBTreeWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="session"/>
+</service>
+
+</deployment>
+
+<!-- Deploy via:
+  java org.apache.axis.client.AdminClient -lhttp://localhost:8080/topali/services/AxisServlet deploy.wsdd
+-->
