@@ -49,7 +49,7 @@ public class Icons
 	
 	public static ImageIcon VAMSASON, VAMSASOFF;
 	
-	public static ImageIcon MIDPOINT_ROOT;
+	public static ImageIcon MIDPOINT_ROOT, TREE_ANCESTOR;
 	
 	private Icons()
 	{

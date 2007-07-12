@@ -18,16 +18,20 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
+import org.apache.log4j.Logger;
+
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.gui.tree.TreePane;
-import doe.GradientPanel;
+import doe.*;
 
 public class NavPanel extends JPanel implements TreeSelectionListener,
 		PropertyChangeListener
 {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	static JPanel blankPanel;
 
 	private DefaultMutableTreeNode root;
@@ -320,9 +324,16 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 			
 			if(result instanceof FastMLResult) {
 				FastMLResult fres = (FastMLResult)result;
-				fres.restoreSeqNames();
-				winMain.addNewAlignmentData(fres.alignment);
-				data.removeResult(result);
+				try
+				{
+					fres.restoreSeqNames();
+					winMain.addNewAlignmentData(fres.alignment);
+					data.removeResult(result);
+				} catch (RuntimeException e)
+				{
+					log.warn("There was a problem with this FastMLResult", e);
+					MsgBox.msg("A problem occured while reconstructing ancestral sequences", MsgBox.ERR);
+				}
 				return;
 			}
 

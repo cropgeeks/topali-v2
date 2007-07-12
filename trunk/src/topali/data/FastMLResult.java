@@ -63,8 +63,6 @@ public class FastMLResult extends AlignmentResult
 	 * Restores the original seq names, if there is a seqNameMapping
 	 */
 	public void restoreSeqNames() {
-		if(seqNameMapping==null)
-			return;
 		
 		for(int i=0; i<seqNameMapping.length; i++) {
 			Vector<Sequence> seqs = alignment.getSequenceSet().getSequences();
