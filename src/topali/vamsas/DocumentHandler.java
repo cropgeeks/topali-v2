@@ -980,6 +980,10 @@ class DocumentHandler
 					vAnno.setType("PDMResult");
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
+					Property p = new Property();
+					p.setName("discrete");
+					p.setType("boolean");
+					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
 					addGraph(vAnno, result.glbData, "glbData");
 					addGraph(vAnno, result.locData, "locData");
@@ -1007,6 +1011,10 @@ class DocumentHandler
 					vAnno.setType("HMMResult");
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
+					Property p = new Property();
+					p.setName("discrete");
+					p.setType("boolean");
+					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
 					addGraph(vAnno, result.data1, "data1");
 					addGraph(vAnno, result.data2, "data2");
@@ -1033,6 +1041,10 @@ class DocumentHandler
 					vAnno.setType("DSSResult");
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
+					Property p = new Property();
+					p.setName("discrete");
+					p.setType("boolean");
+					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
 					addGraph(vAnno, result.data, "data");
 					addData(vAnno, result.thresholds, "thresholds");
@@ -1058,6 +1070,10 @@ class DocumentHandler
 					vAnno.setType("LRTResult");
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
+					Property p = new Property();
+					p.setName("discrete");
+					p.setType("boolean");
+					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
 					addGraph(vAnno, result.data, "data");
 					addData(vAnno, result.thresholds, "thresholds");
