@@ -74,7 +74,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		bRoot = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.MIDPOINT_ROOT, null);
 		
-		bAncestor = (JButton)WinMainToolBar.getButton(false, null, "tre12", Icons.TREE_TREE, null);
+		bAncestor = (JButton)WinMainToolBar.getButton(false, null, "tre12", Icons.TREE_ANCESTOR, null);
 		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);

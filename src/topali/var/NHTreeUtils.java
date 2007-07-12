@@ -21,4 +21,13 @@ public class NHTreeUtils
 		return result;
 	}
 	
+	/**
+	 * Removes the bootstrap or probability (MrBayes) values of a tree
+	 * @param tree
+	 * @return
+	 */
+	public static String removeBootstrapValues(String tree) {
+		String result = tree.replaceAll("\\s*\\d+.\\d+:", "");
+		return result;
+	}
 }

@@ -27,7 +27,7 @@ public class CodonWProcess extends StoppableProcess
 	{
 		CodonWResult result = (CodonWResult) this.result;
 		
-		ProcessBuilder pb = new ProcessBuilder(result.codonwPath, "codonw.fasta", "-code", ""+getGeneticCode(result.geneticCode), "-gc3s", "-enc", "-cai", "-cbi", "-fop", "-nomenu", "-silent");
+		ProcessBuilder pb = new ProcessBuilder(result.codonwPath, "codonw.fasta", "-code", ""+getGeneticCode(result.geneticCode), "-enc", "-gc3s", "-gc", "-sil_base", "-nomenu", "-silent");
 		pb.directory(wrkDir);
 		pb.redirectErrorStream(true);
 

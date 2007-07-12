@@ -444,7 +444,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunMG = new AbstractAction("Subst. Model Test") {
+		aAnlsRunMG = new AbstractAction("Model Selection") {
 			public void actionPerformed(ActionEvent e)
 			{
 				boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
@@ -452,7 +452,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunCW = new AbstractAction("Codon Usage Analysis") {
+		aAnlsRunCW = new AbstractAction("Check Codon Usage") {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunCW(null);
@@ -745,7 +745,7 @@ public class WinMainMenuBar extends JMenuBar
 		//mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
 		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
-		mAnlsCreateTree.setDisplayedMnemonicIndex(20);
+		mAnlsCreateTree.setDisplayedMnemonicIndex(9);
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
 				KeyEvent.CTRL_MASK);
 		mAnlsRename = getItem(aAnlsRename, KeyEvent.VK_N, 0, 0);
@@ -753,21 +753,21 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
-		mAnls.add(new MenuHeading("Recombination"));
+		mAnls.add(new MenuHeading("Recombination breakpoints"));
 		mAnls.add(mAnlsRunPDM);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Positive Selection"));
+		mAnls.add(new MenuHeading("Positive selection"));
 		mAnls.add(mAnlsRunCodeMLSite);
 		mAnls.add(mAnlsRunCodeMLBranch);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Phylogeny"));
+		mAnls.add(new MenuHeading("Phylogenetic trees"));
 		mAnls.add(mAnlsRunMG);
 		mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Misc."));
+		mAnls.add(new MenuHeading("Coding regions"));
 		mAnls.add(mAnlsRunCW);
 		mAnls.addSeparator();
 		mAnls.add(mAnlsPartition);
@@ -1005,7 +1005,7 @@ public class WinMainMenuBar extends JMenuBar
 		public MenuHeading(String text) {
 			super(text);
 			Font f = getFont();
-			setFont(f.deriveFont(Font.ITALIC));
+			setFont(f.deriveFont(Font.BOLD));
 		}
 
 		@Override

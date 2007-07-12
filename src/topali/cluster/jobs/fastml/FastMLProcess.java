@@ -36,7 +36,7 @@ public class FastMLProcess extends StoppableProcess
 		if(result.gamma)
 			cmdList.add("-g");
 		cmdList.add("-b");
-		if(result.model!=null)
+		if(result.model!=null && !result.model.equals("mn"))
 			cmdList.add("-"+result.model);
 		cmdList.add("-s");
 		cmdList.add("seq.fasta");
