@@ -1031,7 +1031,7 @@ class DocumentHandler
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
 					Property p = new Property();
-					p.setName("discrete");
+					p.setName("continuous");
 					p.setType("boolean");
 					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
@@ -1062,7 +1062,7 @@ class DocumentHandler
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
 					Property p = new Property();
-					p.setName("discrete");
+					p.setName("continuous");
 					p.setType("boolean");
 					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
@@ -1092,7 +1092,7 @@ class DocumentHandler
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
 					Property p = new Property();
-					p.setName("discrete");
+					p.setName("continuous");
 					p.setType("boolean");
 					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
@@ -1121,7 +1121,7 @@ class DocumentHandler
 					vAnno.setDescription(tRes.guiName);
 					vAnno.setGraph(true);
 					Property p = new Property();
-					p.setName("discrete");
+					p.setName("continuous");
 					p.setType("boolean");
 					vAnno.addProperty(p);
 					// vAnno.setProvenance(getDummyProvenance());
