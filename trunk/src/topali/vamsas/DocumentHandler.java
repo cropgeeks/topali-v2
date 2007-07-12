@@ -923,10 +923,11 @@ class DocumentHandler
 
 				// Add sequence to vamsas dataset:
 				vDSSequence = new uk.ac.vamsas.objects.core.Sequence();
-				vDSSequence.setSequence(seqString);
+				String ungappedSeqString = seqString.replaceAll(vGapCharEscaped, ""); 
+				vDSSequence.setSequence(ungappedSeqString);
 				vDSSequence.setName(tSeq.getName());
 				vDSSequence.setStart(1);
-				vDSSequence.setEnd(tSeq.getLength());
+				vDSSequence.setEnd(ungappedSeqString.length());
 				if (tSequenceSet.getParams().isDNA())
 					vDSSequence.setDictionary(SymbolDictionary.STANDARD_NA);
 				else
