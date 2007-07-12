@@ -17,7 +17,7 @@ import topali.gui.Project;
 import uk.ac.vamsas.client.IClientDocument;
 import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.core.AnnotationElement;
-import uk.ac.vamsas.objects.utils.SymbolDictionary;
+import uk.ac.vamsas.objects.utils.*;
 
 
 class DocumentHandler
@@ -786,11 +786,11 @@ class DocumentHandler
 			if(pos<1)
 				continue;
 			
-			String description = els[i].getDescription();
+			Glyph gl = els[i].getGlyph(0);
 			
 			float[] value = new float[2]; 
 			value[0] = els[i].getValue()[0];
-			value[1] = (float)description.charAt(0);
+			value[1] = (float)gl.getContent().charAt(0);
 			positions.add((float) pos);
 			values.add(value);
 		}
@@ -831,7 +831,10 @@ class DocumentHandler
 		AnnotationElement[] els = vAnno.getAnnotationElement();
 		for (int i = 0; i < els.length; i++)
 		{
-			if (els[i].getDescription().equals(desc))
+			String desc2 = els[i].getDescription();
+			if(desc2==null)
+				continue;
+			if (desc2.equals(desc))
 				return els[i].getValue();
 		}
 		return null;
@@ -1449,7 +1452,10 @@ class DocumentHandler
 			String aa = ""+(char)(int)data[i][2];
 			
 			AnnotationElement el = new AnnotationElement();
-			el.setDescription(aa);
+			Glyph gl = new Glyph();
+			gl.setContent(aa);
+			gl.setDict(GlyphDictionary.DEFAULT);
+			el.addGlyph(gl);
 			el.setPosition(pos);
 			el.setValue(values);
 			anno.addAnnotationElement(el);
