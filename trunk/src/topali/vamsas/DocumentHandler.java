@@ -997,6 +997,9 @@ class DocumentHandler
 	{
 		for (AnalysisResult tRes : tAlign.getResults())
 		{
+			if(tRes.status!=JobStatus.COMPLETED)
+				continue;
+			
 			// the corresponding vamsas object to tRes could be either a
 			// AlignmentAnnotation or a Tree
 			Object tmp = VamsasManager.mapper.getVamsasObject(tRes);
