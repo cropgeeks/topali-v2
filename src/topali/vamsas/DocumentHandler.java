@@ -451,7 +451,7 @@ class DocumentHandler
 						boolean hasData = false;
 						boolean hasGraph = false;
 
-						float[][] graph = getGraph(vAnno, "graph");
+						float[][] graph = getCMLGraph(vAnno);
 						float[] data = getData(vAnno, "parameters");
 						if (data != null && data.length > 8)
 						{
@@ -772,6 +772,53 @@ class DocumentHandler
 		return result;
 	}
 
+	private float[][] getCMLGraph(AlignmentAnnotation vAnno)
+	{
+
+		LinkedList<Float> positions = new LinkedList<Float>();
+		LinkedList<float[]> values = new LinkedList<float[]>();
+
+		AnnotationElement[] els = vAnno.getAnnotationElement();
+
+		for (int i = 0; i < els.length; i++)
+		{
+			int pos = (int) els[i].getPosition();
+			if(pos<1)
+				continue;
+			
+			String description = els[i].getDescription();
+			
+			float[] value = new float[2]; 
+			value[0] = els[i].getValue()[0];
+			value[1] = (float)description.charAt(0);
+			positions.add((float) pos);
+			values.add(value);
+		}
+
+		// if there is no data matching the desc return null
+		if (positions.size() <= 0)
+			return null;
+
+		// determine the max. size of the values array
+		int maxSize = 0;
+		for (int j = 0; j < positions.size(); j++)
+		{
+			if (values.get(j).length > maxSize)
+				maxSize = values.get(j).length;
+		}
+
+		float[][] result = new float[positions.size()][maxSize + 1];
+		for (int j = 0; j < positions.size(); j++)
+		{
+			result[j][0] = positions.get(j);
+
+			for (int k = 0; k < values.get(j).length; k++)
+				result[j][k + 1] = values.get(j)[k];
+		}
+
+		return result;
+	}
+	
 	/**
 	 * Get certain values from a vamsas annotation
 	 * 
@@ -1108,7 +1155,7 @@ class DocumentHandler
 						float[][] graph = model.getGraph();
 						if (graph != null)
 						{
-							addGraph(vAnno, graph, "graph");
+							addCMLGraph(vAnno, graph);
 							vAnno.setGraph(true);
 						}
 						
@@ -1393,6 +1440,22 @@ class DocumentHandler
 		}
 	}
 
+	private void addCMLGraph(AlignmentAnnotation anno, float[][] data)
+	{
+		for (int i = 0; i < data.length; i++)
+		{
+			int pos = (int) (data[i][0]);
+			float[] values = new float[] {data[i][1]};
+			String aa = ""+(char)(int)data[i][2];
+			
+			AnnotationElement el = new AnnotationElement();
+			el.setDescription(aa);
+			el.setPosition(pos);
+			el.setValue(values);
+			anno.addAnnotationElement(el);
+		}
+	}
+	
 	/**
 	 * Add a value to a vamsas alignment annotation
 	 * 
