@@ -30,3 +30,7 @@ make
 echo "Compiling CodonW"
 cd ../codonW
 make
+
+echo "Compiling FastML"
+cd ../fastml
+g++ -o fastml -O3 *.cpp

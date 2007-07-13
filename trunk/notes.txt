@@ -2,16 +2,11 @@ Current state of affairs
 -----------------------
 TODO:
 - Check Sub. models
- 
+- Clusterjobs: Check for error.txt in getPercentageComplete()!
+
 Last modifications:
-- Implemented fast WAG/NJ tree for protein alignments
-- Changed webservice limit from total number of bases to number of sequences 
-- Added "Load example alignment" option to "Import alignment" dialog
-- Added MrBayes cDNA tree estimation
 
 Current problems:
-- Midpoint routing results in loosing bootstrap values
-- VAMSAS: one Topali sequence -> two Vamsas sequences just causes trouble
 
 Some ideas:
 - What's about the third import alignment option (clustal)? (not important at the moment)

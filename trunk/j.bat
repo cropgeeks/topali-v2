@@ -4,7 +4,7 @@ set lib=web\WEB-INF\lib
 
 set topali=%lib%\
 set topali=%topali%;%lib%\axis.jar
-set topali=%topali%;%lib%\castor-1.1-xml.jar
+set topali=%topali%;%lib%\castor-1.1-cycle-xml.jar
 set topali=%topali%;%lib%\commons-codec-1.3.jar
 set topali=%topali%;%lib%\commons-discovery-0.2.jar
 set topali=%topali%;%lib%\commons-httpclient-3.0.jar
