@@ -610,7 +610,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		
 		res.gamma = data.getSequenceSet().getParams().isModelGamma();
 		
-		res.alignment.name = data.name+" (+ancestral seq.)";
+		res.alignment.name = data.name+" (+ancestral seq. using FastML)";
 		submitJob(data, res);
 	}
 	
