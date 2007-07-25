@@ -1,0 +1,42 @@
+Current state of affairs
+-----------------------
+TODO:
+- Check Sub. models
+- Clusterjobs: Check for error.txt in getPercentageComplete()!
+
+Last modifications:
+
+Current problems:
+
+Some ideas:
+- What's about the third import alignment option (clustal)? (not important at the moment)
+- Just one settings dialog for all settings?
+- Not just limit max. alignment size, also limit number of active jobs per user? (not an easy task)
+- Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)? ((not important at the moment)
+- Import alignment from URL (not important at the moment)
+- Spread Phyml job over several nodes (bootstrapping)? (not important at the moment)
+
+
+Some URLs
+---------
+Tomcat Manager:
+http://gruffalo:8080/
+
+Grid Report
+http://gruffalo/scri/ganglia/
+
+SCRI Cluster:
+http://gruffalo.scri.ac.uk/topali
+http://gruffalo.scri.ac.uk/broker
+
+
+
+Misc.
+-----
+To run a script in a certain queue:
+#$ -q fast.q@n1
+
+If libs changes, edit:
+- j.bat (for testing)
+- build.xml (generates meta-inf classpath for topali.jar) (used by installer)
+- webstart/topali.jnlp

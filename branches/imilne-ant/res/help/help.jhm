@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+   <!DOCTYPE map
+     PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+            "http://java.sun.com/products/javahelp/map_1_0.dtd">
+<map version="1.0">
+   <mapID target="intro" url="html/intro.html" />
+   <mapID target="topali" url="html/topali.html" />
+   <mapID target="quickstart" url="html/quickstart.html" />
+   
+   <mapID target="license" url="html/license.html" />
+   <mapID target="privacy" url="html/privacy.html" />
+   
+   <mapID target="projects" url="html/projects.html" />
+   
+   <mapID target="alignments" url="html/alignments.html" />
+     <mapID target="import_alignment" url="html/import_alignment.html" />
+     <mapID target="makena" url="html/makena.html" />
+     <mapID target="export_alignment" url="html/export_alignment.html" />
+     <mapID target="view_alignment" url="html/view_alignment.html" />
+     <mapID target="summary_info" url="html/summary_info.html" />
+     <mapID target="movie_dialog" url="html/movie_dialog.html" />
+     <mapID target="select_seqs" url="html/select_seqs.html" />
+     <mapID target="reorder_seqs" url="html/reorder_seqs.html" />
+     <mapID target="find_sequence" url="html/find_sequence.html" />
+     <mapID target="rename_sequence" url="html/rename_sequence.html" />
+     <mapID target="go_to_nucleotide" url="html/go_to_nucleotide.html" />
+     <mapID target="partitions_dialog" url="html/partitions_dialog.html" />
+     <mapID target="auto_partition" url="html/auto_partition.html" />
+     <mapID target="overview_dialog" url="html/overview_dialog.html" />
+     <mapID target="remove_alignment" url="html/remove_alignment.html" />
+     
+     <mapID target="local_jobs" url="html/local_jobs.html" />
+     
+     <mapID target="pdm_method" url="html/pdm_method.html" />
+     <mapID target="pdm_settings" url="html/pdm_settings.html" />
+     <mapID target="hmm_method" url="html/hmm_method.html" />
+     <mapID target="hmm_settings" url="html/hmm_settings.html" />
+     <mapID target="dss_method" url="html/dss_method.html" />
+     <mapID target="dss_settings" url="html/dss_settings.html" />
+     <mapID target="lrt_method" url="html/lrt_method.html" />
+     <mapID target="lrt_settings" url="html/lrt_settings.html" />
+     
+     <mapID target="estimate_tree" url="html/estimate_tree.html" />
+     
+     <mapID target="paml" url="html/paml.html" />
+     <mapID target="cmlsite_settings" url="html/cmlsite_settings.html" />
+     <mapID target="cmlbranch_settings" url="html/cmlbranch_settings.html" />
+   
+   <mapID target="display_settings" url="html/display_settings.html" /> 
+   <mapID target="settings" url="html/settings.html" />
+   
+   <mapID target="backIcon" url="icons/back.png" />
+   <mapID target="forwardIcon" url="icons/forward.png" />
+   <mapID target="homeIcon" url="icons/home.png" />
+   <mapID target="printIcon" url="icons/print.png" />
+   <mapID target="printSetupIcon" url="icons/setup.png" />
+   <mapID target="helpIcon" url="icons/help.png" />
+   
+   <mapID target="topic" url="icons/topic.png" />
+</map>
