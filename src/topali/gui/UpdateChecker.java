@@ -100,7 +100,8 @@ class UpdateChecker extends Thread
 				+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
 				+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"
 				+ "This software is licensed. Please see accompanying "
-				+ "license file for details." + "</html>";
+				+ "license file for details.<br><br>"
+				+ "My TOPALi ID: " + Prefs.appId + "</html>";
 
 		doe.MsgBox.msg(msg, doe.MsgBox.INF);
 	}
