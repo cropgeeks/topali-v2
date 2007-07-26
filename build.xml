@@ -16,6 +16,8 @@
 	<property name="build.web-inf" location="${build.root}/WEB-INF"/>
 	<property name="build.cluster" location="${build.web-inf}/cluster"/>
 
+	<property name="manager.url" value="http://${user.server.name}:${user.server.port}/manager"/>
+
 	<!-- The two main results from building - TOPALi, and a WAR for Tomcat -->
 	<property name="jarfile" location="${lib}/topali.jar"/>
 	<property name="build.warfile" location="${build.root}/topali.zip"/>
@@ -84,6 +86,18 @@
 			<lib dir="${lib}"/>
 			<webinf dir="${build.web-inf}"/>
 		</war>
+	</target>
+
+	<target name="undeploy">
+		<undeploy url="${manager.url}"
+			username="${user.manager.username}" password="${user.manager.password}"
+			path="${user.url.path}"/>
+	</target>
+
+	<target name="deploy" depends="war">
+		<deploy url="${manager.url}"
+			username="${user.manager.username}" password="${user.manager.password}"
+			path="${user.url.path}" war="${build.warfile}"/>
 	</target>
 
 	<target name="clean">
