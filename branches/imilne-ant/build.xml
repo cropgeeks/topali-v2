@@ -15,19 +15,20 @@
 	<property name="build.classes" location="${build.root}/classes"/>
 	<property name="build.web-inf" location="${build.root}/WEB-INF"/>
 	<property name="build.cluster" location="${build.web-inf}/cluster"/>
+	<property name="build.binaries" location="${build.web-inf}/binaries/src"/>
 
 	<property name="manager.url" value="http://${user.server.name}:${user.server.port}/manager"/>
 
 	<!-- The two main results from building - TOPALi, and a WAR for Tomcat -->
 	<property name="jarfile" location="${lib}/topali.jar"/>
-	<property name="build.warfile" location="${build.root}/topali.zip"/>
+	<property name="build.warfile" location="${build.root}/topali.war"/>
 
 
 	<target name="init">
-		<mkdir dir="${build.root}"/>
 		<mkdir dir="${build.classes}"/>
 		<mkdir dir="${build.web-inf}"/>
 		<mkdir dir="${build.cluster}"/>
+		<mkdir dir="${build.binaries}"/>
 	</target>
 
 	<path id="project.classpath">
@@ -72,14 +73,28 @@
 			</fileset>
 		</signjar>
 	</target>
+	
+	<target name="templates">
+		<copy
+			file="${config}/cluster/cluster.properties.template"
+			tofile="${build.cluster}/cluster.properties"
+			overwrite="true">
+			<filterset>
+				<filter token="JAVAPATH" value="${user.java.path}"/>
+				<filter token="JOBDIR" value="${user.job.dir}"/>				
+				<filter token="TMPDIR" value="${user.tmp.dir}"/>
+			</filterset>
+		</copy>
+	</target>
 
-	<target name="war" depends="jar">
-		<delete file="${build.warfile}"/>
-
+	<target name="war" depends="jar,templates">
 		<copy file="${config}/web.xml" todir="${build.web-inf}"/>
 		<copy file="${config}/server-config.wsdd" todir="${build.web-inf}"/>
 		<copy todir="${build.cluster}">
 			<fileset dir="${user.cluster.dir}"/>
+		</copy>
+		<copy todir="${build.binaries}">
+			<fileset dir="${user.binaries.dir}"/>
 		</copy>
 
 		<war destfile="${build.warfile}" update="true">
@@ -103,5 +118,6 @@
 	<target name="clean">
 		<delete dir="${build.root}"/>
 	</target>
+	
 
 </project>
