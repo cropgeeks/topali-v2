@@ -2,15 +2,30 @@
 
 	<description>TOPALi v2 Ant Build Script</description>
 
+	<!-- Load in user-specific properties from build.properties -->
+	<property file="build.properties"/>
+
 	<property name="src" location="src"/>
-	<property name="classes" location="classes"/>
-	<property name="lib" location="web/WEB-INF/lib"/>
-	<property name="lib-devel" location="web/WEB-INF/lib-devel"/>
+	<property name="res" location="res"/>
+	<property name="lib" location="lib"/>
+	<property name="config" location="config"/>
+	<property name="lib-devel" location="lib-devel"/>
+
+	<property name="build.root" location="build"/>
+	<property name="build.classes" location="${build.root}/classes"/>
+	<property name="build.web-inf" location="${build.root}/WEB-INF"/>
+	<property name="build.cluster" location="${build.web-inf}/cluster"/>
+
+	<!-- The two main results from building - TOPALi, and a WAR for Tomcat -->
 	<property name="jarfile" location="${lib}/topali.jar"/>
-	<property name="warfile" location="topali.war"/>
+	<property name="build.warfile" location="${build.root}/topali.zip"/>
+
 
 	<target name="init">
-		<!--<mkdir dir="${classes}"/>-->
+		<mkdir dir="${build.root}"/>
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${build.web-inf}"/>
+		<mkdir dir="${build.cluster}"/>
 	</target>
 
 	<path id="project.classpath">
@@ -29,15 +44,15 @@
 		classname="org.apache.catalina.ant.DeployTask"/>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="1.5" target="1.5">
+		<javac srcdir="${src}" destdir="${build.classes}" source="1.5" target="1.5">
 			<classpath refid="project.classpath"/>
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
 		<jar jarfile="${jarfile}">
-			<fileset dir="classes"/>
-			<zipfileset dir="res" prefix="res"/>
+			<fileset dir="${build.classes}"/>
+			<zipfileset dir="${res}" prefix="res"/>
 			<manifest>
 				<attribute name="Main-Class" value="topali.gui.TOPALi"/>
 				<attribute name="Class-Path"
@@ -57,27 +72,22 @@
 	</target>
 
 	<target name="war" depends="jar">
-		<delete file="${warfile}"/>
-		<war destfile="${warfile}" webxml="web/WEB-INF/web.xml" update="true">
-			<webinf dir="WEB-INF">
-				<exclude name="${lib-devel}/*.*"/>
-			</webinf>
+		<delete file="${build.warfile}"/>
+
+		<copy file="${config}/web.xml" todir="${build.web-inf}"/>
+		<copy file="${config}/server-config.wsdd" todir="${build.web-inf}"/>
+		<copy todir="${build.cluster}">
+			<fileset dir="${user.cluster.dir}"/>
+		</copy>
+
+		<war destfile="${build.warfile}" update="true">
+			<lib dir="${lib}"/>
+			<webinf dir="${build.web-inf}"/>
 		</war>
 	</target>
 
-	<!--
-	<target name="war" depends="compile,log4j">
-		<delete file="${warfile}"/>
-		<war destfile="${warfile}" webxml="WEB-INF/web.xml" update="true">
-			<webinf dir="WEB-INF">
-				<exclude name="deploy.wsdd"/>
-				<exclude name="**/servlet-api.jar"/>
-				<exclude name="**/catalina-ant.jar"/>
-				<exclude name="**/axis-ant.jar"/>
-				<exclude name="**/log4j.template.xml"/>
-			</webinf>
-		</war>
+	<target name="clean">
+		<delete dir="${build.root}"/>
 	</target>
-	-->
 
 </project>

@@ -1,6 +1,6 @@
 @echo off
 
-set lib=web\WEB-INF\lib
+set lib=lib
 
 set topali=%lib%\
 set topali=%topali%;%lib%\axis.jar
@@ -24,4 +24,4 @@ set topali=%topali%;%lib%\swing-layout-1.0.jar
 set topali=%topali%;%lib%\vamsas-client.jar
 set topali=%topali%;%lib%\xercesImpl.jar
 
-java -Xmx256m -cp .;classes;res;%topali% topali.gui.TOPALi %1
+java -Xmx256m -cp .;deploy\classes;res;%topali% topali.gui.TOPALi %1
