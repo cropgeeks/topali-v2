@@ -1236,28 +1236,28 @@ class DocumentHandler
 
 				}
 
-				else if (tRes instanceof MGResult)
-				{
-					MGResult result = (MGResult) tRes;
-					vAnno.setType("MGResult");
-					vAnno.setDescription(tRes.guiName);
-					vAnno.setGraph(false);
-					// vAnno.setProvenance(getDummyProvenance());
-
-					for (SubstitutionModel m : result.models)
-					{
-						AnnotationElement el = new AnnotationElement();
-						el.setPosition(-1);
-						el.setDescription(m.getName());
-						el.setValue(new float[]
-						{ (float) m.getLnl(), (float) m.getAic1(),
-								(float) m.getAic2(), (float) m.getBic() });
-						vAnno.addAnnotationElement(el);
-					}
-
-					VamsasManager.mapper.registerObjects(tRes, vAnno);
-					vAlign.addAlignmentAnnotation(vAnno);
-				}
+//				else if (tRes instanceof MGResult)
+//				{
+//					MGResult result = (MGResult) tRes;
+//					vAnno.setType("MGResult");
+//					vAnno.setDescription(tRes.guiName);
+//					vAnno.setGraph(false);
+//					// vAnno.setProvenance(getDummyProvenance());
+//
+//					for (SubstitutionModel m : result.models)
+//					{
+//						AnnotationElement el = new AnnotationElement();
+//						el.setPosition(-1);
+//						el.setDescription(m.getName());
+//						el.setValue(new float[]
+//						{ (float) m.getLnl(), (float) m.getAic1(),
+//								(float) m.getAic2(), (float) m.getBic() });
+//						vAnno.addAnnotationElement(el);
+//					}
+//
+//					VamsasManager.mapper.registerObjects(tRes, vAnno);
+//					vAlign.addAlignmentAnnotation(vAnno);
+//				}
 
 				else if (tRes instanceof CodonWResult)
 				{
