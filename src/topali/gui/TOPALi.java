@@ -22,18 +22,18 @@ import topali.mod.*;
 import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application
-{	
+{
 	private final String prefsFile = ".TOPALiV2-16.xml";
-	
+
 	static Logger root;
 	static Logger log;
-	
+
 	static {
-		PropertyConfigurator.configure(TOPALi.class.getResource("/res/clientlogger.properties"));
+		PropertyConfigurator.configure(TOPALi.class.getResource("/res/client.log4j.properties"));
 		root = Logger.getRootLogger();
 		log = Logger.getLogger(TOPALi.class);
 	}
-	
+
 	private boolean isApplet = false;
 
 	private JWindow splash = null;
@@ -41,10 +41,10 @@ public class TOPALi extends Applet implements Application
 	private Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
-	
+
 	public static void main(String[] args)
-	{	
-		
+	{
+
 		root.info("Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));
 
@@ -66,8 +66,8 @@ public class TOPALi extends Applet implements Application
 		Icons.loadIcons();
 
 		new TOPALi(initialProject);
-		
-		
+
+
 	}
 
 	public void init()
@@ -83,7 +83,7 @@ public class TOPALi extends Applet implements Application
 	}
 
 	private TOPALi(final File initialProject)
-	{		
+	{
 		//If there is a GracefulShutdownHandler, tell it about TOPALi
 		//and also use it as UncaughtExceptionHandler
 		Enumeration en = root.getAllAppenders();
@@ -95,7 +95,7 @@ public class TOPALi extends Applet implements Application
 				Thread.setDefaultUncaughtExceptionHandler(sh);
 			}
 		}
-		
+
 		showSplash();
 
 		// Load the preferences
@@ -120,7 +120,7 @@ public class TOPALi extends Applet implements Application
 				UIManager.put("OptionPane.informationIcon", Icons.WIN_INFORM);
 				UIManager.put("OptionPane.warningIcon", Icons.WIN_WARN);
 				UIManager.put("OptionPane.questionIcon", Icons.WIN_QUESTION);
-				
+
 			} else if (Prefs.isMacOSX)
 				UIManager.setLookAndFeel(UIManager
 						.getSystemLookAndFeelClassName());
@@ -195,7 +195,7 @@ public class TOPALi extends Applet implements Application
 	public void shutdown()
 	{
 		log.info("Shutting down TOPALi");
-		
+
 		// Check it's ok to exit
 		if (!winMain.okToContinue())
 			return;
@@ -251,7 +251,7 @@ public class TOPALi extends Applet implements Application
 	{
 		if(Prefs.web_proxy_password==null || Prefs.web_proxy_password.equals(""))
 			return;
-		
+
 		// About as secure as a chocolate teapot is functional...
 		String key = "287e283d5737552c5a72277561745452";
 		String scheme = StringEncrypter.DESEDE_ENCRYPTION_SCHEME;

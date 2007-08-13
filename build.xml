@@ -73,7 +73,7 @@
 			</fileset>
 		</signjar>
 	</target>
-	
+
 	<target name="templates">
 		<copy
 			file="${config}/cluster/cluster.properties.template"
@@ -81,8 +81,17 @@
 			overwrite="true">
 			<filterset>
 				<filter token="JAVAPATH" value="${user.java.path}"/>
-				<filter token="JOBDIR" value="${user.job.dir}"/>				
+				<filter token="JOBDIR" value="${user.job.dir}"/>
 				<filter token="TMPDIR" value="${user.tmp.dir}"/>
+			</filterset>
+		</copy>
+		<copy
+			file="${config}/server.log4j.properties.template"
+			tofile="${lib}/log4j.properties"
+			overwrite="true">
+			<filterset>
+				<filter token="INFOLOG" value="${user.logging.info.path}"/>
+				<filter token="ACCESSLOG" value="${user.logging.access.path}"/>
 			</filterset>
 		</copy>
 	</target>
@@ -118,6 +127,6 @@
 	<target name="clean">
 		<delete dir="${build.root}"/>
 	</target>
-	
+
 
 </project>

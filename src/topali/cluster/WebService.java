@@ -69,19 +69,20 @@ public abstract class WebService
 		// Initialize logging
 		logger = Logger.getLogger("topali.cluster.info-log");
 		accessLog = Logger.getLogger("topali.cluster.access-log");
-		
-		try
+
+/*		try
 		{
 			File logDir = new File(webappPath, "logs");
 			File infoFile = new File(logDir, "info-log.txt");
 			File accessFile = new File(logDir, "access-log.txt");
 
 			PatternLayout pLayout = new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} - %m\r\n");
-		
+
 			logger.addAppender(new FileAppender(pLayout, infoFile.getPath()));
 			accessLog.addAppender(new FileAppender(pLayout, accessFile.getPath()));
 		}
 		catch (Exception e) {}
+*/
 	}
 
 	protected String getJobId()
@@ -119,7 +120,7 @@ public abstract class WebService
 		ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 		cluster.submitJob(jobDir, cmd);
 	}
-	
+
 	/**
 	 * Check if alignment is too big for a certain webservice
 	 * (limits can be set in cluster.properties, default: no limit)
@@ -130,7 +131,7 @@ public abstract class WebService
 		String tmp = getParameter(this.getClass().getSimpleName());
 		if(tmp==null || tmp.equals(""))
 			return;
-		
+
 		int max = Integer.parseInt(tmp);
 		if(ss.getSelectedSequences().length>max) {
 			String msg = "Max. alignment size for this job type is limited to "+max+" sequences.";
@@ -163,7 +164,7 @@ public abstract class WebService
 			ICluster cluster = (DRMAA) ? new DrmaaClient() : new SgeClient();
 			js.status = cluster.getJobStatus(jobDir);
 			logger.info(jobId + " - current status = " + js.status);
-			
+
 			if (js.status == JobStatus.QUEUING)
 				js.text = "" + cluster.getQueueCount(jobDir);
 
@@ -182,7 +183,7 @@ public abstract class WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 			cluster.deleteJob(jobDir);
-			
+
 			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
