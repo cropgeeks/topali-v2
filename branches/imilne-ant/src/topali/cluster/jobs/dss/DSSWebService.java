@@ -33,12 +33,14 @@ public class DSSWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			DSSResult result = (DSSResult) Castor.unmarshall(resultXML);
 
 			result.fitchPath = webappPath + "/binaries/src/fitch/fitch";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.fitchPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible

@@ -37,17 +37,19 @@ public class CodeMLWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
 			type = result.type;
 			if(type==CodeMLResult.TYPE_SITEMODEL)
 				nRuns = result.models.size();
 			else if(type==CodeMLResult.TYPE_BRANCHMODEL)
 				nRuns = result.hypos.size();
-			
+
 			result.codemlPath = webappPath + "/binaries/src/codeml/codeml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.codemlPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
@@ -112,7 +114,7 @@ public class CodeMLWebService extends WebService
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLBranchAnalysis");
 		else if(type==CodeMLResult.TYPE_SITEMODEL)
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLSiteAnalysis");
-		
+
 		// Write...
 		writeFile(template, new File(jobDir, "cml.sh"));
 
