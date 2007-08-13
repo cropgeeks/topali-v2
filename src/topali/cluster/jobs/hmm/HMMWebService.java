@@ -5,7 +5,7 @@
 
 package topali.cluster.jobs.hmm;
 
-import java.io.File;
+import java.io.*;
 import java.util.concurrent.RejectedExecutionException;
 
 import org.apache.axis.AxisFault;
@@ -33,12 +33,14 @@ public class HMMWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			HMMResult result = (HMMResult) Castor.unmarshall(resultXML);
 
 			result.barcePath = webappPath + "/binaries/src/barce/barce";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.barcePath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible

@@ -19,7 +19,7 @@ public class FastMLWebService extends WebService
 {
 
 	Logger log = Logger.getLogger(this.getClass());
-	
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -36,13 +36,15 @@ public class FastMLWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			FastMLResult result = (FastMLResult) Castor.unmarshall(resultXML);
 
 			result.fastmlPath = webappPath + "/binaries/src/fastml/fastml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
-			
+
+			Runtime.getRuntime().exec("chmod +x " + result.fastmlPath);
+
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
 			RunFastML run = new RunFastML(jobDir, ss, result);
@@ -65,7 +67,7 @@ public class FastMLWebService extends WebService
 			logger.log(Level.ERROR, "error.txt found");
 			throw AxisFault.makeFault(new Exception("FastML error.txt"));
 		}
-		
+
 		if(new File(jobDir, "result.xml").exists())
 			return new JobStatus(100, 0, "_status");
 		else
@@ -79,7 +81,7 @@ public class FastMLWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			FastMLResult result =  (FastMLResult)Castor.unmarshall(new File(jobDir, "result.xml"));
-			
+
 			logger.info(jobId + " - returning result");
 			accessLog.info("FastML  result  to   " + jobId);
 			return Castor.getXML(result);
@@ -113,5 +115,5 @@ public class FastMLWebService extends WebService
 		submitJob("fastml.sh", jobDir);
 	}
 
-	
+
 }

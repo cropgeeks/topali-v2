@@ -24,4 +24,4 @@ set topali=%topali%;%lib%\swing-layout-1.0.jar
 set topali=%topali%;%lib%\vamsas-client.jar
 set topali=%topali%;%lib%\xercesImpl.jar
 
-java -Xmx256m -cp .;deploy\classes;res;%topali% topali.gui.TOPALi %1
+java -Xmx256m -cp .;classes;res;%topali% topali.gui.TOPALi %1

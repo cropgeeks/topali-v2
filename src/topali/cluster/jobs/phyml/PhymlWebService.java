@@ -19,7 +19,7 @@ public class PhymlWebService extends WebService
 {
 
 	Logger log = Logger.getLogger(this.getClass());
-	
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -36,13 +36,15 @@ public class PhymlWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			PhymlResult result = (PhymlResult) Castor.unmarshall(resultXML);
 
 			result.phymlPath = webappPath + "/binaries/src/phyml/phyml_linux";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
-			
+
+			Runtime.getRuntime().exec("chmod +x " + result.phymlPath);
+
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
 			RunPhyml run = new RunPhyml(jobDir, ss, result);
@@ -77,7 +79,7 @@ public class PhymlWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			PhymlResult result = (new PhymlMonitor(jobDir)).getResult();
-			
+
 			logger.info(jobId + " - returning result");
 			accessLog.info("Phyml  result  to   " + jobId);
 			return Castor.getXML(result);
