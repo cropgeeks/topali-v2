@@ -8,8 +8,9 @@
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
 	<property name="lib" location="lib"/>
-	<property name="classes" location="classes"/>
-	<property name="config" location="config"/>
+	<property name="binaries"  location="binaries"/>
+	<property name="classes"   location="classes"/>
+	<property name="config"    location="config"/>
 	<property name="lib-devel" location="lib-devel"/>
 
 	<property name="build.root"     location="build"/>
@@ -89,8 +90,7 @@
 			tofile="${build.classes}/log4j.properties"
 			overwrite="true">
 			<filterset>
-				<filter token="INFOLOG" value="${user.logging.info.path}"/>
-				<filter token="ACCESSLOG" value="${user.logging.access.path}"/>
+				<filter token="LOGDIR" value="${user.logging.dir}"/>
 			</filterset>
 		</copy>
 	</target>
@@ -102,13 +102,14 @@
 			<fileset dir="${user.cluster.dir}"/>
 		</copy>
 		<copy todir="${build.binaries}">
-			<fileset dir="${user.binaries.dir}"/>
+			<fileset dir="${binaries}"/>
 		</copy>
 
 		<war destfile="${build.warfile}" update="false" >
 			<lib dir="${lib}"/>
 			<webinf dir="${build.web-inf}"/>
 			<classes dir="${build.classes}"/>
+			<fileset file="doc/web/tracking.jsp"/>
 		</war>
 	</target>
 

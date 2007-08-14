@@ -3,17 +3,25 @@ log4j.rootCategory=INFO
 
 log4j.category.topali.cluster.info-log=INFO, INFOLOG
 log4j.category.topali.cluster.access-log=INFO, ACCESSLOG
+log4j.category.topali.tracker=INFO, TRACKLOG
 
-log4j.appender.INFOLOG.File=@INFOLOG@
+log4j.appender.INFOLOG.File=@LOGDIR@/info-log.txt
 log4j.appender.INFOLOG=org.apache.log4j.FileAppender
 log4j.appender.INFOLOG.Append=true
 log4j.appender.INFOLOG.Threshold=INFO
 log4j.appender.INFOLOG.layout=org.apache.log4j.PatternLayout
 log4j.appender.INFOLOG.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} - %m\r\n
 
-log4j.appender.ACCESSLOG.File=@ACCESSLOG@
+log4j.appender.ACCESSLOG.File=@LOGDIR@/access-log.txt
 log4j.appender.ACCESSLOG=org.apache.log4j.FileAppender
 log4j.appender.ACCESSLOG.Append=true
 log4j.appender.ACCESSLOG.Threshold=INFO
 log4j.appender.ACCESSLOG.layout=org.apache.log4j.PatternLayout
 log4j.appender.ACCESSLOG.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} - %m\r\n
+
+log4j.appender.TRACKLOG.File=@LOGDIR@/tracking.log
+log4j.appender.TRACKLOG=org.apache.log4j.FileAppender
+log4j.appender.TRACKLOG.Append=true
+log4j.appender.TRACKLOG.Threshold=INFO
+log4j.appender.TRACKLOG.layout=org.apache.log4j.PatternLayout
+log4j.appender.TRACKLOG.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} - %m\r\n
