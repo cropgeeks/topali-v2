@@ -3,7 +3,9 @@
 	<description>TOPALi v2 Ant Build Script</description>
 
 	<!-- Load in user-specific properties from build.properties -->
-	<property file="build.properties"/>
+	<!-- To override the filename use, 'ant -Dprops=file.properties' -->
+	<property name="props" value="build.scri.properties"/>
+	<property file="${props}"/>
 
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
