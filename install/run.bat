@@ -1,1 +1,0 @@
-java -jar web\WEB-INF\lib\topali.jar
