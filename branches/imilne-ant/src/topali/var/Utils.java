@@ -32,7 +32,7 @@ import doe.MsgBox;
 public class Utils
 {
 	static Logger log = Logger.getLogger(Utils.class);
-	
+
 	/* Ensures the scratch directory exists */
 	public static void createScratch()
 	{
@@ -107,12 +107,12 @@ public class Utils
 
 		MsgBox.msg(Text.Gui.getString("clipboard_2"), MsgBox.INF);
 	}
-	
+
 	public static String getClipboardContent()
 	{
 		Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		Transferable transfer = sysClip.getContents(null);
-		
+
 		try
 		{
 			Object o = transfer.getTransferData(DataFlavor.stringFlavor);
@@ -138,7 +138,7 @@ public class Utils
 		}
 		return false;
 	}
-	
+
 	public static void saveComponent(Component cmp, File file, int w, int h) throws IOException
 	{
 		// Store the container's current parent
@@ -167,13 +167,13 @@ public class Utils
 	public static String getLocalPath()
 	{
 		if (Prefs.isWindows)
-			return System.getProperty("user.dir") + "\\web\\binaries\\";
+			return System.getProperty("user.dir") + "\\binaries\\";
 		else if (Prefs.isMacOSX)
-			return System.getProperty("user.dir") + "/web/binaries/src/";
+			return System.getProperty("user.dir") + "/binaries/src/";
 		else
-			return System.getProperty("user.dir") + "/web/binaries/src/";
+			return System.getProperty("user.dir") + "/binaries/src/";
 	}
-	
+
 	/**
 	 * Get a String representation of a map
 	 * @param map The map
@@ -195,7 +195,7 @@ public class Utils
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Create a map of a String containing key-value pairs
 	 * @param map Separated key-value pairs
@@ -212,7 +212,7 @@ public class Utils
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Converts a float into a double array (as simple casting is not possible)
 	 * @param data
@@ -228,7 +228,7 @@ public class Utils
 		}
 		return ddata;
 	}
-	
+
 	/**
 	 * Converts a double into a float array (as simple casting is not possible)
 	 * @param data
@@ -244,7 +244,7 @@ public class Utils
 		}
 		return ddata;
 	}
-	
+
 	public static byte[] readFile(URI uri) throws IOException {
 		File inFile = new File(uri);
 		FileInputStream fis = new FileInputStream(inFile);
@@ -254,7 +254,7 @@ public class Utils
 		inChannel.close();
 		return buf.array();
 	}
-	
+
 	public static String intArrayToString(int[] array) {
 		StringBuffer sb = new StringBuffer();
 		sb.append('[');
@@ -265,13 +265,13 @@ public class Utils
 		sb.replace(sb.length()-1, sb.length()-1, "]");
 		return sb.toString();
 	}
-	
+
 //	public static void printMemUsage() {
 //		long freeMem = Runtime.getRuntime().freeMemory();
 //		long maxMem = Runtime.getRuntime().maxMemory();
 //		System.out.println("MemUsage: "+((maxMem-freeMem)/1024/1024)+" MB\n");
 //	}
-	
+
 	public static String midPointRoot(String tree) {
 		try
 		{

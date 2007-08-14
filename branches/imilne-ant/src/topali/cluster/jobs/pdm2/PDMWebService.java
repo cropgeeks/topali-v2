@@ -35,9 +35,9 @@ public class PDMWebService extends WebService
 
 			PDM2Result result = (PDM2Result) Castor.unmarshall(resultXML);
 
-			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";
+			result.mbPath = webappPath + "/WEB-INF/binaries/src/mrbayes/mb";
 			result.treeDistPath = webappPath
-					+ "/binaries/src/treedist/treedist";
+					+ "/WEB-INF/binaries/src/treedist/treedist";
 			result.tmpDir = getParameter("tmp-dir");
 			result.nProcessors = Integer.parseInt(getParameter("n-processors"));
 			result.jobId = jobId;

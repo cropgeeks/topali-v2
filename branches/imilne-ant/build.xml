@@ -15,6 +15,7 @@
 	<property name="build.root"     location="build"/>
 	<property name="build.classes"  location="${build.root}/classes"/>
 	<property name="build.web-inf"  location="${build.root}/WEB-INF"/>
+	<property name="build.binaries" location="${build.web-inf}/binaries"/>
 	<property name="build.cluster"  location="${build.web-inf}/cluster"/>
 
 	<!-- The two main results from building - TOPALi, and a WAR for Tomcat -->
@@ -25,6 +26,7 @@
 	<target name="init">
 		<mkdir dir="${build.classes}"/>
 		<mkdir dir="${build.web-inf}"/>
+		<mkdir dir="${build.binaries}"/>
 		<mkdir dir="${build.cluster}"/>
 	</target>
 
@@ -99,12 +101,14 @@
 		<copy todir="${build.cluster}">
 			<fileset dir="${user.cluster.dir}"/>
 		</copy>
+		<copy todir="${build.binaries}">
+			<fileset dir="${user.binaries.dir}"/>
+		</copy>
 
 		<war destfile="${build.warfile}" update="false" >
 			<lib dir="${lib}"/>
 			<webinf dir="${build.web-inf}"/>
 			<classes dir="${build.classes}"/>
-			<zipfileset dir="${user.binaries.dir}" prefix="binaries"/>
 		</war>
 	</target>
 
