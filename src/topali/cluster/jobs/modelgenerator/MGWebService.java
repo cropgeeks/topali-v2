@@ -19,7 +19,7 @@ public class MGWebService extends WebService
 {
 
 	Logger log = Logger.getLogger(this.getClass());
-	
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -36,14 +36,14 @@ public class MGWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			MGResult result = (MGResult) Castor.unmarshall(resultXML);
 
-			result.mgPath = webappPath + "/binaries/src/modelgenerator.jar";
+			result.mgPath = webappPath + "/WEB-INF/binaries/modelgenerator.jar";
 			result.javaPath = javaPath;
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
-			
+
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
 			RunModelGenerator run = new RunModelGenerator(jobDir, ss, result);
@@ -78,7 +78,7 @@ public class MGWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			MGResult result = (new MGMonitor(jobDir)).getResult();
-			
+
 			logger.info(jobId + " - returning result");
 			accessLog.info("MG  result  to   " + jobId);
 			return Castor.getXML(result);

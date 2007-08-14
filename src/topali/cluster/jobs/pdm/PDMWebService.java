@@ -36,9 +36,9 @@ public class PDMWebService extends WebService
 
 			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
 
-			result.bambePath = webappPath + "/binaries/src/bambe/bambe";
+			result.bambePath = webappPath + "/WEB-INF/binaries/src/bambe/bambe";
 			result.treeDistPath = webappPath
-					+ "/binaries/src/treedist/treedist";
+					+ "/WEB-INF/binaries/src/treedist/treedist";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 

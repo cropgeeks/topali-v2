@@ -63,10 +63,10 @@ public class CodeMLInitializer extends Thread
 			for(int i=0; i<result.models.size(); i++) {
 				if (LocalJobs.isRunning(result.jobId) == false)
 					return;
-	
+
 				File runDir = new File(jobDir, "run" + (i+1));
 				runDir.mkdirs();
-	
+
 				if (result.isRemote == false)
 					new CodeMLSiteAnalysis(runDir).start(LocalJobs.manager);
 			}
@@ -76,16 +76,16 @@ public class CodeMLInitializer extends Thread
 			for(int i=0; i<result.hypos.size(); i++) {
 				if (LocalJobs.isRunning(result.jobId) == false)
 					return;
-	
+
 				File runDir = new File(jobDir, "run" + (i+1));
 				runDir.mkdirs();
-	
+
 				if (result.isRemote == false)
 					new CodeMLBranchAnalysis(runDir).start(LocalJobs.manager);
 			}
 		}
-		
+
 		if (result.isRemote)
-			CodeMLWebService.runScript(jobDir);
+			CodeMLWebService.runScript(jobDir, result);
 	}
 }

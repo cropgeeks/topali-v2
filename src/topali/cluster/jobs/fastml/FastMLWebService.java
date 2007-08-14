@@ -39,7 +39,7 @@ public class FastMLWebService extends WebService
 
 			FastMLResult result = (FastMLResult) Castor.unmarshall(resultXML);
 
-			result.fastmlPath = webappPath + "/binaries/src/fastml/fastml";
+			result.fastmlPath = webappPath + "/WEB-INF/binaries/src/fastml/fastml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 

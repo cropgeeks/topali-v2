@@ -36,7 +36,7 @@ public class DSSWebService extends WebService
 
 			DSSResult result = (DSSResult) Castor.unmarshall(resultXML);
 
-			result.fitchPath = webappPath + "/binaries/src/fitch/fitch";
+			result.fitchPath = webappPath + "/WEB-INF/binaries/src/fitch/fitch";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 
