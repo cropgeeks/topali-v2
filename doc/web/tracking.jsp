@@ -2,22 +2,19 @@
 <%@ page import="java.io.*" %>
 
 <%
-	String path = application.getRealPath("/");
-	PropertyConfigurator.configure(path + "/tracking.properties");
 	Logger tracker = Logger.getLogger("topali.tracker");
-	
-	
+
 	String client = request.getParameter("client");
 	String id = request.getParameter("id");
-	
+
 	if (client != null && id != null)
 	{
 		String host = request.getRemoteHost();
 		String addr = request.getRemoteAddr();
-		
+
 		tracker.info(host + " - " + addr + " - " + id);
 %>
-Current = 16
+Current = 15
 <%
 		return;
 	}
@@ -30,15 +27,17 @@ Release History:
 [BF] = Bug Fix
 [SC] = Source Code
 
+Coming in the next version (2.16). Date TBA:
+
   - [NF] Mouse highlighting (is it worth to mention that?)
   - [NF] Failed jobs now clear from the cluster as soon as they are detected,
     rather than waiting on the user to delete them.
   - [NF] New Webservice "Codon Usage Analysis", which uses CodonW to analyse
-    Codon Usage. 
+    Codon Usage.
   - [NF] New Webservice "Subst. Model Test", which uses Modelgenerator to find
     the most appropriate DNA/AA substitution model.
-  - [NF] MrBayes Webservice can now create trees from DNA as well as protein 
-    sequence alignments, and accepts more parameters (DNA/AA models, invariant 
+  - [NF] MrBayes Webservice can now create trees from DNA as well as protein
+    sequence alignments, and accepts more parameters (DNA/AA models, invariant
     sites, gamma).
   - [NF] New methods for positive selection (CodeML site model and branch model
     analysis)
@@ -114,7 +113,7 @@ Release History:
   - [NF] Matched TOPALi's gradient panels for the Office Look and Feel to those
     of Windows for Classic, Blue, Silver, and Olive colour schemes.
   - [NF] Full support for local job submission is now included.
-  
+
 06-04-2006 - Release 2.07
   - [NF] Added client-side support for server-side gzip compression, reducing
     the amount of data sent between client and server.
@@ -164,5 +163,5 @@ Release History:
 
 16-01-2006 - Release 2.01
   - Initial public release.
-  
+
 </pre>
