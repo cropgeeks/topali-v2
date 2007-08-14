@@ -20,7 +20,7 @@ import doe.PreferencesXML;
 public class Prefs extends PreferencesXML
 {
 	static Logger log = Logger.getLogger(Prefs.class);
-	
+
 	// Variables not definable by the user...
 	public static Locale locale = Locale.getDefault();
 
@@ -194,14 +194,14 @@ public class Prefs extends PreferencesXML
 
 	// Id for identifying this client
 	public static String appId = new String();
-	
+
 	protected void getPreferences()
 	{
 		// Generate a "unique" 32 character id number
 		Random rnd = new Random();
 		for (int i = 0; i < 32; i++)
 			appId += rnd.nextInt(10);
-		
+
 		setDisplayDefaults();
 		setPDMDefaults();
 		setPDM2Defaults();
@@ -378,7 +378,7 @@ public class Prefs extends PreferencesXML
 		web_proxy_port = getInt("web_proxy_port", web_proxy_port);
 		web_proxy_username = getStr("web_proxy_username", web_proxy_username);
 		web_proxy_password = getStr("web_proxy_password", web_proxy_password);
-		
+
 		appId = getStr("appId", appId);
 	}
 
@@ -536,7 +536,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("web_proxy_port", "" + web_proxy_port);
 		setStr("web_proxy_username", web_proxy_username);
 		setStr("web_proxy_password", web_proxy_password);
-		
+
 		setStr("appId", appId);
 	}
 
@@ -650,7 +650,7 @@ public class Prefs extends PreferencesXML
 	public static void setWebDefaults()
 	{
 		web_direct_url = "http://gruffalo.scri.ac.uk/topali";
-		web_broker_url = "http://gruffalo.scri.ac.uk/broker";
+		web_broker_url = "http://gruffalo.scri.ac.uk/topali-broker";
 		web_use_rbroker = true;
 		web_check_secs = 30;
 		web_check_startup = true;
