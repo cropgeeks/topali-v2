@@ -44,6 +44,9 @@ public class Prefs extends PreferencesXML
 	public static boolean isMacOSX = System.getProperty("os.name").startsWith(
 			"Mac OS");
 
+	public static boolean isLinux = System.getProperty("os.name").startsWith(
+			"Linux");
+
 	// All other variables...
 	public static LinkedList<String> gui_recent = new LinkedList<String>();
 	public static String gui_dir = System.getProperty("user.home");

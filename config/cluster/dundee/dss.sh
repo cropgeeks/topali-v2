@@ -1,5 +1,9 @@
-#$ -q 32.bit-q
-#$ -l www_parallel=1
+#$ -q 64bit-pri.q
+#$ -l www_pserv=1
+#$ -l qname=64bit-pri.q
+#$ -l h_vmem=4000M
+#$ -l mem_free=1500M
+#$ -l h_cpu=01:00:00
 
 #$ -N TPi-DSS
 #$ -cwd

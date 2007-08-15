@@ -32,15 +32,18 @@ public class PDMWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			PDM2Result result = (PDM2Result) Castor.unmarshall(resultXML);
 
-			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";
+			result.mbPath = webappPath + "/WEB-INF/binaries/src/mrbayes/mb";
 			result.treeDistPath = webappPath
-					+ "/binaries/src/treedist/treedist";
+					+ "/WEB-INF/binaries/src/treedist/treedist";
 			result.tmpDir = getParameter("tmp-dir");
 			result.nProcessors = Integer.parseInt(getParameter("n-processors"));
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.mbPath);
+			Runtime.getRuntime().exec("chmod +x " + result.treeDistPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible

@@ -17,10 +17,6 @@ import topali.fileio.Castor;
 
 public class CodeMLWebService extends WebService
 {
-	//TODO: Assumes that submit() is called before runScript(), really always true?
-	static int nRuns = -1;
-	static int type = -1;
-
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -37,17 +33,14 @@ public class CodeMLWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
-			type = result.type;
-			if(type==CodeMLResult.TYPE_SITEMODEL)
-				nRuns = result.models.size();
-			else if(type==CodeMLResult.TYPE_BRANCHMODEL)
-				nRuns = result.hypos.size();
-			
-			result.codemlPath = webappPath + "/binaries/src/codeml/codeml";
+
+			result.codemlPath = webappPath + "/WEB-INF/binaries/src/codeml/codeml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.codemlPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
@@ -98,7 +91,7 @@ public class CodeMLWebService extends WebService
 	 * calls to execute that job. In this case, a java command to run a
 	 * CodeMLAnalysis on a given directory.
 	 */
-	static void runScript(File jobDir) throws Exception
+	static void runScript(File jobDir, CodeMLResult result) throws Exception
 	{
 		// Read...
 		String template = ClusterUtils.readFile(new File(scriptsDir, "cml.sh"));
@@ -107,12 +100,18 @@ public class CodeMLWebService extends WebService
 		template = template.replaceAll("\\$JAVA", javaPath);
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
-		template = template.replaceAll("\\$RUNS", Integer.toString(nRuns));
-		if(type==CodeMLResult.TYPE_BRANCHMODEL)
+
+		if(result.type==CodeMLResult.TYPE_BRANCHMODEL)
+		{
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLBranchAnalysis");
-		else if(type==CodeMLResult.TYPE_SITEMODEL)
+			template = template.replaceAll("\\$RUNS", "" + result.models.size());
+		}
+		else if(result.type==CodeMLResult.TYPE_SITEMODEL)
+		{
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLSiteAnalysis");
-		
+			template = template.replaceAll("\\$RUNS", "" + result.hypos.size());
+		}
+
 		// Write...
 		writeFile(template, new File(jobDir, "cml.sh"));
 
