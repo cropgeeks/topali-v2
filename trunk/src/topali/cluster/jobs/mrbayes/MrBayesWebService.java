@@ -34,12 +34,14 @@ public class MrBayesWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			MBTreeResult result = (MBTreeResult) Castor.unmarshall(resultXML);
 
-			result.mbPath = webappPath + "/binaries/src/mrbayes/mb";
+			result.mbPath = webappPath + "/WEB-INF/binaries/src/mrbayes/mb";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.mbPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible

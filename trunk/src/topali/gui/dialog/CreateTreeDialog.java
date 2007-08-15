@@ -34,20 +34,20 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	private BasicTreePanel basicPanel;
 
 	private MrBayesSettingsPanel bayesPanel;
-	
+
 	private PhymlSettingsPanel phymlPanel;
-	
+
 	MBTreeResult mbResult = new MBTreeResult();
-	
+
 	PhymlResult phymlResult = new PhymlResult();
-	
+
 	public CreateTreeDialog(WinMain winMain, AlignmentData data)
 	{
 		super(winMain, "Estimate New Tree", true);
 		this.data = data;
 
 		ss = data.getSequenceSet();
-		
+
 		setLayout(new BorderLayout());
 		add(createControls());
 		add(getButtons(), BorderLayout.SOUTH);
@@ -67,9 +67,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet(), mbResult);
-		
+
 		phymlPanel = new PhymlSettingsPanel(data.getSequenceSet(), phymlResult);
-		
+
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
 		if(Prefs.gui_tree_method==0 || Prefs.gui_tree_method==3) {
@@ -106,7 +106,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	private void onOK(boolean makeRemote)
 	{
 		basicPanel.onOK();
-		
+
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else if(Prefs.gui_tree_method == 1) {
@@ -183,28 +183,30 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			result.guiName = "MrBayes Tree " + runNum;
 			result.jobName = "MrBayes Tree Estimation ";
 		}
-		
+
 		result.jobName += runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
-		
+
 		if(Prefs.gui_tree_method==1)
 			initPhymlTreeResult((PhymlResult)tr);
 
 		if (Prefs.gui_tree_method == 2 || Prefs.gui_tree_method == 3)
 			initMBTreeResult((MBTreeResult) tr);
-		
+
 	}
 
 	private void initPhymlTreeResult(PhymlResult tr) {
 		//Path to Phyml
 		if (Prefs.isWindows)
-			tr.phymlPath = Utils.getLocalPath() + "phyml\\phyml_win32.exe";
+			tr.phymlPath = Utils.getLocalPath() + "\\phyml_win32.exe";
 		else if(Prefs.isMacOSX)
-			tr.phymlPath = Utils.getLocalPath() + "phyml/phyml_macOSX";
+			tr.phymlPath = Utils.getLocalPath() + "/phyml/phyml_macOSX";
+		else if (Prefs.isLinux)
+			tr.phymlPath = Utils.getLocalPath() + "/phyml/phyml_linux";
 		else
-			tr.phymlPath = Utils.getLocalPath() + "phyml/phyml_linux";
-		
+			tr.phymlPath = Utils.getLocalPath() + "/phyml/phyml_sunOS";
+
 		//Use all sequences, or just those selected?
 		if (Prefs.gui_tree_useall)
 			tr.selectedSeqs = data.getSequenceSet().getAllSequenceSafeNames();
@@ -212,14 +214,14 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			tr.selectedSeqs = data.getSequenceSet()
 					.getSelectedSequenceSafeNames();
 	}
-	
+
 	private void initMBTreeResult(MBTreeResult tr)
 	{
 		// Path to MrBayes
 		if (Prefs.isWindows)
-			tr.mbPath = Utils.getLocalPath() + "mb.exe";
+			tr.mbPath = Utils.getLocalPath() + "\\mb.exe";
 		else
-			tr.mbPath = Utils.getLocalPath() + "mrbayes/mb";
+			tr.mbPath = Utils.getLocalPath() + "/mrbayes/mb";
 
 		// Use all sequences, or just those selected?
 		if (Prefs.gui_tree_useall)
@@ -227,7 +229,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		else
 			tr.selectedSeqs = data.getSequenceSet()
 					.getSelectedSequenceSafeNames();
-		
+
 		tr.isCDNA = Prefs.gui_tree_method == 3;
 	}
 
@@ -237,9 +239,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 		BasicTreePanel()
 		{
-			
+
 			String text = (ss.getParams().isDNA()) ? "F84+Gamma" : "WAG+Gamma";
-			
+
 			rMethod0 = new JRadioButton(
 					text+"/neighbor joining",
 					Prefs.gui_tree_method == 0);
@@ -260,19 +262,19 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			rMethod3.setToolTipText("Slow, sophisticated method");
 			rMethod3.addChangeListener(this);
 			rMethod3.setMnemonic(KeyEvent.VK_C);
-			
+
 			ButtonGroup g1 = new ButtonGroup();
 			g1.add(rMethod0);
 			g1.add(rMethod1);
 			g1.add(rMethod2);
 			g1.add(rMethod3);
-			
+
 			if(!ss.isDNA()) {
 				if(rMethod3.isSelected())
 					rMethod0.setSelected(true);
 				rMethod3.setEnabled(false);
 			}
-			
+
 			rSelectAll = new JRadioButton("Use all sequences in the alignment",
 					Prefs.gui_tree_useall);
 			rSelectAll.setMnemonic(KeyEvent.VK_A);
@@ -291,7 +293,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			p1.add(rMethod1);
 			p1.add(rMethod2);
 			p1.add(rMethod3);
-			
+
 			JPanel p2 = new JPanel(new GridLayout(2, 1, 5, 0));
 			p2.setBorder(BorderFactory
 					.createTitledBorder("Sequence selection:"));
@@ -313,7 +315,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 				Prefs.gui_tree_method = 2;
 			if(rMethod3.isSelected())
 				Prefs.gui_tree_method = 3;
-			
+
 			Prefs.gui_tree_useall = rSelectAll.isSelected();
 		}
 
@@ -321,7 +323,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		{
 			if(tabs==null)
 				return;
-			
+
 			if(rMethod0.isSelected()) {
 				tabs.setEnabledAt(1, false);
 			}
@@ -341,7 +343,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			validate();
 			repaint();
 		}
-		
-		
+
+
 	}
 }

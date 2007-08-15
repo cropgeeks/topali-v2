@@ -19,7 +19,7 @@ public class CodonWWebService extends WebService
 {
 
 	Logger log = Logger.getLogger(this.getClass());
-	
+
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -36,12 +36,14 @@ public class CodonWWebService extends WebService
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
+
 			CodonWResult result = (CodonWResult) Castor.unmarshall(resultXML);
 
-			result.codonwPath = webappPath + "/binaries/src/codonW/codonw";
+			result.codonwPath = webappPath + "/WEB-INF/binaries/src/codonW/codonw";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
+
+			Runtime.getRuntime().exec("chmod +x " + result.codonwPath);
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
@@ -75,7 +77,7 @@ public class CodonWWebService extends WebService
 		try
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
-			
+
 			CodonWResult result = (new CodonWMonitor(jobDir)).getResult();
 
 			logger.info(jobId + " - returning result");

@@ -1,6 +1,6 @@
 @echo off
 
-set lib=web\WEB-INF\lib
+set lib=lib
 
 set topali=%lib%\
 set topali=%topali%;%lib%\axis.jar
