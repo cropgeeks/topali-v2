@@ -17,9 +17,6 @@ import topali.fileio.Castor;
 
 public class FastMLWebService extends WebService
 {
-
-	Logger log = Logger.getLogger(this.getClass());
-
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{

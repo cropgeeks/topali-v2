@@ -38,9 +38,6 @@ public class Project extends ViewableDataObject
 	// its state after a project-load
 	private int[] treePath;
 
-	// Is this project associated with a VAMSAS session
-	private String vamsasID;
-
 	public Project()
 	{
 	}
@@ -82,16 +79,26 @@ public class Project extends ViewableDataObject
 		this.treePath = treePath;
 	}
 
-	public String getVamsasID()
-	{
-		return vamsasID;
+	public boolean containsDataset(AlignmentData data) {
+		boolean result = false;
+		for(AlignmentData data2 : datasets) {
+			if(data.name.equals(data2.name) && data.getSequenceSet().getSize()==data2.getSequenceSet().getSize()) {
+				SequenceSet ss = data.getSequenceSet();
+				SequenceSet ss2 = data2.getSequenceSet();
+				for(int i=0; i<ss.getSize(); i++) {
+					Sequence s = ss.getSequence(i);
+					Sequence s2 = ss2.getSequence(i);
+					result = s.getName().equals(s2.getName()) && s.getSequence().equals(s2.getSequence());
+					if(!result)
+						break;
+				}
+			}
+			if(result)
+				break;
+		}
+		return result;
 	}
-
-	public void setVamsasID(String vamsasID)
-	{
-		this.vamsasID = vamsasID;
-	}
-
+	
 	// Calls load() to load the given project from disk, or opens a FileDialog
 	// to prompt for the project name if filename is null
 	public static Project open(String filename)

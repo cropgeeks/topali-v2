@@ -537,10 +537,10 @@ public class WinMainMenuBar extends JMenuBar
 		aVamsas = new AbstractAction("VAMSAS") {
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean success = winMain.vamsasUpdate();
-				if(success) 
+				//boolean success = winMain.vamsasUpdate();
+				//if(success) 
 					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASON);
-				else
+				//else
 					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASOFF);
 				//TODO: That's really not a nice way to toggle the icon
 			}

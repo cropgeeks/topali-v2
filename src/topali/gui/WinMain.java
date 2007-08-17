@@ -634,6 +634,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			if (palTree != null)
 			{
 				result.setTreeStr(palTree.toString());
+				result.startTime = creator.getStartTime();
+				result.endTime = creator.getEndTime();
 				result.status = topali.cluster.JobStatus.COMPLETED;
 				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)" : "WAG";
 				result.info = "Sub. Model: "+model+"\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
@@ -736,9 +738,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		new topali.gui.dialog.settings.SettingsDialog(this);
 	}
 
-	void menuVamsasSelectSession()
-	{
-		// First ensure it's ok to begin a new session
+	void menuVamsasSelectSession() {
+//		 First ensure it's ok to begin a new session
 		if (vamsas != null)
 		{
 			String msg = "An association with an existing VAMSAS session has "
@@ -751,27 +752,51 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		vamsas = new VamsasManager();
 		vEvents = new VamsasEvents(this);
 		
-		if (vamsas.initializeVamsas(project))
+		try
 		{
-			MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
-				+ "session.", MsgBox.INF);
-		}
-
-		// Create a dialog to select the session file
-/*		JFileChooser fc = new JFileChooser();
-		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-		fc.setSelectedFile(new File("vamsas-session.zip"));
-		fc.setDialogTitle("Select (or Create) VAMSAS Session File");
-
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+			vamsas.connect(project, null);
+		} catch (Exception e)
 		{
-			File file = fc.getSelectedFile();
-			Prefs.gui_dir = "" + fc.getCurrentDirectory();
-
-			vClient = new VamsasClient(file);
+			MsgBox.msg("Error connecting/creating VAMSAS session.", MsgBox.ERR);
 		}
-*/
 	}
+	
+//	void menuVamsasSelectSession()
+//	{
+//		// First ensure it's ok to begin a new session
+//		if (vamsas != null)
+//		{
+//			String msg = "An association with an existing VAMSAS session has "
+//					+ "already been established. Would you like to drop this\n"
+//					+ "connection and begin (or connect to) a new session?";
+//			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+//				return;
+//		}
+//		
+//		vamsas = new VamsasManager();
+//		vEvents = new VamsasEvents(this);
+//		
+//		if (vamsas.initializeVamsas(project))
+//		{
+//			MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
+//				+ "session.", MsgBox.INF);
+//		}
+//
+//		// Create a dialog to select the session file
+///*		JFileChooser fc = new JFileChooser();
+//		fc.setCurrentDirectory(new File(Prefs.gui_dir));
+//		fc.setSelectedFile(new File("vamsas-session.zip"));
+//		fc.setDialogTitle("Select (or Create) VAMSAS Session File");
+//
+//		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+//		{
+//			File file = fc.getSelectedFile();
+//			Prefs.gui_dir = "" + fc.getCurrentDirectory();
+//
+//			vClient = new VamsasClient(file);
+//		}
+//*/
+//	}
 
 	void menuVamsasExport()
 	{
@@ -779,7 +804,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			try
 			{
-				vamsas.writeToDocument();
+				vamsas.write();
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -789,41 +814,41 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
 	}
 
-	boolean vamsasUpdate() {
-		if(vamsas == null) {
-			vamsas = new VamsasManager();
-			vEvents = new VamsasEvents(this);
-			
-			if (!vamsas.initializeVamsas(project))
-			{
-				MsgBox.msg("Connection to a VAMSAS session could not be established", MsgBox.ERR);
-				return false;
-			}
-			
-			try
-			{
-				vamsas.readFromDocument();
-			} catch (Exception e)
-			{
-				MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
-				return false;
-			}
-			
-			return true;
-		}
-		else {
-			try
-			{
-				vamsas.writeToDocument();
-				return true;
-			} catch (Exception e)
-			{
-				MsgBox.msg("There was an error while synchronizing VAMSAS session", MsgBox.ERR);
-				e.printStackTrace();
-				return false;
-			}
-		}
-	}
+//	boolean vamsasUpdate() {
+//		if(vamsas == null) {
+//			vamsas = new VamsasManager();
+//			vEvents = new VamsasEvents(this);
+//			
+//			if (!vamsas.initializeVamsas(project))
+//			{
+//				MsgBox.msg("Connection to a VAMSAS session could not be established", MsgBox.ERR);
+//				return false;
+//			}
+//			
+//			try
+//			{
+//				vamsas.readFromDocument();
+//			} catch (Exception e)
+//			{
+//				MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
+//				return false;
+//			}
+//			
+//			return true;
+//		}
+//		else {
+//			try
+//			{
+//				vamsas.writeToDocument();
+//				return true;
+//			} catch (Exception e)
+//			{
+//				MsgBox.msg("There was an error while synchronizing VAMSAS session", MsgBox.ERR);
+//				e.printStackTrace();
+//				return false;
+//			}
+//		}
+//	}
 	
 	void menuVamsasImport()
 	{
@@ -833,7 +858,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 //			
 			try
 			{
-				vamsas.readFromDocument();
+				vamsas.read();
 			} catch (Exception e)
 			{
 				e.printStackTrace();

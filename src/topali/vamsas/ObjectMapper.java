@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
+import topali.data.Sequence;
 import uk.ac.vamsas.client.*;
 
 public class ObjectMapper
@@ -16,22 +17,26 @@ public class ObjectMapper
 	// Resolves TOPALi objects to vamsas IDs
 	private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
 	
+	// Keeps track on sequences, which are somehow connected to eachother
+	private Hashtable<Sequence, Sequence> seqLinkFW = new Hashtable<Sequence, Sequence>();
+	private Hashtable<Sequence, Sequence> seqLinkRV = new Hashtable<Sequence, Sequence>();
+	
 	IClientDocument cdoc = null;
 	
-	ObjectMapper()
+	public ObjectMapper()
 	{
 	}
 	
 	// This needs to be called each time we want to use this class for a fresh
 	// update or store of data
-	void registerClientDocument(IClientDocument cdoc)
+	public void registerClientDocument(IClientDocument cdoc)
 		{ this.cdoc = cdoc;	}
 	
 	/**
 	 * Uses a TOPALi data object and attempts to return the matching vamsas
 	 * object by matching the TOPALi obj reference in the TV hashtable.
 	 */
-	Vobject getVamsasObject(Object topaliObject)
+	public Vobject getVamsasObject(Object topaliObject)
 	{
 		if (hashTV.containsKey(topaliObject))
 		{
@@ -47,7 +52,7 @@ public class ObjectMapper
 	 * Uses a vamsas data object and attempts to return the matching TOPALi
 	 * object by matching the vamsas ID in the VT hashtable.
 	 */
-	Object getTopaliObject(Vobject vamsasObject)
+	public Object getTopaliObject(Vobject vamsasObject)
 	{
 		// Does this vamsas object have a key (it won't if it's never been part
 		// of the document, ie, only just been created)
@@ -64,14 +69,14 @@ public class ObjectMapper
 		return hashVT.get(id);
 	}
 	
-	Object getTopaliObject(String vorbaId) {
+	public Object getTopaliObject(String vorbaId) {
 		return hashVT.get(vorbaId);
 	}
 	
 	/**
 	 * Registers linked TOPALi/Vamsas objects in the hash tables.
 	 */
-	void registerObjects(Object topaliObject, Vobject vamsasObject)
+	public void registerObjects(Object topaliObject, Vobject vamsasObject)
 	{
 		VorbaId id = vamsasObject.getVorbaId();
 		System.out.print("Checking vorba id...");
@@ -95,5 +100,31 @@ public class ObjectMapper
 			return vObj.getVorbaId().getId();
 		else
 			return null;
+	}
+	
+	public Sequence getLinkedSeq(Sequence seq) {
+		if(seqLinkFW.contains(seq))
+			return seqLinkFW.get(seq);
+		else if(seqLinkRV.contains(seq))
+			return seqLinkRV.get(seq);
+		return null;
+	}
+	
+	public void setLinkedSeq(Sequence seq, Sequence link) {
+		seqLinkFW.put(seq, link);
+		seqLinkRV.put(link, seq);
+	}
+	
+	public void removeLinkedSeq(Sequence seq) {
+		if(seqLinkFW.contains(seq)) {
+			Sequence seq2 = seqLinkFW.get(seq);
+			seqLinkFW.remove(seq);
+			seqLinkRV.remove(seq2);
+		}
+		else if(seqLinkRV.contains(seq)) {
+			Sequence seq2 = seqLinkRV.get(seq);
+			seqLinkRV.remove(seq);
+			seqLinkFW.remove(seq2);
+		}
 	}
 }

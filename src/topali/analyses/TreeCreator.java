@@ -31,6 +31,9 @@ public class TreeCreator extends JDialog
 	private Alignment alignment;
 	private Tree tree;
 	
+	private long start;
+	private long end;
+	
 	public TreeCreator(Alignment alignment, boolean isDNA)
 	{
 		super(MsgBox.frm, Text.Analyses.getString("TreeCreator.gui01"), true);
@@ -45,7 +48,7 @@ public class TreeCreator extends JDialog
 	{
 		try
 		{
-			long start = System.currentTimeMillis();
+			start = System.currentTimeMillis();
 			double[] freqs = AlignmentUtils.estimateFrequencies(alignment);
 			
 			AbstractRateMatrix ratematrix = null;
@@ -68,7 +71,7 @@ public class TreeCreator extends JDialog
 			// Midpoint route...
 			tree = TreeRooter.getMidpointRooted(tree);
 			
-			log.info("Tree creation took: "+(System.currentTimeMillis()-start)+"ms");
+			end = System.currentTimeMillis();
 			
 		} catch (Exception e)
 		{
@@ -99,6 +102,14 @@ public class TreeCreator extends JDialog
 		dispose();
 
 		return tree;
+	}
+	
+	public long getStartTime() {
+		return start;
+	}
+	
+	public long getEndTime() {
+		return end;
 	}
 	
 	private void createDialog()

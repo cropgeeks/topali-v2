@@ -18,8 +18,6 @@ import topali.fileio.Castor;
 public class CodonWWebService extends WebService
 {
 
-	Logger log = Logger.getLogger(this.getClass());
-
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -67,7 +65,7 @@ public class CodonWWebService extends WebService
 			return (new CodonWMonitor(jobDir)).getPercentageComplete();
 		} catch (Exception e)
 		{
-			log.warn(e);
+			logger.warn(e);
 			return new JobStatus(0, JobStatus.FATAL_ERROR);
 		}
 	}
