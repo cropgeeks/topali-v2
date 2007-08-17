@@ -41,7 +41,7 @@ public class PhymlAnalysis extends AnalysisThread
 		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
 
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, true);
+		ss.save(new File(runDir, "seq"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.PHY_I, true);
 
 		result.phymlParameters = determinePhymlParameters(result, ss.getParams());
 		result.info = treeInfo();

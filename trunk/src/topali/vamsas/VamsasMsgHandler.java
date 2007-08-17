@@ -19,14 +19,15 @@ public class VamsasMsgHandler implements IMessageHandler
 	
 	private IPickManager manager;
 	
-	public VamsasMsgHandler(IPickManager manager)
+	public VamsasMsgHandler()
 	{
-		this.manager = manager;
-		manager.registerMessageHandler(this);
-		
-		System.out.println("Successfully created VamsasMsgHandler");
 	}
 
+	public void connect(IPickManager manager) {
+		this.manager = manager;
+		manager.registerMessageHandler(this);
+	}
+	
 	public void sendMessage(Message message)
 	{
 		log.info("Send new message: "+message.getRawMessage());

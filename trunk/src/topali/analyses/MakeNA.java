@@ -6,13 +6,13 @@
 package topali.analyses;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.Text;
+import topali.vamsas.VamsasManager;
 import doe.MsgBox;
 
 public class MakeNA
@@ -38,10 +38,14 @@ public class MakeNA
 	}
 	
 	public boolean doConversion() {
-		return doConversion(true, null);
+		return doConversion(true);
 	}
 	
-	public boolean doConversion(boolean showMessages, HashMap<Sequence, Sequence> mapping)
+	public boolean doConversion(boolean showMessages) {
+		return doConversion(showMessages, false);
+	}
+	
+	public boolean doConversion(boolean showMessages, boolean useMapper)
 	{
 		SequenceSet newSS = new SequenceSet();
 
@@ -125,8 +129,9 @@ public class MakeNA
 			newSequence.getBuffer().append(seqBuf);
 			// And add it to the dataset
 			newSS.addSequence(newSequence);
-			if(mapping!=null)
-				mapping.put(newSequence, proSeq);
+			if(useMapper) {
+				VamsasManager.mapper.setLinkedSeq(newSequence, proSeq);
+			}
 		}
 
 		// Perform some final checks on the new alignment before OKing it

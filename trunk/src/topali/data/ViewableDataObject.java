@@ -13,6 +13,8 @@ public abstract class ViewableDataObject
 
 	protected LinkedList<PropertyChangeListener> changeListeners = new LinkedList<PropertyChangeListener>();
 	
+	private String id;
+	
 	public ViewableDataObject() {
 		
 	}
@@ -26,5 +28,16 @@ public abstract class ViewableDataObject
 		if(changeListeners.contains(listener))
 			this.changeListeners.remove(listener);
 	}
+
+	public String getId()
+	{
+		return id;
+	}
+
+	public void setId(String id)
+	{
+		this.id = id;
+	}
+	
 	
 }

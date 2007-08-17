@@ -8,7 +8,7 @@ package topali.cluster.jobs.cml;
 import java.io.File;
 import java.util.logging.Logger;
 
-import topali.cluster.JobStatus;
+import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
 

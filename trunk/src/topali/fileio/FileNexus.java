@@ -269,7 +269,7 @@ class FileNexus extends FileGeneric
 		out.write("  matrix" + nl);
 
 		int nameLen = getLongestNameLength(index) + 1;
-		for (int i = start; i < end; i += 50)
+		for (int i = start; i <= end; i += 50)
 		{
 			for (int seq = 0; seq < index.length; seq++)
 			{

@@ -18,8 +18,6 @@ import topali.fileio.Castor;
 public class MGWebService extends WebService
 {
 
-	Logger log = Logger.getLogger(this.getClass());
-
 	public String submit(String alignmentXML, String resultXML)
 			throws AxisFault
 	{
@@ -66,7 +64,7 @@ public class MGWebService extends WebService
 			return (new MGMonitor(jobDir)).getPercentageComplete();
 		} catch (Exception e)
 		{
-			log.warn(e);
+			logger.warn(e);
 			return new JobStatus(0, JobStatus.FATAL_ERROR);
 		}
 	}
