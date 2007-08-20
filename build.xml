@@ -85,6 +85,7 @@
 				<filter token="JAVAPATH" value="${user.java.path}"/>
 				<filter token="JOBDIR" value="${user.job.dir}"/>
 				<filter token="TMPDIR" value="${user.tmp.dir}"/>
+				<filter token="TOPALIDIR" value="${user.topali.dir}"/>
 			</filterset>
 		</copy>
 		<copy
@@ -113,6 +114,10 @@
 			<classes dir="${build.classes}"/>
 			<fileset file="doc/web/tracking.jsp"/>
 		</war>
+	</target>
+
+	<target name="clone" depends="war">
+		<unzip src="${build.warfile}" dest="${user.topali.dir}"/>
 	</target>
 
 	<target name="undeploy">

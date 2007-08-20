@@ -37,7 +37,7 @@ public class PhymlWebService extends WebService
 
 			PhymlResult result = (PhymlResult) Castor.unmarshall(resultXML);
 
-			result.phymlPath = webappPath + "/WEB-INF/binaries/src/phyml/phyml_linux";
+			result.phymlPath = binPath + "/src/phyml/phyml_linux";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 

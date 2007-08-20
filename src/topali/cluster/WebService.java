@@ -33,9 +33,9 @@ public abstract class WebService
 
 	protected static WebXmlProperties props;
 
-	protected static File webappPath;
+//	protected static File webappPath;
 
-	protected static String javaPath, topaliPath;
+	protected static String javaPath, topaliPath, binPath;
 
 	protected static String scriptsDir;
 
@@ -53,7 +53,7 @@ public abstract class WebService
 		ServletContext sc = req.getSession().getServletContext();
 
 		// This defines a real path to where the webapp is located on disk
-		webappPath = new File(sc.getRealPath("/"));
+		File webappPath = new File(sc.getRealPath("/"));
 
 		// We then load the properties for this install
 		File configPath = FileUtils.getFile(webappPath, "WEB-INF", "cluster");
@@ -63,26 +63,25 @@ public abstract class WebService
 		// subclasses
 		scriptsDir = configPath.getPath();
 		javaPath = getParameter("java-path");
-		topaliPath = FileUtils.getFile(webappPath, "WEB-INF", "lib",
-				"topali.jar").getPath();
+
+		String rootPath = getParameter("topali-dir");
+		if (rootPath != null && rootPath.length() > 0)
+		{
+			topaliPath = rootPath + "/WEB-INF/lib/topali.jar";
+			binPath    = rootPath + "/WEB-INF/binaries";
+		}
+		else
+		{
+			topaliPath = webappPath.getPath() + "/WEB-INF/lib/topali.jar";
+			binPath    = webappPath.getPath() + "/WEB-INF/binaries";
+		}
 
 		// Initialize logging
 		logger = Logger.getLogger("topali.cluster.info-log");
 		accessLog = Logger.getLogger("topali.cluster.access-log");
 
-/*		try
-		{
-			File logDir = new File(webappPath, "logs");
-			File infoFile = new File(logDir, "info-log.txt");
-			File accessFile = new File(logDir, "access-log.txt");
-
-			PatternLayout pLayout = new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} - %m\r\n");
-
-			logger.addAppender(new FileAppender(pLayout, infoFile.getPath()));
-			accessLog.addAppender(new FileAppender(pLayout, accessFile.getPath()));
-		}
-		catch (Exception e) {}
-*/
+		logger.info("topaliPath = " + topaliPath);
+		logger.info("binPath    = " + binPath);
 	}
 
 	protected String getJobId()

@@ -37,7 +37,7 @@ public class MGWebService extends WebService
 
 			MGResult result = (MGResult) Castor.unmarshall(resultXML);
 
-			result.mgPath = webappPath + "/WEB-INF/binaries/modelgenerator.jar";
+			result.mgPath = binPath + "/modelgenerator.jar";
 			result.javaPath = javaPath;
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;

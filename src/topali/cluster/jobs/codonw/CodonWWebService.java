@@ -37,7 +37,7 @@ public class CodonWWebService extends WebService
 
 			CodonWResult result = (CodonWResult) Castor.unmarshall(resultXML);
 
-			result.codonwPath = webappPath + "/WEB-INF/binaries/src/codonW/codonw";
+			result.codonwPath = binPath + "/src/codonW/codonw";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 
