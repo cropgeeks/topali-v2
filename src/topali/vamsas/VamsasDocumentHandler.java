@@ -153,9 +153,10 @@ public class VamsasDocumentHandler
 		// protein sequence.
 		// if so, check if we have a corresponding cdna for it
 		Object tmp = vSeq.getRefid();
+		uk.ac.vamsas.objects.core.Sequence refSeq = null;
 		if (tmp != null)
 		{
-			uk.ac.vamsas.objects.core.Sequence refSeq = (uk.ac.vamsas.objects.core.Sequence) tmp;
+			refSeq = (uk.ac.vamsas.objects.core.Sequence) tmp;
 			if (refSeq.getDictionary()
 					.equals(SymbolDictionary.STANDARD_AA))
 			{
@@ -168,6 +169,11 @@ public class VamsasDocumentHandler
 		Sequence tSeq = new Sequence();
 		tSeq.setName(name);
 		tSeq.setSequence(seq);
+		
+		//if the sequence is associated with a DatasetSequence, take a note of that
+		//if(refSeq!=null)
+			//ObjectMapper.datasetSequences.put(tSeq, refSeq);
+			
 		return tSeq;
 	}
 	
@@ -197,18 +203,29 @@ public class VamsasDocumentHandler
 	}
 
 	private void writeSequence(Sequence seq) {
-		uk.ac.vamsas.objects.core.Sequence vdsSeq = new uk.ac.vamsas.objects.core.Sequence();
-		vdsSeq.setName(seq.getName());
-		vdsSeq.setSequence(seq.getSequence().replaceAll("\\W", ""));
-		vdsSeq.setStart(1);
-		vdsSeq.setEnd(vdsSeq.getSequence().length());
-		if (currentTAlignment.getSequenceSet().getParams().isDNA())
-			vdsSeq.setDictionary(SymbolDictionary.STANDARD_NA);
-		else
-			vdsSeq.setDictionary(SymbolDictionary.STANDARD_AA);
-		getDataset().addSequence(vdsSeq);
-		map.registerObjects(seq, vdsSeq);
 		
+		//If neccessary create a new DatasetSequence
+		//uk.ac.vamsas.objects.core.Sequence vdsSeq = table.get(seq);
+		//if(vdsSeq==null) {
+			log.info("No DatasetSequence found, creating a new one.");
+			uk.ac.vamsas.objects.core.Sequence vdsSeq = new uk.ac.vamsas.objects.core.Sequence();
+			vdsSeq.setName(seq.getName());
+			vdsSeq.setSequence(seq.getSequence().replaceAll("\\W", ""));
+			vdsSeq.setStart(1);
+			vdsSeq.setEnd(vdsSeq.getSequence().length());
+			if (currentTAlignment.getSequenceSet().getParams().isDNA())
+				vdsSeq.setDictionary(SymbolDictionary.STANDARD_NA);
+			else
+				vdsSeq.setDictionary(SymbolDictionary.STANDARD_AA);
+			getDataset().addSequence(vdsSeq);
+			map.registerObjects(seq, vdsSeq);
+			//ObjectMapper.datasetSequences.put(seq, vdsSeq);
+		//}
+		//else {
+		//	log.info("DatasetSequence for this AlignmentSequence exists.");
+		//}
+		
+		//Create the alignment sequence
 		AlignmentSequence valSeq = new AlignmentSequence();
 		valSeq.setName(seq.getName());
 		valSeq.setSequence(seq.getSequence());
@@ -217,6 +234,32 @@ public class VamsasDocumentHandler
 		valSeq.setRefid(vdsSeq);
 		map.registerObjects(seq, valSeq);
 		currentVAlignment.addAlignmentSequence(valSeq);
+		
+//		Check if there is linked sequence
+		if(map.getLinkedSeq(seq)!=null) {
+			AlignmentSequence seq1 = (AlignmentSequence)VamsasManager.mapper.getVamsasObject(seq);
+			AlignmentSequence seq2 = (AlignmentSequence)VamsasManager.mapper.getVamsasObject(map.getLinkedSeq(seq));
+			SequenceMapping mapping = new SequenceMapping();
+			mapping.setLoc(seq1);
+			mapping.setMap(seq2);
+			Local local = new Local();
+			Seg seg = new Seg();
+			seg.setStart(1);
+			seg.setEnd(seq1.getSequence().length());
+			seg.setInclusive(true);
+			local.addSeg(seg);
+			mapping.setLocal(local);
+			Mapped mapped = new Mapped();
+			Seg seg2 = new Seg();
+			seg2.setStart(1);
+			seg2.setEnd(seq2.getSequence().length());
+			seg2.setInclusive(true);
+			mapped.addSeg(seg2);
+			mapping.setMapped(mapped);
+			mapping.setProvenance(getProvenance("Protein guided cDNA alignment"));
+			getDataset().addSequenceMapping(mapping);
+			map.removeLinkedSeq(seq);
+		}
 	}
 	
 	private void writeResult(AnalysisResult res) {
