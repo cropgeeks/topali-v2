@@ -152,8 +152,6 @@
 
 <!-- Project -->
 <class name="topali.gui.Project">
-  <field name="vamsasID" type="string">
-    <bind-xml node="attribute"/></field>
    
   <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
   <field name="treePath" type="int" collection="array"/>
