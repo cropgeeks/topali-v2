@@ -36,7 +36,7 @@ public class CodeMLWebService extends WebService
 
 			CodeMLResult result = (CodeMLResult) Castor.unmarshall(resultXML);
 
-			result.codemlPath = webappPath + "/WEB-INF/binaries/src/codeml/codeml";
+			result.codemlPath = binPath + "/src/codeml/codeml";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 

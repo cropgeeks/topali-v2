@@ -37,7 +37,7 @@ public class MrBayesWebService extends WebService
 
 			MBTreeResult result = (MBTreeResult) Castor.unmarshall(resultXML);
 
-			result.mbPath = webappPath + "/WEB-INF/binaries/src/mrbayes/mb";
+			result.mbPath = binPath + "/src/mrbayes/mb";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 

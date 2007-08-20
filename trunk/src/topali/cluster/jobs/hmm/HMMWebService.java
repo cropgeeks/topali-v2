@@ -36,7 +36,7 @@ public class HMMWebService extends WebService
 
 			HMMResult result = (HMMResult) Castor.unmarshall(resultXML);
 
-			result.barcePath = webappPath + "/WEB-INF/binaries/src/barce/barce";
+			result.barcePath = binPath + "/src/barce/barce";
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
 
