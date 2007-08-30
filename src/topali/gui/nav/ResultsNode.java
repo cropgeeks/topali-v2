@@ -35,6 +35,5 @@ public abstract class ResultsNode extends INode implements IPrintable
 		aAnlsRename.setEnabled(true);
 		aAnlsRemove.setEnabled(true);
 
-		aVamExport.setEnabled(true);
 	}
 }

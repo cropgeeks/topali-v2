@@ -55,7 +55,6 @@ public class TreePaneNode extends INode implements IPrintable
 
 		aAnlsCreateTree.setEnabled(true);
 
-		aVamExport.setEnabled(true);
 	}
 	
 	void setTreeNode(DefaultMutableTreeNode node)

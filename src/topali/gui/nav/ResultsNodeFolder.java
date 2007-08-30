@@ -31,7 +31,6 @@ public class ResultsNodeFolder extends INode
 	{
 		aFileExportDataSet.setEnabled(true);
 
-		aVamExport.setEnabled(true);
 	}
 
 	public JComponent getPanel()
