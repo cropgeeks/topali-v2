@@ -1,5 +1,11 @@
 Current state of affairs
 -----------------------
+
+VAMSAS today:
+- Work on tree saving to vamdoc
+- Track problems/bugs to talk about tomorrow with Jim (e. g. saving project to appdata)
+- Fix the ancestral sequence bug (duplicated ds sequences)
+
 TODO:
 - Rewrite VAMSAS interface
 - Try to write complete topali project to vamsas document 

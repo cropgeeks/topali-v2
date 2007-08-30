@@ -4,22 +4,23 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import topali.data.Sequence;
+import topali.var.AssociationMap;
 import uk.ac.vamsas.client.*;
 
 public class ObjectMapper
 {
+	final boolean debug = false;
+	
 	Logger log = Logger.getLogger(this.getClass());
 	
 	// Resolves vamsas IDs to TOPALi data objects
 	private Hashtable<VorbaId, Object> hashVT = new Hashtable<VorbaId, Object>();
 	
 	// Resolves TOPALi objects to vamsas IDs
-	private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
+	//private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
+	private Hashtable<Object, VorbaId> hashTV = new Hashtable<Object, VorbaId>();
 	
-	// Keeps track on sequences, which are somehow connected to eachother
-	private Hashtable<Sequence, Sequence> seqLinkFW = new Hashtable<Sequence, Sequence>();
-	private Hashtable<Sequence, Sequence> seqLinkRV = new Hashtable<Sequence, Sequence>();
+	public AssociationMap<Object> linkedObjects = new AssociationMap<Object>();
 	
 	IClientDocument cdoc = null;
 	
@@ -40,10 +41,12 @@ public class ObjectMapper
 	{
 		if (hashTV.containsKey(topaliObject))
 		{
+			if(debug)
 			log.info("Found corresponding VAMSAS object for "+topaliObject+", it's "+hashTV.get(topaliObject));
 			return cdoc.getObject(hashTV.get(topaliObject));
 		}
 		
+		if(debug)
 		log.info("Didn't find corresponding VAMSAS object for "+topaliObject);
 		return null;
 	}
@@ -59,6 +62,7 @@ public class ObjectMapper
 		VorbaId id = vamsasObject.getVorbaId();
 		if (id == null)
 		{
+			if(debug)
 			log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
 			// Register the object for use within the session document
 			cdoc.registerObject(vamsasObject);
@@ -84,13 +88,17 @@ public class ObjectMapper
 		if (id == null)
 		{
 			id = cdoc.registerObject(vamsasObject);
+			if(debug)
 			log.info(vamsasObject+" is now registered, id is "+id);
 		}
-		else
+		else {
+			if(debug)
 			log.info(vamsasObject+" was already registered, id is "+id);
+		}
 		
 		hashTV.put(topaliObject, id);		
 		hashVT.put(id, topaliObject);
+		if(debug)
 		log.info("Updated hashtables for "+topaliObject);
 	}
 	
@@ -102,29 +110,29 @@ public class ObjectMapper
 			return null;
 	}
 	
-	public Sequence getLinkedSeq(Sequence seq) {
-		if(seqLinkFW.contains(seq))
-			return seqLinkFW.get(seq);
-		else if(seqLinkRV.contains(seq))
-			return seqLinkRV.get(seq);
-		return null;
-	}
-	
-	public void setLinkedSeq(Sequence seq, Sequence link) {
-		seqLinkFW.put(seq, link);
-		seqLinkRV.put(link, seq);
-	}
-	
-	public void removeLinkedSeq(Sequence seq) {
-		if(seqLinkFW.contains(seq)) {
-			Sequence seq2 = seqLinkFW.get(seq);
-			seqLinkFW.remove(seq);
-			seqLinkRV.remove(seq2);
-		}
-		else if(seqLinkRV.contains(seq)) {
-			Sequence seq2 = seqLinkRV.get(seq);
-			seqLinkRV.remove(seq);
-			seqLinkFW.remove(seq2);
-		}
-	}
+//	public Sequence getLinkedSeq(Sequence seq) {
+//		if(seqLinkFW.contains(seq))
+//			return seqLinkFW.get(seq);
+//		else if(seqLinkRV.contains(seq))
+//			return seqLinkRV.get(seq);
+//		return null;
+//	}
+//	
+//	public void setLinkedSeq(Sequence seq, Sequence link) {
+//		seqLinkFW.put(seq, link);
+//		seqLinkRV.put(link, seq);
+//	}
+//	
+//	public void removeLinkedSeq(Sequence seq) {
+//		if(seqLinkFW.contains(seq)) {
+//			Sequence seq2 = seqLinkFW.get(seq);
+//			seqLinkFW.remove(seq);
+//			seqLinkRV.remove(seq2);
+//		}
+//		else if(seqLinkRV.contains(seq)) {
+//			Sequence seq2 = seqLinkRV.get(seq);
+//			seqLinkRV.remove(seq);
+//			seqLinkFW.remove(seq2);
+//		}
+//	}
 }

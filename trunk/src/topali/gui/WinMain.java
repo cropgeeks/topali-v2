@@ -749,16 +749,56 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				return;
 		}
 		
-		vamsas = new VamsasManager();
-		vEvents = new VamsasEvents(this);
-		
 		try
 		{
+			
+		vamsas = new VamsasManager();
+		
+		String[] tmp = vamsas.getAvailableSessions();
+		if(tmp!=null && tmp.length>0) {
+			String[] sessions = new String[tmp.length+1];
+			String newSession = "Create new session...";
+			sessions[0] = newSession; 
+			System.arraycopy(tmp, 0, sessions, 1, tmp.length);
+			VamsasSessionDialog dlg = new VamsasSessionDialog(this, sessions);
+			dlg.setVisible(true);
+			String session = dlg.getSelSession();
+			if(session==null)
+				return;
+			else if(session.equals(newSession)) 
+				vamsas.connect(project, null);
+			else  {
+				vamsas.connect(project, session);
+				vamsas.read();
+			}
+		} 
+		else {
 			vamsas.connect(project, null);
+		}
+		
+		vEvents = new VamsasEvents(this, vamsas.mapper);
+		
 		} catch (Exception e)
 		{
+			vamsas = null;
 			MsgBox.msg("Error connecting/creating VAMSAS session.", MsgBox.ERR);
+			log.error("Error connecting/creating VAMSAS session.", e);
 		}
+	}
+	
+	void menuVamsasCommit() {
+		if (vamsas != null)
+		{
+			try
+			{
+				vamsas.write();
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
 	}
 	
 //	void menuVamsasSelectSession()

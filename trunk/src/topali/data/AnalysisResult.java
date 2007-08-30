@@ -7,7 +7,7 @@ package topali.data;
 
 import topali.cluster.JobStatus;
 
-public class AnalysisResult
+public class AnalysisResult extends DataObject
 {
 	
 	// Simple name for this result (used by navpanel)
@@ -38,4 +38,5 @@ public class AnalysisResult
 	{
 		return guiName;
 	}
+	
 }

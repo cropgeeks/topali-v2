@@ -7,15 +7,17 @@ import uk.ac.vamsas.client.picking.MouseOverMessage;
 public class VamsasEvents
 {
 	private WinMain winMain;
+	private ObjectMapper mapper;
 	
-	public VamsasEvents(WinMain winMain)
+	public VamsasEvents(WinMain winMain, ObjectMapper mapper)
 	{
 		this.winMain = winMain;
+		this.mapper = mapper;
 	}
 	
 	void sendAlignmentPanelMouseOverEvent(Sequence seq, int pos)
 	{
-		String id = VamsasManager.mapper.getVorbaID(seq);
+		String id = mapper.getVorbaID(seq);
 		if(id!=null) {
 			MouseOverMessage message = new MouseOverMessage(id, pos-1);
 			winMain.vamsas.msgHandler.sendMessage(message);

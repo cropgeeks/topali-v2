@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.Text;
-import topali.vamsas.VamsasManager;
+import topali.var.AssociationMap;
 import doe.MsgBox;
 
 public class MakeNA
@@ -42,12 +42,12 @@ public class MakeNA
 	}
 	
 	public boolean doConversion(boolean showMessages) {
-		return doConversion(showMessages, false);
+		return doConversion(showMessages, null);
 	}
 	
-	public boolean doConversion(boolean showMessages, boolean useMapper)
+	public boolean doConversion(boolean showMessages, AssociationMap<Object> map)
 	{
-		SequenceSet newSS = new SequenceSet();
+		//SequenceSet newSS = new SequenceSet();
 
 		// How many sequences are we dealing with
 		int dnaCount = dna.getSize();
@@ -125,19 +125,22 @@ public class MakeNA
 			}
 
 			// Create the new sequence
-			Sequence newSequence = new Sequence(dnaSeq.getName());
-			newSequence.getBuffer().append(seqBuf);
+			//Sequence newSequence = new Sequence(dnaSeq.getName());
+			//newSequence.getBuffer().append(seqBuf);
 			// And add it to the dataset
-			newSS.addSequence(newSequence);
-			if(useMapper) {
-				VamsasManager.mapper.setLinkedSeq(newSequence, proSeq);
-			}
+			dnaSeq.setSequence(seqBuf.toString());
+			//newSS.addSequence(newSequence);
+			
+			if(map!=null) 
+				//map.put(newSequence, proSeq);
+				map.put(dnaSeq, proSeq);
 		}
 
 		// Perform some final checks on the new alignment before OKing it
 		try
 		{
-			newSS.checkValidity();
+			//newSS.checkValidity();
+			dna.checkValidity();
 		} catch (AlignmentLoadException e)
 		{
 			String msg = Text.GuiFile.getString("ImportDataSetDialog.err0"
@@ -148,7 +151,7 @@ public class MakeNA
 			return false;
 		}
 
-		if (SequenceSetUtils.verifySequenceNames(newSS) == false) {
+		if (SequenceSetUtils.verifySequenceNames(dna) == false) {
 			String msg = Text.GuiFile.getString("ImportDataSetDialog.err05");
 			log.warn(msg);
 			if(showMessages)
@@ -156,7 +159,7 @@ public class MakeNA
 					MsgBox.WAR);
 		}
 
-		this.data = new AlignmentData(name, newSS);
+		this.data = new AlignmentData(name, dna);
 		//TOPALi.winMain.addNewAlignmentData(data);
 
 		return true;

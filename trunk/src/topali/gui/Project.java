@@ -23,7 +23,7 @@ import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
 import doe.MsgBox;
 
-public class Project extends ViewableDataObject
+public class Project extends DataObject
 {
 	static Logger log = Logger.getLogger(Project.class);
 	
@@ -79,25 +79,37 @@ public class Project extends ViewableDataObject
 		this.treePath = treePath;
 	}
 
-	public boolean containsDataset(AlignmentData data) {
-		boolean result = false;
+	public AlignmentData containsDatasetBySeqs(AlignmentData data) {
+		AlignmentData match = null;
 		for(AlignmentData data2 : datasets) {
 			if(data.name.equals(data2.name) && data.getSequenceSet().getSize()==data2.getSequenceSet().getSize()) {
 				SequenceSet ss = data.getSequenceSet();
 				SequenceSet ss2 = data2.getSequenceSet();
+				boolean seqMatch = true;
 				for(int i=0; i<ss.getSize(); i++) {
 					Sequence s = ss.getSequence(i);
 					Sequence s2 = ss2.getSequence(i);
-					result = s.getName().equals(s2.getName()) && s.getSequence().equals(s2.getSequence());
-					if(!result)
+					seqMatch = s.getName().equals(s2.getName()) && s.getSequence().equals(s2.getSequence());
+					if(!seqMatch)
 						break;
 				}
+				if(seqMatch) {
+					match = data2;
+					break;
+				}
 			}
-			if(result)
-				break;
 		}
-		return result;
+		return match;
 	}
+	
+//	public AlignmentData containsDatasetByID(AlignmentData data) {
+//		for(AlignmentData data2 : datasets) {
+//			if(data.getId()==data2.getId()) {
+//				return data;
+//			}
+//		}
+//		return null;
+//	}
 	
 	// Calls load() to load the given project from disk, or opens a FileDialog
 	// to prompt for the project name if filename is null

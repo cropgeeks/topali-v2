@@ -60,7 +60,7 @@ public class WinMainMenuBar extends JMenuBar
 	
 	JMenu mVamsas;
 
-	JMenuItem mVamSelectSession, mVamImport, mVamExport;
+	JMenuItem mVamSelectSession, mVamCommit; //mVamImport, mVamExport;
 
 	JMenu mHelp;
 
@@ -93,7 +93,7 @@ public class WinMainMenuBar extends JMenuBar
 	//CodonW
 	public static AbstractAction aAnlsRunCW;
 
-	public static AbstractAction aVamSelectSession, aVamImport, aVamExport;
+	public static AbstractAction aVamSelectSession, aVamCommit; //aVamImport, aVamExport;
 
 	public static AbstractAction aVamsas;
 	
@@ -517,22 +517,31 @@ public class WinMainMenuBar extends JMenuBar
 				winMain.menuVamsasSelectSession();
 			}
 		};
-
-		aVamImport = new AbstractAction(Text.Gui.getString("aVamImport"))
+		
+		aVamCommit = new AbstractAction(Text.Gui
+				.getString("aVamCommit"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuVamsasImport();
+				winMain.menuVamsasCommit();
 			}
 		};
 
-		aVamExport = new AbstractAction(Text.Gui.getString("aVamExport"))
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				winMain.menuVamsasExport();
-			}
-		};
+//		aVamImport = new AbstractAction(Text.Gui.getString("aVamImport"))
+//		{
+//			public void actionPerformed(ActionEvent e)
+//			{
+//				winMain.menuVamsasImport();
+//			}
+//		};
+//
+//		aVamExport = new AbstractAction(Text.Gui.getString("aVamExport"))
+//		{
+//			public void actionPerformed(ActionEvent e)
+//			{
+//				winMain.menuVamsasExport();
+//			}
+//		};
 
 		aVamsas = new AbstractAction("VAMSAS") {
 			public void actionPerformed(ActionEvent e)
@@ -787,13 +796,15 @@ public class WinMainMenuBar extends JMenuBar
 		mVamsas.setMnemonic(KeyEvent.VK_S);
 
 		mVamSelectSession = getItem(aVamSelectSession, KeyEvent.VK_S, 0, 0);
-		mVamImport = getItem(aVamImport, KeyEvent.VK_I, 0, 0, Icons.IMPORT16);
-		mVamExport = getItem(aVamExport, KeyEvent.VK_E, 0, 0, Icons.EXPORT);
+		mVamCommit = getItem(aVamCommit, KeyEvent.VK_U, 0, 0, Icons.MIDPOINT_ROOT);
+		//mVamImport = getItem(aVamImport, KeyEvent.VK_I, 0, 0, Icons.IMPORT16);
+		//mVamExport = getItem(aVamExport, KeyEvent.VK_E, 0, 0, Icons.EXPORT);
 
 		mVamsas.add(mVamSelectSession);
-		mVamsas.addSeparator();
-		mVamsas.add(mVamImport);
-		mVamsas.add(mVamExport);
+		mVamsas.add(mVamCommit);
+		//mVamsas.addSeparator();
+		//mVamsas.add(mVamImport);
+		//mVamsas.add(mVamExport);
 
 		add(mVamsas);
 	}
@@ -917,7 +928,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRename.setEnabled(false);
 		aAnlsRemove.setEnabled(false);
 
-		aVamExport.setEnabled(false);
+		//aVamExport.setEnabled(false);
 		//aVamImport.setEnabled(false);
 	}
 

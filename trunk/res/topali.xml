@@ -6,8 +6,12 @@
 
 <mapping>
 
+<class name="topali.data.DataObject">
+  <!-- <field name="id" type="int"/> -->
+</class>
+ 
 <!-- Sequence -->
-<class name="topali.data.Sequence">
+<class name="topali.data.Sequence" extends="topali.data.DataObject">
   <field name="name" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="safeName" type="string" direct="true">
@@ -39,7 +43,7 @@
 </class>
 
 <!-- SequenceSet -->
-<class name="topali.data.SequenceSet">
+<class name="topali.data.SequenceSet" extends="topali.data.DataObject">
   <field name="length" type="int">
   	<bind-xml node="attribute"/></field>
   	
@@ -130,7 +134,7 @@
 </class>
 
 <!-- AlignmentData -->
-<class name="topali.data.AlignmentData">
+<class name="topali.data.AlignmentData" extends="topali.data.DataObject">
   <field name="name" type="string" direct="true">
     <bind-xml node="attribute"/></field>
  <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
@@ -166,7 +170,7 @@
 
 
 <!-- AnalysisResult -->
-<class name="topali.data.AnalysisResult">
+<class name="topali.data.AnalysisResult" extends="topali.data.DataObject">
   <field name="guiName" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="jobName" type="string" direct="true">
@@ -218,6 +222,7 @@
   <field name="burnin" type="double" direct="true"/>
   <field name="sampleFreq" type="int" direct="true"/>
   <field name="isCDNA" type="boolean" direct="true"/>
+  <field name="nexusCommands" type="string" direct="true"/>
 </class>
   
 <!-- PhymlResult (extends TreeResult) -->

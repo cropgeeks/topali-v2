@@ -18,6 +18,8 @@ public class MBTreeResult extends TreeResult
 	public int sampleFreq = 10;
 	public boolean isCDNA = false;
 	
+	public String nexusCommands;
+	
 	public MBTreeResult()
 	{
 	}
