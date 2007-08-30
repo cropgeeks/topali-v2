@@ -18,11 +18,10 @@ public class VamsasManager
 {
 	Logger log = Logger.getLogger(this.getClass());
 
-	public static ObjectMapper mapper;
-	//public static Hashtable<Object, DataSet> vObjectLocator;
+	public ObjectMapper mapper;
 	
-	public static ClientHandle client = new ClientHandle("topali", "2.16");
-	public static UserHandle user = new UserHandle(System.getProperty("user.name"), "");
+	public static final ClientHandle client = new ClientHandle("topali", "2.16");
+	public static final UserHandle user = new UserHandle(System.getProperty("user.name"), "");
 	
 	private Project project;
 	
@@ -31,8 +30,7 @@ public class VamsasManager
 	public VamsasMsgHandler msgHandler;
 	
 	public VamsasManager() {
-		VamsasManager.mapper = new ObjectMapper();
-		//VamsasManager.vObjectLocator = new Hashtable<Object, DataSet>();
+		mapper = new ObjectMapper();
 	}
 	
 	public String[] getAvailableSessions() throws Exception {
@@ -46,11 +44,16 @@ public class VamsasManager
 		initVamsas(session);
 	}
 	
+	public void update() throws IOException {
+		read();
+		write();
+	}
+	
 	public void read() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		//VAMSASUtils.loadProject(project, cDoc);
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc);
-		docHandler.read();
+		VAMSASUtils.loadProject(project, cDoc); //this does not really work
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
+		//docHandler.read();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
@@ -58,9 +61,9 @@ public class VamsasManager
 	
 	public void write() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		//VAMSASUtils.storeProject(project, cDoc);
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc);
-		docHandler.write();
+		VAMSASUtils.storeProject(project, cDoc); //this does not really work
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
+		//docHandler.write();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
@@ -88,7 +91,7 @@ public class VamsasManager
 			log.warn("No PickManager available. Inter-Application messaging disabled.");
 		else {
 			msgHandler = new VamsasMsgHandler();
-			msgHandler.connect(pickManager);
+			msgHandler.connect(pickManager, mapper);
 		}
 	}
 	

@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.LinkedList;
 
 /* Represents an Alignment and the results/analyses run upon it. */
-public class AlignmentData extends ViewableDataObject
+public class AlignmentData extends DataObject
 {
 	// The alignment's name
 	public String name;
@@ -40,6 +40,10 @@ public class AlignmentData extends ViewableDataObject
 	{
 	}
 
+	//public AlignmentData(int id) {
+	//	super(id);
+	//}
+	
 	public AlignmentData(String name, SequenceSet sequenceSet)
 	{
 		this.name = name;
@@ -194,5 +198,5 @@ public class AlignmentData extends ViewableDataObject
 			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionS));
 		
 	}
-
+	
 }

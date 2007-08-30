@@ -19,12 +19,15 @@ public class VamsasMsgHandler implements IMessageHandler
 	
 	private IPickManager manager;
 	
+	ObjectMapper mapper;
+	
 	public VamsasMsgHandler()
 	{
 	}
 
-	public void connect(IPickManager manager) {
+	public void connect(IPickManager manager, ObjectMapper mapper) {
 		this.manager = manager;
+		this.mapper = mapper;
 		manager.registerMessageHandler(this);
 	}
 	
@@ -55,7 +58,7 @@ public class VamsasMsgHandler implements IMessageHandler
 		{	
 			MouseOverMessage msg = (MouseOverMessage)message;
 			String id = msg.getVorbaID();
-			Object tmp = VamsasManager.mapper.getTopaliObject(id);
+			Object tmp = mapper.getTopaliObject(id);
 			if(tmp!=null && tmp instanceof Sequence) {
 				Sequence seq = (Sequence)tmp;
 				int pos = msg.getPosition();

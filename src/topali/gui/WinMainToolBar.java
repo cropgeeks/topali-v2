@@ -126,8 +126,8 @@ public class WinMainToolBar extends JToolBar
 		//add(bAnlsRunHMM);
 		//add(bAnlsRunDSS);
 		//add(bAnlsRunLRT);
-		addSeparator();
-		add(bVamsas);
+		//addSeparator();
+		//add(bVamsas);
 		addSeparator();
 		add(bHelpDisplay);
 

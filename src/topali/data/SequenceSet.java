@@ -21,7 +21,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.fileio.*;
 
 // Class representing a set of sequences (an alignment).
-public class SequenceSet extends ViewableDataObject
+public class SequenceSet extends DataObject
 {
 	// Actual alignment data
 	private Vector<Sequence> sequences = new Vector<Sequence>();
@@ -518,6 +518,35 @@ public class SequenceSet extends ViewableDataObject
 		super.addChangeListener(listener);
 		for(Sequence s : sequences)
 			s.addChangeListener(listener);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((sequences == null) ? 0 : sequences.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final SequenceSet other = (SequenceSet) obj;
+		if (sequences == null)
+		{
+			if (other.sequences != null)
+				return false;
+		} else if (!sequences.equals(other.sequences))
+			return false;
+		return true;
 	}
 	
 	

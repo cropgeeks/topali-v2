@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import java.util.Arrays;
+
 public class AlignmentResult extends AnalysisResult
 {
 	// Sequences to be analysed
@@ -21,5 +23,5 @@ public class AlignmentResult extends AnalysisResult
 	public AlignmentResult()
 	{
 	}
-
+	
 }

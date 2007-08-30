@@ -23,8 +23,10 @@ import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application
 {
+	public static final String VERSION = "2.16";
+	
 	private final String prefsFile = ".TOPALiV2-16.xml";
-
+	
 	static Logger root;
 	static Logger log;
 

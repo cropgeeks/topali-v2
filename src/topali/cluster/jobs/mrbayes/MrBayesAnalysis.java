@@ -15,6 +15,8 @@ import topali.mod.Filters;
 public class MrBayesAnalysis extends AnalysisThread
 {
 
+	public static final String VERSION = "3.1";
+	
 	private SequenceSet ss;
 
 	private MBTreeResult result;
@@ -200,6 +202,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		 sb.append("MrBayes Commands:\n");
 		 sb.append(cmd.getCommands());
 		 result.info = sb.toString();
+		 result.nexusCommands = cmd.getCommands();
 	}
 
 	private void readTree() throws Exception
