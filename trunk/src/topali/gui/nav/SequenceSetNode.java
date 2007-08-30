@@ -81,7 +81,6 @@ public class SequenceSetNode extends INode
 		
 		aAnlsCreateTree.setEnabled(true);
 
-		aVamExport.setEnabled(true);
 
 		alignmentPanel.getListPanel().setMenus();
 	}

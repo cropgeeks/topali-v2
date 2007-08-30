@@ -30,8 +30,6 @@ class DataSetNodeFolder extends INode
 		aFileExportDataSet.setEnabled(true);
 
 		aAlgnRemove.setEnabled(true);
-
-		aVamExport.setEnabled(true);
 	}
 
 	public JPanel getPanel()
