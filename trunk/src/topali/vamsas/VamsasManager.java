@@ -51,9 +51,12 @@ public class VamsasManager
 	
 	public void read() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		VAMSASUtils.loadProject(project, cDoc); //this does not really work
+		mapper.registerClientDocument(cDoc);
+		//uncomment this if you want to use the vamsas appdata facility
+		//VAMSASUtils.loadProject(project, cDoc); 
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
-		//docHandler.read();
+		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
+		docHandler.read();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
@@ -61,9 +64,12 @@ public class VamsasManager
 	
 	public void write() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		VAMSASUtils.storeProject(project, cDoc); //this does not really work
+		mapper.registerClientDocument(cDoc);
+		//uncomment this if you want to use the vamsas appdata facility
+		//VAMSASUtils.storeProject(project, cDoc); 
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
-		//docHandler.write();
+		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
+		docHandler.write();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
