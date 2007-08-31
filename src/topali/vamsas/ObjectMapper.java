@@ -20,6 +20,7 @@ public class ObjectMapper
 	//private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
 	private Hashtable<Object, VorbaId> hashTV = new Hashtable<Object, VorbaId>();
 	
+	// Holds objects, which are in someway linked to eachother (e. g. cdna->protein seq.)
 	public AssociationMap<Object> linkedObjects = new AssociationMap<Object>();
 	
 	IClientDocument cdoc = null;
@@ -109,30 +110,4 @@ public class ObjectMapper
 		else
 			return null;
 	}
-	
-//	public Sequence getLinkedSeq(Sequence seq) {
-//		if(seqLinkFW.contains(seq))
-//			return seqLinkFW.get(seq);
-//		else if(seqLinkRV.contains(seq))
-//			return seqLinkRV.get(seq);
-//		return null;
-//	}
-//	
-//	public void setLinkedSeq(Sequence seq, Sequence link) {
-//		seqLinkFW.put(seq, link);
-//		seqLinkRV.put(link, seq);
-//	}
-//	
-//	public void removeLinkedSeq(Sequence seq) {
-//		if(seqLinkFW.contains(seq)) {
-//			Sequence seq2 = seqLinkFW.get(seq);
-//			seqLinkFW.remove(seq);
-//			seqLinkRV.remove(seq2);
-//		}
-//		else if(seqLinkRV.contains(seq)) {
-//			Sequence seq2 = seqLinkRV.get(seq);
-//			seqLinkRV.remove(seq);
-//			seqLinkFW.remove(seq2);
-//		}
-//	}
 }

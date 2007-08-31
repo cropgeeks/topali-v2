@@ -53,10 +53,10 @@ public class VamsasManager
 		IClientDocument cDoc = vclient.getClientDocument();
 		mapper.registerClientDocument(cDoc);
 		//uncomment this if you want to use the vamsas appdata facility
-		//VAMSASUtils.loadProject(project, cDoc); 
+		VAMSASUtils.loadProject(project, cDoc); 
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
 		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
-		docHandler.read();
+		//docHandler.read();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
@@ -66,10 +66,10 @@ public class VamsasManager
 		IClientDocument cDoc = vclient.getClientDocument();
 		mapper.registerClientDocument(cDoc);
 		//uncomment this if you want to use the vamsas appdata facility
-		//VAMSASUtils.storeProject(project, cDoc); 
+		VAMSASUtils.storeProject(project, cDoc); 
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
 		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
-		docHandler.write();
+		//docHandler.write();
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
