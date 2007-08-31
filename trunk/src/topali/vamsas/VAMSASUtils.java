@@ -23,9 +23,9 @@ import uk.ac.vamsas.objects.utils.trees.*;
 
 public class VAMSASUtils
 {
+	final static boolean debug = false;
+	
 	static Logger log = Logger.getLogger(VAMSASUtils.class);
-	//static AppDataOutputStream os = null;
-	//static AppDataInputStream is = null;
 	
 	public static boolean storeProject(Project project, IClientDocument cDoc) {	
 		
@@ -45,6 +45,7 @@ public class VAMSASUtils
 			m.marshal(project);
 			AppDataOutputStream os = data.getClientOutputStream();
 			os.write(out.toString().getBytes());
+			log.info("Wrote topali project to vamsas appdata.");
 		} catch (Exception e)
 		{
 			log.warn("Marshalling failed.", e);
@@ -82,8 +83,10 @@ public class VAMSASUtils
 		for(int i=0; i<tmp.size(); i++)
 			bytes[i] = tmp.get(i).byteValue();
 		
-		String debug = new String(bytes);
-		System.out.println("\n"+debug.replaceAll(">", ">\n"));
+		if(VAMSASUtils.debug) {
+			String debug = new String(bytes);
+			System.out.println("\n"+debug.replaceAll(">", ">\n"));
+		}
 		
 		InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(bytes));
 		Unmarshaller u = new Unmarshaller();
@@ -91,6 +94,7 @@ public class VAMSASUtils
 		{
 			u.setMapping(Castor.getMapping());
 			Project vProject = (Project)u.unmarshal(in);
+			log.info("Got topali project from appdata.");
 			if(project!=null) {
 				for(AlignmentData align : vProject.getDatasets())
 					project.addDataSet(align);

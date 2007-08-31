@@ -29,7 +29,6 @@ public class VamsasDocumentHandler
 
 	private IClientDocument doc;
 
-	// Shortcut to VamsasManager.mapper
 	ObjectMapper map;
 
 	// These fields are dynamically set during reading/writing process (be
