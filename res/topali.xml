@@ -5,13 +5,9 @@
 <!-- Mapping file from TOPALi class objects to/from XML. A git of a file at first glance, but it was built up by hand over time, with occasional help from Castor's auto mapping file generator -->
 
 <mapping>
-
-<class name="topali.data.DataObject">
-  <!-- <field name="id" type="int"/> -->
-</class>
  
 <!-- Sequence -->
-<class name="topali.data.Sequence" extends="topali.data.DataObject">
+<class name="topali.data.Sequence">
   <field name="name" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="safeName" type="string" direct="true">
@@ -43,7 +39,7 @@
 </class>
 
 <!-- SequenceSet -->
-<class name="topali.data.SequenceSet" extends="topali.data.DataObject">
+<class name="topali.data.SequenceSet">
   <field name="length" type="int">
   	<bind-xml node="attribute"/></field>
   	
@@ -134,7 +130,7 @@
 </class>
 
 <!-- AlignmentData -->
-<class name="topali.data.AlignmentData" extends="topali.data.DataObject">
+<class name="topali.data.AlignmentData">
   <field name="name" type="string" direct="true">
     <bind-xml node="attribute"/></field>
  <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
@@ -156,11 +152,19 @@
 
 <!-- Project -->
 <class name="topali.gui.Project">
-   
   <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
   <field name="treePath" type="int" collection="array"/>
+  <field name="vamsasMapper" type="byte" collection="array" get-method="getVamsasMapperSerialized" set-method="setVamsasMapperSerialized"/>
 </class>
 
+<!-- 
+<class name="topali.vamsas.ObjectMapper">
+  <field name="hashVT" collection="hashtable" direct="true"/>
+  <field name="hashTV" collection="hashtable" direct="true"/>
+  <field name="linkedObjects" type="topali.var.AssociationMap" direct="true"/>
+</class>
+-->
+  
 <!-- JobStatus -->
 <class name="topali.cluster.JobStatus">
 	<field name="progress" type="float" direct="true"/>
@@ -170,7 +174,7 @@
 
 
 <!-- AnalysisResult -->
-<class name="topali.data.AnalysisResult" extends="topali.data.DataObject">
+<class name="topali.data.AnalysisResult">
   <field name="guiName" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="jobName" type="string" direct="true">
