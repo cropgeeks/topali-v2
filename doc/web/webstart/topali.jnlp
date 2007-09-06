@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>   
-<jnlp codebase="http://www.bioss.ac.uk/knowledge/topali/webstart" href="topali.jnlp">
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp codebase="http://www.topali.org/webstart" href="topali.jnlp">
 	<information>
 		<title>TOPALi v2</title>
-		<vendor>Biomathematics & Statistics Scotland</vendor>
+		<vendor>Biomathematics and Statistics Scotland</vendor>
 	</information>
 	<resources>
 		<j2se version="1.5+"/>
@@ -21,7 +21,7 @@
 		<jar href="log4j-1.2.8.jar"/>
 		<jar href="looks-2.0.2.jar"/>
 		<jar href="office-2.0.jar"/>
-		<jar href="pal.jar"/>	
+		<jar href="pal.jar"/>
 		<jar href="saaj.jar"/>
 		<jar href="sbrn-commons.jar"/>
 		<jar href="swing-layout-1.0.jar"/>
@@ -35,4 +35,4 @@
 		<all-permissions/>
 	</security>
 </jnlp>
-   
+
