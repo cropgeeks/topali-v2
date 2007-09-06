@@ -15,7 +15,7 @@ import topali.cluster.*;
 
 public class DrmaaClient implements ICluster
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.sge");
+	private static  Logger logger = Logger.getLogger("topali.cluster.sge");
 
 	private static Session session = null;
 

@@ -5,11 +5,18 @@
 
 package topali.data;
 
+import java.io.Serializable;
+
 import topali.cluster.JobStatus;
 
-public class AnalysisResult extends DataObject
+public class AnalysisResult extends DataObject implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7268038613014858256L;
+
 	// Simple name for this result (used by navpanel)
 	public String guiName;
 
@@ -34,6 +41,7 @@ public class AnalysisResult extends DataObject
 	// The job's current status
 	public int status = JobStatus.STARTING;
 
+	@Override
 	public String toString()
 	{
 		return guiName;

@@ -5,8 +5,14 @@
 
 package topali.data;
 
-public class SequenceSetParams
+import java.io.Serializable;
+
+public class SequenceSetParams implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7214931906887827282L;
 	public static final String GENETICCODE_UNIVERSAL = "Universal";
 	public static final String GENETICCODE_VERTMT = "Vertebrate Mitochondrial DNA";
 	public static final String GENETICCODE_MYCOPLASMA = "Mycoplasma";

@@ -33,6 +33,7 @@ public class PhymlLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
+	@Override
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -49,11 +50,13 @@ public class PhymlLocalJob extends AnalysisJob
 		}
 	}
 
+	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new PhymlMonitor(jobDir).getPercentageComplete();
 	}
 
+	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new PhymlMonitor(jobDir).getResult();
@@ -62,6 +65,7 @@ public class PhymlLocalJob extends AnalysisJob
 		return result;
 	}
 
+	@Override
 	public void ws_cleanup() throws Exception
 	{
 		ClusterUtils.emptyDirectory(jobDir, true);
@@ -70,6 +74,7 @@ public class PhymlLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
+	@Override
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

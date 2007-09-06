@@ -14,7 +14,7 @@ import topali.fileio.Castor;
 
 public class CollateHMM
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
+	private static  Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
@@ -39,7 +39,7 @@ public class CollateHMM
 		try
 		{
 			int count = new File(jobDir, "percent").listFiles().length;
-			progress = ((float) count / 105f) * 100f;
+			progress = (count / 105f) * 100f;
 		} catch (Exception e)
 		{
 		}

@@ -9,7 +9,7 @@ import static topali.mod.Filters.TOP;
 
 import java.beans.*;
 import java.io.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.zip.*;
 
 import javax.swing.*;
@@ -21,11 +21,12 @@ import topali.data.*;
 import topali.fileio.Castor;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
+import topali.vamsas.ObjectMapper;
 import doe.MsgBox;
 
-public class Project extends DataObject
+public class Project extends DataObject 
 {
-	static Logger log = Logger.getLogger(Project.class);
+	 static Logger log = Logger.getLogger(Project.class);
 	
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
@@ -38,6 +39,9 @@ public class Project extends DataObject
 	// its state after a project-load
 	private int[] treePath;
 
+	private ObjectMapper vamsasMapper = null;
+	private ArrayList<Byte> vamsasMapperSerialized = new ArrayList<Byte>();
+	
 	public Project()
 	{
 	}
@@ -58,6 +62,17 @@ public class Project extends DataObject
 			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
 			//propagate listeners to alignment datasets
 			data.addChangeListener(l);
+		}
+	}
+	
+	public void addAllDataSets(List<AlignmentData> datasets) {
+		for(AlignmentData data : datasets) {
+			this.datasets.add(data);
+			for(PropertyChangeListener l : changeListeners) {
+				l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
+				//propagate listeners to alignment datasets
+				data.addChangeListener(l);
+			}
 		}
 	}
 	
@@ -258,5 +273,55 @@ public class Project extends DataObject
 		}
 
 		return false;
+	}
+	
+	public void merge(Project proj) {
+		addAllDataSets(proj.getDatasets());
+		if(proj.getVamsasMapper()!=null)
+			this.vamsasMapper = proj.getVamsasMapper();
+	}
+	
+	public ObjectMapper getVamsasMapper() {
+		if(vamsasMapper==null && vamsasMapperSerialized.size()>0) {
+			try
+			{
+				byte[] bytes = new byte[vamsasMapperSerialized.size()];
+				for(int i=0; i<bytes.length; i++)
+					bytes[i] = vamsasMapperSerialized.get(i);
+				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+				Object obj = ois.readObject();
+				if(obj instanceof ObjectMapper)
+					this.vamsasMapper = (ObjectMapper)obj;
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			} 
+		}
+		return vamsasMapper;
+	}
+	
+	public void setVamsasMapper(ObjectMapper mapper) {
+		this.vamsasMapper = mapper;
+	}
+	
+	public byte[] getVamsasMapperSerialized() {
+		if(vamsasMapper!=null) {
+			try
+			{
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				ObjectOutputStream oos = new ObjectOutputStream(bos);
+				oos.writeObject(vamsasMapper);
+				return bos.toByteArray();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public void setVamsasMapperSerialized(byte[] data) {
+		//as this is stored as byte array, castor calls this method for each single item of the array
+		vamsasMapperSerialized.add(data[0]);
 	}
 }

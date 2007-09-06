@@ -20,6 +20,7 @@ class FileMSF extends FileGeneric
 		ss = s;
 	}
 
+	@Override
 	public boolean readFile(File file)
 	{
 		try
@@ -47,7 +48,7 @@ class FileMSF extends FileGeneric
 			// Step 3: reformat based on gaps, missing chars, etc
 			for (int i = 0; i < seqs.size(); i++)
 			{
-				Sequence s = (Sequence) seqs.get(i);
+				Sequence s = seqs.get(i);
 				String data = s.getBuffer().toString();
 				data = data.replace('.', '-');
 				data = data.replace('~', '?');
@@ -57,7 +58,7 @@ class FileMSF extends FileGeneric
 
 			// Step 4: finally pass each sequence to the SequenceSet collection
 			for (int i = 0; i < seqs.size(); i++)
-				ss.addSequence((Sequence) seqs.get(i));
+				ss.addSequence(seqs.get(i));
 		} catch (Exception e)
 		{
 			success = false;
@@ -125,9 +126,10 @@ class FileMSF extends FileGeneric
 		if (index >= seqs.size())
 			return null;
 		else
-			return (Sequence) seqs.get(index);
+			return seqs.get(index);
 	}
 
+	@Override
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

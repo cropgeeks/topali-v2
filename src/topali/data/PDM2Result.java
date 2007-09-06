@@ -5,14 +5,21 @@
 
 package topali.data;
 
+import java.io.Serializable;
+
 import sbrn.commons.MatrixXML;
 
 /*
  * Class that stores both the results from running a PDM2 analysis and the
  * settings required to make the run (although not the data itself).
  */
-public class PDM2Result extends AlignmentResult
+public class PDM2Result extends AlignmentResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5855053823208271399L;
+
 	// The location of the MrBayes binary
 	public String mbPath;
 

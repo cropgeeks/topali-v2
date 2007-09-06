@@ -34,6 +34,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				doLoad();
@@ -53,7 +54,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 
 		pack();
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 		setVisible(true);
 	}
@@ -82,6 +83,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 			menubar.updateRecentFileList(project);
 			WinMain.navPanel.displayProject(project);
 			WinMainMenuBar.aFileSave.setEnabled(false);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 
 		setVisible(false);

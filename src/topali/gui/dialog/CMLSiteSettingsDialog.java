@@ -87,6 +87,8 @@ public class CMLSiteSettingsDialog extends JDialog implements MouseListener
 		initModels();
 		initialize();
 		
+		getRootPane().setDefaultButton(bRun);
+		
 		if(res!=null)
 			initPreviousResult(res);
 		

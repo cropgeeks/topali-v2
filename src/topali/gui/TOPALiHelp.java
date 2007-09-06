@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 
 public class TOPALiHelp
 {
-	static Logger log = Logger.getLogger(TOPALiHelp.class);
+	 static Logger log = Logger.getLogger(TOPALiHelp.class);
 	
-	public static HelpSet hs;
+	 public static HelpSet hs;
 
-	public static HelpBroker hb;
+	 public static HelpBroker hb;
 
 	static
 	{

@@ -39,6 +39,7 @@ public class WinMainStatusBar extends JPanel
 		jobLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		jobLabel.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				winMain.menuAnlsShowJobs();

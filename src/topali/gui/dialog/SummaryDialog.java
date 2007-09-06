@@ -44,6 +44,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				startThread();

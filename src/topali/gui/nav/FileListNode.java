@@ -20,21 +20,25 @@ class FileListNode extends INode
 		panel = new FileListPanel(data);
 	}
 
+	@Override
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_NONE;
 	}
 
+	@Override
 	public String toString()
 	{
 		return data.name;
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return panel;
 	}
 
+	@Override
 	public void setMenus()
 	{
 	}

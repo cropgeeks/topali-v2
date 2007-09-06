@@ -25,7 +25,7 @@ import doe.MsgBox;
 
 public class ImportDataSetDialog extends JDialog implements Runnable
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private AlignmentData data;
 
@@ -45,6 +45,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				doLoad();
@@ -62,7 +63,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		pack();
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 	}
 

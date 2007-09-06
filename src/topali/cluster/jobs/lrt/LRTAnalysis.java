@@ -38,6 +38,7 @@ class LRTAnalysis extends AnalysisThread
 		super(runDir);
 	}
 
+	@Override
 	public void runAnalysis() throws Exception
 	{
 		// Read the LRTResult
@@ -55,7 +56,7 @@ class LRTAnalysis extends AnalysisThread
 		int window = result.window;
 		int step = result.step;
 
-		int windowCount = (int) ((ss.getLength() - window) / step) + 1;
+		int windowCount = ((ss.getLength() - window) / step) + 1;
 		int firstWinPos = (int) (1 + (window / 2f - 0.5));
 
 		// Initialize the array to hold the data results

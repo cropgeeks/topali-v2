@@ -48,6 +48,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		// Add some mouse handlers
 		list.addMouseMotionListener(new MouseMotionAdapter()
 		{
+			@Override
 			public void mouseMoved(MouseEvent e)
 			{
 				WinMainStatusBar.setText(Text.format(Text.Gui
@@ -57,6 +58,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		});
 		list.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseExited(MouseEvent e)
 			{
 				WinMainStatusBar.setText("");
@@ -108,6 +110,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		}
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 
 	void moveSequences(boolean up, boolean top)
@@ -263,6 +266,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			WinMain.rDialog.updateTreePreview(false);
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 
 	
@@ -313,7 +317,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			JMenu menu = new JMenu(Text.Gui.getString("menuAlgnSelect"));
 
 			JMenuItem m1 = getItem(aAlgnSelectAll, KeyEvent.VK_A,
-					KeyEvent.VK_A, KeyEvent.CTRL_MASK);
+					KeyEvent.VK_A, InputEvent.CTRL_MASK);
 			JMenuItem m2 = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 			JMenuItem m3 = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 			JMenuItem m4 = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
@@ -370,7 +374,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			p.add(annotate);
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F,
-					KeyEvent.CTRL_MASK, 0, false);
+					InputEvent.CTRL_MASK, 0, false);
 			add(aAlgnRename, KeyEvent.VK_R, 0, 0, 0, false);
 			add(aAlgnGoTo, KeyEvent.VK_G, 0, 0, 0, false);
 			add(aViewDisplaySettings, KeyEvent.VK_D, KeyEvent.VK_F5, 0, 0, true);

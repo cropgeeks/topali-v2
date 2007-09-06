@@ -5,10 +5,15 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class MGResult extends AlignmentResult
+public class MGResult extends AlignmentResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8938540464070891185L;
 	public String mgPath;
 	public ArrayList<SubstitutionModel> models = new ArrayList<SubstitutionModel>();
 	public String javaPath;
@@ -52,6 +57,7 @@ public class MGResult extends AlignmentResult
 		 * @author info.vancauwenberge.tostring plugin
 	
 		 */
+		@Override
 		public String toString() {
 			StringBuffer buffer = new StringBuffer();
 			for(int i=0; i<models.size(); i++)

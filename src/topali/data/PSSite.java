@@ -5,11 +5,17 @@
 
 package topali.data;
 
+import java.io.Serializable;
+
 /**
  * A Positive Selected Site
  */
-public class PSSite
+public class PSSite implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3462150156841327348L;
 	//nuc position
 	int pos;
 	//one-letter aa
@@ -54,6 +60,7 @@ public class PSSite
 		this.pos = pos;
 	}
 
+	@Override
 	public String toString()
 	{
 		return pos + "" + aa;

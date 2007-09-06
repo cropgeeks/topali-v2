@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 
 public class CollateDSS
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
+	private static  Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
@@ -71,7 +71,7 @@ public class CollateDSS
 		// Return this total as a percentage
 		// (the main run finishes at 100% but we don't *really* finish until the
 		// post-analysis is done, which writes 105% to disk)
-		float progress = ((total / (float) runs) / 105f) * 100;
+		float progress = ((total / runs) / 105f) * 100;
 
 		return new JobStatus(progress, 0, "_status");
 	}

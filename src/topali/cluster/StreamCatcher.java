@@ -37,6 +37,7 @@ public class StreamCatcher extends Thread
 		this.parsers.add(parser);
 	}
 	
+	@Override
 	public void run()
 	{
 		try

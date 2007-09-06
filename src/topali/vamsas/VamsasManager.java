@@ -16,21 +16,20 @@ import uk.ac.vamsas.client.simpleclient.SimpleClientFactory;
 
 public class VamsasManager
 {
-	Logger log = Logger.getLogger(this.getClass());
-
-	public ObjectMapper mapper;
+	 Logger log = Logger.getLogger(this.getClass());
 	
+	public static final String newSession = "NewSession";
 	public static final ClientHandle client = new ClientHandle("topali", "2.16");
 	public static final UserHandle user = new UserHandle(System.getProperty("user.name"), "");
 	
 	private Project project;
-	
 	private IClient vclient;
 	private VamsasEventHandler eventHandler;
+	private IPickManager pickManager;
 	public VamsasMsgHandler msgHandler;
 	
-	public VamsasManager() {
-		mapper = new ObjectMapper();
+	public VamsasManager(Project project) {
+		this.project = project;
 	}
 	
 	public String[] getAvailableSessions() throws Exception {
@@ -39,37 +38,42 @@ public class VamsasManager
 		return sessions;
 	}
 	
-	public void connect(Project project, String session) throws Exception {
-		this.project = project;
+	public void connect(String session) throws Exception {
+		log.info("Connecting to vamsas session: "+session);
 		initVamsas(session);
 	}
 	
-	public void update() throws IOException {
-		read();
-		write();
+	public void disconnect() {
+		log.info("Disconnecting from vamsas session.");
+		//vclient.finalizeClient();
 	}
 	
 	public void read() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		mapper.registerClientDocument(cDoc);
-		//uncomment this if you want to use the vamsas appdata facility
-		VAMSASUtils.loadProject(project, cDoc); 
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
-		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
-		//docHandler.read();
+		
+		Project vProject = VAMSASUtils.loadProject(cDoc);
+		if(vProject!=null) {
+			this.project.merge(vProject);
+		}
+		
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this.project, cDoc);
+		docHandler.read();
+		
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
+		
+		msgHandler = new VamsasMsgHandler(pickManager, this.project.getVamsasMapper());
 	}
 	
 	public void write() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		mapper.registerClientDocument(cDoc);
-		//uncomment this if you want to use the vamsas appdata facility
-		VAMSASUtils.storeProject(project, cDoc); 
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(project, cDoc, mapper);
-		//comment this out, if you use the vamas appdata facility (it's still buggy yet)
-		//docHandler.write();
+		
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this.project, cDoc);
+		docHandler.write();
+		
+		VAMSASUtils.storeProject(this.project, cDoc); 
+		
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
@@ -80,8 +84,12 @@ public class VamsasManager
 		IClientFactory clientfactory = new SimpleClientFactory();
 		
 		// Get an Iclient with session data
-		if (session != null)
-			vclient = clientfactory.getIClient(VamsasManager.client, VamsasManager.user, session);
+		if (session != null) {
+			if(session.equals(VamsasManager.newSession)) 
+				vclient = clientfactory.getNewSessionIClient(VamsasManager.client, VamsasManager.user);
+			else
+				vclient = clientfactory.getIClient(VamsasManager.client, VamsasManager.user, session);
+		}
 		else
 			vclient = clientfactory.getIClient(VamsasManager.client, VamsasManager.user);
 		
@@ -92,13 +100,9 @@ public class VamsasManager
 		//Join the session
 		vclient.joinSession();
 		
-		IPickManager pickManager = vclient.getPickManager();
+		pickManager = vclient.getPickManager();
 		if(pickManager==null)
 			log.warn("No PickManager available. Inter-Application messaging disabled.");
-		else {
-			msgHandler = new VamsasMsgHandler();
-			msgHandler.connect(pickManager, mapper);
-		}
 	}
 	
 	protected IClient getVClient() {

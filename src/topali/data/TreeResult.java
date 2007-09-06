@@ -16,8 +16,13 @@ import pal.tree.*;
  * string. Trees created from a SequenceSet alignment track their sequences in
  * safeName form (SEQ001 etc)
  */
-public class TreeResult extends AlignmentResult
+public class TreeResult extends AlignmentResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2351349005288972473L;
+
 	// Codes for deciding how to display the tree
 	public static final int NORMAL = 0;
 

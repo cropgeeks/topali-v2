@@ -31,6 +31,7 @@ class HMMAnalysis extends AnalysisThread
 		super(runDir);
 	}
 
+	@Override
 	public void runAnalysis() throws Exception
 	{
 		// Read the HMMResult
@@ -116,7 +117,7 @@ class HMMAnalysis extends AnalysisThread
 		result.data2 = new float[v2.size() / S][2];
 		result.data3 = new float[v3.size() / S][2];
 
-		System.out.println("Storing " + (int) (v1.size() / S) + " points");
+		System.out.println("Storing " + (v1.size() / S) + " points");
 
 		// We also need to work out corresponding X values for the Ys returned
 		// by Barce

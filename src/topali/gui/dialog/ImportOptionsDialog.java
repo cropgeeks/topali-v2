@@ -145,6 +145,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	private class DblClickListener extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent e)
 		{
 			if (e.getClickCount() != 2)

@@ -16,7 +16,7 @@ import topali.gui.Prefs;
 
 public abstract class RemoteJob extends AnalysisJob
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	protected Call call = null;
 
@@ -100,6 +100,7 @@ public abstract class RemoteJob extends AnalysisJob
 		return call;
 	}
 
+	@Override
 	public void ws_cleanup() throws Exception
 	{
 		call = getCall();
@@ -109,6 +110,7 @@ public abstract class RemoteJob extends AnalysisJob
 		result.status = JobStatus.COMPLETED;
 	}
 
+	@Override
 	public void ws_cancelJob() throws Exception
 	{
 		call = getCall();

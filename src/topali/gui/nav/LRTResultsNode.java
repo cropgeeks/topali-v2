@@ -22,16 +22,19 @@ public class LRTResultsNode extends ResultsNode
 		panel = new LRTResultPanel(data, result);
 	}
 
+	@Override
 	public String toString()
 	{
 		return result.guiName;
 	}
 
+	@Override
 	public String getHelpKey()
 	{
 		return "lrt_method";
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return panel;

@@ -5,8 +5,15 @@
 
 package topali.data;
 
-public class AnnotationElement
+import java.io.Serializable;
+
+public class AnnotationElement implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4973995461197933865L;
+
 	public static final int PARTITION = 1;
 
 	public static final int CODINGREG = 2;

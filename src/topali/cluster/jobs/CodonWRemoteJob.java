@@ -16,7 +16,7 @@ import topali.fileio.Castor;
 public class CodonWRemoteJob extends RemoteJob
 {
 
-Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private SequenceSet ss;
 
@@ -31,6 +31,7 @@ Logger log = Logger.getLogger(this.getClass());
 			result.startTime = System.currentTimeMillis();
 	}
 
+	@Override
 	public String ws_submitJob() throws Exception
 	{
 		determineClusterURL();
@@ -50,6 +51,7 @@ Logger log = Logger.getLogger(this.getClass());
 		return result.jobId;
 	}
 
+	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
@@ -63,6 +65,7 @@ Logger log = Logger.getLogger(this.getClass());
 		return status;
 	}
 
+	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();

@@ -27,11 +27,13 @@ public class TreePaneNode extends INode implements IPrintable
 		treePane = new TreePane(data);
 	}
 
+	@Override
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_TRE;
 	}
 
+	@Override
 	public String toString()
 	{
 		int count = treePane.getFrameCount();
@@ -39,6 +41,7 @@ public class TreePaneNode extends INode implements IPrintable
 		return Text.format(Text.GuiNav.getString("TreePaneNode.gui01"), count);
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return treePane;
@@ -49,6 +52,7 @@ public class TreePaneNode extends INode implements IPrintable
 		return treePane;
 	}
 
+	@Override
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);

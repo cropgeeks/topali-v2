@@ -21,7 +21,7 @@ import doe.DoeLayout;
 
 public class ImportFileSetsDialog extends JDialog implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private WinMain winMain;
 
@@ -48,6 +48,7 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				Runnable r = new Runnable()
@@ -66,7 +67,7 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bClose);
 
 		pack();
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 		setVisible(true);
 	}

@@ -6,12 +6,17 @@
 package topali.data;
 
 import java.beans.*;
-import java.io.File;
+import java.io.*;
 import java.util.LinkedList;
 
 /* Represents an Alignment and the results/analyses run upon it. */
-public class AlignmentData extends DataObject
+public class AlignmentData extends DataObject implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2631590265549224643L;
+
 	// The alignment's name
 	public String name;
 
@@ -198,5 +203,42 @@ public class AlignmentData extends DataObject
 			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionS));
 		
 	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((sequenceSet == null) ? 0 : sequenceSet.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final AlignmentData other = (AlignmentData) obj;
+		if (name == null)
+		{
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (sequenceSet == null)
+		{
+			if (other.sequenceSet != null)
+				return false;
+		} else if (!sequenceSet.equals(other.sequenceSet))
+			return false;
+		return true;
+	}
+	
 	
 }

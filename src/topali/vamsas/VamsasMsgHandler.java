@@ -15,17 +15,14 @@ import uk.ac.vamsas.client.picking.*;
 
 public class VamsasMsgHandler implements IMessageHandler
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private IPickManager manager;
 	
 	ObjectMapper mapper;
 	
-	public VamsasMsgHandler()
+	public VamsasMsgHandler(IPickManager manager, ObjectMapper mapper)
 	{
-	}
-
-	public void connect(IPickManager manager, ObjectMapper mapper) {
 		this.manager = manager;
 		this.mapper = mapper;
 		manager.registerMessageHandler(this);

@@ -51,11 +51,11 @@ public class WinMainTipsPanel extends JPanel implements ActionListener
 		text.setFont(new Font("SansSerif", Font.PLAIN, 10));
 
 		sp = new JScrollPane(text);
-		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		setLayout(new BorderLayout());
 		TipsGradientPanel tPanel = new TipsGradientPanel();
-		tPanel.setStyle(TipsGradientPanel.OFFICE2003);
+		tPanel.setStyle(GradientPanel.OFFICE2003);
 		add(tPanel, BorderLayout.NORTH);
 		add(sp);
 	}

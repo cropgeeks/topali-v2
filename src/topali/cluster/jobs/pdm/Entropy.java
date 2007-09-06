@@ -524,7 +524,7 @@ public class Entropy
 		// string already exists
 		for (i = 0; i < stringList.size(); i++)
 		{
-			if (topoString.equals((String) stringList.elementAt(i)))
+			if (topoString.equals(stringList.elementAt(i)))
 			{
 				nListNumber = i;
 				break;

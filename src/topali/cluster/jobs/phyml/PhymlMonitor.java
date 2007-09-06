@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 
 public class PhymlMonitor
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private File jobDir;
 

@@ -23,7 +23,7 @@ import doe.MsgBox;
 public class RegionDialog extends JDialog implements ActionListener,
 		ListSelectionListener, ItemListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	// Holds all currently supported RegionAnnotation classes
 	private final Class[] supportedAnnotations = new Class[]
@@ -160,6 +160,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			WinMain.repaintDisplay();
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 		// Create the tree
 		treePanel.createTree(r.getS(), r.getE());
 	}
@@ -272,6 +273,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 			annotations.remove(r.getS(), r.getE());
 			annotations.addRegion(dialog.newRegion);
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 
 		refreshList();
@@ -288,6 +290,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 		{
 			annotations.addRegion(dialog.newRegion);
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 
 		refreshList();
@@ -407,6 +410,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 		// A double-click should call editPartition()
 		regionList.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() == 2)
@@ -421,6 +425,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 		// As should pressing ENTER. DELETE should do the obvious too
 		regionList.addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_DELETE)

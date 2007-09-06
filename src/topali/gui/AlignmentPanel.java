@@ -19,7 +19,7 @@ import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener, PropertyChangeListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private JScrollPane sp;
 
@@ -414,6 +414,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 
 		int y1 = 0, y2 = 0;
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			return new Dimension(width, y2 + 1);
@@ -433,6 +434,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 
 		// Paints Clustal *** information and column numbers
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -515,6 +517,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 
 			int y = -1;
 
+			@Override
 			public void mouseExited(MouseEvent e)
 			{
 				if (!holdMouseHighlight)
@@ -572,6 +575,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		class CanvasMouseMotionListener extends MouseMotionAdapter
 		{
 
+			@Override
 			public void mouseMoved(MouseEvent e)
 			{
 				if (ss == null
@@ -683,8 +687,8 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			if (buffer == null)
 				return;
 
-			charCount = (int) ((float) d.getWidth() / (float) charW);
-			charDepth = (int) ((float) d.getHeight() / (float) charH);
+			charCount = (int) ((float) d.getWidth() / charW);
+			charDepth = (int) ((float) d.getHeight() / charH);
 			pX = p.x;
 			pY = p.y;
 
@@ -700,16 +704,19 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			repaint();
 		}
 
+		@Override
 		public Dimension getSize()
 		{
 			return dimension;
 		}
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			return dimension;
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -718,7 +725,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				return;
 
 			start = (pX / charW);
-			int seqStart = (int) (pY / charH);
+			int seqStart = (pY / charH);
 
 			g.setFont(font);
 
@@ -892,6 +899,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		{
 		}
 
+		@Override
 		public void run()
 		{
 			while (true)

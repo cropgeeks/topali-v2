@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 public class MrBayesParser
 {
-	static Logger log = Logger.getLogger(MrBayesParser.class);
+	static  Logger log = Logger.getLogger(MrBayesParser.class);
 	
 	public static String getTree(File f) {
 		try

@@ -16,7 +16,7 @@ import topali.fileio.Castor;
 public class CodonWMonitor
 {
 	private File jobDir;
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	public CodonWMonitor(File jobDir) throws Exception
 	{

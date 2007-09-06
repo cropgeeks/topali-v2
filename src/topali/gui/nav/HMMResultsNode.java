@@ -23,21 +23,25 @@ public class HMMResultsNode extends ResultsNode
 		panel = new HMMResultPanel(data, result);
 	}
 
+	@Override
 	public String toString()
 	{
 		return result.guiName;
 	}
 
+	@Override
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_NONE;
 	}
 
+	@Override
 	public String getHelpKey()
 	{
 		return "hmm_method";
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return panel;

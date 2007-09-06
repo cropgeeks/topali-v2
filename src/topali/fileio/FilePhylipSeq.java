@@ -17,6 +17,7 @@ public class FilePhylipSeq extends FileGeneric
 		ss = s;
 	}
 
+	@Override
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

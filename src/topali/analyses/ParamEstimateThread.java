@@ -15,7 +15,7 @@ import pal.tree.NeighborJoiningTree;
 
 public class ParamEstimateThread extends Thread
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private Alignment alignment = null;
 
@@ -66,6 +66,7 @@ public class ParamEstimateThread extends Thread
 		return freqs;
 	}
 
+	@Override
 	public void run()
 	{
 		sitePattern = new SitePattern(alignment);

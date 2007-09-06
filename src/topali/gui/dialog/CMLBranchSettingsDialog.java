@@ -77,6 +77,8 @@ public class CMLBranchSettingsDialog extends JDialog implements WindowListener
 		this.setSize(400, 300);
 		this.setContentPane(getJContentPane());
 		
+		getRootPane().setDefaultButton(bAdd);
+		
 		setLocationRelativeTo(winMain);
 	}
 	

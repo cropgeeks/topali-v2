@@ -19,7 +19,7 @@ import doe.PreferencesXML;
 
 public class Prefs extends PreferencesXML
 {
-	static Logger log = Logger.getLogger(Prefs.class);
+	 static Logger log = Logger.getLogger(Prefs.class);
 
 	// Variables not definable by the user...
 	public static Locale locale = Locale.getDefault();

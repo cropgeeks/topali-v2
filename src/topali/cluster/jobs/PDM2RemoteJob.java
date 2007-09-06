@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 
 public class PDM2RemoteJob extends RemoteJob
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private SequenceSet ss;
 
@@ -30,6 +30,7 @@ public class PDM2RemoteJob extends RemoteJob
 			result.startTime = System.currentTimeMillis();
 	}
 
+	@Override
 	public String ws_submitJob() throws Exception
 	{
 		determineClusterURL();
@@ -49,6 +50,7 @@ public class PDM2RemoteJob extends RemoteJob
 		return result.jobId;
 	}
 
+	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
@@ -64,6 +66,7 @@ public class PDM2RemoteJob extends RemoteJob
 		return status;
 	}
 
+	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();

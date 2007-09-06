@@ -24,21 +24,25 @@ public class DSSResultsNode extends ResultsNode
 		panel = new DSSResultPanel(data, result);
 	}
 
+	@Override
 	public String toString()
 	{
 		return result.guiName;
 	}
 
+	@Override
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_DSS;
 	}
 
+	@Override
 	public String getHelpKey()
 	{
 		return "dss_method";
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return panel;

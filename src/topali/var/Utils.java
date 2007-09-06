@@ -31,7 +31,7 @@ import doe.MsgBox;
  */
 public class Utils
 {
-	static Logger log = Logger.getLogger(Utils.class);
+	static  Logger log = Logger.getLogger(Utils.class);
 
 	/* Ensures the scratch directory exists */
 	public static void createScratch()
@@ -147,7 +147,7 @@ public class Utils
 		// Create an image to draw upon
 		BufferedImage bi = new BufferedImage(w, h,
 				BufferedImage.TYPE_BYTE_INDEXED);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		Graphics2D g2d = bi.createGraphics();
 
 		// Redraw the component using the image
 
@@ -224,7 +224,7 @@ public class Utils
 			ddata = new double[data.length][data[0].length];
 			for(int i=0; i<data.length; i++)
 				for(int j=0; j<data[i].length; j++)
-					ddata[i][j] = (double)data[i][j];
+					ddata[i][j] = data[i][j];
 		}
 		return ddata;
 	}

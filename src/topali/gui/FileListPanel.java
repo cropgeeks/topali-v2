@@ -56,6 +56,7 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 
 		table.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() != 2)
@@ -106,11 +107,13 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 				model.removeAlignment(rows[index]);
 
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 
 	private class AlignmentTableModel extends DefaultTableModel
 	{
+		@Override
 		public String getColumnName(int col)
 		{
 			switch (col)
@@ -130,16 +133,19 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 			return null;
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 5;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return refs.size();
 		}
 
+		@Override
 		public Object getValueAt(int row, int col)
 		{
 			AlignmentFileStat stat = refs.get(row);

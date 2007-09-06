@@ -22,7 +22,7 @@ import topali.var.Utils;
 
 class TreePanel extends JPanel
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	// Reference back to the SequenceSet containing the sequences in this tree
 	private SequenceSet ss;
@@ -197,6 +197,7 @@ class TreePanel extends JPanel
 					painter.getPreferredSize().height + 50);
 		}
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			if (tree.isSizedToFit)
@@ -205,6 +206,7 @@ class TreePanel extends JPanel
 				return dimension;
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

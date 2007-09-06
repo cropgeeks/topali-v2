@@ -15,7 +15,7 @@ import topali.fileio.AlignmentLoadException;
 
 public class FastMLParser
 {
-	static Logger log = Logger.getLogger(FastMLParser.class);
+	 static Logger log = Logger.getLogger(FastMLParser.class);
 	
 	public static FastMLResult parseTree(File file, FastMLResult result) {
 		try

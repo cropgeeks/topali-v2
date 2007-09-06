@@ -41,6 +41,7 @@ public class ParamEstDialog extends JDialog
 		
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent event)
 			{
 				Runnable r = new Runnable()

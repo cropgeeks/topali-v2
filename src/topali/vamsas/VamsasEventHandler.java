@@ -15,7 +15,7 @@ import uk.ac.vamsas.client.*;
 public class VamsasEventHandler
 {
 	
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	VamsasManager vMan;
 	

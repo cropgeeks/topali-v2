@@ -43,6 +43,7 @@ class MosaicDisplay extends JPanel
 		repaint();
 	}
 
+	@Override
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);

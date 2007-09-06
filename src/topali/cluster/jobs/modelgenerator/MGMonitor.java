@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 
 public class MGMonitor
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private File jobDir;
 
@@ -35,7 +35,7 @@ public class MGMonitor
 		float progress;
 		try
 		{
-			progress = (float)new File(jobDir, "percent").listFiles().length;
+			progress = new File(jobDir, "percent").listFiles().length;
 			//prevent progress to be 100% (otherwise the result will be requested before it's created)
 			if(progress>99)
 				progress = 99;

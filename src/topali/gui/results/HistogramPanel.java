@@ -37,6 +37,7 @@ class HistogramPanel extends JPanel
 			repaint();
 	}
 	
+	@Override
 	public Dimension getPreferredSize()
 		{ return new Dimension(50, 30); }
 	
@@ -56,6 +57,7 @@ class HistogramPanel extends JPanel
 		return border;
 	}
 	
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);

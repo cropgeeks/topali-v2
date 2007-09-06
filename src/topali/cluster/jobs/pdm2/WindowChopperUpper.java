@@ -62,7 +62,7 @@ class WindowChopperUpper
 	RegionAnnotations.Region[] getWindows()
 	{
 		// Total number of windows that need to be PDMed
-		int tW = (int) ((length - w) / s) + 1;
+		int tW = ((length - w) / s) + 1;
 		System.out.println("tW=" + tW);
 
 		// Move along the alignment a step (s) at at time, creating windows from

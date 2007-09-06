@@ -1,5 +1,6 @@
 package topali.vamsas;
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -7,23 +8,24 @@ import org.apache.log4j.Logger;
 import topali.var.AssociationMap;
 import uk.ac.vamsas.client.*;
 
-public class ObjectMapper
+public class ObjectMapper implements Serializable
 {
 	final boolean debug = false;
 	
-	Logger log = Logger.getLogger(this.getClass());
+	transient static Logger log = Logger.getLogger(ObjectMapper.class);
 	
 	// Resolves vamsas IDs to TOPALi data objects
-	private Hashtable<VorbaId, Object> hashVT = new Hashtable<VorbaId, Object>();
+	//private IdentityHashMap<VorbaId, Object> hashVT = new IdentityHashMap<VorbaId, Object>();
+	public Hashtable<VorbaId, Object> hashVT = new Hashtable<VorbaId, Object>();
 	
 	// Resolves TOPALi objects to vamsas IDs
 	//private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
-	private Hashtable<Object, VorbaId> hashTV = new Hashtable<Object, VorbaId>();
+	public Hashtable<Object, VorbaId> hashTV = new Hashtable<Object, VorbaId>();
 	
 	// Holds objects, which are in someway linked to eachother (e. g. cdna->protein seq.)
 	public AssociationMap<Object> linkedObjects = new AssociationMap<Object>();
 	
-	IClientDocument cdoc = null;
+	transient IClientDocument cdoc = null;
 	
 	public ObjectMapper()
 	{
@@ -66,7 +68,7 @@ public class ObjectMapper
 			if(debug)
 			log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
 			// Register the object for use within the session document
-			cdoc.registerObject(vamsasObject);
+			//cdoc.registerObject(vamsasObject);
 			return null;
 		}
 		
@@ -109,5 +111,5 @@ public class ObjectMapper
 			return vObj.getVorbaId().getId();
 		else
 			return null;
-	}
+	}	
 }

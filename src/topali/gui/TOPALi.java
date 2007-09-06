@@ -6,6 +6,7 @@
 package topali.gui;
 
 import java.applet.Applet;
+import java.awt.Frame;
 import java.awt.event.*;
 import java.io.File;
 import java.net.*;
@@ -27,8 +28,8 @@ public class TOPALi extends Applet implements Application
 	
 	private final String prefsFile = ".TOPALiV2-16.xml";
 	
-	static Logger root;
-	static Logger log;
+	 static Logger root;
+	 static Logger log;
 
 	static {
 		PropertyConfigurator.configure(TOPALi.class.getResource("/res/client.log4j.properties"));
@@ -72,6 +73,7 @@ public class TOPALi extends Applet implements Application
 
 	}
 
+	@Override
 	public void init()
 	{
 		root.info("Applet init()");
@@ -79,6 +81,7 @@ public class TOPALi extends Applet implements Application
 		// new TOPALi();
 	}
 
+	@Override
 	public void destroy()
 	{
 		shutdown();
@@ -139,11 +142,13 @@ public class TOPALi extends Applet implements Application
 
 		winMain.addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				shutdown();
 			}
 
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				hideSplash();
@@ -181,6 +186,7 @@ public class TOPALi extends Applet implements Application
 
 			Authenticator.setDefault(new Authenticator()
 			{
+				@Override
 				protected PasswordAuthentication getPasswordAuthentication()
 				{
 					return new PasswordAuthentication(Prefs.web_proxy_username,
@@ -203,10 +209,14 @@ public class TOPALi extends Applet implements Application
 			return;
 		winMain.setVisible(false);
 
-		if (winMain.getExtendedState() == JFrame.MAXIMIZED_BOTH)
+		//check if there is a vamsas session
+		if(winMain.vamsas!=null) 
+			winMain.vamsasDisconnect();
+		
+		if (winMain.getExtendedState() == Frame.MAXIMIZED_BOTH)
 		{
 			Prefs.gui_maximized = true;
-			winMain.setExtendedState(JFrame.NORMAL);
+			winMain.setExtendedState(Frame.NORMAL);
 		} else
 			Prefs.gui_maximized = false;
 

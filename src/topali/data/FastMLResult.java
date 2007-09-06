@@ -5,14 +5,20 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  * Just a result wrapper around a alignment data
  * (The result of a fastml job is a new alignment containing the corresponding tree)
  */
-public class FastMLResult extends AlignmentResult
+public class FastMLResult extends AlignmentResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1107224363568642146L;
+
 	public static String MODEL_DNA_JC = "mn";
 	
 	public static String MODEL_AA_JC = "ma";

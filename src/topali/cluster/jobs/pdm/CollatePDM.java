@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 
 public class CollatePDM
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
+	private static  Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
@@ -67,7 +67,7 @@ public class CollatePDM
 		}
 
 		// Return this total as a percentage
-		float progress = (total / ((float) runs)) * 100;
+		float progress = (total / (runs)) * 100;
 
 		return new JobStatus(progress, 0, "_status");
 	}

@@ -19,7 +19,7 @@ import doe.MsgBox;
 
 public class PrinterDialog extends JDialog
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private static PrinterJob job = PrinterJob.getPrinterJob();
 
@@ -46,6 +46,7 @@ public class PrinterDialog extends JDialog
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				new Printer().start();
@@ -53,7 +54,7 @@ public class PrinterDialog extends JDialog
 		});
 
 		pack();
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(MsgBox.frm);
 		setResizable(false);
 	}
@@ -90,6 +91,7 @@ public class PrinterDialog extends JDialog
 
 	class Printer extends Thread
 	{
+		@Override
 		public void run()
 		{
 			if (job.printDialog(aset))

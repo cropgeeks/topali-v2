@@ -17,7 +17,7 @@ import doe.MsgBox;
 
 public class MakeNA
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 
 	private SequenceSet dna = null, pro = null;
 	private String name;

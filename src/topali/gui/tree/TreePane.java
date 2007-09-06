@@ -19,7 +19,7 @@ import topali.gui.*;
 
 public class TreePane extends JDesktopPane implements InternalFrameListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	// The AlignmentData object that stores the trees for this pane
 	private AlignmentData data;
@@ -146,6 +146,7 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 
 		data.removeResult(frame.tree);
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 
 		checkStatus();
 	}

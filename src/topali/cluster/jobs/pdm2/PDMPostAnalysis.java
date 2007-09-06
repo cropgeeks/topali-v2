@@ -270,7 +270,7 @@ class PDMPostAnalysis
 			// Each time a tree is picked, we basically increase its "found"
 			// count by 1. However, we want the histogram normalized so its
 			// values sum to 1, therefore we actually increase by 1/sampleCount
-			histogram[index] += (1.0f / (float) sampleCount);
+			histogram[index] += (1.0f / sampleCount);
 		}
 
 		return histogram;

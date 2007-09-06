@@ -12,11 +12,11 @@ import javax.swing.JComponent;
 import topali.data.AlignmentData;
 import topali.gui.*;
 
-public class SequenceSetNode extends INode
+public class SequenceSetNode extends INode 
 {
 	private String nodeName;
 
-	private AlignmentPanel alignmentPanel;
+	private  AlignmentPanel alignmentPanel;
 
 	SequenceSetNode(AlignmentData data)
 	{
@@ -29,21 +29,25 @@ public class SequenceSetNode extends INode
 		alignmentPanel = new AlignmentPanel(data);
 	}
 
+	@Override
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_ALN;
 	}
 
+	@Override
 	public String getHelpKey()
 	{
 		return "view_alignment";
 	}
 
+	@Override
 	public String toString()
 	{
 		return nodeName;
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return alignmentPanel;
@@ -55,6 +59,7 @@ public class SequenceSetNode extends INode
 		return alignmentPanel;
 	}
 
+	@Override
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
