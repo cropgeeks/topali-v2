@@ -1,4 +1,4 @@
-- Move website to SCRI hosting
+* Move website to SCRI hosting
 - Applications note
 - Online help updates and linking with buttons
 - FRANK: come up with additional "TOPALi Tips"
@@ -12,7 +12,7 @@
 - GUI: Estimate Tree dialog layouts need sorting
 - Future: Estimate Tree dialog needs defaults button
 - Future: Resumbittion of tree job
-- GUI: Jobs tracking progress bar for non-tracking jobs is too large
+* GUI: Jobs tracking progress bar for non-tracking jobs is too large
 - Future: Decide on mouse highlighting functionality
 - Future: Decide on how to handle local job submission
 - GUI: Icons for job results in the left-hand navigation panel
