@@ -13,7 +13,7 @@ import org.exolab.castor.xml.*;
 
 public class Castor
 {
-	static Logger log = Logger.getLogger(Castor.class);
+	static  Logger log = Logger.getLogger(Castor.class);
 	
 	private static Mapping mapping;
 

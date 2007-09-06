@@ -5,14 +5,20 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.*;
 
 
 /**
  * Holds all data of a codeml hypothesis
  */
-public class CMLHypothesis
+public class CMLHypothesis implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5646671337527384015L;
+
 	static String nl = System.getProperty("line.separator");
 	
 	//the model to use (0 for H0, 2 for the other hypothesis)
@@ -53,6 +59,7 @@ public class CMLHypothesis
 		return sb.toString();
 	}
 	
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(tree+"\n");

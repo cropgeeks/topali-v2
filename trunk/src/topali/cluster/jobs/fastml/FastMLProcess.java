@@ -16,7 +16,7 @@ import topali.data.FastMLResult;
 public class FastMLProcess extends StoppableProcess
 {
 
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private File wrkDir;
 	

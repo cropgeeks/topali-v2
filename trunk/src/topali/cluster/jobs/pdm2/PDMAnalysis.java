@@ -52,6 +52,7 @@ class PDMAnalysis extends AnalysisThread
 		super(runDir);
 	}
 
+	@Override
 	public void runAnalysis() throws Exception
 	{
 		// Job directory

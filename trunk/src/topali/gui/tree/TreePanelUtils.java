@@ -24,7 +24,7 @@ import doe.MsgBox;
 
 class TreePanelUtils
 {
-	static Logger log = Logger.getLogger(TreePanelUtils.class);
+	static   Logger log = Logger.getLogger(TreePanelUtils.class);
 	
 	static void exportTree(TreePanel panel)
 	{
@@ -252,6 +252,7 @@ class TreePanelUtils
 			panel.getSequenceSet().setSelectedSequences(indices);
 			((WinMain) MsgBox.frm).menuViewDisplaySettings(true);
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 

@@ -23,7 +23,7 @@ import org.forester.phylogeny.parsers.nhx.NHXParser;
  */
 public class ATV extends Thread
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	ATVapplicationFrame atvframe;
 	

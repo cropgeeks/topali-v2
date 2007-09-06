@@ -52,6 +52,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				// basicPanel.stepSpin.requestFocus();

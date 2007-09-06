@@ -36,7 +36,7 @@ public class DSSResultPanel extends ResultPanel
 		float thres= AnalysisUtils.getArrayValue(res.thresholds,
 				(float)threshold);
 
-		graph.setThreshold((double)thres);
+		graph.setThreshold(thres);
 	}
 	
 	@Override

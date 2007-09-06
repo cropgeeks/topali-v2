@@ -35,6 +35,7 @@ public class TreeToolTip extends JToolTip
 		this.seqNames = seqNames;
 	}
 
+	@Override
 	public Dimension getPreferredSize()
 	{
 		if (painter != null)
@@ -69,6 +70,7 @@ public class TreeToolTip extends JToolTip
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		if (painter != null)

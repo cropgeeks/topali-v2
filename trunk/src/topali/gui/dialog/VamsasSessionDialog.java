@@ -46,6 +46,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 		this.setSize(237, 243);
 		this.setTitle("Select Session");
 		this.setContentPane(getJContentPane());
+		getRootPane().setDefaultButton(bok);
 	}
 
 	/**
@@ -189,7 +190,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 		if (list == null)
 		{
 			list = new JList(sessions);
-			list.setSelectedIndex(0);
+			list.setSelectedIndex(sessions.length-1);
 			list.addMouseListener(this);
 		}
 		return list;

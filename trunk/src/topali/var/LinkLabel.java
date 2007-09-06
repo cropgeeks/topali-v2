@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class LinkLabel extends JLabel implements MouseListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	String url;
 	

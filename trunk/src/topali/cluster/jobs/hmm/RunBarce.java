@@ -158,6 +158,7 @@ class RunBarce extends StoppableProcess
 			super(in, showOutput);
 		}
 
+		@Override
 		public void run()
 		{
 			File pctDir = new File(jobDir, "percent");

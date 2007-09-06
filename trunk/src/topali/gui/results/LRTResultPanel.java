@@ -61,7 +61,7 @@ public class LRTResultPanel extends ResultPanel
 		((AlignmentResult)result).threshold = t;
 		float thres = AnalysisUtils.getArrayValue(res.thresholds,(float)t);
 
-		graph.setThreshold((double)thres);
+		graph.setThreshold(thres);
 
 	}
 

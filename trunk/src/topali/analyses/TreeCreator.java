@@ -22,7 +22,7 @@ import doe.MsgBox;
 
 public class TreeCreator extends JDialog
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 
 	private boolean dna = true;
 	private double tsTv = 2;
@@ -116,6 +116,7 @@ public class TreeCreator extends JDialog
 	{
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				Runnable r = new Runnable()
@@ -136,7 +137,7 @@ public class TreeCreator extends JDialog
 		add(p1);
 		pack();
 
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(MsgBox.frm);
 	}

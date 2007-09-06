@@ -6,10 +6,16 @@
 package topali.data;
 
 import java.beans.*;
+import java.io.Serializable;
 
 // Class representing a single sequence.
-public class Sequence extends DataObject
+public class Sequence extends DataObject implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7958501115834574791L;
+
 	// Sequence's actual name
 	public String name;
 
@@ -55,6 +61,7 @@ public class Sequence extends DataObject
 			l.propertyChange(new PropertyChangeEvent(this, "sequence", oldValue, sequence));
 	}
 
+	@Override
 	public String toString()
 	{
 		return name;
@@ -140,64 +147,41 @@ public class Sequence extends DataObject
 		return equalSeq && equalName;
 	}
 
-//	@Override
-//	public int hashCode()
-//	{
-//		final int PRIME = 31;
-//		int result = 1;
-//		result = PRIME * result + ((name == null) ? 0 : name.hashCode());
-//		result = PRIME * result + ((safeName == null) ? 0 : safeName.hashCode());
-//		result = PRIME * result + ((sequence == null) ? 0 : sequence.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj)
-//	{
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		final Sequence other = (Sequence) obj;
-//		if (name == null)
-//		{
-//			if (other.name != null)
-//				return false;
-//		} else if (!name.equals(other.name))
-//			return false;
-//		if (safeName == null)
-//		{
-//			if (other.safeName != null)
-//				return false;
-//		} else if (!safeName.equals(other.safeName))
-//			return false;
-//		if (sequence == null)
-//		{
-//			if (other.sequence != null)
-//				return false;
-//		} else if (!sequence.equals(other.sequence))
-//			return false;
-//		return true;
-//	}
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((sequence == null) ? 0 : sequence.toString().hashCode());
+		return result;
+	}
 
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(!(obj instanceof Sequence))
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		
-		Sequence seq = (Sequence)obj;
-		try
-		{
-			return (seq.name.equals(name) && seq.sequence.toString().equals(sequence.toString()));
-		} catch (RuntimeException e)
-		{
+		if (getClass() != obj.getClass())
 			return false;
-		}
+		final Sequence other = (Sequence) obj;
+		if (name == null)
+		{
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (sequence == null)
+		{
+			if (other.sequence != null)
+				return false;
+		} else if (!sequence.toString().equals(other.sequence.toString()))
+			return false;
+		return true;
 	}
-	
 	
 	
 }

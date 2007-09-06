@@ -34,12 +34,13 @@ import doe.MsgBox;
 public class WinMain extends JFrame implements PropertyChangeListener
 {
 	Logger log = Logger.getLogger(this.getClass());
-	
+
 	// The user's project
 	private Project project = new Project();
 
 	// And associated vamsas session (if any)
 	public VamsasManager vamsas = null;
+
 	public static VamsasEvents vEvents = null;
 
 	// GUI controls...
@@ -72,13 +73,13 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		// Position on screen
 		setSize(Prefs.gui_win_width, Prefs.gui_win_height);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		setIconImage(Icons.APP_FRAME.getImage());
 		setTitle(Text.Gui.getString("WinMain.gui01"));
 
 		if (Prefs.gui_maximized)
-			setExtendedState(JFrame.MAXIMIZED_BOTH);
+			setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		project.addChangeListener(this);
 	}
@@ -161,15 +162,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (!okToContinue())
 			return;
 
-		project = new Project();
-		project.addChangeListener(this);
-
-		setTitle(Text.Gui.getString("WinMain.gui01"));
-		menubar.setProjectOpenedState();
-		navPanel.clear();
-
-		rDialog.setAlignmentData(null);
-		ovDialog.setAlignmentPanel(null);
+		newProject();
 
 		// Anything done here may need to go in LoadMonitorDialog.java too
 	}
@@ -181,7 +174,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			return;
 
 		LoadMonitorDialog dialog = new LoadMonitorDialog(this, menubar, name);
-		if (dialog.getProject() != null) {
+		if (dialog.getProject() != null)
+		{
 			project = dialog.getProject();
 			project.addChangeListener(this);
 		}
@@ -207,9 +201,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			case 3:
 				new ImportFileSetsDialog(this);
 				break;
-			case 4: {
+			case 4:
+			{
 				ImportDataSetDialog d = new ImportDataSetDialog(this);
-				URL url = this.getClass().getResource("/res/example-alignment.phy");
+				URL url = this.getClass().getResource(
+						"/res/example-alignment.phy");
 				System.out.println(url);
 				try
 				{
@@ -234,10 +230,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		if (data != null)
 		{
-			//project.getDatasets().add(data);
+			// project.getDatasets().add(data);
 			project.addDataSet(data);
 			WinMainMenuBar.aFileSave.setEnabled(true);
-			//navPanel.addAlignmentFolder(data);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
+			// navPanel.addAlignmentFolder(data);
 		}
 	}
 
@@ -249,6 +246,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (Project.save(project, saveAs))
 		{
 			WinMainMenuBar.aFileSave.setEnabled(false);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 			menubar.updateRecentFileList(project);
 		}
 
@@ -388,9 +386,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (SequenceSetUtils.renameSequence(data.getSequenceSet()))
 		{
 			// Force the display to redraw itself
-			//navPanel.getCurrentAlignmentPanel(data).refreshAndRepaint();
+			// navPanel.getCurrentAlignmentPanel(data).refreshAndRepaint();
 			// And mark the project as modified
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 
@@ -398,7 +397,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		rDialog.setVisible(true);
 	}
-	
+
 	/* Removes an alignment from the current project. */
 	void menuAlgnRemove()
 	{
@@ -416,17 +415,18 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			// Then remove it from both the project and the navigation panel
 			project.removeDataSet(data);
 
-//			navPanel.removeSelectedNode();
-//			rDialog.setAlignmentData(null);
-//			ovDialog.setAlignmentPanel(null);
+			// navPanel.removeSelectedNode();
+			// rDialog.setAlignmentData(null);
+			// ovDialog.setAlignmentPanel(null);
 
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 
 	public void menuAnlsRunPDM(PDMResult iResult)
 	{
-	
+
 		// Perform an initial check on the data and selected sequences
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
@@ -524,7 +524,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		SequenceSet ss = data.getSequenceSet();
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
-		
+
 		CMLSiteSettingsDialog dlg = new CMLSiteSettingsDialog(this, data,
 				result);
 		dlg.setVisible(true);
@@ -536,88 +536,92 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		SequenceSet ss = data.getSequenceSet();
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
-		
+
 		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,
 				result);
 		dlg.setVisible(true);
 	}
-	
+
 	public void menuAnlsRunMG(boolean remote)
 	{
 
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
-		
+
 		MGResult result = new MGResult();
 		result.mgPath = Utils.getLocalPath() + "modelgenerator.jar";
 		result.isRemote = remote;
 		result.javaPath = "java";
 		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
-		
+
 		int runNum = data.getTracker().getMgRunCount() + 1;
 		data.getTracker().setMgRunCount(runNum);
 		result.guiName = "Modelgenerator Result " + runNum;
-		result.jobName = "Modelgenerator on " + data.name
-				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
+		result.jobName = "Modelgenerator on " + data.name + " ("
+				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 
 		submitJob(data, result);
 	}
-	
-	public void menuAnlsRunCW(CodonWResult res) {
-		
+
+	public void menuAnlsRunCW(CodonWResult res)
+	{
+
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		SequenceSet ss = data.getSequenceSet();
 		if (SequenceSetUtils.canRunCodonW(ss) == false)
 			return;
-		
+
 		CodonWDialog cwd = new CodonWDialog(data, res);
 		cwd.setVisible(true);
 		CodonWResult result = cwd.getResult();
-		
-		if(result!=null) 
+
+		if (result != null)
 			submitJob(data, result);
 	}
-	
-	public void anlsRunFastML(FastMLResult res) {
+
+	public void anlsRunFastML(FastMLResult res)
+	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		
+
 		Vector<Sequence> seqs = data.getSequenceSet().getSequences();
 		String[][] seqNames = new String[seqs.size()][2];
-		for(int i=0; i<seqs.size(); i++) {
+		for (int i = 0; i < seqs.size(); i++)
+		{
 			seqNames[i][0] = seqs.get(i).safeName;
 			seqNames[i][1] = seqs.get(i).name;
 		}
 		res.seqNameMapping = seqNames;
-		
-		if(!data.getSequenceSet().isDNA()) {
-		SequenceSetParams p = data.getSequenceSet().getParams();
-		if(p.getModel()==SequenceSetParams.MODEL_AA_CPREV)
-			res.model = FastMLResult.MODEL_AA_CPREV;
-		else if(p.getModel()==SequenceSetParams.MODEL_AA_DAYHOFF)
-			res.model = FastMLResult.MODEL_AA_DAY;
-		else if(p.getModel()==SequenceSetParams.MODEL_AA_JONES)
-			res.model = FastMLResult.MODEL_AA_JTT;
-		else if(p.getModel()==SequenceSetParams.MODEL_AA_MTREV || p.getModel()==SequenceSetParams.MODEL_AA_MTMAM)
-			res.model = FastMLResult.MODEL_AA_MTREV;
-		else if(p.getModel()==SequenceSetParams.MODEL_AA_WAG)
-			res.model = FastMLResult.MODEL_AA_WAG;
-		else
-			res.model = FastMLResult.MODEL_AA_WAG;
-		}
-		else
+
+		if (!data.getSequenceSet().isDNA())
+		{
+			SequenceSetParams p = data.getSequenceSet().getParams();
+			if (p.getModel() == SequenceSetParams.MODEL_AA_CPREV)
+				res.model = FastMLResult.MODEL_AA_CPREV;
+			else if (p.getModel() == SequenceSetParams.MODEL_AA_DAYHOFF)
+				res.model = FastMLResult.MODEL_AA_DAY;
+			else if (p.getModel() == SequenceSetParams.MODEL_AA_JONES)
+				res.model = FastMLResult.MODEL_AA_JTT;
+			else if (p.getModel() == SequenceSetParams.MODEL_AA_MTREV
+					|| p.getModel() == SequenceSetParams.MODEL_AA_MTMAM)
+				res.model = FastMLResult.MODEL_AA_MTREV;
+			else if (p.getModel() == SequenceSetParams.MODEL_AA_WAG)
+				res.model = FastMLResult.MODEL_AA_WAG;
+			else
+				res.model = FastMLResult.MODEL_AA_WAG;
+		} else
 			res.model = FastMLResult.MODEL_DNA_JC;
-		
+
 		res.gamma = data.getSequenceSet().getParams().isModelGamma();
-		
-		res.alignment.name = data.name+" (+ancestral seq. using FastML)";
+
+		res.alignment.name = data.name + " (+ancestral seq. using FastML)";
 		submitJob(data, res);
 	}
-	
+
 	void menuAnlsCreateTree()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		
+
 		CreateTreeDialog dialog = new CreateTreeDialog(this, data);
 		TreeResult result = dialog.getTreeResult();
 		if (result == null)
@@ -626,9 +630,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		// Tree being created on-the-fly as part of TOPALi
 		if (Prefs.gui_tree_method == 0)
 		{
-			//TreePane treePane = navPanel.getCurrentTreePane(data, true);
-			//TreeCreator creator = new TreeCreator(dialog.getAlignment());
-			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data.getSequenceSet().getParams().isDNA());
+			// TreePane treePane = navPanel.getCurrentTreePane(data, true);
+			// TreeCreator creator = new TreeCreator(dialog.getAlignment());
+			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data
+					.getSequenceSet().getParams().isDNA());
 			Tree palTree = creator.getTree(true);
 
 			if (palTree != null)
@@ -637,15 +642,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				result.startTime = creator.getStartTime();
 				result.endTime = creator.getEndTime();
 				result.status = topali.cluster.JobStatus.COMPLETED;
-				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)" : "WAG";
-				result.info = "Sub. Model: "+model+"\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
-			
+				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)"
+						: "WAG";
+				result.info = "Sub. Model: "
+						+ model
+						+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
+
 				// Add the tree to the project
-				//data.getResults().add(result);
+				// data.getResults().add(result);
 				data.addResult(result);
 
-				//treePane.displayTree(data.getSequenceSet(), result);
+				// treePane.displayTree(data.getSequenceSet(), result);
 				WinMainMenuBar.aFileSave.setEnabled(true);
+				WinMainMenuBar.aVamCommit.setEnabled(true);
 			}
 		}
 		// Tree being created as a cluster/local job
@@ -655,10 +664,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	public void submitJob(AlignmentData data, AnalysisResult result)
 	{
-		//data.getResults().add(result);
+		// data.getResults().add(result);
 		data.addResult(result);
 
-		//jobsPanel.createJob(result, data);
+		// jobsPanel.createJob(result, data);
 		menuAnlsShowJobs();
 	}
 
@@ -695,9 +704,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 			// Then remove it from both the alignment and the navigation panel
 			data.removeResult(result);
-			//navPanel.removeSelectedNode();
+			// navPanel.removeSelectedNode();
 
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 
@@ -715,6 +725,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			result.guiName = newName;
 			navPanel.nodesChanged();
 			WinMainMenuBar.aFileSave.setEnabled(true);
+			WinMainMenuBar.aVamCommit.setEnabled(true);
 		}
 	}
 
@@ -738,57 +749,85 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		new topali.gui.dialog.settings.SettingsDialog(this);
 	}
 
-	void menuVamsasSelectSession() {
-//		 First ensure it's ok to begin a new session
+	void menuVamsasSelectSession()
+	{
+		// First ensure it's ok to begin a new session
 		if (vamsas != null)
 		{
 			String msg = "An association with an existing VAMSAS session has "
 					+ "already been established. Would you like to drop this\n"
 					+ "connection and begin (or connect to) a new session?";
-			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+			if (MsgBox.yesno(msg, 1) == JOptionPane.YES_OPTION)
+			{
+				if (WinMainMenuBar.aVamCommit.isEnabled())
+				{
+					if (MsgBox
+							.yesno(
+									"There are uncommitted changes. Commit to VAMSAS session now?",
+									1) == JOptionPane.YES_OPTION)
+						menuVamsasCommit();
+				}
+				vamsasDisconnect();
+			} else
 				return;
 		}
-		
+
 		try
 		{
-			
-		vamsas = new VamsasManager();
-		
-		String[] tmp = vamsas.getAvailableSessions();
-		if(tmp!=null && tmp.length>0) {
-			String[] sessions = new String[tmp.length+1];
-			String newSession = "Create new session...";
-			sessions[0] = newSession; 
-			System.arraycopy(tmp, 0, sessions, 1, tmp.length);
-			VamsasSessionDialog dlg = new VamsasSessionDialog(this, sessions);
-			dlg.setVisible(true);
-			String session = dlg.getSelSession();
-			if(session==null)
-				return;
-			else if(session.equals(newSession)) 
-				vamsas.connect(project, null);
-			else  {
-				vamsas.connect(project, session);
-				vamsas.read();
+
+			newProject();
+			vamsas = new VamsasManager(project);
+
+			String[] tmp = vamsas.getAvailableSessions();
+			if (tmp != null && tmp.length > 0)
+			{
+				String[] sessions = new String[tmp.length + 1];
+				String newSession = "Create new session...";
+				sessions[0] = newSession;
+				System.arraycopy(tmp, 0, sessions, 1, tmp.length);
+				VamsasSessionDialog dlg = new VamsasSessionDialog(this,
+						sessions);
+				dlg.setVisible(true);
+				String session = dlg.getSelSession();
+				if (session == null)
+				{
+					WinMainMenuBar.aVamCommit.setEnabled(false);
+					toolbar.vamsasEnabled(false);
+					vamsas = null;
+					return;
+				} else if (session.equals(newSession))
+					vamsas.connect(VamsasManager.newSession);
+				else
+				{
+					vamsas.connect(session);
+					vamsas.read();
+				}
+			} else
+			{
+				vamsas.connect(null);
 			}
-		} 
-		else {
-			vamsas.connect(project, null);
-		}
-		
-		vEvents = new VamsasEvents(this, vamsas.mapper);
-		
+
+			vEvents = new VamsasEvents(this, project.getVamsasMapper());
+
+			WinMainMenuBar.aVamCommit.setEnabled(true);
+
+			toolbar.vamsasEnabled(true);
+
 		} catch (Exception e)
 		{
 			vamsas = null;
 			MsgBox.msg("Error connecting/creating VAMSAS session.", MsgBox.ERR);
 			log.error("Error connecting/creating VAMSAS session.", e);
+			WinMainMenuBar.aVamCommit.setEnabled(false);
+			toolbar.vamsasEnabled(false);
 		}
 	}
-	
-	void menuVamsasCommit() {
+
+	void menuVamsasCommit()
+	{
 		if (vamsas != null)
 		{
+			WinMainMenuBar.aVamCommit.setEnabled(false);
 			try
 			{
 				vamsas.write();
@@ -796,47 +835,49 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				e.printStackTrace();
 			}
-		}
-		else
-			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
+		} else
+			MsgBox
+					.msg(
+							"TOPALi has not been associated with a VAMSAS session yet.",
+							MsgBox.WAR);
 	}
-	
-//	void menuVamsasSelectSession()
-//	{
-//		// First ensure it's ok to begin a new session
-//		if (vamsas != null)
-//		{
-//			String msg = "An association with an existing VAMSAS session has "
-//					+ "already been established. Would you like to drop this\n"
-//					+ "connection and begin (or connect to) a new session?";
-//			if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
-//				return;
-//		}
-//		
-//		vamsas = new VamsasManager();
-//		vEvents = new VamsasEvents(this);
-//		
-//		if (vamsas.initializeVamsas(project))
-//		{
-//			MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
-//				+ "session.", MsgBox.INF);
-//		}
-//
-//		// Create a dialog to select the session file
-///*		JFileChooser fc = new JFileChooser();
-//		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-//		fc.setSelectedFile(new File("vamsas-session.zip"));
-//		fc.setDialogTitle("Select (or Create) VAMSAS Session File");
-//
-//		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-//		{
-//			File file = fc.getSelectedFile();
-//			Prefs.gui_dir = "" + fc.getCurrentDirectory();
-//
-//			vClient = new VamsasClient(file);
-//		}
-//*/
-//	}
+
+	// void menuVamsasSelectSession()
+	// {
+	// // First ensure it's ok to begin a new session
+	// if (vamsas != null)
+	// {
+	// String msg = "An association with an existing VAMSAS session has "
+	// + "already been established. Would you like to drop this\n"
+	// + "connection and begin (or connect to) a new session?";
+	// if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
+	// return;
+	// }
+	//		
+	// vamsas = new VamsasManager();
+	// vEvents = new VamsasEvents(this);
+	//		
+	// if (vamsas.initializeVamsas(project))
+	// {
+	// MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
+	// + "session.", MsgBox.INF);
+	// }
+	//
+	// // Create a dialog to select the session file
+	// /* JFileChooser fc = new JFileChooser();
+	// fc.setCurrentDirectory(new File(Prefs.gui_dir));
+	// fc.setSelectedFile(new File("vamsas-session.zip"));
+	// fc.setDialogTitle("Select (or Create) VAMSAS Session File");
+	//
+	// if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+	// {
+	// File file = fc.getSelectedFile();
+	// Prefs.gui_dir = "" + fc.getCurrentDirectory();
+	//
+	// vClient = new VamsasClient(file);
+	// }
+	// */
+	// }
 
 	void menuVamsasExport()
 	{
@@ -849,53 +890,58 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				e.printStackTrace();
 			}
-		}
-		else
-			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
+		} else
+			MsgBox
+					.msg(
+							"TOPALi has not been associated with a VAMSAS session yet.",
+							MsgBox.WAR);
 	}
 
-//	boolean vamsasUpdate() {
-//		if(vamsas == null) {
-//			vamsas = new VamsasManager();
-//			vEvents = new VamsasEvents(this);
-//			
-//			if (!vamsas.initializeVamsas(project))
-//			{
-//				MsgBox.msg("Connection to a VAMSAS session could not be established", MsgBox.ERR);
-//				return false;
-//			}
-//			
-//			try
-//			{
-//				vamsas.readFromDocument();
-//			} catch (Exception e)
-//			{
-//				MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
-//				return false;
-//			}
-//			
-//			return true;
-//		}
-//		else {
-//			try
-//			{
-//				vamsas.writeToDocument();
-//				return true;
-//			} catch (Exception e)
-//			{
-//				MsgBox.msg("There was an error while synchronizing VAMSAS session", MsgBox.ERR);
-//				e.printStackTrace();
-//				return false;
-//			}
-//		}
-//	}
-	
+	// boolean vamsasUpdate() {
+	// if(vamsas == null) {
+	// vamsas = new VamsasManager();
+	// vEvents = new VamsasEvents(this);
+	//			
+	// if (!vamsas.initializeVamsas(project))
+	// {
+	// MsgBox.msg("Connection to a VAMSAS session could not be established",
+	// MsgBox.ERR);
+	// return false;
+	// }
+	//			
+	// try
+	// {
+	// vamsas.readFromDocument();
+	// } catch (Exception e)
+	// {
+	// MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
+	// return false;
+	// }
+	//			
+	// return true;
+	// }
+	// else {
+	// try
+	// {
+	// vamsas.writeToDocument();
+	// return true;
+	// } catch (Exception e)
+	// {
+	// MsgBox.msg("There was an error while synchronizing VAMSAS session",
+	// MsgBox.ERR);
+	// e.printStackTrace();
+	// return false;
+	// }
+	// }
+	// }
+
 	void menuVamsasImport()
 	{
-		if(vamsas != null) {
-//			
-//			boolean emptyProject = (project.getDatasets().size()==0);
-//			
+		if (vamsas != null)
+		{
+			//			
+			// boolean emptyProject = (project.getDatasets().size()==0);
+			//			
 			try
 			{
 				vamsas.read();
@@ -903,44 +949,32 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				e.printStackTrace();
 			}
-//			
-//			if(emptyProject) {
-//				for(AlignmentData data : project.getDatasets())
-//					navPanel.addAlignmentFolder(data);
-//			}
-		}
-		else
-			MsgBox.msg("TOPALi has not been associated with a VAMSAS session yet.",	MsgBox.WAR);
-		
-/*		if (vClient == null)
-		{
+			//			
+			// if(emptyProject) {
+			// for(AlignmentData data : project.getDatasets())
+			// navPanel.addAlignmentFolder(data);
+			// }
+		} else
 			MsgBox
 					.msg(
 							"TOPALi has not been associated with a VAMSAS session yet.",
 							MsgBox.WAR);
-			return;
-		}
 
-		AlignmentData[] datasets = vClient.readFromFile();
-
-		// topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
-
-		// AlignmentData[] datasets = fh.loadVamsas();
-
-		if (datasets != null)
-		{
-			for (AlignmentData data1 : datasets)
-				addNewAlignmentData(data1);
-
-			if (datasets.length == 1)
-				MsgBox.msg("1 alignment has been imported into TOPALi.",
-						MsgBox.INF);
-			else
-				MsgBox.msg(datasets.length
-						+ " alignments have been imported into TOPALi.",
-						MsgBox.INF);
-		}
-*/
+		/*
+		 * if (vClient == null) { MsgBox .msg( "TOPALi has not been associated
+		 * with a VAMSAS session yet.", MsgBox.WAR); return; }
+		 * 
+		 * AlignmentData[] datasets = vClient.readFromFile();
+		 *  // topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
+		 *  // AlignmentData[] datasets = fh.loadVamsas();
+		 * 
+		 * if (datasets != null) { for (AlignmentData data1 : datasets)
+		 * addNewAlignmentData(data1);
+		 * 
+		 * if (datasets.length == 1) MsgBox.msg("1 alignment has been imported
+		 * into TOPALi.", MsgBox.INF); else MsgBox.msg(datasets.length + "
+		 * alignments have been imported into TOPALi.", MsgBox.INF); }
+		 */
 	}
 
 	void menuHelpUpdate(boolean useGUI)
@@ -992,26 +1026,48 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		//		
 	}
 
+	private void newProject()
+	{
+		project = new Project();
+		project.addChangeListener(this);
+
+		setTitle(Text.Gui.getString("WinMain.gui01"));
+		menubar.setProjectOpenedState();
+		navPanel.clear();
+
+		rDialog.setAlignmentData(null);
+		ovDialog.setAlignmentPanel(null);
+	}
+
+	public void vamsasDisconnect()
+	{
+		if (vamsas == null)
+			return;
+		vamsas.disconnect();
+		vamsas = null;
+	}
+
 	/**
 	 * This is called when the current project is modified (data added/removed)
 	 */
 	public void propertyChange(PropertyChangeEvent evt)
 	{
-		if(evt.getPropertyName().equals("alignmentData")) {
-			//a new dataset was added
-			if(evt.getOldValue()==null && evt.getNewValue()!=null) {
-				navPanel.addAlignmentFolder((AlignmentData)evt.getNewValue());
+		if (evt.getPropertyName().equals("alignmentData"))
+		{
+			// a new dataset was added
+			if (evt.getOldValue() == null && evt.getNewValue() != null)
+			{
+				navPanel.addAlignmentFolder((AlignmentData) evt.getNewValue());
 			}
-			//a dataset was removed
-			if(evt.getOldValue()!=null && evt.getNewValue()==null) {
+			// a dataset was removed
+			if (evt.getOldValue() != null && evt.getNewValue() == null)
+			{
 				navPanel.removeSelectedNode();
 				rDialog.setAlignmentData(null);
 				ovDialog.setAlignmentPanel(null);
 			}
 		}
-		
-		
+
 	}
-	
-	
+
 }

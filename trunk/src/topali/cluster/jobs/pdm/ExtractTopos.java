@@ -59,13 +59,13 @@ public class ExtractTopos
 		int i, k, nColsTest;
 		vectorOfVectors.trimToSize();
 		int nRows = this.vectorOfVectors.size();
-		Vector topoVector = (Vector) this.vectorOfVectors.elementAt(0);
+		Vector topoVector = this.vectorOfVectors.elementAt(0);
 		int nCols = topoVector.size();
 		this.topoArray = new String[nRows][nCols];
 
 		for (i = 0; i < nRows; i++)
 		{
-			topoVector = (Vector) this.vectorOfVectors.elementAt(i);
+			topoVector = this.vectorOfVectors.elementAt(i);
 			nColsTest = topoVector.size();
 			if (nColsTest != nCols)
 			{
@@ -74,7 +74,7 @@ public class ExtractTopos
 				System.out.println("nColsTest != nCols");
 				for (k = 0; k < nRows; k++)
 				{
-					topoVector = (Vector) this.vectorOfVectors.elementAt(k);
+					topoVector = this.vectorOfVectors.elementAt(k);
 					nCols = topoVector.size();
 					System.out.print(nCols + " ");
 				}

@@ -83,7 +83,7 @@ public class CustomTable extends JTable implements Printable
 		getSelectionModel().clearSelection();
 		
 		BufferedImage bi = new BufferedImage(getSize().width, getSize().height+getTableHeader().getSize().height,BufferedImage.TYPE_BYTE_INDEXED);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		Graphics2D g2d = bi.createGraphics();
 		getTableHeader().paint(g2d);
 		g2d.translate(0, getTableHeader().getSize().height);
 		paint(g2d);
@@ -143,7 +143,7 @@ public class CustomTable extends JTable implements Printable
 		
 		double pageHeight = pageFormat.getImageableHeight();
 		double pageWidth = pageFormat.getImageableWidth();
-		double tableWidth = (double) getColumnModel().getTotalColumnWidth();
+		double tableWidth = getColumnModel().getTotalColumnWidth();
 		double tableHeight = getTableHeader().getHeight() +getRowMargin();
 		for(int i=0; i<getRowCount(); i++) 
 			tableHeight += getRowHeight(i) + getRowMargin();

@@ -23,7 +23,7 @@ import uk.ac.vamsas.objects.utils.SymbolDictionary;
 
 public class VamsasDocumentHandler
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 
 	private Project project;
 
@@ -42,11 +42,17 @@ public class VamsasDocumentHandler
 
 	SequenceSet cdnaSS = new SequenceSet();
 
-	public VamsasDocumentHandler(Project proj, IClientDocument doc, ObjectMapper mapper)
+	public VamsasDocumentHandler(Project proj, IClientDocument doc)
 	{
 		this.project = proj;
 		this.doc = doc;
-		this.map = mapper;
+		
+		if(proj.getVamsasMapper()==null)
+			proj.setVamsasMapper(new ObjectMapper());
+		
+		proj.getVamsasMapper().registerClientDocument(doc);
+		
+		this.map = proj.getVamsasMapper();
 	}
 
 	public void read()
@@ -194,6 +200,7 @@ public class VamsasDocumentHandler
 	private void writeAlignment()
 	{
 		//Check if this alignment already exists in the vamsas doc
+		System.out.println(currentTAlignment.hashCode());
 		currentVAlignment = (Alignment) map.getVamsasObject(currentTAlignment);
 		
 		// create new Alignment
@@ -222,13 +229,12 @@ public class VamsasDocumentHandler
 		// Alignment already exists
 		else
 		{	
-			//if alignment is locked, do nothing
-			if(currentVAlignment.getModifiable()!=null)
-				return;
-			
-			for (Sequence seq : currentTAlignment.getSequenceSet()
-					.getSequences())
-				writeSequence(seq);
+			//just modifiy sequences if alignment is not locked
+			if(currentVAlignment.getModifiable()==null)
+			{
+				for (Sequence seq : currentTAlignment.getSequenceSet().getSequences())
+					writeSequence(seq);
+			}
 
 			for (AnalysisResult res : currentTAlignment.getResults())
 				writeResult(res);

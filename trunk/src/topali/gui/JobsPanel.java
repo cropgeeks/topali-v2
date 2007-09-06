@@ -82,12 +82,13 @@ public class JobsPanel extends JPanel
 	{
 		jobs.add(e);
 
-		e.setAlignmentX(JPanel.TOP_ALIGNMENT);
+		e.setAlignmentX(Component.TOP_ALIGNMENT);
 		jp.add(e);
 
 		jobsThread.interrupt();
 		setStatusPanel();
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 
 	void removeJobEntry(JobsPanelEntry entry, boolean getResults)
@@ -107,6 +108,7 @@ public class JobsPanel extends JPanel
 
 		setStatusPanel();
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 		jp.repaint();
 	}
 

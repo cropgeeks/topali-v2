@@ -16,7 +16,7 @@ import topali.logging.GracefulShutdownHandler;
 
 public class WinMainMenuBar extends JMenuBar
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private WinMain winMain;
 
@@ -60,7 +60,7 @@ public class WinMainMenuBar extends JMenuBar
 	
 	JMenu mVamsas;
 
-	JMenuItem mVamSelectSession, mVamCommit; //mVamImport, mVamExport;
+	JMenuItem mVamSelectSession, mVamCommit;
 
 	JMenu mHelp;
 
@@ -118,7 +118,7 @@ public class WinMainMenuBar extends JMenuBar
 		setProjectOpenedState();
 		
 		//Register a shortcut for showing log messages
-		KeyStroke showLogs = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
+		KeyStroke showLogs = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK);
 		Action aShowLogs = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if(GracefulShutdownHandler.instance!=null)
@@ -526,32 +526,17 @@ public class WinMainMenuBar extends JMenuBar
 				winMain.menuVamsasCommit();
 			}
 		};
-
-//		aVamImport = new AbstractAction(Text.Gui.getString("aVamImport"))
-//		{
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				winMain.menuVamsasImport();
-//			}
-//		};
-//
-//		aVamExport = new AbstractAction(Text.Gui.getString("aVamExport"))
-//		{
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				winMain.menuVamsasExport();
-//			}
-//		};
+		aVamCommit.setEnabled(false);
 
 		aVamsas = new AbstractAction("VAMSAS") {
 			public void actionPerformed(ActionEvent e)
 			{
-				//boolean success = winMain.vamsasUpdate();
-				//if(success) 
-					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASON);
-				//else
-					winMain.toolbar.bVamsas.setIcon(Icons.VAMSASOFF);
-				//TODO: That's really not a nice way to toggle the icon
+				if(winMain.vamsas==null) {
+					winMain.menuVamsasSelectSession();
+				}
+				else {
+					winMain.menuVamsasCommit();
+				}
 			}
 		};
 		
@@ -604,11 +589,11 @@ public class WinMainMenuBar extends JMenuBar
 		setRecentMenu("");
 
 		mFileNewProject = getItem(aFileNewProject, KeyEvent.VK_N,
-				KeyEvent.VK_N, KeyEvent.CTRL_MASK, Icons.NEW_PROJECT16);
+				KeyEvent.VK_N, InputEvent.CTRL_MASK, Icons.NEW_PROJECT16);
 		mFileOpenProject = getItem(aFileOpenProject, KeyEvent.VK_O,
-				KeyEvent.VK_O, KeyEvent.CTRL_MASK, Icons.OPEN_PROJECT16);
+				KeyEvent.VK_O, InputEvent.CTRL_MASK, Icons.OPEN_PROJECT16);
 		mFileSave = getItem(aFileSave, KeyEvent.VK_S, KeyEvent.VK_S,
-				KeyEvent.CTRL_MASK, Icons.SAVE16);
+				InputEvent.CTRL_MASK, Icons.SAVE16);
 		mFileSaveAs = getItem(aFileSaveAs, KeyEvent.VK_A, 0, 0, Icons.SAVEAS16);
 		mFileSaveAs.setDisplayedMnemonicIndex(5);
 		mFileImportDataSet = getItem(aFileImportDataSet, KeyEvent.VK_I, 0, 0,
@@ -617,7 +602,7 @@ public class WinMainMenuBar extends JMenuBar
 		mFilePrintSetup = getItem(aFilePrintSetup, KeyEvent.VK_U, 0, 0);
 		mFilePrintPreview = getItem(aFilePrintPreview, KeyEvent.VK_V, 0, 0);
 		mFilePrint = getItem(aFilePrint, KeyEvent.VK_P, KeyEvent.VK_P,
-				KeyEvent.CTRL_MASK, Icons.PRINT16);
+				InputEvent.CTRL_MASK, Icons.PRINT16);
 		mFileExit = getItem(aFileExit, KeyEvent.VK_X, 0, 0);
 
 		mFile.add(mFileNewProject);
@@ -676,7 +661,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAlgnPhyloView = getItem(aAlgnPhyloView, KeyEvent.VK_O, 0, 0);
 		mAlgnPhyloView.setDisplayedMnemonicIndex(13);
 		mAlgnSelectAll = getItem(aAlgnSelectAll, KeyEvent.VK_A, KeyEvent.VK_A,
-				KeyEvent.CTRL_MASK);
+				InputEvent.CTRL_MASK);
 		mAlgnSelectNone = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 		mAlgnSelectUnique = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 		mAlgnSelectInvert = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
@@ -684,14 +669,14 @@ public class WinMainMenuBar extends JMenuBar
 				0, 0);
 
 		mAlgnMoveUp = getItem(aAlgnMoveUp, 0, KeyEvent.VK_UP,
-				KeyEvent.ALT_MASK, Icons.UP16);
+				InputEvent.ALT_MASK, Icons.UP16);
 		mAlgnMoveUp.setDisplayedMnemonicIndex(15);
 		mAlgnMoveDown = getItem(aAlgnMoveDown, KeyEvent.VK_D, KeyEvent.VK_DOWN,
-				KeyEvent.ALT_MASK, Icons.DOWN16);
+				InputEvent.ALT_MASK, Icons.DOWN16);
 		mAlgnMoveTop = getItem(aAlgnMoveTop, 0, 0, 0);
 		mAlgnMoveTop.setDisplayedMnemonicIndex(18);
 		mAlgnFindSeq = getItem(aAlgnFindSeq, KeyEvent.VK_F, KeyEvent.VK_F,
-				KeyEvent.CTRL_MASK, Icons.FIND16);
+				InputEvent.CTRL_MASK, Icons.FIND16);
 		mAlgnRename = getItem(aAlgnRename, KeyEvent.VK_R, 0, 0);
 		mAlgnRemove = getItem(aAlgnRemove, KeyEvent.VK_M, 0, 0, Icons.REMOVE16);
 		mAlgnGoTo = getItem(aAlgnGoTo, KeyEvent.VK_G, 0, 0);
@@ -752,11 +737,11 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
 		
 		//mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
-		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK);
+		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK);
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
 		mAnlsCreateTree.setDisplayedMnemonicIndex(9);
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
-				KeyEvent.CTRL_MASK);
+				InputEvent.CTRL_MASK);
 		mAnlsRename = getItem(aAnlsRename, KeyEvent.VK_N, 0, 0);
 		mAnlsRemove = getItem(aAnlsRemove, KeyEvent.VK_R, 0, 0, Icons.REMOVE16);
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
@@ -887,6 +872,8 @@ public class WinMainMenuBar extends JMenuBar
 
 		aAnlsShowJobs.setEnabled(true);
 
+		aVamCommit.setEnabled(false);
+		
 		setMenusForNavChange();
 	}
 
@@ -927,9 +914,6 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsPartition.setEnabled(false);
 		aAnlsRename.setEnabled(false);
 		aAnlsRemove.setEnabled(false);
-
-		//aVamExport.setEnabled(false);
-		//aVamImport.setEnabled(false);
 	}
 
 	public void updateRecentFileList(Project project)
@@ -947,7 +931,7 @@ public class WinMainMenuBar extends JMenuBar
 		// First see if it already exists, and reorder the list if it does
 		for (int i = 0; i < Prefs.gui_recent.size(); i++)
 		{
-			String value = (String) Prefs.gui_recent.get(i);
+			String value = Prefs.gui_recent.get(i);
 
 			if (value.equals(newStr))
 				loc = i;
@@ -967,7 +951,7 @@ public class WinMainMenuBar extends JMenuBar
 		// Finally, convert the list into menu items...
 		for (int i = 0; i < Prefs.gui_recent.size(); i++)
 		{
-			String value = (String) Prefs.gui_recent.get(i);
+			String value = Prefs.gui_recent.get(i);
 			createRecentMenuItem(value, (i + 1));
 		}
 

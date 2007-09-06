@@ -33,6 +33,7 @@ public class MrBayesLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
+	@Override
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -50,11 +51,13 @@ public class MrBayesLocalJob extends AnalysisJob
 		}
 	}
 
+	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new MrBayesMonitor(jobDir).getPercentageComplete();
 	}
 
+	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new MrBayesMonitor(jobDir).getResult();
@@ -63,6 +66,7 @@ public class MrBayesLocalJob extends AnalysisJob
 		return result;
 	}
 
+	@Override
 	public void ws_cleanup() throws Exception
 	{
 		ClusterUtils.emptyDirectory(jobDir, true);
@@ -71,6 +75,7 @@ public class MrBayesLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
+	@Override
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

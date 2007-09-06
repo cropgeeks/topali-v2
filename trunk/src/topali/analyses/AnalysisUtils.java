@@ -11,7 +11,7 @@ public class AnalysisUtils
 	// array index that is percentile %age along (eg the 95th percentile)
 	public static float getArrayValue(float[] values, float percentile)
 	{
-		int index = (int) Math.round(percentile * values.length);
+		int index = Math.round(percentile * values.length);
 		if (index >= values.length)
 			index = values.length - 1;
 

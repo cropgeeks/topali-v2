@@ -5,10 +5,11 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.*;
 
 public abstract class RegionAnnotations extends AlignmentAnnotations implements
-		Iterable<RegionAnnotations.Region>
+		Iterable<RegionAnnotations.Region>, Serializable
 {
 	public RegionAnnotations()
 	{
@@ -160,6 +161,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 			this.e = e;
 		}
 
+		@Override
 		public String toString()
 		{
 			return "Nucleotide " + s + " to Nucleotide " + e;

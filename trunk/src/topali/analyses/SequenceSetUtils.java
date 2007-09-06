@@ -150,6 +150,7 @@ public class SequenceSetUtils
 		
 		ss.setParams(params);
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 
 	/*

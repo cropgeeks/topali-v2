@@ -27,9 +27,9 @@ import topali.fileio.Castor;
  */
 public abstract class WebService
 {
-	protected static Logger accessLog;
+	protected static  Logger accessLog;
 
-	protected static Logger logger;
+	protected static  Logger logger;
 
 	protected static WebXmlProperties props;
 

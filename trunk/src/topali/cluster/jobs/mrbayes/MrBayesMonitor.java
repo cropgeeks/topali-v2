@@ -15,7 +15,7 @@ import topali.fileio.Castor;
 public class MrBayesMonitor
 {
 
-	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
+	private static   Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
@@ -36,7 +36,7 @@ public class MrBayesMonitor
 		
 		try
 		{
-			progress = (float)new File(jobDir, "percent").listFiles().length;
+			progress = new File(jobDir, "percent").listFiles().length;
 			//prevent progress to be 100% (otherwise the result will be requested before it's created)
 			if(progress>99)
 				progress = 99;

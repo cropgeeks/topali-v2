@@ -34,7 +34,7 @@ import doe.MsgBox;
  */
 public class GraphPanel extends JPanel implements Printable
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	public static final int NO = 0;
 	public static final int TOP = 1;
@@ -89,7 +89,7 @@ public class GraphPanel extends JPanel implements Printable
 	}
 	
 	public JToolBar createToolbar(int pos) {
-		int p = (pos==LEFT||pos==RIGHT) ? JToolBar.VERTICAL : JToolBar.HORIZONTAL;
+		int p = (pos==LEFT||pos==RIGHT) ? SwingConstants.VERTICAL : SwingConstants.HORIZONTAL;
 		JToolBar tb = new JToolBar(p);
 		
 		tb.setFloatable(false);
@@ -240,7 +240,7 @@ public class GraphPanel extends JPanel implements Printable
 			max *= 1.05;
 		}
 		XYPlot plot = chart.getXYPlot();
-		ValueAxis yAxis = (ValueAxis) plot.getRangeAxis();
+		ValueAxis yAxis = plot.getRangeAxis();
 		yAxis.setUpperBound(max);
 	}
 
@@ -263,7 +263,7 @@ public class GraphPanel extends JPanel implements Printable
 	private void savePNG(File filename) throws IOException
 	{
 		BufferedImage bi = new BufferedImage(chartPanel.getSize().width, chartPanel.getSize().height, BufferedImage.TYPE_BYTE_INDEXED);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
+		Graphics2D g2d = bi.createGraphics();
 		chartPanel.paint(g2d);
 		updateUI();
 		
@@ -286,6 +286,7 @@ public class GraphPanel extends JPanel implements Printable
 	{
 		WinMain.rDialog.addCurrentRegion(type);
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 	
 	protected void actionShowToolTipDialog()
@@ -297,6 +298,7 @@ public class GraphPanel extends JPanel implements Printable
 		aResult.treeToolTipWindow = dialog.getWindowSize();
 
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 	
 	protected void actionSaveGraph()
@@ -397,11 +399,13 @@ public class GraphPanel extends JPanel implements Printable
 			// this.setDisplayToolTips(true);
 		}
 
+		@Override
 		public JToolTip createToolTip()
 		{
 			return tooltip;
 		}
 
+		@Override
 		public String getToolTipText(MouseEvent e)
 		{
 			int x = e.getX(), y = e.getY();
@@ -434,6 +438,7 @@ public class GraphPanel extends JPanel implements Printable
 			WinMainStatusBar.setText(msg);
 		}
 
+		@Override
 		public void mouseMoved(MouseEvent e)
 		{
 			int x = e.getX(), y = e.getY();
@@ -453,6 +458,7 @@ public class GraphPanel extends JPanel implements Printable
 			this.getParent().dispatchEvent(e2);
 		}
 
+		@Override
 		public void mouseDragged(MouseEvent e)
 		{
 			if (e.isMetaDown() == false && !e.isPopupTrigger())
@@ -464,6 +470,7 @@ public class GraphPanel extends JPanel implements Printable
 			}
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e)
 		{
 			// Do nothing if the click is outside of the canvas area
@@ -477,6 +484,7 @@ public class GraphPanel extends JPanel implements Printable
 			}
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e)
 		{
 			if (e.isMetaDown() == false && !e.isPopupTrigger())
@@ -486,6 +494,7 @@ public class GraphPanel extends JPanel implements Printable
 			}
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e)
 		{
 			WinMainStatusBar.setText("");
@@ -523,6 +532,7 @@ public class GraphPanel extends JPanel implements Printable
 
 		// alpha
 
+		@Override
 		public void paintComponent(Graphics graphics)
 		{
 			/*
@@ -658,7 +668,7 @@ public class GraphPanel extends JPanel implements Printable
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0,
 					false);
 			add(aAnlsCreateTree, Icons.CREATE_TREE, KeyEvent.VK_T,
-					KeyEvent.VK_T, KeyEvent.CTRL_MASK, 9, true);
+					KeyEvent.VK_T, InputEvent.CTRL_MASK, 9, true);
 		}
 
 		@Override

@@ -34,7 +34,7 @@ class AnnotationsPanel extends JPanel
 		cdsCanvas = new CDSCanvas();
 		cdsSP = new JScrollPane(cdsCanvas);
 		cdsSP
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		cdsSP.getHorizontalScrollBar().setModel(panel.hBar.getModel());
 
 		textPanel = new TextPanel();
@@ -64,16 +64,19 @@ class AnnotationsPanel extends JPanel
 	private class CDSCanvas extends JPanel
 	{
 
+		@Override
 		public Dimension getSize()
 		{
 			return new Dimension(canW, 30);
 		}
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			return new Dimension(canW, 30);
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -113,11 +116,13 @@ class AnnotationsPanel extends JPanel
 		// return new Dimension(width, 30);
 		// }
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			return new Dimension(width, 30);
 		}
 
+		@Override
 		public Dimension getMaximumSize()
 		{
 			return new Dimension(width, 30);

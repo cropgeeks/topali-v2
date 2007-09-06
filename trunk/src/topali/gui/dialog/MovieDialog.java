@@ -73,6 +73,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 		Utils.addCloseHandler(this, bClose);
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				onClose();
@@ -124,7 +125,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 		checkCircular.setToolTipText(Text.GuiDiag
 				.getString("MovieDialog.gui05"));
 
-		sliderLabel = new JLabel("", JLabel.CENTER);
+		sliderLabel = new JLabel("", SwingConstants.CENTER);
 
 		bPlay = (JButton) WinMainToolBar.getButton(false, null, "movie01",
 				Icons.PLAYER_PLAY, null);
@@ -417,6 +418,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 			setPreferredSize(new Dimension(400, 300));
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -447,6 +449,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 			setToolTipText(Text.GuiDiag.getString("MovieDialog.gui08"));
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

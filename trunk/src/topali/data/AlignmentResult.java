@@ -5,10 +5,15 @@
 
 package topali.data;
 
-import java.util.Arrays;
+import java.io.Serializable;
 
-public class AlignmentResult extends AnalysisResult
+public class AlignmentResult extends AnalysisResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5045158485574526651L;
+
 	// Sequences to be analysed
 	public String[] selectedSeqs = new String[0];
 

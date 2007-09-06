@@ -42,10 +42,11 @@ class OverviewGenerator extends Thread
 		return image;
 	}
 
+	@Override
 	public void run()
 	{
 		image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_INDEXED);
-		Graphics2D g = (Graphics2D) image.createGraphics();
+		Graphics2D g = image.createGraphics();
 		SequenceSet ss = panel.getSequenceSet();
 
 		// Number of sequences

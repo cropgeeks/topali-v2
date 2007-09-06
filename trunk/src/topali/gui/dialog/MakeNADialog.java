@@ -22,7 +22,7 @@ import doe.*;
 
 public class MakeNADialog extends JDialog implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private JTextField dnaText, proText;
 

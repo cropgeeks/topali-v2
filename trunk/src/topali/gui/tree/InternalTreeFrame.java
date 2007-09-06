@@ -73,6 +73,7 @@ class InternalTreeFrame extends JInternalFrame implements ComponentListener
 	{
 		tree.setRectangle(new Rectangle(getLocation(), getSize()));
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 
 	public void componentHidden(ComponentEvent e)

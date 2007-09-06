@@ -14,6 +14,11 @@ import topali.gui.nav.NavPanel;
 
 public class WinMainToolBar extends JToolBar
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5874172250858381338L;
+
 	private JButton bFileNewProject;
 
 	private JButton bFileOpenProject;
@@ -31,17 +36,6 @@ public class WinMainToolBar extends JToolBar
 	private JButton bAlgnMoveUp;
 
 	private JButton bAlgnMoveDown;
-
-	private JButton bAnlsCreateTree;
-
-	private JButton bAnlsRunPDM;
-
-	// private JButton bAnlsRunPDM2;
-	private JButton bAnlsRunHMM;
-
-	private JButton bAnlsRunDSS;
-
-	private JButton bAnlsRunLRT;
 
 	public JButton bVamsas;
 	
@@ -71,23 +65,8 @@ public class WinMainToolBar extends JToolBar
 				WinMainMenuBar.aAlgnMoveUp);
 		bAlgnMoveDown = (JButton) getButton(false, null, "gui11", Icons.DOWN16,
 				WinMainMenuBar.aAlgnMoveDown);
-		bAnlsCreateTree = (JButton) getButton(false, null, "gui12",
-				Icons.CREATE_TREE, WinMainMenuBar.aAnlsCreateTree);
-		bAnlsRunPDM = (JButton) getButton(false, null, "gui17", Icons.RUN_PDM,
-				WinMainMenuBar.aAnlsRunPDM);
-		// bAnlsRunPDM2 = (JButton) getButton(false, null, "gui19",
-		// Icons.RUN_PDM2, mb.aAnlsRunPDM2);
-		bAnlsRunHMM = (JButton) getButton(false, null, "gui16", Icons.RUN_HMM,
-				WinMainMenuBar.aAnlsRunHMM);
-		bAnlsRunDSS = (JButton) getButton(false, null, "gui15", Icons.RUN_DSS,
-				WinMainMenuBar.aAnlsRunDSS);
-		bAnlsRunLRT = (JButton) getButton(false, null, "gui18", Icons.RUN_LRT,
-				WinMainMenuBar.aAnlsRunLRT);
 		bFilePrint = (JButton) getButton(false, null, "gui13", Icons.PRINT16,
 				WinMainMenuBar.aFilePrint);
-
-		// bVamExport = (JButton) getButton(false, null, "gui20",
-		// null, WinMainMenuBar.aVamExport);
 
 		bVamsas = (JButton)getButton(false, null, "gui20", Icons.VAMSASOFF, WinMainMenuBar.aVamsas);
 		
@@ -116,18 +95,8 @@ public class WinMainToolBar extends JToolBar
 		add(bAlgnDisplaySummary);
 		add(bAlgnMoveUp);
 		add(bAlgnMoveDown);
-		//addSeparator();
-		//add(bAnlsCreateTree);
-		//addSeparator();
-		// add(bVamExport);
-		// addSeparator();
-		//add(bAnlsRunPDM);
-		// add(bAnlsRunPDM2);
-		//add(bAnlsRunHMM);
-		//add(bAnlsRunDSS);
-		//add(bAnlsRunLRT);
-		//addSeparator();
-		//add(bVamsas);
+		addSeparator();
+		add(bVamsas);
 		addSeparator();
 		add(bHelpDisplay);
 
@@ -162,5 +131,12 @@ public class WinMainToolBar extends JToolBar
 		// button.setFocusPainted(false);
 
 		return button;
+	}
+	
+	public void vamsasEnabled(boolean b) {
+		if(b)
+			bVamsas.setIcon(Icons.VAMSASON);
+		else
+			bVamsas.setIcon(Icons.VAMSASOFF);
 	}
 }

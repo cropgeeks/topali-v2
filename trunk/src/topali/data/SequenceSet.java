@@ -9,7 +9,7 @@ import static topali.fileio.AlignmentLoadException.*;
 
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
-import java.io.File;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -21,8 +21,13 @@ import topali.analyses.SequenceSetUtils;
 import topali.fileio.*;
 
 // Class representing a set of sequences (an alignment).
-public class SequenceSet extends DataObject
+public class SequenceSet extends DataObject implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -309431847525199340L;
+
 	// Actual alignment data
 	private Vector<Sequence> sequences = new Vector<Sequence>();
 
@@ -37,7 +42,7 @@ public class SequenceSet extends DataObject
 	private SequenceSetParams params = null;
 	
 	// Runtime only objects (ie, not saved to XML)
-	private NameColouriser nameColouriser;
+	transient private NameColouriser nameColouriser;
 
 	public SequenceSet()
 	{
@@ -303,7 +308,7 @@ public class SequenceSet extends DataObject
 			}
 		}
 
-		length = ((Sequence) sequences.get(0)).getLength();
+		length = (sequences.get(0)).getLength();
 
 		// if (resetSelection)
 		params.setDNA(SequenceSetUtils.isSequenceDNA(this)); 
@@ -520,16 +525,27 @@ public class SequenceSet extends DataObject
 			s.addChangeListener(listener);
 	}
 
+//	@Override
+//	public int hashCode()
+//	{
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result
+//				+ ((sequences == null) ? 0 : sequences.hashCode());
+//		return result;
+//	}
+
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((sequences == null) ? 0 : sequences.hashCode());
+		result = prime * result;
+		for(Sequence s : sequences)
+			result += s.hashCode();
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{

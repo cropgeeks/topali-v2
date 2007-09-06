@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private WinMain winMain;
 

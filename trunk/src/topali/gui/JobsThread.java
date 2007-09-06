@@ -17,7 +17,7 @@ import topali.data.AnalysisResult;
 
 public class JobsThread extends Thread
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private final JobsPanel jobsPanel;
 
@@ -30,6 +30,7 @@ public class JobsThread extends Thread
 		timerThread.start();
 	}
 
+	@Override
 	public void run()
 	{
 		while (true)
@@ -200,6 +201,7 @@ public class JobsThread extends Thread
 
 	class TimerThread extends Thread
 	{
+		@Override
 		public void run()
 		{
 			while (true)

@@ -5,14 +5,19 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.*;
 
 
 /**
  * Holds all data of a CodeML model, predefined settings as well as the results after CodeML had been run.
  */
-public class CMLModel
+public class CMLModel implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2227880923240448076L;
 	//Predefined models
 	public final static String MODEL_M0 = "M0";
 	public final static String MODEL_M1a = "M1a";
@@ -232,9 +237,9 @@ public class CMLModel
 			float[][] result = new float[sites.size()][3];
 			for(int i=0; i<sites.size(); i++) {
 				PSSite s = sites.get(i);
-				result[i][0] = (float)s.pos;
+				result[i][0] = s.pos;
 				result[i][1] = (float)s.p;
-				result[i][2] = (float)s.aa;
+				result[i][2] = s.aa;
 			}
 			return result;
 		}
@@ -255,6 +260,7 @@ public class CMLModel
 		}
 	}
 	
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Model: "+name+"\n");

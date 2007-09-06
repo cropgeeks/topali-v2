@@ -5,10 +5,16 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class AlignmentAnnotations
+public class AlignmentAnnotations implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7575283316076221645L;
+
 	protected Vector<AnnotationElement> annotations;
 
 	protected String label;

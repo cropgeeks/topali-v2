@@ -30,7 +30,7 @@ import doe.*;
 public class NavPanel extends JPanel implements TreeSelectionListener,
 		PropertyChangeListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	static JPanel blankPanel;
 
@@ -95,7 +95,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		blankPanel.setBackground(Color.white);
 		blankPanel.add(new JLabel(
 				"Import an alignment to begin working with TOPALi",
-				JLabel.CENTER));
+				SwingConstants.CENTER));
 		splits.setRightComponent(blankPanel);
 		splits.setDividerLocation(Prefs.gui_splits_loc);
 
@@ -594,6 +594,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
+		@Override
 		protected void handlePopup(int x, int y)
 		{
 

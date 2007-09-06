@@ -18,7 +18,7 @@ import topali.var.Utils;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private TreePane treePane;
 
@@ -192,6 +192,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		}
 		
 		WinMainMenuBar.aFileSave.setEnabled(true);
+		WinMainMenuBar.aVamCommit.setEnabled(true);
 	}
 	
 	private String getTreeInfo() {

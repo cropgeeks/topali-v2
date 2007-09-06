@@ -22,17 +22,20 @@ public class ResultsNodeFolder extends INode
 		super(data);
 	}
 
+	@Override
 	public String toString()
 	{
 		return Text.GuiNav.getString("ResultsNode.gui01");
 	}
 
+	@Override
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
 
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		int count = 0;
@@ -59,9 +62,9 @@ public class ResultsNodeFolder extends INode
 
 		DoeLayout layout = new DoeLayout();
 		layout.getPanel().setBackground(Color.white);
-		layout.add(new JLabel(msg1, JLabel.CENTER), 0, 0, 1, 1, new Insets(0,
+		layout.add(new JLabel(msg1, SwingConstants.CENTER), 0, 0, 1, 1, new Insets(0,
 				0, 0, 0));
-		layout.add(new JLabel(msg2, JLabel.CENTER), 0, 1, 1, 1, new Insets(2,
+		layout.add(new JLabel(msg2, SwingConstants.CENTER), 0, 1, 1, 1, new Insets(2,
 				0, 0, 0));
 
 		return layout.getPanel();

@@ -39,7 +39,7 @@ public abstract class ResultPanel extends JPanel
 		toolbar = new ResultPanelToolbar(this, data, (AlignmentResult)result);
 		toolbar.setFloatable(false);
 		toolbar.setBorderPainted(false);
-		toolbar.setOrientation(JToolBar.HORIZONTAL);
+		toolbar.setOrientation(SwingConstants.HORIZONTAL);
 		toolbar.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		add(toolbar, BorderLayout.NORTH);
 		}

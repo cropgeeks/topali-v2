@@ -16,6 +16,10 @@ import topali.gui.JobsPanelEntry;
 
 public class CodeMLJobEntry extends JobsPanelEntry
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8279795336302219695L;
 	private JLabel progressLabel;
 
 	public CodeMLJobEntry(AnalysisJob job)
@@ -26,7 +30,7 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	@Override
 	public JComponent getProgressComponent()
 	{
-		progressLabel = new JLabel("Completed models/hypothesis: ", JLabel.LEFT);
+		progressLabel = new JLabel("Completed models/hypothesis: ", SwingConstants.LEFT);
 
 		JPanel p = new JPanel(new BorderLayout());
 		p.setBackground(bgColor);

@@ -57,6 +57,7 @@ public class FastMLWebService extends WebService
 		}
 	}
 
+	@Override
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
 		if (new File(jobDir, "error.txt").exists())

@@ -20,7 +20,7 @@ import doe.MsgBox;
 
 class MosaicPanel extends JPanel implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private SequenceSet ss;
 
@@ -54,7 +54,7 @@ class MosaicPanel extends JPanel implements ActionListener
 		model.setColumnIdentifiers(columnNames);
 
 		JScrollPane sp = new JScrollPane(table);
-		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		sp.setPreferredSize(new Dimension(10, table.getRowHeight() * 5));
 
 		TableColumn column = table.getColumnModel().getColumn(1);
@@ -401,6 +401,7 @@ class MosaicPanel extends JPanel implements ActionListener
 
 	class BreakpointTableModel extends DefaultTableModel
 	{
+		@Override
 		public boolean isCellEditable(int row, int col)
 		{
 			if (row == getRowCount() - 1 && col == 0)

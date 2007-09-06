@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class Icons
 {
-	public static Logger log = Logger.getLogger(Icons.class);
+	public static   Logger log = Logger.getLogger(Icons.class);
 	
 	// Globally used colours
 	public static Color grayBackground = new Color(119, 126, 143);

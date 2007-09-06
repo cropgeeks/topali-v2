@@ -5,6 +5,7 @@
 
 package topali.data;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /*
@@ -12,9 +13,13 @@ import java.util.Vector;
  * analysis (via CODEML) and the settings required to make the run (although 
  * not the data itself).
  */
-public class CodeMLResult extends AlignmentResult
+public class CodeMLResult extends AlignmentResult implements Serializable
 {	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 805951916608940576L;
 	public final static int TYPE_SITEMODEL = 0;
 	public final static int TYPE_BRANCHMODEL = 1;
 	

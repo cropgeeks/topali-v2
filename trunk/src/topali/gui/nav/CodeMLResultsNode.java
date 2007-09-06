@@ -28,16 +28,19 @@ public class CodeMLResultsNode extends ResultsNode
 			panel = new CMLBranchResultPanel(data, result);
 		}
 
+	@Override
 	public String toString()
 	{
 		return result.guiName;
 	}
 
+	@Override
 	public String getHelpKey()
 	{
 		return "cml_method";
 	}
 
+	@Override
 	public JComponent getPanel()
 	{
 		return panel;

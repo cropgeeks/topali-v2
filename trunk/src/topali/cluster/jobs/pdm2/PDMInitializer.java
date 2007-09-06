@@ -34,6 +34,7 @@ public class PDMInitializer extends Thread
 		this.result = result;
 	}
 
+	@Override
 	public void run()
 	{
 		try
@@ -109,9 +110,9 @@ public class PDMInitializer extends Thread
 		System.out.println("NoWindows=" + regions.length);
 
 		// Number of windows per node (best case)
-		int wN = (int) ((regions.length / nodeCount) + 1);
+		int wN = ((regions.length / nodeCount) + 1);
 		// Number of nodes we actually end up using
-		int nodes = (int) ((regions.length / wN) + 1);
+		int nodes = ((regions.length / wN) + 1);
 		// Check for special case where integer rounddown goes tits up
 		// (ie 39 nodes but all data written in 38)
 		if (wN * (nodes - 1) == regions.length)

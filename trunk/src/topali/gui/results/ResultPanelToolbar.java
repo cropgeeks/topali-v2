@@ -87,6 +87,7 @@ public class ResultPanelToolbar extends JToolBar
 			{
 				WinMain.rDialog.addCurrentRegion(PartitionAnnotations.class);
 				WinMainMenuBar.aFileSave.setEnabled(true);
+				WinMainMenuBar.aVamCommit.setEnabled(true);
 			}
 		};
 		
@@ -107,6 +108,7 @@ public class ResultPanelToolbar extends JToolBar
 				result.treeToolTipWindow = dialog.getWindowSize();
 
 				WinMainMenuBar.aFileSave.setEnabled(true);
+				WinMainMenuBar.aVamCommit.setEnabled(true);
 			}
 		}; 
 		

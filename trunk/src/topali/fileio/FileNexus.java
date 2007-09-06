@@ -32,6 +32,7 @@ class FileNexus extends FileGeneric
 		ss = s;
 	}
 
+	@Override
 	public boolean readFile(File file)
 	{
 		try
@@ -98,7 +99,7 @@ class FileNexus extends FileGeneric
 			// Step 3: reformat based on gaps, missing chars, etc
 			for (int i = 0; i < seqs.size(); i++)
 			{
-				Sequence s = (Sequence) seqs.get(i);
+				Sequence s = seqs.get(i);
 				String data = s.getBuffer().toString();
 				if (gap != '-')
 					data = data.replace(gap, '-');
@@ -111,10 +112,10 @@ class FileNexus extends FileGeneric
 			// Step 4: fill in match chars
 			try
 			{
-				StringBuffer seq0 = ((Sequence) seqs.get(0)).getBuffer();
+				StringBuffer seq0 = (seqs.get(0)).getBuffer();
 				for (int i = 1; i < seqs.size(); i++)
 				{
-					StringBuffer buf = ((Sequence) seqs.get(i)).getBuffer();
+					StringBuffer buf = (seqs.get(i)).getBuffer();
 					// For each '.' character in the sequence, replace it with
 					// the corresponding value from the first sequence
 					for (int j = 0; j < buf.length(); j++)
@@ -127,7 +128,7 @@ class FileNexus extends FileGeneric
 
 			// Step 5: finally pass each sequence to the SequenceSet collection
 			for (int i = 0; i < seqs.size(); i++)
-				ss.addSequence((Sequence) seqs.get(i));
+				ss.addSequence(seqs.get(i));
 		} catch (Exception e)
 		{
 			success = false;
@@ -202,9 +203,10 @@ class FileNexus extends FileGeneric
 		if (index >= seqs.size())
 			return null;
 		else
-			return (Sequence) seqs.get(index);
+			return seqs.get(index);
 	}
 
+	@Override
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

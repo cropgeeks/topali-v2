@@ -21,6 +21,7 @@ class FileClustal extends FileGeneric
 		ss = s;
 	}
 
+	@Override
 	public boolean readFile(File file)
 	{
 		try
@@ -85,7 +86,7 @@ class FileClustal extends FileGeneric
 
 			// Add all the sequences to the SequenceSet
 			for (int i = 0; i < seqs.size(); i++)
-				ss.addSequence((Sequence) seqs.get(i));
+				ss.addSequence(seqs.get(i));
 		} catch (Exception e)
 		{
 			success = false;
@@ -107,9 +108,10 @@ class FileClustal extends FileGeneric
 		if (index >= seqs.size())
 			return null;
 		else
-			return (Sequence) seqs.get(index);
+			return seqs.get(index);
 	}
 
+	@Override
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

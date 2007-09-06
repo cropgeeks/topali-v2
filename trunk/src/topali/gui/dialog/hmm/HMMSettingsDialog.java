@@ -56,6 +56,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				// basicPanel.stepSpin.requestFocus();
@@ -452,9 +453,9 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 
 				// Even so, scale the values so that barce is happy
-				Prefs.hmm_freq_1 = Prefs.hmm_freq_1 / (float) sum;
-				Prefs.hmm_freq_2 = Prefs.hmm_freq_2 / (float) sum;
-				Prefs.hmm_freq_3 = Prefs.hmm_freq_3 / (float) sum;
+				Prefs.hmm_freq_1 = Prefs.hmm_freq_1 / sum;
+				Prefs.hmm_freq_2 = Prefs.hmm_freq_2 / sum;
+				Prefs.hmm_freq_3 = Prefs.hmm_freq_3 / sum;
 			} catch (Exception e)
 			{
 				return error("Topology frequencies: values must sum to one.",
@@ -614,6 +615,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			comp.addFocusListener(new FocusAdapter()
 			{
+				@Override
 				public void focusLost(FocusEvent e)
 				{
 					computeSample();

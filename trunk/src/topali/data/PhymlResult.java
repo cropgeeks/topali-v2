@@ -5,9 +5,15 @@
 
 package topali.data;
 
-public class PhymlResult extends TreeResult
+import java.io.Serializable;
+
+public class PhymlResult extends TreeResult implements Serializable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4370753010007394293L;
 	public String phymlPath;
 	public int bootstrap = 0;
 	public boolean optTopology = false;

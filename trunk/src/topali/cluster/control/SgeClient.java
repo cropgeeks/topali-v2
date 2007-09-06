@@ -12,7 +12,7 @@ import topali.cluster.*;
 
 public class SgeClient implements ICluster
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.control");
+	private static  Logger logger = Logger.getLogger("topali.cluster.control");
 
 	private String sge_job_id;
 
@@ -288,6 +288,7 @@ class SGEStreamReader extends Thread
 		start();
 	}
 
+	@Override
 	public void run()
 	{
 		try

@@ -150,7 +150,7 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener, 
 		if (nuc >= result.locData[0][0] - result.pdm_step)
 			// Position: +stepSize moves right one window to avoid -0.x and
 			// +0.x both giving the same window
-			pos = (int) ( (nuc-result.locData[0][0]+result.pdm_step ) / (float)result.pdm_step);
+			pos = (int) ( (nuc-result.locData[0][0]+result.pdm_step ) / result.pdm_step);
 		
 	
 		if (pos < 0 || pos >= result.histograms.length)

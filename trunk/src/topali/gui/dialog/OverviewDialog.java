@@ -46,6 +46,7 @@ public class OverviewDialog extends JDialog
 	{
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				createImage();
@@ -54,6 +55,7 @@ public class OverviewDialog extends JDialog
 
 		addComponentListener(new ComponentAdapter()
 		{
+			@Override
 			public void componentResized(ComponentEvent e)
 			{
 				createImage();
@@ -147,16 +149,19 @@ public class OverviewDialog extends JDialog
 
 			addMouseListener(new MouseAdapter()
 			{
+				@Override
 				public void mouseClicked(MouseEvent e)
 				{
 					processMouse(e);
 				}
 
+				@Override
 				public void mousePressed(MouseEvent e)
 				{
 					processMouse(e);
 				}
 
+				@Override
 				public void mouseReleased(MouseEvent e)
 				{
 					processMouse(e);
@@ -165,6 +170,7 @@ public class OverviewDialog extends JDialog
 
 			addMouseMotionListener(new MouseMotionAdapter()
 			{
+				@Override
 				public void mouseDragged(MouseEvent e)
 				{
 					processMouse(e);
@@ -187,6 +193,7 @@ public class OverviewDialog extends JDialog
 			panel.jumpToPosition(nuc, seq, false, false);
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

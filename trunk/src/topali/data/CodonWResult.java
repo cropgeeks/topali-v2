@@ -5,10 +5,16 @@
 
 package topali.data;
 
+import java.io.Serializable;
 
-public class CodonWResult extends AlignmentResult
+
+public class CodonWResult extends AlignmentResult implements Serializable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -331644372085211514L;
 	public String codonwPath;
 	public String geneticCode = SequenceSetParams.GENETICCODE_UNIVERSAL;
 	public String result;

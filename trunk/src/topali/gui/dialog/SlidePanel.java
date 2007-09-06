@@ -16,6 +16,11 @@ import doe.DoeLayout;
 /* Simple panel containing oft-used Window and Step size settings controls */
 class SlidePanel extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4196118566726774726L;
+
 	private JLabel label1, label2;
 
 	private SpinnerNumberModel winModel, stepModel;
@@ -28,7 +33,7 @@ class SlidePanel extends JPanel
 
 		// Check settings for validity
 		if (window < 2 || window > length)
-			window = (int) length / 3;
+			window = length / 3;
 		if (step < 1 || step > length)
 			step = 1;
 

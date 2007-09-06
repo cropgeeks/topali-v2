@@ -141,7 +141,7 @@ public class AutoCorrelationTime
 			int nLength = actVector.size();
 			for (i = 0; i < nLength; i++)
 			{
-				tau = ((Float) actVector.elementAt(i)).floatValue();
+				tau = (actVector.elementAt(i)).floatValue();
 				outStream.println(tau);
 			}
 			outStream.close();
@@ -282,7 +282,7 @@ public class AutoCorrelationTime
 		float[] actArray = new float[nLength];
 		for (i = 0; i < nLength; i++)
 		{
-			actArray[i] = ((Float) actVector.elementAt(i)).floatValue();
+			actArray[i] = (actVector.elementAt(i)).floatValue();
 		}
 		return actArray;
 	}
@@ -297,7 +297,7 @@ public class AutoCorrelationTime
 		int nLength = actVector.size();
 		for (i = 0; i < nLength; i++)
 		{
-			actAverage += ((Float) actVector.elementAt(i)).floatValue();
+			actAverage += (actVector.elementAt(i)).floatValue();
 		}
 		actAverage /= nLength;
 		return actAverage;
@@ -315,8 +315,8 @@ public class AutoCorrelationTime
 		int nLength = actVector.size();
 		for (i = 0; i < nLength; i++)
 		{
-			actAverage += ((Float) actVector.elementAt(i)).floatValue();
-			act2ndMom += (float) Math.pow(((Float) actVector.elementAt(i))
+			actAverage += (actVector.elementAt(i)).floatValue();
+			act2ndMom += (float) Math.pow((actVector.elementAt(i))
 					.floatValue(), 2);
 		}
 		actAverage /= nLength;

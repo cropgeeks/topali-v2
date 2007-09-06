@@ -14,7 +14,7 @@ import topali.fileio.Castor;
 
 public class CodeMLMonitor
 {
-	private static Logger logger = Logger.getLogger("topali.cluster.info-log");
+	private static  Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 

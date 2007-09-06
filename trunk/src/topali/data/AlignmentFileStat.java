@@ -5,10 +5,15 @@
 
 package topali.data;
 
-import java.io.File;
+import java.io.*;
 
-public class AlignmentFileStat
+public class AlignmentFileStat implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7533048882832132271L;
+
 	public String filename;
 
 	public int size;
@@ -28,6 +33,7 @@ public class AlignmentFileStat
 		this.filename = filename;
 	}
 
+	@Override
 	public String toString()
 	{
 		return new File(filename).getName();

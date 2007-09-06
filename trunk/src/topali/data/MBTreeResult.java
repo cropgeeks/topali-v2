@@ -5,12 +5,18 @@
 
 package topali.data;
 
+import java.io.Serializable;
+
 /*
  * Class that stores both the results from running MrBayes and the
  * settings required to make the run (although not the data itself).
  */
-public class MBTreeResult extends TreeResult
+public class MBTreeResult extends TreeResult implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 202990938174176824L;
 	// The location of the MrBayes binary
 	public String mbPath;
 	public int nGen = 100000;

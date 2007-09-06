@@ -18,13 +18,14 @@ import doe.MsgBox;
 // delegating the actual work to the ReadSeq util class (web/cgi service)
 class FileReadSeq extends FileGeneric
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	FileReadSeq(SequenceSet s)
 	{
 		ss = s;
 	}
 
+	@Override
 	public boolean readFile(File file)
 	{
 		File outFile = new File(Prefs.tmpDir, "tmpAlignment");
@@ -52,6 +53,7 @@ class FileReadSeq extends FileGeneric
 		return success;
 	}
 
+	@Override
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

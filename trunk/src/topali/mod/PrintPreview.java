@@ -20,7 +20,7 @@ import doe.MsgBox;
  */
 public class PrintPreview extends JFrame implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	protected int m_wPage;
 
@@ -97,8 +97,8 @@ public class PrintPreview extends JFrame implements ActionListener
 				}
 				m_wPage = (int) (pageFormat.getWidth());
 				m_hPage = (int) (pageFormat.getHeight());
-				int w = (int) (m_wPage * scale / 100);
-				int h = (int) (m_hPage * scale / 100);
+				int w = (m_wPage * scale / 100);
+				int h = (m_hPage * scale / 100);
 
 				BufferedImage img = new BufferedImage(m_wPage, m_hPage,
 						BufferedImage.TYPE_INT_RGB);
@@ -133,6 +133,7 @@ public class PrintPreview extends JFrame implements ActionListener
 		{
 			Thread runner = new Thread()
 			{
+				@Override
 				public void run()
 				{
 					String str = m_cbScale.getSelectedItem().toString();
@@ -146,8 +147,8 @@ public class PrintPreview extends JFrame implements ActionListener
 					{
 						return;
 					}
-					int w = (int) (m_wPage * scale / 100);
-					int h = (int) (m_hPage * scale / 100);
+					int w = (m_wPage * scale / 100);
+					int h = (m_hPage * scale / 100);
 
 					Component[] comps = m_preview.getComponents();
 					for (int k = 0; k < comps.length; k++)
@@ -197,6 +198,7 @@ public class PrintPreview extends JFrame implements ActionListener
 
 		protected int V_GAP = 10;
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			int n = getComponentCount();
@@ -220,16 +222,19 @@ public class PrintPreview extends JFrame implements ActionListener
 					+ ins.bottom);
 		}
 
+		@Override
 		public Dimension getMaximumSize()
 		{
 			return getPreferredSize();
 		}
 
+		@Override
 		public Dimension getMinimumSize()
 		{
 			return getPreferredSize();
 		}
 
+		@Override
 		public void doLayout()
 		{
 			Insets ins = getInsets();
@@ -296,6 +301,7 @@ public class PrintPreview extends JFrame implements ActionListener
 			repaint();
 		}
 
+		@Override
 		public Dimension getPreferredSize()
 		{
 			Insets ins = getInsets();
@@ -303,16 +309,19 @@ public class PrintPreview extends JFrame implements ActionListener
 					+ ins.bottom);
 		}
 
+		@Override
 		public Dimension getMaximumSize()
 		{
 			return getPreferredSize();
 		}
 
+		@Override
 		public Dimension getMinimumSize()
 		{
 			return getPreferredSize();
 		}
 
+		@Override
 		public void paint(Graphics g)
 		{
 			g.setColor(getBackground());

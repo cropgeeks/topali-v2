@@ -5,6 +5,7 @@
 
 package topali.var;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.LinkedList;
  * 
  * @param <T>
  */
-public class AssociationMap<T>
+public class AssociationMap<T> implements Serializable
 {
 
 	LinkedList<T> list1;

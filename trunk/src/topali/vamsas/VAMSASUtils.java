@@ -25,7 +25,7 @@ public class VAMSASUtils
 {
 	final static boolean debug = false;
 	
-	static Logger log = Logger.getLogger(VAMSASUtils.class);
+	static   Logger log = Logger.getLogger(VAMSASUtils.class);
 	
 	public static boolean storeProject(Project project, IClientDocument cDoc) {	
 		
@@ -55,16 +55,16 @@ public class VAMSASUtils
 		return true;
 	}
 	
-	public static Project loadProject(Project project, IClientDocument cDoc) {
+	public static Project loadProject(IClientDocument cDoc) {
 		IClientAppdata data = cDoc.getClientAppdata();
 		if(data==null) {
 			log.warn("Could not get a IClientAppdata.");
-			return project;
+			return null;
 		}
 
 		if(!data.hasClientAppdata()) {
 			log.info("No stored project found in VAMSAS document.");
-			return project;
+			return null;
 		}
 		
 		AppDataInputStream is = data.getClientInputStream();
@@ -95,11 +95,6 @@ public class VAMSASUtils
 			u.setMapping(Castor.getMapping());
 			Project vProject = (Project)u.unmarshal(in);
 			log.info("Got topali project from appdata.");
-			if(project!=null) {
-				for(AlignmentData align : vProject.getDatasets())
-					project.addDataSet(align);
-				return project;
-			}
 			return vProject;
 		} catch (Exception e)
 		{

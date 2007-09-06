@@ -22,7 +22,7 @@ import doe.MsgBox;
 
 public class TreePreviewPanel extends JPanel implements ActionListener
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	// Current alignment data and partition info
 	private SequenceSet ss;
@@ -167,6 +167,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 			// Mouse listener to catch double-click events
 			addMouseListener(new MouseAdapter()
 			{
+				@Override
 				public void mouseClicked(MouseEvent e)
 				{
 					if (e.getClickCount() == 2)
@@ -178,6 +179,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 			});
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

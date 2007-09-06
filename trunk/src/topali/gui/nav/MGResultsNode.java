@@ -38,6 +38,7 @@ public class MGResultsNode extends ResultsNode
 		return true;
 	}
 
+	@Override
 	public String toString()
 	{
 		return result.guiName;

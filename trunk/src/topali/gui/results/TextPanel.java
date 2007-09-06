@@ -24,7 +24,7 @@ import doe.MsgBox;
 public class TextPanel extends JPanel implements Printable
 {
 	
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 
 //	Toolbar positions
 	public static final int NO = 0;
@@ -65,8 +65,8 @@ public class TextPanel extends JPanel implements Printable
 
 	private JToolBar createToolbar()
 	{
-		int pos = (this.toolbarPos == LEFT || this.toolbarPos == RIGHT) ? JToolBar.VERTICAL
-				: JToolBar.HORIZONTAL;
+		int pos = (this.toolbarPos == LEFT || this.toolbarPos == RIGHT) ? SwingConstants.VERTICAL
+				: SwingConstants.HORIZONTAL;
 		JToolBar tb = new JToolBar(pos);
 
 		tb.setFloatable(false);

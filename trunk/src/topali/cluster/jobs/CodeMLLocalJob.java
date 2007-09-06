@@ -31,6 +31,7 @@ public class CodeMLLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
+	@Override
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -47,11 +48,13 @@ public class CodeMLLocalJob extends AnalysisJob
 		}
 	}
 
+	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new CodeMLMonitor(jobDir).getPercentageComplete();
 	}
 
+	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new CodeMLMonitor(jobDir).getResult();
@@ -60,6 +63,7 @@ public class CodeMLLocalJob extends AnalysisJob
 		return result;
 	}
 
+	@Override
 	public void ws_cleanup() throws Exception
 	{
 		ClusterUtils.emptyDirectory(jobDir, true);
@@ -68,6 +72,7 @@ public class CodeMLLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
+	@Override
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

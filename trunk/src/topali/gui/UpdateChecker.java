@@ -18,7 +18,7 @@ import doe.MsgBox;
 
 class UpdateChecker extends Thread
 {
-	Logger log = Logger.getLogger(this.getClass());
+	 Logger log = Logger.getLogger(this.getClass());
 	
 	private static int RELEASE = 16;
 
@@ -33,6 +33,7 @@ class UpdateChecker extends Thread
 		start();
 	}
 
+	@Override
 	public void run()
 	{
 		try
