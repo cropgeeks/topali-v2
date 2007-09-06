@@ -1,0 +1,77 @@
+- Move website to SCRI hosting
+- Applications note
+- Online help updates and linking with buttons
+- FRANK: come up with additional "TOPALi Tips"
+- Write paragraphs and produce images for "What's New" for web (see below)
+
+- Implement/decide on analysis restrictions for remote jobs
+
+- Bug: Annotations dialog combo box no longer works
+- GUI: Tidy up layout of Annotations dialog
+- Bug: Dundee cluster filesystem timeout problems
+- GUI: Estimate Tree dialog layouts need sorting
+- Future: Estimate Tree dialog needs defaults button
+- Future: Resumbittion of tree job
+- GUI: Jobs tracking progress bar for non-tracking jobs is too large
+- Future: Decide on mouse highlighting functionality
+- Future: Decide on how to handle local job submission
+- GUI: Icons for job results in the left-hand navigation panel
+- GUI: Model generator output - toggle between TOPALi-compatible results and all results (toolbar button)
+- GUI: Site model analysis dialog tidy up
+- BUG: FRANK: m1, m2 etc are doing the wrong analysis
+- GUI: Branch model dialog needs a "ATV Launching..." dialog while waiting
+- GUI: Close ATV if it's still running and the TOPALi dialog has been closed/cancelled.
+
+
+
+New Features since last public release:
+
+- Print preview
+  - printing of graphs, trees, tables
+- Mouse over highlighting allowing vamsas integration and sequence/parition selection
+- (Coding region partitions)
+- In addition to 4 recom/detect methods, package now contains:
+  - 2 positive selection analysis methods
+  - improved local tree calculations method (F84 over JC)
+  - 3 new remove tree calculation types
+- Rerooting of trees
+- Ancestral sequences (trees)
+- Model selection analysis for determing tree analysis
+- Vamsas
+
+(there must be more?)
+
+  - [NF] Mouse highlighting (is it worth to mention that?)
+  - [NF] Failed jobs now clear from the cluster as soon as they are detected,
+    rather than waiting on the user to delete them.
+  - [NF] New Webservice "Codon Usage Analysis", which uses CodonW to analyse
+    Codon Usage.
+  - [NF] New Webservice "Subst. Model Test", which uses Modelgenerator to find
+    the most appropriate DNA/AA substitution model.
+  - [NF] MrBayes Webservice can now create trees from DNA as well as protein
+    sequence alignments, and accepts more parameters (DNA/AA models, invariant
+    sites, gamma).
+  - [NF] New methods for positive selection (CodeML site model and branch model
+    analysis)
+  - [NF] The job status panel will now tell you what position in the queue (on
+    the remote cluster) you job is currently in while waiting to run.
+  - [NF] Improvements to job feedback (finer percentage levels) for LRT and DSS
+    analysis jobs.
+  - [NF] The old "Partitions" dialog has been split into a generic annotations
+    viewer, with separate sections for Paritions and Coding Regions (so far).
+  - [NF] Alignment selections can now be carried out using the main alignment
+    view window.
+  - [NF] Cleaned up the job progress screen, allowing for a double-click to
+    cancel a job.
+  - [BF] TOPALi is now compatible with Java 1.6 after fixing multidimensional
+    array issues with the Castor XML package. This has changed the XML project
+    format again though, so projects created in versions earlier than 2.16 will
+    no longer load. Project files have also been reduced in size.
+  - [BF] Updated the timer threads for the job progress screen so that jobs with
+    indeterminate progress bars are properly displayed.
+  - [NF] Updated the export dialog so alignments can now be created/exported by
+    concatenating together one or more of the currently selected partitions.
+  - [NF] Updated help for several topics.
+  - [NF] Improved the rendering speed of the charts while highlighting regions.
+  - [NF] TOPALi can now use ReadSeq (remotely) for additional sequence-format
+    compatibility.
