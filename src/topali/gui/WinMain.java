@@ -23,7 +23,9 @@ import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
-import topali.gui.dialog.hmm.HMMSettingsDialog;
+import topali.gui.dialog.jobs.*;
+import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
+import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
 import topali.mod.PrintPreview;
@@ -232,8 +234,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			// project.getDatasets().add(data);
 			project.addDataSet(data);
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 			// navPanel.addAlignmentFolder(data);
 		}
 	}
@@ -245,8 +248,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		if (Project.save(project, saveAs))
 		{
-			WinMainMenuBar.aFileSave.setEnabled(false);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(false);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setFileSaved();
 			menubar.updateRecentFileList(project);
 		}
 
@@ -388,8 +392,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			// Force the display to redraw itself
 			// navPanel.getCurrentAlignmentPanel(data).refreshAndRepaint();
 			// And mark the project as modified
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 
@@ -419,8 +424,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			// rDialog.setAlignmentData(null);
 			// ovDialog.setAlignmentPanel(null);
 
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 
@@ -653,8 +659,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				data.addResult(result);
 
 				// treePane.displayTree(data.getSequenceSet(), result);
-				WinMainMenuBar.aFileSave.setEnabled(true);
-				WinMainMenuBar.aVamCommit.setEnabled(true);
+				//WinMainMenuBar.aFileSave.setEnabled(true);
+				//WinMainMenuBar.aVamCommit.setEnabled(true);
+				ProjectState.setDataChanged();
 			}
 		}
 		// Tree being created as a cluster/local job
@@ -706,8 +713,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			data.removeResult(result);
 			// navPanel.removeSelectedNode();
 
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 
@@ -724,8 +732,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			result.guiName = newName;
 			navPanel.nodesChanged();
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 
@@ -752,7 +761,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	void menuVamsasSelectSession()
 	{
 		// First ensure it's ok to begin a new session
-		if (vamsas != null)
+		if (ProjectState.isVamsasSession())
 		{
 			String msg = "An association with an existing VAMSAS session has "
 					+ "already been established. Would you like to drop this\n"
@@ -791,12 +800,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				String session = dlg.getSelSession();
 				if (session == null)
 				{
-					WinMainMenuBar.aVamCommit.setEnabled(false);
 					toolbar.vamsasEnabled(false);
-					vamsas = null;
 					return;
-				} else if (session.equals(newSession))
+				} else if (session.equals(newSession)) {
 					vamsas.connect(VamsasManager.newSession);
+				}
 				else
 				{
 					vamsas.connect(session);
@@ -806,19 +814,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				vamsas.connect(null);
 			}
-
+			
+			ProjectState.setVamsasSession(true);
+			
 			vEvents = new VamsasEvents(this, project.getVamsasMapper());
-
-			WinMainMenuBar.aVamCommit.setEnabled(true);
 
 			toolbar.vamsasEnabled(true);
 
 		} catch (Exception e)
 		{
 			vamsas = null;
+			ProjectState.setVamsasSession(false);
 			MsgBox.msg("Error connecting/creating VAMSAS session.", MsgBox.ERR);
 			log.error("Error connecting/creating VAMSAS session.", e);
-			WinMainMenuBar.aVamCommit.setEnabled(false);
 			toolbar.vamsasEnabled(false);
 		}
 	}
@@ -827,7 +835,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		if (vamsas != null)
 		{
-			WinMainMenuBar.aVamCommit.setEnabled(false);
+			ProjectState.setVamsasCommitted();
 			try
 			{
 				vamsas.write();
@@ -841,43 +849,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 							"TOPALi has not been associated with a VAMSAS session yet.",
 							MsgBox.WAR);
 	}
-
-	// void menuVamsasSelectSession()
-	// {
-	// // First ensure it's ok to begin a new session
-	// if (vamsas != null)
-	// {
-	// String msg = "An association with an existing VAMSAS session has "
-	// + "already been established. Would you like to drop this\n"
-	// + "connection and begin (or connect to) a new session?";
-	// if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
-	// return;
-	// }
-	//		
-	// vamsas = new VamsasManager();
-	// vEvents = new VamsasEvents(this);
-	//		
-	// if (vamsas.initializeVamsas(project))
-	// {
-	// MsgBox.msg("TOPALi initiated a successfull connection to a VAMSAS "
-	// + "session.", MsgBox.INF);
-	// }
-	//
-	// // Create a dialog to select the session file
-	// /* JFileChooser fc = new JFileChooser();
-	// fc.setCurrentDirectory(new File(Prefs.gui_dir));
-	// fc.setSelectedFile(new File("vamsas-session.zip"));
-	// fc.setDialogTitle("Select (or Create) VAMSAS Session File");
-	//
-	// if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-	// {
-	// File file = fc.getSelectedFile();
-	// Prefs.gui_dir = "" + fc.getCurrentDirectory();
-	//
-	// vClient = new VamsasClient(file);
-	// }
-	// */
-	// }
 
 	void menuVamsasExport()
 	{
@@ -897,51 +868,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 							MsgBox.WAR);
 	}
 
-	// boolean vamsasUpdate() {
-	// if(vamsas == null) {
-	// vamsas = new VamsasManager();
-	// vEvents = new VamsasEvents(this);
-	//			
-	// if (!vamsas.initializeVamsas(project))
-	// {
-	// MsgBox.msg("Connection to a VAMSAS session could not be established",
-	// MsgBox.ERR);
-	// return false;
-	// }
-	//			
-	// try
-	// {
-	// vamsas.readFromDocument();
-	// } catch (Exception e)
-	// {
-	// MsgBox.msg("Could not retrieve data from VAMSAS session", MsgBox.ERR);
-	// return false;
-	// }
-	//			
-	// return true;
-	// }
-	// else {
-	// try
-	// {
-	// vamsas.writeToDocument();
-	// return true;
-	// } catch (Exception e)
-	// {
-	// MsgBox.msg("There was an error while synchronizing VAMSAS session",
-	// MsgBox.ERR);
-	// e.printStackTrace();
-	// return false;
-	// }
-	// }
-	// }
 
 	void menuVamsasImport()
 	{
 		if (vamsas != null)
-		{
-			//			
-			// boolean emptyProject = (project.getDatasets().size()==0);
-			//			
+		{	
 			try
 			{
 				vamsas.read();
@@ -949,32 +880,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				e.printStackTrace();
 			}
-			//			
-			// if(emptyProject) {
-			// for(AlignmentData data : project.getDatasets())
-			// navPanel.addAlignmentFolder(data);
-			// }
 		} else
 			MsgBox
 					.msg(
 							"TOPALi has not been associated with a VAMSAS session yet.",
 							MsgBox.WAR);
-
-		/*
-		 * if (vClient == null) { MsgBox .msg( "TOPALi has not been associated
-		 * with a VAMSAS session yet.", MsgBox.WAR); return; }
-		 * 
-		 * AlignmentData[] datasets = vClient.readFromFile();
-		 *  // topali.vamsas.FileHandler fh = new topali.vamsas.FileHandler();
-		 *  // AlignmentData[] datasets = fh.loadVamsas();
-		 * 
-		 * if (datasets != null) { for (AlignmentData data1 : datasets)
-		 * addNewAlignmentData(data1);
-		 * 
-		 * if (datasets.length == 1) MsgBox.msg("1 alignment has been imported
-		 * into TOPALi.", MsgBox.INF); else MsgBox.msg(datasets.length + "
-		 * alignments have been imported into TOPALi.", MsgBox.INF); }
-		 */
 	}
 
 	void menuHelpUpdate(boolean useGUI)
@@ -1044,7 +954,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (vamsas == null)
 			return;
 		vamsas.disconnect();
-		vamsas = null;
+		ProjectState.setVamsasSession(false);
+		toolbar.vamsasEnabled(false);
 	}
 
 	/**

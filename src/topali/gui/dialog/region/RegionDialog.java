@@ -159,8 +159,9 @@ public class RegionDialog extends JDialog implements ActionListener,
 		if (repaintAll)
 			WinMain.repaintDisplay();
 
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 		// Create the tree
 		treePanel.createTree(r.getS(), r.getE());
 	}
@@ -272,8 +273,9 @@ public class RegionDialog extends JDialog implements ActionListener,
 			regionModel.removeElement(r);
 			annotations.remove(r.getS(), r.getE());
 			annotations.addRegion(dialog.newRegion);
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 
 		refreshList();
@@ -289,8 +291,9 @@ public class RegionDialog extends JDialog implements ActionListener,
 		if (dialog.newRegion != null)
 		{
 			annotations.addRegion(dialog.newRegion);
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 
 		refreshList();

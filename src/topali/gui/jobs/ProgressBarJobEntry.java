@@ -15,7 +15,6 @@ import topali.gui.*;
 
 public class ProgressBarJobEntry extends JobsPanelEntry
 {
-
 	JProgressBar pb;
 
 	public ProgressBarJobEntry(AnalysisJob job)
@@ -41,7 +40,7 @@ public class ProgressBarJobEntry extends JobsPanelEntry
 	{
 		super.setJobStatus(status);
 		pb.setValue((int) status.progress);
-		pb.setString(Prefs.d3.format(status.progress) + "%");
+		pb.setString(Prefs.i.format(status.progress) + "%");
 	}
 
 }

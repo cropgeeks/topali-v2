@@ -191,8 +191,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			TOPALi.winMain.anlsRunFastML(fastml);
 		}
 		
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 	
 	private String getTreeInfo() {

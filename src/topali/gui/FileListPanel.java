@@ -106,8 +106,9 @@ public class FileListPanel extends JPanel implements ListSelectionListener
 			for (int index = rows.length - 1; index >= 0; index--)
 				model.removeAlignment(rows[index]);
 
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 

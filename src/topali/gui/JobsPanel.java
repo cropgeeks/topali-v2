@@ -87,8 +87,9 @@ public class JobsPanel extends JPanel
 
 		jobsThread.interrupt();
 		setStatusPanel();
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 
 	void removeJobEntry(JobsPanelEntry entry, boolean getResults)
@@ -107,8 +108,9 @@ public class JobsPanel extends JPanel
 			job.getAlignmentData().removeResult(job.getResult());
 
 		setStatusPanel();
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 		jp.repaint();
 	}
 

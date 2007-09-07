@@ -251,8 +251,9 @@ class TreePanelUtils
 
 			panel.getSequenceSet().setSelectedSequences(indices);
 			((WinMain) MsgBox.frm).menuViewDisplaySettings(true);
-			WinMainMenuBar.aFileSave.setEnabled(true);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 	}
 

@@ -100,7 +100,8 @@ public class ThresholdDialog extends JDialog implements ActionListener, ChangeLi
 		float value = numModel.getNumber().floatValue();
 
 		panel.setThreshold(value);
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 }

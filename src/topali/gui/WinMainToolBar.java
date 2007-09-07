@@ -68,7 +68,7 @@ public class WinMainToolBar extends JToolBar
 		bFilePrint = (JButton) getButton(false, null, "gui13", Icons.PRINT16,
 				WinMainMenuBar.aFilePrint);
 
-		bVamsas = (JButton)getButton(false, null, "gui20", Icons.VAMSASOFF, WinMainMenuBar.aVamsas);
+		bVamsas = (JButton)getButton(false, null, "gui20", Icons.VAMSASOFF, WinMainMenuBar.aVamsasButton);
 		
 		bHelpDisplay = (JButton) getButton(false, null, "gui14", Icons.HELP16,
 				null);

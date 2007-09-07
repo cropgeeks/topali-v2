@@ -285,8 +285,9 @@ public class GraphPanel extends JPanel implements Printable
 	protected void actionAddSelectedRegion(Class type)
 	{
 		WinMain.rDialog.addCurrentRegion(type);
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 	
 	protected void actionShowToolTipDialog()
@@ -297,8 +298,9 @@ public class GraphPanel extends JPanel implements Printable
 		aResult.useTreeToolTips = dialog.isOptionChecked();
 		aResult.treeToolTipWindow = dialog.getWindowSize();
 
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 	
 	protected void actionSaveGraph()

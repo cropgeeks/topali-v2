@@ -95,7 +95,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	public static AbstractAction aVamSelectSession, aVamCommit; //aVamImport, aVamExport;
 
-	public static AbstractAction aVamsas;
+	public static AbstractAction aVamsasButton;
 	
 	public static AbstractAction aHelpContents, aHelpLicense, aHelpAbout,
 			aHelpUpdate, aHelpTestMethod;
@@ -526,12 +526,11 @@ public class WinMainMenuBar extends JMenuBar
 				winMain.menuVamsasCommit();
 			}
 		};
-		aVamCommit.setEnabled(false);
 
-		aVamsas = new AbstractAction("VAMSAS") {
+		aVamsasButton = new AbstractAction("VAMSAS") {
 			public void actionPerformed(ActionEvent e)
 			{
-				if(winMain.vamsas==null) {
+				if(!ProjectState.isVamsasSession()) {
 					winMain.menuVamsasSelectSession();
 				}
 				else {
