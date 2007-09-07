@@ -15,7 +15,7 @@ import topali.analyses.MakeNA;
 import topali.data.*;
 import topali.data.Sequence;
 import topali.fileio.AlignmentLoadException;
-import topali.gui.Project;
+import topali.gui.*;
 import uk.ac.vamsas.client.IClientDocument;
 import uk.ac.vamsas.objects.core.*;
 import uk.ac.vamsas.objects.core.Map;
@@ -71,8 +71,10 @@ public class VamsasDocumentHandler
 								"Found DNA with a corresponding protein alignment. Create a protein guided DNA alignment?",
 								"Guided alignment", JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE);
-				if (option == JOptionPane.YES_OPTION)
+				if (option == JOptionPane.YES_OPTION) {
 					project.addDataSet(cdnas);
+					ProjectState.setDataChanged();
+				}
 			}
 		cdnaDatasets.clear();
 	}
