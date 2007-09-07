@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui.dialog;
+package topali.gui.dialog.jobs.tree;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -31,11 +31,11 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private JTabbedPane tabs;
 
-	private BasicTreePanel basicPanel;
+	private TreeDialogPanel basicPanel;
 
-	private MrBayesSettingsPanel bayesPanel;
+	private AdvancedMrBayes bayesPanel;
 
-	private PhymlSettingsPanel phymlPanel;
+	private AdvancedPhyML phymlPanel;
 
 	MBTreeResult mbResult = new MBTreeResult();
 
@@ -61,14 +61,38 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		setVisible(true);
 	}
 
+	public void switchMethod() {
+		if(tabs==null)
+			return;
+
+		if(Prefs.gui_tree_method==0) {
+			tabs.setEnabledAt(1, false);
+		}
+		else if(Prefs.gui_tree_method==1) {
+			tabs.remove(1);
+			tabs.add(phymlPanel, "Advanced");
+			tabs.setEnabledAt(1, true);
+		}
+		else if(Prefs.gui_tree_method==2) {
+			tabs.remove(1);
+			tabs.add(bayesPanel, "Advanced");
+			tabs.setEnabledAt(1, true);
+		}
+		else if(Prefs.gui_tree_method==3) {
+			tabs.setEnabledAt(1, false);
+		}
+		validate();
+		repaint();
+	}
+	
 	private JComponent createControls()
 	{
-		basicPanel = new BasicTreePanel();
+		basicPanel = new TreeDialogPanel(this, ss);
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		bayesPanel = new MrBayesSettingsPanel(data.getSequenceSet(), mbResult);
+		bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), mbResult);
 
-		phymlPanel = new PhymlSettingsPanel(data.getSequenceSet(), phymlResult);
+		phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
 
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
@@ -105,8 +129,6 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private void onOK(boolean makeRemote)
 	{
-		basicPanel.onOK();
-
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else if(Prefs.gui_tree_method == 1) {
@@ -231,119 +253,5 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 					.getSelectedSequenceSafeNames();
 
 		tr.isCDNA = Prefs.gui_tree_method == 3;
-	}
-
-	class BasicTreePanel extends JPanel implements ChangeListener
-	{
-		private JRadioButton rMethod0, rMethod1, rMethod2, rMethod3, rSelectAll, rSelectCurrent;
-
-		BasicTreePanel()
-		{
-
-			String text = (ss.getParams().isDNA()) ? "F84+Gamma" : "WAG+Gamma";
-
-			rMethod0 = new JRadioButton(
-					text+"/neighbor joining",
-					Prefs.gui_tree_method == 0);
-			rMethod0.setToolTipText("Fast, approximate method with fixed ts/tv and alpha parameters");
-			rMethod0.addChangeListener(this);
-			rMethod0.setMnemonic(KeyEvent.VK_F);
-			rMethod1 = new JRadioButton("Maximum Likelihood (using PhyML)", Prefs.gui_tree_method == 1);
-			rMethod1.setToolTipText("Medium, accurate method");
-			rMethod1.addChangeListener(this);
-			rMethod1.setMnemonic(KeyEvent.VK_M);
-			rMethod2 = new JRadioButton(
-					"Bayesian phylogenetic analysis (using MrBayes)",
-					Prefs.gui_tree_method == 2);
-			rMethod2.setToolTipText("Slow, sophisticated method");
-			rMethod2.addChangeListener(this);
-			rMethod2.setMnemonic(KeyEvent.VK_B);
-			rMethod3 = new JRadioButton("cDNA Bayesian phylogenetic analysis (using MrBayes)", Prefs.gui_tree_method==3);
-			rMethod3.setToolTipText("Slow, sophisticated method");
-			rMethod3.addChangeListener(this);
-			rMethod3.setMnemonic(KeyEvent.VK_C);
-
-			ButtonGroup g1 = new ButtonGroup();
-			g1.add(rMethod0);
-			g1.add(rMethod1);
-			g1.add(rMethod2);
-			g1.add(rMethod3);
-
-			if(!ss.isDNA()) {
-				if(rMethod3.isSelected())
-					rMethod0.setSelected(true);
-				rMethod3.setEnabled(false);
-			}
-
-			rSelectAll = new JRadioButton("Use all sequences in the alignment",
-					Prefs.gui_tree_useall);
-			rSelectAll.setMnemonic(KeyEvent.VK_A);
-			rSelectCurrent = new JRadioButton(
-					"Use currently selected sequences only",
-					!Prefs.gui_tree_useall);
-			rSelectCurrent.setMnemonic(KeyEvent.VK_C);
-			ButtonGroup g2 = new ButtonGroup();
-			g2.add(rSelectAll);
-			g2.add(rSelectCurrent);
-
-			JPanel p1 = new JPanel(new GridLayout(4, 1, 5, 0));
-			p1.setBorder(BorderFactory
-					.createTitledBorder("Tree creation method:"));
-			p1.add(rMethod0);
-			p1.add(rMethod1);
-			p1.add(rMethod2);
-			p1.add(rMethod3);
-
-			JPanel p2 = new JPanel(new GridLayout(2, 1, 5, 0));
-			p2.setBorder(BorderFactory
-					.createTitledBorder("Sequence selection:"));
-			p2.add(rSelectAll);
-			p2.add(rSelectCurrent);
-
-			setLayout(new GridLayout(2, 1, 5, 5));
-			add(p1);
-			add(p2);
-		}
-
-		void onOK()
-		{
-			if (rMethod0.isSelected())
-				Prefs.gui_tree_method = 0;
-			if(rMethod1.isSelected())
-				Prefs.gui_tree_method = 1;
-			if (rMethod2.isSelected())
-				Prefs.gui_tree_method = 2;
-			if(rMethod3.isSelected())
-				Prefs.gui_tree_method = 3;
-
-			Prefs.gui_tree_useall = rSelectAll.isSelected();
-		}
-
-		public void stateChanged(ChangeEvent e)
-		{
-			if(tabs==null)
-				return;
-
-			if(rMethod0.isSelected()) {
-				tabs.setEnabledAt(1, false);
-			}
-			else if(rMethod1.isSelected()) {
-				tabs.remove(1);
-				tabs.add(phymlPanel, "Advanced");
-				tabs.setEnabledAt(1, true);
-			}
-			else if(rMethod2.isSelected()) {
-				tabs.remove(1);
-				tabs.add(bayesPanel, "Advanced");
-				tabs.setEnabledAt(1, true);
-			}
-			else if(rMethod3.isSelected()) {
-				tabs.setEnabledAt(1, false);
-			}
-			validate();
-			repaint();
-		}
-
-
 	}
 }

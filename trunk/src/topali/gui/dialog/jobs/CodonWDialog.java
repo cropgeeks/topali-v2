@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui.dialog;
+package topali.gui.dialog.jobs;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;

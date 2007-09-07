@@ -82,8 +82,9 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 			menubar.setProjectOpenedState();
 			menubar.updateRecentFileList(project);
 			WinMain.navPanel.displayProject(project);
-			WinMainMenuBar.aFileSave.setEnabled(false);
-			WinMainMenuBar.aVamCommit.setEnabled(true);
+			//WinMainMenuBar.aFileSave.setEnabled(true);
+			//WinMainMenuBar.aVamCommit.setEnabled(true);
+			ProjectState.setDataChanged();
 		}
 
 		setVisible(false);

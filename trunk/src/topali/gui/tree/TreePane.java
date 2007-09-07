@@ -145,8 +145,9 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 			return;
 
 		data.removeResult(frame.tree);
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 
 		checkStatus();
 	}

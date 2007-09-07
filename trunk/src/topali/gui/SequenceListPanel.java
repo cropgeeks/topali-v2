@@ -109,8 +109,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			sp.getViewport().setViewPosition(p);
 		}
 
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 
 	void moveSequences(boolean up, boolean top)
@@ -265,8 +266,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		if (Prefs.gui_preview_current)
 			WinMain.rDialog.updateTreePreview(false);
 
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 
 	

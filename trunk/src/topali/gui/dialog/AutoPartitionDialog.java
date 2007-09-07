@@ -176,8 +176,9 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 	private void cleanup()
 	{
 		WinMain.rDialog.refreshList();
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 
 		PartitionAnnotations anno = (PartitionAnnotations) data
 				.getTopaliAnnotations().getAnnotations(

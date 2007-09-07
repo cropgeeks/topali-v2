@@ -9,7 +9,7 @@
 - Bug: Annotations dialog combo box no longer works
 - GUI: Tidy up layout of Annotations dialog
 - Bug: Dundee cluster filesystem timeout problems
-- GUI: Estimate Tree dialog layouts need sorting
+* GUI: Estimate Tree dialog layouts need sorting
 - Future: Estimate Tree dialog needs defaults button
 - Future: Resumbittion of tree job
 * GUI: Jobs tracking progress bar for non-tracking jobs is too large

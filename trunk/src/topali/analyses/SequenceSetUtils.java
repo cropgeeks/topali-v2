@@ -149,8 +149,9 @@ public class SequenceSetUtils
 		params.setNeedCalculation(false);
 		
 		ss.setParams(params);
-		WinMainMenuBar.aFileSave.setEnabled(true);
-		WinMainMenuBar.aVamCommit.setEnabled(true);
+		//WinMainMenuBar.aFileSave.setEnabled(true);
+		//WinMainMenuBar.aVamCommit.setEnabled(true);
+		ProjectState.setDataChanged();
 	}
 
 	/*

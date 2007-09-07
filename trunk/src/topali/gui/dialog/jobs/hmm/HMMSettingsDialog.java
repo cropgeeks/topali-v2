@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui.dialog.hmm;
+package topali.gui.dialog.jobs.hmm;
 
 import java.awt.*;
 import java.awt.event.*;

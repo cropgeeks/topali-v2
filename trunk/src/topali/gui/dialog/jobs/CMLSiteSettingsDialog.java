@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui.dialog;
+package topali.gui.dialog.jobs;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,6 +13,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
+import topali.gui.dialog.OmegaEstDialog;
 import topali.var.Utils;
 
 public class CMLSiteSettingsDialog extends JDialog implements MouseListener
