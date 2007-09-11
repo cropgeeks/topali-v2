@@ -18,21 +18,52 @@ import topali.gui.WinMain;
  */
 public class CMLSitePanel extends javax.swing.JPanel {
     
+    CMLSiteDialog parent;
     CodeMLResult res;
     
     CMLModel mod0, mod1a, mod2a, mod3, mod7, mod8;
-    Vector<CMLModel> models = new Vector<CMLModel>();
     
     /** Creates new form CMLSitePanel */
-    public CMLSitePanel(CodeMLResult res) {
-        this.res = res;
+    public CMLSitePanel(CodeMLResult res, CMLSiteDialog parent) {
+        this.res = (res==null) ? new CodeMLResult(CodeMLResult.TYPE_SITEMODEL) : res;
+        this.parent = parent;
         
         initComponents();
         
-        initModels();
+        setDefaults();
 			
-	if(res!=null)
-		initPreviousResult(res);
+        if(res!=null)
+        	initPreviousResult(res);
+    }
+    
+    public void setDefaults() {
+    	mod0 = new CMLModel(CMLModel.MODEL_M0);
+		mod1a = new CMLModel(CMLModel.MODEL_M1a);
+		mod2a = new CMLModel(CMLModel.MODEL_M2a);
+		mod3 = new CMLModel(CMLModel.MODEL_M3);
+		mod7 = new CMLModel(CMLModel.MODEL_M7);
+		mod8 = new CMLModel(CMLModel.MODEL_M8);
+		
+		m1a.setSelected(true);
+		m2a.setSelected(true);
+    }
+    
+    public CodeMLResult getResult() {
+ 
+    	if(m0.isSelected())
+    		res.models.addAll(mod0.generateModels());
+    	if(m1a.isSelected())
+    		res.models.addAll(mod1a.generateModels());
+    	if(m2a.isSelected())
+    		res.models.addAll(mod2a.generateModels());
+    	if(m3.isSelected())
+    		res.models.addAll(mod3.generateModels());
+    	if(m7.isSelected())
+    		res.models.addAll(mod7.generateModels());
+    	if(m8.isSelected())
+    		res.models.addAll(mod8.generateModels());
+    	
+    	return res;
     }
     
     private void initPreviousResult(CodeMLResult res) {
@@ -70,15 +101,6 @@ public class CMLSitePanel extends javax.swing.JPanel {
 			}
 		}
 	}
-	
-	private void initModels() {
-		mod0 = new CMLModel(CMLModel.MODEL_M0);
-		mod1a = new CMLModel(CMLModel.MODEL_M1a);
-		mod2a = new CMLModel(CMLModel.MODEL_M2a);
-		mod3 = new CMLModel(CMLModel.MODEL_M3);
-		mod7 = new CMLModel(CMLModel.MODEL_M7);
-		mod8 = new CMLModel(CMLModel.MODEL_M8);
-	}
         
     /** This method is called from within the constructor to
      * initialize the form.
@@ -106,26 +128,56 @@ public class CMLSitePanel extends javax.swing.JPanel {
         m0.setText("M0 (One Ratio)");
         m0.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m0.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m0.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m0StateChanged(evt);
+            }
+        });
 
         m1a.setText("M1a (Nearly Neutral)");
         m1a.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m1a.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m1a.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m1aStateChanged(evt);
+            }
+        });
 
         m2a.setText("M2a (Positive Selection)");
         m2a.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m2a.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m2a.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m2aStateChanged(evt);
+            }
+        });
 
         m3.setText("M3 (Discrete, 3 Categories)");
         m3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m3.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m3StateChanged(evt);
+            }
+        });
 
         m7.setText("M7 (Beta, 10 Categories)");
         m7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m7.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m7.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m7StateChanged(evt);
+            }
+        });
 
         m8.setText("M8 (Beta & w>1, 11 Categories)");
         m8.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m8.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        m8.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                m8StateChanged(evt);
+            }
+        });
 
         m7set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
         m7set.addActionListener(new java.awt.event.ActionListener() {
@@ -229,51 +281,86 @@ public class CMLSitePanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void m8StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m8StateChanged
+        checkSelected();
+    }//GEN-LAST:event_m8StateChanged
+
+    private void m7StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m7StateChanged
+        checkSelected();
+    }//GEN-LAST:event_m7StateChanged
+
+    private void m3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m3StateChanged
+        checkSelected();
+    }//GEN-LAST:event_m3StateChanged
+
+    private void m2aStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m2aStateChanged
+        checkSelected();
+    }//GEN-LAST:event_m2aStateChanged
+
+    private void m1aStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m1aStateChanged
+        checkSelected();
+    }//GEN-LAST:event_m1aStateChanged
+
+    private void m0StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m0StateChanged
+        checkSelected();
+    }//GEN-LAST:event_m0StateChanged
+
+    private void checkSelected() {
+    	if(parent.bRun!=null)
+    		parent.bRun.setEnabled(m0.isSelected() || m1a.isSelected() || m2a.isSelected() || m3.isSelected() || m7.isSelected() || m8.isSelected());
+    }
+    
     private void m8setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m8setActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod8);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod8 = dlg.getModel();
     }//GEN-LAST:event_m8setActionPerformed
 
     private void m7setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m7setActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod7);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod7 = dlg.getModel();
     }//GEN-LAST:event_m7setActionPerformed
 
     private void m3setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m3setActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod3);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod3 = dlg.getModel();
     }//GEN-LAST:event_m3setActionPerformed
 
     private void m2asetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m2asetActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod2a);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod2a = dlg.getModel();
     }//GEN-LAST:event_m2asetActionPerformed
 
     private void m1asetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m1asetActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod1a);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod1a = dlg.getModel();
     }//GEN-LAST:event_m1asetActionPerformed
 
     private void m0setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m0setActionPerformed
         OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod0);
+        dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod0 = dlg.getModel();
     }//GEN-LAST:event_m0setActionPerformed

@@ -10,6 +10,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+import topali.cluster.jobs.modelgenerator.ModelGeneratorProcess;
 import topali.gui.Icons;
 
 class NavPanelRenderer extends JLabel implements TreeCellRenderer
@@ -60,7 +61,13 @@ class NavPanelRenderer extends JLabel implements TreeCellRenderer
 		
 		else if (obj instanceof CodeMLResultsNode)
 			setIcon(Icons.CODEML);
-
+		
+		else if(obj instanceof CodonWResultsNode)
+			setIcon(Icons.APPLICATION);
+		
+		else if(obj instanceof MGResultsNode)
+			setIcon(Icons.APPLICATION);
+		
 		else if (leaf)
 			setIcon(new DefaultTreeCellRenderer().getLeafIcon());
 

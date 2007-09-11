@@ -101,6 +101,9 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="valuesValueChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -115,7 +118,11 @@
         <Component class="javax.swing.JButton" name="remove">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

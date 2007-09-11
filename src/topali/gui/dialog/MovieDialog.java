@@ -315,7 +315,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 		SimpleAlignment alignment = ss.getAlignment(indices, start, end, false);
 		TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 		
-		tree = tc.getTree(false);
+		tree = tc.getTree(true, false);
 		// tree = tc.createTree(TreeCreator.JC_NJ);
 
 		if (tree != null)

@@ -1,36 +1,23 @@
 Current state of affairs
 -----------------------
 
-VAMSAS today:
-- Work on tree saving to vamdoc
-- Track problems/bugs to talk about tomorrow with Jim (e. g. saving project to appdata)
-- Fix the ancestral sequence bug (duplicated ds sequences)
-
 TODO:
-- Rewrite VAMSAS interface
-- Try to write complete topali project to vamsas document 
-- Check svn!
-
 
 Last modifications:
-- Fixed a bug in nexus file writer (which produced a corrupt file, when selecting partitions of size n%50==0)
-- Worked on vamsas stuff reimplementation (still in progress)
+- fixed vamsas mouseover bug
+- fixed vamsas "writing non-finished result to vamsas" bug
+- cleaned up branch model dialog layout
+- fixed Project.merge() method
+- added Button to hide non-supported models from the modelgenerator table
+- tided up partitions dialog
+- fixed "atv still running after closing dialog" bug
+- added "atv starting up" message
 
 Current problems:
+- codeml doesn't work anymore
 
 Some ideas:
-- What's about the third import alignment option (clustal)? (not important at the moment)
-- Just one settings dialog for all settings?
-- Not just limit max. alignment size, also limit number of active jobs per user? (not an easy task)
-- Would it be helpfull to launch an external application from a tree panel (ATV, TreeView, etc.)? ((not important at the moment)
-- Import alignment from URL (not important at the moment)
-- Spread Phyml job over several nodes (bootstrapping)? (not important at the moment)
 
-VAMSAS TODO:
-------------
-- Store complete topali project to ApplicationData area in the VAMSAS document (don't store everything as annotation)
-- Deal with vamsas sessions (saving/loading/creating new session)
-  
 
 
 Some URLs

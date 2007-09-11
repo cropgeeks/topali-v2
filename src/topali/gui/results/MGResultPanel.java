@@ -5,23 +5,30 @@
 
 package topali.gui.results;
 
+import java.awt.event.*;
 import java.awt.print.Printable;
 import java.util.*;
 
-import javax.swing.table.TableRowSorter;
+import javax.swing.JToggleButton;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 
 @SuppressWarnings("unchecked")
 public class MGResultPanel extends ResultPanel
 {
-
 	TablePanel tp;
+	
+	JToggleButton filter;
+	String tooltip1 = "Show all models";
+	String tooltip2 = "Show only models, which are currently supported by TOPALi";
 	
 	public MGResultPanel(AlignmentData data, MGResult result) {
 		super(data, result);
 		tp = getTablePanel(result);
+		updateTable(false);
 		
 		TableRowSorter sorter = new TableRowSorter(tp.accessTable().getModel());
 		for(int i=0; i<tp.accessTable().getColumnCount(); i++)
@@ -29,9 +36,23 @@ public class MGResultPanel extends ResultPanel
 		tp.accessTable().setRowSorter(sorter);
 		
 		addContent(tp, false);
+		
+		filter = new JToggleButton();
+		filter.setIcon(Icons.VISIBLE);
+		filter.setToolTipText(tooltip1);
+		filter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				updateTable(filter.isSelected());
+				String tt = filter.isSelected() ? tooltip2 : tooltip1;
+				filter.setToolTipText(tt);
+			}
+		});
+		super.toolbar.add(filter);
 	}
 	
-	public TablePanel getTablePanel(MGResult result) {
+	public TablePanel getTablePanel(MGResult result) {		
 		Vector<Object> colNames = new Vector<Object>();
 		colNames.add("Name");
 		colNames.add("ln(L)");
@@ -40,20 +61,54 @@ public class MGResultPanel extends ResultPanel
 		colNames.add("BIC");
 		
 		Vector<Object> rowData = new Vector<Object>(result.models.size());
+
+		TablePanel tp = new TablePanel(rowData, colNames, TablePanel.RIGHT);
+		return tp;
+	}
+	
+	private void updateTable(boolean showAll) {
+		HashSet<String> suppModels = new HashSet<String>();
+		//dna
+		suppModels.add("JC");
+		suppModels.add("K80");
+		suppModels.add("F81");
+		suppModels.add("HKY");
+		suppModels.add("GTR");
+		//protein
+		suppModels.add("MtMam");
+		suppModels.add("MTRev");
+		suppModels.add("RTRev");
+		suppModels.add("VT");
+		suppModels.add("CPRev");
+		suppModels.add("Blosum");
+		suppModels.add("JTT");
+		suppModels.add("DAY");
+		suppModels.add("WAG");
+		
+		DefaultTableModel mod = (DefaultTableModel)tp.accessTable().getModel();
+		while(mod.getRowCount()>0)
+			mod.removeRow(0);
+		
+		MGResult result = (MGResult)super.result;
 		for(SubstitutionModel m : result.models) {
 			Vector<Object> row = new Vector<Object>();
 			String name = m.getName();
+			
+			if(!showAll) {
+				String[] tmp = name.split("\\+");
+				if(!suppModels.contains(tmp[0]))
+					continue;
+			}
+			
 			row.add(name);
 			row.add(Prefs.d2.format(m.getLnl()));
 			row.add(Prefs.d2.format(m.getAic1()));
 			row.add(Prefs.d2.format(m.getAic2()));
 			row.add(Prefs.d2.format(m.getBic()));
-			rowData.add(row);
+			mod.addRow(row);
 		}
-		
-		TablePanel tp = new TablePanel(rowData, colNames, TablePanel.RIGHT);
-		return tp;
 	}
+	
 	@Override
 	public String getAnalysisInfo()
 	{
@@ -82,7 +137,7 @@ public class MGResultPanel extends ResultPanel
 			{
 				double d1 = Double.parseDouble(o1.toString());
 				double d2 = Double.parseDouble(o2.toString());
-				res = (d1>d2) ? -1 : 1;
+				res = (d1>d2) ? 1 : -1;
 			} catch (NumberFormatException e)
 			{
 				res = o1.toString().compareTo(o2.toString());

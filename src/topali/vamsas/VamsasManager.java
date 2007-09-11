@@ -77,6 +77,8 @@ public class VamsasManager
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
+		
+		msgHandler = new VamsasMsgHandler(pickManager, this.project.getVamsasMapper());
 	}
 	
 	private void initVamsas(String session) throws Exception {

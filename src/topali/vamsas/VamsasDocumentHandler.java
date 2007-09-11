@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import topali.analyses.MakeNA;
+import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.data.Sequence;
 import topali.fileio.AlignmentLoadException;
@@ -333,6 +334,9 @@ public class VamsasDocumentHandler
 	private void writeResult(AnalysisResult res)
 	{
 
+		if(res.status!=JobStatus.COMPLETED)
+			return;
+		
 		Object tmp = map.getVamsasObject(res);
 		if (tmp == null)
 		{

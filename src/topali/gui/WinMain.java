@@ -24,6 +24,7 @@ import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.jobs.*;
+import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
@@ -531,7 +532,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
 
-		CMLSiteSettingsDialog dlg = new CMLSiteSettingsDialog(this, data,
+		CMLSiteDialog dlg = new CMLSiteDialog(this, data,
 				result);
 		dlg.setVisible(true);
 	}
@@ -543,8 +544,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
 
-		CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,
-				result);
+		//CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,result);
+		CMLBranchDialog dlg = new CMLBranchDialog(this, data,result);
 		dlg.setVisible(true);
 	}
 
@@ -640,7 +641,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			// TreeCreator creator = new TreeCreator(dialog.getAlignment());
 			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data
 					.getSequenceSet().getParams().isDNA());
-			Tree palTree = creator.getTree(true);
+			Tree palTree = creator.getTree(true, true);
 
 			if (palTree != null)
 			{
@@ -817,8 +818,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			
 			ProjectState.setVamsasSession(true);
 			
-			vEvents = new VamsasEvents(this, project.getVamsasMapper());
-
+			//vEvents = new VamsasEvents(this, project.getVamsasMapper());
+			vEvents = new VamsasEvents(this);
+			
 			toolbar.vamsasEnabled(true);
 
 		} catch (Exception e)

@@ -50,7 +50,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	private JButton bHelp, bClose;
 
-	private JComboBox annoType;
+	//private JComboBox annoType;
 
 	public RegionDialog()
 	{
@@ -77,7 +77,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 		if (data != null)
 		{
 			setTitle("Current Regions - " + data.name);
-			annoType.setSelectedItem(supportedAnnotations[0]);
+			//annoType.setSelectedItem(supportedAnnotations[0]);
 			annotations = (RegionAnnotations) data.getTopaliAnnotations()
 					.getAnnotations(supportedAnnotations[0]);
 		} else
@@ -111,7 +111,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 		// Add it
 		String selection = getAnnotationLabel(type);
-		annoType.setSelectedItem(selection);
+		//annoType.setSelectedItem(selection);
 		refreshList();
 
 		int position = annotations.addRegion(r);
@@ -341,8 +341,8 @@ public class RegionDialog extends JDialog implements ActionListener,
 		String[] annoLabels = new String[supportedAnnotations.length];
 		for (int i = 0; i < supportedAnnotations.length; i++)
 			annoLabels[i] = getAnnotationLabel(supportedAnnotations[i]);
-		annoType = new JComboBox(annoLabels);
-		annoType.addItemListener(this);
+		//annoType = new JComboBox(annoLabels);
+		//annoType.addItemListener(this);
 
 		JPanel p1 = new JPanel(new GridLayout(12, 1, 5, 5));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -351,12 +351,12 @@ public class RegionDialog extends JDialog implements ActionListener,
 		p1.add(bPartition);
 		p1.add(bRemove);
 		p1.add(bRemoveAll);
-		p1.add(new JLabel());
+		//p1.add(new JLabel());
 		p1.add(bExport);
 		p1.add(bTree);
 		// Blank spaces
-		p1.add(new JLabel());
-		p1.add(new JLabel());
+		//p1.add(new JLabel());
+		//p1.add(new JLabel());
 		p1.add(bHelp);
 		p1.add(bClose);
 
@@ -379,14 +379,14 @@ public class RegionDialog extends JDialog implements ActionListener,
 				.createEmptyBorder(5, 5, 5, 5)));
 		p2a.add(sp, BorderLayout.CENTER);
 
-		JPanel cboxPanel = new JPanel();
-		cboxPanel.add(new JLabel("Show/Edit"));
-		cboxPanel.add(annoType);
-		cboxPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		//JPanel cboxPanel = new JPanel();
+		//cboxPanel.add(new JLabel("Show/Edit"));
+		//cboxPanel.add(annoType);
+		//cboxPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		JPanel p3 = new JPanel(new BorderLayout());
-		p3.add(p2a, BorderLayout.CENTER);
-		p3.add(cboxPanel, BorderLayout.NORTH);
+		//JPanel p3 = new JPanel(new BorderLayout());
+		//p3.add(p2a, BorderLayout.CENTER);
+		//p3.add(cboxPanel, BorderLayout.NORTH);
 
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		treePanel.setPreferredSize(new Dimension(300, 200));
@@ -399,7 +399,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 				.createEmptyBorder(0, 5, 5, 5)));
 
 		splitter.setDividerSize(5);
-		splitter.setTopComponent(p3);
+		splitter.setTopComponent(p2a);
 		splitter.setBottomComponent(p2);
 		if (Prefs.gui_pdialog_splitter == -1)
 			splitter.setDividerLocation(0.5);
@@ -499,15 +499,15 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	public void itemStateChanged(ItemEvent e)
 	{
-		String name = (String) annoType.getSelectedItem();
-		Class type = getAnnotationClass(name);
+		//String name = (String) annoType.getSelectedItem();
+		//Class type = getAnnotationClass(name);
 
-		AlignmentAnnotations tmp = alignData.getTopaliAnnotations()
-				.getAnnotations(type);
-		if (tmp != null)
-			annotations = (RegionAnnotations) tmp;
+		//AlignmentAnnotations tmp = alignData.getTopaliAnnotations()
+		//		.getAnnotations(type);
+		//if (tmp != null)
+		//	annotations = (RegionAnnotations) tmp;
 
-		refreshList();
+		//refreshList();
 	}
 
 	public static void main(String[] args)

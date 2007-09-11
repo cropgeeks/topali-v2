@@ -59,7 +59,7 @@ public class TreeToolTip extends JToolTip
 
 		TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 
-		Tree tree = tc.getTree(false);
+		Tree tree = tc.getTree(true, false);
 		if (tree != null)
 		{
 			painter = new TreePainterNormal(tree, "", false);

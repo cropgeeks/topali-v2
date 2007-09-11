@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import topali.data.CMLModel;
+import topali.var.Utils;
 
 /**
  *
@@ -27,6 +28,12 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.model = model;
         initComponents();
+        setDefaults();
+        
+        getRootPane().setDefaultButton(ok);
+		Utils.addCloseHandler(this, cancel);
+		
+		setLocationRelativeTo(parent);
     }
     
     public CMLModel getModel() {
@@ -61,6 +68,12 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+        values.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                valuesValueChanged(evt);
+            }
+        });
+
         jScrollPane1.setViewportView(values);
 
         add.setText("Add");
@@ -71,6 +84,12 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
         });
 
         remove.setText("Remove");
+        remove.setEnabled(false);
+        remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -137,13 +156,34 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+        int index = values.getSelectedIndex();
+        listmodel.remove(index);
+        if(listmodel.getSize()>0) {
+            if(index==listmodel.getSize())
+                index--;
+            values.setSelectedIndex(index);
+        }
+        else
+        	ok.setEnabled(false);
+        
+    }//GEN-LAST:event_removeActionPerformed
+
+    private void valuesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_valuesValueChanged
+        if(values.getSelectedIndex()>-1)
+            remove.setEnabled(true);
+        else
+            remove.setEnabled(false);
+    }//GEN-LAST:event_valuesValueChanged
+
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         JSpinner spin = new JSpinner(new SpinnerNumberModel(5.0d, 0.1d, 10.0d, 0.1d));
         int i = JOptionPane.showConfirmDialog(this, spin, "Enter new value", JOptionPane.OK_CANCEL_OPTION);
         if(i==JOptionPane.OK_OPTION) {
-            Double d = Double.parseDouble((String)spin.getValue());
+            Double d = (Double)spin.getValue();
             if(!listmodel.contains(d))
                 listmodel.addElement(d);
+            ok.setEnabled(true);
         }
     }//GEN-LAST:event_addActionPerformed
 
@@ -155,7 +195,7 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
         model.wStart = new Vector<Double>();
         for(int i=0; i<values.getModel().getSize(); i++) 
-            model.wStart.add(Double.parseDouble((String)values.getModel().getElementAt(i)));
+            model.wStart.add((Double)values.getModel().getElementAt(i));
         this.setVisible(false);
     }//GEN-LAST:event_okActionPerformed
     

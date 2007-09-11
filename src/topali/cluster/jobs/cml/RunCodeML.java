@@ -8,9 +8,9 @@ package topali.cluster.jobs.cml;
 import java.io.*;
 
 import pal.alignment.ReadAlignment;
-import pal.distance.JukesCantorDistanceMatrix;
-import pal.tree.*;
+import pal.tree.Tree;
 import sbrn.commons.file.FileUtils;
+import topali.analyses.TreeCreator;
 import topali.cluster.StreamCatcher;
 import topali.data.*;
 
@@ -75,8 +75,8 @@ class RunCodeML
 		String file = new File(wrkDir, "seq.phy").getPath();
 		ReadAlignment alignment = new ReadAlignment(file);
 
-		JukesCantorDistanceMatrix dm = new JukesCantorDistanceMatrix(alignment);
-		Tree tree = new NeighborJoiningTree(dm);
+		TreeCreator tc = new TreeCreator(alignment, true);
+		Tree tree = tc.getTree(false, false);
 
 		FileUtils.writeFile(new File(wrkDir, "tree.txt"), tree.toString());
 	}
