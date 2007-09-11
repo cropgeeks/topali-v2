@@ -34,9 +34,9 @@ public class ResultPanelToolbar extends JToolBar
 		
 		addStandardActions();
 		add(new JToolBar.Separator());
-		addGraphActions();
+		//addGraphActions();
 		
-		enableGraphButtons(false);
+		//enableGraphButtons(false);
 	}
 	
 	public void addStandardActions() {
@@ -129,10 +129,10 @@ public class ResultPanelToolbar extends JToolBar
 		add(bToolTips);
 	}
 
-	public void enableGraphButtons(boolean b) {
-		bThres.setEnabled(b);
-		bAddPart.setEnabled(b);
-		bAutoPart.setEnabled(b);
-		bToolTips.setEnabled(b);
-	}
+//	public void enableGraphButtons(boolean b) {
+//		bThres.setEnabled(b);
+//		bAddPart.setEnabled(b);
+//		bAutoPart.setEnabled(b);
+//		bToolTips.setEnabled(b);
+//	}
 }

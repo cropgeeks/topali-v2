@@ -5,8 +5,102 @@
 
 package topali.gui.dialog.jobs.cml;
 
-public class CMLSiteDialog
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+
+import topali.data.*;
+import topali.gui.*;
+import topali.var.Utils;
+
+public class CMLSiteDialog extends JDialog implements ActionListener
 {
 
+	WinMain winmain;
+	AlignmentData data;
+	CodeMLResult res;
+	
+	CMLSitePanel panel;
+	
+	public JButton bRun, bCancel, bDefault, bHelp;
+	
+	public CMLSiteDialog(WinMain winMain, AlignmentData data, CodeMLResult res) {
+		super(winMain, "Positive Selection - Site Models", false);
+		
+		this.winmain = winMain;
+		this.data = data;
+		this.res = res;
+		init();
+		
+		pack();
+		setLocationRelativeTo(winmain);
+		setResizable(false);
+	}
+	
+	private void init() {
+		panel = new CMLSitePanel(res, this);
+		
+		bRun = new JButton("Run");
+		bRun.addActionListener(this);
+		bCancel = new JButton(Text.Gui.getString("cancel"));
+		bCancel.addActionListener(this);
+		bDefault = new JButton(Text.Gui.getString("defaults"));
+		bDefault.addActionListener(this);
+		bHelp = TOPALiHelp.getHelpButton("codeml_site_help");
+		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
+		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		p1.add(bRun);
+		p1.add(bDefault);
+		p1.add(bCancel);
+		p1.add(bHelp);
+		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		p2.add(p1);
+
+		this.setLayout(new BorderLayout());
+		add(panel, BorderLayout.CENTER);
+		add(p2, BorderLayout.SOUTH);
+		
+		getRootPane().setDefaultButton(bRun);
+		Utils.addCloseHandler(this, bCancel);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == bCancel)
+			setVisible(false);
+
+		else if (e.getSource() == bRun)
+		{
+			setVisible(false);
+			
+			SequenceSet ss = data.getSequenceSet();
+
+			res = panel.getResult();
+
+			if (Prefs.isWindows)
+				res.codemlPath = Utils.getLocalPath() + "codeml.exe";
+			else
+				res.codemlPath = Utils.getLocalPath() + "codeml/codeml";
+
+			res.selectedSeqs = ss.getSelectedSequenceSafeNames();
+			res.isRemote = ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
+			
+			int runNum = data.getTracker().getCodeMLRunCount() + 1;
+			data.getTracker().setCodeMLRunCount(runNum);
+			res.guiName = "CodeML Result " + runNum;
+			res.jobName = "CodeML Analysis " + runNum + " on " + data.name
+					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
+					+ " sequences)";
+
+			winmain.submitJob(data, res);
+		}
+
+		else if (e.getSource() == bDefault) {
+			panel.setDefaults();
+		}
+	}
+	
 	
 }

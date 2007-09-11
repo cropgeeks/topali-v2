@@ -53,8 +53,11 @@ public abstract class ResultPanel extends JPanel
 	 */
 	public void addContent(JComponent comp, boolean containGraphs) {
 		this.contentPanel.add(comp, BorderLayout.CENTER);
-		if(toolbar!=null)
-			toolbar.enableGraphButtons(containGraphs);
+		if(toolbar!=null) {
+			if(containGraphs)
+				toolbar.addGraphActions();
+			//toolbar.enableGraphButtons(containGraphs);
+		}
 	}
 	
 	/**

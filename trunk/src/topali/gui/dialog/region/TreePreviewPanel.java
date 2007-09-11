@@ -116,7 +116,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 						end, false);
 				TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
 				
-				tree = tc.getTree(false);
+				tree = tc.getTree(true, false);
 				long e = System.currentTimeMillis();
 				log.info("Tree creation " + (e - s) + "ms");
 

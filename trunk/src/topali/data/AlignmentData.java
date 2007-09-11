@@ -240,5 +240,37 @@ public class AlignmentData extends DataObject implements Serializable
 		return true;
 	}
 	
-	
+	public void merge(AlignmentData data) {
+		
+		//merge sequences
+		for(Sequence seq : data.getSequenceSet().getSequences()) {
+			if(sequenceSet.getSequences().contains(seq)) {
+				Sequence match = null;
+				for(Sequence tmp : sequenceSet.getSequences()) {
+					if(tmp.equals(seq)) {
+						match = tmp;
+						break;
+					}
+				}
+				match.setName(seq.getName());
+				match.setSequence(seq.getSequence());
+			}
+			else
+			{
+				sequenceSet.addSequence(seq);
+			}
+		}
+		
+		//merge results
+		for(AnalysisResult res : data.getResults()){
+			if(results.contains(res)) {
+				//TODO: match names
+			}
+			else {
+				addResult(res);
+			}
+		}
+		
+		//TODO: merge annotations
+	}
 }

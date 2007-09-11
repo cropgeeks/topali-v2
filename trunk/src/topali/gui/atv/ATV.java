@@ -10,7 +10,7 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
 import org.forester.atv.ATVapplicationFrame;
@@ -71,6 +71,9 @@ public class ATV extends Thread
 	@Override
 	public void run()
 	{		
+		final LaunchDialog dlg = new LaunchDialog();
+		dlg.setVisible(true);
+		
 		URL url;
 		if(showBranchLengths) 
 			url =ATV.class.getResource("/res/ATVConfig-branchlengths.conf");
@@ -97,6 +100,8 @@ public class ATV extends Thread
 		
 		atvframe.showFrame();
 		
+		dlg.setVisible(false);
+		
 		if(parent!=null)
 			parent.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
@@ -111,10 +116,27 @@ public class ATV extends Thread
 		return phyl.toNewHampshire(false);
 	}
 
+	public void close() {
+		atvframe.dispose();
+	}
+	
 	public static void main(String[] args)
 	{
 		String tree = "(U68496:0.0027390,U68497:0.0275900,((U68498:0.0315980,(U68501:0.0709420,((U68502:0.0777510,(U68503:0.0440620,U68508:0.1610830):0.0208750):0.0005290,(((U68504:0.0007310,U68506:0.0168530):0.0501390,U68507:0.0000000):0.0014570,U68505:0.0148880):0.0415900):0.0195660):0.0208720):0.0160180,(U68499:0.0152300,U68500:0.0463450):0.0349010):0.0578500);";
 		ATV atv = new ATV(tree, "TOPALi Test", null, null);
 		atv.run();
+	}
+	
+	class LaunchDialog extends JDialog {
+		public LaunchDialog() {
+			this.setTitle("Wait...");
+			this.setModal(false);
+			JPanel p = new JPanel();
+			p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			p.add(new JLabel("Launching ATV, please wait..."));
+			this.getContentPane().add(p);
+			pack();
+			setLocationRelativeTo(null);
+		}	
 	}
 }

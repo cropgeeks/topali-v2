@@ -67,6 +67,8 @@ public class Project extends DataObject
 	
 	public void addAllDataSets(List<AlignmentData> datasets) {
 		for(AlignmentData data : datasets) {
+			if(this.datasets.contains(data))
+				continue;
 			this.datasets.add(data);
 			for(PropertyChangeListener l : changeListeners) {
 				l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
@@ -276,7 +278,29 @@ public class Project extends DataObject
 	}
 	
 	public void merge(Project proj) {
-		addAllDataSets(proj.getDatasets());
+		
+		for(AlignmentData data : proj.getDatasets()) {
+			if(datasets.contains(data)) {
+				AlignmentData match = null;
+				for(AlignmentData tmp : datasets) {
+					if(tmp.equals(data)) {
+						match = tmp;
+						break;
+					}
+				}
+				match.merge(data);
+				
+			}
+			else {
+				for(PropertyChangeListener l : changeListeners) {
+					l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
+					//propagate listeners to alignment datasets
+					data.addChangeListener(l);
+				}
+				datasets.add(data);
+			}
+		}
+
 		if(proj.getVamsasMapper()!=null)
 			this.vamsasMapper = proj.getVamsasMapper();
 	}

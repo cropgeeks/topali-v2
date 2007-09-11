@@ -6,8 +6,8 @@
 
 - Implement/decide on analysis restrictions for remote jobs
 
-- Bug: Annotations dialog combo box no longer works
-- GUI: Tidy up layout of Annotations dialog
+* Bug: Annotations dialog combo box no longer works
+* GUI: Tidy up layout of Annotations dialog
 - Bug: Dundee cluster filesystem timeout problems
 * GUI: Estimate Tree dialog layouts need sorting
 - Future: Estimate Tree dialog needs defaults button
@@ -16,12 +16,12 @@
 - Future: Decide on mouse highlighting functionality
 - Future: Decide on how to handle local job submission
 - GUI: Icons for job results in the left-hand navigation panel
-- GUI: Model generator output - toggle between TOPALi-compatible results and all results (toolbar button)
-- GUI: Site model analysis dialog tidy up
-- BUG: FRANK: m1, m2 etc are doing the wrong analysis
-- GUI: Branch model dialog needs a "ATV Launching..." dialog while waiting
-- GUI: Close ATV if it's still running and the TOPALi dialog has been closed/cancelled.
-
+* GUI: Model generator output - toggle between TOPALi-compatible results and all results (toolbar button)
+* GUI: Site model analysis dialog tidy up
+* BUG: FRANK: m1, m2 etc are doing the wrong analysis
+* GUI: Branch model dialog needs a "ATV Launching..." dialog while waiting
+* GUI: Close ATV if it's still running and the TOPALi dialog has been closed/cancelled.
+* GUI: Show graph related toolbar buttons only if there is a graph (concerns: ResultPanels)
 
 
 New Features since last public release:
