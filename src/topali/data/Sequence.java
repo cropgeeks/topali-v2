@@ -147,6 +147,19 @@ public class Sequence extends DataObject implements Serializable
 		return equalSeq && equalName;
 	}
 
+	public boolean containsStopCodons() {
+		for(int i=0; i<sequence.length(); i+=3) {
+			String tmp = sequence.substring(i, (i+3)).toLowerCase();
+			if(tmp.equals("taa") || tmp.equals("tga") || tmp.equals("tag"))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isCodons() {
+		return (sequence.length()%3)==0;
+	}
+	
 	@Override
 	public int hashCode()
 	{

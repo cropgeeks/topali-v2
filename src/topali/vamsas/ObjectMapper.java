@@ -15,11 +15,11 @@ public class ObjectMapper implements Serializable
 	transient static Logger log = Logger.getLogger(ObjectMapper.class);
 	
 	// Resolves vamsas IDs to TOPALi data objects
-	//private IdentityHashMap<VorbaId, Object> hashVT = new IdentityHashMap<VorbaId, Object>();
+	//public IdentityHashMap<VorbaId, Object> hashVT = new IdentityHashMap<VorbaId, Object>();
 	public Hashtable<VorbaId, Object> hashVT = new Hashtable<VorbaId, Object>();
 	
 	// Resolves TOPALi objects to vamsas IDs
-	//private IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
+	//public IdentityHashMap<Object, VorbaId> hashTV = new IdentityHashMap<Object, VorbaId>();
 	public Hashtable<Object, VorbaId> hashTV = new Hashtable<Object, VorbaId>();
 	
 	// Holds objects, which are in someway linked to eachother (e. g. cdna->protein seq.)

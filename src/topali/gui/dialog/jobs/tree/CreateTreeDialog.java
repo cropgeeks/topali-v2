@@ -27,8 +27,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private TreeResult result;
 
-	private JButton bOK, bCancel;
-
+	//private JButton bOK, bCancel;
+	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
+	
 	private JTabbedPane tabs;
 
 	private TreeDialogPanel basicPanel;
@@ -50,9 +51,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 		setLayout(new BorderLayout());
 		add(createControls());
-		add(getButtons(), BorderLayout.SOUTH);
+		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "estimate_tree");
+		add(bp, BorderLayout.SOUTH);
 
-		getRootPane().setDefaultButton(bOK);
+		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 
 		pack();
@@ -110,20 +112,12 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		return tabs;
 	}
 
-	private JPanel getButtons()
-	{
-		bOK = new JButton(Text.Gui.getString("ok"));
-		bCancel = new JButton(Text.Gui.getString("cancel"));
-
-		return Utils.getButtonPanel(this, bOK, bCancel, "estimate_tree");
-	}
-
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel)
 			setVisible(false);
 
-		else if (e.getSource() == bOK)
+		else if (e.getSource() == bRun)
 			onOK((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 	}
 

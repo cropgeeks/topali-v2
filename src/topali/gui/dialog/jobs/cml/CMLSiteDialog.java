@@ -23,7 +23,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 	
 	CMLSitePanel panel;
 	
-	public JButton bRun, bCancel, bDefault, bHelp;
+	public JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	
 	public CMLSiteDialog(WinMain winMain, AlignmentData data, CodeMLResult res) {
 		super(winMain, "Positive Selection - Site Models", false);
@@ -40,26 +40,12 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 	
 	private void init() {
 		panel = new CMLSitePanel(res, this);
-		
-		bRun = new JButton("Run");
-		bRun.addActionListener(this);
-		bCancel = new JButton(Text.Gui.getString("cancel"));
-		bCancel.addActionListener(this);
-		bDefault = new JButton(Text.Gui.getString("defaults"));
-		bDefault.addActionListener(this);
-		bHelp = TOPALiHelp.getHelpButton("codeml_site_help");
-		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
-		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		p1.add(bRun);
-		p1.add(bDefault);
-		p1.add(bCancel);
-		p1.add(bHelp);
-		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-		p2.add(p1);
 
 		this.setLayout(new BorderLayout());
 		add(panel, BorderLayout.CENTER);
-		add(p2, BorderLayout.SOUTH);
+		
+		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "cmlsite_settings");
+		add(bp, BorderLayout.SOUTH);
 		
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);

@@ -517,6 +517,24 @@ public class SequenceSet extends DataObject implements Serializable
 		return indices;
 	}
 
+	public boolean containsStopCodons() {
+		for(Sequence s : sequences) {
+			if(s.containsStopCodons())
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isCodons() {
+		if(!isDNA())
+			return false;
+		
+		if(sequences.size()>0)
+			return sequences.get(0).isCodons();
+		
+		return false;
+	}
+	
 	@Override
 	public void addChangeListener(PropertyChangeListener listener)
 	{

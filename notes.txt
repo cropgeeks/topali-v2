@@ -4,6 +4,13 @@ Current state of affairs
 TODO:
 
 Last modifications:
+- Created (empty) html pages for help menu, linked to help buttons
+- Moved "Run,Cancel,Default,Help" button panel creation to one single method in utils class
+- Cleaned up codonw dialog
+- before running codeml it's now checked if the selected partition is a multiple of 3 and does not contain stop codons
+- fixed codeml
+
+11/09
 - fixed vamsas mouseover bug
 - fixed vamsas "writing non-finished result to vamsas" bug
 - cleaned up branch model dialog layout
@@ -14,7 +21,8 @@ Last modifications:
 - added "atv starting up" message
 
 Current problems:
-- codeml doesn't work anymore
+- Vamsas sequence editing causes a huge problem, as topali stores object relationships in hashtables
+  (hashes are based on sequence and seq. names)
 
 Some ideas:
 

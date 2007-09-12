@@ -203,6 +203,27 @@ public class AlignmentData extends DataObject implements Serializable
 			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionS));
 		
 	}
+	
+	public boolean isPartitionCodons() {
+		return (activeRegionE-activeRegionS+1)%3==0;
+	}
+	
+	public LinkedList<int[]> containsPartitionStopCodons() {
+		LinkedList<int[]> pos = new LinkedList<int[]>();
+		
+		int[] index = sequenceSet.getSelectedSequences();
+		for(int i=0; i<index.length; i++) {
+			Sequence seq = sequenceSet.getSequence(index[i]);
+			String part = seq.getPartition(activeRegionS, activeRegionE);
+			for(int j=0; j<part.length(); j+=3) {
+				String tmp = part.substring(j, (j+3)).toLowerCase();
+				if(tmp.equals("taa") || tmp.equals("tga") || tmp.equals("tag"))
+					pos.add(new int[]{i+1, j});
+			}
+		}
+		
+		return pos;
+	}
 
 	@Override
 	public int hashCode()

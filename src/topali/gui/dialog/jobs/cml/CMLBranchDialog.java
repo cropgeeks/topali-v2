@@ -11,7 +11,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import pal.alignment.SimpleAlignment;
-import pal.tree.Tree;
+import pal.distance.JukesCantorDistanceMatrix;
+import pal.tree.*;
 
 import topali.analyses.TreeCreator;
 import topali.data.*;
@@ -23,7 +24,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 
 	BranchModelPanel bp;
 	
-	public JButton bRun, bCancel, bDefault, bHelp;
+	public JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	
 	WinMain winMain;
 	AlignmentData data;
@@ -56,32 +57,25 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		if(result==null)
 			bp.setH0(this.tree);
 		this.getContentPane().add(bp, BorderLayout.CENTER);
-		
-		bRun = new JButton("Run");
-		bRun.setEnabled(false);
-		bRun.addActionListener(this);
-		bCancel = new JButton(Text.Gui.getString("cancel"));
-		bCancel.addActionListener(this);
-		bDefault = new JButton(Text.Gui.getString("defaults"));
-		bDefault.addActionListener(this);
-		bHelp = TOPALiHelp.getHelpButton("codeml_branch_help");
-		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
-		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		p1.add(bRun);
-		p1.add(bDefault);
-		p1.add(bCancel);
-		p1.add(bHelp);
-		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-		p2.add(p1);
-		this.getContentPane().add(p2, BorderLayout.SOUTH);
+
+		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "cmlbranch_settings");
+		getContentPane().add(bp, BorderLayout.SOUTH);
 		
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 	}
 
 	private void createTree() {
+		
 		SequenceSet ss = data.getSequenceSet();
 		SimpleAlignment alignment = ss.getAlignment(ss.getSelectedSequences(), data.getActiveRegionS(), data.getActiveRegionE(), false);
+		
+//		JukesCantorDistanceMatrix dm = new JukesCantorDistanceMatrix(alignment);
+//		Tree tree = new NeighborJoiningTree(dm);
+//		this.tree = tree.toString();
+//		this.tree = this.tree.replaceAll(";", "");
+//		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
+		
 		TreeCreator tc = new TreeCreator(alignment, data.getSequenceSet().isDNA());
 		Tree tree = tc.getTree(false, false);
 		this.tree = tree.toString();
@@ -136,6 +130,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		int size =  bp.model.getSize();
 		for(int i=0; i<size; i++) {
 			String tree = (String)bp.model.getElementAt(i);
+			tree = Utils.getSafenameTree(tree, ss);
 			CMLHypothesis hypo = new CMLHypothesis();
 			hypo.tree = tree;
 			if(i==0)

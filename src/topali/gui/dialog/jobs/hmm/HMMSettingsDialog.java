@@ -20,7 +20,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 {
 	private JTabbedPane tabs;
 
-	private JButton bRun, bCancel, bDefault, bHelp;
+	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 
 	private BasicPanel basicPanel;
 
@@ -43,14 +43,6 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		if (iResult != null)
 			setInitialSettings(iResult);
 
-		bRun = new JButton("Run");
-		bRun.addActionListener(this);
-		bCancel = new JButton("Cancel");
-		bCancel.addActionListener(this);
-		bDefault = new JButton("Defaults");
-		bDefault.addActionListener(this);
-		bHelp = TOPALiHelp.getHelpButton("hmm_settings");
-
 		tabs = new JTabbedPane();
 		addTabs(iResult);
 
@@ -63,17 +55,10 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			}
 		});
 
-		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
-		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		p1.add(bRun);
-		p1.add(bDefault);
-		p1.add(bCancel);
-		p1.add(bHelp);
-		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-		p2.add(p1);
-
 		getContentPane().add(tabs, BorderLayout.CENTER);
-		getContentPane().add(p2, BorderLayout.SOUTH);
+		
+		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "hmm_settings");
+		getContentPane().add(bp, BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);

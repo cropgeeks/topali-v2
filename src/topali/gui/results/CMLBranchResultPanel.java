@@ -16,7 +16,7 @@ import pal.statistics.ChiSquareDistribution;
 import topali.data.*;
 import topali.gui.Prefs;
 import topali.gui.atv.ATV;
-import topali.var.NHTreeUtils;
+import topali.var.*;
 
 /**
  * Panel for displaying codeml branch model results
@@ -65,6 +65,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		{
 			double omega = h0.omegas[0];
 			String tree = tree2ATV(h0.tree, omega);
+			tree = Utils.getNameTree(tree, data.getSequenceSet());
 			p.add(new HypoLabel(0, tree, this));
 		}
 
@@ -72,6 +73,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		{
 			CMLHypothesis h = result.hypos.get(i);
 			String tree = tree2ATV(h.omegaTree);
+			tree = Utils.getNameTree(tree, data.getSequenceSet());
 			JLabel l = new HypoLabel(i, tree, this);
 			l.setBackground(Color.WHITE);
 			p.add(l);
@@ -294,12 +296,9 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		public void mouseClicked(MouseEvent e)
 		{
-			// display wait cursor, atv will reset to default cursor after
-			// started up.
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			ATV atv = new ATV(tree, "H" + i, parent, null);
 			atv.showBranchLengths(true);
-			SwingUtilities.invokeLater(atv);
+			atv.start();
 		}
 
 		public void mouseEntered(MouseEvent e)
