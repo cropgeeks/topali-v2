@@ -12,7 +12,7 @@ import java.awt.print.*;
 import java.beans.*;
 import java.io.File;
 import java.net.URL;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -543,6 +543,22 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		SequenceSet ss = data.getSequenceSet();
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
+		
+		if(!data.isPartitionCodons()) {
+			MsgBox.msg("Selected Partition doesn't contain codons \n(Partition's length is not a multiple of 3)!", MsgBox.ERR);
+			return;
+		}
+		
+		LinkedList<int[]> pos = data.containsPartitionStopCodons();
+		if(pos.size()>0) {
+			String msg = "Selected sequences contain stop codons: \n";
+			for(int[] p : pos) {
+				msg += "Seq: "+p[0]+", Pos: "+p[1]+"\n";
+			}
+			msg += "/nPlease select a partition without stop codons!";
+			MsgBox.msg(msg, MsgBox.ERR);
+			return;
+		}
 
 		//CMLBranchSettingsDialog dlg = new CMLBranchSettingsDialog(this, data,result);
 		CMLBranchDialog dlg = new CMLBranchDialog(this, data,result);

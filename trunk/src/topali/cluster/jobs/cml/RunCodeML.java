@@ -8,11 +8,13 @@ package topali.cluster.jobs.cml;
 import java.io.*;
 
 import pal.alignment.ReadAlignment;
-import pal.tree.Tree;
+import pal.distance.JukesCantorDistanceMatrix;
+import pal.tree.*;
 import sbrn.commons.file.FileUtils;
 import topali.analyses.TreeCreator;
 import topali.cluster.StreamCatcher;
 import topali.data.*;
+import topali.var.NHTreeUtils;
 
 class RunCodeML
 {
@@ -78,6 +80,13 @@ class RunCodeML
 		TreeCreator tc = new TreeCreator(alignment, true);
 		Tree tree = tc.getTree(false, false);
 
-		FileUtils.writeFile(new File(wrkDir, "tree.txt"), tree.toString());
+//		JukesCantorDistanceMatrix dm = new JukesCantorDistanceMatrix(alignment);
+//		Tree tree = new NeighborJoiningTree(dm);
+		
+		String treeSt = tree.toString();
+		treeSt = treeSt.replaceAll(";", "");
+		treeSt = NHTreeUtils.removeBranchLengths(treeSt);
+		
+		FileUtils.writeFile(new File(wrkDir, "tree.txt"), treeSt);
 	}
 }

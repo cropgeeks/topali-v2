@@ -22,6 +22,7 @@
 * GUI: Branch model dialog needs a "ATV Launching..." dialog while waiting
 * GUI: Close ATV if it's still running and the TOPALi dialog has been closed/cancelled.
 * GUI: Show graph related toolbar buttons only if there is a graph (concerns: ResultPanels)
+* GUI: Clean up CodonW dialog
 
 
 New Features since last public release:

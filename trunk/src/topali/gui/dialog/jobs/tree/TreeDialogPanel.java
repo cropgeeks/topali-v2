@@ -28,8 +28,10 @@ public class TreeDialogPanel extends javax.swing.JPanel {
     }
     
     public void setDefaults() {
+    		
     	if(ss.getParams().isDNA()) {
     		f84.setText("F84+Gamma/neighbor joining");
+    		bayescdna.setEnabled(ss.isCodons());
     	}
     	else {
     		f84.setText("WAG+Gamma/neighbor joining");

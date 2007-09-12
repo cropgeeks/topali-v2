@@ -101,9 +101,6 @@ public class ATV extends Thread
 		atvframe.showFrame();
 		
 		dlg.setVisible(false);
-		
-		if(parent!=null)
-			parent.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	/**

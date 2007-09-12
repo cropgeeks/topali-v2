@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import pal.tree.*;
 import topali.cluster.ClusterUtils;
+import topali.data.*;
 import topali.gui.*;
 import doe.MsgBox;
 
@@ -65,6 +66,28 @@ public class Utils
 		return p2;
 	}
 
+	public static JPanel getButtonPanel(JButton bRun, JButton bCancel, JButton bDefault, JButton bHelp, JDialog parent, String help) {
+		bRun.setText("Run");
+		bRun.addActionListener((ActionListener)parent);
+		bCancel.setText("Cancel");
+		bCancel.addActionListener((ActionListener)parent);
+		bDefault.setText("Defaults");
+		bDefault.addActionListener((ActionListener)parent);
+		bHelp = TOPALiHelp.getHelpButton(help);
+		
+		addCloseHandler(parent, bCancel);
+		
+		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
+		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		p1.add(bRun);
+		p1.add(bDefault);
+		p1.add(bCancel);
+		p1.add(bHelp);
+		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		p2.add(p1);
+		return p1;
+	}
+	
 	/**
 	 * Forces the given Window to hide by mapping a KeyEvent for Escape onto the
 	 * given JComponent.
@@ -284,5 +307,29 @@ public class Utils
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String getSafenameTree(String tree, SequenceSet ss) {
+		Hashtable<String, String> lookup = new Hashtable<String, String>();
+		for(Sequence seq : ss.getSequences()) {
+			lookup.put(seq.name, seq.safeName);
+		}
+		
+		for(String name : lookup.keySet()) {
+			tree = tree.replaceAll(name, lookup.get(name));
+		}
+		return tree;
+	}
+	
+	public static String getNameTree(String tree, SequenceSet ss) {
+		Hashtable<String, String> lookup = new Hashtable<String, String>();
+		for(Sequence seq : ss.getSequences()) {
+			lookup.put(seq.safeName, seq.name);
+		}
+		
+		for(String safename : lookup.keySet()) {
+			tree = tree.replaceAll(safename, lookup.get(safename));
+		}
+		return tree;
 	}
 }
