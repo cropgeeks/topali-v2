@@ -1,8 +1,8 @@
 * Move website to SCRI hosting
 - Applications note
-- Online help updates and linking with buttons
++ Online help updates and linking with buttons
 - FRANK: come up with additional "TOPALi Tips"
-- Write paragraphs and produce images for "What's New" for web (see below)
++ Write paragraphs and produce images for "What's New" for web (see below)
 
 - Implement/decide on analysis restrictions for remote jobs
 

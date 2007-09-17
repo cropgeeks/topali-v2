@@ -8,7 +8,7 @@ package topali.data;
 import static topali.fileio.AlignmentLoadException.*;
 
 import java.awt.Color;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -21,12 +21,8 @@ import topali.analyses.SequenceSetUtils;
 import topali.fileio.*;
 
 // Class representing a set of sequences (an alignment).
-public class SequenceSet extends DataObject implements Serializable
+public class SequenceSet extends DataObject
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -309431847525199340L;
 
 	// Actual alignment data
 	private Vector<Sequence> sequences = new Vector<Sequence>();
@@ -42,7 +38,7 @@ public class SequenceSet extends DataObject implements Serializable
 	private SequenceSetParams params = null;
 	
 	// Runtime only objects (ie, not saved to XML)
-	transient private NameColouriser nameColouriser;
+	private NameColouriser nameColouriser;
 
 	public SequenceSet()
 	{
@@ -163,6 +159,10 @@ public class SequenceSet extends DataObject implements Serializable
 		// Give the sequence a safe name to work with
 		DecimalFormat d = new DecimalFormat("00000");
 		sequence.safeName = "SEQ" + d.format(sequences.size());
+		
+		for(PropertyChangeListener li : changeListeners) {
+			li.propertyChange(new PropertyChangeEvent(this, "addSequence", null, sequence));
+		}
 	}
 
 	/* Returns the sequence at the given index position. */
@@ -535,6 +535,22 @@ public class SequenceSet extends DataObject implements Serializable
 		return false;
 	}
 	
+	public void merge(SequenceSet set) {
+		for(Sequence s : set.getSequences()) {
+			boolean found = false;
+			for(Sequence thisS : getSequences()) {
+				if(thisS.getID()==s.getID()) {
+					thisS.setName(s.getName());
+					thisS.setSequence(s.getSequence());
+					found = true;
+				}
+			}
+			if(!found) {
+				addSequence(s);
+			}
+		}
+	}
+	
 	@Override
 	public void addChangeListener(PropertyChangeListener listener)
 	{
@@ -542,16 +558,6 @@ public class SequenceSet extends DataObject implements Serializable
 		for(Sequence s : sequences)
 			s.addChangeListener(listener);
 	}
-
-//	@Override
-//	public int hashCode()
-//	{
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result
-//				+ ((sequences == null) ? 0 : sequences.hashCode());
-//		return result;
-//	}
 
 	@Override
 	public int hashCode()

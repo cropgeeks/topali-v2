@@ -5,14 +5,8 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
-public class ResultsTracker implements Serializable
+public class ResultsTracker
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -158822275749634380L;
 
 	private int treeRunCount;
 

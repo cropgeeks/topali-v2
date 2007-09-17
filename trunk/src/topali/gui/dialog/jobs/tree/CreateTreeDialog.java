@@ -5,11 +5,10 @@
 
 package topali.gui.dialog.jobs.tree;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 import pal.alignment.Alignment;
 import topali.data.*;
@@ -58,6 +57,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bCancel);
 
 		pack();
+		setSize(360,450);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
@@ -72,12 +72,12 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		}
 		else if(Prefs.gui_tree_method==1) {
 			tabs.remove(1);
-			tabs.add(phymlPanel, "Advanced");
+			tabs.add(new JScrollPane(phymlPanel), "Advanced");
 			tabs.setEnabledAt(1, true);
 		}
 		else if(Prefs.gui_tree_method==2) {
 			tabs.remove(1);
-			tabs.add(bayesPanel, "Advanced");
+			tabs.add(new JScrollPane(bayesPanel), "Advanced");
 			tabs.setEnabledAt(1, true);
 		}
 		else if(Prefs.gui_tree_method==3) {
@@ -103,10 +103,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			tabs.setEnabledAt(1, false);
 		}
 		else if(Prefs.gui_tree_method==1) {
-			tabs.add(phymlPanel, "Advanced");
+			tabs.add(new JScrollPane(phymlPanel), "Advanced");
 		}
 		else if(Prefs.gui_tree_method==2) {
-			tabs.add(bayesPanel, "Advanced");
+			tabs.add(new JScrollPane(bayesPanel), "Advanced");
 		}
 
 		return tabs;

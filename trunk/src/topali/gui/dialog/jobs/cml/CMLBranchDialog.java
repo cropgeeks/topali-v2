@@ -5,15 +5,13 @@
 
 package topali.gui.dialog.jobs.cml;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
 
 import pal.alignment.SimpleAlignment;
-import pal.distance.JukesCantorDistanceMatrix;
-import pal.tree.*;
-
+import pal.tree.Tree;
 import topali.analyses.TreeCreator;
 import topali.data.*;
 import topali.gui.*;

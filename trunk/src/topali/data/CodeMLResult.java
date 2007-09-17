@@ -5,7 +5,6 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 /*
@@ -13,17 +12,12 @@ import java.util.Vector;
  * analysis (via CODEML) and the settings required to make the run (although 
  * not the data itself).
  */
-public class CodeMLResult extends AlignmentResult implements Serializable
+public class CodeMLResult extends AlignmentResult 
 {	
+	public final static String TYPE_SITEMODEL = "0";
+	public final static String TYPE_BRANCHMODEL = "1";
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 805951916608940576L;
-	public final static int TYPE_SITEMODEL = 0;
-	public final static int TYPE_BRANCHMODEL = 1;
-	
-	public int type;
+	public String type;
 	public Vector<CMLModel> models = new Vector<CMLModel>();
 	public Vector<CMLHypothesis> hypos = new Vector<CMLHypothesis>();
 	
@@ -31,10 +25,14 @@ public class CodeMLResult extends AlignmentResult implements Serializable
 	public String codemlPath;
 	
 	public CodeMLResult() {
-		
+		super();
 	}
 	
-	public CodeMLResult(int type)
+	public CodeMLResult(int id) {
+		super(id);
+	}
+	
+	public CodeMLResult(String type)
 	{
 		this.type = type;
 	}

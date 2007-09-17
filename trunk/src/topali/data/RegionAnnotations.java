@@ -5,11 +5,10 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.*;
 
 public abstract class RegionAnnotations extends AlignmentAnnotations implements
-		Iterable<RegionAnnotations.Region>, Serializable
+		Iterable<RegionAnnotations.Region>
 {
 	public RegionAnnotations()
 	{
@@ -148,7 +147,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 		}
 	}
 
-	public static class Region implements Comparator
+	public static class Region implements Comparator<Region>
 	{
 		// Start and ending (region) nucleotide positions
 		private int s;
@@ -167,11 +166,8 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 			return "Nucleotide " + s + " to Nucleotide " + e;
 		}
 
-		public int compare(Object obj1, Object obj2)
+		public int compare(Region r1, Region r2)
 		{
-			Region r1 = (Region) obj1;
-			Region r2 = (Region) obj2;
-
 			if (r1.s < r2.s)
 				return -1;
 			if (r1.s > r2.s)

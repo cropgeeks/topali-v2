@@ -332,6 +332,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, dss.data);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 		} else if (res instanceof HMMResult)
 		{
@@ -345,6 +346,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, hmm.data1);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 			
 			vAnno = getRawAlignmentAnnotation(align);
@@ -356,6 +358,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, hmm.data2);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 			
 			vAnno = getRawAlignmentAnnotation(align);
@@ -367,6 +370,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, hmm.data3);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 		} else if (res instanceof LRTResult)
 		{
@@ -380,6 +384,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, lrt.data);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 		} else if (res instanceof PDMResult)
 		{
@@ -393,6 +398,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, pdm.glbData);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 			
 			vAnno = getRawAlignmentAnnotation(align);
@@ -404,6 +410,7 @@ public class VAMSASUtils
 			p.setType("boolean");
 			vAnno.addProperty(p);
 			addGraph(vAnno, pdm.locData);
+			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
 		}
 
@@ -421,6 +428,7 @@ public class VAMSASUtils
 				if (graph != null)
 				{
 					addGraph(vAnno, graph);
+					vAnno.addProperty(createTIDProp(res));
 					annotations.add(vAnno);
 				}
 			}
@@ -464,5 +472,13 @@ public class VAMSASUtils
 			el.setValue(values);
 			anno.addAnnotationElement(el);
 		}
+	}
+	
+	private static Property createTIDProp(DataObject tObj) {
+		Property tid = new Property();
+		tid.setName("topaliID");
+		tid.setType("int");
+		tid.setContent(""+tObj.getID());
+		return tid;
 	}
 }

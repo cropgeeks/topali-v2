@@ -5,20 +5,14 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
 import sbrn.commons.MatrixXML;
 
 /*
  * Class that stores both the results from running a DSS analysis and the
  * settings required to make the run (although not the data itself).
  */
-public class DSSResult extends AlignmentResult implements Serializable
+public class DSSResult extends AlignmentResult 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6816361598735056492L;
 
 	// The location of the Fitch binary
 	public String fitchPath;
@@ -51,9 +45,13 @@ public class DSSResult extends AlignmentResult implements Serializable
 
 	public DSSResult()
 	{
-		
+		super();
 	}
 
+	public DSSResult(int id) {
+		super(id);
+	}
+	
 	// Castor conversion methods so that the 2D data array is saved as a string
 	public String getData()
 	{

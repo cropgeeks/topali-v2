@@ -7,13 +7,8 @@ package topali.data;
 
 import java.io.*;
 
-public class AlignmentFileStat implements Serializable
+public class AlignmentFileStat
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7533048882832132271L;
-
 	public String filename;
 
 	public int size;

@@ -5,13 +5,7 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
-public class SubstitutionModel  implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1647896747280961123L;
+public class SubstitutionModel  {
 	String name;
 	double aic1, aic2, bic, lnl;
 	

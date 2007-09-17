@@ -6,8 +6,14 @@
 
 <mapping>
  
+<class name="topali.data.DataObject">
+  <field name="id" type="int" set-method="%1" get-method="getID">
+    <bind-xml node="attribute"/>
+  </field>
+</class>
+
 <!-- Sequence -->
-<class name="topali.data.Sequence">
+<class name="topali.data.Sequence" extends="topali.data.DataObject">
   <field name="name" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="safeName" type="string" direct="true">
@@ -130,7 +136,7 @@
 </class>
 
 <!-- AlignmentData -->
-<class name="topali.data.AlignmentData">
+<class name="topali.data.AlignmentData" extends="topali.data.DataObject">
   <field name="name" type="string" direct="true">
     <bind-xml node="attribute"/></field>
  <field name="isReferenceList" type="boolean" get-method="isReferenceList" set-method="setIsReferenceList">
@@ -154,16 +160,8 @@
 <class name="topali.gui.Project">
   <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
   <field name="treePath" type="int" collection="array"/>
-  <field name="vamsasMapper" type="byte" collection="array" get-method="getVamsasMapperSerialized" set-method="setVamsasMapperSerialized"/>
+  <!-- <field name="vamsasMapper" type="byte" collection="array" get-method="getVamsasMapperSerialized" set-method="setVamsasMapperSerialized"/> -->
 </class>
-
-<!-- 
-<class name="topali.vamsas.ObjectMapper">
-  <field name="hashVT" collection="hashtable" direct="true"/>
-  <field name="hashTV" collection="hashtable" direct="true"/>
-  <field name="linkedObjects" type="topali.var.AssociationMap" direct="true"/>
-</class>
--->
   
 <!-- JobStatus -->
 <class name="topali.cluster.JobStatus">
@@ -174,7 +172,7 @@
 
 
 <!-- AnalysisResult -->
-<class name="topali.data.AnalysisResult">
+<class name="topali.data.AnalysisResult" extends="topali.data.DataObject">
   <field name="guiName" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
   <field name="jobName" type="string" direct="true">
@@ -257,7 +255,7 @@
 <class name="topali.data.CodeMLResult" extends="topali.data.AlignmentResult">
 	<field name="codemlPath" type="string" direct="true">
 		<bind-xml node="attribute"/></field>
-	<field name="type" type="integer" direct="true"/>
+	<field name="type" type="string" direct="true"/>
 	<field name="models" type="topali.data.CMLModel" direct="true" collection="vector"/>
 	<field name="hypos" type="topali.data.CMLHypothesis" direct="true" collection="vector"/>
     <field name="threshold" type="double" direct="true"/>

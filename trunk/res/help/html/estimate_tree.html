@@ -1,28 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Language" content="en-gb">
-<link rel="stylesheet" href="styles.css" type="text/css">
-<title>Estimating Phylogenetic Trees</title
-</title>
+
+  <meta http-equiv="Content-Language" content="en-gb">
+
+  <link rel="stylesheet" href="styles.css" type="text/css">
+  <title>Estimating Phylogenetic Trees</title>
+
+
+</head>
 
 <body>
 
 <h1>Estimating Phylogenetic Trees</h1>
 
 <p>Phylogenetic trees can be created from any selected <a href="partitions_dialog.html">partition</a>,
-and from any set of <a href="select_seqs.html">selected sequences</a> (where the number of sequences
+and from any set of <a href="select_seqs.html">selected
+sequences</a> (where the number of sequences
 is greater than three).</p>
 
-<p>To create a phylogenetic tree, select <b>Analysis | Estimate Phylogenetic Tree</b> from the menu
+<p>To create a phylogenetic tree, select <b>Analysis |
+Estimate Phylogenetic Tree</b> from the menu
 bar. This brings up the Estimate New Tree dialog.</p>
 
 <h2><a name="f84gamma">F84+Gamma</a></h2>
 
+<p> The F84+Gamma model (with fixed ts/tv and alpha parameter)
+can be used for a quick, rough tree estimation. It has now further
+options. </p>
+
 <h2><a name="phyml">PhyML</a></h2>
+
+<p> Using a maximum likelihood method, like PhyML is a more
+sophisticated but still reasonable quick way for tree estimation. It
+can be used for larger datasets. <br>
+
+On the 'Advanced' tab you can specify the substitution model and
+further PhyML specific parameters. </p>
 
 <h2><a name="mrbayes">MrBayes</a></h2>
 
+<p> MrBayes is probably the most sophisticated tree estimation
+method at the moment, but is rather slow on larger datasets.<br>
+
+Like for the maximum likelihood method you can specify the substitution
+model and further MrBayes parameters on the 'Advanced' tab.</p>
+
 <h2><a name="cdnabayes">MrBayes (cDNA)</a></h2>
+
+<p>This method also uses MrBayes but with a cDNA model. Choosing
+this method, MrBayes will estimate a model for each codon position.</p>
+
+<br>
+
+<h3>References</h3>
+
+<ul>
+
+  <li>F Ronquist, JP Huelsenbeck, 2003, <b>MrBayes 3:
+Bayesian phylogenetic inference under mixed models</b>,
+Bioinformatics, 19(12), pp 1572-1574</li>
+
+  <li>S Guindon, O Gascuel, 2003, <b>A simple, fast, and
+accurate algorithm to estimate large phylogenies by maximum likelihood.</b>,
+Systematic Biology, 52(5), pp 696-704. </li>
+
+</ul>
 
 </body>
 </html>

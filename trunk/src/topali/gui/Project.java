@@ -21,13 +21,12 @@ import topali.data.*;
 import topali.fileio.Castor;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
-import topali.vamsas.ObjectMapper;
 import doe.MsgBox;
 
 public class Project extends DataObject 
 {
 	 static Logger log = Logger.getLogger(Project.class);
-	
+	 
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
 	public File filename;
@@ -39,11 +38,9 @@ public class Project extends DataObject
 	// its state after a project-load
 	private int[] treePath;
 
-	private ObjectMapper vamsasMapper = null;
-	private ArrayList<Byte> vamsasMapperSerialized = new ArrayList<Byte>();
-	
 	public Project()
 	{
+		
 	}
 
 	public LinkedList<AlignmentData> getDatasets()
@@ -65,35 +62,12 @@ public class Project extends DataObject
 		}
 	}
 	
-	public void addAllDataSets(List<AlignmentData> datasets) {
-		for(AlignmentData data : datasets) {
-			if(this.datasets.contains(data))
-				continue;
-			this.datasets.add(data);
-			for(PropertyChangeListener l : changeListeners) {
-				l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
-				//propagate listeners to alignment datasets
-				data.addChangeListener(l);
-			}
-		}
-	}
-	
 	void removeDataSet(AlignmentData data)
 	{
 		datasets.remove(data);
 		for(PropertyChangeListener l : changeListeners) {
 			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", data, null));
 		}
-	}
-
-	public int[] getTreePath()
-	{
-		return treePath;
-	}
-
-	public void setTreePath(int[] treePath)
-	{
-		this.treePath = treePath;
 	}
 
 	public AlignmentData containsDatasetBySeqs(AlignmentData data) {
@@ -106,7 +80,8 @@ public class Project extends DataObject
 				for(int i=0; i<ss.getSize(); i++) {
 					Sequence s = ss.getSequence(i);
 					Sequence s2 = ss2.getSequence(i);
-					seqMatch = s.getName().equals(s2.getName()) && s.getSequence().equals(s2.getSequence());
+					//seqMatch = s.getName().equals(s2.getName()) && s.getSequence().equals(s2.getSequence());
+					seqMatch = s.getSequence().equals(s2.getSequence());
 					if(!seqMatch)
 						break;
 				}
@@ -119,14 +94,15 @@ public class Project extends DataObject
 		return match;
 	}
 	
-//	public AlignmentData containsDatasetByID(AlignmentData data) {
-//		for(AlignmentData data2 : datasets) {
-//			if(data.getId()==data2.getId()) {
-//				return data;
-//			}
-//		}
-//		return null;
-//	}
+	public int[] getTreePath()
+	{
+		return treePath;
+	}
+
+	public void setTreePath(int[] treePath)
+	{
+		this.treePath = treePath;
+	}
 	
 	// Calls load() to load the given project from disk, or opens a FileDialog
 	// to prompt for the project name if filename is null
@@ -165,14 +141,6 @@ public class Project extends DataObject
 			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
-			// Create a new Unmarshaller
-			// Castor.initialise();
-			// Unmarshaller unmarshaller = new Unmarshaller();//Project.class);
-			// unmarshaller.setMapping(Castor.getMapping());
-			// unmarshaller.setWhitespacePreserve(true);
-			// unmarshaller.setIgnoreExtraElements(true);
-
-			// Unmarshal the person object
 			Unmarshaller unmarshaller = Castor.getUnmarshaller();
 			Project p = (Project) unmarshaller.unmarshal(in);
 			in.close();
@@ -278,74 +246,17 @@ public class Project extends DataObject
 	}
 	
 	public void merge(Project proj) {
-		
 		for(AlignmentData data : proj.getDatasets()) {
-			if(datasets.contains(data)) {
-				AlignmentData match = null;
-				for(AlignmentData tmp : datasets) {
-					if(tmp.equals(data)) {
-						match = tmp;
-						break;
-					}
+			boolean found = false;
+			for(AlignmentData thisData : datasets) {
+				if(thisData.getID()==data.getID()) {
+					thisData.merge(data);
+					found = true;
 				}
-				match.merge(data);
-				
 			}
-			else {
-				for(PropertyChangeListener l : changeListeners) {
-					l.propertyChange(new PropertyChangeEvent(this, "alignmentData", null, data));
-					//propagate listeners to alignment datasets
-					data.addChangeListener(l);
-				}
-				datasets.add(data);
-			}
+			if(!found)
+				addDataSet(data);
 		}
-
-		if(proj.getVamsasMapper()!=null)
-			this.vamsasMapper = proj.getVamsasMapper();
 	}
 	
-	public ObjectMapper getVamsasMapper() {
-		if(vamsasMapper==null && vamsasMapperSerialized.size()>0) {
-			try
-			{
-				byte[] bytes = new byte[vamsasMapperSerialized.size()];
-				for(int i=0; i<bytes.length; i++)
-					bytes[i] = vamsasMapperSerialized.get(i);
-				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-				Object obj = ois.readObject();
-				if(obj instanceof ObjectMapper)
-					this.vamsasMapper = (ObjectMapper)obj;
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			} 
-		}
-		return vamsasMapper;
-	}
-	
-	public void setVamsasMapper(ObjectMapper mapper) {
-		this.vamsasMapper = mapper;
-	}
-	
-	public byte[] getVamsasMapperSerialized() {
-		if(vamsasMapper!=null) {
-			try
-			{
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(bos);
-				oos.writeObject(vamsasMapper);
-				return bos.toByteArray();
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-	
-	public void setVamsasMapperSerialized(byte[] data) {
-		//as this is stored as byte array, castor calls this method for each single item of the array
-		vamsasMapperSerialized.add(data[0]);
-	}
 }

@@ -274,8 +274,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 	
 	public void propertyChange(PropertyChangeEvent evt)
 	{
-		if(evt.getPropertyName().equals("name"))
-			refreshAndRepaint();
+		//if(evt.getPropertyName().equals("name"))
+		refreshAndRepaint();
 	}
 
 	class SequenceRenderer extends JLabel implements ListCellRenderer
@@ -310,7 +310,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
 		JMenuItem selectHighlighted;
-
+		
+		JMenuItem addPart;
+		
 		JMenu annotate;
 
 		MyPopupMenuAdapter()
@@ -332,8 +334,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			menu.add(m3);
 			menu.addSeparator();
 			menu.add(m4);
-
-			JMenuItem addPart = new JMenuItem();
+			
+			addPart = new JMenuItem();
 			addPart.setAction(new AbstractAction()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -373,7 +375,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 					false);
 			p.addSeparator();
 			p.add(menu);
-			p.add(annotate);
+			//p.add(annotate);
+			p.add(addPart);
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F,
 					InputEvent.CTRL_MASK, 0, false);
@@ -390,7 +393,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 
 		public void enableAnnotate(boolean b)
 		{
-			annotate.setEnabled(b);
+			//annotate.setEnabled(b);
+			addPart.setEnabled(b);
 		}
 
 		@Override

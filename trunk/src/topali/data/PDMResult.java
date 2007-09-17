@@ -5,8 +5,6 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
 import pal.statistics.ChiSquareDistribution;
 import sbrn.commons.MatrixXML;
 import topali.analyses.AnalysisUtils;
@@ -15,12 +13,8 @@ import topali.analyses.AnalysisUtils;
  * Class that stores both the results from running a PDM analysis and the
  * settings required to make the run (although not the data itself).
  */
-public class PDMResult extends AlignmentResult implements Serializable
+public class PDMResult extends AlignmentResult 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5195818444473552358L;
 
 	// The location of the Bambe binary
 	public String bambePath;
@@ -98,6 +92,11 @@ public class PDMResult extends AlignmentResult implements Serializable
 
 	public PDMResult()
 	{
+		super();
+	}
+	
+	public PDMResult(int id) {
+		super(id);
 	}
 
 	public float calculateThreshold()

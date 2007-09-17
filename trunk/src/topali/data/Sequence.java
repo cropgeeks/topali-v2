@@ -6,15 +6,10 @@
 package topali.data;
 
 import java.beans.*;
-import java.io.Serializable;
 
 // Class representing a single sequence.
-public class Sequence extends DataObject implements Serializable
+public class Sequence extends DataObject 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7958501115834574791L;
 
 	// Sequence's actual name
 	public String name;
@@ -29,11 +24,12 @@ public class Sequence extends DataObject implements Serializable
 
 	public Sequence()
 	{
+		super();
 	}
 
-	//public Sequence(int id) {
-	//	super(id);
-	//}
+	public Sequence(int id) {
+		super(id);
+	}
 	
 	public Sequence(String name, int length)
 	{
@@ -159,42 +155,4 @@ public class Sequence extends DataObject implements Serializable
 	public boolean isCodons() {
 		return (sequence.length()%3)==0;
 	}
-	
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((sequence == null) ? 0 : sequence.toString().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final Sequence other = (Sequence) obj;
-		if (name == null)
-		{
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (sequence == null)
-		{
-			if (other.sequence != null)
-				return false;
-		} else if (!sequence.toString().equals(other.sequence.toString()))
-			return false;
-		return true;
-	}
-	
-	
 }

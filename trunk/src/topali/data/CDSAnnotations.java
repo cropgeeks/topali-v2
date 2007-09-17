@@ -5,15 +5,8 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
-public class CDSAnnotations extends RegionAnnotations implements Serializable
+public class CDSAnnotations extends RegionAnnotations
 {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6590308900181519467L;
 
 	public CDSAnnotations()
 	{

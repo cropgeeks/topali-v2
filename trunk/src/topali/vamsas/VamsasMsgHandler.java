@@ -18,13 +18,12 @@ public class VamsasMsgHandler implements IMessageHandler
 	 Logger log = Logger.getLogger(this.getClass());
 	
 	private IPickManager manager;
-	
 	ObjectMapper mapper;
 	
-	public VamsasMsgHandler(IPickManager manager, ObjectMapper mapper)
+	public VamsasMsgHandler(IPickManager manager, VamsasManager vamman)
 	{
 		this.manager = manager;
-		this.mapper = mapper;
+		this.mapper = vamman.mapper;
 		manager.registerMessageHandler(this);
 	}
 	

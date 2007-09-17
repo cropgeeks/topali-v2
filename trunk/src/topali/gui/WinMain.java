@@ -800,8 +800,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		try
 		{
-
-			newProject();
+			boolean writeEnabled = (project.getDatasets().size()>0);
+			
 			vamsas = new VamsasManager(project);
 
 			String[] tmp = vamsas.getAvailableSessions();
@@ -834,8 +834,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			
 			ProjectState.setVamsasSession(true);
 			
+			if(writeEnabled)
+				ProjectState.setDataChanged();
+			
 			//vEvents = new VamsasEvents(this, project.getVamsasMapper());
-			vEvents = new VamsasEvents(this);
+			vEvents = new VamsasEvents(this, vamsas);
 			
 			toolbar.vamsasEnabled(true);
 

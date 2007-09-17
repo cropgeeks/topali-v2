@@ -1,18 +1,17 @@
 package topali.vamsas;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
 import topali.var.AssociationMap;
 import uk.ac.vamsas.client.*;
 
-public class ObjectMapper implements Serializable
+public class ObjectMapper
 {
 	final boolean debug = false;
 	
-	transient static Logger log = Logger.getLogger(ObjectMapper.class);
+	static Logger log = Logger.getLogger(ObjectMapper.class);
 	
 	// Resolves vamsas IDs to TOPALi data objects
 	//public IdentityHashMap<VorbaId, Object> hashVT = new IdentityHashMap<VorbaId, Object>();
@@ -25,7 +24,7 @@ public class ObjectMapper implements Serializable
 	// Holds objects, which are in someway linked to eachother (e. g. cdna->protein seq.)
 	public AssociationMap<Object> linkedObjects = new AssociationMap<Object>();
 	
-	transient IClientDocument cdoc = null;
+	IClientDocument cdoc = null;
 	
 	public ObjectMapper()
 	{

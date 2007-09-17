@@ -5,21 +5,22 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class MGResult extends AlignmentResult implements Serializable
+import sun.nio.cs.ext.MacGreek;
+
+public class MGResult extends AlignmentResult 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8938540464070891185L;
 	public String mgPath;
 	public ArrayList<SubstitutionModel> models = new ArrayList<SubstitutionModel>();
 	public String javaPath;
 	
 	public MGResult() {
-		
+		super();
+	}
+	
+	public MGResult(int id) {
+		super(id);
 	}
 	
 	public SubstitutionModel getModel(String name) {
