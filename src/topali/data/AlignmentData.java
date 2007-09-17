@@ -7,16 +7,11 @@ package topali.data;
 
 import java.beans.*;
 import java.io.*;
-import java.util.LinkedList;
+import java.util.*;
 
 /* Represents an Alignment and the results/analyses run upon it. */
-public class AlignmentData extends DataObject implements Serializable
+public class AlignmentData extends DataObject
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2631590265549224643L;
-
 	// The alignment's name
 	public String name;
 
@@ -43,14 +38,16 @@ public class AlignmentData extends DataObject implements Serializable
 
 	public AlignmentData()
 	{
+		super();
 	}
 
-	//public AlignmentData(int id) {
-	//	super(id);
-	//}
+	public AlignmentData(int id) {
+		super(id);
+	}
 	
 	public AlignmentData(String name, SequenceSet sequenceSet)
 	{
+		this();
 		this.name = name;
 		this.sequenceSet = sequenceSet;
 		activeRegionS = 1;
@@ -224,7 +221,7 @@ public class AlignmentData extends DataObject implements Serializable
 		
 		return pos;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -261,37 +258,21 @@ public class AlignmentData extends DataObject implements Serializable
 		return true;
 	}
 	
-	public void merge(AlignmentData data) {
+	public void merge(AlignmentData data ) {
+		this.name = data.name;
 		
-		//merge sequences
-		for(Sequence seq : data.getSequenceSet().getSequences()) {
-			if(sequenceSet.getSequences().contains(seq)) {
-				Sequence match = null;
-				for(Sequence tmp : sequenceSet.getSequences()) {
-					if(tmp.equals(seq)) {
-						match = tmp;
-						break;
-					}
+		sequenceSet.merge(data.getSequenceSet());
+		
+		for(AnalysisResult res : data.getResults()) {
+			boolean found = false;
+			for(AnalysisResult thisRes : results) {
+				if(thisRes.getID()==res.getID()) {
+					thisRes.guiName = res.guiName;
+					found = true;
 				}
-				match.setName(seq.getName());
-				match.setSequence(seq.getSequence());
 			}
-			else
-			{
-				sequenceSet.addSequence(seq);
-			}
-		}
-		
-		//merge results
-		for(AnalysisResult res : data.getResults()){
-			if(results.contains(res)) {
-				//TODO: match names
-			}
-			else {
+			if(!found)
 				addResult(res);
-			}
 		}
-		
-		//TODO: merge annotations
 	}
 }

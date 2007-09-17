@@ -5,20 +5,14 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
 import sbrn.commons.MatrixXML;
 
 /*
  * Class that stores both the results from running a LRT analysis and the
  * settings required to make the run (although not the data itself).
  */
-public class LRTResult extends AlignmentResult implements Serializable
+public class LRTResult extends AlignmentResult
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2039008728553595262L;
 
 	// The method (JC, F84, etc)
 	public int method;
@@ -42,6 +36,11 @@ public class LRTResult extends AlignmentResult implements Serializable
 
 	public LRTResult()
 	{
+		super();
+	}
+	
+	public LRTResult(int id) {
+		super(id);
 	}
 
 	// Castor conversion methods so that the 2D data array is saved as a string

@@ -5,14 +5,9 @@
 
 package topali.data;
 
-import java.io.Serializable;
 
-public class AlignmentResult extends AnalysisResult implements Serializable
+public class AlignmentResult extends AnalysisResult 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5045158485574526651L;
 
 	// Sequences to be analysed
 	public String[] selectedSeqs = new String[0];
@@ -27,6 +22,10 @@ public class AlignmentResult extends AnalysisResult implements Serializable
 	
 	public AlignmentResult()
 	{
+		super();
 	}
 	
+	public AlignmentResult(int id) {
+		super(id);
+	}
 }

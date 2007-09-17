@@ -22,14 +22,17 @@ public class VamsasManager
 	public static final ClientHandle client = new ClientHandle("topali", "2.16");
 	public static final UserHandle user = new UserHandle(System.getProperty("user.name"), "");
 	
-	private Project project;
-	private IClient vclient;
+	public Project project;
+	public IClient vclient;
 	private VamsasEventHandler eventHandler;
 	private IPickManager pickManager;
 	public VamsasMsgHandler msgHandler;
 	
+	public ObjectMapper mapper;
+	
 	public VamsasManager(Project project) {
 		this.project = project;
+		this.mapper = new ObjectMapper();
 	}
 	
 	public String[] getAvailableSessions() throws Exception {
@@ -56,20 +59,20 @@ public class VamsasManager
 			this.project.merge(vProject);
 		}
 		
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this.project, cDoc);
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this, cDoc);
 		docHandler.read();
 		
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
 		
-		msgHandler = new VamsasMsgHandler(pickManager, this.project.getVamsasMapper());
+		msgHandler = new VamsasMsgHandler(pickManager, this);
 	}
 	
 	public void write() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
 		
-		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this.project, cDoc);
+		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this, cDoc);
 		docHandler.write();
 		
 		VAMSASUtils.storeProject(this.project, cDoc); 
@@ -78,7 +81,7 @@ public class VamsasManager
 		vclient.updateDocument(cDoc);
 		cDoc = null;
 		
-		msgHandler = new VamsasMsgHandler(pickManager, this.project.getVamsasMapper());
+		msgHandler = new VamsasMsgHandler(pickManager, this);
 	}
 	
 	private void initVamsas(String session) throws Exception {

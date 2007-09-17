@@ -5,14 +5,8 @@
 
 package topali.data;
 
-import java.io.Serializable;
-
-public class AnnotationElement implements Serializable
+public class AnnotationElement
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4973995461197933865L;
 
 	public static final int PARTITION = 1;
 

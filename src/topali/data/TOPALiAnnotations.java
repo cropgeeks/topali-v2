@@ -5,21 +5,16 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 // Helper class for AlignmentAnnotations, providing code and methods to deal
 // with annotations that would otherwise clog up the AlignmentData class
-public class TOPALiAnnotations implements Serializable
+public class TOPALiAnnotations 
 {
-	 /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6571002149581634848L;
 
-	transient Logger log = Logger.getLogger(this.getClass());
+	Logger log = Logger.getLogger(this.getClass());
 	
 	// A list (where each element is itself a list) of annotation wrappers
 	private Vector<AlignmentAnnotations> annotations;
@@ -39,7 +34,7 @@ public class TOPALiAnnotations implements Serializable
 		this.annotations = annotations;
 	}
 
-	public AlignmentAnnotations getAnnotations(Class type)
+	public AlignmentAnnotations getAnnotations(Class<? extends AlignmentAnnotations> type)
 	{
 		if (!AlignmentAnnotations.class.isAssignableFrom(type))
 			throw new IllegalArgumentException(

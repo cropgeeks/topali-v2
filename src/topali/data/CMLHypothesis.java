@@ -5,19 +5,14 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.*;
 
 
 /**
  * Holds all data of a codeml hypothesis
  */
-public class CMLHypothesis implements Serializable
+public class CMLHypothesis
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5646671337527384015L;
 
 	static String nl = System.getProperty("line.separator");
 	

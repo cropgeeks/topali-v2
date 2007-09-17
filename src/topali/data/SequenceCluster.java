@@ -5,16 +5,11 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
 // Simple class to represent a group of sequences that are clustered together.
-public class SequenceCluster implements Serializable
+public class SequenceCluster 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3618908321914682871L;
 	private LinkedList<String> sequences = new LinkedList<String>();
 
 	public SequenceCluster()

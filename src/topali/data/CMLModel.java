@@ -5,19 +5,15 @@
 
 package topali.data;
 
-import java.io.Serializable;
 import java.util.*;
 
 
 /**
  * Holds all data of a CodeML model, predefined settings as well as the results after CodeML had been run.
  */
-public class CMLModel implements Serializable
+public class CMLModel 
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2227880923240448076L;
+
 	//Predefined models
 	public final static String MODEL_M0 = "M0";
 	public final static String MODEL_M1a = "M1a";

@@ -11,8 +11,22 @@ import java.util.*;
 public abstract class DataObject 
 {
 	protected LinkedList<PropertyChangeListener> changeListeners = new LinkedList<PropertyChangeListener>();
+	private final static Random random = new Random();
+	protected final int id;
 	
 	public DataObject() {
+		id = DataObject.random.nextInt(Integer.MAX_VALUE);
+	}
+	
+	public DataObject(int id) {
+		if(id>-1)
+			this.id = id;
+		else
+			this.id = DataObject.random.nextInt(Integer.MAX_VALUE);
+	}
+	
+	public int getID() {
+		return id;
 	}
 	
 	public void addChangeListener(PropertyChangeListener listener) {
@@ -28,15 +42,26 @@ public abstract class DataObject
 	@Override
 	public int hashCode()
 	{
-		return 1;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj)
 	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
 		if (getClass() != obj.getClass())
+			return false;
+		final DataObject other = (DataObject) obj;
+		if (id != other.id)
 			return false;
 		return true;
 	}
+	
 	
 }

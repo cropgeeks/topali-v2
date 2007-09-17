@@ -2,30 +2,16 @@ Current state of affairs
 -----------------------
 
 TODO:
-
-Last modifications:
-- Created (empty) html pages for help menu, linked to help buttons
-- Moved "Run,Cancel,Default,Help" button panel creation to one single method in utils class
-- Cleaned up codonw dialog
-- before running codeml it's now checked if the selected partition is a multiple of 3 and does not contain stop codons
-- fixed codeml
-
-11/09
-- fixed vamsas mouseover bug
-- fixed vamsas "writing non-finished result to vamsas" bug
-- cleaned up branch model dialog layout
-- fixed Project.merge() method
-- added Button to hide non-supported models from the modelgenerator table
-- tided up partitions dialog
-- fixed "atv still running after closing dialog" bug
-- added "atv starting up" message
+- If connecting to a vamsas session, and there is already a project loaded, copy project to the vamsas session. 
 
 Current problems:
-- Vamsas sequence editing causes a huge problem, as topali stores object relationships in hashtables
-  (hashes are based on sequence and seq. names)
+- Interapplication sequence editing doesn't work (topali or vamsas problem?)
+  
+Last modifications:
+- VAMSAS: Removed mapper serialization again, replaced it with a "ID mechanism for all DataObjects"
+- Connecting to vamsas session does not clear the current project anymore
 
 Some ideas:
-
 
 
 Some URLs
