@@ -4,18 +4,28 @@
 <%
 	Logger tracker = Logger.getLogger("topali.tracker");
 
+	String host = request.getRemoteHost();
+	String addr = request.getRemoteAddr();
+
 	String client = request.getParameter("client");
 	String id = request.getParameter("id");
 
 	if (client != null && id != null)
 	{
-		String host = request.getRemoteHost();
-		String addr = request.getRemoteAddr();
-
 		tracker.info(host + " - " + addr + " - " + id);
 %>
 Current = 15
 <%
+		return;
+	}
+
+	String link = request.getParameter("link");
+
+	if (link != null)
+	{
+		tracker.info(host + " - " + addr + " - " + link.substring(link.lastIndexOf("/")));
+		response.sendRedirect(link);
+
 		return;
 	}
 %>
