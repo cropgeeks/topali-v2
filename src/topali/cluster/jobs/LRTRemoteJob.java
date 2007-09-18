@@ -16,7 +16,7 @@ import topali.fileio.Castor;
 public class LRTRemoteJob extends RemoteJob
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private SequenceSet ss;
 
 	public LRTRemoteJob(LRTResult result, AlignmentData data)
@@ -33,7 +33,7 @@ public class LRTRemoteJob extends RemoteJob
 	@Override
 	public String ws_submitJob() throws Exception
 	{
-		determineClusterURL();
+		determineClusterURL("-parallel");
 
 		call = getCall();
 		call.setOperationName(new QName("topali-lrt", "submit"));

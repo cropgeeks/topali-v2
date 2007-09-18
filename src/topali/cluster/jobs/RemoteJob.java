@@ -39,12 +39,14 @@ public abstract class RemoteJob extends AnalysisJob
 		url = result.url;
 	}
 
-	protected void determineClusterURL() throws Exception
+	protected void determineClusterURL(String type) throws Exception
 	{
 		if (Prefs.web_use_rbroker)
 		{
 			// First form of the URL...this points to the ResourceBroker service
-			url = Prefs.web_broker_url + "/services/resource-broker";
+			url = Prefs.web_broker_url + type + "/services/resource-broker";
+
+			System.out.println("RB: " + url);
 
 			getCall();
 			call.setOperationName(new QName("ResourceBroker", "queryForResource"));

@@ -17,7 +17,7 @@ public class PhymlRemoteJob extends RemoteJob
 {
 
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private SequenceSet ss;
 
 	public PhymlRemoteJob(PhymlResult result, AlignmentData data)
@@ -34,7 +34,7 @@ public class PhymlRemoteJob extends RemoteJob
 	@Override
 	public String ws_submitJob() throws Exception
 	{
-		determineClusterURL();
+		determineClusterURL("-serial");
 
 		call = getCall();
 		call.setOperationName(new QName("topali-phyml", "submit"));
