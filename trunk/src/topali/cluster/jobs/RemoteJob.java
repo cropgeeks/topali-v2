@@ -17,7 +17,7 @@ import topali.gui.Prefs;
 public abstract class RemoteJob extends AnalysisJob
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	protected Call call = null;
 
 	protected String url = null;
@@ -82,7 +82,8 @@ public abstract class RemoteJob extends AnalysisJob
 
 				call.setTargetEndpointAddress(new java.net.URL(url));
 				// call.setMaintainSession(true);
-				call.setTimeout(60000);
+				// Timeout set to 5 minutes
+				call.setTimeout(300000);
 
 				// Compress request (if possible)
 				// call.setProperty(HTTPConstants.MC_GZIP_REQUEST,

@@ -257,15 +257,26 @@ Recombination Method: Likelihood Ratio Test (LRT)</span></p>
 
 <p><span style="font-weight: bold;"></span><img style="width: 632px; height: 374px;" alt="" src="lrt.jpg" /></p>
 
-<p>Still to document...</p>
 
-<ul>
+<p>&nbsp;</p>
 
-  <li>parallel code</li>
+<p class="trainline"></p>
 
-</ul>
+<p><b>Run multiple jobs in parallel</b>
+</p>
 
-<a href="#top">top</a><br />
+<p>TOPALi now has full support for multi-processor and multi-core machines, so
+if you have 2, 4, or more CPUs at your disposal then TOPALi can run jobs on all
+of them at once, or split a single job so that it runs in parallel across them
+all (and completes faster). You can also limit the total number of CPUs available
+to TOPALi, perhaps to keep a CPU free for non-TOPALi tasks.</p>
+
+<p><img src="parallel.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+
+
 
 <br />
 
@@ -313,7 +324,7 @@ methods</span><br />
 <br />
 The Jukes-Cantor model for quick tree estimation was replaced with the
 more sophisticated F84+Gamma model. TOPALi also offers different tree
-estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/phyml/" target="_blank">PhyML</a>) or bayesian tree estimation (using <a href="http://mrbayes.csit.fsu.edu/" target="_blank">MrBayes</a>), where you now also are able to finetune the parameters.<br />
+estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/phyml/" target="_blank">PhyML</a>) or bayesian tree estimation (using <a href="http://mrbayes.csit.fsu.edu/" target="_blank">MrBayes</a>), where also allows further tuning of the tree-creation parameters.<br />
 
 <br />
 
@@ -325,7 +336,7 @@ estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/
 Substitution Model selection</span><br style="font-weight: bold;" />
 
 <br />
-To find out, which substitution model your alignment fits best, TOPALi now offers model testing using <a href="http://bioinf.may.ie/software/modelgenerator/" target="_blank">Modelgenerator</a>.<br />
+To find out which substitution model your alignment fits best, TOPALi now offers model testing using <a href="http://bioinf.may.ie/software/modelgenerator/" target="_blank">Modelgenerator</a>.<br />
 <br />
 
 <img style="width: 432px; height: 262px;" alt="" src="modelgenerator.jpg" /><br style="font-weight: bold;" />
@@ -343,7 +354,7 @@ In order to estimate ancestral sequences, you can now run <a href="http://www.ta
 
 <span style="font-weight: bold;">Codon Usage Check</span><br />
 <br />
-For many analysis it is important to check the codon usage beforehand. Therefore you can now launch <a href="http://codonw.sourceforge.net/" target="_blank">CodonW</a> within TOPALi.<br />
+For many analyses it is important to check the codon usage beforehand. Therefore you can now launch <a href="http://codonw.sourceforge.net/" target="_blank">CodonW</a> from within TOPALi.<br />
 <br />
 <img style="border: 1px solid ; width: 310px; height: 206px;" alt="" src="codonw.jpg" /><br />
 
@@ -352,12 +363,22 @@ For many analysis it is important to check the codon usage beforehand. Therefore
 <span style="font-weight: bold;">VAMSAS support</span><br />
 
 <br />
-TOPALi now mostly supports the <a href="http://www.vamsas.ac.uk/" target="_blank">VAMSAS</a> API, which enables different bioinformatic applications to work together. Currently <a href="http://www.jalview.org/" target="_blank">Jalview</a> and VAMAV support VAMSAS.<br />
+TOPALi now mostly supports the <a href="http://www.vamsas.ac.uk/" target="_blank">VAMSAS</a> API, which enables different bioinformatics applications to work together. Currently <a href="http://www.jalview.org/" target="_blank">Jalview</a> and VAMAV support VAMSAS.<br />
 <br />
 
 <img style="width: 478px; height: 196px;" alt="" src="vamsas.jpg" /><br />
 
 <br />
+
+
+<span style="font-weight: bold;">Cluster queue monitoring</span><br />
+<p>
+TOPALi's monitoring of the cluster where your job has been submitted now shows how many jobs
+are in the queue in front of you.
+<p>
+
+<p><img alt="" src="queues.png"/></p>
+
 
 <a href="#top">top</a><br />
 

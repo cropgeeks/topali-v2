@@ -23,34 +23,34 @@ public class CodonWDialog extends JDialog implements ActionListener
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	JComboBox cbCode;
 	CodonWResult result;
-	
+
 	public CodonWDialog(AlignmentData data, CodonWResult res) {
+		super(TOPALi.winMain, "Check Codon Usage", true);
 		this.data = data;
 		this.ss = data.getSequenceSet();
 		init();
-		
+
 		if(res!=null)
 			setSelectedCode(res.geneticCode);
-		
+
 		pack();
-		setLocationRelativeTo(null);
-		setModal(true);
+		setLocationRelativeTo(TOPALi.winMain);
 	}
-	
+
 	private void init() {
 		JPanel p1 = new JPanel();
 		cbCode = new JComboBox(SequenceSetParams.availCodes);
 		String code = ss.getParams().getGeneticCode();
 		setSelectedCode(code);
-		
+
 		p1.add(new JLabel("Genetic Code: "));
 		p1.add(cbCode);
-		
+
 		this.add(p1, BorderLayout.CENTER);
-		
+
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "codonw");
 		add(bp, BorderLayout.SOUTH);
-		
+
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 	}
@@ -62,31 +62,31 @@ public class CodonWDialog extends JDialog implements ActionListener
 				break;
 			}
 	}
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource().equals(bRun)) {
 			ss.getParams().setGeneticCode((String)cbCode.getSelectedItem());
 			boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
-			
+
 			result = new CodonWResult();
-			
+
 			if(Prefs.isWindows)
 				result.codonwPath = Utils.getLocalPath() + "CodonW.exe";
 			else
 				result.codonwPath = Utils.getLocalPath() + "codonW/codonw";
-			
+
 			result.isRemote = remote;
 			result.geneticCode = (String)cbCode.getSelectedItem();
 			result.selectedSeqs = ss.getSelectedSequenceSafeNames();
-			
+
 			int runNum = data.getTracker().getCwRunCount() + 1;
 			data.getTracker().setCwRunCount(runNum);
 			result.guiName = "CodonW Result " + runNum;
 			result.jobName = "CodonW on " + data.name
 					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";
-			
+
 			this.setVisible(false);
 		}
 		else if(e.getSource().equals(bCancel)) {
@@ -97,7 +97,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 			setSelectedCode(SequenceSetParams.GENETICCODE_UNIVERSAL);
 		}
 	}
-	
+
 	public CodonWResult getResult() {
 		return result;
 	}

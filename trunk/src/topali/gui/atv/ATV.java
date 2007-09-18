@@ -18,25 +18,27 @@ import org.forester.phylogeny.Phylogeny;
 import org.forester.phylogeny.factories.*;
 import org.forester.phylogeny.parsers.nhx.NHXParser;
 
+import topali.gui.*;
+
 /**
  * Helper class for launching ATV
  */
 public class ATV extends Thread
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	ATVapplicationFrame atvframe;
-	
+
 	Phylogeny phyl;
 
 	String title;
 
 	Component parent;
-	
+
 	WindowListener listener;
 
 	boolean showBranchLengths;
-	
+
 	/**
 	 * Launches ATV
 	 * @param tree The tree to be displayed (New Hampshire (extended) format)
@@ -67,28 +69,28 @@ public class ATV extends Thread
 	public void showBranchLengths(boolean b) {
 		showBranchLengths = b;
 	}
-	
+
 	@Override
 	public void run()
-	{		
+	{
 		final LaunchDialog dlg = new LaunchDialog();
 		dlg.setVisible(true);
-		
+
 		URL url;
-		if(showBranchLengths) 
+		if(showBranchLengths)
 			url =ATV.class.getResource("/res/ATVConfig-branchlengths.conf");
-		else 
+		else
 			url = ATV.class.getResource("/res/ATVConfig.conf");
-		 
+
 		String config_filename = url.toString();
-			
+
 		atvframe = new ATVapplicationFrame(phyl,
 				config_filename, title);
-		
+
 		atvframe.setLocationRelativeTo(parent);
-		
+
 		atvframe.addWindowListener(listener);
-		
+
 		//ATV will change the LnF, set it back to office2003
 		try
 		{
@@ -97,9 +99,9 @@ public class ATV extends Thread
 		{
 			log.warn("Error resetting Look and Feel\n",e);
 		}
-		
+
 		atvframe.showFrame();
-		
+
 		dlg.setVisible(false);
 	}
 
@@ -116,24 +118,23 @@ public class ATV extends Thread
 	public void close() {
 		atvframe.dispose();
 	}
-	
+
 	public static void main(String[] args)
 	{
 		String tree = "(U68496:0.0027390,U68497:0.0275900,((U68498:0.0315980,(U68501:0.0709420,((U68502:0.0777510,(U68503:0.0440620,U68508:0.1610830):0.0208750):0.0005290,(((U68504:0.0007310,U68506:0.0168530):0.0501390,U68507:0.0000000):0.0014570,U68505:0.0148880):0.0415900):0.0195660):0.0208720):0.0160180,(U68499:0.0152300,U68500:0.0463450):0.0349010):0.0578500);";
 		ATV atv = new ATV(tree, "TOPALi Test", null, null);
 		atv.run();
 	}
-	
+
 	class LaunchDialog extends JDialog {
 		public LaunchDialog() {
-			this.setTitle("Wait...");
-			this.setModal(false);
+			super(TOPALi.winMain, "Running ATV", true);
 			JPanel p = new JPanel();
 			p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			p.add(new JLabel("Launching ATV, please wait..."));
 			this.getContentPane().add(p);
 			pack();
-			setLocationRelativeTo(null);
-		}	
+			setLocationRelativeTo(TOPALi.winMain);
+		}
 	}
 }

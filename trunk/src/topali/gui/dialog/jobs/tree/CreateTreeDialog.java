@@ -5,7 +5,7 @@
 
 package topali.gui.dialog.jobs.tree;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	//private JButton bOK, bCancel;
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
-	
+
 	private JTabbedPane tabs;
 
 	private TreeDialogPanel basicPanel;
@@ -51,13 +51,15 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		setLayout(new BorderLayout());
 		add(createControls());
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "estimate_tree");
-		add(bp, BorderLayout.SOUTH);
+		JPanel bPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		bPanel.add(bp);
+		add(bPanel, BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 
 		pack();
-		setSize(360,450);
+//		setSize(360,450);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
@@ -72,12 +74,14 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		}
 		else if(Prefs.gui_tree_method==1) {
 			tabs.remove(1);
-			tabs.add(new JScrollPane(phymlPanel), "Advanced");
+			//tabs.add(new JScrollPane(phymlPanel), "Advanced");
+			tabs.add(phymlPanel, "Advanced");
 			tabs.setEnabledAt(1, true);
 		}
 		else if(Prefs.gui_tree_method==2) {
 			tabs.remove(1);
-			tabs.add(new JScrollPane(bayesPanel), "Advanced");
+			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
+			tabs.add(bayesPanel, "Advanced");
 			tabs.setEnabledAt(1, true);
 		}
 		else if(Prefs.gui_tree_method==3) {
@@ -86,15 +90,17 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		validate();
 		repaint();
 	}
-	
+
 	private JComponent createControls()
 	{
 		basicPanel = new TreeDialogPanel(this, ss);
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), mbResult);
+		bayesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
+		phymlPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
@@ -103,10 +109,12 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			tabs.setEnabledAt(1, false);
 		}
 		else if(Prefs.gui_tree_method==1) {
-			tabs.add(new JScrollPane(phymlPanel), "Advanced");
+			//tabs.add(new JScrollPane(phymlPanel), "Advanced");
+			tabs.add(phymlPanel, "Advanced");
 		}
 		else if(Prefs.gui_tree_method==2) {
-			tabs.add(new JScrollPane(bayesPanel), "Advanced");
+			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
+			tabs.add(bayesPanel, "Advanced");
 		}
 
 		return tabs;
