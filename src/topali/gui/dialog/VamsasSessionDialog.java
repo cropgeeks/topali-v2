@@ -10,6 +10,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import topali.gui.*;
+
 public class VamsasSessionDialog extends JDialog implements MouseListener
 {
 	private JPanel jContentPane = null;
@@ -23,7 +25,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 
 	String[] sessions = null;
 	String selSession = null;
-	
+
 	/**
 	 * @param owner
 	 */
@@ -33,12 +35,12 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 		this.setModal(true);
 		this.sessions = sessions;
 		initialize();
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(TOPALi.winMain);
 	}
 
 	/**
 	 * This method initializes this
-	 * 
+	 *
 	 * @return void
 	 */
 	private void initialize()
@@ -50,9 +52,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes jContentPane	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jContentPane
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane()
 	{
@@ -71,9 +73,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes foot	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes foot
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getFoot()
 	{
@@ -94,9 +96,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes bok	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes bok
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getBok()
 	{
@@ -116,9 +118,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes bcanc	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes bcanc
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getBcanc()
 	{
@@ -138,9 +140,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes head	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes head
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getHead()
 	{
@@ -158,9 +160,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes center	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes center
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCenter()
 	{
@@ -181,9 +183,9 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	}
 
 	/**
-	 * This method initializes list	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes list
+	 *
+	 * @return javax.swing.JList
 	 */
 	private JList getList()
 	{
@@ -199,7 +201,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	public String getSelSession() {
 		return selSession;
 	}
-	
+
 	public void action() {
 		selSession = (String)list.getSelectedValue();
 		setVisible(false);
@@ -215,23 +217,23 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 
 	@Override
 	public void mouseEntered(MouseEvent e)
-	{	
+	{
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e)
-	{	
+	{
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e)
-	{	
+	{
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 	}
-	
-	
-}  
+
+
+}

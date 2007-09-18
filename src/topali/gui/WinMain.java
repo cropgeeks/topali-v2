@@ -543,19 +543,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		SequenceSet ss = data.getSequenceSet();
 		if (SequenceSetUtils.canRunCodeML(ss) == false)
 			return;
-		
+
 		if(!data.isPartitionCodons()) {
 			MsgBox.msg("Selected Partition doesn't contain codons \n(Partition's length is not a multiple of 3)!", MsgBox.ERR);
 			return;
 		}
-		
+
 		LinkedList<int[]> pos = data.containsPartitionStopCodons();
 		if(pos.size()>0) {
 			String msg = "Selected sequences contain stop codons: \n";
 			for(int[] p : pos) {
 				msg += "Seq: "+p[0]+", Pos: "+p[1]+"\n";
 			}
-			msg += "/nPlease select a partition without stop codons!";
+			msg += "\nPlease select a partition without stop codons!";
 			MsgBox.msg(msg, MsgBox.ERR);
 			return;
 		}
@@ -801,7 +801,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		try
 		{
 			boolean writeEnabled = (project.getDatasets().size()>0);
-			
+
 			vamsas = new VamsasManager(project);
 
 			String[] tmp = vamsas.getAvailableSessions();
@@ -831,15 +831,15 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			{
 				vamsas.connect(null);
 			}
-			
+
 			ProjectState.setVamsasSession(true);
-			
+
 			if(writeEnabled)
 				ProjectState.setDataChanged();
-			
+
 			//vEvents = new VamsasEvents(this, project.getVamsasMapper());
 			vEvents = new VamsasEvents(this, vamsas);
-			
+
 			toolbar.vamsasEnabled(true);
 
 		} catch (Exception e)
@@ -893,7 +893,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	void menuVamsasImport()
 	{
 		if (vamsas != null)
-		{	
+		{
 			try
 			{
 				vamsas.read();
@@ -954,7 +954,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		long e = System.currentTimeMillis();
 		System.out.println("Time: " + (e - s) + "ms");
-		//		
+		//
 	}
 
 	private void newProject()
