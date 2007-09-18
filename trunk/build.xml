@@ -4,7 +4,7 @@
 
 	<!-- Load in user-specific properties from build.properties -->
 	<!-- To override the filename use, 'ant -Dprops=file.properties' -->
-	<property name="props" value="build.scri.properties"/>
+	<property name="props" value="build.scri-testing.properties"/>
 	<property file="${props}"/>
 
 	<property name="src" location="src"/>

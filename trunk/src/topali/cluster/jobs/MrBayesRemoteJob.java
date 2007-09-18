@@ -34,7 +34,7 @@ public class MrBayesRemoteJob extends RemoteJob
 	@Override
 	public String ws_submitJob() throws Exception
 	{
-		determineClusterURL();
+		determineClusterURL("-serial");
 
 		call = getCall();
 		call.setOperationName(new QName("topali-mb", "submit"));

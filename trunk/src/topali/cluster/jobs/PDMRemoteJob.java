@@ -16,7 +16,7 @@ import topali.fileio.Castor;
 public class PDMRemoteJob extends RemoteJob
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private SequenceSet ss;
 
 	public PDMRemoteJob(PDMResult result, AlignmentData data)
@@ -33,7 +33,7 @@ public class PDMRemoteJob extends RemoteJob
 	@Override
 	public String ws_submitJob() throws Exception
 	{
-		determineClusterURL();
+		determineClusterURL("-parallel");
 
 		call = getCall();
 		call.setOperationName(new QName("topali-pdm", "submit"));
