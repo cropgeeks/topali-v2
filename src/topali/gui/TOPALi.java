@@ -25,9 +25,9 @@ import topali.var.Utils;
 public class TOPALi extends Applet implements Application
 {
 	public static final String VERSION = "2.16";
-	
-	private final String prefsFile = ".TOPALiV2-16.xml";
-	
+
+	private final String prefsFile = ".topali2-new.xml";
+
 	 static Logger root;
 	 static Logger log;
 
@@ -210,9 +210,9 @@ public class TOPALi extends Applet implements Application
 		winMain.setVisible(false);
 
 		//check if there is a vamsas session
-		if(winMain.vamsas!=null) 
+		if(winMain.vamsas!=null)
 			winMain.vamsasDisconnect();
-		
+
 		if (winMain.getExtendedState() == Frame.MAXIMIZED_BOTH)
 		{
 			Prefs.gui_maximized = true;

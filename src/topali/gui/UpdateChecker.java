@@ -19,7 +19,7 @@ import doe.MsgBox;
 class UpdateChecker extends Thread
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private static int RELEASE = 16;
 
 	private int webVersion = 0;
@@ -39,18 +39,18 @@ class UpdateChecker extends Thread
 		try
 		{
 			URL url = new URL(
-					"http://gruffalo.scri.ac.uk/topali/tracking.jsp?client=topali&id="+Prefs.appId);
+					"http://www.topali.org/topali/tracking.jsp?client=topali&id="+Prefs.appId);
 			URLConnection uc = url.openConnection();
-			
+
 			System.out.println(url);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
 					.getInputStream()));
-				
+
 			String str = null;
 			while ((str = in.readLine()) != null)
 			{
-				
+
 				if (str.startsWith("Current = "))
 				{
 					webVersion = Integer.parseInt(str.substring(10));
@@ -70,7 +70,7 @@ class UpdateChecker extends Thread
 						"TOPALi was unable to check for a new version due to "
 								+ "the following unexpected error:\n  " + e,
 						MsgBox.ERR);
-			
+
 			log.warn("Unable to check for updates.",e);
 
 			return;
@@ -82,7 +82,7 @@ class UpdateChecker extends Thread
 			p.add(new JLabel("<html>A new version of TOPALi v2 is available.<br>Please visit our website to obtain it.</html>"), BorderLayout.CENTER);
 			p.add(new LinkLabel("http://www.topali.org"), BorderLayout.SOUTH);
 			JOptionPane.showMessageDialog(null, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
-			
+
 //			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
 //					+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
 //
