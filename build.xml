@@ -98,7 +98,7 @@
 		</copy>
 	</target>
 
-	<target name="war" depends="jar, templates">
+	<target name="war" depends="clean, jar, templates">
 		<copy file="${config}/web.xml" todir="${build.web-inf}"/>
 		<copy file="${config}/server-config.wsdd" todir="${build.web-inf}"/>
 		<copy todir="${build.cluster}">
