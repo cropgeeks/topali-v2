@@ -46,8 +46,6 @@ public abstract class RemoteJob extends AnalysisJob
 			// First form of the URL...this points to the ResourceBroker service
 			url = Prefs.web_broker_url + type + "/services/resource-broker";
 
-			System.out.println("RB: " + url);
-
 			getCall();
 			call.setOperationName(new QName("ResourceBroker", "queryForResource"));
 

@@ -653,8 +653,8 @@ public class Prefs extends PreferencesXML
 
 	public static void setWebDefaults()
 	{
-		web_direct_url = "http://gruffalo.scri.ac.uk/topali";
-		web_broker_url = "http://gruffalo.scri.ac.uk/topali-broker";
+		web_direct_url = "http://www.topali.org/topali";
+		web_broker_url = "http://www.topali.org/topali-broker";
 		web_use_rbroker = true;
 		web_check_secs = 30;
 		web_check_startup = true;
