@@ -12,14 +12,10 @@
   <files>
     <mountPoints>
       <mountPoint name="" id="38" location="binaries" mode="755" />
-      <mountPoint name="" id="46" location="src" mode="755" />
       <mountPoint name="" id="53" location="lib" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="38" file="../binaries" overwrite="1" shared="false" mode="644" dontUninstall="false" excludeSuffixes=".svn" dirMode="755">
-        <exclude />
-      </dirEntry>
-      <dirEntry mountPoint="46" file="../src" overwrite="1" shared="false" mode="644" dontUninstall="false" excludeSuffixes="*.svn" dirMode="755">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="53" file="../lib" overwrite="1" shared="false" mode="644" dontUninstall="false" excludeSuffixes=".svn" dirMode="755">
@@ -85,7 +81,7 @@
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
-        <entry location="binaries" launcher="false" />
+        <entry location="binaries/src" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />
@@ -95,7 +91,15 @@
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
-        <entry location="binaries" launcher="false" />
+        <entry location="binaries/bambe.exe" launcher="false" />
+        <entry location="binaries/barce.exe" launcher="false" />
+        <entry location="binaries/codeml.exe" launcher="false" />
+        <entry location="binaries/CodonW.exe" launcher="false" />
+        <entry location="binaries/fastml.exe" launcher="false" />
+        <entry location="binaries/fitch.exe" launcher="false" />
+        <entry location="binaries/mb.exe" launcher="false" />
+        <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />
@@ -105,7 +109,15 @@
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
-        <entry location="binaries" launcher="false" />
+        <entry location="binaries/bambe.exe" launcher="false" />
+        <entry location="binaries/barce.exe" launcher="false" />
+        <entry location="binaries/codeml.exe" launcher="false" />
+        <entry location="binaries/CodonW.exe" launcher="false" />
+        <entry location="binaries/fastml.exe" launcher="false" />
+        <entry location="binaries/fitch.exe" launcher="false" />
+        <entry location="binaries/mb.exe" launcher="false" />
+        <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />
@@ -117,7 +129,15 @@
       </selectedLaunchers>
       <messageSet language="English" />
       <exclude>
-        <entry location="binaries" launcher="false" />
+        <entry location="binaries/bambe.exe" launcher="false" />
+        <entry location="binaries/barce.exe" launcher="false" />
+        <entry location="binaries/codeml.exe" launcher="false" />
+        <entry location="binaries/CodonW.exe" launcher="false" />
+        <entry location="binaries/fastml.exe" launcher="false" />
+        <entry location="binaries/fitch.exe" launcher="false" />
+        <entry location="binaries/mb.exe" launcher="false" />
+        <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />

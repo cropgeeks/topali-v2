@@ -14,22 +14,16 @@ however, there may be times when you wish to run jobs locally on your own machin
 
 <p>To do this, you need to do several things:</p>
 
-<p><b>Download Binaries</b><br>
-Visit the TOPALi website (http://www.bioss.ac.uk/knowledge/topali) and download the
-<b>binaries.zip</b> add-on package.</p>
-
-<p><b>Extract Zip File</b><br>
-Extract the contents of this zip file to the directory where TOPALi is installed. It should
-be &lt;topali&gt;/web/binaries.</p>
-
 <p><b>Compile Binaries (non Windows systems only)</b><br>
-cd into binaries/src and run "sh compileprogs". This will compile each of the external programs
-that TOPALi uses.</p>
+You will probably need to be running an installed version of TOPALi rather than the webstart
+version for this to work, unless you can determine where on your system Java Webstart has
+put its locally cached copy of TOPALi. Once you know what directory TOPALi is installed into,
+change to it, and cd into binaries/src and run "sh compileprogs". This will compile each
+of the external programs that TOPALi uses.</p>
 
 <p><b>CTRL-click Run Buttons</b><br>
 Finally, to submit jobs locally, simply hold down the CTRL key when pressing "Run" on
 any analysis job's settings dialog.</p>
-<p><img src="images/run_locally.png"></p>
 
 <p>You should note that locally submitted jobs do not act in the same way as remotely submitted
 jobs. They can be cancelled, but their state cannot be saved as part of a project. If a project
