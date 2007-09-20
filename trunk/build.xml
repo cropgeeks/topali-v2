@@ -113,6 +113,7 @@
 			<webinf dir="${build.web-inf}"/>
 			<classes dir="${build.classes}"/>
 			<fileset file="doc/web/tracking.jsp"/>
+			<fileset file="doc/web/version.html"/>
 		</war>
 	</target>
 

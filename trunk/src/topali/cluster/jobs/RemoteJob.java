@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.data.AnalysisResult;
-import topali.gui.Prefs;
+import topali.gui.*;
 
 public abstract class RemoteJob extends AnalysisJob
 {
@@ -109,6 +109,8 @@ public abstract class RemoteJob extends AnalysisJob
 		call.invoke(new Object[] { result.jobId });
 
 		result.status = JobStatus.COMPLETED;
+
+		Tracker.log("COMPLETED", result.jobId);
 	}
 
 	@Override

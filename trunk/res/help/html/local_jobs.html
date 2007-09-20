@@ -12,17 +12,15 @@
 <p>TOPALi is designed to run its analysis methods on remote high-performance compute clusters,
 however, there may be times when you wish to run jobs locally on your own machine.</p>
 
-<p>To do this, you need to do several things:</p>
+<p><b>Note, to run jobs locally you must be using an installed version of TOPALi, not the
+webstart version.</b></p>
 
 <p><b>Compile Binaries (non Windows systems only)</b><br>
-You will probably need to be running an installed version of TOPALi rather than the webstart
-version for this to work, unless you can determine where on your system Java Webstart has
-put its locally cached copy of TOPALi. Once you know what directory TOPALi is installed into,
-change to it, and cd into binaries/src and run "sh compileprogs". This will compile each
-of the external programs that TOPALi uses.</p>
+Change to the directory where TOPALi was installed, and cd into binaries/src and run
+"sh compileprogs". This will compile each of the external programs that TOPALi uses.</p>
 
 <p><b>CTRL-click Run Buttons</b><br>
-Finally, to submit jobs locally, simply hold down the CTRL key when pressing "Run" on
+To submit jobs locally, simply hold down the CTRL key when pressing "Run" on
 any analysis job's settings dialog.</p>
 
 <p>You should note that locally submitted jobs do not act in the same way as remotely submitted
