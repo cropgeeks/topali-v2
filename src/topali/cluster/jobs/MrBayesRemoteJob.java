@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.data.*;
+import topali.gui.*;
 import topali.fileio.Castor;
 
 public class MrBayesRemoteJob extends RemoteJob
@@ -46,6 +47,7 @@ public class MrBayesRemoteJob extends RemoteJob
 		{ alignmentXML, resultXML });
 
 		log.info("Job in progress: " + result.jobId);
+		Tracker.log("SUBMITTED", "MRBAYES", result.jobId, url);
 
 		result.status = JobStatus.QUEUING;
 		return result.jobId;

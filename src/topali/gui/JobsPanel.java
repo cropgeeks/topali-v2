@@ -61,7 +61,7 @@ public class JobsPanel extends JPanel
 
 		jobsThread = new JobsThread(this);
 		jobsThread.start();
-		
+
 		setStatusPanel();
 	}
 
@@ -118,8 +118,12 @@ public class JobsPanel extends JPanel
 	{
 		// Then send the cancel request...
 		int status = e.getJob().getStatus();
+
 		if (status != JobStatus.COMPLETING && status != JobStatus.COMPLETED)
 		{
+			if (status != JobStatus.FATAL_ERROR)
+				Tracker.log("CANCELLED", e.getJob().getJobId());
+
 			e.getJob().setStatus(JobStatus.CANCELLING);
 			e.updateStatus();
 			jobsThread.interrupt();
@@ -239,7 +243,7 @@ public class JobsPanel extends JPanel
 				job = new MrBayesLocalJob((MBTreeResult) result, data);
 			entry = new ProgressBarJobEntry(job);
 		}
-		
+
 		else if(result instanceof PhymlResult) {
 			if(result.isRemote)
 				job = new PhymlRemoteJob((PhymlResult)result, data);
@@ -247,7 +251,7 @@ public class JobsPanel extends JPanel
 				job = new PhymlLocalJob((PhymlResult)result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
-		
+
 		else if(result instanceof MGResult) {
 			if(result.isRemote)
 				job = new MGRemoteJob((MGResult)result, data);
@@ -256,7 +260,7 @@ public class JobsPanel extends JPanel
 			//entry = new NoTrackingJobEntry(job);
 			entry = new ProgressBarJobEntry(job);
 		}
-		
+
 		else if(result instanceof CodonWResult) {
 			if(result.isRemote)
 				job = new CodonWRemoteJob((CodonWResult)result, data);
@@ -264,15 +268,15 @@ public class JobsPanel extends JPanel
 				job = new CodonWLocalJob((CodonWResult)result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
-		
+
 		else if(result instanceof FastMLResult) {
-			if(result.isRemote) 
+			if(result.isRemote)
 				job = new FastMLRemoteJob((FastMLResult)result, data);
 			else
 				job = new FastMLLocalJob((FastMLResult)result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
-		
+
 		addJob(entry);
 	}
 

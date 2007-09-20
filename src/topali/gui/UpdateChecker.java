@@ -38,11 +38,10 @@ class UpdateChecker extends Thread
 	{
 		try
 		{
-			URL url = new URL(
-					"http://www.topali.org/topali/tracking.jsp?client=topali&id="+Prefs.appId);
-			URLConnection uc = url.openConnection();
+			Tracker.log("OPEN");
 
-			System.out.println(url);
+			URL url = new URL("http://www.topali.org/topali/version.html");
+			URLConnection uc = url.openConnection();
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
 					.getInputStream()));
@@ -51,9 +50,10 @@ class UpdateChecker extends Thread
 			while ((str = in.readLine()) != null)
 			{
 
-				if (str.startsWith("Current = "))
+				if (str.startsWith("<!-- Current = "))
 				{
-					webVersion = Integer.parseInt(str.substring(10));
+					webVersion = Integer.parseInt(
+						str.substring(14, str.indexOf("-->")).trim());
 					break;
 				}
 			}
