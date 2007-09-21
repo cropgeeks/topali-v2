@@ -29,6 +29,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	public CMLSiteResultPanel(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
+		System.out.println(result);
 		this.table = createTablePanel();
 		this.graph = createGraphPanel();
 		this.graph.setEnabled(false);

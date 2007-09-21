@@ -182,7 +182,8 @@ public abstract class WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 			cluster.deleteJob(jobDir);
-
+			
+			accessLog.info("JOB FAILED " + jobId);
 			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
 		}
@@ -222,6 +223,6 @@ public abstract class WebService
 		logger.info(jobId + " - cleaning up and removing files");
 
 		File jobDir = new File(getParameter("job-dir"), jobId);
-		ClusterUtils.emptyDirectory(jobDir, true);
+		//ClusterUtils.emptyDirectory(jobDir, true);
 	}
 }

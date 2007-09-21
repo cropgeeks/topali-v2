@@ -746,21 +746,29 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
-		mAnls.add(new MenuHeading("Recombination breakpoints"));
+		MenuHeading h1 = new MenuHeading("Recombination breakpoints");
+		h1.setIcon(Icons.RECOMBINATION);
+		mAnls.add(h1);
 		mAnls.add(mAnlsRunPDM);
 		mAnls.add(mAnlsRunHMM);
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Positive selection"));
+		MenuHeading h2 = new MenuHeading("Positive selection");
+		h2.setIcon(Icons.POSSELECTION);
+		mAnls.add(h2);
 		mAnls.add(mAnlsRunCodeMLSite);
 		mAnls.add(mAnlsRunCodeMLBranch);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Phylogenetic trees"));
+		MenuHeading h3 = new MenuHeading("Phylogenetic trees");
+		h3.setIcon(Icons.TREE);
+		mAnls.add(h3);
 		mAnls.add(mAnlsRunMG);
 		mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
-		mAnls.add(new MenuHeading("Coding regions"));
+		MenuHeading h4 = new MenuHeading("Coding regions");
+		h4.setIcon(Icons.CODONUSAGE);
+		mAnls.add(h4);
 		mAnls.add(mAnlsRunCW);
 		mAnls.addSeparator();
 		mAnls.add(mAnlsPartition);
@@ -996,6 +1004,7 @@ public class WinMainMenuBar extends JMenuBar
 	}
 	
 	class MenuHeading extends JMenuItem {
+		
 		public MenuHeading(String text) {
 			super(text);
 			Font f = getFont();

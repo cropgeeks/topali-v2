@@ -10,7 +10,7 @@ import java.util.Vector;
 import topali.data.AlignmentData;
 import topali.data.CMLModel;
 import topali.data.CodeMLResult;
-import topali.gui.WinMain;
+import topali.gui.*;
 
 /**
  *
@@ -179,42 +179,42 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m7set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m7set.setIcon(Icons.SETTINGS);
         m7set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m7setActionPerformed(evt);
             }
         });
 
-        m3set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m3set.setIcon(Icons.SETTINGS);
         m3set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m3setActionPerformed(evt);
             }
         });
 
-        m2aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m2aset.setIcon(Icons.SETTINGS);
         m2aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m2asetActionPerformed(evt);
             }
         });
 
-        m1aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m1aset.setIcon(Icons.SETTINGS);
         m1aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m1asetActionPerformed(evt);
             }
         });
 
-        m0set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m0set.setIcon(Icons.SETTINGS);
         m0set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m0setActionPerformed(evt);
             }
         });
 
-        m8set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m8set.setIcon(Icons.SETTINGS);
         m8set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m8setActionPerformed(evt);
@@ -324,42 +324,42 @@ public class CMLSitePanel extends javax.swing.JPanel {
     }
     
     private void m8setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m8setActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod8);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod8);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod8 = dlg.getModel();
     }//GEN-LAST:event_m8setActionPerformed
 
     private void m7setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m7setActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod7);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod7);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod7 = dlg.getModel();
     }//GEN-LAST:event_m7setActionPerformed
 
     private void m3setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m3setActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod3);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod3);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod3 = dlg.getModel();
     }//GEN-LAST:event_m3setActionPerformed
 
     private void m2asetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m2asetActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod2a);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod2a);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod2a = dlg.getModel();
     }//GEN-LAST:event_m2asetActionPerformed
 
     private void m1asetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m1asetActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod1a);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod1a);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod1a = dlg.getModel();
     }//GEN-LAST:event_m1asetActionPerformed
 
     private void m0setActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m0setActionPerformed
-        OmegaValuesDialog dlg = new OmegaValuesDialog(null, true, mod0);
+        OmegaValuesDialog dlg = new OmegaValuesDialog(parent, true, mod0);
         dlg.setVisible(true);
         if(dlg.getModel()!=null)
             mod0 = dlg.getModel();

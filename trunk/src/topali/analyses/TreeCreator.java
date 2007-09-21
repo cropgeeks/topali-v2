@@ -34,12 +34,14 @@ public class TreeCreator extends JDialog
 	private long start;
 	private long end;
 	
+	private boolean showDialog = false;
 	private boolean mproot = false;
 	
-	public TreeCreator(Alignment alignment, boolean isDNA)
+	public TreeCreator(Alignment alignment, boolean isDNA, boolean mproot, boolean showDialog)
 	{
 		super(MsgBox.frm, Text.Analyses.getString("TreeCreator.gui01"), true);
-
+		this.mproot = mproot;
+		this.showDialog = showDialog;
 		this.alignment = alignment;
 		this.dna = isDNA;
 		
@@ -92,10 +94,8 @@ public class TreeCreator extends JDialog
 		setVisible(false);
 	}
 	
-	public Tree getTree(boolean mpRoot, boolean showDialog)
-	{
-		this.mproot = mpRoot;
-		
+	public Tree getTree()
+	{		
 		// Both of these calls should block - either by popping open the dialog
 		// and not returning from it until createTree() is finished, or by
 		// calling createTree directly.

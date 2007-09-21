@@ -66,7 +66,7 @@ public class CodeMLLocalJob extends AnalysisJob
 	@Override
 	public void ws_cleanup() throws Exception
 	{
-		ClusterUtils.emptyDirectory(jobDir, true);
+		//ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
 
 		LocalJobs.delJob(result.jobId);

@@ -8,7 +8,7 @@ package topali.cluster.jobs.cml.parser;
 import java.io.*;
 import java.util.regex.*;
 
-import topali.data.CMLModel;
+import topali.data.*;
 
 public class Model3Parser extends CMLResultParser
 {
@@ -74,7 +74,6 @@ public class Model3Parser extends CMLResultParser
 			line = null;
 			Pattern p = Pattern.compile("\\d+ \\D .+");
 			boolean start = false;
-			StringBuffer pss = new StringBuffer();
 			while ((line = in.readLine()) != null)
 			{
 				line = line.trim();
@@ -83,21 +82,17 @@ public class Model3Parser extends CMLResultParser
 				{
 					String[] tmp = line.split("\\s+");
 					int pos = Integer.parseInt(tmp[0]);
+					pos = pos*3-1; //transform the aa position into a nuc. position
 					char aa = tmp[1].charAt(0);
 					float prob = Float.parseFloat(tmp[4]);
-					pss.append(pos*3-1); //transform the aa position into a nuc. position
-					pss.append('|');
-					pss.append(aa);
-					pss.append('|');
-					pss.append(prob);
-					pss.append(' ');
+					PSSite pss = new PSSite(pos, aa, prob);
+					model.pssList.add(pss);
 				}
 				if (line.startsWith("Naive Empirical Bayes (NEB)"))
 					start = true;
 				else if (line.startsWith("Positively selected sites"))
 					start = false;
 			}
-			model.pss = (pss.toString());
 			in.close();
 
 		} catch (Exception e)

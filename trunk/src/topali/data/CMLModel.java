@@ -40,8 +40,7 @@ public class CMLModel
 	public double w0 = -1, w1 = -1, w2 = -1;
 	public double p = -1, q = -1;
 	public double likelihood = -1;
-	public String pss = null;
-	public List<PSSite> pssList; //not stored in Castor XML!
+	public Collection<PSSite> pssList = new LinkedList<PSSite>(); 
 	
 	//Just for castor. Don't use this constructor!
 	public CMLModel() {	
@@ -198,26 +197,6 @@ public class CMLModel
 	 */
 	public List<PSSite> getPSS(double minP)
 	{
-//		if (pss == null)
-//			return null;
-
-		//parse the pss string just one time
-		if (pssList == null)
-		{
-			pssList = new LinkedList<PSSite>();
-			if (!pss.equals(""))
-			{
-				for (String s : pss.split("\\s"))
-				{
-					String[] tmp = s.split("\\|");
-					int pos = Integer.parseInt(tmp[0]);
-					char c = tmp[1].charAt(0);
-					double p = Double.parseDouble(tmp[2]);
-					pssList.add(new PSSite(pos, c, p));
-				}
-			}
-		}
-
 		List<PSSite> res = new LinkedList<PSSite>();
 		for (PSSite ps : pssList)
 		{
@@ -241,30 +220,55 @@ public class CMLModel
 		}
 		return null;
 	}
+
+	/**
+	 * Constructs a <code>String</code> with all attributes
+	 * in name = value format.
+	 *
+	 * @return a <code>String</code> representation 
+	 * of this object.
+	 */
+	public String toString()
+	{
+	    final String TAB = "    ";
+	    
+	    String retValue = "";
+	    
+	    retValue = "CMLModel ( "
+	        + super.toString() + TAB
+	        + "model = " + this.model + TAB
+	        + "name = " + this.name + TAB
+	        + "nParameter = " + this.nParameter + TAB
+	        + "supportsPSS = " + this.supportsPSS + TAB
+	        + "fixedOmega = " + this.fixedOmega + TAB
+	        + "settings = " + this.settings + TAB
+	        + "wStart = " + this.wStart + TAB
+	        + "p0 = " + this.p0 + TAB
+	        + "p1 = " + this.p1 + TAB
+	        + "p2 = " + this.p2 + TAB
+	        + "w0 = " + this.w0 + TAB
+	        + "w1 = " + this.w1 + TAB
+	        + "w2 = " + this.w2 + TAB
+	        + "p = " + this.p + TAB
+	        + "q = " + this.q + TAB
+	        + "likelihood = " + this.likelihood + TAB
+	        + "pssList = " + this.pssList + TAB
+	        + " )";
 	
-	public void setGraph(float[][] graph) {
-		if(supportsPSS) {
-			pssList = null;
-			StringBuffer sb = new StringBuffer();
-			for(int i=0; i<graph.length; i++) {
-				int pos = (int)(graph[i][0]);
-				float value = graph[i][1];
-				char aa = (char)graph[i][2];
-				sb.append(pos+"|"+aa+"|"+value+" ");
-			}
-			pss = sb.toString();
-		}
+	    return retValue;
 	}
 	
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Model: "+name+"\n");
-		sb.append("Settings: \n");
-		Set<String> keys = settings.keySet();
-		for(String s : keys) {
-			sb.append(s+" = "+settings.get(s)+"\n");
-		}
-		return sb.toString();
-	}
+//	@Override
+//	public String toString() {
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("Model: "+name+"\n");
+//		sb.append("Settings: \n");
+//		Set<String> keys = settings.keySet();
+//		for(String s : keys) {
+//			sb.append(s+" = "+settings.get(s)+"\n");
+//		}
+//		return sb.toString();
+//	}
+	
+	
 }

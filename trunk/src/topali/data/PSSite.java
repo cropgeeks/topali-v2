@@ -12,12 +12,16 @@ public class PSSite
 {
 
 	//nuc position
-	int pos;
+	public int pos;
 	//one-letter aa
-	char aa;
+	public char aa;
 	//propability
-	double p;
+	public double p;
 
+	public PSSite() {
+		
+	}
+	
 	public PSSite(int pos, char aa, double p)
 	{
 		this.pos = pos;
@@ -58,6 +62,6 @@ public class PSSite
 	@Override
 	public String toString()
 	{
-		return pos + "" + aa;
+		return aa+"("+pos+")["+p+"]";
 	}
 }
