@@ -141,7 +141,7 @@ public class MrBayesCmdBuilder
 			sb.append("\tprset applyto=(all) ratepr=dirichlet(1,1,1);\n");
 			sb.append("\tlset applyto=(all) nst=2;\n");
 		}
-		sb.append("\tmcmc nruns=1 ngen=" + ngen + " samplefreq=" + sampleFreq
+		sb.append("\tmcmc nruns=2 ngen=" + ngen + " samplefreq=" + sampleFreq
 				+ ";\n");
 		int burn = (int) ((ngen / sampleFreq) * burnin);
 		sb.append("\tsump burnin=" + burn + ";\n");

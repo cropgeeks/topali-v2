@@ -74,7 +74,7 @@ public class CodeMLBranchAnalysis extends AnalysisThread
 		
 		Castor.saveXML(hypo, new File(runDir, "hypo.xml"));
 
-		ClusterUtils.emptyDirectory(wrkDir, true);
+		//ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 
 }

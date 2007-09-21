@@ -19,11 +19,11 @@ public class CodeMLResultsNode extends ResultsNode
 	{
 		super(data, result);
 
-		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+		if(result.type.equals(CodeMLResult.TYPE_SITEMODEL)) {
 			//panel = new CodeMLSiteResultPanel(data, result);
 			panel = new CMLSiteResultPanel(data, result);
 		}
-		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL)
+		else if(result.type.equals(CodeMLResult.TYPE_BRANCHMODEL))
 			//panel = new CodeMLBranchResultPanel(data, result);
 			panel = new CMLBranchResultPanel(data, result);
 		}

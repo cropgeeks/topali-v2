@@ -102,15 +102,15 @@ public class CodeMLWebService extends WebService
 		template = template.replaceAll("\\$TOPALi", topaliPath);
 		template = template.replaceAll("\\$JOB_DIR", jobDir.getPath());
 
-		if(result.type==CodeMLResult.TYPE_BRANCHMODEL)
+		if(result.type.equals(CodeMLResult.TYPE_BRANCHMODEL))
 		{
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLBranchAnalysis");
-			template = template.replaceAll("\\$RUNS", "" + result.models.size());
+			template = template.replaceAll("\\$RUNS", "" + result.hypos.size());
 		}
-		else if(result.type==CodeMLResult.TYPE_SITEMODEL)
+		else if(result.type.equals(CodeMLResult.TYPE_SITEMODEL))
 		{
 			template = template.replaceAll("\\$CLASS", "topali.cluster.jobs.cml.CodeMLSiteAnalysis");
-			template = template.replaceAll("\\$RUNS", "" + result.hypos.size());
+			template = template.replaceAll("\\$RUNS", "" + result.models.size());
 		}
 
 		// Write...

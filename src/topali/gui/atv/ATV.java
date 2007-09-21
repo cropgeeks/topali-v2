@@ -128,7 +128,7 @@ public class ATV extends Thread
 
 	class LaunchDialog extends JDialog {
 		public LaunchDialog() {
-			super(TOPALi.winMain, "Running ATV", true);
+			super(TOPALi.winMain, "Running ATV", false);
 			JPanel p = new JPanel();
 			p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			p.add(new JLabel("Launching ATV, please wait..."));

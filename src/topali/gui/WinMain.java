@@ -656,8 +656,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			// TreePane treePane = navPanel.getCurrentTreePane(data, true);
 			// TreeCreator creator = new TreeCreator(dialog.getAlignment());
 			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data
-					.getSequenceSet().getParams().isDNA());
-			Tree palTree = creator.getTree(true, true);
+					.getSequenceSet().getParams().isDNA(), true, true);
+			Tree palTree = creator.getTree();
 
 			if (palTree != null)
 			{

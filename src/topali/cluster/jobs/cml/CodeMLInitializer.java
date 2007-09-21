@@ -59,7 +59,7 @@ public class CodeMLInitializer extends Thread
 		// Store the sequence data in phylip sequential
 		ss.save(new File(jobDir, "seq.phy"), indices, Filters.PHY_S, true);
 
-		if(result.type==CodeMLResult.TYPE_SITEMODEL) {
+		if(result.type.equals(CodeMLResult.TYPE_SITEMODEL)) {
 	//		 We want to run each of the models
 			for(int i=0; i<result.models.size(); i++) {
 				if (LocalJobs.isRunning(result.jobId) == false)
@@ -72,7 +72,7 @@ public class CodeMLInitializer extends Thread
 					new CodeMLSiteAnalysis(runDir).start(LocalJobs.manager);
 			}
 		}
-		else if(result.type==CodeMLResult.TYPE_BRANCHMODEL) {
+		else if(result.type.equals(CodeMLResult.TYPE_BRANCHMODEL)) {
 			//		 We want to run each of the hypothesis
 			for(int i=0; i<result.hypos.size(); i++) {
 				if (LocalJobs.isRunning(result.jobId) == false)

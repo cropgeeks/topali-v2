@@ -275,6 +275,15 @@
   <field name="omegas" type="double" direct="true" collection="array"/>
 </class>
 
+<class name="topali.data.PSSite">
+  <field name="pos" type="integer" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="aa" type="char" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="p" type="double" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
 <!-- CMLModel -->
 <class name="topali.data.CMLModel" auto-complete="false">
   <field name="name" type="string"  direct="true">
@@ -305,7 +314,7 @@
 		<bind-xml node="attribute"/></field>
   <field name="likelihood" type="double" direct="true">
 		<bind-xml node="attribute"/></field>
-  <field name="pss" type="string" direct="true"/>
+  <field name="pssList" type="topali.data.PSSite" collection="collection" direct="true"/>
   <field name="settings" collection="map" direct="true"/>
   <field name="wStart" collection="vector" direct="true"/>
 </class>

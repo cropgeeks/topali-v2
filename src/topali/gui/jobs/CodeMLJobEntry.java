@@ -20,6 +20,7 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	 * 
 	 */
 	private static final long serialVersionUID = -8279795336302219695L;
+
 	private JLabel progressLabel;
 
 	public CodeMLJobEntry(AnalysisJob job)
@@ -30,7 +31,8 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	@Override
 	public JComponent getProgressComponent()
 	{
-		progressLabel = new JLabel("Completed models/hypothesis: ", SwingConstants.LEFT);
+		progressLabel = new JLabel("Completed models/hypothesis: ",
+				SwingConstants.LEFT);
 
 		JPanel p = new JPanel(new BorderLayout());
 		p.setBackground(bgColor);
@@ -44,7 +46,7 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	public void setJobStatus(JobStatus status)
 	{
 		super.setJobStatus(status);
-		
+
 		if (status.text == null)
 			return;
 
@@ -54,14 +56,21 @@ public class CodeMLJobEntry extends JobsPanelEntry
 		while (tok.hasMoreElements())
 		{
 			String[] tmp = tok.nextToken().split("=");
-			if(tmp.length<2)
+			if (tmp.length < 2)
 				break;
-			boolean b = Boolean.parseBoolean(tmp[1]);
 
-			if (b)
-				str += "[" + tmp[0] + "]";
-			else
-				str += "<font color='#aaaaaa'>[" + tmp[0] + "]</font>";
+			if (tmp[1].equals("error"))
+			{
+				str += "<font color='#dd0000'>[" + tmp[0] + "]</font>";
+			} else
+			{
+				boolean b = Boolean.parseBoolean(tmp[1]);
+
+				if (b)
+					str += "[" + tmp[0] + "]";
+				else
+					str += "<font color='#aaaaaa'>[" + tmp[0] + "]</font>";
+			}
 
 			str += "&nbsp;&nbsp;&nbsp;";
 		}

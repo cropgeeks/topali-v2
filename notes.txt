@@ -1,15 +1,11 @@
 Current state of affairs
 -----------------------
 
-TODO:
-- If connecting to a vamsas session, and there is already a project loaded, copy project to the vamsas session. 
-
-Current problems:
-- Interapplication sequence editing doesn't work (topali or vamsas problem?)
-  
 Last modifications:
-- VAMSAS: Removed mapper serialization again, replaced it with a "ID mechanism for all DataObjects"
-- Connecting to vamsas session does not clear the current project anymore
+- Added/Modified icons
+- Cleaned up Phyml settings dialog 
+
+TODO:
 
 Some ideas:
 

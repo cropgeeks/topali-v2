@@ -7,10 +7,7 @@
 package topali.gui.dialog.jobs.cml;
 
 import java.util.Vector;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import topali.data.CMLModel;
 import topali.var.Utils;
 
@@ -24,7 +21,7 @@ public class OmegaValuesDialog extends javax.swing.JDialog {
     DefaultListModel listmodel = new DefaultListModel();
     
     /** Creates new form OmegaValuesDialog */
-    public OmegaValuesDialog(java.awt.Frame parent, boolean modal, CMLModel model) {
+    public OmegaValuesDialog(JDialog parent, boolean modal, CMLModel model) {
         super(parent, modal);
         this.model = model;
         initComponents();

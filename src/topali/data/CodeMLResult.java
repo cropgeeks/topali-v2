@@ -14,8 +14,8 @@ import java.util.Vector;
  */
 public class CodeMLResult extends AlignmentResult 
 {	
-	public final static String TYPE_SITEMODEL = "0";
-	public final static String TYPE_BRANCHMODEL = "1";
+	public final static String TYPE_SITEMODEL = "Site Model";
+	public final static String TYPE_BRANCHMODEL = "Branch Model";
 	
 	public String type;
 	public Vector<CMLModel> models = new Vector<CMLModel>();
@@ -66,4 +66,30 @@ public class CodeMLResult extends AlignmentResult
 		models.add(lastModel);
 		this.models = models;
 	}
+
+	/**
+	 * Constructs a <code>String</code> with all attributes
+	 * in name = value format.
+	 *
+	 * @return a <code>String</code> representation 
+	 * of this object.
+	 */
+	public String toString()
+	{
+	    final String TAB = "    ";
+	    
+	    String retValue = "";
+	    
+	    retValue = "CodeMLResult ( "
+	        + super.toString() + TAB
+	        + "type = " + this.type + TAB
+	        + "models = " + this.models + TAB
+	        + "hypos = " + this.hypos + TAB
+	        + "codemlPath = " + this.codemlPath + TAB
+	        + " )";
+	
+	    return retValue;
+	}
+	
+	
 }

@@ -76,6 +76,6 @@ class CodeMLSiteAnalysis extends AnalysisThread
 
 		Castor.saveXML(model, new File(runDir, "model.xml"));
 
-		ClusterUtils.emptyDirectory(wrkDir, true);
+		//ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 }

@@ -7,8 +7,11 @@ package topali.cluster.jobs.cml;
 
 import java.io.*;
 
-import pal.alignment.ReadAlignment;
-import pal.distance.JukesCantorDistanceMatrix;
+import pal.alignment.*;
+import pal.distance.*;
+import pal.misc.Identifier;
+import pal.substmodel.*;
+import pal.substmodel.SubstitutionModel;
 import pal.tree.*;
 import sbrn.commons.file.FileUtils;
 import topali.analyses.TreeCreator;
@@ -77,8 +80,13 @@ class RunCodeML
 		String file = new File(wrkDir, "seq.phy").getPath();
 		ReadAlignment alignment = new ReadAlignment(file);
 
-		TreeCreator tc = new TreeCreator(alignment, true);
-		Tree tree = tc.getTree(false, false);
+		double[] freqs = AlignmentUtils.estimateFrequencies(alignment);
+		AbstractRateMatrix ratematrix = new F84(2, freqs);
+		RateDistribution rate = new GammaRates(4, 4);
+		SubstitutionModel sModel = SubstitutionModel.Utils.createSubstitutionModel(ratematrix, rate);
+		AlignmentDistanceMatrix distmatrix = new AlignmentDistanceMatrix(new SitePattern(alignment), sModel);
+		Tree tree = new NeighborJoiningTree(distmatrix);
+		tree.getRoot().setIdentifier(new Identifier(""));
 
 //		JukesCantorDistanceMatrix dm = new JukesCantorDistanceMatrix(alignment);
 //		Tree tree = new NeighborJoiningTree(dm);

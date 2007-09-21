@@ -57,9 +57,9 @@ public class TreeToolTip extends JToolTip
 		int[] indices = ss.getIndicesFromNames(seqNames);
 		SimpleAlignment alignment = ss.getAlignment(indices, n1, n2, false);
 
-		TreeCreator tc = new TreeCreator(alignment, ss.isDNA());
+		TreeCreator tc = new TreeCreator(alignment, ss.isDNA(), true, false);
 
-		Tree tree = tc.getTree(true, false);
+		Tree tree = tc.getTree();
 		if (tree != null)
 		{
 			painter = new TreePainterNormal(tree, "", false);

@@ -24,12 +24,15 @@
 * GUI: Show graph related toolbar buttons only if there is a graph (concerns: ResultPanels)
 * GUI: Clean up CodonW dialog
 
+* GUI: Center Omega-Start-Dialog over parent dialog
+* GUI: Clean up Advanced phyml settings
+- Future: Catch failing codeml jobs
 
 New Features since last public release:
 
 - Print preview
   - printing of graphs, trees, tables
-- Mouse over highlighting allowing vamsas integration and sequence/parition selection
+- Mouse over highlighting allowing vamsas integration and sequence/partition selection
 - (Coding region partitions)
 - In addition to 4 recom/detect methods, package now contains:
   - 2 positive selection analysis methods
