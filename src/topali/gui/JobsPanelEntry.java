@@ -100,9 +100,18 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	{
 		String title = "JobId: " + jobId + " ";
 		if (job.getResult().isRemote)
-			title += "(remote)";
+		{
+			if (job.getResult().url.startsWith("http://www.topali.org"))
+				title += "(running on the Scottish Crop Research Institute HPC cluster)";
+			else if (job.getResult().url.startsWith("http://compbio.dundee"))
+				title += "(running on the University of Dundee Barton Group HPC cluster)";
+			else
+				title += "(running remotely)";
+		}
 		else
-			title += "(local)";
+			title += "(running locally)";
+
+
 
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
@@ -131,7 +140,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			int q = Integer.parseInt(qCount);
 			if (q >= 0)
 				txt = q + (q==1 ? " job " : " jobs ") + "ahead of you...";
-				
+
 			statusLabel.setText("Queued - " + txt);
 			WinMainStatusBar.setStatusIcon(GRE);
 			break;
