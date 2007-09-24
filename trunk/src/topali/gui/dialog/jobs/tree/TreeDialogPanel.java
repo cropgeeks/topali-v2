@@ -260,14 +260,14 @@ public class TreeDialogPanel extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton allseq;
-    private javax.swing.JRadioButton bayes;
-    private javax.swing.JRadioButton bayescdna;
+    public javax.swing.JRadioButton bayes;
+    public javax.swing.JRadioButton bayescdna;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JRadioButton f84;
+    public javax.swing.JRadioButton f84;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton phyml;
+    public javax.swing.JRadioButton phyml;
     private javax.swing.JRadioButton selseq;
     // End of variables declaration//GEN-END:variables
     

@@ -25,6 +25,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		this.result = result;
         initComponents();
         setDefaults();
+        
+        if(result!=null)
+        	initPrevResult(result);
     }
     
     private void setDefaults() {
@@ -59,6 +62,12 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		SpinnerNumberModel mNBoot = new SpinnerNumberModel(result.bootstrap, 0, 1000, 10);
 		this.bootstraps.setModel(mNBoot);
 	}
+    
+    private void initPrevResult(PhymlResult res) {
+    	this.bootstraps.setValue(res.bootstrap);
+    	this.optTop.setSelected(res.optTopology);
+    	this.optBranch.setSelected(res.optBranchPara);
+    }
     
     public void onOK() {
 		ss.getParams().setModel((String)subModel.getSelectedItem());

@@ -25,7 +25,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 	public JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	
 	WinMain winMain;
-	AlignmentData data;
+	public AlignmentData data;
 	public CodeMLResult result;
 	
 	String tree;

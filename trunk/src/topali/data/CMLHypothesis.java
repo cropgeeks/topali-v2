@@ -57,7 +57,7 @@ public class CMLHypothesis
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(tree+"\n");
+		sb.append("<tree>"+tree+"</tree>\n");
 		sb.append("Settings:\n");
 		for(String k : settings.keySet()) {
 			if(!k.contains("file"))

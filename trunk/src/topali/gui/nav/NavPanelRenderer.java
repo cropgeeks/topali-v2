@@ -48,19 +48,24 @@ class NavPanelRenderer extends JLabel implements TreeCellRenderer
 			setIcon(Icons.TREE);
 
 		else if (obj instanceof PDMResultsNode)
-			setIcon(Icons.RECOMBINATION);
+			setIcon(Icons.RECOMBINATION_PDM);
 
 		else if (obj instanceof HMMResultsNode)
-			setIcon(Icons.RECOMBINATION);
+			setIcon(Icons.RECOMBINATION_HMM);
 
 		else if (obj instanceof DSSResultsNode)
-			setIcon(Icons.RECOMBINATION);
+			setIcon(Icons.RECOMBINATION_DSS);
 
 		else if (obj instanceof LRTResultsNode)
-			setIcon(Icons.RECOMBINATION);
+			setIcon(Icons.RECOMBINATION_LRT);
 		
-		else if (obj instanceof CodeMLResultsNode)
-			setIcon(Icons.POSSELECTION);
+		else if (obj instanceof CodeMLResultsNode) {
+			CodeMLResultsNode tmp = (CodeMLResultsNode)obj;
+			if(tmp.isSiteModel())
+				setIcon(Icons.POSSELECTION_SITE);
+			else
+				setIcon(Icons.POSSELECTION_BRANCH);
+		}
 		
 		else if(obj instanceof CodonWResultsNode)
 			setIcon(Icons.CODONUSAGE);

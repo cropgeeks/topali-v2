@@ -146,7 +146,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			panel.setViewMode(TreeResult.CLUSTER);
 
 		else if(e.getSource() == bInfo) {
-			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult, false);
+			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult);
 			ad.setText(getTreeInfo());
 			ad.setVisible(true);
 		}

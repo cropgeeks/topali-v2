@@ -112,7 +112,15 @@ public class MGResultPanel extends ResultPanel
 	@Override
 	public String getAnalysisInfo()
 	{
-		return "";
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("\n\nApplication: ModelGenerator (Version 0.84)\n");
+		sb.append("Thomas M Keane, Christopher J Creevey , Melissa M Pentony, Thomas J Naughton\n " +
+				"and James O McInerney (2006) Assessment of methods for amino acid matrix selection\n" +
+				"and their use on empirical data shows that ad hoc assumptions for choice of matrix\n" +
+				"are not justified, BMC Evolutionary Biology, 6:29");
+		
+		return sb.toString();
 	}
 
 	@Override

@@ -202,6 +202,11 @@ public class MrBayesAnalysis extends AnalysisThread
 		 sb.append("Burnin: "+((int)(result.burnin*100))+"%\n\n");
 		 sb.append("MrBayes Commands:\n");
 		 sb.append(cmd.getCommands());
+		 
+		 sb.append("\n\nApplication: MrBayes (Version 3.1.1)\n");
+		 sb.append("F Ronquist, JP Huelsenbeck, 2003, MrBayes 3: Bayesian phylogenetic\n" +
+					"inference under mixed models, Bioinformatics, 19(12), pp 1572-1574");
+			
 		 result.info = sb.toString();
 		 result.nexusCommands = cmd.getCommands();
 	}

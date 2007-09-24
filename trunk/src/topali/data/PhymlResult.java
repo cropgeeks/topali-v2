@@ -17,9 +17,11 @@ public class PhymlResult extends TreeResult
 	
 	public PhymlResult() {
 		super();
+		isResubmittable = true;
 	}
 	
 	public PhymlResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 }

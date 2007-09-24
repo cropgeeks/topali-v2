@@ -45,10 +45,12 @@ public class PDM2Result extends AlignmentResult
 	public PDM2Result()
 	{
 		super();
+		isResubmittable = true;
 	}
 	
 	public PDM2Result(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 
 	// Castor conversion methods so that the 2D data array is saved as a string

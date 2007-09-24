@@ -14,9 +14,11 @@ public class CodonWResult extends AlignmentResult
 	
 	public CodonWResult() {
 		super();
+		isResubmittable = true;
 	}
 	
 	public CodonWResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 }

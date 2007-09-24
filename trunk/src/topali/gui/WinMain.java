@@ -29,6 +29,7 @@ import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
+import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
 import topali.var.Utils;
@@ -643,11 +644,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		submitJob(data, res);
 	}
 
-	void menuAnlsCreateTree()
+	public void menuAnlsCreateTree(TreeResult res)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
-		CreateTreeDialog dialog = new CreateTreeDialog(this, data);
+		CreateTreeDialog dialog = new CreateTreeDialog(this, data, res);
 		TreeResult result = dialog.getTreeResult();
 		if (result == null)
 			return;
@@ -681,6 +682,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				//WinMainMenuBar.aFileSave.setEnabled(true);
 				//WinMainMenuBar.aVamCommit.setEnabled(true);
 				ProjectState.setDataChanged();
+				
+				TreePane treePane = navPanel.getCurrentTreePane(data, true);
+				treePane.displayTree(data.getSequenceSet(), result);
 			}
 		}
 		// Tree being created as a cluster/local job

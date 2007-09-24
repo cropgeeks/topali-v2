@@ -34,6 +34,7 @@ public class AnalysisResult extends DataObject
 	// The job's current status
 	public int status = JobStatus.STARTING;
 
+	protected boolean isResubmittable = false;
 	
 	public AnalysisResult()
 	{
@@ -53,4 +54,7 @@ public class AnalysisResult extends DataObject
 		return guiName;
 	}
 	
+	public boolean isResubmittable() {
+		return isResubmittable;
+	}
 }

@@ -37,10 +37,12 @@ public class LRTResult extends AlignmentResult
 	public LRTResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 	
 	public LRTResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 
 	// Castor conversion methods so that the 2D data array is saved as a string

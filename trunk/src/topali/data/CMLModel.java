@@ -162,6 +162,7 @@ public class CMLModel
 		
 		for(double d : wStart) {
 			CMLModel m = new CMLModel(model);
+			m.wStart = this.wStart;
 			m.settings.put("omega", String.valueOf(d));
 			res.add(m);
 		}
@@ -221,54 +222,54 @@ public class CMLModel
 		return null;
 	}
 
-	/**
-	 * Constructs a <code>String</code> with all attributes
-	 * in name = value format.
-	 *
-	 * @return a <code>String</code> representation 
-	 * of this object.
-	 */
-	public String toString()
-	{
-	    final String TAB = "    ";
-	    
-	    String retValue = "";
-	    
-	    retValue = "CMLModel ( "
-	        + super.toString() + TAB
-	        + "model = " + this.model + TAB
-	        + "name = " + this.name + TAB
-	        + "nParameter = " + this.nParameter + TAB
-	        + "supportsPSS = " + this.supportsPSS + TAB
-	        + "fixedOmega = " + this.fixedOmega + TAB
-	        + "settings = " + this.settings + TAB
-	        + "wStart = " + this.wStart + TAB
-	        + "p0 = " + this.p0 + TAB
-	        + "p1 = " + this.p1 + TAB
-	        + "p2 = " + this.p2 + TAB
-	        + "w0 = " + this.w0 + TAB
-	        + "w1 = " + this.w1 + TAB
-	        + "w2 = " + this.w2 + TAB
-	        + "p = " + this.p + TAB
-	        + "q = " + this.q + TAB
-	        + "likelihood = " + this.likelihood + TAB
-	        + "pssList = " + this.pssList + TAB
-	        + " )";
-	
-	    return retValue;
-	}
-	
-//	@Override
-//	public String toString() {
-//		StringBuffer sb = new StringBuffer();
-//		sb.append("Model: "+name+"\n");
-//		sb.append("Settings: \n");
-//		Set<String> keys = settings.keySet();
-//		for(String s : keys) {
-//			sb.append(s+" = "+settings.get(s)+"\n");
-//		}
-//		return sb.toString();
+//	/**
+//	 * Constructs a <code>String</code> with all attributes
+//	 * in name = value format.
+//	 *
+//	 * @return a <code>String</code> representation 
+//	 * of this object.
+//	 */
+//	public String toString()
+//	{
+//	    final String TAB = "    ";
+//	    
+//	    String retValue = "";
+//	    
+//	    retValue = "CMLModel ( "
+//	        + super.toString() + TAB
+//	        + "model = " + this.model + TAB
+//	        + "name = " + this.name + TAB
+//	        + "nParameter = " + this.nParameter + TAB
+//	        + "supportsPSS = " + this.supportsPSS + TAB
+//	        + "fixedOmega = " + this.fixedOmega + TAB
+//	        + "settings = " + this.settings + TAB
+//	        + "wStart = " + this.wStart + TAB
+//	        + "p0 = " + this.p0 + TAB
+//	        + "p1 = " + this.p1 + TAB
+//	        + "p2 = " + this.p2 + TAB
+//	        + "w0 = " + this.w0 + TAB
+//	        + "w1 = " + this.w1 + TAB
+//	        + "w2 = " + this.w2 + TAB
+//	        + "p = " + this.p + TAB
+//	        + "q = " + this.q + TAB
+//	        + "likelihood = " + this.likelihood + TAB
+//	        + "pssList = " + this.pssList + TAB
+//	        + " )";
+//	
+//	    return retValue;
 //	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Model: "+name+"\n");
+		sb.append("Settings: \n");
+		Set<String> keys = settings.keySet();
+		for(String s : keys) {
+			sb.append(s+" = "+settings.get(s)+"\n");
+		}
+		return sb.toString();
+	}
 	
 	
 }

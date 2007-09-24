@@ -41,11 +41,22 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	PhymlResult phymlResult = new PhymlResult();
 
-	public CreateTreeDialog(WinMain winMain, AlignmentData data)
+	public CreateTreeDialog(WinMain winMain, AlignmentData data, TreeResult result)
 	{
 		super(winMain, "Estimate New Tree", true);
 		this.data = data;
 
+		if(result!=null) {
+			if(result instanceof MBTreeResult) {
+				this.mbResult = (MBTreeResult)result;
+				Prefs.gui_tree_method=2;
+			}
+			else if(result instanceof PhymlResult) {
+				this.phymlResult = (PhymlResult)result;
+				Prefs.gui_tree_method = 1;
+			}
+		}
+		
 		ss = data.getSequenceSet();
 
 		setLayout(new BorderLayout());
@@ -127,6 +138,14 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 		else if (e.getSource() == bRun)
 			onOK((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
+		
+		else if(e.getSource() == bDefault) {
+			mbResult = new MBTreeResult();
+			bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), mbResult);
+			phymlResult = new PhymlResult();
+			phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
+			basicPanel.f84.setSelected(true);
+		}
 	}
 
 	private void onOK(boolean makeRemote)

@@ -68,10 +68,12 @@ public class HMMResult extends AlignmentResult
 	public HMMResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 
 	public HMMResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 	
 	// Castor conversion methods so that the 2D data arrays are saved as strings
