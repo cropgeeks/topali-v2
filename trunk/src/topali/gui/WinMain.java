@@ -85,6 +85,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		project.addChangeListener(this);
+
+		Tracker.log("OPEN");
 	}
 
 	public Project getProject()

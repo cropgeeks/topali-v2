@@ -38,8 +38,6 @@ class UpdateChecker extends Thread
 	{
 		try
 		{
-			Tracker.log("OPEN");
-
 			URL url = new URL("http://www.topali.org/topali/version.html");
 			URLConnection uc = url.openConnection();
 
