@@ -15,7 +15,7 @@
 * GUI: Jobs tracking progress bar for non-tracking jobs is too large
 - Future: Decide on mouse highlighting functionality
 - Future: Decide on how to handle local job submission
-- GUI: Icons for job results in the left-hand navigation panel
+* GUI: Icons for job results in the left-hand navigation panel
 * GUI: Model generator output - toggle between TOPALi-compatible results and all results (toolbar button)
 * GUI: Site model analysis dialog tidy up
 * BUG: FRANK: m1, m2 etc are doing the wrong analysis
@@ -26,7 +26,9 @@
 
 * GUI: Center Omega-Start-Dialog over parent dialog
 * GUI: Clean up Advanced phyml settings
-- Future: Catch failing codeml jobs
+* Future: Catch failing codeml jobs
+* Check if all jobs can be resubmitted
+* Switch to tree view when f84 tree job has finished
 
 New Features since last public release:
 

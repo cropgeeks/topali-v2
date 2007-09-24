@@ -242,11 +242,19 @@ public class CMLBranchResultPanel extends ResultPanel
 		
 		sb.append("Analysis type: Branch model\n\n");
 
-		
+		sb.append("Hypothesis tested:\n\n");
 		for (int i = 0; i < res.hypos.size(); i++)
 		{
 			sb.append("Hypothesis H" + i + "\n");
-			sb.append(res.hypos.get(i));
+			
+			String tmp = res.hypos.get(i).toString();
+			int s = tmp.indexOf('>');
+			int e = tmp.indexOf('<', s);
+			String tree = tmp.substring(s+1, e);
+			String tree2 = Utils.getNameTree(tree, data.getSequenceSet());
+			tmp = tmp.replaceAll("\\<tree\\>.*\\</tree\\>", tree2);
+			
+			sb.append(tmp);
 			sb.append("\n");
 		}
 
@@ -254,6 +262,10 @@ public class CMLBranchResultPanel extends ResultPanel
 		for (String seq : res.selectedSeqs)
 			sb.append("\n  " + data.getSequenceSet().getNameForSafeName(seq));
 
+		sb.append("\n\nApplication: CodeML (PAML, Version 4)\n");
+		sb.append("Yang, Ziheng (2007),  PAML 4: Phylogenetic Analysis by Maximum Likelihood.\n" +
+				"Molecular Biology and Evolution, 24(8), pp 1586-91.");
+		
 		return sb.toString();
 	}
 

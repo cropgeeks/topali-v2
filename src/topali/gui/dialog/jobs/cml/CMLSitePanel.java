@@ -44,8 +44,12 @@ public class CMLSitePanel extends javax.swing.JPanel {
 		mod7 = new CMLModel(CMLModel.MODEL_M7);
 		mod8 = new CMLModel(CMLModel.MODEL_M8);
 		
+		m0.setSelected(true);
 		m1a.setSelected(true);
 		m2a.setSelected(true);
+		m3.setSelected(false);
+		m7.setSelected(false);
+		m8.setSelected(false);
     }
     
     public CodeMLResult getResult() {

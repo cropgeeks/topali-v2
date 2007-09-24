@@ -2,13 +2,17 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added/Modified icons
-- Cleaned up Phyml settings dialog 
+- Modified icons again
+- When F84 tree job finishes, Topali now again automatically switches to tree view
+- Fixed Codeml Site/Branch job resubmission and anaylsis info display
+- Fixed: Default button was not working for every job settings dialog
+- Added application details and literature references to jobs' analysis info 
+- Repacked ATV library (forester.jar), now includes source code
 
 TODO:
 
 Some ideas:
-
+- Do we actually really want to reselect the sequences when resubmitting a job?
 
 Some URLs
 ---------

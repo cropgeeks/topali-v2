@@ -464,7 +464,7 @@ public class WinMainMenuBar extends JMenuBar
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuAnlsCreateTree();
+				winMain.menuAnlsCreateTree(null);
 			}
 		};
 
@@ -767,7 +767,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
 		MenuHeading h4 = new MenuHeading("Coding regions");
-		h4.setIcon(Icons.CODONUSAGE);
+		h4.setIcon(Icons.CODINGREGIONS);
 		mAnls.add(h4);
 		mAnls.add(mAnlsRunCW);
 		mAnls.addSeparator();

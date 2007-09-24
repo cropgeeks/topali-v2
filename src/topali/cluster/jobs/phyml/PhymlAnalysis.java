@@ -77,6 +77,11 @@ public class PhymlAnalysis extends AnalysisThread
 		 sb.append("Optimize Topology: "+result.optTopology+"\n");
 		 sb.append("Optimize branch lengths/rate para.: "+result.optBranchPara+"\n\n");
 		 
+		 sb.append("\n\nApplication: PhyML (Version 2.4.4)\n");
+		 sb.append("Guindon S, Gascuel O. (2003), A simple, fast, and accurate\n" +
+		 		"algorithm to estimate large phylogenies by maximum likelihood,\n" +
+		 		"Systematic Biology. 52(5) pp 696-704. ");
+		 
 		 return sb.toString();
 	}
 	

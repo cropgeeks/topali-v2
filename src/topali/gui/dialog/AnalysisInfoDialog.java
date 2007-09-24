@@ -22,18 +22,10 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 	private JButton bClose, bSubmit, bHelp;
 
 	private JTextArea text;
-
-	private boolean submit = true;
 	
 	public AnalysisInfoDialog(AlignmentResult aResult) {
-		this(aResult, true);
-	}
-	
-	public AnalysisInfoDialog(AlignmentResult aResult, boolean submit)
-	{
 		super(MsgBox.frm, "Analysis Information", true);
 		this.aResult = aResult;
-		this.submit = submit;
 		
 		add(createControls());
 		getRootPane().setDefaultButton(bClose);
@@ -67,7 +59,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 		p2.add(bClose);
-		if(submit)
+		if(aResult.isResubmittable())
 			p2.add(bSubmit);
 		p2.add(bHelp);
 
@@ -137,6 +129,16 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		else if(aResult instanceof CodonWResult) {
 			CodonWResult res = (CodonWResult) aResult;
 			TOPALi.winMain.menuAnlsRunCW(res);
+		}
+		
+		else if(aResult instanceof MBTreeResult) {
+			MBTreeResult res = (MBTreeResult)aResult;
+			TOPALi.winMain.menuAnlsCreateTree(res);
+		}
+		
+		else if(aResult instanceof PhymlResult) {
+			PhymlResult res = (PhymlResult)aResult;
+			TOPALi.winMain.menuAnlsCreateTree(res);
 		}
 	}
 }

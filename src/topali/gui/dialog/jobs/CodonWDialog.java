@@ -30,8 +30,9 @@ public class CodonWDialog extends JDialog implements ActionListener
 		this.ss = data.getSequenceSet();
 		init();
 
-		if(res!=null)
+		if(res!=null) {
 			setSelectedCode(res.geneticCode);
+		}
 
 		pack();
 		setLocationRelativeTo(TOPALi.winMain);

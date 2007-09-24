@@ -42,6 +42,8 @@ public class CodonWResultPanel extends ResultPanel
 				"-cbi\n" +
 				"-fop\n\n");
 		
+		sb.append("\n\nApplication: CodonW (Version 1.4.4)\n");
+		sb.append("John F Peden (1999), Analysis of Codon Usage");
 		return sb.toString(); 
 	}
 

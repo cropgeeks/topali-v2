@@ -55,6 +55,8 @@
      
      <mapID target="fastml" url="html/fastml.html" />
      
+     <mapID target="analysis_info" url="html/analysis_info.html" />
+     
    <mapID target="display_settings" url="html/display_settings.html" /> 
    <mapID target="settings" url="html/settings.html" />
    

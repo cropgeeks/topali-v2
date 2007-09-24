@@ -93,10 +93,12 @@ public class PDMResult extends AlignmentResult
 	public PDMResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 	
 	public PDMResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 
 	public float calculateThreshold()

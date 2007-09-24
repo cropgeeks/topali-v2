@@ -23,9 +23,11 @@ public class MBTreeResult extends TreeResult
 	public MBTreeResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 	
 	public MBTreeResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 }

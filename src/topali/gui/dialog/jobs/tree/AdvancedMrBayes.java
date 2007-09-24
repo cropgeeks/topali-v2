@@ -25,6 +25,9 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		this.result = result;
         initComponents();
         setDefaults();
+        
+        if(result!=null)
+        	initPrevResult(result);
     }
     
     private void setDefaults() {
@@ -62,6 +65,12 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		SpinnerNumberModel mBurn = new SpinnerNumberModel((int)(result.burnin*100), 1, 99, 1);
 		this.burnin.setModel(mBurn);
 	}
+    
+    private void initPrevResult(MBTreeResult res) {
+    	this.nGen.setValue(res.nGen);
+    	this.burnin.setValue((int)(res.burnin*100));
+    	this.samFreq.setValue(res.sampleFreq);
+    }
     
     public void onOK() {
 		ss.getParams().setGeneticCode((String)genCode.getSelectedItem());
@@ -108,7 +117,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 
         nGen.setToolTipText("Number of generations");
 
-        burnin.setToolTipText("Length of burnin period (relative to number of samples generated)");
+        burnin.setToolTipText("Length of burnin period (in %, relative to number of samples generated)");
 
         jLabel4.setText("nGenerations:");
 

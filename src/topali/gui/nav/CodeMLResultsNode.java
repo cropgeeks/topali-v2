@@ -28,6 +28,10 @@ public class CodeMLResultsNode extends ResultsNode
 			panel = new CMLBranchResultPanel(data, result);
 		}
 
+	public boolean isSiteModel() {
+		return ((CodeMLResult)result).type.equals(CodeMLResult.TYPE_SITEMODEL);
+	}
+	
 	@Override
 	public String toString()
 	{

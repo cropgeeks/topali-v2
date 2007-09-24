@@ -26,15 +26,19 @@ public class CodeMLResult extends AlignmentResult
 	
 	public CodeMLResult() {
 		super();
+		isResubmittable = true;
 	}
 	
 	public CodeMLResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 	
 	public CodeMLResult(String type)
 	{
+		super();
 		this.type = type;
+		isResubmittable = true;
 	}
 
 	/**

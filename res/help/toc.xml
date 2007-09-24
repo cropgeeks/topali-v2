@@ -63,10 +63,10 @@
   <tocitem text="Ancestral sequence estimation" expand="true">
     <tocitem text="FastML" target="fastml" image="topic" />
   </tocitem>
+  <tocitem text="Detailed Job information" target="analysis_info" image="topic" />
 </tocitem>
 
 <tocitem text="Application Settings" >
-  
   <tocitem text="Display Settings" target="display_settings" image="topic" />
   <tocitem text="Analysis Settings" target="settings" image="topic" />
 </tocitem>

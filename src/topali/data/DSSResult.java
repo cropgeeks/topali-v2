@@ -46,10 +46,12 @@ public class DSSResult extends AlignmentResult
 	public DSSResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 
 	public DSSResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 	
 	// Castor conversion methods so that the 2D data array is saved as a string

@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.atv.ATV;
+import topali.var.Utils;
 
 /**
  *
@@ -33,10 +34,14 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
         if(parent.result!=null) {
         	for(int i=0; i<parent.result.hypos.size(); i++) {
         		if(i==0) {
-        			setH0(parent.result.hypos.get(0).tree);
+        			String tree = parent.result.hypos.get(0).tree;
+        			tree = Utils.getNameTree(tree, parent.data.getSequenceSet());
+        			setH0(tree);
         		}
         		else {
-        			model.addElement(parent.result.hypos.get(i).tree);
+        			String tree = parent.result.hypos.get(i).tree;
+        			tree = Utils.getNameTree(tree, parent.data.getSequenceSet());
+        			model.addElement(tree);
         		}
         	}
         }
@@ -134,7 +139,11 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
     }//GEN-LAST:event_hypolistValueChanged
 
     public void setDefaults() {
-    	
+    	for(int i=model.size()-1; i>0; i--) {
+    		model.remove(i);
+    	}
+    	remove.setEnabled(false);
+		parent.bRun.setEnabled(false);
     }
     
     private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed

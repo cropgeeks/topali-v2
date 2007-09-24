@@ -145,6 +145,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		
 		sb.append("Analysis type: Site model\n\n");
 
+		sb.append("Selected models:\n\n");
 		for (CMLModel m : result.models)
 		{
 			sb.append(m.toString() + "\n");
@@ -154,6 +155,10 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		for (String seq : result.selectedSeqs)
 			sb.append("\n  " + data.getSequenceSet().getNameForSafeName(seq));
 
+		sb.append("\n\nApplication: CodeML (PAML, Version 4)\n");
+		sb.append("Yang, Ziheng (2007),  PAML 4: Phylogenetic Analysis by Maximum Likelihood.\n" +
+				"Molecular Biology and Evolution, 24(8), pp 1586-91.");
+		
 		return sb.toString();
 	}
 
