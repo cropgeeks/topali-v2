@@ -15,23 +15,129 @@
 </head>
 
 
-<body>
+<div id="header">
+<div style="margin-left: auto; margin-right: auto; width: 40em; text-align: right; position: relative;">    
+    <h1>TOPALi v2</h1>
+    <br><span id="subtitle">statistical and evolutionary analysis of multiple sequence alignments</span></div>
+</div>
+<div class="body">
 
-<h1><a name="top"></a>What's New in TOPALi</h1>
+<h1>What's New in TOPALi v2</h1>
 
 <p>TOPALi v2 is an ongoing project, and as such the software is
 updated often. Below is a list
 of new or interesting features that have been added to the application
 in recent days, weeks,
-months... (newest additions at the bottom).</p>
+months...</p>
 
 <ul>
 
-  <li><a href="#v215">Version 2.15</a></li>
-
   <li><a href="#v216">Version 2.16</a></li>
+  <li><a href="#v215">Version 2.15</a></li>  
 
 </ul>
+
+
+<h2><a name="v216"></a>New in Version 2.16</h2>
+
+
+<span style="font-weight: bold;">Print previews</span><br />
+
+<p>See what you'll get, before hitting the "Print" button.</p>
+
+<img style="width: 469px; height: 260px;" alt="" src="printpreview.jpg" /><br />
+<br />
+
+
+
+<span style="font-weight: bold;">Mouse over highlighting</span><br />
+
+<br />
+The sequence and position is now highlighted, as you move your mouse
+across the alignment. You can highlight regions and select the
+according sequences or add the according position as partition. This
+feature is also used during VAMSAS sessions to synchronize alignment
+views between different application.<br />
+
+<img style="width: 707px; height: 319px;" alt="" src="mouseover.jpg" />
+
+
+
+<span style="font-weight: bold;">Positive Selection
+analysis</span><br />
+<br />
+TOPALi now provides a intuitive interface to CodeML (part of <a href="http://abacus.gene.ucl.ac.uk/software/paml.html" target="_blank">PAML</a>), making positive selection analysis much more convenient.
+
+<br />
+
+<img style="width: 552px; height: 412px;" alt="" src="codeml1.jpg" /><img style="width: 572px; height: 414px;" alt="" src="codeml2.jpg" /><br />
+
+
+
+<span style="font-weight: bold;">New tree estimation
+methods</span><br />
+<br />
+The Jukes-Cantor model for quick tree estimation was replaced with the
+more sophisticated F84+Gamma model. TOPALi also offers different tree
+estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/phyml/" target="_blank">PhyML</a>) or bayesian tree estimation (using <a href="http://mrbayes.csit.fsu.edu/" target="_blank">MrBayes</a>), where also allows further tuning of the tree-creation parameters.<br />
+
+<br />
+
+<img style="width: 346px; height: 209px;" alt="" src="tree1.jpg" />&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<img style="width: 321px; height: 288px;" alt="" src="tree2.jpg" />
+
+
+
+<span style="font-weight: bold;">Nucleotide/Aminoacid
+Substitution Model selection</span>
+
+<br />
+To find out which substitution model your alignment fits best, TOPALi now offers model testing using <a href="http://bioinf.may.ie/software/modelgenerator/" target="_blank">Modelgenerator</a>.<br />
+<br />
+
+<img style="width: 432px; height: 262px;" alt="" src="modelgenerator.jpg" />
+
+<span style="font-weight: bold;"><br />
+Ancestral sequence
+estimation</span><br />
+
+<br />
+In order to estimate ancestral sequences, you can now run <a href="http://www.tau.ac.il/%7Etalp/supplementary/fastml/fastml.2.02.htm" target="_blank">FastML</a>'s ancestral sequence estimation directly from a tree created in TOPALi.<br />
+
+<img style="width: 533px; height: 324px;" alt="" src="ancestral.jpg" /><br />
+
+<br />
+
+<span style="font-weight: bold;">Codon Usage Check</span><br />
+<br />
+For many analyses it is important to check the codon usage beforehand. Therefore you can now launch <a href="http://codonw.sourceforge.net/" target="_blank">CodonW</a> from within TOPALi.<br />
+<br />
+<img style="border: 1px solid ; width: 310px; height: 206px;" alt="" src="codonw.jpg" /><br />
+
+<br />
+
+<span style="font-weight: bold;">VAMSAS support</span><br />
+
+<br />
+TOPALi now mostly supports the <a href="http://www.vamsas.ac.uk/" target="_blank">VAMSAS</a> API, which enables different bioinformatics applications to work together. Currently <a href="http://www.jalview.org/" target="_blank">Jalview</a> and VAMAV support VAMSAS.<br />
+<br />
+
+<img style="width: 478px; height: 196px;" alt="" src="vamsas.jpg" /><br />
+
+<br />
+
+
+<span style="font-weight: bold;">Cluster queue monitoring</span><br />
+<p>
+TOPALi's monitoring of the cluster where your job has been submitted now shows how many jobs
+are in the queue in front of you.
+<p>
+
+<p><img alt="" src="queues.png"/></p>
+
+
+
+
+
 
 <h2><a name="v215"></a>New in Version 2.15</h2>
 
@@ -275,114 +381,10 @@ to TOPALi, perhaps to keep a CPU free for non-TOPALi tasks.</p>
 
 <p>&nbsp;</p>
 
-
-
-
-<br />
-
-<h2><a name="v216"></a>New in Version 2.16</h2>
-
-<br style="font-weight: bold;" />
-
-<span style="font-weight: bold;">Print previews</span><br />
-
-<br />
-See what you'll get, before hitting the "Print" button.<br />
-<br />
-
-<img style="width: 469px; height: 260px;" alt="" src="printpreview.jpg" /><br />
-<br />
-
-<br style="font-weight: bold;" />
-
-<span style="font-weight: bold;">Mouse over highlighting</span><br />
-
-<br />
-The sequence and position is now highlighted, as you move your mouse
-across the alignment. You can highlight regions and select the
-according sequences or add the according position as partition. This
-feature is also used during VAMSAS sessions to synchronize alignment
-views between different application.<br />
-
-<img style="width: 707px; height: 319px;" alt="" src="mouseover.jpg" /><br style="font-weight: bold;" />
-
-<br style="font-weight: bold;" />
-
-<span style="font-weight: bold;">Positive Selection
-analysis</span><br />
-<br />
-TOPALi now provides a intuitive interface to CodeML (part of <a href="http://abacus.gene.ucl.ac.uk/software/paml.html" target="_blank">PAML</a>), making positive selection analysis much more convenient.<br style="font-weight: bold;" />
-
-<br />
-
-<img style="width: 552px; height: 412px;" alt="" src="codeml1.jpg" /><img style="width: 572px; height: 414px;" alt="" src="codeml2.jpg" /><br />
-
-<br style="font-weight: bold;" />
-
-<span style="font-weight: bold;">New tree estimation
-methods</span><br />
-<br />
-The Jukes-Cantor model for quick tree estimation was replaced with the
-more sophisticated F84+Gamma model. TOPALi also offers different tree
-estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/phyml/" target="_blank">PhyML</a>) or bayesian tree estimation (using <a href="http://mrbayes.csit.fsu.edu/" target="_blank">MrBayes</a>), where also allows further tuning of the tree-creation parameters.<br />
-
-<br />
-
-<img style="width: 346px; height: 209px;" alt="" src="tree1.jpg" />&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<img style="width: 321px; height: 288px;" alt="" src="tree2.jpg" /><br style="font-weight: bold;" />
-
-<br style="font-weight: bold;" />
-
-<span style="font-weight: bold;">Nucleotide/Aminoacid
-Substitution Model selection</span><br style="font-weight: bold;" />
-
-<br />
-To find out which substitution model your alignment fits best, TOPALi now offers model testing using <a href="http://bioinf.may.ie/software/modelgenerator/" target="_blank">Modelgenerator</a>.<br />
-<br />
-
-<img style="width: 432px; height: 262px;" alt="" src="modelgenerator.jpg" /><br style="font-weight: bold;" />
-
-<span style="font-weight: bold;"><br />
-Ancestral sequence
-estimation</span><br />
-
-<br />
-In order to estimate ancestral sequences, you can now run <a href="http://www.tau.ac.il/%7Etalp/supplementary/fastml/fastml.2.02.htm" target="_blank">FastML</a>'s ancestral sequence estimation directly from a tree created in TOPALi.<br />
-
-<img style="width: 533px; height: 324px;" alt="" src="ancestral.jpg" /><br />
-
-<br />
-
-<span style="font-weight: bold;">Codon Usage Check</span><br />
-<br />
-For many analyses it is important to check the codon usage beforehand. Therefore you can now launch <a href="http://codonw.sourceforge.net/" target="_blank">CodonW</a> from within TOPALi.<br />
-<br />
-<img style="border: 1px solid ; width: 310px; height: 206px;" alt="" src="codonw.jpg" /><br />
-
-<br />
-
-<span style="font-weight: bold;">VAMSAS support</span><br />
-
-<br />
-TOPALi now mostly supports the <a href="http://www.vamsas.ac.uk/" target="_blank">VAMSAS</a> API, which enables different bioinformatics applications to work together. Currently <a href="http://www.jalview.org/" target="_blank">Jalview</a> and VAMAV support VAMSAS.<br />
-<br />
-
-<img style="width: 478px; height: 196px;" alt="" src="vamsas.jpg" /><br />
-
 <br />
 
 
-<span style="font-weight: bold;">Cluster queue monitoring</span><br />
-<p>
-TOPALi's monitoring of the cluster where your job has been submitted now shows how many jobs
-are in the queue in front of you.
-<p>
-
-<p><img alt="" src="queues.png"/></p>
-
-
-<a href="#top">top</a><br />
-
-<br />
+</div>
 
 </body>
 </html>
