@@ -96,8 +96,8 @@ public class Prefs extends PreferencesXML
 	public static float gui_group_threshold = 0.05f;
 	public static int gui_import_method = 0;
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
-	public static boolean gui_show_horizontal_highlight = true;
-	public static boolean gui_show_vertical_highlight = true;
+	public static boolean gui_show_horizontal_highlight = false;
+	public static boolean gui_show_vertical_highlight = false;
 
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
