@@ -1,3 +1,5 @@
+#$ -l public=true
+
 #$ -N TPi-MG
 #$ -cwd
 #$ -j y
