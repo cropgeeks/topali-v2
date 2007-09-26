@@ -38,7 +38,7 @@ class UpdateChecker extends Thread
 	{
 		try
 		{
-			URL url = new URL("http://www.topali.org/topali/version.html");
+			URL url = new URL("http://www.topali.org/topali/version.txt");
 			URLConnection uc = url.openConnection();
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
