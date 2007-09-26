@@ -83,7 +83,10 @@ font-size: 13px;
     line-height: 16px; color: #666666;
 }
 
-
+IMG
+{
+	border: 0;
+}
 
 .body h1, .body h2, .body h3{
 position:relative;
