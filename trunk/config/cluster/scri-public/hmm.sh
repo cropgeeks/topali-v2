@@ -1,3 +1,5 @@
+#$ -l public=true
+
 #$ -N TPi-HMM
 #$ -cwd
 #$ -j y

@@ -1,3 +1,5 @@
+#$ -l public=true
+
 #$ -N TPi-PDM2
 #$ -cwd
 #$ -j y
