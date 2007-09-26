@@ -5,11 +5,12 @@
 
 package topali.gui.results;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.print.Printable;
 import java.util.*;
+import java.util.List;
 
-import javax.swing.JSplitPane;
+import javax.swing.*;
 import javax.swing.event.*;
 
 import topali.data.*;
@@ -23,8 +24,10 @@ public class CMLSiteResultPanel extends ResultPanel implements
 {
 
 	TablePanel table;
+	JSplitPane sp;
 
 	GraphPanel graph;
+	JPanel blankPanel;
 
 	public CMLSiteResultPanel(AlignmentData data, CodeMLResult result)
 	{
@@ -32,14 +35,21 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		System.out.println(result);
 		this.table = createTablePanel();
 		this.graph = createGraphPanel();
-		this.graph.setEnabled(false);
+	//	this.graph.setEnabled(false);
 		
-		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		sp.setLeftComponent(table);
-		sp.setRightComponent(graph);
+		blankPanel = new JPanel(new BorderLayout());
+		blankPanel.add(
+			new JLabel("(models predicting positive selection sites will display graph data here when selected)", JLabel.CENTER));
+		
+		sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		sp.setTopComponent(table);
+		sp.setBottomComponent(blankPanel);
 		addContent(sp, true);
 
 		setThreshold(result.threshold);
+		
+		sp.setResizeWeight(0.3);
+		sp.setDividerLocation(200);
 		
 	}
 
@@ -66,7 +76,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		names.add("Q");
 		names.add("PSS");
 
-		Vector data = getTableVector(((AlignmentResult)result).threshold);
+		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
@@ -76,10 +86,10 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		return p;
 	}
 
-	private Vector<Vector> getTableVector(double thres)
+	private Vector<Vector<String>> getTableVector(double thres)
 	{
 		CodeMLResult result = (CodeMLResult) this.result;
-		Vector<Vector> data = new Vector<Vector>();
+		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		for (CMLModel m : result.models)
 		{
 			Vector<String> v = new Vector<String>();
@@ -167,7 +177,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	{
 		((AlignmentResult)this.result).threshold = t;
 		graph.setThreshold(t);
-		Vector data = getTableVector(t);
+		Vector<Vector<String>> data = getTableVector(t);
 		table.setData(data);
 	}
 
@@ -185,6 +195,8 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		if (e.getValueIsAdjusting() || table.accessTable().getSelectedRow() < 0)
 			return;
 
+		int location = sp.getDividerLocation();
+		
 		CodeMLResult result = (CodeMLResult) this.result;
 		CMLModel m = result.models.get(table.accessTable().getSelectedRow());
 
@@ -208,7 +220,8 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[n - 1][1] = p;
 				data[n][1] = p;
 			}
-			graph.setEnabled(true);
+//			graph.setEnabled(true);
+			sp.setBottomComponent(graph);
 		} else
 		{
 			data = new double[this.data.getSequenceSet().getLength()][2];
@@ -218,9 +231,12 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[i][1] = 0;
 			}
 			
-			graph.setEnabled(false);
+//			graph.setEnabled(false);
+			sp.setBottomComponent(blankPanel);
 		}
 		graph.setChartData(data);
+		
+		sp.setDividerLocation(location);
 	}
 
 }

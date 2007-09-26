@@ -36,6 +36,9 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 		pack();
 		setLocationRelativeTo(winmain);
 		setResizable(false);
+		
+		getRootPane().setDefaultButton(bRun);
+		bRun.requestFocus();
 	}
 	
 	private void init() {
@@ -45,9 +48,8 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 		add(panel, BorderLayout.CENTER);
 		
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "cmlsite_settings");
-		add(bp, BorderLayout.SOUTH);
+		getContentPane().add(bp, BorderLayout.SOUTH);
 		
-		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 	}
 

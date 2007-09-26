@@ -71,7 +71,7 @@ class NavPanelRenderer extends JLabel implements TreeCellRenderer
 			setIcon(Icons.CODONUSAGE);
 		
 		else if(obj instanceof MGResultsNode)
-			setIcon(Icons.TREE_TABLE);
+			setIcon(Icons.NUC_MODEL);
 		
 		else if (leaf)
 			setIcon(new DefaultTreeCellRenderer().getLeafIcon());

@@ -68,7 +68,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bFloat = (JToggleButton) WinMainToolBar.getButton(true, null, "tre07",
 				Icons.FLOAT, null);
 		bViewCluster = (JToggleButton) WinMainToolBar.getButton(true, null,
-				"tre09", Icons.TREE_NEWHAMP, null);
+				"tre09", Icons.CLUSTER_INFO, null);
 		
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		

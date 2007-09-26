@@ -7,8 +7,6 @@ package topali.data;
 
 import java.util.*;
 
-import sun.nio.cs.ext.MacGreek;
-
 public class MGResult extends AlignmentResult 
 {
 	public String mgPath;

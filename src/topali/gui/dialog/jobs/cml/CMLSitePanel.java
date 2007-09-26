@@ -6,11 +6,7 @@
 
 package topali.gui.dialog.jobs.cml;
 
-import java.util.Vector;
-import topali.data.AlignmentData;
-import topali.data.CMLModel;
-import topali.data.CodeMLResult;
-import topali.gui.*;
+import topali.data.*;
 
 /**
  *
@@ -183,42 +179,47 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m7set.setIcon(Icons.SETTINGS);
+        m7set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m7set.setToolTipText("Edit omega start values");
         m7set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m7setActionPerformed(evt);
             }
         });
 
-        m3set.setIcon(Icons.SETTINGS);
+        m3set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m3set.setToolTipText("Edit omega start values");
         m3set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m3setActionPerformed(evt);
             }
         });
 
-        m2aset.setIcon(Icons.SETTINGS);
+        m2aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m2aset.setToolTipText("Edit omega start values");
         m2aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m2asetActionPerformed(evt);
             }
         });
 
-        m1aset.setIcon(Icons.SETTINGS);
+        m1aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m1aset.setToolTipText("Edit omega start values");
         m1aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m1asetActionPerformed(evt);
             }
         });
 
-        m0set.setIcon(Icons.SETTINGS);
+        m0set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m0set.setToolTipText("Edit omega start values");
         m0set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m0setActionPerformed(evt);
             }
         });
 
-        m8set.setIcon(Icons.SETTINGS);
+        m8set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
         m8set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m8setActionPerformed(evt);

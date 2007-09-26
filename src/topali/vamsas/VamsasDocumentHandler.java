@@ -89,6 +89,32 @@ public class VamsasDocumentHandler
 			currentTAlignment = align;
 			writeAlignment();
 		}
+		
+		//clean();
+	}
+
+	public void clean() {
+		HashSet<Object> tobjs = new HashSet<Object>();
+		for(AlignmentData data : this.project.getDatasets()) {
+			tobjs.add(data);
+			for(AnalysisResult res : data.getResults()) {
+				tobjs.add(res);
+			}
+		}
+		
+		for (VAMSAS vamsas : doc.getVamsasRoots())
+			for (DataSet dataset : vamsas.getDataSet())
+				for (Alignment alignment : dataset.getAlignment()) {
+					if(!tobjs.contains(alignment)) {
+						dataset.removeAlignment(alignment);
+					}
+					else {
+						for(AlignmentAnnotation anno : alignment.getAlignmentAnnotation()) {
+							if(!tobjs.contains(anno))
+								alignment.removeAlignmentAnnotation(anno);
+						}
+					}
+				}
 	}
 
 	private AlignmentData readAlignment(Alignment vAlign)
@@ -195,7 +221,6 @@ public class VamsasDocumentHandler
 	private void writeAlignment()
 	{
 		//Check if this alignment already exists in the vamsas doc
-		System.out.println(currentTAlignment.hashCode());
 		currentVAlignment = (Alignment) map.getVamsasObject(currentTAlignment);
 		
 		// create new Alignment
@@ -224,6 +249,11 @@ public class VamsasDocumentHandler
 		// Alignment already exists
 		else
 		{	
+			int tid = readTID(currentVAlignment);
+			if(tid<0) {
+				currentVAlignment.addProperty(createTIDProp(currentTAlignment));
+			}
+			
 			//just modifiy sequences if alignment is not locked
 			if(currentVAlignment.getModifiable()==null)
 			{

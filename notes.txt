@@ -2,12 +2,11 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Modified icons again
-- When F84 tree job finishes, Topali now again automatically switches to tree view
-- Fixed Codeml Site/Branch job resubmission and anaylsis info display
-- Fixed: Default button was not working for every job settings dialog
-- Added application details and literature references to jobs' analysis info 
-- Repacked ATV library (forester.jar), now includes source code
+- REMOVED (not working properly): When F84 tree job finishes, Topali now again automatically switches to tree view
+- Modified icons
+- Cleaned up "Omega start values" dialog
+- CodeMLSite dialog: run button now has default focus
+- Updated license information in Topali help section (ModelGenerator license still missing!)
 
 TODO:
 

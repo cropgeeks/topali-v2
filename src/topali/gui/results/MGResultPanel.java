@@ -5,20 +5,23 @@
 
 package topali.gui.results;
 
+import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.print.Printable;
 import java.util.*;
 
-import javax.swing.JToggleButton;
-import javax.swing.event.*;
+import javax.swing.*;
 import javax.swing.table.*;
 
 import topali.data.*;
 import topali.gui.*;
 
+import doe.*;
+
 @SuppressWarnings("unchecked")
 public class MGResultPanel extends ResultPanel
 {
+	GradientPanel gp;
 	TablePanel tp;
 	
 	JToggleButton filter;
@@ -30,12 +33,19 @@ public class MGResultPanel extends ResultPanel
 		tp = getTablePanel(result);
 		updateTable(false);
 		
+		gp = new GradientPanel("Substitution Models (supported by TOPALi)");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		
 		TableRowSorter sorter = new TableRowSorter(tp.accessTable().getModel());
 		for(int i=0; i<tp.accessTable().getColumnCount(); i++)
 			sorter.setComparator(i, new SimpleComparator());
 		tp.accessTable().setRowSorter(sorter);
 		
-		addContent(tp, false);
+		JPanel p1 = new JPanel(new BorderLayout());
+		p1.add(gp, BorderLayout.NORTH);
+		p1.add(tp);
+		
+		addContent(p1, false);
 		
 		filter = new JToggleButton();
 		filter.setIcon(Icons.VISIBLE);
@@ -47,6 +57,11 @@ public class MGResultPanel extends ResultPanel
 				updateTable(filter.isSelected());
 				String tt = filter.isSelected() ? tooltip2 : tooltip1;
 				filter.setToolTipText(tt);
+				
+				if (filter.isSelected())
+					gp.setTitle("Substitution Models (all results)");
+				else
+					gp.setTitle("Substitution Models (supported by TOPALi)");
 			}
 		});
 		super.toolbar.add(filter);
@@ -54,7 +69,7 @@ public class MGResultPanel extends ResultPanel
 	
 	public TablePanel getTablePanel(MGResult result) {		
 		Vector<Object> colNames = new Vector<Object>();
-		colNames.add("Name");
+		colNames.add("Model");
 		colNames.add("ln(L)");
 		colNames.add("AIC1");
 		colNames.add("AIC2");
@@ -114,8 +129,8 @@ public class MGResultPanel extends ResultPanel
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("\n\nApplication: ModelGenerator (Version 0.84)\n");
-		sb.append("Thomas M Keane, Christopher J Creevey , Melissa M Pentony, Thomas J Naughton\n " +
+		sb.append("\nApplication: ModelGenerator (Version 0.84)\n");
+		sb.append("Thomas M Keane, Christopher J Creevey , Melissa M Pentony, Thomas J Naughton\n" +
 				"and James O McInerney (2006) Assessment of methods for amino acid matrix selection\n" +
 				"and their use on empirical data shows that ad hoc assumptions for choice of matrix\n" +
 				"are not justified, BMC Evolutionary Biology, 6:29");
