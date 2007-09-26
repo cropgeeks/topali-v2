@@ -13,25 +13,27 @@ import javax.swing.*;
 import topali.data.*;
 import topali.var.Utils;
 
+import doe.*;
+
 public class HMMResultPanel extends ResultPanel
 {
 
 	GraphPanel graph1, graph2, graph3;
-	
+
 	public HMMResultPanel(AlignmentData data, HMMResult result)
 	{
 		super(data, result);
 		graph1 = new GraphPanel(data, result, Utils.float2doubleArray(result.data1), 1.01, GraphPanel.RIGHT);
 		graph2 = new GraphPanel(data, result, Utils.float2doubleArray(result.data2), 1.01, GraphPanel.RIGHT);
 		graph3 = new GraphPanel(data, result, Utils.float2doubleArray(result.data3), 1.01, GraphPanel.RIGHT);
-		
+
 		graph1.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 1 (1,2), (3,4):"));
 		graph2.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 2 (1,3), (2,4):"));
 		graph3.setBorder(BorderFactory
 				.createTitledBorder("Probability of topology 3 (1,4), (2,3):"));
-		
+
 		JPanel p = new JPanel(new GridBagLayout());
 		GridBagConstraints c1 = new GridBagConstraints();
 		c1.gridx = 0;
@@ -54,9 +56,15 @@ public class HMMResultPanel extends ResultPanel
 		c3.weighty = 0.3;
 		c3.fill = GridBagConstraints.BOTH;
 		p.add(graph3, c3);
-		
-		addContent(p, true);
-		
+
+		GradientPanel gp = new GradientPanel("Hidden Markov Model (HMM)");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		JPanel p1 = new JPanel(new BorderLayout());
+		p1.add(gp, BorderLayout.NORTH);
+		p1.add(p);
+
+		addContent(p1, true);
+
 		setThreshold(result.threshold);
 	}
 
@@ -64,7 +72,7 @@ public class HMMResultPanel extends ResultPanel
 	public String getAnalysisInfo()
 	{
 		HMMResult result = (HMMResult)this.result;
-		
+
 		String str = new String(result.guiName);
 
 		str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)

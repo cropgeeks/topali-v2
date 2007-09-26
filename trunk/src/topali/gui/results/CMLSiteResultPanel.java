@@ -16,6 +16,8 @@ import javax.swing.event.*;
 import topali.data.*;
 import topali.gui.Prefs;
 
+import doe.*;
+
 /**
  * Panel for displaying codeml site model result
  */
@@ -36,21 +38,28 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		this.table = createTablePanel();
 		this.graph = createGraphPanel();
 	//	this.graph.setEnabled(false);
-		
+
 		blankPanel = new JPanel(new BorderLayout());
 		blankPanel.add(
 			new JLabel("(models predicting positive selection sites will display graph data here when selected)", JLabel.CENTER));
-		
+
 		sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		sp.setTopComponent(table);
 		sp.setBottomComponent(blankPanel);
-		addContent(sp, true);
+
+		GradientPanel gp = new GradientPanel("TODO: Add title");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		JPanel p1 = new JPanel(new BorderLayout());
+		p1.add(gp, BorderLayout.NORTH);
+		p1.add(sp);
+
+		addContent(p1, true);
 
 		setThreshold(result.threshold);
-		
+
 		sp.setResizeWeight(0.3);
 		sp.setDividerLocation(200);
-		
+
 	}
 
 	private GraphPanel createGraphPanel()
@@ -148,11 +157,11 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	public String getAnalysisInfo()
 	{
 		CodeMLResult result = (CodeMLResult) this.result;
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append(result.guiName+"\n\n");
 		sb.append("Runtime: " + ((result.endTime - result.startTime) / 1000)+ " seconds\n");
-		
+
 		sb.append("Analysis type: Site model\n\n");
 
 		sb.append("Selected models:\n\n");
@@ -168,7 +177,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		sb.append("\n\nApplication: CodeML (PAML, Version 4)\n");
 		sb.append("Yang, Ziheng (2007),  PAML 4: Phylogenetic Analysis by Maximum Likelihood.\n" +
 				"Molecular Biology and Evolution, 24(8), pp 1586-91.");
-		
+
 		return sb.toString();
 	}
 
@@ -196,7 +205,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 			return;
 
 		int location = sp.getDividerLocation();
-		
+
 		CodeMLResult result = (CodeMLResult) this.result;
 		CMLModel m = result.models.get(table.accessTable().getSelectedRow());
 
@@ -210,12 +219,12 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				PSSite pssite = pss.get(i);
 				int n = pssite.getPos();
 				double p = pssite.getP();
-				
-				// n[1,length] -> data[x][y], x[0, length-1] 
+
+				// n[1,length] -> data[x][y], x[0, length-1]
 				data[n - 2][0] = n - 1;
 				data[n - 1][0] = n;
 				data[n][0] = n + 1;
-				
+
 				data[n - 2][1] = p;
 				data[n - 1][1] = p;
 				data[n][1] = p;
@@ -230,12 +239,12 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[i][0] = i;
 				data[i][1] = 0;
 			}
-			
+
 //			graph.setEnabled(false);
 			sp.setBottomComponent(blankPanel);
 		}
 		graph.setChartData(data);
-		
+
 		sp.setDividerLocation(location);
 	}
 
