@@ -8,13 +8,12 @@ package topali.cluster.jobs.cml;
 import java.io.*;
 
 import pal.alignment.*;
-import pal.distance.*;
+import pal.distance.AlignmentDistanceMatrix;
 import pal.misc.Identifier;
 import pal.substmodel.*;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.*;
 import sbrn.commons.file.FileUtils;
-import topali.analyses.TreeCreator;
 import topali.cluster.StreamCatcher;
 import topali.data.*;
 import topali.var.NHTreeUtils;

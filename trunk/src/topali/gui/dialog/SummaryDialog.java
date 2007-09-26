@@ -233,7 +233,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			if (map.size() == 2)
 			{
 				// What were the two characters?
-				Enumeration values = map.elements();
+				Enumeration<Integer> values = map.elements();
 				int char1 = ((Integer) values.nextElement()).intValue();
 				int char2 = ((Integer) values.nextElement()).intValue();
 

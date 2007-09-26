@@ -29,7 +29,6 @@ import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
-import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
 import topali.var.Utils;
@@ -185,6 +184,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			project = dialog.getProject();
 			project.addChangeListener(this);
 		}
+		
+		ProjectState.reset();
 	}
 
 	public void menuFileImportDataSet()
@@ -682,9 +683,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				//WinMainMenuBar.aFileSave.setEnabled(true);
 				//WinMainMenuBar.aVamCommit.setEnabled(true);
 				ProjectState.setDataChanged();
-				
-				TreePane treePane = navPanel.getCurrentTreePane(data, true);
-				treePane.displayTree(data.getSequenceSet(), result);
 			}
 		}
 		// Tree being created as a cluster/local job
@@ -827,18 +825,20 @@ public class WinMain extends JFrame implements PropertyChangeListener
 					return;
 				} else if (session.equals(newSession)) {
 					vamsas.connect(VamsasManager.newSession);
+					ProjectState.setVamsasSession(true);
 				}
 				else
 				{
 					vamsas.connect(session);
+					ProjectState.setVamsasSession(true);
 					vamsas.read();
 				}
 			} else
 			{
 				vamsas.connect(null);
+				ProjectState.setVamsasSession(true);
 			}
 
-			ProjectState.setVamsasSession(true);
 
 			if(writeEnabled)
 				ProjectState.setDataChanged();

@@ -239,11 +239,14 @@ public class CustomTable extends JTable implements Printable
 		}
 	}
 	
+	static Font cellFont = new JTableHeader().getFont();
+	
 	class MyTextArea extends JTextArea {
 
 		public MyTextArea() {
 			super(0,0);
 			setLineWrap(true);
+			setFont(cellFont);
 			setWrapStyleWord(true);
 		}
 		

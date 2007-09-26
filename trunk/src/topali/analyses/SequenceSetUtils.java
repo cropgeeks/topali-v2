@@ -39,12 +39,12 @@ public class SequenceSetUtils
 		int count = ss.getSize();
 		duplicateCount = 0;
 
-		ListIterator itor = ss.getSequences().listIterator(0);
+		ListIterator<Sequence> itor = ss.getSequences().listIterator(0);
 		for (int i = 0; i < indices.length; i++)
 		{
 			StringBuffer buffer = ((Sequence) itor.next()).getBuffer();
 
-			ListIterator jtor = ss.getSequences().listIterator(0);
+			ListIterator<Sequence> jtor = ss.getSequences().listIterator(0);
 			for (int j = 0; j < indices.length; j++)
 			{
 				StringBuffer toCompare = ((Sequence) jtor.next()).getBuffer();

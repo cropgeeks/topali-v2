@@ -12,11 +12,15 @@ import java.util.Vector;
 
 import javax.swing.*;
 
+import doe.GradientPanel;
+
 import pal.statistics.ChiSquareDistribution;
 import topali.data.*;
 import topali.gui.Prefs;
 import topali.gui.atv.ATV;
 import topali.var.*;
+
+import sbrn.commons.gui.DoeLayout;
 
 /**
  * Panel for displaying codeml branch model results
@@ -33,7 +37,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		p1 = createTable1();
 		p2 = createTable2();
 
-		JPanel panel = new JPanel(new GridBagLayout());
+/*		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBackground(Color.WHITE);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -47,6 +51,27 @@ public class CMLBranchResultPanel extends ResultPanel
 		panel.add(p2, c);
 		
 		addContent(panel, false);
+*/
+		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		sp.setTopComponent(p1);
+		sp.setBottomComponent(p2);
+		
+		GradientPanel gp = new GradientPanel("some title");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		
+		JPanel panel1 = new JPanel(new BorderLayout(5, 5));
+		panel1.add(getHeaderPanel(), BorderLayout.NORTH);
+		panel1.add(sp);
+		
+//		DoeLayout layout = new DoeLayout();
+	//	layout.add(gp, 0, 0, 1, 1, new Insets(0, 0, 5, 0));
+		//layout.add(panel1, 0, 1, 1, 1, new Insets(5, 5, 5, 5));
+		
+		JPanel panel2 = new JPanel(new BorderLayout());
+		panel2.add(gp, BorderLayout.NORTH);
+		panel2.add(panel1, BorderLayout.CENTER);
+		
+		addContent(panel2, false);
 	}
 
 	private JPanel getHeaderPanel()
@@ -54,11 +79,11 @@ public class CMLBranchResultPanel extends ResultPanel
 		CodeMLResult result = (CodeMLResult) super.result;
 
 		JPanel p = new JPanel();
-		JLabel l0 = new JLabel("Hypothesis tested:");
-		l0.setBackground(Color.WHITE);
+		JLabel l0 = new JLabel("Hypothesis tested (click to view):");
+	//	l0.setBackground(Color.WHITE);
 		p.add(l0);
 		p.setBorder(BorderFactory.createTitledBorder(""));
-		p.setBackground(Color.WHITE);
+	//	p.setBackground(Color.WHITE);
 
 		CMLHypothesis h0 = result.hypos.get(0);
 		if (h0.omegas != null)
@@ -75,7 +100,7 @@ public class CMLBranchResultPanel extends ResultPanel
 			String tree = tree2ATV(h.omegaTree);
 			tree = Utils.getNameTree(tree, data.getSequenceSet());
 			JLabel l = new HypoLabel(i, tree, this);
-			l.setBackground(Color.WHITE);
+	//		l.setBackground(Color.WHITE);
 			p.add(l);
 		}
 		return p;
@@ -94,15 +119,15 @@ public class CMLBranchResultPanel extends ResultPanel
 				n = hypo.omegas.length;
 		}
 		for (int i = 0; i < n; i++)
-			names.add("w" + i);
+			names.add("\u03C9" + i);
 		names.add("Likelihood");
 
-		Vector<Vector> data = new Vector<Vector>();
+		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		for (int i = 0; i < result.hypos.size(); i++)
 		{
 			Vector<String> row = new Vector<String>();
 			CMLHypothesis hypo = result.hypos.get(i);
-			row.add("H" + i);
+			row.add("H" + getUnicode(i));
 			for (int j = 0; j < n; j++)
 			{
 				if (j < hypo.omegas.length)
@@ -116,7 +141,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		}
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
-		p.setBackground(Color.WHITE);
+	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("Likelihood/Omega values"));
 		return p;
 	}
@@ -128,13 +153,13 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		names.add("");
 		for (int i = 0; i < result.hypos.size(); i++)
-			names.add("H" + i);
+			names.add("H" + getUnicode(i));
 
-		Vector<Vector> data = new Vector<Vector>();
+		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		for (int i = 0; i < result.hypos.size(); i++)
 		{
 			Vector<String> row = new Vector<String>();
-			row.add("H" + i);
+			row.add("H" + getUnicode(i));
 			for (int j = 0; j < result.hypos.size(); j++)
 			{
 				if (i == j)
@@ -172,9 +197,29 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		TablePanel p = new TablePanel(data, names,
 				TablePanel.RIGHT);
-		p.setBackground(Color.WHITE);
+	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));
 		return p;
+	}
+	
+	private String getUnicode(int i)
+	{
+		switch (i)
+		{
+			case 0: return "\u2080";
+			case 1: return "\u2081";
+			case 2: return "\u2082";
+			case 3: return "\u2083";
+			case 4: return "\u2084";
+			case 5: return "\u2085";
+			case 6: return "\u2086";
+			case 7: return "\u2087";
+			case 8: return "\u2088";
+			case 9: return "\u2089";
+			case 10: return "\u2090";
+		}
+		
+		return "" + i;
 	}
 
 	/**
@@ -300,7 +345,7 @@ public class CMLBranchResultPanel extends ResultPanel
 			this.i = i;
 			this.tree = tree;
 			this.parent = parent;
-			this.setText("<html><u>H" + i + "</u></html>");
+			this.setText("<html>H<sub>" + i + "</sub></html>");
 			this.setForeground(Color.BLUE);
 			this.addMouseListener(this);
 			this.setToolTipText("Show tree");

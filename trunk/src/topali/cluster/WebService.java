@@ -223,6 +223,6 @@ public abstract class WebService
 		logger.info(jobId + " - cleaning up and removing files");
 
 		File jobDir = new File(getParameter("job-dir"), jobId);
-		//ClusterUtils.emptyDirectory(jobDir, true);
+		ClusterUtils.emptyDirectory(jobDir, true);
 	}
 }

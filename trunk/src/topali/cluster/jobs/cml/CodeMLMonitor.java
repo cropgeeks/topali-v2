@@ -122,9 +122,7 @@ public class CodeMLMonitor
 				File runDir = new File(jobDir, "run" + (i+1));
 				File modelFile = new File(runDir, "model.xml");
 				File errorFile = new File(runDir, "error.txt");
-				
-				logger.info("modelFile exists? "+modelFile.exists()+" errorFile exists? "+errorFile.exists());
-				
+			
 				result.models.remove(0);
 				if(modelFile.exists() && !errorFile.exists()) {
 					CMLModel model = (CMLModel) Castor.unmarshall(modelFile);
@@ -142,9 +140,6 @@ public class CodeMLMonitor
 				File hypoFile = new File(runDir, "hypo.xml");
 				File errorFile = new File(runDir, "error.txt");
 				
-				logger.info("hypoFile exists? "+hypoFile.exists()+" errorFile exists? "+errorFile.exists());
-			
-				//TODO: 
 				result.hypos.remove(0);
 				
 				if(hypoFile.exists() && !errorFile.exists()) {
