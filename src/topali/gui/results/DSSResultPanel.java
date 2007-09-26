@@ -6,21 +6,32 @@
 package topali.gui.results;
 
 import java.awt.print.Printable;
+import java.awt.*;
+import javax.swing.*;
 
 import topali.analyses.AnalysisUtils;
 import topali.data.*;
 import topali.var.Utils;
 
+import doe.*;
+
 public class DSSResultPanel extends ResultPanel
 {
 
 	GraphPanel graph;
-	
+
 	public DSSResultPanel(AlignmentData data, DSSResult result)
 	{
 		super(data, result);
 		graph = new GraphPanel(data, result, Utils.float2doubleArray(result.data), -1, GraphPanel.RIGHT);
-		addContent(graph, true);
+
+		GradientPanel gp = new GradientPanel("Difference of Sums of Squares (DSS)");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		JPanel p1 = new JPanel(new BorderLayout());
+		p1.add(gp, BorderLayout.NORTH);
+		p1.add(graph);
+
+		addContent(p1, true);
 		setThreshold(result.threshold);
 	}
 
@@ -30,7 +41,7 @@ public class DSSResultPanel extends ResultPanel
 		DSSResult res = (DSSResult)result;
 		if(res.thresholds==null)
 			return;
-		
+
 		res.threshold= threshold;
 
 		float thres= AnalysisUtils.getArrayValue(res.thresholds,
@@ -38,12 +49,12 @@ public class DSSResultPanel extends ResultPanel
 
 		graph.setThreshold(thres);
 	}
-	
+
 	@Override
 	public String getAnalysisInfo()
 	{
 		DSSResult result = (DSSResult)this.result;
-		
+
 		String str = new String(result.guiName);
 
 		str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
@@ -69,5 +80,5 @@ public class DSSResultPanel extends ResultPanel
 		return new Printable[] {graph};
 	}
 
-	
+
 }

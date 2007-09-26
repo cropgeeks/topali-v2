@@ -15,32 +15,34 @@ import topali.analyses.AnalysisUtils;
 import topali.data.*;
 import topali.var.Utils;
 
+import doe.*;
+
 public class PDMResultPanel extends ResultPanel implements MouseMotionListener, MouseListener
 {
 
 	GraphPanel graph1, graph2;
 	HistogramPanel histoPanel;
-	
+
 	public PDMResultPanel(AlignmentData data, PDMResult result)
 	{
 		super(data, result);
 		graph1 = new GraphPanel(data, result, Utils.float2doubleArray(result.glbData), -1, GraphPanel.RIGHT);
 		graph2 = new GraphPanel(data, result, Utils.float2doubleArray(result.locData), -1, GraphPanel.RIGHT);
 		graph2.setThreshold(result.threshold);
-		
+
 		graph1.setBorder(BorderFactory
 				.createTitledBorder("Global divergence measure"));
 		graph2.setBorder(BorderFactory
 				.createTitledBorder("Local divergence measure"));
-		
+
 		graph1.addMouseListener(this);
 		graph1.addMouseMotionListener(this);
 		graph2.addMouseListener(this);
 		graph2.addMouseMotionListener(this);
-		
+
 		histoPanel = new HistogramPanel();
 		histoPanel.setBorder(BorderFactory.createTitledBorder(""));
-		
+
 		JPanel p = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -66,15 +68,21 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener, 
 		c3.insets = new Insets(2,2,2,2);
 		c3.fill = GridBagConstraints.BOTH;
 		p.add(histoPanel, c3);
-		
+
 //		JSplitPane p = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graph1, graph2);
 //		p.setDividerLocation(0.5d);
-//		
+//
 //		int h = (int)this.getPreferredSize().getHeight();
 //		p.setDividerLocation((int)(h/2));
-		
-		addContent(p, true);
-		
+
+		GradientPanel gp = new GradientPanel("Probabilistic Divergence Measure (PDM)");
+		gp.setStyle(GradientPanel.OFFICE2003);
+		JPanel p1 = new JPanel(new BorderLayout());
+		p1.add(gp, BorderLayout.NORTH);
+		p1.add(p);
+
+		addContent(p1, true);
+
 		setThreshold(result.threshold);
 	}
 
@@ -130,42 +138,42 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener, 
 	{
 		((AlignmentResult)result).threshold = t;
 		PDMResult res = (PDMResult)result;
-		
+
 		float thres= AnalysisUtils.getArrayValue(res.thresholds,
 				(float)t);
-		
+
 		graph2.setThreshold(thres);
 	}
 
 	public void mouseMoved(MouseEvent e)
-	{		
+	{
 		PDMResult result = (PDMResult)this.result;
 		if(result.histograms==null)
 			return;
-		
+
 		int nuc = graph2.getNucleotideFromPoint(e.getX());
-		
+
 		int pos = -1;
-		
+
 		if (nuc >= result.locData[0][0] - result.pdm_step)
 			// Position: +stepSize moves right one window to avoid -0.x and
 			// +0.x both giving the same window
 			pos = (int) ( (nuc-result.locData[0][0]+result.pdm_step ) / result.pdm_step);
-		
-	
+
+
 		if (pos < 0 || pos >= result.histograms.length)
 			histoPanel.setData(null);
 		else
 			histoPanel.setData(result.histograms[pos]);
 	}
-	
+
 	public void mouseExited(MouseEvent e)
 		{ histoPanel.setData(null);	}
-	
+
 	public void mouseDragged(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}	
-	
+	public void mouseReleased(MouseEvent e) {}
+
 }

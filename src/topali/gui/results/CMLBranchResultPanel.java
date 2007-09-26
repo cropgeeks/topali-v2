@@ -49,28 +49,26 @@ public class CMLBranchResultPanel extends ResultPanel
 		panel.add(p1, c);
 		c.gridy = 2;
 		panel.add(p2, c);
-		
+
 		addContent(panel, false);
 */
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		sp.setResizeWeight(0.5);
+		sp.setDividerLocation(0.5);
 		sp.setTopComponent(p1);
 		sp.setBottomComponent(p2);
-		
-		GradientPanel gp = new GradientPanel("some title");
+
+		GradientPanel gp = new GradientPanel("TODO: Add title");
 		gp.setStyle(GradientPanel.OFFICE2003);
-		
-		JPanel panel1 = new JPanel(new BorderLayout(5, 5));
-		panel1.add(getHeaderPanel(), BorderLayout.NORTH);
-		panel1.add(sp);
-		
-//		DoeLayout layout = new DoeLayout();
-	//	layout.add(gp, 0, 0, 1, 1, new Insets(0, 0, 5, 0));
-		//layout.add(panel1, 0, 1, 1, 1, new Insets(5, 5, 5, 5));
-		
+
+		DoeLayout layout = new DoeLayout();
+		layout.add(gp, 0, 0, 1, 1, new Insets(0, 0, 5, 0));
+		layout.add(getHeaderPanel(), 0, 1, 1, 1, new Insets(5, 5, 5, 5));
+
 		JPanel panel2 = new JPanel(new BorderLayout());
-		panel2.add(gp, BorderLayout.NORTH);
-		panel2.add(panel1, BorderLayout.CENTER);
-		
+		panel2.add(layout.getPanel(), BorderLayout.NORTH);
+		panel2.add(sp, BorderLayout.CENTER);
+
 		addContent(panel2, false);
 	}
 
@@ -109,7 +107,7 @@ public class CMLBranchResultPanel extends ResultPanel
 	private TablePanel createTable1()
 	{
 		CodeMLResult result = (CodeMLResult) super.result;
-		
+
 		Vector<String> names = new Vector<String>();
 		names.add("Hypothesis");
 		int n = 0;
@@ -201,7 +199,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));
 		return p;
 	}
-	
+
 	private String getUnicode(int i)
 	{
 		switch (i)
@@ -218,14 +216,14 @@ public class CMLBranchResultPanel extends ResultPanel
 			case 9: return "\u2089";
 			case 10: return "\u2090";
 		}
-		
+
 		return "" + i;
 	}
 
 	/**
 	 * Converts the omega values (paml) to branch lengths, so that they can be
 	 * visualized in ATV.
-	 * 
+	 *
 	 * @param tree
 	 * @return
 	 */
@@ -251,7 +249,7 @@ public class CMLBranchResultPanel extends ResultPanel
 	/**
 	 * Converts the omega values (paml) to branch lengths, so that they can be
 	 * visualized in ATV.
-	 * 
+	 *
 	 * @param tree
 	 * @param w fixed omega value, added to each node
 	 * @return
@@ -280,25 +278,25 @@ public class CMLBranchResultPanel extends ResultPanel
 	public String getAnalysisInfo()
 	{
 		CodeMLResult res = (CodeMLResult) result;
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append(res.guiName+"\n\n");
 		sb.append("Runtime: " + ((res.endTime - res.startTime) / 1000)+ " seconds\n");
-		
+
 		sb.append("Analysis type: Branch model\n\n");
 
 		sb.append("Hypothesis tested:\n\n");
 		for (int i = 0; i < res.hypos.size(); i++)
 		{
 			sb.append("Hypothesis H" + i + "\n");
-			
+
 			String tmp = res.hypos.get(i).toString();
 			int s = tmp.indexOf('>');
 			int e = tmp.indexOf('<', s);
 			String tree = tmp.substring(s+1, e);
 			String tree2 = Utils.getNameTree(tree, data.getSequenceSet());
 			tmp = tmp.replaceAll("\\<tree\\>.*\\</tree\\>", tree2);
-			
+
 			sb.append(tmp);
 			sb.append("\n");
 		}
@@ -310,7 +308,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		sb.append("\n\nApplication: CodeML (PAML, Version 4)\n");
 		sb.append("Yang, Ziheng (2007),  PAML 4: Phylogenetic Analysis by Maximum Likelihood.\n" +
 				"Molecular Biology and Evolution, 24(8), pp 1586-91.");
-		
+
 		return sb.toString();
 	}
 
