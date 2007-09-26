@@ -61,10 +61,10 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
 
-		rExSeq = new JRadioButton("Load Example sequence alignment");
-		rExSeq.setMnemonic(KeyEvent.VK_E);
+		rExSeq = new JRadioButton("by allowing TOPALi to provide me with an example alignment");
+		rExSeq.setMnemonic(KeyEvent.VK_T);
 		rExSeq.addMouseListener(dblListener);
-		
+
 		switch (Prefs.gui_import_method)
 		{
 		case 0:
