@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Phylogenetic Overviews</title
+</title>
+
+<body>
+
+<h1>Phylogenetic Overviews</h1>
+
+<p>TOPALi's Phylogenetic Overview feature is designed to give you a feel
+for an alignment by providing the ability to view phylogenetic trees for
+set window sizes as you move along the alignment.</p>
+
+<p>To bring up the Phylogenetic Overview dialog, selecting <b>Alignment |
+Phylogenetic Overview</b> from the menu bar.</p>
+
+<p>The dialog allows you to view a Jukes Cantor/Neighbor Joining tree for every 
+window position within the alignment (based on the window settings specified).
+VCR-like playback controls are also provided to run an animation 
+that displays every tree automatically.</p>
+
+<p><b>Controlling parameters</b><br>
+The number of trees that can be drawn is based on the number of windows that 
+are available. By adjusting the current window size using the
+<b>Window size</b> control you can specify how many 
+windows the alignment will be partitioned into.</p>
+<ul>
+  <li><b>Step size</b> - step size (in nucleotides) to use when moving along the 
+  alignment</li>
+  <li><b>Window size</b> - window size (in nucleotides) to use when creating 
+  each tree</li>
+</ul>
+</p>
+
+<p>Modifying either of these values will adjust the slider control under the 
+tree window, allowing it to select (for display) more or less windows. The
+<b>Window position</b> label under the slider gives the 
+current window position, along with the nucleotide starting and ending values 
+for that window.</p>
+
+<p><b>Playing animations</b><br>
+You can also animate the tree, and watch how it changes as the window moves 
+over the alignment. To accomplish this, first select a suitable window and step 
+size, then decide upon the <b>Delay</b> time (in milliseconds) that each tree will be 
+visible for. You can then use the animation buttons to control playback.
+<ul>
+  <li><b>Restart</b> - return the animation to the beginning (moving the window 
+    back to its initial position)</li>
+  <li><b>Step Back One Window</b> - move the window back one (step size) 
+    increment</li>
+  <li><b>Stop</b> - stop the animation that is currently playing</li>
+  <li><b>Play</b> - start (or restart) the animation from the current window 
+    position</li>
+  <li><b>Step Forward One Window</b> - move the window forward one (step size) 
+    increment</li>
+</ul>
+</p>
+
+</body>
+</html>

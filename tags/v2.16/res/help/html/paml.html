@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>Positive selection analysis using PAML</title></head><body>
+<h1>Positive selection analysis using the PAML package</h1>
+<br>
+The variability in each column of a protein-coding alignment contains
+information that can be used to investigate the process of protein
+evolution.&nbsp; Evolutionary change occurs through mutation (e.g.
+substitution of nucleotides) followed by a process called natural
+selection which may remove some of the changes (e.g. substitutions), or
+do nothing, or amplify the frequency of some of the changes.&nbsp; If
+there is no selection we would expect a rate of evolution that reflects
+the rate of nucleotide substitution (i.e. the neutral rate).&nbsp; If
+the rate (at a particular site) is significantly lower than the neutral
+rate, we might infer that selection has removed substitutions that
+result in a less functional protein.&nbsp; Alternatively, if we see
+higher than the neutral rate at a site, we might infer that this site
+is under positive selection as it improves protein function.&nbsp; With
+protein-coding DNA, the underlying structure of the Genetic Code (i.e.
+the mapping of 61 sense codons to the 20 amino acids) allows us to
+distinguish nucleotide changes that affect or do not affect amino acid
+choice.&nbsp; ASSUMING that the changes that do not affect amino acid
+change are neutral (this assumption may not always be completely true)
+allows us to use these "synonymous" changes as a standard against which
+to compare the nonsynonymous (i.e. amino acid altering) changes.<br>
+<br>
+The analysis of positive selection requires an understanding of
+molecular evolution and of the appropriate software.&nbsp; TOPALi uses
+the PAML package (Phylogenetic Analysis by Maximum Likelihood) by
+Ziheng Yang for Selection Analysis.&nbsp; See the <span style="font-weight: bold;">PAML webpage</span> (see below)&nbsp; and
+the 2007 <span style="font-weight: bold;">PAML overview</span> (see
+below) for more information on PAML.&nbsp; A 2005 <span style="font-weight: bold;">PAML book chapter</span> (plus associated
+online <span style="font-weight: bold;">PAML example datasets</span>
+and online<span style="font-weight: bold;"> PAML demo material</span>)
+provides
+excellent directions for&nbsp; analysing real data.&nbsp;&nbsp; TOPALi
+uses only&nbsp; the codeml program from PAML, so there is no need to
+read up on other PAML programs.<br>
+<br>
+TOPALi can launch two types of web service&nbsp; to analyse&nbsp;
+protein-coding&nbsp; DNA alignments for detect positive selection,
+which we call the codeml <span style="font-weight: bold;">sites</span>
+model and codeml <span style="font-weight: bold;">branch</span>
+model.&nbsp;&nbsp;&nbsp; These two types of analysis are discussed in
+the <span style="font-weight: bold;">PAML book chapter</span> and the <span style="font-weight: bold;">PAML demo material.&nbsp;&nbsp; </span>See
+TOPALi documentation on the <span style="font-weight: bold;">codeml
+sites model settings</span> and <span style="font-weight: bold;">codeml
+branch model</span> settings for more detail.<br>
+<br>
+In this version of TOPALi, one aim has been to simplify the use of PAML
+for users already familiar with the PAML package.&nbsp; They no longer
+need to worry about PAML ctl files, for example.&nbsp;&nbsp; For users
+new to positive selection analysis, we strongly suggest&nbsp; you read
+the&nbsp; <span style="font-weight: bold;">PAML book chapter</span>
+and the <span style="font-weight: bold;">PAML demo material</span>
+first and try to replicate the analysis of the <span style="font-weight: bold;">PAML example datasets</span> using
+TOPALi.&nbsp; After that, you should be ready to analyse your own data.<br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3>References</h3>
+<span style="font-weight: bold;">PAML webpage<br>
+</span>http://abacus.gene.ucl.ac.uk/software/paml.html <br>
+<br>
+<span style="font-weight: bold;">PAML overview</span><br>
+Yang, Ziheng (2007),&nbsp; PAML 4: Phylogenetic Analysis by Maximum
+Likelihood., Molecular Biology and Evolution, 24(8), pp 1586-91.<br>
+<br>
+<span style="font-weight: bold;">PAML book chapter and online datasets
+plus demo<br>
+</span> Bielawski, J.P. and Z. Yang, 2005 Maximum
+likelihood methods for detecting adaptive protein evolution, in
+Statistical Methods in Molecular Evolution, R. Nielsen, Editor.
+Springer-Verlag: New York. p. 103-124.&nbsp; See&nbsp; <a href="http://abacus.gene.ucl.ac.uk/ziheng/data.html">http://abacus.gene.ucl.ac.uk/ziheng/data.html
+</a>for<span style="font-weight: bold;"> PAML example datasets</span>
+used in chapter.&nbsp;&nbsp; See associated<span style="font-weight: bold;"> </span>online<span style="font-weight: bold;"> PAML&nbsp; demo material</span> at&nbsp; <a href="http://abacus.gene.ucl.ac.uk/ziheng/data/pamlDEMO.pdf">http://abacus.gene.ucl.ac.uk/ziheng/data/pamlDEMO.pdf</a>.<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body></html>

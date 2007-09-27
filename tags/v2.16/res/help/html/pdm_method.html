@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Probabilistic Divergence Measures</title
+</title>
+
+<body>
+
+<h1>Probabilistic Divergence Measures</h1>
+
+<p>The PDM method utilizes a Markov chain Monte Carlo (MCMC) approach
+to phylogenetic analysis, that attempts to detect recombinants based on
+a marginal posterior distribution analysis. A fixed size window (eg,
+500bp wide) is moved along a sequence alignment. For every position,
+the posterior probability of tree topologies conditional on the
+subsequence alignment selected by the moving window is determined by a
+MCMC simulation.</p>
+
+<p>On moving into a recombinant region, this marginal posterior
+distribution of topologies can be expected to change. This can be
+quantified by probabilistic divergence measures, for example, a local
+measure (AS) comparing the distributions on two adjacent windows. This
+divergence measure is then plotted along the alignment. The MCMC
+approach is currently limited to analyses of about 10 sequences. The
+MCMC method attempts to focus only on topology changes and to exclude
+all rate heterogeneity effects.</p>
+
+<p>More information on the PDM method is available in:
+<ul>
+  <li>Husmeier D and Wright F (2001), <i>Probabilistic Divergence
+Measures for Detecting Interspecies Recombination</i>, Bioinformatics
+17, Suppl. 1, S123-S131.</li>
+</ul>
+
+<p>More information on the Pruned PDM method is available in:<br>
+<ul>
+  <li>Husmeier D, Wright F, and Milne I (2005) <i>Detecting
+Interspecific Recombination with a Pruned Probabilistic Divergence
+Measure</i>, Bioinformatics 21, pp 1797-1806.</li>
+</ul>
+</p>
+
+</body>
+</html>

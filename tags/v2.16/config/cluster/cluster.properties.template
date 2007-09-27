@@ -1,0 +1,32 @@
+# TOPALi Cluster Configuration File
+
+# BOTH: settings required by the cluster head node and its child nodes
+# NODE: settings required only by the child nodes
+# HEAD: settings required only by the head node
+
+# BOTH - the location where job results are stored
+job-dir = @JOBDIR@
+
+# NODE - path to the java executable
+java-path = @JAVAPATH@
+
+# NODE - the location where TOPALi and its binaries can be found
+# Assumed to be the same as the webapps deployment dir but can be overriden
+topali-dir = @TOPALIDIR@
+
+# NODE - the working directory (for temp files and results)
+tmp-dir = @TMPDIR@
+
+# HEAD - Webservice limits (number of sequences)
+# Default: no limit
+# ([class-name of webservice] = [n])
+#CodeMLWebService = 20
+#CodonWWebService = 20
+#DSSWebService = 20
+#HMMWebService = 20
+#LRTWebService = 20
+#MGWebService = 20
+#MrBayesWebService = 20
+#PDMWebService = 20
+#PhymlWebService = 100
+#FastMLWebService = 100
