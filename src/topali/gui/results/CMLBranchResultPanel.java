@@ -58,7 +58,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		sp.setTopComponent(p1);
 		sp.setBottomComponent(p2);
 
-		GradientPanel gp = new GradientPanel("TODO: Add title");
+		GradientPanel gp = new GradientPanel("PAML/CodeML Branch Models");
 		gp.setStyle(GradientPanel.OFFICE2003);
 
 		DoeLayout layout = new DoeLayout();
@@ -117,8 +117,8 @@ public class CMLBranchResultPanel extends ResultPanel
 				n = hypo.omegas.length;
 		}
 		for (int i = 0; i < n; i++)
-			names.add("\u03C9" + i);
-		names.add("Likelihood");
+			names.add("\u03C9" + getUnicode(i));
+		names.add("\u2113");
 
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		for (int i = 0; i < result.hypos.size(); i++)
@@ -139,6 +139,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		}
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("Likelihood/Omega values"));
 		return p;
@@ -195,6 +196,7 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		TablePanel p = new TablePanel(data, names,
 				TablePanel.RIGHT);
+		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));
 		return p;

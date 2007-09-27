@@ -83,7 +83,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 
 			int runNum = data.getTracker().getCwRunCount() + 1;
 			data.getTracker().setCwRunCount(runNum);
-			result.guiName = "CodonW Result " + runNum;
+			result.guiName = "CodonW " + runNum;
 			result.jobName = "CodonW on " + data.name
 					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";

@@ -140,8 +140,8 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		
 		int runNum = data.getTracker().getCodeMLRunCount() + 1;
 		data.getTracker().setCodeMLRunCount(runNum);
-		result.guiName = "CodeML Result " + runNum;
-		result.jobName = "CodeML Analysis " + runNum + " on " + data.name
+		result.guiName = "PAML Branch " + runNum;
+		result.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.name
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 

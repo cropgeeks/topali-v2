@@ -70,9 +70,9 @@ public class MGResultPanel extends ResultPanel
 	public TablePanel getTablePanel(MGResult result) {		
 		Vector<Object> colNames = new Vector<Object>();
 		colNames.add("Model");
-		colNames.add("ln(L)");
-		colNames.add("AIC1");
-		colNames.add("AIC2");
+		colNames.add("\u2113");
+		colNames.add("AIC\u2081");
+		colNames.add("AIC\u2082");
 		colNames.add("BIC");
 		
 		Vector<Object> rowData = new Vector<Object>(result.models.size());

@@ -428,7 +428,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLSite = new AbstractAction("Site Model Analysis")
+		aAnlsRunCodeMLSite = new AbstractAction("Site Model Analysis...")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -436,7 +436,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLBranch = new AbstractAction("Branch Model Analysis")
+		aAnlsRunCodeMLBranch = new AbstractAction("Branch Model Analysis...")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -452,7 +452,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunCW = new AbstractAction("Check Codon Usage") {
+		aAnlsRunCW = new AbstractAction("Check Codon Usage...") {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunCW(null);

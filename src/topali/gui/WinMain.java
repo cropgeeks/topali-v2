@@ -583,7 +583,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		int runNum = data.getTracker().getMgRunCount() + 1;
 		data.getTracker().setMgRunCount(runNum);
-		result.guiName = "Modelgenerator Result " + runNum;
+		result.guiName = "Modelgenerator " + runNum;
 		result.jobName = "Modelgenerator on " + data.name + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";

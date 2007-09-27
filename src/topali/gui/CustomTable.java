@@ -21,12 +21,28 @@ public class CustomTable extends JTable implements Printable
 {
 	boolean editable = false;
 	
+	Vector<Color> bgColors = new Vector<Color>();
+	
+	public CustomTable(Object[][] rowData, Object[] columnNames, Color[] bgColors)
+	{
+		this(rowData, columnNames);
+		this.bgColors = new Vector<Color>(this.bgColors);
+		init();
+	}
+	
 	public CustomTable(Object[][] rowData, Object[] columnNames)
 	{
 		this.setModel(new MyTablemodel(rowData, columnNames));
 		init();
 	}
 
+	public CustomTable(Vector rowData, Vector columnNames, Vector<Color> bgColors)
+	{
+		this(rowData, columnNames);
+		this.bgColors = bgColors;
+		init();
+	}
+	
 	public CustomTable(Vector rowData, Vector columnNames)
 	{
 		this.setModel(new MyTablemodel(rowData, columnNames));
@@ -138,44 +154,44 @@ public class CustomTable extends JTable implements Printable
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 			throws PrinterException
 	{
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.black);
-		
-		double pageHeight = pageFormat.getImageableHeight();
-		double pageWidth = pageFormat.getImageableWidth();
-		double tableWidth = getColumnModel().getTotalColumnWidth();
-		double tableHeight = getTableHeader().getHeight() +getRowMargin();
-		for(int i=0; i<getRowCount(); i++) 
-			tableHeight += getRowHeight(i) + getRowMargin();
-		
-		double scale = 1, scale2 = 1;
-		if (tableWidth >= pageWidth)
-			scale = pageWidth / tableWidth;
-		if(tableHeight >= pageHeight)
-			scale2 = pageHeight/tableHeight;
-		scale = (scale < scale2) ? scale : scale2;
-
-		double headerHeightOnPage = getTableHeader().getHeight() * scale;
-		double tableWidthOnPage = tableWidth * scale;
-
-
-		g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-
-		// we don't want to print the selection...
-		int selected = getSelectedRow();
-		getSelectionModel().clearSelection();
-		
-		g2.scale(scale, scale);
-		paint(g2);
-		g2.scale(1 / scale, 1 / scale);
-		g2.translate(0f, pageIndex * tableHeight);
-		g2.translate(0f, -headerHeightOnPage);
-		g2.setClip(0, 0, (int) Math.ceil(tableWidthOnPage), (int) Math
-				.ceil(headerHeightOnPage));
-		g2.scale(scale, scale);
-		getTableHeader().paint(g2);
-
-		getSelectionModel().setSelectionInterval(selected, selected);
+//		Graphics2D g2 = (Graphics2D) g;
+//		g2.setColor(Color.black);
+//		
+//		double pageHeight = pageFormat.getImageableHeight();
+//		double pageWidth = pageFormat.getImageableWidth();
+//		double tableWidth = getColumnModel().getTotalColumnWidth();
+//		double tableHeight = getTableHeader().getHeight() +getRowMargin();
+//		for(int i=0; i<getRowCount(); i++) 
+//			tableHeight += getRowHeight(i) + getRowMargin();
+//		
+//		double scale = 1, scale2 = 1;
+//		if (tableWidth >= pageWidth)
+//			scale = pageWidth / tableWidth;
+//		if(tableHeight >= pageHeight)
+//			scale2 = pageHeight/tableHeight;
+//		scale = (scale < scale2) ? scale : scale2;
+//
+//		double headerHeightOnPage = getTableHeader().getHeight() * scale;
+//		double tableWidthOnPage = tableWidth * scale;
+//
+//
+//		g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+//
+//		// we don't want to print the selection...
+//		int selected = getSelectedRow();
+//		getSelectionModel().clearSelection();
+//		
+//		g2.scale(scale, scale);
+//		paint(g2);
+//		g2.scale(1 / scale, 1 / scale);
+//		g2.translate(0f, pageIndex * tableHeight);
+//		g2.translate(0f, -headerHeightOnPage);
+//		g2.setClip(0, 0, (int) Math.ceil(tableWidthOnPage), (int) Math
+//				.ceil(headerHeightOnPage));
+//		g2.scale(scale, scale);
+//		getTableHeader().paint(g2);
+//
+//		getSelectionModel().setSelectionInterval(selected, selected);
 		return Printable.PAGE_EXISTS;
 	}
 
@@ -209,8 +225,9 @@ public class CustomTable extends JTable implements Printable
 		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
-			if(isSelected)
+			if(isSelected) {
 				setBackground(UIManager.getColor("Table.selectionBackground"));
+			}
 			else
 				setBackground(UIManager.getColor("Table.background"));
 

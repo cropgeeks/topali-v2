@@ -35,7 +35,8 @@ public class MGResultsNode extends ResultsNode
 
 	public boolean isPrintable()
 	{
-		return true;
+		//TODO: Fix table printing
+		return false; 
 	}
 
 	@Override

@@ -130,7 +130,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		
 		int runNum = data.getTracker().getHmmRunCount() + 1;
 		data.getTracker().setHmmRunCount(runNum);
-		result.guiName = "HMM Result " + runNum;
+		result.guiName = "HMM " + runNum;
 		result.jobName = "HMM Analysis " + runNum + " on " + data.name + " ("
 				+ data.getSequenceSet().getSelectedSequences().length + "/" + data.getSequenceSet().getSize()
 				+ " sequences)";

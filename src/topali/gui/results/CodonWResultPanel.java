@@ -24,7 +24,7 @@ public class CodonWResultPanel extends ResultPanel
 		panel = new TextPanel(TextPanel.RIGHT);
 		panel.setText(result.result);
 
-		GradientPanel gp = new GradientPanel("TODO: Add title");
+		GradientPanel gp = new GradientPanel("CodonW Output");
 		gp.setStyle(GradientPanel.OFFICE2003);
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.add(gp, BorderLayout.NORTH);

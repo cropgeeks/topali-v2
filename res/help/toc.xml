@@ -6,7 +6,7 @@
 <!--<tocitem text="Help" image="chapter" >-->
 <tocitem text="Introduction" target="intro" image="topic" />
 <tocitem text="TOPALi Overview" target="topali" image="topic" />
-<tocitem text="Quickstart Guide" target="quickstart" image="topic" />
+<!--<tocitem text="Quickstart Guide" target="quickstart" image="topic" />-->
 
 <tocitem text="Licensing" target="license" image="topic" />
 <tocitem text="Privacy Policy" target="privacy" image="topic" />
