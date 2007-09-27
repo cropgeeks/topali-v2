@@ -91,7 +91,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		group.add(rMulti);
 		group.add(rExSeq);
 
-		JPanel p1 = new JPanel(new GridLayout(5, 1));
+		JPanel p1 = new JPanel(new GridLayout(4, 1));
 		p1.setBorder(BorderFactory
 				.createTitledBorder("Please select how you'd "
 						+ "like to import data into TOPALi:"));
@@ -99,7 +99,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		p1.add(rCDNA);
 		p1.add(rAlign);
 		p1.add(rMulti);
-		p1.add(rExSeq);
+//		p1.add(rExSeq);
 
 		JPanel p2 = new JPanel(new BorderLayout());
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
