@@ -34,6 +34,8 @@ import topali.vamsas.VamsasManager;
 import topali.var.Utils;
 import doe.MsgBox;
 
+import sbrn.commons.file.*;
+
 public class WinMain extends JFrame implements PropertyChangeListener
 {
 	Logger log = Logger.getLogger(this.getClass());
@@ -187,7 +189,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			project = dialog.getProject();
 			project.addChangeListener(this);
 		}
-		
+
 		ProjectState.reset();
 	}
 
@@ -214,16 +216,16 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			case 4:
 			{
 				ImportDataSetDialog d = new ImportDataSetDialog(this);
-				URL url = this.getClass().getResource(
-						"/res/example-alignment.phy");
-				System.out.println(url);
+				URL url = getClass().getResource("/res/example-alignment.phy");
 				try
 				{
-					d.loadAlignment(new File(url.toURI()));
+					File tmpFile = new File(Prefs.tmpDir, "example.txt");
+					FileUtils.writeFile(tmpFile, url.openStream());
+					d.loadAlignment(tmpFile);
 				} catch (Exception e)
 				{
 					log.warn("Couldn't find example dataset");
-					MsgBox.msg("Couldn't load example dataset", MsgBox.ERR);
+					MsgBox.msg("Couldn't load example dataset.\n  " + e, MsgBox.ERR);
 				}
 			}
 			}
