@@ -27,7 +27,7 @@ public class NHTreeUtils
 	 * @return
 	 */
 	public static String removeBootstrapValues(String tree) {
-		String result = tree.replaceAll("\\s*\\d+.\\d+:", "");
+		String result = tree.replaceAll("\\)\\d+(\\.\\d+)?", ")");
 		return result;
 	}
 }

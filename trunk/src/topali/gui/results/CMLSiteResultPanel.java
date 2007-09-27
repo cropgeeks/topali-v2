@@ -13,8 +13,11 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import org.apache.log4j.Logger;
+
 import topali.data.*;
 import topali.gui.Prefs;
+import topali.var.MathUtils;
 
 import doe.*;
 
@@ -24,7 +27,8 @@ import doe.*;
 public class CMLSiteResultPanel extends ResultPanel implements
 		ListSelectionListener
 {
-
+	Logger log = Logger.getLogger(this.getClass());
+	
 	TablePanel table;
 	JSplitPane sp;
 
@@ -47,7 +51,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		sp.setTopComponent(table);
 		sp.setBottomComponent(blankPanel);
 
-		GradientPanel gp = new GradientPanel("TODO: Add title");
+		GradientPanel gp = new GradientPanel("PAML/CodeML Sites Models");
 		gp.setStyle(GradientPanel.OFFICE2003);
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.add(gp, BorderLayout.NORTH);
@@ -72,17 +76,19 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	private TablePanel createTablePanel()
 	{
 		Vector<String> names = new Vector<String>();
-		names.add("Model");
-		names.add("Free parameters");
-		names.add("Likelihood");
-		names.add("P0");
-		names.add("P1");
-		names.add("P2");
-		names.add("W0");
-		names.add("W1");
-		names.add("W2");
-		names.add("P");
-		names.add("Q");
+		names.add("Model"); 
+		names.add("\u2113");
+		names.add("p\u2080"); //2
+		names.add("p\u2081");
+		names.add("p\u2082"); //4
+		names.add("\u03C9"+"\u2080");
+		names.add("\u03C9"+"\u2081"); //6
+		names.add("\u03C9"+"\u2082");
+		names.add("p"); //8 
+		names.add("q");
+		names.add("df"); //10
+		names.add("-2\u2206L");
+		names.add("Sig"); //12
 		names.add("PSS");
 
 		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
@@ -90,7 +96,19 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
-		p.accessTable().getColumnModel().getColumn(11).setMinWidth(120);
+		p.accessTable().getColumnModel().getColumn(1).setMaxWidth(60); 
+		p.accessTable().getColumnModel().getColumn(2).setMaxWidth(40);
+		p.accessTable().getColumnModel().getColumn(3).setMaxWidth(40); 
+		p.accessTable().getColumnModel().getColumn(4).setMaxWidth(40);
+		p.accessTable().getColumnModel().getColumn(5).setMaxWidth(40); 
+		p.accessTable().getColumnModel().getColumn(6).setMaxWidth(40); 
+		p.accessTable().getColumnModel().getColumn(7).setMaxWidth(40); 
+		p.accessTable().getColumnModel().getColumn(8).setMaxWidth(40);
+		p.accessTable().getColumnModel().getColumn(9).setMaxWidth(40);
+		p.accessTable().getColumnModel().getColumn(10).setMaxWidth(40);
+		p.accessTable().getColumnModel().getColumn(11).setMaxWidth(60);
+		p.accessTable().getColumnModel().getColumn(12).setMaxWidth(60);
+		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		p.setBackground(Color.WHITE);
 		return p;
 	}
@@ -99,11 +117,16 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	{
 		CodeMLResult result = (CodeMLResult) this.result;
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
-		for (CMLModel m : result.models)
+		
+		double ll = -1;
+		int np = -1;
+		
+		for (int i=0; i<result.models.size(); i++)
 		{
+			CMLModel m = result.models.get(i);
+			
 			Vector<String> v = new Vector<String>();
-			v.add(m.name);
-			v.add("" + m.nParameter);
+			v.add(m.name+"("+m.nParameter+")");
 			v.add(Prefs.d2.format(m.likelihood));
 			if (m.p0 != -1)
 				v.add(Prefs.d3.format(m.p0));
@@ -138,6 +161,33 @@ public class CMLSiteResultPanel extends ResultPanel implements
 			else
 				v.add("");
 
+			if((i%2)==1 && np != -1) {
+				try
+				{
+					int df = m.nParameter - np;
+					double lr = MathUtils.calcLR(m.likelihood, ll);
+					double lrt = MathUtils.calcLRT(lr, df);
+					String lrtString = MathUtils.getRoughSignificance(lrt);
+					v.add(""+df);
+					v.add(Prefs.d3.format(lr));
+					v.add(lrtString);
+				} catch (RuntimeException e)
+				{
+					log.warn(e);
+					v.add("");
+					v.add("");
+					v.add("");
+				}
+			}
+			else {
+				v.add("");
+				v.add("");
+				v.add("");
+			}
+			
+			np = m.nParameter;
+			ll = m.likelihood;
+			
 			if (m.supportsPSS)
 			{
 				List<PSSite> pss = m.getPSS(thres);

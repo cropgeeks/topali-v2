@@ -115,7 +115,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		
 		int runNum = data.getTracker().getDssRunCount() + 1;
 		data.getTracker().setDssRunCount(runNum);
-		result.guiName = "DSS Result " + runNum;
+		result.guiName = "DSS " + runNum;
 		result.jobName = "DSS Analysis " + runNum + " on " + data.name + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";

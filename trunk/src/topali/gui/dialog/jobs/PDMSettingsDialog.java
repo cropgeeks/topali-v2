@@ -132,7 +132,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		
 		int runNum = data.getTracker().getPdmRunCount() + 1;
 		data.getTracker().setPdmRunCount(runNum);
-		result.guiName = "PDM Result " + runNum;
+		result.guiName = "PDM " + runNum;
 		result.jobName = "PDM Analysis " + runNum + " on " + data.name + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";

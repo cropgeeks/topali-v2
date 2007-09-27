@@ -106,7 +106,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		
 		int runNum = data.getTracker().getLrtRunCount() + 1;
 		data.getTracker().setLrtRunCount(runNum);
-		result.guiName = "LRT Result " + runNum;
+		result.guiName = "LRT " + runNum;
 		result.jobName = "LRT Analysis " + runNum + " on " + data.name + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";

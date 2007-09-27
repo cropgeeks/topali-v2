@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.AnalysisInfoDialog;
-import topali.var.Utils;
+import topali.var.*;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
@@ -183,8 +183,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				fastml.fastmlPath = Utils.getLocalPath() + "fastml/fastml";
 			
 			fastml.selectedSeqs = tResult.selectedSeqs;
-			fastml.origTree = tResult.getTreeStr();
-			
+			fastml.origTree = NHTreeUtils.removeBootstrapValues(tResult.getTreeStr());
+			//fastml.origTree = tResult.getTreeStr();
 			
 			fastml.guiName = "Ancestor";
 			fastml.jobName = "Ancestral sequence creation based on '"+tResult.guiName+"'";

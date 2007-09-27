@@ -77,8 +77,8 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 			
 			int runNum = data.getTracker().getCodeMLRunCount() + 1;
 			data.getTracker().setCodeMLRunCount(runNum);
-			res.guiName = "CodeML Result " + runNum;
-			res.jobName = "CodeML Analysis " + runNum + " on " + data.name
+			res.guiName = "PAML Sites " + runNum;
+			res.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.name
 					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";
 
