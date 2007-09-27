@@ -1,13 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Language" content="en-gb">
-<link rel="stylesheet" href="styles.css" type="text/css">
-<title>CodeML site model settings</title
-</title>
-
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>PAML codeml site model settings</title>
+</head>
 <body>
-
 <h1>CodeML site model settings</h1>
-
+<br>
+The testing for positive selection involves comparing a null hypothesis
+of no selection with the alternative hypothesis of positive
+selection. The PAML codeml program provides three pairs of
+model with increasing complexity, so we can test M0 v M3, M1a v M2a and
+M7 v M8. TOPALi allows you to choose any or all of these
+pairs.<br>
+<br>
+Each model has initial values that you can change, as the analysis can
+get stuck in a local optimum. Models M2a and M8 are particularly
+likely to have this problem, so we run several jobs with
+different values (following the advice in the PAML documentation).<br>
+<br>
+TOPALi this runs many jobs (e.g. one M0, one M3, one M1a, six M2a, one
+M7, six M8) simultaneously (if running remotely on the HPC
+cluster). The simpler models (e.g. M0) will run quickest, but
+there will be a delay while the longer jobs run. The longer jobs
+can take several hours, but we can not predict in advance how long they
+will take. We recommend you analyse a subset of sequences (e.g.
+10 sequences from a 50 sequence alignment) to get an idea of how long
+the full analysis will take.<br>
+<br>
+The output is similar to the standard table produced in papers that use
+PAML, listing models, parameter values, likelihoods, and results of
+Likelihood Ratio Tests to compare the pairs of models.<br>
+<br>
+<br>
+<br>
 </body>
 </html>

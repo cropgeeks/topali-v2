@@ -1,14 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Language" content="en-gb">
-<link rel="stylesheet" href="styles.css" type="text/css">
-<title>CodeML branch model settings</title
-</title>
-
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>PAML codeml site model settings</title>
+</head>
 <body>
-
 <h1>CodeML branch model settings</h1>
-
-
+<br>
+Using PAML codeml to test for differences in the rate of
+evolution between branches on a tree is not a simple
+task. Using the original codeml program, you are required
+to edit a tree file to mark which branches you want to compare.
+We suggest (insist, maybe) that you read the PAML demo pdf (see
+references in PAML/Codeml section). Once you see how you do it in
+the original PAML codeml program, you will understand how to do it in
+TOPALi.<br>
+<br>
+TOPALi shows you a tree "hypothesis" - this is the null
+hypothesis. You are required to create additional
+hypotheses. To do this click "Add". You will then see a
+tree diagram. You can click on the internal nodes and insert
+(e.g.) #1 beside the "seq name". This will seem odd
+to you unless you have read the PAML demo pdf. If you have read
+it, you will understand why you use "#1" and you will just find it odd
+that you type it beside the "seq name". Then you click "okay" and
+then you kill the tree window. You should see that a second tree
+hypothesis has been added to the list. You can add other tree
+hypotheses if you wish. When you have completed setting up your
+hypotheses, click "run".<br>
+<br>
+TOPALi will then carry out the analysis and produce tables with the
+parameter values for each tree hypotheses. and carry out the Likelihood
+Ratio Test(s) to compare hypotheses. If you click on "hypthesis
+tested" icons (e.g. H0) then you will see a tree diagram with the
+branch lengths.<br>
+<br>
+ <br>
 </body>
 </html>

@@ -23,7 +23,7 @@ public abstract class ResultPanel extends JPanel
 	AnalysisResult result;
 	
 	JPanel contentPanel;
-	ResultPanelToolbar toolbar;
+	public ResultPanelToolbar toolbar;
 	
 	public ResultPanel(AlignmentData data, AnalysisResult result) {
 		this.data = data;

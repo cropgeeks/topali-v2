@@ -64,6 +64,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		sp.setResizeWeight(0.3);
 		sp.setDividerLocation(200);
 
+		toolbar.enableButtons(true, true, true, false, false, false);
 	}
 
 	private GraphPanel createGraphPanel()
@@ -92,8 +93,9 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		names.add("PSS");
 
 		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
-
-		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		Vector<Color> c = getColorVector();
+		
+		TablePanel p = new TablePanel(data, names, c, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
 		p.accessTable().getColumnModel().getColumn(1).setMaxWidth(60); 
@@ -113,6 +115,34 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		return p;
 	}
 
+	private Vector<Color> getColorVector() {
+		
+		Color c1 = UIManager.getColor("Table.background");
+		Color c2 = new Color(220,220,220);
+		Color c3 = new Color(235,235,235);
+		
+		CodeMLResult result = (CodeMLResult) this.result;
+		Vector<Color> c = new Vector<Color>();
+		for (CMLModel m : result.models)
+		{
+			if(m.name.startsWith("M0"))
+					c.add(c1);
+			else if(m.name.startsWith("M3"))
+					c.add(c1);
+			else if(m.name.startsWith("M1a"))
+				c.add(c2);
+			else if(m.name.startsWith("M2a"))
+				c.add(c2);
+			else if(m.name.startsWith("M7"))
+				c.add(c3);
+			else if(m.name.startsWith("M8"))
+				c.add(c3);
+			else
+				c.add(c1);
+		}
+		return c;
+	}
+	
 	private Vector<Vector<String>> getTableVector(double thres)
 	{
 		CodeMLResult result = (CodeMLResult) this.result;
@@ -280,6 +310,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				data[n][1] = p;
 			}
 //			graph.setEnabled(true);
+			toolbar.enableButtons(true, true, true, true, true, true);
 			sp.setBottomComponent(graph);
 		} else
 		{
@@ -292,6 +323,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 
 //			graph.setEnabled(false);
 			sp.setBottomComponent(blankPanel);
+			toolbar.enableButtons(true, true, true, false, false, false);
 		}
 		graph.setChartData(data);
 
