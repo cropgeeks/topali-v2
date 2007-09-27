@@ -70,6 +70,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	public WinMain()
 	{
+		Color c = UIManager.getColor("Table.selectionBackground");
+		c = c.brighter();
+		UIManager.put("Table.selectionBackground", c);
 		// GUI Control initialization
 		createControls();
 

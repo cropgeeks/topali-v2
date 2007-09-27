@@ -228,8 +228,12 @@ public class CustomTable extends JTable implements Printable
 			if(isSelected) {
 				setBackground(UIManager.getColor("Table.selectionBackground"));
 			}
-			else
-				setBackground(UIManager.getColor("Table.background"));
+			else {
+				Color c = UIManager.getColor("Table.background");
+				if(row<bgColors.size())
+					c = bgColors.get(row);
+				setBackground(c);
+			}
 
 			setText(value.toString());
 		    

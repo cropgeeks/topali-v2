@@ -39,6 +39,15 @@ public class ResultPanelToolbar extends JToolBar
 		//enableGraphButtons(false);
 	}
 	
+	public void enableButtons(boolean bInfo, boolean bReselect, boolean bThres, boolean bAddPart, boolean bAutoPart, boolean bToolTips) {
+		this.bInfo.setEnabled(bInfo);
+		this.bReselect.setEnabled(bReselect);
+		this.bThres.setEnabled(bThres);
+		this.bAddPart.setEnabled(bAddPart);
+		this.bAutoPart.setEnabled(bAutoPart);
+		this.bToolTips.setEnabled(bToolTips);
+	}
+	
 	public void addStandardActions() {
 		aInfo = new AbstractAction()
 		{
