@@ -7,6 +7,7 @@
 package topali.gui.dialog.jobs.cml;
 
 import topali.data.*;
+import topali.gui.Icons;
 
 /**
  *
@@ -123,7 +124,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
         m8set = new javax.swing.JButton();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        m0set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m0set.setIcon(Icons.SETTINGS);
         m0set.setToolTipText("Edit omega start values");
         m0set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,7 +132,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m3set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m3set.setIcon(Icons.SETTINGS);
         m3set.setToolTipText("Edit omega start values");
         m3set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,7 +197,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
 
         jLabel4.setText("M2a (Positive Selection)");
 
-        m1aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m1aset.setIcon(Icons.SETTINGS);
         m1aset.setToolTipText("Edit omega start values");
         m1aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,7 +205,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m2aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m2aset.setIcon(Icons.SETTINGS);
         m2aset.setToolTipText("Edit omega start values");
         m2aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -257,7 +258,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
 
         jLabel6.setText("M8 (Beta & w>1, 11 Categories)");
 
-        m7set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m7set.setIcon(Icons.SETTINGS);
         m7set.setToolTipText("Edit omega start values");
         m7set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,7 +266,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m8set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png"));
+        m8set.setIcon(Icons.SETTINGS);
         m8set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m8setActionPerformed(evt);
