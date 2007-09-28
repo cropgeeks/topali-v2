@@ -12,12 +12,14 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import topali.gui.*;
+
 public class LinkLabel extends JLabel implements MouseListener
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	String url;
-	
+
 	public LinkLabel(String url) {
 		this.url = url;
 		setText("<html><a href=\""+url+"\">"+url+"</a></html>");
@@ -30,13 +32,13 @@ public class LinkLabel extends JLabel implements MouseListener
 		{
 			boolean success = Utils.openBrowser(url);
 			if(!success) {
-				JOptionPane.showMessageDialog(this, "Sorry, the Java Desktop API is not yet supported on your system.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(TOPALi.winMain, "Sorry, the Java Desktop API is not yet supported on your system.", "Error", JOptionPane.ERROR_MESSAGE);
 				log.warn("Java Desktop API not supported on this system.");
 			}
 		} catch (Exception e1)
 		{
 			log.warn("Opening browser for "+url+" failed!", e1);
-		} 
+		}
 	}
 
 	public void mouseEntered(MouseEvent e)
@@ -50,11 +52,11 @@ public class LinkLabel extends JLabel implements MouseListener
 	}
 
 	public void mousePressed(MouseEvent e)
-	{		
+	{
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
 	}
-	
+
 }

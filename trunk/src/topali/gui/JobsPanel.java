@@ -108,6 +108,7 @@ public class JobsPanel extends JPanel
 			job.getAlignmentData().removeResult(job.getResult());
 
 		setStatusPanel();
+
 		//WinMainMenuBar.aFileSave.setEnabled(true);
 		//WinMainMenuBar.aVamCommit.setEnabled(true);
 		ProjectState.setDataChanged();
@@ -163,6 +164,11 @@ public class JobsPanel extends JPanel
 
 		// Display it
 		WinMainStatusBar.setJobText(msg, false);
+		if (jobs.size() == 0)
+		{
+			WinMainStatusBar.resetIcon = true;
+			WinMainStatusBar.setStatusIcon(WinMainStatusBar.OFF);
+		}
 	}
 
 	public void createJob(AnalysisResult result, AlignmentData data)
@@ -318,5 +324,4 @@ public class JobsPanel extends JPanel
 		e.setSelected(true);
 		infoText.setText(e.getJob().errorInfo);
 	}
-
 }

@@ -20,13 +20,13 @@ tmp-dir = @TMPDIR@
 # HEAD - Webservice limits (number of sequences)
 # Default: no limit
 # ([class-name of webservice] = [n])
-#CodeMLWebService = 20
-#CodonWWebService = 20
-#DSSWebService = 20
-#HMMWebService = 20
-#LRTWebService = 20
-#MGWebService = 20
-#MrBayesWebService = 20
-#PDMWebService = 20
-#PhymlWebService = 100
-#FastMLWebService = 100
+CodeMLWebService = 20
+CodonWWebService = 100
+DSSWebService = 50
+HMMWebService = 4
+LRTWebService = 50
+MGWebService = 100
+MrBayesWebService = 50
+PDMWebService = 15
+PhymlWebService = 100
+FastMLWebService = 100

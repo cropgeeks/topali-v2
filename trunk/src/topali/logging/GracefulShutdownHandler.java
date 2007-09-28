@@ -14,7 +14,7 @@ import javax.swing.*;
 import org.apache.log4j.*;
 import org.apache.log4j.spi.LoggingEvent;
 
-import topali.gui.Application;
+import topali.gui.*;
 
 public class GracefulShutdownHandler extends AppenderSkeleton implements
 		UncaughtExceptionHandler
@@ -26,7 +26,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 	Application application;
 
 	public static GracefulShutdownHandler instance;
-	
+
 	public GracefulShutdownHandler()
 	{
 		super();
@@ -94,7 +94,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 					System.exit(1);
 			}
 		} else
-			JOptionPane.showMessageDialog(null, p, "Log", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(TOPALi.winMain, p, "Log", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void setApplication(Application app)
