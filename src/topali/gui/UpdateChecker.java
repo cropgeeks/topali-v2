@@ -20,7 +20,7 @@ class UpdateChecker extends Thread
 {
 	 Logger log = Logger.getLogger(this.getClass());
 
-	private static int RELEASE = 16;
+	private static int RELEASE = 17;
 
 	private int webVersion = 0;
 
@@ -77,9 +77,11 @@ class UpdateChecker extends Thread
 		if (webVersion > RELEASE)
 		{
 			JPanel p = new JPanel(new BorderLayout());
-			p.add(new JLabel("<html>A new version of TOPALi v2 is available.<br>Please visit our website to obtain it.</html>"), BorderLayout.CENTER);
+			p.add(new JLabel("<html>A new version of TOPALi v2 is available. Please visit our website to obtain it.<br><br>"
+				+ "Upgrading sooner rather than later is advised otherwise your version may not<br>communicate with our "
+				+ "remote analyses services properly.<br><br></html>"), BorderLayout.CENTER);
 			p.add(new LinkLabel("http://www.topali.org"), BorderLayout.SOUTH);
-			JOptionPane.showMessageDialog(null, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(TOPALi.winMain, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
 
 //			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
 //					+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
@@ -94,7 +96,7 @@ class UpdateChecker extends Thread
 
 	static void helpAbout()
 	{
-		String msg = "<html><b>TOPALi v2</b> (2.16)<br><br>"
+		String msg = "<html><b>TOPALi v2</b> (2.17)<br><br>"
 				+ "Copyright &copy 2003-2007 Biomathematics & Statistics Scotland<br><br>"
 				+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
 				+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"

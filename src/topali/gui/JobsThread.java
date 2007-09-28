@@ -15,10 +15,12 @@ import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.data.AnalysisResult;
 
+import doe.*;
+
 public class JobsThread extends Thread
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private final JobsPanel jobsPanel;
 
 	private TimerThread timerThread;
@@ -82,7 +84,7 @@ public class JobsThread extends Thread
 					{
 						final JobStatus status = job.ws_getProgress();
 						log.info("Requested JobStatus for "+job.getJobId()+": "+status);
-						
+
 						SwingUtilities.invokeLater(new Runnable()
 						{
 							public void run()
@@ -142,19 +144,24 @@ public class JobsThread extends Thread
 				} catch (org.apache.axis.AxisFault e)
 				{
 					String fault = e.getFaultString();
-					
+
 					//--- Catch the error, which is thrown when the webservice (alignment size) limit has been exceeded.
 					String msg = e.getMessage();
 					//TODO: Look for better way to do this
 					//msg = java.util.concurrent.RejectedExecutionException: Max. alignment size for this job type is limited to 10000 bases in total.
-					if(msg.contains("Max. alignment")) {
+					if(msg.contains("The maximum alignment")) {
 						String[] tmp = msg.split("\\s+");
-						int limit = Integer.parseInt(tmp[11]);
-						JOptionPane.showMessageDialog(null, "Please deselect some sequences to run this job (max. "+limit+" sequences allowed for this webservice).", "Webservice limit exceeded", JOptionPane.ERROR_MESSAGE);
-						jobsPanel.removeJobEntry(entry, false);
+						int limit = Integer.parseInt(tmp[18]);
+
+						MsgBox.msg("This job type has been limited (by the server) to a maximum "
+							+ "of " + limit + " sequences per submission. Please reduce the number "
+							+ "of sequences selected and try again.\nYou can either manually choose "
+							+ "a subset of sequences, or use F84 phylogenetic tree estimation (with "
+							+ "group-clustering) to auto select a subset.", MsgBox.ERR);
+					//	jobsPanel.removeJobEntry(entry, false);
 					}
 					//---
-					
+
 					final int error = (fault.startsWith("java.net.")) ? COMMS_ERROR
 							: FATAL_ERROR;
 					SwingUtilities.invokeLater(new Runnable()

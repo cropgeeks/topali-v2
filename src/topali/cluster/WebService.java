@@ -126,14 +126,20 @@ public abstract class WebService
 	 * @param ss
 	 * @throws RejectedExecutionException
 	 */
-	protected void checkJob(SequenceSet ss) throws RejectedExecutionException {
+	protected void checkJob(SequenceSet ss) throws RejectedExecutionException
+	{
 		String tmp = getParameter(this.getClass().getSimpleName());
-		if(tmp==null || tmp.equals(""))
+
+		if (tmp == null || tmp.equals(""))
 			return;
 
 		int max = Integer.parseInt(tmp);
-		if(ss.getSelectedSequences().length>max) {
-			String msg = "Max. alignment size for this job type is limited to "+max+" sequences.";
+
+		if(ss.getSelectedSequences().length>max)
+		{
+			String msg = "The maximum alignment size for this job type when "
+				+ "running on a remote cluster is limited to " + max + " "
+				+ "sequences.";
 			throw new RejectedExecutionException(msg);
 		}
 	}
@@ -182,7 +188,7 @@ public abstract class WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 			ICluster cluster = (false) ? new DrmaaClient() : new SgeClient();
 			cluster.deleteJob(jobDir);
-			
+
 			accessLog.info("JOB FAILED " + jobId);
 			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);

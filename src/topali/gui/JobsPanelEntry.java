@@ -179,7 +179,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			iconLabel.setIcon(Icons.STATUS_RED);
 			WinMainStatusBar.setStatusIcon(RED);
 			statusLabel.setForeground(Color.red);
-			statusLabel.setText("Fatal job error...");
+			statusLabel.setText("Fatal job error (click for details)");
 			break;
 		}
 	}
