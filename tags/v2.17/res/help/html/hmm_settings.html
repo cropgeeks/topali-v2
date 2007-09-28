@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>HMM Settings</title
+</title>
+
+<body>
+
+<h1>HMM Settings</h1>
+
+<p>HMM stands for <i><a href="hmm_method.html">Hidden Markov Model</a></i>.</p>
+
+<p>Please ensure that exactly 4 sequences have been selected from your 
+alignment before attempting to run HMM. See <a href="select_seqs.html">
+selecting sequences</a> for further information.</p>
+
+<p>To run the HMM analysis method, select <b>Analysis | Run HMM</b> from the menu
+bar. This brings up the Settings dialog that provides several sets of parameters
+that can be customized before starting the HMM run.</p>
+
+<p><b>Topology structure:</b><br>
+Topology structure settings are available by selecting the <b>Topology Structure</b>
+tabbed pane. This allows you to define a prediction about the topology structure of the
+alignment before the analysis actually runs. TOPALi will estimate a suitable structure
+for you, but you may wish to edit it further.</p>
+
+<p>To add a new structure partition, first click the <b>Add Breakpoint</b> button. This
+will add a new record to the table that must be further edited to complete the definition.</p>
+
+<p>The <b>Breakpoint</b> field defines the nucleotide position where the new partition will
+end. Partitions are assumed to start either from the beginning of the alignment, or from
+the end of the preceding partition if a partition already exists whose endpoint value is
+lower than the new partition's.</p>
+
+<p>The <b>Topology</b> field defines what the topology for the new partition will be.
+As there are only 4 sequences, the maximum of tree topologies is 3, and one of these 3
+must be chosen. The topologies are listed as 1, 2, and 3, along with the names of the
+sequences that form them.</p>
+
+
+
+<p><b>Model settings:</b><br>
+TODO: Description of settings needed by Frank/Dirk</p>
+
+<p><b>Run settings</b><br>
+TODO: Description of settings needed by Frank/Dirk</p>
+
+<p>Once you are happy with the settings, click <b>Run</b> to begin the analysis.</p>
+
+</body>
+</html>

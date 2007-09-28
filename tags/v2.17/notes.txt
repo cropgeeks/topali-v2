@@ -1,0 +1,38 @@
+Current state of affairs
+-----------------------
+
+Last modifications:
+- REMOVED (not working properly): When F84 tree job finishes, Topali now again automatically switches to tree view
+- Modified icons
+- Cleaned up "Omega start values" dialog
+- CodeMLSite dialog: run button now has default focus
+- Updated license information in Topali help section (ModelGenerator license still missing!)
+
+TODO:
+
+Some ideas:
+- Do we actually really want to reselect the sequences when resubmitting a job?
+
+Some URLs
+---------
+Tomcat Manager:
+http://gruffalo:8080/
+
+Grid Report
+http://gruffalo/scri/ganglia/
+
+SCRI Cluster:
+http://gruffalo.scri.ac.uk/topali
+http://gruffalo.scri.ac.uk/broker
+
+
+
+Misc.
+-----
+To run a script in a certain queue:
+#$ -q fast.q@n1
+
+If libs changes, edit:
+- j.bat (for testing)
+- build.xml (generates meta-inf classpath for topali.jar) (used by installer)
+- webstart/topali.jnlp

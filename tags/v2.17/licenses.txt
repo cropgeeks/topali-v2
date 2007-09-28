@@ -1,0 +1,44 @@
+Libraries
+---------
+PAL: LGPL
+JFreechart: LGPL
+Castor: Apache License, Version 2.0
+ATV: LGPL
+
+Ext. applications:
+------------------
+MrBayes: GPL, Version 2
+PhyML: (a)
+PAML: (b)
+FastML: (c)
+ModelGenerator: ?
+CodonW: GPL
+
+
+
+---
+a)
+© Copyright 2003 by Stéphane Guindon. The software is provided ''as is''
+without warranty of any kind. In no event shall the author be held 
+responsible for any damage resulting from the use of this software, 
+including but not limited to the frustration that you may experience 
+in using the package. The program package, including source codes, 
+example data sets, executables, and the user's guide, is distributed 
+free of charge for academic use only. 
+
+b)
+© Copyright 1993 – 2004 by Ziheng Yang.
+The software package is provided "as is" without warranty of any kind.
+In no event shall the author or his employer be held responsible for 
+any damage resulting from the use of this software, including but not
+limited to the frustration that you may experience in using the 
+package. The program package, including source codes, example data 
+sets, executables, and this documentation, is distributed free of 
+charge for academic use only. Permission is granted to copy and use 
+programs in the package provided no fee is charged for it and provided 
+that this copyright notice is not removed.
+
+c)
+To modify the code, or use parts of it for other purposes, permission
+is requested. Please contact Tal Pupko at talp@post.tau.ac.il  
+
