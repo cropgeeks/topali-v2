@@ -41,47 +41,31 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener, 
 		graph2.addMouseMotionListener(this);
 
 		histoPanel = new HistogramPanel();
-		histoPanel.setBorder(BorderFactory.createTitledBorder(""));
+		JPanel p1a = new JPanel(new BorderLayout());
+		p1a.add(histoPanel);
+		p1a.setBorder(BorderFactory.createLoweredBevelBorder());
 
-		JPanel p = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0.45;
-		//c.insets = new Insets(0,0,2,0);
-		c.fill = GridBagConstraints.BOTH;
-		p.add(graph1, c);
-		GridBagConstraints c2 = new GridBagConstraints();
-		c2.gridx = 0;
-		c2.gridy = 1;
-		c2.weightx = 1;
-		c2.weighty = 0.45;
-		//c2.insets = new Insets(2,0,0,0);
-		c2.fill = GridBagConstraints.BOTH;
-		p.add(graph2, c2);
-		GridBagConstraints c3 = new GridBagConstraints();
-		c3.gridx = 0;
-		c3.gridy = 2;
-		c3.weightx = 1;
-		c3.weighty = 0.1;
-		c3.insets = new Insets(2,2,2,2);
-		c3.fill = GridBagConstraints.BOTH;
-		p.add(histoPanel, c3);
+		JPanel p2a = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		p2a.add(new JLabel("Histogram of probability distribution (under mouse): "));
+		p2a.add(p1a);
 
-//		JSplitPane p = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graph1, graph2);
-//		p.setDividerLocation(0.5d);
-//
-//		int h = (int)this.getPreferredSize().getHeight();
-//		p.setDividerLocation((int)(h/2));
+
+		JPanel p1 = new JPanel(new GridLayout(2, 1, 5, 5));
+		p1.add(graph1);
+		p1.add(graph2);
+
+		JPanel p2 = new JPanel(new BorderLayout());
+		p2.add(p1);
+		p2.add(p2a, BorderLayout.SOUTH);
+
 
 		GradientPanel gp = new GradientPanel("Probabilistic Divergence Measure (PDM)");
 		gp.setStyle(GradientPanel.OFFICE2003);
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.add(gp, BorderLayout.NORTH);
-		p1.add(p);
+		JPanel p3 = new JPanel(new BorderLayout());
+		p3.add(gp, BorderLayout.NORTH);
+		p3.add(p2, BorderLayout.CENTER);
 
-		addContent(p1, true);
+		addContent(p3, true);
 
 		setThreshold(result.threshold);
 	}

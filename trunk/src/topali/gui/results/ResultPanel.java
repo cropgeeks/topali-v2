@@ -18,23 +18,23 @@ import topali.gui.Icons;
  */
 public abstract class ResultPanel extends JPanel
 {
-	
+
 	AlignmentData data;
 	AnalysisResult result;
-	
+
 	JPanel contentPanel;
 	public ResultPanelToolbar toolbar;
-	
+
 	public ResultPanel(AlignmentData data, AnalysisResult result) {
 		this.data = data;
 		this.result = result;
-		
+
 		this.setLayout(new BorderLayout());
-		
+
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createLineBorder(Icons.grayBackground,4));
 		add(contentPanel, BorderLayout.CENTER);
-		
+
 		if(result instanceof AlignmentResult) {
 		toolbar = new ResultPanelToolbar(this, data, (AlignmentResult)result);
 		toolbar.setFloatable(false);
@@ -46,7 +46,7 @@ public abstract class ResultPanel extends JPanel
 	}
 
 	/**
-	 * Add the actual content to this ResultPanel 
+	 * Add the actual content to this ResultPanel
 	 * (this method is meant to be called by subclasses of ResultPanel)
 	 * @param comp
 	 * @param containGraphs
@@ -59,23 +59,23 @@ public abstract class ResultPanel extends JPanel
 			//toolbar.enableGraphButtons(containGraphs);
 		}
 	}
-	
+
 	/**
 	 * Get detailed information about the analysis
-	 * @return 
+	 * @return
 	 */
 	public abstract String getAnalysisInfo();
-	
+
 	/**
 	 * Set the threshold
 	 * @param t
 	 */
 	public abstract void setThreshold(double t);
-	
+
 	/**
 	 * Get the printable content of this ResultPanel
 	 * @return
 	 */
 	public abstract Printable[] getPrintables();
-	
+
 }
