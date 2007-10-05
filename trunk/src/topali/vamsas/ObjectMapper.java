@@ -4,13 +4,12 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
+import topali.gui.TOPALi;
 import topali.var.AssociationMap;
 import uk.ac.vamsas.client.*;
 
 public class ObjectMapper
-{
-	final boolean debug = false;
-	
+{	
 	static Logger log = Logger.getLogger(ObjectMapper.class);
 	
 	// Resolves vamsas IDs to TOPALi data objects
@@ -43,13 +42,13 @@ public class ObjectMapper
 	{
 		if (hashTV.containsKey(topaliObject))
 		{
-			if(debug)
-			log.info("Found corresponding VAMSAS object for "+topaliObject+", it's "+hashTV.get(topaliObject));
+			if(TOPALi.debug)
+				log.info("Found corresponding VAMSAS object for "+topaliObject+", it's "+hashTV.get(topaliObject));
 			return cdoc.getObject(hashTV.get(topaliObject));
 		}
 		
-		if(debug)
-		log.info("Didn't find corresponding VAMSAS object for "+topaliObject);
+		if(TOPALi.debug)
+			log.info("Didn't find corresponding VAMSAS object for "+topaliObject);
 		return null;
 	}
 	
@@ -64,8 +63,8 @@ public class ObjectMapper
 		VorbaId id = vamsasObject.getVorbaId();
 		if (id == null)
 		{
-			if(debug)
-			log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
+			if(TOPALi.debug)
+				log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
 			// Register the object for use within the session document
 			//cdoc.registerObject(vamsasObject);
 			return null;
@@ -90,18 +89,18 @@ public class ObjectMapper
 		if (id == null)
 		{
 			id = cdoc.registerObject(vamsasObject);
-			if(debug)
-			log.info(vamsasObject+" is now registered, id is "+id);
+			if(TOPALi.debug)
+				log.info(vamsasObject+" is now registered, id is "+id);
 		}
 		else {
-			if(debug)
-			log.info(vamsasObject+" was already registered, id is "+id);
+			if(TOPALi.debug)
+				log.info(vamsasObject+" was already registered, id is "+id);
 		}
 		
 		hashTV.put(topaliObject, id);		
 		hashVT.put(id, topaliObject);
-		if(debug)
-		log.info("Updated hashtables for "+topaliObject);
+		if(TOPALi.debug)
+			log.info("Updated hashtables for "+topaliObject);
 	}
 	
 	public String getVorbaID(Object topaliObject) {

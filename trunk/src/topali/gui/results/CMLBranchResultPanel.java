@@ -324,8 +324,8 @@ public class CMLBranchResultPanel extends ResultPanel
 	public Printable[] getPrintables()
 	{
 		Printable[] p = new Printable[2];
-		p[0] = p1;
-		p[1] = p2;
+		p[0] = p1.getPrintable();
+		p[1] = p2.getPrintable();
 		return p;
 	}
 

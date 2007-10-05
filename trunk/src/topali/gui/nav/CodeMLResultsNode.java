@@ -53,7 +53,7 @@ public class CodeMLResultsNode extends ResultsNode
 	public boolean isPrintable()
 	{
 		//TODO: Fix table printing
-		return false;
+		return true;
 	}
 
 	public Printable[] getPrintables()

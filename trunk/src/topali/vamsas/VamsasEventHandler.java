@@ -74,7 +74,7 @@ public class VamsasEventHandler
 
 	public void handleDocumentUpdate(PropertyChangeEvent e)
 	{
-		System.out.println("Vamsas document update for "
+		log.info("Vamsas document update for "
 			+ e.getPropertyName() + ": " + e.getOldValue()
 			+ " to " + e.getNewValue());
 		
@@ -89,7 +89,7 @@ public class VamsasEventHandler
 	
 	public void handleCloseEvent(PropertyChangeEvent e)
 	{
-		System.out.println("handleCloseEvent...\n"+e);
+		log.info("handleCloseEvent...\n"+e);
 		// TODO: ask user for a fileto save to then pass it to the vorba object
 		// vorbaclient.storeDocument(java.io.File);
 	}
@@ -97,7 +97,7 @@ public class VamsasEventHandler
 	public void handleClientCreationEvent(PropertyChangeEvent e)
 	{
 		// Tell app add new client to its list of clients
-		System.out.println("New Vamsas client for "
+		log.info("New Vamsas client for "
 			+ e.getPropertyName() + ": "
 			+ e.getOldValue() + " to "
 			+ e.getNewValue());
@@ -106,7 +106,7 @@ public class VamsasEventHandler
 	public void handleClientFinalizationEvent(PropertyChangeEvent e)
 	{
 		// Tell app to update its list of clients to communicate with
-		System.out.println("Vamsas client finalizing for "
+		log.info("Vamsas client finalizing for "
 			+ e.getPropertyName() + ": "
 			+ e.getOldValue() + " to "
 			+ e.getNewValue());
@@ -116,7 +116,7 @@ public class VamsasEventHandler
 	public void handleSessionShutdownEvent(PropertyChangeEvent e)
 	{
 		// Tell app to finalize its session data before shutdown
-		System.out.println("Session " + e.getPropertyName()
+		log.info("Session " + e.getPropertyName()
 			+ " is shutting down.");
 	}
 	
@@ -124,6 +124,6 @@ public class VamsasEventHandler
 	{
 		// Tell app to finalize its session data prior to the storage of the
 		// current session as an archive.
-		System.out.println("Application received a DOCUMENT_FINALIZEAPPDATA event.\n"+e);   
+		log.info("Application received a DOCUMENT_FINALIZEAPPDATA event.\n"+e);   
 	}
 }

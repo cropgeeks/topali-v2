@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.Logger;
 
 import topali.data.Sequence;
-import topali.gui.WinMain;
+import topali.gui.*;
 import uk.ac.vamsas.client.picking.*;
 
 public class VamsasMsgHandler implements IMessageHandler
@@ -29,13 +29,15 @@ public class VamsasMsgHandler implements IMessageHandler
 	
 	public void sendMessage(Message message)
 	{
-		log.info("Send new message: "+message.getRawMessage());
+		if(TOPALi.debug)
+			log.info("Send new message: "+message.getRawMessage());
 		manager.sendMessage(message);
 	}
 
 	public void handleMessage(final Message message)
 	{
-		log.info("Received new message: "+message.getRawMessage());
+		if(TOPALi.debug)
+			log.info("Received new message: "+message.getRawMessage());
 		
 		Runnable r = new Runnable()
 		{

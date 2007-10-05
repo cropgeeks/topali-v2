@@ -17,7 +17,7 @@ import javax.swing.table.*;
  * Table which supports multiple line cells (with auto-linebreak),
  * export to CSV and PNG, is printable, and can be set (not) editable.
  */
-public class CustomTable extends JTable implements Printable
+public class CustomTable extends JTable
 {
 	boolean editable = false;
 	
@@ -151,9 +151,8 @@ public class CustomTable extends JTable implements Printable
 	/**
 	 * @see java.awt.print.Printable
 	 */
-	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
-			throws PrinterException
-	{
+//	public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException
+//	{
 //		Graphics2D g2 = (Graphics2D) g;
 //		g2.setColor(Color.black);
 //		
@@ -192,8 +191,8 @@ public class CustomTable extends JTable implements Printable
 //		getTableHeader().paint(g2);
 //
 //		getSelectionModel().setSelectionInterval(selected, selected);
-		return Printable.PAGE_EXISTS;
-	}
+//		return Printable.PAGE_EXISTS;
+//	}
 
 	class MyTablemodel extends DefaultTableModel
 	{

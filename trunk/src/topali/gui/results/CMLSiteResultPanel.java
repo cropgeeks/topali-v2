@@ -274,7 +274,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	public Printable[] getPrintables()
 	{
 		Printable[] p = new Printable[2];
-		p[0] = table;
+		p[0] = table.getPrintable();
 		p[1] = graph;
 		return p;
 	}

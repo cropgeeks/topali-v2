@@ -15,6 +15,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.JTable.PrintMode;
 
 import org.apache.log4j.Logger;
 
@@ -25,7 +26,7 @@ import doe.MsgBox;
 /**
  * Panel for displaying a table
  */
-public class TablePanel extends JPanel implements Printable
+public class TablePanel extends JPanel 
 {
 	 Logger log = Logger.getLogger(this.getClass());
 	
@@ -232,13 +233,17 @@ public class TablePanel extends JPanel implements Printable
 		return aExport;
 	}
 
-	/**
-	 * @see java.awt.print.Printable
-	 */
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-			throws PrinterException
-	{
-		return table.print(graphics, pageFormat, pageIndex);
+//	/**
+//	 * @see java.awt.print.Printable
+//	 */
+//	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
+//			throws PrinterException
+//	{
+//		return table.getPrintable(PrintMode.FIT_WIDTH, null, null).print(graphics, pageFormat, pageIndex);
+//	}
+	
+	public Printable getPrintable() {
+		return table.getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 
 }

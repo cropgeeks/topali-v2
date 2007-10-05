@@ -141,7 +141,7 @@ public class MGResultPanel extends ResultPanel
 	@Override
 	public Printable[] getPrintables()
 	{
-		return new Printable[] {tp};
+		return new Printable[] {tp.getPrintable()};
 	}
 
 	@Override
