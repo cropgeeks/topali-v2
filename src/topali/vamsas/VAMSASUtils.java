@@ -23,7 +23,6 @@ import uk.ac.vamsas.objects.utils.trees.*;
 
 public class VAMSASUtils
 {
-	final static boolean debug = false;
 	
 	static   Logger log = Logger.getLogger(VAMSASUtils.class);
 	
@@ -82,11 +81,6 @@ public class VAMSASUtils
 		byte[] bytes = new byte[tmp.size()];
 		for(int i=0; i<tmp.size(); i++)
 			bytes[i] = tmp.get(i).byteValue();
-		
-		if(VAMSASUtils.debug) {
-			String debug = new String(bytes);
-			System.out.println("\n"+debug.replaceAll(">", ">\n"));
-		}
 		
 		InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(bytes));
 		Unmarshaller u = new Unmarshaller();

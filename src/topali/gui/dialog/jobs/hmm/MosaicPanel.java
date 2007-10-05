@@ -263,7 +263,7 @@ class MosaicPanel extends JPanel implements ActionListener
 
 	private void populateTableFromTDS()
 	{
-		log.info("Populating via TDS...");
+		log.info("Populating via Topology Defining Sites (TDS)...");
 
 		int[] indices = ss.getSelectedSequences();
 		StringBuffer[] buffers = new StringBuffer[indices.length];
@@ -332,7 +332,7 @@ class MosaicPanel extends JPanel implements ActionListener
 	{
 		Vector<BreakPoint> breakpoints = checkData(true);
 
-		// 2D array [0] = breakpoint postition, [1] = topology at that position
+		// 2D array [0] = breakpoint position, [1] = topology at that position
 		int[][] bpArray = new int[breakpoints.size()][2];
 
 		for (int i = 0; i < bpArray.length; i++)

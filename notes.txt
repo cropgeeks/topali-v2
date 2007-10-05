@@ -2,16 +2,20 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- REMOVED (not working properly): When F84 tree job finishes, Topali now again automatically switches to tree view
-- Modified icons
-- Cleaned up "Omega start values" dialog
-- CodeMLSite dialog: run button now has default focus
-- Updated license information in Topali help section (ModelGenerator license still missing!)
+- Added static boolean "debug" to TOPALi to enable/disable extensive logging
+- Fixed vamsas sequence duplication bug
+- Fixed table printing issues
+- Extended modelgenerator parser to include best hlrt, aic1, aic2 and bic models 
+- Added a parser for the tracking log file
 
 TODO:
 
 Some ideas:
 - Do we actually really want to reselect the sequences when resubmitting a job?
+
+Known Bugs
+----------
+
 
 Some URLs
 ---------
@@ -25,7 +29,8 @@ SCRI Cluster:
 http://gruffalo.scri.ac.uk/topali
 http://gruffalo.scri.ac.uk/broker
 
-
+www.topali.org - Usage:
+file://///gruffalo/www.topali.org/site_stats/index.html
 
 Misc.
 -----
@@ -36,3 +41,14 @@ If libs changes, edit:
 - j.bat (for testing)
 - build.xml (generates meta-inf classpath for topali.jar) (used by installer)
 - webstart/topali.jnlp
+
+Release
+-------
+- Update website (whatsnew/index.html and version.txt)
+- Set TOPALi.debug = false
+- Set logger level to warn/error
+- Build/deploy public topali server:
+	ant -Dproperties=build.scri-public.properties update
+- Create and upload installers
+- Sign and upload jars for WebStart
+

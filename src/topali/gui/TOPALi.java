@@ -24,6 +24,9 @@ import topali.var.Utils;
 
 public class TOPALi extends Applet implements Application
 {
+	//enables/disables extensive logging
+	public static final boolean debug = true;
+	
 	public static final String VERSION = "2.16";
 
 	private final String prefsFile = ".topali2-new.xml";

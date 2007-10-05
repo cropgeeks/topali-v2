@@ -28,4 +28,7 @@
 * GUI: Clean up Advanced phyml settings
 * Future: Catch failing codeml jobs
 * Check if all jobs can be resubmitted
-* Switch to tree view when f84 tree job has finished
+* Switch to tree view when f84 tree job has finished (Removed again!)
+
+* Loading example sequence fails
+

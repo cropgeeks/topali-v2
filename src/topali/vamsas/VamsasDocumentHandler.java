@@ -64,12 +64,12 @@ public class VamsasDocumentHandler
 				}
 
 		for (AlignmentData cdnas : cdnaDatasets)
-			if (project.containsDatasetBySeqs(cdnas)==null)
+			if (tmp.containsDatasetBySeqs(cdnas)==null)
 			{
 				int option = JOptionPane
 						.showConfirmDialog(
 								null,
-								"Found DNA with a corresponding protein alignment. Create a protein guided DNA alignment?",
+								"Found DNA with a corresponding protein alignment\n("+cdnas.name+").\n\nCreate a protein guided DNA alignment?",
 								"Guided alignment", JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE);
 				if (option == JOptionPane.YES_OPTION) {
@@ -350,6 +350,11 @@ public class VamsasDocumentHandler
 			}
 		} else
 		{
+			int tid = readTID(valSeq);
+			if(tid<0) {
+				valSeq.addProperty(createTIDProp(seq));
+			}
+			
 			log.info("Vamsas sequence already exists. Updating sequence "+valSeq);
 			valSeq.setName(seq.getName());
 		}
