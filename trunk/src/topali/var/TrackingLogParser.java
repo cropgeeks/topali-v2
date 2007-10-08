@@ -13,11 +13,14 @@ public class TrackingLogParser
 {
 
 	final static String logFileName = "\\\\gruffalo\\tomcat\\topali\\public\\tracking.log";
-
+	final static boolean dnsLookup = true;
+	
 	HashSet<String> excludedIps = new HashSet<String>();
 
 	Hashtable<String, User> users = new Hashtable<String, User>();
 
+	Hashtable<String, Location> locations = new Hashtable<String, Location>();
+	
 	Hashtable<String, Job> jobs = new Hashtable<String, Job>();
 
 	LinkedList<Download> downloads = new LinkedList<Download>();
@@ -36,17 +39,6 @@ public class TrackingLogParser
 	public void evaluate() throws Exception
 	{
 		parse();
-
-		Hashtable<String, Integer> loc = new Hashtable<String, Integer>();
-		for (User u : users.values())
-		{
-			Integer i = loc.get(u.location);
-			if (i == null)
-				i = 1;
-			else
-				i++;
-			loc.put(u.location, i);
-		}
 
 		int cancelledJobs = 0;
 		int completedJobs = 0;
@@ -81,17 +73,21 @@ public class TrackingLogParser
 		System.out.println();
 		System.out.println("Run with Java WebStart: "+countDownloads(Download.WEBSTART));
 		System.out.println();
-		
+
 		System.out.println("Users");
 		System.out.println("-----");
 		System.out.println("Number of Users: " + users.size());
 		System.out.println("Locations:");
-		for (String s : loc.keySet())
+		Collection<Location> tmp = locations.values();
+		Location[] loc = new Location[tmp.size()];
+		loc = tmp.toArray(loc);
+		Arrays.sort(loc);
+		for (Location l : loc)
 		{
-			System.out.println(s + ": " + loc.get(s) + " users");
+			System.out.println(l.location + ": " + l.count + " users");
 		}
-
-		System.out.println("");
+		System.out.println();
+		
 		System.out.println("Jobs");
 		System.out.println("----");
 		System.out.println("Submitted jobs: " + jobs.size());
@@ -102,6 +98,17 @@ public class TrackingLogParser
 		{
 			System.out.println(s + ": " + job.get(s)+" ("+countJobs(s, Job.COMPLETETED)+", "+countJobs(s, Job.CANCELLED)+")");
 		}
+		
+		System.out.println();
+		System.out.println("Jobs per User:");
+		Collection<User> tmp2 = this.users.values();
+		User[] users = new User[tmp2.size()];
+		users = tmp2.toArray(users);
+		Arrays.sort(users);
+		for(int i=0; i<users.length; i++) {
+			System.out.println("User "+users[i].id+": "+users[i].jobs+" ("+users[i].ip+", "+users[i].location+")");
+		}
+		
 	}
 
 	private void parse() throws Exception
@@ -139,7 +146,7 @@ public class TrackingLogParser
 			
 			else if (tmp[4].equals("OPEN"))
 			{
-				if (!users.contains(tmp[3]))
+				if (!users.containsKey(tmp[3]))
 				{
 					User user = new User(tmp[3], tmp[1]);
 					users.put(tmp[3], user);
@@ -150,6 +157,9 @@ public class TrackingLogParser
 			{
 				Job job = new Job(tmp[6], tmp[5]);
 				jobs.put(tmp[6], job);
+				User user = users.get(tmp[3]);
+				if(user!=null)
+					user.jobs++;
 			}
 
 			else if (tmp[4].equals("COMPLETED"))
@@ -227,35 +237,80 @@ public class TrackingLogParser
 			return add;
 	}
 
-	class User
+	class User implements Comparable<User>
 	{
 
 		public String id;
 
 		public String ip;
 
-		public String location = "unknown";;
+		public String location = "unknown";
+		
+		public int jobs = 0;
 
 		public User(String id, String ip)
 		{
 			this.id = id;
 			this.ip = ip;
 
-			try
-			{
-				String host = lookup(ip);
-				if (!host.matches("\\d+\\.\\d+\\.\\d+\\.\\d+"))
+			if(dnsLookup) {
+				try
 				{
-					String[] tmp = host.split("\\.");
-					location = tmp[tmp.length - 1];
+					String host = lookup(ip);
+					if (!host.matches("\\d+\\.\\d+\\.\\d+\\.\\d+"))
+					{
+						String[] tmp = host.split("\\.");
+						location = tmp[tmp.length - 1];
+						
+						Location l = locations.get(location);
+						if(l==null) {
+							l = new Location();
+							l.location = location;
+							locations.put(location, l);
+						}
+						l.count += 1;
+					}
+				} catch (UnknownHostException e)
+				{
 				}
-			} catch (UnknownHostException e)
-			{
 			}
 		}
 
+		@Override
+		public int compareTo(User o)
+		{
+			if(o.jobs>this.jobs)
+				return 1;
+			else if(o.jobs<this.jobs) 
+				return -1;
+			else
+				return this.id.compareTo(o.id);
+		}
+		
 	}
 
+	class Location implements Comparable<Location> {
+		public String location = "unknown";
+		public int count = 0;
+		
+		public Location() {
+			
+		}
+
+		@Override
+		public int compareTo(Location o)
+		{
+			if(o.count>this.count)
+				return 1;
+			else if(o.count<this.count) 
+				return -1;
+			else {
+				return location.compareTo(o.location);
+			}
+		}
+		
+	}
+	
 	class Job
 	{
 		public static final int UNKNOWN = 0;
