@@ -37,10 +37,15 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private AdvancedPhyML phymlPanel;
 
+	private AdvancedCDNAMrBayes cdnaPanel;
+	
 	MBTreeResult mbResult = new MBTreeResult();
 
 	PhymlResult phymlResult = new PhymlResult();
 
+	boolean showPhyMLInfo = true;
+	boolean showMBInfo = true;
+	
 	public CreateTreeDialog(WinMain winMain, AlignmentData data, TreeResult result)
 	{
 		super(winMain, "Estimate New Tree", true);
@@ -77,9 +82,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 	}
 
 	public void switchMethod() {
+		
 		if(tabs==null)
 			return;
-
+		
 		if(Prefs.gui_tree_method==0) {
 			tabs.setEnabledAt(1, false);
 		}
@@ -88,15 +94,41 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			//tabs.add(new JScrollPane(phymlPanel), "Advanced");
 			tabs.add(phymlPanel, "Advanced");
 			tabs.setEnabledAt(1, true);
+			
+			if(!phymlPanel.modelIsSupported && showPhyMLInfo) {
+    			if(!phymlPanel.altModelFound)
+    				MsgBox.msg("The substitution model associated with this\n" +
+    						"alignment is not supported by PhyML.\n" +
+    						"Therefore model '"+phymlPanel.altModel+"' has been suggested.", MsgBox.INF);
+    			else
+    				MsgBox.msg("The substitution model associated with this\n" +
+    						"alignment is not supported by PhyML.\n" +
+    						"Please choose an appropriate PhyML model or use the default '"+phymlPanel.altModel+"' model.", MsgBox.INF);
+    			showPhyMLInfo = false;
+    		}			
 		}
 		else if(Prefs.gui_tree_method==2) {
 			tabs.remove(1);
 			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
 			tabs.add(bayesPanel, "Advanced");
 			tabs.setEnabledAt(1, true);
+			
+			if(!bayesPanel.modelIsSupported && showMBInfo) {
+    			if(!bayesPanel.altModelFound)
+    				MsgBox.msg("The substitution model associated with this\n" +
+    						"alignment is not supported by MrBayes.\n" +
+    						"Therefore model '"+bayesPanel.altModel+"' has been suggested.", MsgBox.INF);
+    			else
+    				MsgBox.msg("The substitution model associated with this\n" +
+    						"alignment is not supported by MrBayes.\n" +
+    						"Please choose an appropriate MrBayes model or use the default '"+bayesPanel.altModel+"' model.", MsgBox.INF);
+    			showMBInfo = false;
+    		}
 		}
 		else if(Prefs.gui_tree_method==3) {
-			tabs.setEnabledAt(1, false);
+			tabs.remove(1);
+			tabs.add(new JScrollPane(cdnaPanel), "Advanced");
+			tabs.setEnabledAt(1, true);
 		}
 		validate();
 		repaint();
@@ -113,6 +145,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
 		phymlPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+		cdnaPanel = new AdvancedCDNAMrBayes(data.getSequenceSet(), mbResult);
+		cdnaPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
 		if(Prefs.gui_tree_method==0 || Prefs.gui_tree_method==3) {
@@ -126,6 +161,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		else if(Prefs.gui_tree_method==2) {
 			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
 			tabs.add(bayesPanel, "Advanced");
+		}
+		else if(Prefs.gui_tree_method==3) {
+			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
+			tabs.add(new JScrollPane(cdnaPanel), "Advanced");
 		}
 
 		return tabs;

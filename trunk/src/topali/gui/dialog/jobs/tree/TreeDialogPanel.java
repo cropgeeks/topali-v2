@@ -6,6 +6,7 @@
 
 package topali.gui.dialog.jobs.tree;
 
+import doe.MsgBox;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
 

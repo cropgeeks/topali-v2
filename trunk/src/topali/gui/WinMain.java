@@ -13,6 +13,7 @@ import java.beans.*;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -22,10 +23,12 @@ import pal.tree.Tree;
 import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
+import topali.data.models.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
+import topali.gui.dialog.jobs.mt.ModelTestDialog;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
@@ -72,8 +75,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	public WinMain()
 	{
-		Color c = UIManager.getColor("Table.selectionBackground");
-		c = c.brighter();
+		Color c = new Color(195,206,217);
 		UIManager.put("Table.selectionBackground", c);
 		// GUI Control initialization
 		createControls();
@@ -573,27 +575,18 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		CMLBranchDialog dlg = new CMLBranchDialog(this, data,result);
 		dlg.setVisible(true);
 	}
-
-	public void menuAnlsRunMG(boolean remote)
+	
+	public void menuAnlsRunMT(ModelTestResult result)
 	{
-
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		SequenceSet ss = data.getSequenceSet();
 
-		MGResult result = new MGResult();
-		result.mgPath = Utils.getLocalPath() + "modelgenerator.jar";
-		result.isRemote = remote;
-		result.javaPath = "java";
-		result.selectedSeqs = ss.getSelectedSequenceSafeNames();
-
-		int runNum = data.getTracker().getMgRunCount() + 1;
-		data.getTracker().setMgRunCount(runNum);
-		result.guiName = "Modelgenerator " + runNum;
-		result.jobName = "Modelgenerator on " + data.name + " ("
-				+ ss.getSelectedSequences().length + "/" + ss.getSize()
-				+ " sequences)";
-
-		submitJob(data, result);
+		ModelTestDialog dlg = new ModelTestDialog(data, result);
+		dlg.setVisible(true);
+		
+		ModelTestResult res = dlg.getResult();
+		
+		if(res!=null)
+			submitJob(data, res);
 	}
 
 	public void menuAnlsRunCW(CodonWResult res)
@@ -628,23 +621,23 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (!data.getSequenceSet().isDNA())
 		{
 			SequenceSetParams p = data.getSequenceSet().getParams();
-			if (p.getModel() == SequenceSetParams.MODEL_AA_CPREV)
+			if (p.getModel().is("cprev"))
 				res.model = FastMLResult.MODEL_AA_CPREV;
-			else if (p.getModel() == SequenceSetParams.MODEL_AA_DAYHOFF)
+			else if (p.getModel().is("day"))
 				res.model = FastMLResult.MODEL_AA_DAY;
-			else if (p.getModel() == SequenceSetParams.MODEL_AA_JONES)
+			else if (p.getModel().is("jtt"))
 				res.model = FastMLResult.MODEL_AA_JTT;
-			else if (p.getModel() == SequenceSetParams.MODEL_AA_MTREV
-					|| p.getModel() == SequenceSetParams.MODEL_AA_MTMAM)
+			else if (p.getModel().is("mtrev")
+					|| p.getModel().is("mtmam"))
 				res.model = FastMLResult.MODEL_AA_MTREV;
-			else if (p.getModel() == SequenceSetParams.MODEL_AA_WAG)
+			else if (p.getModel().is("wag"))
 				res.model = FastMLResult.MODEL_AA_WAG;
 			else
 				res.model = FastMLResult.MODEL_AA_WAG;
 		} else
 			res.model = FastMLResult.MODEL_DNA_JC;
 
-		res.gamma = data.getSequenceSet().getParams().isModelGamma();
+		res.gamma = data.getSequenceSet().getParams().getModel().isGamma();
 
 		res.alignment.name = data.name + " (+ancestral seq. using FastML)";
 		submitJob(data, res);

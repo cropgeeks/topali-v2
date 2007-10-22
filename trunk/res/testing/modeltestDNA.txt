@@ -1,0 +1,51 @@
+
+- PHYML v2.4.4 -
+
+. Sequence file : [seq]
+
+. Model of nucleotides substitution : custom
+
+. Initial tree : [BIONJ]
+
+. Number of taxa : 60
+
+
+. Likelihood : loglk = -9166.59588
+
+. Discrete gamma model : Yes
+  - Number of categories : 4
+  - Gamma shape parameter : 100.000
+
+. Proportion of invariant : 0.000
+
+. Nucleotides frequencies :
+
+  - f(A)= 0.24387
+  - f(C)= 0.24433
+  - f(G)= 0.27220
+  - f(T)= 0.23960
+
+. GTR relative rate parameters : 
+
+A <-> C    1.00000
+A <-> G    0.91312
+A <-> T    0.96294
+C <-> G    0.96294
+C <-> T    0.91312
+G <-> T   1.0 (fixed)
+
+
+. Instantaneous rate matrix : 
+
+[A---------C---------G---------T------]
+-1.00730   0.34013   0.34600   0.32117  
+ 0.33948  -1.00891   0.36487   0.30456  
+ 0.30998   0.32752  -0.97104   0.33354  
+ 0.32689   0.31058   0.37892  -1.01639  
+
+eg., the instantaneous rate of change from 'C' to 'A' is  0.24387 x  1.00000 =  0.33948
+
+. Time used 0h0m21s
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

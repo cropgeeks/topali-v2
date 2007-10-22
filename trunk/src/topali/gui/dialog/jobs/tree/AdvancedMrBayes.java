@@ -6,9 +6,15 @@
 
 package topali.gui.dialog.jobs.tree;
 
+import java.util.*;
+
 import javax.swing.*;
 
+import doe.MsgBox;
+
 import topali.data.*;
+import topali.data.models.*;
+import topali.var.Utils;
 
 /**
  *
@@ -19,10 +25,15 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 	SequenceSet ss;
 	MBTreeResult result;
 	
+	public boolean modelIsSupported = true;
+	public boolean altModelFound = true;
+	public String altModel = "";
+	
     /** Creates new form AdvancedMrBayes */
     public AdvancedMrBayes(SequenceSet ss, MBTreeResult result) {
     	this.ss = ss;
 		this.result = result;
+		
         initComponents();
         setDefaults();
         
@@ -42,19 +53,41 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 				break;
 			}
 		
-		String[] models = ss.isDNA() ?  SequenceSetParams.availDNAModels : SequenceSetParams.availAAModels;
+		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.isDNA());
+		String[] models = new String[mlist.size()];
+		for(int i=0; i<mlist.size(); i++)
+			models[i] = mlist.get(i).getName();
+		
 		cm = new DefaultComboBoxModel(models);
 		this.subModel.setModel(cm);
-		String m = params.getModel();
-		for(int i=0; i<models.length; i++)
-			if(models[i].equals(m)) {
+
+		Model m = params.getModel();
+		while(!Utils.contains(models, m.getName())) {
+			modelIsSupported = false;
+			Model next = ModelManager.getInstance().getNearestModel(m);
+			if(next.getName().equals(m.getName())) {
+				altModelFound = false;
+				if(ss.isDNA()) 
+					m = ModelManager.getInstance().generateModel("hky", m.isGamma(), m.isInv());
+				else
+					m = ModelManager.getInstance().generateModel("wag", m.isGamma(), m.isInv());
+				break;
+			}
+			else 
+				m = next;
+		}
+		altModel = m.getName();
+		
+		for(int i=0; i<models.length; i++) {
+			if(models[i].equals(m.getName())) {
 				this.subModel.setSelectedIndex(i);
 				break;
 			}
+		}
 		
 		
-		this.gamma.setSelected(params.isModelGamma());
-		this.inv.setSelected(params.isModelInv());
+		this.gamma.setSelected(params.getModel().isGamma());
+		this.inv.setSelected(params.getModel().isInv());
 		
 		SpinnerNumberModel mNGen = new SpinnerNumberModel(result.nGen, 10000, 500000, 10000);
 		this.nGen.setModel(mNGen);
@@ -74,9 +107,12 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
     
     public void onOK() {
 		ss.getParams().setGeneticCode((String)genCode.getSelectedItem());
-		ss.getParams().setModel((String)subModel.getSelectedItem());
-		ss.getParams().setModelGamma(gamma.isSelected());
-		ss.getParams().setModelInv(inv.isSelected());
+		
+		String name = (String)subModel.getSelectedItem();
+		boolean g = gamma.isSelected();
+		boolean i = inv.isSelected();
+		
+		ss.getParams().setModel(ModelManager.getInstance().generateModel(name, g, i));
 		
 		result.burnin = ((Integer)burnin.getValue()).doubleValue()/100d;
 		result.nGen = (Integer)nGen.getValue();

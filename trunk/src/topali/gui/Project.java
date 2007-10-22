@@ -26,6 +26,8 @@ import doe.MsgBox;
 public class Project extends DataObject 
 {
 	 static Logger log = Logger.getLogger(Project.class);
+
+	 public String appVersion;
 	 
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
@@ -40,7 +42,7 @@ public class Project extends DataObject
 
 	public Project()
 	{
-		
+		appVersion = TOPALi.VERSION;
 	}
 
 	public LinkedList<AlignmentData> getDatasets()

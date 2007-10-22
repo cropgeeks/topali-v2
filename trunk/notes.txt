@@ -2,13 +2,13 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added static boolean "debug" to TOPALi to enable/disable extensive logging
-- Fixed vamsas sequence duplication bug
-- Fixed table printing issues
-- Extended modelgenerator parser to include best hlrt, aic1, aic2 and bic models 
-- Added a parser for the tracking log file
+- Added new model testing webservice based on phyml (removed modelgenerator from the menu)
+- Added highlighting/tooltip functionality to CustomTable
 
 TODO:
+- Write unit test for model test webservice
+- Implement a method for importing old topali projects (XSLT?)
+  (because topali.xml has changed again)
 
 Some ideas:
 - Do we actually really want to reselect the sequences when resubmitting a job?

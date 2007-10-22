@@ -316,6 +316,11 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				node.setUserObject(new MGResultsNode(data, (MGResult) result));
 			}
 
+			if (result instanceof ModelTestResult)
+			{
+				node.setUserObject(new MTResultsNode(data, (ModelTestResult) result));
+			}
+			
 			if (result instanceof CodonWResult)
 			{
 				node.setUserObject(new CodonWResultsNode(data,

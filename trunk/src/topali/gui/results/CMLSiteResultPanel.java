@@ -93,9 +93,8 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		names.add("PSS");
 
 		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
-		Vector<Color> c = getColorVector();
 		
-		TablePanel p = new TablePanel(data, names, c, TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
 		p.accessTable().getColumnModel().getColumn(1).setMaxWidth(60); 
@@ -145,6 +144,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	
 	private Vector<Vector<String>> getTableVector(double thres)
 	{
+		
 		CodeMLResult result = (CodeMLResult) this.result;
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		
@@ -154,42 +154,59 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		for (int i=0; i<result.models.size(); i++)
 		{
 			CMLModel m = result.models.get(i);
+	
+			Color c1 = UIManager.getColor("Table.background");
+			Color c2 = new Color(245,245,245);
+			Color c3 = new Color(235,235,235);
+			Color c = c1;
+			if(m.name.startsWith("M0"))
+				c = c1;
+			else if(m.name.startsWith("M3"))
+				c = c1;
+			else if(m.name.startsWith("M1a"))
+			    c = c2;
+			else if(m.name.startsWith("M2a"))
+				c = c2;
+			else if(m.name.startsWith("M7"))
+				c = c3;
+			else if(m.name.startsWith("M8"))
+			    c = c3;
 			
 			Vector<String> v = new Vector<String>();
-			v.add(m.name+"("+m.nParameter+")");
-			v.add(Prefs.d2.format(m.likelihood));
+			v.add(m.name+"("+m.nParameter+")"+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+			v.add(Prefs.d2.format(m.likelihood)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p0 != -1)
-				v.add(Prefs.d3.format(m.p0));
+				v.add(Prefs.d3.format(m.p0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p1 != -1)
-				v.add(Prefs.d3.format(m.p1));
+				v.add(Prefs.d3.format(m.p1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p2 != -1)
-				v.add(Prefs.d3.format(m.p2));
+				v.add(Prefs.d3.format(m.p2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w0 != -1)
-				v.add(Prefs.d3.format(m.w0));
+				v.add(Prefs.d3.format(m.w0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w1 != -1)
-				v.add(Prefs.d3.format(m.w1));
+				v.add(Prefs.d3.format(m.w1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w2 != -1)
-				v.add(Prefs.d3.format(m.w2));
+				v.add(Prefs.d3.format(m.w2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p != -1)
-				v.add(Prefs.d3.format(m.p));
+				v.add(Prefs.d3.format(m.p)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.q != -1)
-				v.add(Prefs.d3.format(m.q));
+				v.add(Prefs.d3.format(m.q)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 
 			if((i%2)==1 && np != -1) {
 				try
@@ -198,21 +215,21 @@ public class CMLSiteResultPanel extends ResultPanel implements
 					double lr = MathUtils.calcLR(m.likelihood, ll);
 					double lrt = MathUtils.calcLRT(lr, df);
 					String lrtString = MathUtils.getRoughSignificance(lrt);
-					v.add(""+df);
-					v.add(Prefs.d3.format(lr));
-					v.add(lrtString);
+					v.add(""+df+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+					v.add(Prefs.d3.format(lr)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+					v.add(lrtString+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 				} catch (RuntimeException e)
 				{
 					log.warn(e);
-					v.add("");
-					v.add("");
-					v.add("");
+					v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+					v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+					v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 				}
 			}
 			else {
-				v.add("");
-				v.add("");
-				v.add("");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			}
 			
 			np = m.nParameter;
@@ -224,9 +241,9 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				StringBuffer sb = new StringBuffer();
 				for (PSSite s : pss)
 					sb.append("" + s.getPos() + s.getAa() + " ");
-				v.add(sb.toString());
+				v.add(sb.toString()+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			} else
-				v.add("--");
+				v.add("--"+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 
 			data.add(v);
 		}

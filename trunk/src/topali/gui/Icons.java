@@ -61,7 +61,7 @@ public class Icons
 	public static void loadIcons()
 	{
 		Icons icons = new Icons();
-		Class c = icons.getClass();
+		Class<? extends Icons> c = icons.getClass();
 
 		try
 		{

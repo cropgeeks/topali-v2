@@ -53,7 +53,7 @@ public class WinMainMenuBar extends JMenuBar
 	JMenuItem mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
 	
 	//Model test
-	JMenuItem mAnlsRunMG;
+	JMenuItem mAnlsRunMT;
 
 	//CodonW
 	JMenuItem mAnlsRunCW;
@@ -88,7 +88,7 @@ public class WinMainMenuBar extends JMenuBar
 	public static AbstractAction aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
 	
 	//Model test
-	public static AbstractAction aAnlsRunMG;
+	public static AbstractAction aAnlsRunMT;
 	
 	//CodonW
 	public static AbstractAction aAnlsRunCW;
@@ -444,11 +444,10 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunMG = new AbstractAction("Model Selection") {
+		aAnlsRunMT = new AbstractAction("Model Selection") {
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
-				winMain.menuAnlsRunMG(remote);
+				winMain.menuAnlsRunMT(null);
 			}
 		};
 		
@@ -731,7 +730,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunCodeMLSite = getItem(aAnlsRunCodeMLSite, KeyEvent.VK_S, 0, 0);
 		mAnlsRunCodeMLBranch = getItem(aAnlsRunCodeMLBranch, KeyEvent.VK_B, 0, 0);
 		
-		mAnlsRunMG = getItem(aAnlsRunMG, KeyEvent.VK_M, 0, 0);
+		mAnlsRunMT = getItem(aAnlsRunMT, KeyEvent.VK_M, 0, 0);
 		
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
 		
@@ -763,7 +762,7 @@ public class WinMainMenuBar extends JMenuBar
 		MenuHeading h3 = new MenuHeading("Phylogenetics");
 		h3.setIcon(Icons.TREE);
 		mAnls.add(h3);
-		mAnls.add(mAnlsRunMG);
+		mAnls.add(mAnlsRunMT);
 		mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
 		MenuHeading h4 = new MenuHeading("Codon Usage");
@@ -915,7 +914,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunLRT.setEnabled(false);
 		aAnlsRunCodeMLBranch.setEnabled(false);
 		aAnlsRunCodeMLSite.setEnabled(false);
-		aAnlsRunMG.setEnabled(false);
+		aAnlsRunMT.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);
 		aAnlsCreateTree.setEnabled(false);
 		aAnlsPartition.setEnabled(false);

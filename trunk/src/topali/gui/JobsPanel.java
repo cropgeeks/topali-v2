@@ -103,7 +103,8 @@ public class JobsPanel extends JPanel
 		// Move its results into main window
 		if (getResults)
 		{
-			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), job.getResult());
+			AnalysisResult res = job.getResult();
+			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), res);
 		} else
 			job.getAlignmentData().removeResult(job.getResult());
 
@@ -122,7 +123,7 @@ public class JobsPanel extends JPanel
 
 		if (status != JobStatus.COMPLETING && status != JobStatus.COMPLETED)
 		{
-			if (status != JobStatus.FATAL_ERROR)
+			if (status != JobStatus.FATAL_ERROR && e.getJob().getResult().isRemote)
 				Tracker.log("CANCELLED", e.getJob().getJobId());
 
 			e.getJob().setStatus(JobStatus.CANCELLING);
@@ -267,6 +268,14 @@ public class JobsPanel extends JPanel
 			entry = new ProgressBarJobEntry(job);
 		}
 
+		else if(result instanceof ModelTestResult) {
+			if(result.isRemote)
+				job = new ModelTestRemoteJob((ModelTestResult)result, data);
+			else
+				job = new ModelTestLocalJob((ModelTestResult)result, data);
+			entry = new ProgressBarJobEntry(job);
+		}
+		
 		else if(result instanceof CodonWResult) {
 			if(result.isRemote)
 				job = new CodonWRemoteJob((CodonWResult)result, data);
