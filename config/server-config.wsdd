@@ -81,6 +81,12 @@
   <parameter name="scope" value="request"/>
   <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebService"/>
  </service>
+  <!-- ModelTest -->
+ <service name="topali-mt" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.modeltest.ModelTestWebService"/>
+ </service>
  <!-- MrBayes -->
  <service name="topali-mb" provider="java:RPC">
   <parameter name="allowedMethods" value="*"/>

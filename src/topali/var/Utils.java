@@ -10,10 +10,12 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -73,7 +75,8 @@ public class Utils
 		bCancel.addActionListener((ActionListener)parent);
 		bDefault.setText("Defaults");
 		bDefault.addActionListener((ActionListener)parent);
-		bHelp = TOPALiHelp.getHelpButton(help);
+		if(help!=null)
+			bHelp = TOPALiHelp.getHelpButton(help);
 		
 		addCloseHandler(parent, bCancel);
 		
@@ -332,5 +335,51 @@ public class Utils
 			tree = tree.replaceAll(safename, lookup.get(safename));
 		}
 		return tree;
+	}
+	
+	public static String arrayToString(Object array, char delim) {
+		StringBuffer sb = new StringBuffer();
+		int length = Array.getLength(array);
+		for(int i=0; i<length-1; i++) {
+			sb.append(Array.get(array, i));
+			sb.append(delim);
+		}
+		sb.append(Array.get(array, length-1));
+		return sb.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * Does not work in primitives!
+	 */
+	public static Object stringToArray(Class c, String s, char delim) throws Exception {
+		String[] tmp = s.split(""+delim);
+		Object array = Array.newInstance(c, tmp.length);
+		Constructor constructor = c.getConstructor(String.class);
+		for(int i=0; i<tmp.length; i++)
+			Array.set(array, i, constructor.newInstance(tmp[i]));
+		return array;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Object castArrayToPrimitives(Object array, Class srcClass, Class dstClass) {
+		int length = Array.getLength(array);
+		Object result = Array.newInstance(dstClass, length);
+		for(int i=0; i<length; i++) {
+			Array.set(result, i, srcClass.cast(Array.get(array, i)));
+		}
+		return result;
+	}
+	
+	public static boolean contains(Object[] list, Object obj) {
+		for(Object o : list) {
+			if(o.equals(obj))
+				return true;
+		}
+		return false;
+	}
+	
+	public static boolean contains(List<Object> list, Object obj) {
+		return contains(list.toArray(), obj);
 	}
 }

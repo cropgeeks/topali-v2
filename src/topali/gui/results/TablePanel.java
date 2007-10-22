@@ -49,42 +49,6 @@ public class TablePanel extends JPanel
 	JScrollPane scroll;
 	Vector rowData, columnNames;
 
-	public TablePanel(Vector rowData, Vector columnNames, Vector<Color> bgColors,
-			int toolbarPos)
-	{
-		this.rowData = rowData;
-		this.columnNames = columnNames;
-		this.toolbarPos = toolbarPos;
-
-		CustomTable table = new CustomTable(rowData, columnNames, bgColors);
-		table.setPreferredScrollableViewportSize(table.getPreferredSize());
-		this.table = table;
-
-		this.setLayout(new BorderLayout());
-		this.scroll = new JScrollPane(table);
-		this.add(scroll, BorderLayout.CENTER);
-		
-		switch (toolbarPos)
-		{
-		case TOP:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.NORTH);
-			break;
-		case RIGHT:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.EAST);
-			break;
-		case BOTTOM:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.SOUTH);
-			break;
-		case LEFT:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.WEST);
-			break;
-		}
-		
-	}
 	/**
 	 * Panel for displaying a table
 	 * @param rowData

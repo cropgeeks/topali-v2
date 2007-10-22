@@ -36,4 +36,41 @@ public class MathUtils
 		double lrt = MathUtils.calcLRT(lr, df);
 		return MathUtils.getRoughSignificance(lrt);
 	}
+	
+	/**
+	 * AIC1 = -2lnl + 2df
+	 * (K = df)
+	 * @param lnl Log-Likelihood
+	 * @param df Degres of freedom (free parameters)
+	 * @return
+	 */
+	public static double calcAIC1(double lnl, int df) {
+		return (-2*lnl + 2*df);
+	}
+	
+	/**
+	 * AIC2 = -2lnl + 2df + 2df(df+1)/(n-df-1)
+	 * @param lnl Log-Likelihood
+	 * @param df Degres of freedom (free parameters)
+	 * @param n Sample size (Sequence length)
+	 * @return
+	 */
+	public static double calcAIC2(double lnl, int df, int n) {
+		double dfd = (double)df;
+		double nd = (double)n;
+		return (calcAIC1(lnl, df) + 2d*dfd*(dfd + 1d)/(nd - dfd - 1d));
+	}
+	
+	/**
+	 * BIC = -2lnl + df * log(n)
+	 * @param lnl Log-Likelihood
+	 * @param df Degres of freedom (free parameters)
+	 * @param n Sample size (Sequence length)
+	 * @return
+	 */
+	public static double calcBIC(double lnl, int df, int n) {
+		double dfd = (double)df;
+		double nd = (double)n;
+		return (-2d*lnl + dfd * Math.log(nd));
+	}
 }

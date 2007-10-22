@@ -59,17 +59,17 @@ public class PhymlAnalysis extends AnalysisThread
 		SequenceSetParams para = ss.getParams();
 		
 		StringBuffer sb = new StringBuffer();
-		 sb.append("Sub. Model: "+para.getModel()+"\n");
+		 sb.append("Sub. Model: "+para.getModel().getName()+"\n");
 		 sb.append("Rate Model: ");
-		 if(!(para.isModelGamma() || para.isModelInv()))
+		 if(!(para.getModel().isGamma() || para.getModel().isInv()))
 			 sb.append("Uniform\n");
-		 if(para.isModelGamma() && para.isModelInv())
+		 if(para.getModel().isGamma() && para.getModel().isInv())
 			 sb.append("Gamma + Inv. sites (est. parameters)\n");
 		 else 
 			 {
-			 if(para.isModelGamma())
+			 if(para.getModel().isGamma())
 				 sb.append("Gamma (est. parameters)\n");
-			 if(para.isModelInv())
+			 if(para.getModel().isInv())
 				 sb.append("Inv. sites (est. parameters)\n");
 			 }
 		 sb.append("Algorithm: Maximum Likelihood (PhyML)\n");
@@ -105,40 +105,40 @@ public class PhymlAnalysis extends AnalysisThread
 		list.add(""+res.bootstrap);
 		//model
 		String model = "GTR";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_BLOSUM))
+		if(para.getModel().is("blosum"))
 			model = "Blosum62";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_CPREV))
+		if(para.getModel().is("cprev"))
 			model = "CpREV";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_DAYHOFF))
+		if(para.getModel().is("day"))
 			model = "Dayhoff";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_GTR))
+		if(para.getModel().is("gtr"))
 			model = "GTR";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_JONES))
+		if(para.getModel().is("jtt"))
 			model = "JTT";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_MTMAM))
+		if(para.getModel().is("mtmam"))
 			model = "MtMam";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_MTREV))
+		if(para.getModel().is("mtrev"))
 			model = "mtREV";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_RTREV))
+		if(para.getModel().is("rtrev"))
 			model = "RtREV";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_VT))
+		if(para.getModel().is("vt"))
 			model = "VT";
-		if(para.getModel().equals(SequenceSetParams.MODEL_AA_WAG))
+		if(para.getModel().is("wag"))
 			model = "WAG";
 		
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_JC))
+		if(para.getModel().is("jc"))
 			model = "JC69";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_K80))
+		if(para.getModel().is("k80"))
 			model = "K80";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_F81))
+		if(para.getModel().is("f81"))
 			model = "F81";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_F84))
+		if(para.getModel().is("f84"))
 			model = "F84";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_HKY))
+		if(para.getModel().is("hky"))
 			model = "HKY85";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_TRN))
+		if(para.getModel().is("trn"))
 			model = "TN93";
-		if(para.getModel().equals(SequenceSetParams.MODEL_DNA_GTR))
+		if(para.getModel().is("gtr"))
 			model = "GTR";
 		
 		list.add(model);
@@ -146,12 +146,12 @@ public class PhymlAnalysis extends AnalysisThread
 		if(para.isDNA())
 			list.add("2");
 		//inv. sites
-		if(para.isModelInv())
+		if(para.getModel().isInv())
 			list.add("e");
 		else
 			list.add("0");
 		//categories
-		if(para.isModelGamma())
+		if(para.getModel().isGamma())
 			list.add("4");
 		else
 			list.add("1");

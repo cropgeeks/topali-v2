@@ -397,6 +397,25 @@ public class SequenceSetUtils
 		return ssNew;
 	}
 	
+	public static SequenceSet getCodonPosSequenceSet(AlignmentData data, int codonPos, int[] seqs) {
+		SequenceSet ssOld = data.getSequenceSet();
+		SequenceSet ssNew = new SequenceSet();
+
+		// For each sequence we want to add...
+		for (int seqIndex : seqs)
+		{
+			// Create (and add) the sequence to the set
+			Sequence seqOld = ssOld.getSequence(seqIndex);
+			Sequence seqNew = new Sequence(seqOld.getName());
+			StringBuffer buffer = seqNew.getBuffer();
+			for(int i=codonPos-1; i<seqOld.getLength(); i+=3) {
+				buffer.append(seqOld.getBuffer().charAt(i));
+			}
+			ssNew.addSequence(seqNew);
+		}
+		
+		return ssNew;
+	}
 	/*
 	 * Simple algorithm to decide if the alignment is DNA or protein. Basically,
 	 * if 85% of the data (not including '-' or '?') is ACGT U or N then the

@@ -38,7 +38,7 @@ public class MrBayesCmdBuilder
 
 	public static final String DNAMODEL_GTR = "6";
 
-	String dnaModel = DNAMODEL_F81JC;
+	String dnaModel = DNAMODEL_HKY;
 
 	public static final String CODE_UNIVERSAL = "universal";
 
@@ -96,7 +96,7 @@ public class MrBayesCmdBuilder
 
 	public static final String AAMODEL_GTR = "gtr";
 
-	String aaModel = AAMODEL_POISSON;
+	String aaModel = AAMODEL_WAG;
 
 	public String prset = null;
 

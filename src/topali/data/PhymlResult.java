@@ -5,15 +5,20 @@
 
 package topali.data;
 
+import topali.data.models.Model;
+
 public class PhymlResult extends TreeResult 
 {
 
 	public String phymlPath;
 	public int bootstrap = 0;
-	public boolean optTopology = false;
-	public boolean optBranchPara = false;
+	public boolean optTopology = true;
+	public boolean optBranchPara = true;
 	
 	public String[] phymlParameters;
+	
+	
+	public Model model;
 	
 	public PhymlResult() {
 		super();

@@ -9,6 +9,7 @@ import java.io.*;
 
 import topali.cluster.AnalysisThread;
 import topali.data.*;
+import topali.data.models.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 
@@ -95,79 +96,79 @@ public class MrBayesAnalysis extends AnalysisThread
 			cmd.setCode(MrBayesCmdBuilder.CODE_YEAST);
 		}
 
-		String model = para.getModel();
-		if(model.equals(SequenceSetParams.MODEL_AA_BLOSUM)) {
+		Model model = para.getModel();
+		if(model.is("blossum")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_BLOSUM);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_CPREV)) {
+		else if(model.is("cprev")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_CPREV);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_DAYHOFF)) {
+		else if(model.is("day")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_DAYHOFF);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_EQUALIN)) {
+		else if(model.is("equalin")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_EQUALIN);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_GTR)) {
+		else if(model.is("gtr") && (model instanceof ProteinModel)) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_GTR);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_JONES)) {
+		else if(model.is("jtt")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_JONES);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_MTMAM)) {
+		else if(model.is("mtmam")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_MTMAM);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_MTREV)) {
+		else if(model.is("mtrev")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_MTREV);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_POISSON)) {
+		else if(model.is("poisson")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_POISSON);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_RTREV)) {
+		else if(model.is("rtrev")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_RTREV);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_VT)) {
+		else if(model.is("vt")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_VT);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_AA_WAG)) {
+		else if(model.is("wag")) {
 			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_WAG);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_JC)) {
+		else if(model.is("jc")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_JC, true);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_F81)) {
+		else if(model.is("f81")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_GTR)) {
+		else if(model.is("gtr") && (model instanceof DNAModel)) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_HKY)) {
+		else if(model.is("hky")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_K3P)) {
+		else if(model.is("k81")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_K80)) {
+		else if(model.is("k80")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_K80, true);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_SYM)) {
+		else if(model.is("sym")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_SYM, true);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_TIM)) {
+		else if(model.is("tim")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_TRN)) {
+		else if(model.is("trn")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
 		}
-		else if(model.equals(SequenceSetParams.MODEL_DNA_TVM)) {
+		else if(model.is("tvm")) {
 			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
 		}
 		
-		if(para.isModelGamma())
+		if(para.getModel().isGamma())
 			cmd.setRate(MrBayesCmdBuilder.RATE_GAMMA);
-		if(para.isModelInv())
+		if(para.getModel().isInv())
 			cmd.setRate(MrBayesCmdBuilder.RATE_PROPINV);
-		if(para.isModelGamma() && para.isModelInv())
+		if(para.getModel().isGamma() && para.getModel().isInv())
 			cmd.setRate(MrBayesCmdBuilder.RATE_INVGAMMA);
 		
 		 BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
@@ -179,17 +180,17 @@ public class MrBayesAnalysis extends AnalysisThread
 		 StringBuffer sb = new StringBuffer();
 		 if(!result.isCDNA) {
 			 sb.append("Genetic Code: "+para.getGeneticCode()+"\n");
-			 sb.append("Sub. Model: "+para.getModel()+"\n");
+			 sb.append("Sub. Model: "+para.getModel().getName()+"\n");
 			 sb.append("Rate Model: ");
-			 if(!(para.isModelGamma() || para.isModelInv()))
+			 if(!(para.getModel().isGamma() || para.getModel().isInv()))
 				 sb.append("Uniform\n");
-			 if(para.isModelGamma() && para.isModelInv())
+			 if(para.getModel().isGamma() && para.getModel().isInv())
 				 sb.append("Gamma + Inv. sites\n");
 			 else 
 				 {
-				 if(para.isModelGamma())
+				 if(para.getModel().isGamma())
 					 sb.append("Gamma\n");
-				 if(para.isModelInv())
+				 if(para.getModel().isInv())
 					 sb.append("Inv. sites\n");
 				 }
 		 }

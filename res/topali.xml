@@ -12,7 +12,35 @@
   </field>
 </class>
 
-<!-- Sequence -->
+<!--                                          Substitution Models                                   -->
+<class name="topali.data.models.Model" extends="topali.data.DataObject">
+  <field name="name" type="string">
+  	<bind-xml node="attribute"/></field>
+  <field name="aliases" type="string" collection="collection"/>
+  <field name="gamma" type="boolean" get-method="isGamma" set-method="isGamma"/>
+  <field name="inv" type="boolean" get-method="isInv" set-method="isInv"/>
+  <field name="lnl" type="double"/>
+  <field name="alpha" type="double"/>
+  <field name="invProp" type="double"/>
+  <field name="gammaCat" type="int"/>
+</class>
+
+<class name="topali.data.models.DNAModel" extends="topali.data.models.Model">
+	<!--  Castor just can't handle arrays  -->
+	<field name="subRateGroups" type="string" get-method="castorGetSubRateGroups" set-method="castorSetSubRateGroups"/>
+	<field name="baseFreqGroups" type="string" get-method="castorGetBaseFreqGroups" set-method="castorSetBaseFreqGroups"/>
+	<field name="subRates" type="string" get-method="castorGetSubRates" set-method="castorSetSubRates"/>
+	<field name="baseFreqs" type="string" get-method="castorGetBaseFreqs" set-method="castorSetBaseFreqs"/>
+</class>
+
+<class name="topali.data.models.ProteinModel" extends="topali.data.models.Model">
+	<field name="rankingScore" type="int"/>
+	<field name="isSpecialMatrix" type="boolean" get-method="isSpecialMatrix" set-method="isSpecialMatrix"/>
+</class>
+
+
+
+<!--                                          Sequences/Alignments                                   -->
 <class name="topali.data.Sequence" extends="topali.data.DataObject">
   <field name="name" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
@@ -38,9 +66,7 @@
   <field name="isAligned" type="boolean" get-method="isAligned" set-method="setAligned" />
   <field name="codonUsage" type="string" />
   <field name="geneticCode" type="string" />
-  <field name="model" type="string" />
-  <field name="modelGamma" type="boolean" get-method="isModelGamma" set-method="setModelGamma" />
-  <field name="modelInv" type="boolean" get-method="isModelInv" set-method="setModelInv" />
+  <field name="model" type="topali.data.models.Model" />
   <field name="needCalculation" type="boolean" get-method="isNeedCalculation" set-method="setNeedCalculation" />
 </class>
 
@@ -115,7 +141,7 @@
     <bind-xml node="attribute"/></field>
   <field name="codeMLRunCount" type="integer">
     <bind-xml node="attribute"/></field>
-  <field name="mgRunCount" type="integer">
+  <field name="mtRunCount" type="integer">
     <bind-xml node="attribute"/></field>
   <field name="cwRunCount" type="integer">
     <bind-xml node="attribute"/></field>
@@ -158,9 +184,9 @@
 
 <!-- Project -->
 <class name="topali.gui.Project">
+  <field name="appVersion" type="string" direct="true"/>
   <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
   <field name="treePath" type="int" collection="array"/>
-  <!-- <field name="vamsasMapper" type="byte" collection="array" get-method="getVamsasMapperSerialized" set-method="setVamsasMapperSerialized"/> -->
 </class>
   
 <!-- JobStatus -->
@@ -171,7 +197,7 @@
 </class>
 
 
-<!-- AnalysisResult -->
+<!--                                             Results                                     -->
 <class name="topali.data.AnalysisResult" extends="topali.data.DataObject">
   <field name="guiName" type="string" direct="true">
   	<bind-xml node="attribute"/></field>
@@ -442,10 +468,10 @@
   <field name="data3" type="string"/>
 </class>
   
-  <class name="topali.data.MGResult" extends="topali.data.AlignmentResult">
-    <field name="mgPath" type="string" direct="true"><bind-xml node="attribute"/></field>
-    <field name="javaPath" type="string" direct="true"><bind-xml node="attribute"/></field>    
-    <field name="models" type="topali.data.SubstitutionModel" direct="true" collection="arraylist"/>
+  <class name="topali.data.ModelTestResult" extends="topali.data.AlignmentResult">
+    <field name="phymlPath" type="string" direct="true"><bind-xml node="attribute"/></field>
+    <field name="selection" type="string" direct="true"/>    
+    <field name="models" type="topali.data.models.Model" direct="true" collection="arraylist"/>
   </class>
   
   <class name="topali.data.CodonWResult" extends="topali.data.AlignmentResult">

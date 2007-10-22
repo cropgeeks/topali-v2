@@ -44,7 +44,7 @@ public class ExportDialog extends JDialog implements ActionListener
 
 	private JRadioButton rAllPar, rSelPar;
 
-	private JRadioButton rDisk, rProject;
+	private JRadioButton rDisk, rProject, rCodonPos;
 
 	public ExportDialog(WinMain winMain, AlignmentData data,
 			RegionAnnotations annotations, int[] regions)
@@ -129,14 +129,18 @@ public class ExportDialog extends JDialog implements ActionListener
 				"Add as a new alignment within the current project",
 				!Prefs.gui_export_todisk);
 		rProject.setMnemonic(KeyEvent.VK_N);
+		rCodonPos = new JRadioButton("Split alignment according to codon positions");
+		rCodonPos.setMnemonic(KeyEvent.VK_C);
 		ButtonGroup group3 = new ButtonGroup();
 		group3.add(rDisk);
 		group3.add(rProject);
-
-		JPanel p3 = new JPanel(new GridLayout(2, 1, 0, 0));
+		group3.add(rCodonPos);
+		
+		JPanel p3 = new JPanel(new GridLayout(3, 1, 0, 0));
 		p3.setBorder(BorderFactory.createTitledBorder("Export options:"));
 		p3.add(rDisk);
 		p3.add(rProject);
+		p3.add(rCodonPos);
 
 		DoeLayout layout = new DoeLayout();
 		layout.add(p1, 0, 0, 1, 1, new Insets(10, 10, 0, 10));
@@ -196,6 +200,26 @@ public class ExportDialog extends JDialog implements ActionListener
 		if (Prefs.gui_export_allseqs == false)
 			seqs = ss.getSelectedSequences();
 
+		if(rCodonPos.isSelected()) {
+			SequenceSet ss1 = SequenceSetUtils.getCodonPosSequenceSet(data, 1, seqs);
+			SequenceSet ss2 = SequenceSetUtils.getCodonPosSequenceSet(data, 2, seqs);
+			SequenceSet ss3 = SequenceSetUtils.getCodonPosSequenceSet(data, 3, seqs);
+			
+			Alignment alignment = ss1.getAlignment(false);
+			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p1",
+					alignment);
+			
+			Alignment alignment2 = ss2.getAlignment(false);
+			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p2",
+					alignment2);
+			
+			Alignment alignment3 = ss3.getAlignment(false);
+			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p3",
+					alignment3);
+			
+			return true;
+		}
+
 		// We recreate the alignment so it only contains the sequences and
 		// regions that
 		// correspond to the user's selection
@@ -205,7 +229,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		// Work out a new name for the alignment
 		String name = data.name + " (" + toExport.getSize() + "x"
 				+ (toExport.getLength()) + ")";
-
+		
 		// Save to disk...
 		if (Prefs.gui_export_todisk)
 		{

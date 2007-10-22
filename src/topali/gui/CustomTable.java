@@ -21,27 +21,12 @@ public class CustomTable extends JTable
 {
 	boolean editable = false;
 	
-	Vector<Color> bgColors = new Vector<Color>();
-	
-	public CustomTable(Object[][] rowData, Object[] columnNames, Color[] bgColors)
-	{
-		this(rowData, columnNames);
-		this.bgColors = new Vector<Color>(this.bgColors);
-		init();
-	}
-	
 	public CustomTable(Object[][] rowData, Object[] columnNames)
 	{
 		this.setModel(new MyTablemodel(rowData, columnNames));
 		init();
 	}
 
-	public CustomTable(Vector rowData, Vector columnNames, Vector<Color> bgColors)
-	{
-		this(rowData, columnNames);
-		this.bgColors = bgColors;
-		init();
-	}
 	
 	public CustomTable(Vector rowData, Vector columnNames)
 	{
@@ -134,65 +119,19 @@ public class CustomTable extends JTable
 			for (int j = 0; j < getColumnCount() - 1; j++)
 			{
 				String tmp = getValueAt(i, j).toString();
-				sb.append(tmp);
+				sb.append(tmp.replaceAll("\\<.*\\>", ""));
 				sb.append(',');
 			}
 			if (getColumnCount() > 0)
 			{
 				String tmp = getValueAt(i, getColumnCount()-1).toString();
-				sb.append(tmp);
+				sb.append(tmp.replaceAll("\\<.*\\>", ""));
 				sb.append(nl);
 			}
 		}
 
 		return sb.toString();
 	}
-	
-	/**
-	 * @see java.awt.print.Printable
-	 */
-//	public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException
-//	{
-//		Graphics2D g2 = (Graphics2D) g;
-//		g2.setColor(Color.black);
-//		
-//		double pageHeight = pageFormat.getImageableHeight();
-//		double pageWidth = pageFormat.getImageableWidth();
-//		double tableWidth = getColumnModel().getTotalColumnWidth();
-//		double tableHeight = getTableHeader().getHeight() +getRowMargin();
-//		for(int i=0; i<getRowCount(); i++) 
-//			tableHeight += getRowHeight(i) + getRowMargin();
-//		
-//		double scale = 1, scale2 = 1;
-//		if (tableWidth >= pageWidth)
-//			scale = pageWidth / tableWidth;
-//		if(tableHeight >= pageHeight)
-//			scale2 = pageHeight/tableHeight;
-//		scale = (scale < scale2) ? scale : scale2;
-//
-//		double headerHeightOnPage = getTableHeader().getHeight() * scale;
-//		double tableWidthOnPage = tableWidth * scale;
-//
-//
-//		g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-//
-//		// we don't want to print the selection...
-//		int selected = getSelectedRow();
-//		getSelectionModel().clearSelection();
-//		
-//		g2.scale(scale, scale);
-//		paint(g2);
-//		g2.scale(1 / scale, 1 / scale);
-//		g2.translate(0f, pageIndex * tableHeight);
-//		g2.translate(0f, -headerHeightOnPage);
-//		g2.setClip(0, 0, (int) Math.ceil(tableWidthOnPage), (int) Math
-//				.ceil(headerHeightOnPage));
-//		g2.scale(scale, scale);
-//		getTableHeader().paint(g2);
-//
-//		getSelectionModel().setSelectionInterval(selected, selected);
-//		return Printable.PAGE_EXISTS;
-//	}
 
 	class MyTablemodel extends DefaultTableModel
 	{
@@ -224,21 +163,48 @@ public class CustomTable extends JTable
 		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
-			if(isSelected) {
-				setBackground(UIManager.getColor("Table.selectionBackground"));
+			String text = value.toString();
+			
+			//determine background color
+			Color selColor = UIManager.getColor("Table.selectionBackground");
+			Color color = UIManager.getColor("Table.background");
+			if(text.matches(".*\\<color.+\\>.*")) {
+				int i = text.indexOf("<color");
+				int s = text.indexOf('=', i);
+				int e = text.indexOf('>', i);
+				String[] rgb = text.substring(s+1, e).split(",");
+				color = new Color(Integer.parseInt(rgb[0]), Integer.parseInt(rgb[1]), Integer.parseInt(rgb[2]));
 			}
-			else {
-				Color c = UIManager.getColor("Table.background");
-				if(row<bgColors.size())
-					c = bgColors.get(row);
-				setBackground(c);
-			}
+			if(isSelected) 
+				setBackground(mixColor(color, selColor));
+			else 
+				setBackground(color);
 
-			setText(value.toString());
+			//determine tooltip text
+			if(text.matches(".*\\<tooltip.+\\>.*")) {
+				int i = text.indexOf("<tooltip");
+				int s = text.indexOf('"', i);
+				int e = text.indexOf('"', s+1);
+				String tt = text.substring(s+1, e);
+				setToolTipText(tt);
+			}
+			else
+				setToolTipText(null);
+			
+			//remove all markup tags
+			text = text.replaceAll("\\<.*\\>", "");
+			
+			setText(text);
 		    
 			return this;
 		}
 		
+		private Color mixColor(Color c1, Color c2) {
+			int r = (c1.getRed()+c2.getRed())/2;
+			int g = (c1.getGreen()+c2.getGreen())/2;
+			int b = (c1.getBlue()+c2.getBlue())/2;
+			return new Color(r,g,b);
+		}
 	}
 	
 	class MyEditor extends AbstractCellEditor implements TableCellEditor {
