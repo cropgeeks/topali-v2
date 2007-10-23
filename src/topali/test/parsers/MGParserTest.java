@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.test;
+package topali.test.parsers;
 
 import java.io.File;
 import java.net.*;

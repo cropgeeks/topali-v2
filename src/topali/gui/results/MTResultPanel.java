@@ -26,6 +26,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	TablePanel tp;
 	ModelInfoPanel infoPanel;
 	
+	int select = -1;
 	Model selModel = null;
 	
 	public MTResultPanel(AlignmentData data, ModelTestResult result) {
@@ -45,10 +46,35 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		tp.accessTable().setRowSorter(sorter);
 		p1.add(tp, BorderLayout.CENTER);
 		
-		infoPanel = new ModelInfoPanel(data);
+		infoPanel = new ModelInfoPanel(data,this);
 		p1.add(infoPanel, BorderLayout.SOUTH);
 		
 		addContent(p1, false);
+	
+		if(select>=0) {
+			tp.accessTable().getSelectionModel().setSelectionInterval(select, select);
+			valueChanged(null);
+			modelSetTo(data.getSequenceSet().getParams().getModel());
+			sorter.toggleSortOrder(5);
+		}
+	}
+	
+	public void modelSetTo(Model mod) {
+		String name = mod.getName();
+		if(mod.isInv())
+			name += "+I";
+		if(mod.isGamma())
+			name += "+G";
+		
+		for(int i=0; i<tp.accessTable().getRowCount(); i++) {
+			String name2 = (String)tp.accessTable().getValueAt(i, 0);
+			if(name.equals(name2)) {
+				tp.accessTable().setValueAt(name2+"<b>", i, 0);
+			}
+			else {
+				tp.accessTable().setValueAt(name2.replaceAll("\\<b\\>", ""), i, 0);
+			}
+		}
 	}
 	
 	public TablePanel getTablePanel(ModelTestResult result) {
@@ -81,6 +107,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		colNames.add("BIC");
 		
 		Vector<Object> rowData = new Vector<Object>(result.models.size());
+		int i = 0;
 		for(Model m : result.models) {
 			Vector<Object> row = new Vector<Object>();
 			
@@ -156,6 +183,8 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				Color c = new Color(240,240,100);
 				col4 += "<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">";
 				col4 +="<tooltip=\"Best Model\">";
+				select = i;
+				data.getSequenceSet().getParams().setModel(m);
 			}
 			
 			row.add(col1);
@@ -166,11 +195,15 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			row.add(col3);
 			row.add(col4);
 			rowData.add(row);
+			
+			i++;
 		}
 		
 		TablePanel tp = new TablePanel(rowData, colNames, TablePanel.RIGHT);
 		
 		tp.accessTable().getColumnModel().getColumn(2).setMaxWidth(50); 
+		
+		
 		
 		return tp;
 	}

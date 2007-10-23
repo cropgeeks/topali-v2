@@ -18,9 +18,10 @@ import org.apache.log4j.Logger;
 import org.exolab.castor.xml.*;
 
 import topali.data.*;
-import topali.fileio.Castor;
+import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
+import topali.var.StringOutputStream;
 import doe.MsgBox;
 
 public class Project extends DataObject 
@@ -140,6 +141,42 @@ public class Project extends DataObject
 					.getInputStream(new ZipEntry("project.xml"));
 			BufferedReader in = new BufferedReader(new InputStreamReader(zin));
 
+			//Check with which version we're dealing with:
+			//if there is no appVersion attribute it's 2.16
+			String appVersion = "2.16";
+			String line = null;
+			while((line=in.readLine())!=null) {
+				if(line.matches(".*appVersion=.*")) {
+					int i = line.indexOf("appVersion=");
+					int s = line.indexOf('"', i);
+					int e = line.indexOf('"', s+1);
+					appVersion = line.substring(s, e);
+				}
+			}
+			if(!appVersion.equals(TOPALi.VERSION)) {
+				String notes = "";
+				if(appVersion.equals("2.16")) {
+					File xsltFile = new File(Project.class.getResource("/res/xslt/2.16-2.17.xsl").toURI());
+					notes += getTranformationNotes(xsltFile);
+					StringOutputStream sos = new StringOutputStream();
+					InputStream xmlin = zipFile.getInputStream(new ZipEntry("project.xml"));
+					InputStream xslin = new FileInputStream(xsltFile);
+					XSLTransformer.transform(xmlin, xslin, sos);
+					in = new BufferedReader(new StringReader(sos.toString()));
+					appVersion = "2.17";
+				}
+				
+				// ... do further tranformations in future (2.17-2.18, 2.18-...)
+				
+				if(!notes.equals("")) {
+					String msg = "This project was created with an older TOPALi version.\n" +
+							"TOPALi will try to import it, but it is possible that not all\n" +
+							"data can be transferred. Please read these notes carefully:\n\n";
+					msg += notes;
+					MsgBox.msg(msg, MsgBox.INF);
+				}
+			}
+			
 			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
@@ -162,6 +199,26 @@ public class Project extends DataObject
 		}
 	}
 
+	private static String getTranformationNotes(File xsltFile) throws Exception {
+		BufferedReader in = new BufferedReader(new FileReader(xsltFile));
+		String line = null;
+		boolean start = false;
+		StringBuffer sb = new StringBuffer();
+		while((line=in.readLine())!=null) {
+			if(line.matches(".*Notes:.*")) { 
+				start = true;
+				continue;
+			}
+			if(line.matches(".*\\-\\-\\>.*") && start) 
+				break;
+			
+			if(start) {
+				sb.append(line+"\n");
+			}
+		}
+		return sb.toString();
+	}
+	
 	static boolean save(Project p, boolean saveAs)
 	{
 		if (p.filename == null)
