@@ -259,14 +259,14 @@ public class ModelManager
 		m.setName("TVMef");
 		m.addAlias("TVM, equal frequences");
 		m.setBaseFreqGroups('0','0','0','0');
-		m.setSubRateGroups('0','1','2','2','3','4');
+		m.setSubRateGroups('0','1','2','3','1','4');
 		dnaModels.add(m);
 		
 		m = new DNAModel();
 		m.setName("TVM");
 		m.addAlias("Transversion Model");
 		m.setBaseFreqGroups('0','1','2','3');
-		m.setSubRateGroups('0','1','2','2','3','4');
+		m.setSubRateGroups('0','1','2','3','1','4');
 		dnaModels.add(m);
 		
 		m = new DNAModel();

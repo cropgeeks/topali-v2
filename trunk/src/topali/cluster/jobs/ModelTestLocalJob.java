@@ -17,7 +17,7 @@ public class ModelTestLocalJob extends AnalysisJob
 {
 
 	private SequenceSet ss;
-	private File jobDir;
+	public File jobDir;
 	
 	public ModelTestLocalJob(ModelTestResult result, AlignmentData data) {
 		this.result = result;    

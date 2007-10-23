@@ -191,6 +191,11 @@ public class CustomTable extends JTable
 			else
 				setToolTipText(null);
 			
+			if(text.matches(".*\\<b\\>.*")) 
+				setFont(getFont().deriveFont(Font.BOLD));
+			else
+				setFont(getFont().deriveFont(Font.PLAIN));
+			
 			//remove all markup tags
 			text = text.replaceAll("\\<.*\\>", "");
 			

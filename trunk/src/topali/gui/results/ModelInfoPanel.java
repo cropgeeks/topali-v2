@@ -21,13 +21,15 @@ import topali.var.MathUtils;
  */
 public class ModelInfoPanel extends javax.swing.JPanel {
     
+	MTResultPanel mtpanel; 
 	AlignmentData data;
 	Model model;
 	Logger log = Logger.getLogger(this.getClass());
 	
     /** Creates new form ModelInfoPanel */
-    public ModelInfoPanel(AlignmentData data) {
+    public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel) {
     	this.data = data;
+    	this.mtpanel = mtpanel;
         initComponents();
         setModel(null);
     }
@@ -108,7 +110,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     		}
     	}
     	
-    	defaultButton.setEnabled(true);
+    	defaultButton.setEnabled(mod!=null && !data.getSequenceSet().getParams().getModel().matches(mod));
     }
     
     private void setModName(String name) {
@@ -442,6 +444,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     	log.info("Set default model to:\n"+model);
         data.getSequenceSet().getParams().setModel(model);
         defaultButton.setEnabled(false);
+        mtpanel.modelSetTo(model);
     }//GEN-LAST:event_defaultButtonActionPerformed
     
     

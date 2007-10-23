@@ -42,8 +42,8 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	p3mod.setModel(new DefaultComboBoxModel(models));
     	
     	p1mod.setSelectedItem("HKY");
-    	p2mod.setSelectedItem("HKY");
-    	p3mod.setSelectedItem("HKY");
+    	p2mod.setSelectedItem("F81");
+    	p3mod.setSelectedItem("GTR");
     	
     	p1g.setSelected(true);
     	p2g.setSelected(true);

@@ -2,13 +2,13 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added new model testing webservice based on phyml (removed modelgenerator from the menu)
-- Added highlighting/tooltip functionality to CustomTable
+- Autoselect Model: After Modeltest finishes, the best BIC model will be selected automatically.
+- The currently selected model will now be marked in the Modeltest table (bold font)
+- Implemented a unit test for Modeltest job
+- Added XSLT mechanism for backward compatibility (V. 2.16 projects will now be transformed to be 2.17 compatible)
 
 TODO:
-- Write unit test for model test webservice
-- Implement a method for importing old topali projects (XSLT?)
-  (because topali.xml has changed again)
+- Check HKY, TrN and GTR model in Model test (results differ from MrAIC results!)
 
 Some ideas:
 - Do we actually really want to reselect the sequences when resubmitting a job?

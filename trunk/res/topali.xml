@@ -184,7 +184,8 @@
 
 <!-- Project -->
 <class name="topali.gui.Project">
-  <field name="appVersion" type="string" direct="true"/>
+  <field name="appVersion" type="string" direct="true">
+  	<bind-xml node="attribute"/> </field>
   <field name="datasets" type="topali.data.AlignmentData" collection="collection"/>
   <field name="treePath" type="int" collection="array"/>
 </class>

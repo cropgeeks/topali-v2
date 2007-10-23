@@ -382,4 +382,14 @@ public class Utils
 	public static boolean contains(List<Object> list, Object obj) {
 		return contains(list.toArray(), obj);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static Collection cloneCollection(Collection col) throws Exception {
+		Class c = col.getClass();
+		Collection result = (Collection)c.newInstance();
+		for(Object item : col) {
+			result.add(item);
+		}
+		return result;
+	}
 }
