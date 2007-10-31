@@ -10,7 +10,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.phyml.*;
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 
 public class PhymlLocalJob extends AnalysisJob
 {
@@ -38,7 +38,7 @@ public class PhymlLocalJob extends AnalysisJob
 	{
 		try
 		{
-			new RunPhyml(jobDir, ss, (PhymlResult) result).start();
+			new PhymlInitializer(jobDir, ss, (PhymlResult) result).start();
 
 			result.status = JobStatus.RUNNING;
 			return result.jobId;
@@ -68,7 +68,8 @@ public class PhymlLocalJob extends AnalysisJob
 	@Override
 	public void ws_cleanup() throws Exception
 	{
-		ClusterUtils.emptyDirectory(jobDir, true);
+		if(!TOPALi.debugJobs)
+			ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
 
 		LocalJobs.delJob(result.jobId);

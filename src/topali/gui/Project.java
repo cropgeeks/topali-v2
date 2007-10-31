@@ -27,8 +27,8 @@ import doe.MsgBox;
 public class Project extends DataObject 
 {
 	 static Logger log = Logger.getLogger(Project.class);
-
-	 public String appVersion;
+	 
+	 public String appversion;
 	 
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
@@ -43,7 +43,7 @@ public class Project extends DataObject
 
 	public Project()
 	{
-		appVersion = TOPALi.VERSION;
+		appversion = TOPALi.VERSION;
 	}
 
 	public LinkedList<AlignmentData> getDatasets()
@@ -146,13 +146,16 @@ public class Project extends DataObject
 			String appVersion = "2.16";
 			String line = null;
 			while((line=in.readLine())!=null) {
-				if(line.matches(".*appVersion=.*")) {
-					int i = line.indexOf("appVersion=");
+				if(line.matches(".*appversion=.*")) {
+					int i = line.indexOf("appversion=");
 					int s = line.indexOf('"', i);
 					int e = line.indexOf('"', s+1);
-					appVersion = line.substring(s, e);
+					appVersion = line.substring(s+1, e);
 				}
 			}
+			in.close();
+			zin.close();
+			
 			if(!appVersion.equals(TOPALi.VERSION)) {
 				String notes = "";
 				if(appVersion.equals("2.16")) {
@@ -175,6 +178,10 @@ public class Project extends DataObject
 					msg += notes;
 					MsgBox.msg(msg, MsgBox.INF);
 				}
+			}
+			else {
+				zin = zipFile.getInputStream(new ZipEntry("project.xml"));
+				in = new BufferedReader(new InputStreamReader(zin));
 			}
 			
 			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");

@@ -42,12 +42,12 @@ public class ObjectMapper
 	{
 		if (hashTV.containsKey(topaliObject))
 		{
-			if(TOPALi.debug)
+			if(TOPALi.debugClient)
 				log.info("Found corresponding VAMSAS object for "+topaliObject+", it's "+hashTV.get(topaliObject));
 			return cdoc.getObject(hashTV.get(topaliObject));
 		}
 		
-		if(TOPALi.debug)
+		if(TOPALi.debugClient)
 			log.info("Didn't find corresponding VAMSAS object for "+topaliObject);
 		return null;
 	}
@@ -63,7 +63,7 @@ public class ObjectMapper
 		VorbaId id = vamsasObject.getVorbaId();
 		if (id == null)
 		{
-			if(TOPALi.debug)
+			if(TOPALi.debugClient)
 				log.info("VAMSAS object "+vamsasObject+" is not registered. Registering now...");
 			// Register the object for use within the session document
 			//cdoc.registerObject(vamsasObject);
@@ -89,17 +89,17 @@ public class ObjectMapper
 		if (id == null)
 		{
 			id = cdoc.registerObject(vamsasObject);
-			if(TOPALi.debug)
+			if(TOPALi.debugClient)
 				log.info(vamsasObject+" is now registered, id is "+id);
 		}
 		else {
-			if(TOPALi.debug)
+			if(TOPALi.debugClient)
 				log.info(vamsasObject+" was already registered, id is "+id);
 		}
 		
 		hashTV.put(topaliObject, id);		
 		hashVT.put(id, topaliObject);
-		if(TOPALi.debug)
+		if(TOPALi.debugClient)
 			log.info("Updated hashtables for "+topaliObject);
 	}
 	

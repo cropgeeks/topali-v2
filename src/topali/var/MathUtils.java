@@ -10,16 +10,42 @@ import pal.statistics.ChiSquareDistribution;
 public class MathUtils
 {
 
+	/**
+	 * Round a double value
+	 * @param d value
+	 * @param n number of decimal places
+	 * @return
+	 */
+	public static double round(double d, int n) {
+		double f = 1 * Math.pow(10, n);
+		return (Math.round(d*f))/f;
+	}
+	
+	/**
+	 * @param l1 likelihood 1
+	 * @param l2 likelihood 2
+	 * @return 2 times likelihood difference
+	 */
 	public static double calcLR(double l1, double l2) {
 		double lr = (l1 > l2) ? 2 * (l1 - l2) : 2 * (l2 - l1);
 		return lr;
 	}
 	
+	/**
+	 * @param lr likelihood ratio (2 times likelihood difference)
+	 * @param df degrees of freedom
+	 * @return chi square significance 
+	 */
 	public static double calcLRT(double lr, int df) {
 		double lrt = 1 - ChiSquareDistribution.cdf(lr, df);
 		return lrt;
 	}
 	
+	/**
+	 * Transforms a significance value into a "rough significance"
+	 * @param lrt significance value
+	 * @return "<0.001" for lrt < 0.001, "<0.01" for lrt < 0.01, "<0.05" for lrt < 0.05, "NS" else
+	 */
 	public static String getRoughSignificance(double lrt) {
 		if (lrt < 0.001)
 			return "<0.001";
@@ -31,6 +57,14 @@ public class MathUtils
 			return "NS";
 	}
 	
+	/**
+	 * Calculates LRT and return a "rough significance" value
+	 * @see MathUtils.getRoughSignificance(double lrt)
+	 * @param l1 likelihood 1
+	 * @param l2 likelihood 2
+	 * @param df degrees of freedom
+	 * @return
+	 */
 	public static String getRoughSignificance(double l1, double l2, int df) {
 		double lr = MathUtils.calcLR(l1, l2);
 		double lrt = MathUtils.calcLRT(lr, df);

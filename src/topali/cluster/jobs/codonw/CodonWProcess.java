@@ -23,7 +23,8 @@ public class CodonWProcess extends StoppableProcess
 		runCancelMonitor();
 	}
 
-	void run() throws Exception
+	@Override
+	public void run() throws Exception
 	{
 		CodonWResult result = (CodonWResult) this.result;
 		

@@ -10,7 +10,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.modeltest.*;
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 import topali.var.Utils;
 
 public class ModelTestLocalJob extends AnalysisJob
@@ -48,7 +48,8 @@ public class ModelTestLocalJob extends AnalysisJob
 	@Override
 	public void ws_cleanup() throws Exception
 	{
-		ClusterUtils.emptyDirectory(jobDir, true);
+		if(!TOPALi.debugJobs)
+			ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
 
 		LocalJobs.delJob(result.jobId);

@@ -5,6 +5,8 @@
 
 package topali.data;
 
+import java.util.*;
+
 /*
  * Class that stores both the results from running MrBayes and the
  * settings required to make the run (although not the data itself).
@@ -13,12 +15,12 @@ public class MBTreeResult extends TreeResult
 {
 	// The location of the MrBayes binary
 	public String mbPath;
+	public int nRuns = 2;
 	public int nGen = 100000;
 	public double burnin = 0.25;
 	public int sampleFreq = 10;
-	public boolean isCDNA = false;
-	
-	public String nexusCommands;
+	public String summary = "";
+	public Vector<MBPartition> partitions = new Vector<MBPartition>();
 	
 	public MBTreeResult()
 	{

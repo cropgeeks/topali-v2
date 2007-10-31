@@ -34,6 +34,9 @@ public class AnalysisResult extends DataObject
 	// The job's current status
 	public int status = JobStatus.STARTING;
 
+	// If the user should get warned about something:
+	public String warning = "";
+	
 	protected boolean isResubmittable = false;
 	
 	public AnalysisResult()

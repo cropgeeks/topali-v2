@@ -185,6 +185,17 @@ public class Prefs extends PreferencesXML
 	// LRT analysis run settings
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 
+	// Mr Bayes run settings
+	public static int mb_runs;
+	public static int mb_gens;
+	public static int mb_samplefreq;
+	public static int mb_burnin;
+	
+	// Phyml run settings
+	public static int phyml_bootstrap;
+	public static boolean phyml_opttop;
+	public static boolean phyml_optbranch;
+	
 	// Vamsas/web settings
 	public static String web_direct_url;
 	public static String web_broker_url;
@@ -212,6 +223,8 @@ public class Prefs extends PreferencesXML
 		setHMMDefaults();
 		setDSSDefaults();
 		setLRTDefaults();
+		setMBDefaults();
+		setPhymlDefaults();
 		setWebDefaults();
 
 
@@ -372,6 +385,15 @@ public class Prefs extends PreferencesXML
 		lrt_runs = getInt("lrt_runs", lrt_runs);
 		lrt_method = getInt("lrt_method", lrt_method);
 
+		mb_runs = getInt("mb_runs", mb_runs);
+		mb_gens = getInt("mb_gens", mb_gens);
+		mb_samplefreq = getInt("mb_samplefreq", mb_samplefreq);
+		mb_burnin = getInt("mb_burnin", mb_burnin);
+
+		phyml_bootstrap = getInt("phyml_bootstrap", phyml_bootstrap);
+		phyml_optbranch = getBool("phyml_optbranch", phyml_optbranch);
+		phyml_opttop = getBool("phyml_opttop", phyml_opttop);
+		
 		web_direct_url = getStr("web_direct_url", web_direct_url);
 		web_broker_url = getStr("web_broker_url", web_broker_url);
 		web_use_rbroker = getBool("web_use_rbroker", web_use_rbroker);
@@ -530,6 +552,15 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
 
+		p.setProperty("mb_runs", ""+mb_runs);
+		p.setProperty("mb_gens", ""+mb_gens);
+		p.setProperty("mb_samplefreq", ""+mb_samplefreq);
+		p.setProperty("mb_burnin", ""+mb_burnin);
+		
+		p.setProperty("phyml_bootstrap", ""+phyml_bootstrap);
+		p.setProperty("phyml_optbranch", ""+phyml_optbranch);
+		p.setProperty("phyml_opttop", ""+phyml_opttop);
+		
 		setStr("web_direct_url", web_direct_url);
 		setStr("web_broker_url", web_broker_url);
 		p.setProperty("web_use_rbroker", "" + web_use_rbroker);
@@ -651,6 +682,19 @@ public class Prefs extends PreferencesXML
 		lrt_method = topali.cluster.jobs.lrt.LRT.METHOD_JC;
 	}
 
+	public static void setMBDefaults() {
+		mb_runs = 2;
+		mb_gens = 100000;
+		mb_samplefreq = 10;
+		mb_burnin = 25;
+	}
+	
+	public static void setPhymlDefaults() {
+		phyml_bootstrap = 0;
+		phyml_optbranch = true;
+		phyml_opttop = true;
+	}
+	
 	public static void setWebDefaults()
 	{
 		web_direct_url = "http://www.topali.org/topali";

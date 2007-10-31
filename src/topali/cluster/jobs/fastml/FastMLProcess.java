@@ -27,7 +27,8 @@ public class FastMLProcess extends StoppableProcess
 		runCancelMonitor();
 	}
 
-	void run() throws Exception
+	@Override
+	public void run() throws Exception
 	{
 		FastMLResult result = (FastMLResult) this.result;
 		

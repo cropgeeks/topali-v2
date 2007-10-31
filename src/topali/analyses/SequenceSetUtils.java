@@ -473,4 +473,37 @@ public class SequenceSetUtils
 			return false;
 	}
 	
+	public static SequenceSet[] getBootstrappedSequenceSets(SequenceSet ss, int n) {
+		SequenceSet[] result = new SequenceSet[n];
+		
+		Random random = new Random();
+		int nSeqs = ss.getSize();
+		int length = ss.getLength();
+		
+		char[][] orig = new char[nSeqs][length];
+		for(int i=0; i<nSeqs; i++) 
+			for(int j=0; j<length; j++)
+				orig[i][j] = ss.getSequences().get(i).getSequence().charAt(j);
+		
+		for(int k=0; k<n; k++) {
+			
+			char[][] bs = new char[nSeqs][length];
+			for(int i=0; i<length; i++) {
+				int rand = random.nextInt(n);
+				for(int j=0; j<nSeqs; j++) {
+					bs[j][i] = orig[j][rand];
+				}
+			}
+		
+			result[k] = new SequenceSet(ss);
+			result[k].reset();
+			for(int i=0; i<nSeqs; i++) {
+				Sequence seq = new Sequence();
+				seq.setSequence(new String(bs[i]));
+				result[k].addSequence(seq);
+			}
+		}
+		
+		return result;
+	}
 }

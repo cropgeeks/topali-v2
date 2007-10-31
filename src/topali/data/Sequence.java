@@ -21,12 +21,19 @@ public class Sequence extends DataObject
 
 	// Sequence data
 	private StringBuffer sequence;
-
+	 
 	public Sequence()
 	{
 		super();
 	}
 
+	public Sequence(Sequence seq) {
+		this();
+		this.name = seq.name;
+		this.safeName = seq.safeName;
+		this.sequence = new StringBuffer(seq.getSequence());
+	}
+	
 	public Sequence(int id) {
 		super(id);
 	}

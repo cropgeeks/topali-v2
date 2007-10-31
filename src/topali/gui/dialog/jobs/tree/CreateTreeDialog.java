@@ -39,9 +39,9 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 	private AdvancedCDNAMrBayes cdnaPanel;
 	
-	MBTreeResult mbResult = new MBTreeResult();
-
-	PhymlResult phymlResult = new PhymlResult();
+	MBTreeResult mbResult = null;
+	MBTreeResult cdnaResult = null;
+	PhymlResult phymlResult = null;
 
 	boolean showPhyMLInfo = true;
 	boolean showMBInfo = true;
@@ -53,8 +53,14 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 
 		if(result!=null) {
 			if(result instanceof MBTreeResult) {
-				this.mbResult = (MBTreeResult)result;
-				Prefs.gui_tree_method=2;
+				if(((MBTreeResult)result).partitions.size()==1) {
+					Prefs.gui_tree_method=2;
+					this.mbResult = (MBTreeResult)result;
+				}
+				else if(((MBTreeResult)result).partitions.size()==3) {
+					Prefs.gui_tree_method=3;
+					this.cdnaResult = (MBTreeResult)result;
+				}
 			}
 			else if(result instanceof PhymlResult) {
 				this.phymlResult = (PhymlResult)result;
@@ -75,7 +81,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bCancel);
 
 		pack();
-//		setSize(360,450);
+		setSize(360,350);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
@@ -92,7 +98,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		else if(Prefs.gui_tree_method==1) {
 			tabs.remove(1);
 			//tabs.add(new JScrollPane(phymlPanel), "Advanced");
-			tabs.add(phymlPanel, "Advanced");
+			tabs.add(new JScrollPane(phymlPanel), "Advanced");
 			tabs.setEnabledAt(1, true);
 			
 			if(!phymlPanel.modelIsSupported && showPhyMLInfo) {
@@ -103,14 +109,14 @@ public class CreateTreeDialog extends JDialog implements ActionListener
     			else
     				MsgBox.msg("The substitution model associated with this\n" +
     						"alignment is not supported by PhyML.\n" +
-    						"Please choose an appropriate PhyML model or use the default '"+phymlPanel.altModel+"' model.", MsgBox.INF);
+    						"Therefore the default '"+phymlPanel.altModel+"' model will be preselected.", MsgBox.INF);
     			showPhyMLInfo = false;
     		}			
 		}
 		else if(Prefs.gui_tree_method==2) {
 			tabs.remove(1);
 			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
-			tabs.add(bayesPanel, "Advanced");
+			tabs.add(new JScrollPane(bayesPanel), "Advanced");
 			tabs.setEnabledAt(1, true);
 			
 			if(!bayesPanel.modelIsSupported && showMBInfo) {
@@ -121,7 +127,7 @@ public class CreateTreeDialog extends JDialog implements ActionListener
     			else
     				MsgBox.msg("The substitution model associated with this\n" +
     						"alignment is not supported by MrBayes.\n" +
-    						"Please choose an appropriate MrBayes model or use the default '"+bayesPanel.altModel+"' model.", MsgBox.INF);
+    						"Therefore the default '"+bayesPanel.altModel+"' model will be preselected.", MsgBox.INF);
     			showMBInfo = false;
     		}
 		}
@@ -139,31 +145,28 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		basicPanel = new TreeDialogPanel(this, ss);
 		basicPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), mbResult);
+		bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), this.mbResult);
 		bayesPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
+		phymlPanel = new AdvancedPhyML(data.getSequenceSet(), this.phymlResult);
 		phymlPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		cdnaPanel = new AdvancedCDNAMrBayes(data.getSequenceSet(), mbResult);
+		cdnaPanel = new AdvancedCDNAMrBayes(data.getSequenceSet(), this.cdnaResult);
 		cdnaPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		tabs = new JTabbedPane();
 		tabs.add(basicPanel, "Basic");
-		if(Prefs.gui_tree_method==0 || Prefs.gui_tree_method==3) {
+		if(Prefs.gui_tree_method==0) {
 			tabs.add(new JPanel(), "Advanced");
 			tabs.setEnabledAt(1, false);
 		}
 		else if(Prefs.gui_tree_method==1) {
-			//tabs.add(new JScrollPane(phymlPanel), "Advanced");
-			tabs.add(phymlPanel, "Advanced");
+			tabs.add(new JScrollPane(phymlPanel), "Advanced");
 		}
 		else if(Prefs.gui_tree_method==2) {
-			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
-			tabs.add(bayesPanel, "Advanced");
+			tabs.add(new JScrollPane(bayesPanel), "Advanced");
 		}
 		else if(Prefs.gui_tree_method==3) {
-			//tabs.add(new JScrollPane(bayesPanel), "Advanced");
 			tabs.add(new JScrollPane(cdnaPanel), "Advanced");
 		}
 
@@ -179,10 +182,10 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 			onOK((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 		
 		else if(e.getSource() == bDefault) {
-			mbResult = new MBTreeResult();
-			bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), mbResult);
-			phymlResult = new PhymlResult();
-			phymlPanel = new AdvancedPhyML(data.getSequenceSet(), phymlResult);
+			bayesPanel = new AdvancedMrBayes(data.getSequenceSet(), null);
+			phymlPanel = new AdvancedPhyML(data.getSequenceSet(), null);
+			cdnaPanel = new AdvancedCDNAMrBayes(data.getSequenceSet(), null);
+			
 			basicPanel.f84.setSelected(true);
 		}
 	}
@@ -192,16 +195,13 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		if (Prefs.gui_tree_method == 0)
 			result = new TreeResult();
 		else if(Prefs.gui_tree_method == 1) {
-			phymlPanel.onOK();
-			result = phymlResult;
+			this.result = phymlPanel.onOK();
 		}
 		else if(Prefs.gui_tree_method == 2) {
-			bayesPanel.onOK();
-			result = mbResult;
+			this.result = bayesPanel.onOK();
 		}
 		else if(Prefs.gui_tree_method == 3) {
-			mbResult.isCDNA = true;
-			result = mbResult;
+			this.result = cdnaPanel.onOk();
 		}
 
 		result.isRemote = makeRemote;
@@ -311,7 +311,5 @@ public class CreateTreeDialog extends JDialog implements ActionListener
 		else
 			tr.selectedSeqs = data.getSequenceSet()
 					.getSelectedSequenceSafeNames();
-
-		tr.isCDNA = Prefs.gui_tree_method == 3;
 	}
 }

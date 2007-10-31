@@ -15,7 +15,7 @@ import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.jobs.*;
 import topali.var.Utils;
-import doe.GradientPanel;
+import doe.*;
 
 public class JobsPanel extends JPanel
 {
@@ -104,6 +104,13 @@ public class JobsPanel extends JPanel
 		if (getResults)
 		{
 			AnalysisResult res = job.getResult();
+			
+			if(!res.warning.equals("")) {
+				String msg = "Job '"+res.guiName+"' finished with a warning:\n\n";
+				msg += res.warning;
+				MsgBox.msg(msg, MsgBox.WAR);
+			}
+			
 			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), res);
 		} else
 			job.getAlignmentData().removeResult(job.getResult());

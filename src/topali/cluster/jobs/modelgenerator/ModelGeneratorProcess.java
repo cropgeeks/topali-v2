@@ -23,7 +23,8 @@ public class ModelGeneratorProcess extends StoppableProcess implements ProcessOu
 		runCancelMonitor();
 	}
 
-	void run() throws Exception
+	@Override
+	public void run() throws Exception
 	{
 		pctDir = new File(wrkDir, "percent");
 		

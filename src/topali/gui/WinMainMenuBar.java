@@ -444,7 +444,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunMT = new AbstractAction("Model Selection") {
+		aAnlsRunMT = new AbstractAction("Model Selection...") {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunMT(null);
