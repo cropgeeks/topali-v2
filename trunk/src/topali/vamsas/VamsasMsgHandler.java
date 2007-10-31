@@ -29,14 +29,14 @@ public class VamsasMsgHandler implements IMessageHandler
 	
 	public void sendMessage(Message message)
 	{
-		if(TOPALi.debug)
+		if(TOPALi.debugClient)
 			log.info("Send new message: "+message.getRawMessage());
 		manager.sendMessage(message);
 	}
 
 	public void handleMessage(final Message message)
 	{
-		if(TOPALi.debug)
+		if(TOPALi.debugClient)
 			log.info("Received new message: "+message.getRawMessage());
 		
 		Runnable r = new Runnable()

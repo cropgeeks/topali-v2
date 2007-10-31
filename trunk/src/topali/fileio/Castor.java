@@ -29,16 +29,19 @@ public class Castor
 		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
 				.setProperty("org.exolab.castor.serializer",
 						"org.apache.xml.serialize.XMLSerializer");
-
+		
 		try
 		{
 			mapping = new Mapping();
 			mapping.loadMapping(""
 					+ new Castor().getClass().getResource("/res/topali.xml"));
 
+			if (unmarshaller == null)
+			{
 			unmarshaller = new Unmarshaller(mapping);
 			unmarshaller.setWhitespacePreserve(true);
 			unmarshaller.setIgnoreExtraElements(true);
+			}
 		} catch (Exception e)
 		{
 			// Critical error. Set the unmarshaller to null so it cannot be used
@@ -62,6 +65,7 @@ public class Castor
 	public static String getXML(Object obj) throws MappingException,
 			IOException, MarshalException, ValidationException
 	{
+		
 		StringWriter sOut = new StringWriter();
 
 		Marshaller marshaller = new Marshaller(sOut);
@@ -83,12 +87,22 @@ public class Castor
 	public static Object unmarshall(String xml) throws MarshalException,
 			ValidationException
 	{
-		return unmarshaller.unmarshal(new StringReader(xml));
+		
+		if(xml==null)
+			log.warn("XML == null!");
+		
+		if(unmarshaller==null)
+			log.warn("unmarshaller == null!");
+		
+		StringReader sr = new StringReader(xml);
+		
+		return unmarshaller.unmarshal(sr);
 	}
 
 	public static Object unmarshall(File file) throws IOException,
 			MarshalException, ValidationException
 	{
+		
 		BufferedReader in = new BufferedReader(new FileReader(file));
 		Object obj = unmarshaller.unmarshal(in);
 		in.close();
@@ -151,6 +165,7 @@ public class Castor
 	 */
 	public static void saveXML(Object obj, File file) throws Exception
 	{
+		
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 
 		out.write(getXML(obj));

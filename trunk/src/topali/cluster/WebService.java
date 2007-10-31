@@ -19,6 +19,7 @@ import sbrn.commons.file.FileUtils;
 import topali.cluster.control.*;
 import topali.data.SequenceSet;
 import topali.fileio.Castor;
+import topali.gui.TOPALi;
 
 /**
  * Base class for all TOPALi web services. Some of the PUBLIC methods used by
@@ -229,6 +230,8 @@ public abstract class WebService
 		logger.info(jobId + " - cleaning up and removing files");
 
 		File jobDir = new File(getParameter("job-dir"), jobId);
-		ClusterUtils.emptyDirectory(jobDir, true);
+		
+		if(!TOPALi.debugJobs)
+			ClusterUtils.emptyDirectory(jobDir, true);
 	}
 }

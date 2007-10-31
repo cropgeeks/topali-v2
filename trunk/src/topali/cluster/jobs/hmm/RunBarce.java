@@ -23,7 +23,8 @@ class RunBarce extends StoppableProcess
 		runCancelMonitor();
 	}
 
-	void runBarce() throws Exception
+	@Override
+	public void run() throws Exception
 	{
 		HMMResult hmmResult = (HMMResult) result;
 

@@ -9,7 +9,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.cml.*;
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 
 public class CodeMLLocalJob extends AnalysisJob
 {
@@ -66,7 +66,8 @@ public class CodeMLLocalJob extends AnalysisJob
 	@Override
 	public void ws_cleanup() throws Exception
 	{
-		//ClusterUtils.emptyDirectory(jobDir, true);
+		if(!TOPALi.debugJobs)
+			ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
 
 		LocalJobs.delJob(result.jobId);

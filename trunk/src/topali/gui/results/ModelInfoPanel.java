@@ -6,7 +6,10 @@
 
 package topali.gui.results;
 
+import java.net.URL;
 import java.util.List;
+
+import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
@@ -74,18 +77,39 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         		setAIC2(aic2);
         		setBIC(bic);
         		
-        		if(mod.isGamma())
+        		if(mod.isGamma()) {
         			setGamma(m.getGammaCat(), m.getAlpha());
-        		else
+        			URL url = getGammaImg(m.getAlpha());
+        			if(url!=null)
+        				imgGamma.setIcon(new ImageIcon(url));
+        		}
+        		else {
         			setGamma(-1, Double.NaN);
-        		if(mod.isInv())
+        			URL url = getGammaImg(-1);
+        			if(url!=null)
+        				imgGamma.setIcon(new ImageIcon(url));
+        		}
+        		if(mod.isInv()) {
         			setInv(m.getInvProp());
-        		else
+        			URL url = getInvImg(m.getInvProp());
+        			if(url!=null)
+        				imgInv.setIcon(new ImageIcon(url));
+        		}
+        		else {
         			setInv(Double.NaN);
+        			URL url = getInvImg(-1);
+        			if(url!=null)
+        				imgInv.setIcon(new ImageIcon(url));
+        		}
+        		
         		setSubRates(m.getSubRates());
         		setSubRateGroups(m.getSubRateGroups());
         		setBaseFreqs(m.getBaseFreqs());
         		setBaseFreqGroups(m.getBaseFreqGroups());
+        		
+        		URL url = ImageIcon.class.getResource("/res/images/"+m.getName().toLowerCase()+".png");
+        		if(url!=null)
+        			imgModel.setIcon(new ImageIcon(url));
     		}
     		else if(mod instanceof ProteinModel) {
     			ProteinModel m = (ProteinModel)mod;
@@ -95,14 +119,32 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         		setAIC1(MathUtils.calcAIC1(m.getLnl(), m.getFreeParameters()));
         		setAIC2(MathUtils.calcAIC2(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
         		setBIC(MathUtils.calcBIC(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
-        		if(mod.isGamma())
+        		
+        		if(mod.isGamma()) {
         			setGamma(m.getGammaCat(), m.getAlpha());
-        		else
+        			URL url = getGammaImg(m.getAlpha());
+        			if(url!=null)
+        				imgGamma.setIcon(new ImageIcon(url));
+        		}
+        		else {
         			setGamma(-1, Double.NaN);
-        		if(mod.isInv())
+        			URL url = getGammaImg(-1);
+        			if(url!=null)
+        				imgGamma.setIcon(new ImageIcon(url));
+        		}
+        		if(mod.isInv()) {
         			setInv(m.getInvProp());
-        		else
+        			URL url = getInvImg(m.getInvProp());
+        			if(url!=null)
+        				imgInv.setIcon(new ImageIcon(url));
+        		}
+        		else {
         			setInv(Double.NaN);
+        			URL url = getInvImg(-1);
+        			if(url!=null)
+        				imgInv.setIcon(new ImageIcon(url));
+        		}
+        		
         		setSubRates(null);
         		setSubRateGroups(null);
         		setBaseFreqs(null);
@@ -113,11 +155,44 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     	defaultButton.setEnabled(mod!=null && !data.getSequenceSet().getParams().getModel().matches(mod));
     }
     
+    private URL getGammaImg(double alpha) {
+    	URL result = null;
+    	if(alpha==-1)
+    		result = URL.class.getResource("/res/images/nogamma.png");
+    	else if(alpha<0.3)
+    		result = URL.class.getResource("/res/images/gamma0.1.png");
+    	else if(alpha<0.75)
+    		result = URL.class.getResource("/res/images/gamma0.5.png");
+    	else if(alpha<2)
+    		result = URL.class.getResource("/res/images/gamma1.png");
+    	else if(alpha<=10)
+    		result = URL.class.getResource("/res/images/gamma5.png");
+    	else
+    		result = URL.class.getResource("/res/images/gamma20.png");
+    	return result;
+    }
+    
+    private URL getInvImg(double inv) {
+    	URL result = null;
+    	if(inv==-1)
+    		result = URL.class.getResource("/res/images/noinv.png");
+    	else if(inv<0.3)
+    		result = URL.class.getResource("/res/images/inv0.2.png");
+    	else if(inv<0.5)
+    		result = URL.class.getResource("/res/images/inv0.4.png");
+    	else if(inv<0.7)
+    		result = URL.class.getResource("/res/images/inv0.6.png");
+    	else
+    		result = URL.class.getResource("/res/images/inv0.8.png");
+    	return result;
+    }
+    
     private void setModName(String name) {
     	if(name==null)
     		this.modelName.setText("--");
-    	else
+    	else {
     		this.modelName.setText(name);
+    	}
     }
     
     private void setAliases(List<String> aliases) {
@@ -245,6 +320,11 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         gamma = new javax.swing.JLabel();
         inv = new javax.swing.JLabel();
+        imgModel = new javax.swing.JLabel();
+        imgGamma = new javax.swing.JLabel();
+        imgInv = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         defaultButton = new javax.swing.JButton();
 
         modelName.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -255,15 +335,15 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel1.setText("Model Test Scores:");
 
-        jLabel2.setText("\u2113 = ");
+        jLabel2.setText("\\u2113 = ");
 
         lnl.setText("123;  ");
 
-        jLabel4.setText("AIC\u2081 = ");
+        jLabel4.setText("AIC\\u2081 = ");
 
         aic1.setText("123;   ");
 
-        jLabel6.setText("AIC\u2082 = ");
+        jLabel6.setText("AIC\\u2082 = ");
 
         aic2.setText("123;   ");
 
@@ -295,7 +375,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bic)))
-                .addContainerGap(284, Short.MAX_VALUE))
+                .addContainerGap(360, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,6 +422,16 @@ public class ModelInfoPanel extends javax.swing.JPanel {
 
         inv.setText("--");
 
+        imgModel.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\gtr.png"));
+
+        imgGamma.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\gamma5.png"));
+
+        imgInv.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\inv0.2.png"));
+
+        jLabel12.setText("Gamma:");
+
+        jLabel15.setText("Prop. Inv. Sites:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -350,6 +440,15 @@ public class ModelInfoPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel13)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(gamma))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel14)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(inv)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -361,42 +460,57 @@ public class ModelInfoPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(baseFreqGroups)
-                            .addComponent(subRateGroups)))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel13)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gamma))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel14)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(inv))))
-                .addContainerGap(328, Short.MAX_VALUE))
+                            .addComponent(subRateGroups))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addComponent(imgModel)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imgGamma)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(imgInv))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(gamma))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(inv))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(subRates)
-                    .addComponent(subRateGroups))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(baseFreq)
-                    .addComponent(baseFreqGroups))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(gamma))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(inv))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(subRates)
+                            .addComponent(subRateGroups))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(baseFreq)
+                            .addComponent(baseFreqGroups))
+                        .addGap(33, 33, 33))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel15))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(imgGamma)
+                                    .addComponent(imgInv)))
+                            .addComponent(imgModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
 
         defaultButton.setText("Select");
@@ -414,13 +528,13 @@ public class ModelInfoPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(modelName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 578, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
                         .addComponent(defaultButton))
                     .addComponent(aliases)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -457,11 +571,16 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     private javax.swing.JLabel bic;
     private javax.swing.JButton defaultButton;
     private javax.swing.JLabel gamma;
+    private javax.swing.JLabel imgGamma;
+    private javax.swing.JLabel imgInv;
+    private javax.swing.JLabel imgModel;
     private javax.swing.JLabel inv;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

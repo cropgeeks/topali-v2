@@ -141,7 +141,6 @@ public class VAMSASUtils
 			
 			if(tree instanceof PhymlResult) {
 				PhymlResult phyml = (PhymlResult)tree;
-				String[] params = phyml.phymlParameters;
 				
 				Param par = new Param();
 				par.setType("string");
@@ -153,78 +152,6 @@ public class VAMSASUtils
 				par.setType("string");
 				par.setName("method");
 				par.setContent("maximum likelihood");
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("int");
-				par.setName("sequenceType");
-				par.setContent(params[2]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("fileFormat");
-				par.setContent(params[3]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("int");
-				par.setName("NoOfDatasets");
-				par.setContent(params[4]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("int");
-				par.setName("bootstraps");
-				par.setContent(params[5]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("model");
-				par.setContent(params[6]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("int");
-				par.setName("tstv");
-				par.setContent(params[7]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("invariant");
-				par.setContent(params[8]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("int");
-				par.setName("categories");
-				par.setContent(params[9]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("gamma");
-				par.setContent(params[10]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("startTree");
-				par.setContent(params[11]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("optimiseTopology");
-				par.setContent(params[12]);
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("optimiseBranchLengths");
-				par.setContent(params[13]);
 				ent.addParam(par);
 			}
 			else if(tree instanceof MBTreeResult) {
@@ -245,12 +172,6 @@ public class VAMSASUtils
 				par.setType("string");
 				par.setName("method");
 				par.setContent("bayes");
-				ent.addParam(par);
-				
-				par = new Param();
-				par.setType("string");
-				par.setName("nexusCommands");
-				par.setContent(mb.nexusCommands);
 				ent.addParam(par);
 			}
 			

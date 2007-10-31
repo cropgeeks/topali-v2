@@ -35,10 +35,33 @@ the full TOPALi version history</a> from the subversion server.</p>
 
 <ul>
 
+  <li><a href="#v217">New since version 2.17</a></li>
   <li><a href="#v216">New since version 2.16</a></li>
   <li><a href="#v215">New since version 2.15</a></li>  
 
 </ul>
+
+<h2><a name="v217"></a>New since version 2.17</h2>
+
+<span style="font-weight: bold;">New Model Selection Method</span><br />
+<p>More accurate and faster (parallel) model selection based on PhyML.</p>
+<img alt="" src="modelselection.jpg" /><br />
+<br />
+
+<span style="font-weight: bold;">Improved cDNA handling</span><br />
+<ul>
+  <li>Split alignments into three new alignments according to codon positions</li>
+  <li>Analyse alignments separately</li>
+  <li>Run MrBayes on the joined alignment and define a separate model for each codon position</li>  
+</ul>
+<br />
+
+<span style="font-weight: bold;">Bugfixes:</span><br />
+<ul>
+  <li>Fixed bug which caused sequence duplication when importing/exporting to VAMSAS sessions</li>
+  <li>Fixed bug which prevented printing of tables.</li> 
+</ul>
+<br />
 
 
 <h2><a name="v216"></a>New since version 2.16</h2>

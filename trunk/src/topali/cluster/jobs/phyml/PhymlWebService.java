@@ -45,7 +45,7 @@ public class PhymlWebService extends WebService
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			RunPhyml run = new RunPhyml(jobDir, ss, result);
+			PhymlInitializer run = new PhymlInitializer(jobDir, ss, result);
 			run.start();
 
 			accessLog.info("Phyml  request from " + jobId);

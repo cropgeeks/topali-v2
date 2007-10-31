@@ -17,11 +17,11 @@ public class MrBayesAnalysis extends AnalysisThread
 {
 
 	public static final String VERSION = "3.1";
-	
+
 	private SequenceSet ss;
 
 	private MBTreeResult result;
-	
+
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 	{
@@ -44,13 +44,15 @@ public class MrBayesAnalysis extends AnalysisThread
 		ss = (SequenceSet) Castor.unmarshall(new File(runDir, "ss.xml"));
 
 		// Temporary working directory
-//		wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
-//				"mrbayes");
+		// wrkDir = ClusterUtils.getWorkingDirectory(result, runDir.getName(),
+		// "mrbayes");
 
 		// We need to save out the SequenceSet for MrBayes to read, ensuring
 		// that only the sequences meant to be processed are saved
 		int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
-		ss.save(new File(runDir, "mb.nex"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.NEX_B, true);
+		ss.save(new File(runDir, "mb.nex"), indices,
+				result.getPartitionStart(), result.getPartitionEnd(),
+				Filters.NEX_B, true);
 
 		// Add nexus commands to tell MrBayes what to do
 		addNexusCommands();
@@ -60,156 +62,47 @@ public class MrBayesAnalysis extends AnalysisThread
 
 		readTree();
 
+		readSummary();
+
 		// Save final data back to drive where it can be retrieved
 		Castor.saveXML(result, new File(runDir, "result.xml"));
 
-		//ClusterUtils.emptyDirectory(wrkDir, true);
+		// ClusterUtils.emptyDirectory(wrkDir, true);
 	}
 
 	private void addNexusCommands() throws Exception
 	{
-		MrBayesCmdBuilder cmd = new MrBayesCmdBuilder(ss.isDNA());
-		cmd.setCDNA(result.isCDNA);
-		cmd.setNgen(result.nGen);
-		cmd.setSampleFreq(result.sampleFreq);
-		cmd.setBurnin(result.burnin);
-		
-		SequenceSetParams para = ss.getParams();
-		String gCode = para.getGeneticCode();
-		if (gCode.equals(SequenceSetParams.GENETICCODE_UNIVERSAL))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_UNIVERSAL);
-		} else if (gCode.equals(SequenceSetParams.GENETICCODE_CILIATES))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_CILIATES);
-		} else if (gCode.equals(SequenceSetParams.GENETICCODE_METMT))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_METMT);
-		} else if (gCode.equals(SequenceSetParams.GENETICCODE_MYCOPLASMA))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_MYCOPLASMA);
-		} else if (gCode.equals(SequenceSetParams.GENETICCODE_VERTMT))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_VERTMT);
-		} else if (gCode.equals(SequenceSetParams.GENETICCODE_YEAST))
-		{
-			cmd.setCode(MrBayesCmdBuilder.CODE_YEAST);
-		}
+		MBCmdBuilder cmd = new MBCmdBuilder();
+		cmd.burnin = result.burnin;
+		cmd.dna = ss.isDNA();
+		cmd.ngen = result.nGen;
+		cmd.nruns = result.nRuns;
+		cmd.sampleFreq = result.sampleFreq;
 
-		Model model = para.getModel();
-		if(model.is("blossum")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_BLOSUM);
-		}
-		else if(model.is("cprev")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_CPREV);
-		}
-		else if(model.is("day")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_DAYHOFF);
-		}
-		else if(model.is("equalin")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_EQUALIN);
-		}
-		else if(model.is("gtr") && (model instanceof ProteinModel)) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_GTR);
-		}
-		else if(model.is("jtt")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_JONES);
-		}
-		else if(model.is("mtmam")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_MTMAM);
-		}
-		else if(model.is("mtrev")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_MTREV);
-		}
-		else if(model.is("poisson")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_POISSON);
-		}
-		else if(model.is("rtrev")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_RTREV);
-		}
-		else if(model.is("vt")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_VT);
-		}
-		else if(model.is("wag")) {
-			cmd.setAaModel(MrBayesCmdBuilder.AAMODEL_WAG);
-		}
-		else if(model.is("jc")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_JC, true);
-		}
-		else if(model.is("f81")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_F81JC, false);
-		}
-		else if(model.is("gtr") && (model instanceof DNAModel)) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
-		}
-		else if(model.is("hky")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
-		}
-		else if(model.is("k81")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
-		}
-		else if(model.is("k80")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_K80, true);
-		}
-		else if(model.is("sym")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_SYM, true);
-		}
-		else if(model.is("tim")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
-		}
-		else if(model.is("trn")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_HKY, false);
-		}
-		else if(model.is("tvm")) {
-			cmd.setDnaModel(MrBayesCmdBuilder.DNAMODEL_GTR, false);
-		}
-		
-		if(para.getModel().isGamma())
-			cmd.setRate(MrBayesCmdBuilder.RATE_GAMMA);
-		if(para.getModel().isInv())
-			cmd.setRate(MrBayesCmdBuilder.RATE_PROPINV);
-		if(para.getModel().isGamma() && para.getModel().isInv())
-			cmd.setRate(MrBayesCmdBuilder.RATE_INVGAMMA);
-		
-		 BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
-		 "mb.nex"), true));
-		 out.write("\n\n"+cmd.getCommands());
-		 out.flush();
-		 out.close();
+		String cmds = cmd.getCmds(result.partitions);
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
+		"mb.nex"), true));
+		out.write("\n\n"+cmds);
+		out.flush();
+		out.close();
 		 
-		 StringBuffer sb = new StringBuffer();
-		 if(!result.isCDNA) {
-			 sb.append("Genetic Code: "+para.getGeneticCode()+"\n");
-			 sb.append("Sub. Model: "+para.getModel().getName()+"\n");
-			 sb.append("Rate Model: ");
-			 if(!(para.getModel().isGamma() || para.getModel().isInv()))
-				 sb.append("Uniform\n");
-			 if(para.getModel().isGamma() && para.getModel().isInv())
-				 sb.append("Gamma + Inv. sites\n");
-			 else 
-				 {
-				 if(para.getModel().isGamma())
-					 sb.append("Gamma\n");
-				 if(para.getModel().isInv())
-					 sb.append("Inv. sites\n");
-				 }
-		 }
-		 else {
-			 sb.append("Model: cDNA\n");
-		 }
-		 sb.append("Algorithm: MrBayes\n");
-		 sb.append("Generations: "+result.nGen+"\n");
-		 sb.append("Sample Freq.: "+result.sampleFreq+"\n");
-		 sb.append("Burnin: "+((int)(result.burnin*100))+"%\n\n");
-		 sb.append("MrBayes Commands:\n");
-		 sb.append(cmd.getCommands());
-		 
-		 sb.append("\n\nApplication: MrBayes (Version 3.1.1)\n");
-		 sb.append("F Ronquist, JP Huelsenbeck, 2003, MrBayes 3: Bayesian phylogenetic\n" +
-					"inference under mixed models, Bioinformatics, 19(12), pp 1572-1574");
-			
-		 result.info = sb.toString();
-		 result.nexusCommands = cmd.getCommands();
+		StringBuffer sb = new StringBuffer();
+		sb.append("Algorithm: MrBayes\n");
+		sb.append("Runs: "+result.nRuns+"\n");
+		sb.append("Generations: " + result.nGen + "\n");
+		sb.append("Sample Freq.: " + result.sampleFreq + "\n");
+		sb.append("Burnin: " + ((int) (result.burnin * 100)) + "%\n\n");
+		sb.append("MrBayes Commands:\n");
+		sb.append(cmds);
+		
+		sb.append("\n[SUMMARY]\n");
+		
+		sb.append("\n\nApplication: MrBayes (Version 3.1.1)\n");
+		sb
+				.append("F Ronquist, JP Huelsenbeck, 2003, MrBayes 3: Bayesian phylogenetic\n"
+						+ "inference under mixed models, Bioinformatics, 19(12), pp 1572-1574");
+
+		result.info = sb.toString();
 	}
 
 	private void readTree() throws Exception
@@ -250,4 +143,44 @@ public class MrBayesAnalysis extends AnalysisThread
 		out.close();
 	}
 
+	private void readSummary() throws Exception
+	{
+		File f = new File(runDir, "summary.txt");
+		BufferedReader in = new BufferedReader(new FileReader(f));
+
+		StringBuffer sb = new StringBuffer();
+		boolean warn = false;
+		String line = null;
+		while ((line = in.readLine()) != null) {
+			sb.append(line+"\n");
+			
+			try
+			{
+				String[] split = line.split("\\s+");
+				double d = Double.parseDouble(split[8]);
+				if(d>1.2) {
+					warn = true;
+				}
+			} catch (RuntimeException e)
+			{
+				//just ignore NullPointer and NumberFormatExceptions here 
+			}
+		}
+
+		
+		result.summary = sb.toString();
+		
+		String tmp = "\nSummary statistics for taxon bipartitions:\n";
+		tmp += result.summary;
+		tmp += "\n";
+		result.info = result.info.replaceFirst("\\[SUMMARY\\]", tmp);
+		
+		if(warn) {
+			result.warning = "One or more PSRF values are greater than 1.2!\n" +
+					"This means the MCMC chains may have not converged.\n" +
+					"Please rerun the analysis with a higher number of\n" +
+					"generations and/or longer burnin period.\n" +
+					"(For further details view tree and click on information icon)";
+		}
+	}
 }

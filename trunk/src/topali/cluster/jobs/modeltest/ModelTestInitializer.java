@@ -8,6 +8,7 @@ package topali.cluster.jobs.modeltest;
 import java.io.*;
 
 import topali.cluster.*;
+import topali.cluster.jobs.PhyMLCmdGenerator;
 import topali.cluster.jobs.modeltest.analysis.ModelTestAnalysis;
 import topali.data.*;
 import topali.data.models.Model;
@@ -92,7 +93,7 @@ public class ModelTestInitializer extends Thread
 		"runphyml.sh")));
 		
 		out.write(result.phymlPath + " << END1" + CR);
-		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, null));
+		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, 0, null));
 		out.write("END1" + CR);
 		
 		out.flush();
@@ -110,7 +111,7 @@ public class ModelTestInitializer extends Thread
 		out.close();
 		
 		out = new BufferedWriter(new FileWriter(new File(runDir, "phymlinput")));
-		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, null));
+		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, 0, null));
 		out.flush();
 		out.close();
 	}

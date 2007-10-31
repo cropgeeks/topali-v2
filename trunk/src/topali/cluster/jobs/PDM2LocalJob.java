@@ -10,7 +10,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.pdm2.*;
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 
 public class PDM2LocalJob extends AnalysisJob
 {
@@ -69,7 +69,8 @@ public class PDM2LocalJob extends AnalysisJob
 	@Override
 	public void ws_cleanup() throws Exception
 	{
-		ClusterUtils.emptyDirectory(jobDir, true);
+		if(!TOPALi.debugJobs)
+			ClusterUtils.emptyDirectory(jobDir, true);
 		result.status = JobStatus.COMPLETED;
 
 		LocalJobs.delJob(result.jobId);

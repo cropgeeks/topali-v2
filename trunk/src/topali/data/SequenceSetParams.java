@@ -49,6 +49,15 @@ public class SequenceSetParams
 	{
 	}
 
+	public SequenceSetParams(SequenceSetParams para) {
+		this();
+		this.codonUsage = para.codonUsage;
+		this.geneticCode = para.geneticCode;
+		this.isAligned = para.isAligned;
+		this.isDNA = para.isDNA;
+		this.model = (para.model instanceof DNAModel) ? new DNAModel((DNAModel)para.model) : new ProteinModel((ProteinModel)para.model);
+	}
+	
 	public double getAlpha()
 	{
 		return alpha;

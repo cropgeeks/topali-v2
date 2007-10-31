@@ -2,16 +2,23 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Autoselect Model: After Modeltest finishes, the best BIC model will be selected automatically.
-- The currently selected model will now be marked in the Modeltest table (bold font)
-- Implemented a unit test for Modeltest job
-- Added XSLT mechanism for backward compatibility (V. 2.16 projects will now be transformed to be 2.17 compatible)
+- Added ModelTestProcess extends StoppableProcess (MT local jobs can now be properly cancelled)
+- MrBayes Summary is now added to "Analysis Info".
+- MrBayes: User will be warned if a PSRF value is greater than 1.2
+- MrBayes and PhyML settings will now be stored in Preferences
+- Replaced PhyML with PhyML-aLRT (because PhyML won't do bootstrapping with custom models)
+- Added some images showing model details, gamma dist. and inv. sites to ModelInfoPanel
+- Alignment can be splitted into 3, according to codon positions (already added some time ago)
+- Wrote unit test for MathUtils class (already added some time ago)
+
 
 TODO:
 - Check HKY, TrN and GTR model in Model test (results differ from MrAIC results!)
+- UpdateChecker doesn't work anymore
+
 
 Some ideas:
-- Do we actually really want to reselect the sequences when resubmitting a job?
+
 
 Known Bugs
 ----------

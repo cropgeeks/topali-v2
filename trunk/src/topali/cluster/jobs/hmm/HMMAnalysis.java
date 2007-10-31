@@ -56,7 +56,7 @@ class HMMAnalysis extends AnalysisThread
 
 		// Then Barce can be run
 		RunBarce barce = new RunBarce(result, wrkDir, runDir);
-		barce.runBarce();
+		barce.run();
 
 		// And the results collated
 		getResults();

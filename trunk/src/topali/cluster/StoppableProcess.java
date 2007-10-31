@@ -19,6 +19,8 @@ public abstract class StoppableProcess
 
 	protected volatile boolean isRunning = true;
 
+	public abstract void run() throws Exception;
+	
 	public void runCancelMonitor()
 	{
 		// Before we start, kick off a thread to monitor for job cancellations

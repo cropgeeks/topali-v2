@@ -45,6 +45,22 @@ public class SequenceSet extends DataObject
 		params = new SequenceSetParams();
 	}
 
+	public SequenceSet(SequenceSet ss) {
+		this();
+		this.length=ss.length;
+		this.overview=ss.overview;
+		this.selectedSeqs=ss.selectedSeqs.clone();
+		this.params = new SequenceSetParams(ss.params);
+		for(int i=0; i<ss.sequences.size(); i++) {
+			addSequence(new Sequence(ss.getSequence(i)));
+		}
+	}
+	
+	public SequenceSet(int id)
+	{
+		super(id);
+	}
+
 	// Creates a new SequenceSet object using a PAL alignment as input
 	public SequenceSet(Alignment alignment) throws AlignmentLoadException
 	{
@@ -399,7 +415,7 @@ public class SequenceSet extends DataObject
 		else
 			return new SimpleAlignment(ids, seqs, new AminoAcids());
 	}
-
+	
 	// Returns (or computes and returns) a PAL object that can be used to colour
 	// sequence labels in trees
 	public NameColouriser getNameColouriser(int colorSeed)

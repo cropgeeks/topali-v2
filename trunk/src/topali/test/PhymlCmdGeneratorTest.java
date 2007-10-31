@@ -5,8 +5,8 @@
 
 package topali.test;
 
-import topali.cluster.PhyMLCmdGenerator;
-import topali.cluster.jobs.phyml.PhymlMonitor;
+import topali.cluster.jobs.PhyMLCmdGenerator;
+import topali.cluster.jobs.phyml.*;
 import topali.data.models.*;
 
 public class PhymlCmdGeneratorTest
@@ -18,7 +18,7 @@ public class PhymlCmdGeneratorTest
 	public static void main(String[] args)
 	{
 		Model mod = ModelManager.getInstance().generateModel("wag", true, true);
-		String cmd = PhyMLCmdGenerator.getModelCmd("seq2", mod, true, true, null);
+		String cmd = PhyMLCmdGenerator.getModelCmd("seq2", mod, true, true, 10, null);
 		System.out.println(cmd);
 	}
 
