@@ -102,6 +102,13 @@ public class ModelUtils
 		return null;
 	}
 
+	/**
+	 * Can be performed on model[+I][+G]
+	 * Model range: all models
+	 * @param models
+	 * @param alpha
+	 * @return
+	 */
 	public static Model perform5HTHLRT(List<Model> models, double alpha) {
 		Model JC = getModel("jc", false, false, models);
 		Model F81 = getModel("f81", false, false, models);
@@ -178,14 +185,14 @@ public class ModelUtils
 		Model modelIG = getModel(model.getName(), true, true, models);
 		
 		Model result = model;
-		if(lrt(model,modelG)<alpha) {
-			if(lrt(modelG,modelIG)<alpha)
+		if(modelG!=null && lrt(model,modelG)<alpha) {
+			if(modelI!=null && lrt(modelG,modelIG)<alpha)
 				result = modelIG;
 			else
 				result = modelG;
 		}
-		else if(lrt(model,modelI)<alpha) {
-			if(lrt(modelI,modelIG)<alpha)
+		else if(modelI!=null && lrt(model,modelI)<alpha) {
+			if(modelG!=null && lrt(modelI,modelIG)<alpha)
 				result = modelIG;
 			else
 				result = modelI;
@@ -194,6 +201,13 @@ public class ModelUtils
 		return result;
 	}
 	
+	/**
+	 * Can be performed on model[+I][+G]
+	 * Model range: MrBayes
+	 * @param models
+	 * @param alpha
+	 * @return
+	 */
 	public static Model performHLRT1(List<Model> models, double alpha)
 	{
 		Model JC = getModel("jc", false, false, models);
@@ -226,36 +240,39 @@ public class ModelUtils
 		Model K80G = getModel("k80", true, false, models);
 		Model K80IG = getModel("k80", true, true, models);
 
+		boolean i = JCI != null;
+		boolean g = JCG !=null;
+		
 		if (lrt(JC, F81) < alpha) /* 1,2 */
 		{
 			if (lrt(F81, HKY) < alpha) /* 3,4 */
 			{
 				if (lrt(HKY, GTR) < alpha) /* 5,6 */
 				{
-					if (lrt(GTR, GTRG) < alpha) /* 7, 8 */
+					if (g && lrt(GTR, GTRG) < alpha) /* 7, 8 */
 					{
-						if (lrt(GTRG, GTRIG) < alpha) /* 9,10 */
+						if (i && lrt(GTRG, GTRIG) < alpha) /* 9,10 */
 							return GTRIG; /* 12 */
 						else
 							return GTRG; /* 11 */
 					} else
 					{
-						if (lrt(GTR, GTRI) < alpha) /* 13 14, */
+						if (i && lrt(GTR, GTRI) < alpha) /* 13 14, */
 							return GTRI; /* 16 */
 						else
 							return GTR; /* 15 */
 					}
 				} else
 				{
-					if (lrt(HKY, HKYG) < alpha) /* 17 , 18 */
+					if (g && lrt(HKY, HKYG) < alpha) /* 17 , 18 */
 					{
-						if (lrt(HKYG, HKYIG) < alpha) /* 19 , 20 */
+						if (i && lrt(HKYG, HKYIG) < alpha) /* 19 , 20 */
 							return HKYIG; /* 22 */
 						else
 							return HKYG; /* 21 */
 					} else
 					{
-						if (lrt(HKY, HKYI) < alpha) /* 23, 24 */
+						if (i && lrt(HKY, HKYI) < alpha) /* 23, 24 */
 							return HKYI; /* 26 */
 						else
 							return HKY; /* 25 */
@@ -263,15 +280,15 @@ public class ModelUtils
 				}
 			} else
 			{
-				if (lrt(F81, F81G) < alpha) /* 27 , 28 */
+				if (g && lrt(F81, F81G) < alpha) /* 27 , 28 */
 				{
-					if (lrt(F81G, F81IG) < alpha) /* 29 , 30 */
+					if (i && lrt(F81G, F81IG) < alpha) /* 29 , 30 */
 						return F81IG; /* 32 */
 					else
 						return F81G; /* 31 */
 				} else
 				{
-					if (lrt(F81, F81I) < alpha) /* 33 , 34 */
+					if (i && lrt(F81, F81I) < alpha) /* 33 , 34 */
 						return F81I; /* 36 */
 					else
 						return F81; /* 35 */
@@ -283,30 +300,30 @@ public class ModelUtils
 			{
 				if (lrt(K80, SYM) < alpha) /* 39 , 40 */
 				{
-					if (lrt(SYM, SYMG) < alpha) /* 41 , 42 */
+					if (g && lrt(SYM, SYMG) < alpha) /* 41 , 42 */
 					{
-						if (lrt(SYMG, SYMIG) < alpha) /* 43, 44 */
+						if (i && lrt(SYMG, SYMIG) < alpha) /* 43, 44 */
 							return SYMIG; /* 46 */
 						else
 							return SYMG; /* 45 */
 					} else
 					{
-						if (lrt(SYM, SYMI) < alpha) /* 47 , 48 */
+						if (i && lrt(SYM, SYMI) < alpha) /* 47 , 48 */
 							return SYMI; /* 50 */
 						else
 							return SYM; /* 49 */
 					}
 				} else
 				{
-					if (lrt(K80, K80G) < alpha) /* 51, 52 */
+					if (g && lrt(K80, K80G) < alpha) /* 51, 52 */
 					{
-						if (lrt(K80G, K80IG) < alpha) /* 53 , 54 */
+						if (i && lrt(K80G, K80IG) < alpha) /* 53 , 54 */
 							return K80IG; /* 56 */
 						else
 							return K80G; /* 55 */
 					} else
 					{
-						if (lrt(K80, K80I) < alpha) /* 57, 58 */
+						if (i && lrt(K80, K80I) < alpha) /* 57, 58 */
 							return K80I; /* 60 */
 						else
 							return K80; /* 59 */
@@ -314,15 +331,15 @@ public class ModelUtils
 				}
 			} else
 			{
-				if (lrt(JC, JCG) < alpha) /* 61 , 62 */
+				if (g && lrt(JC, JCG) < alpha) /* 61 , 62 */
 				{
-					if (lrt(JCG, JCIG) < alpha) /* 63 , 64 */
+					if (i && lrt(JCG, JCIG) < alpha) /* 63 , 64 */
 						return JCIG; /* 66 */
 					else
 						return JCG; /* 65 */
 				} else
 				{
-					if (lrt(JC, JCI) < alpha) /* 67, 68 */
+					if (i && lrt(JC, JCI) < alpha) /* 67, 68 */
 						return JCI; /* 70 */
 					else
 						return JC; /* 69 */
@@ -331,6 +348,13 @@ public class ModelUtils
 		}
 	}
 
+	/**
+	 * Can be performed on model+I+G
+	 * Model range: MrBayes
+	 * @param models
+	 * @param alpha
+	 * @return
+	 */
 	public static Model performHLRT2(List<Model> models, double alpha)
 	{
 		Model JC = getModel("jc", false, false, models);
@@ -363,6 +387,11 @@ public class ModelUtils
 		Model K80G = getModel("k80", true, false, models);
 		Model K80IG = getModel("k80", true, true, models);
 
+		boolean i = JCI != null;
+		boolean g = JCG !=null;
+		if(!i || !g)
+			return null;
+		
 		if (lrt(SYMIG, GTRIG) < alpha)/* A */
 		{
 			if (lrt(HKYIG, GTRIG) < alpha) /* B */
@@ -468,6 +497,13 @@ public class ModelUtils
 		}
 	}
 
+	/**
+	 * Can be performed on model[+I][+G]
+	 * Model range: MrBayes
+	 * @param models
+	 * @param alpha
+	 * @return
+	 */
 	public static Model performHLRT3(List<Model> models, double alpha)
 	{
 		Model JC = getModel("jc", false, false, models);
@@ -500,9 +536,12 @@ public class ModelUtils
 		Model K80G = getModel("k80", true, false, models);
 		Model K80IG = getModel("k80", true, true, models);
 
-		if (lrt(JC, JCG) < alpha) /* A */
+		boolean i = JCI != null;
+		boolean g = JCG !=null;
+		
+		if (g && lrt(JC, JCG) < alpha) /* A */
 		{
-			if (lrt(JCG, JCIG) < alpha) /* B */
+			if (i && lrt(JCG, JCIG) < alpha) /* B */
 			{
 				if (lrt(JCIG, K80IG) < alpha) /* C */
 				{
@@ -553,7 +592,7 @@ public class ModelUtils
 			}
 		} else
 		{
-			if (lrt(JC, JCI) < alpha) /* M */
+			if (i && lrt(JC, JCI) < alpha) /* M */
 			{
 				if (lrt(JCI, K80I) < alpha) /* N */
 				{
@@ -605,6 +644,13 @@ public class ModelUtils
 		}
 	}
 
+	/**
+	 * Can be performed on model[+I][+G]
+	 * Model range: MrBayes
+	 * @param models
+	 * @param alpha
+	 * @return
+	 */
 	public static Model performHLRT4(List<Model> models, double alpha)
 	{
 		Model JC = getModel("jc", false, false, models);
@@ -637,7 +683,10 @@ public class ModelUtils
 		Model K80G = getModel("k80", true, false, models);
 		Model K80IG = getModel("k80", true, true, models);
 
-		if (lrt(GTRI, GTRIG) < alpha) /* A */
+		boolean i = JCI != null;
+		boolean g = JCG !=null;
+		
+		if (i && g && lrt(GTRI, GTRIG) < alpha) /* A */
 		{
 			if (lrt(GTRG, GTRIG) < alpha) /* B */
 			{
@@ -690,7 +739,7 @@ public class ModelUtils
 			}
 		} else
 		{
-			if (lrt(GTR, GTRI) < alpha) /* M */
+			if (i && lrt(GTR, GTRI) < alpha) /* M */
 			{
 				if (lrt(HKYI, GTRI) < alpha) /* N */
 				{

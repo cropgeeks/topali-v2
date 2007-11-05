@@ -7,8 +7,13 @@
 package topali.gui.dialog.jobs.mt;
 
 import java.awt.Component;
+import java.util.*;
 
 import javax.swing.*;
+
+import topali.data.ModelTestResult;
+import topali.data.models.*;
+import topali.gui.Prefs;
 
 /**
  *
@@ -16,9 +21,71 @@ import javax.swing.*;
  */
 public class MTDialogPanel extends javax.swing.JPanel {
     
+	ModelTestResult res;
+	boolean dna;
+	
     /** Creates new form MTDialogPanel */
-    public MTDialogPanel() {
+    public MTDialogPanel(ModelTestResult res, boolean dna) {
+    	this.res = (res==null) ? new ModelTestResult() : res;
+    	this.dna = dna;
         initComponents();
+        
+        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.PHYML, ModelTestResult.MRBAYES});
+        models.setModel(mod);
+        
+        models.setSelectedItem(Prefs.ms_models);
+    	gamma.setSelected(Prefs.ms_gamma);
+    	inv.setSelected(Prefs.ms_inv);
+    	
+    	if(res!=null)
+    		initPrevResult(res);
+    }
+    
+    private void initPrevResult(ModelTestResult res) {
+    	this.models.setSelectedItem(res.selection);
+    	this.gamma.setSelected(res.models.get(0).isGamma());
+    	this.inv.setSelected(res.models.get(0).isInv());
+    }
+    
+    public ModelTestResult getResult() {
+    	
+    	List<Model> availModels = null;
+		if(this.models.getSelectedItem().equals(ModelTestResult.PHYML)) {
+			availModels = ModelManager.getInstance().listPhymlModels(dna);
+		}
+		else if(this.models.getSelectedItem().equals(ModelTestResult.MRBAYES)) { 
+			availModels = ModelManager.getInstance().listMrBayesModels(dna);
+		}
+		ArrayList<Model> models = new ArrayList<Model>();
+		for(Model m : availModels) {
+				Model m1 = ModelManager.getInstance().generateModel(m.getName(), false, false);
+				models.add(m1);
+				if(gamma.isSelected()) {
+					Model m2 = ModelManager.getInstance().generateModel(m.getName(), true, false);
+					models.add(m2);
+				}
+				if(inv.isSelected()) {
+					Model m3 = ModelManager.getInstance().generateModel(m.getName(), false, true);
+					models.add(m3);
+				}
+				if(gamma.isSelected()&&inv.isSelected()) {
+					Model m4 = ModelManager.getInstance().generateModel(m.getName(), true, true);
+					models.add(m4);
+				}
+		}
+		res.models = models;
+		res.selection = (String)this.models.getSelectedItem();
+		
+		Prefs.ms_gamma = gamma.isSelected();
+		Prefs.ms_inv = inv.isSelected();
+		Prefs.ms_models = (String)this.models.getSelectedItem();
+    	return this.res;
+    }
+    
+    public void setDefaults() {
+    	models.setSelectedIndex(0);
+    	gamma.setSelected(true);
+    	inv.setSelected(true);
     }
     
     /** This method is called from within the constructor to
@@ -28,188 +95,71 @@ public class MTDialogPanel extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jPanel2 = new javax.swing.JPanel();
+        models = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        modelPanel = new javax.swing.JPanel();
-        draft = new javax.swing.JPanel();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
+        gamma = new javax.swing.JCheckBox();
+        inv = new javax.swing.JCheckBox();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel1.setText("Select all:");
+        jLabel1.setText("Models:");
 
-        jCheckBox1.setText("Models");
-        jCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        models.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "PhyML", "MrBayes" }));
 
-        jCheckBox2.setText("Inv. Sites");
-        jCheckBox2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jLabel2.setText("Gamma:");
 
-        jCheckBox3.setText("Gamma");
-        jCheckBox3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jLabel3.setText("Invariant Sites:");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(jCheckBox3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox2)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jCheckBox3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gamma.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        gamma.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel2.setText("    Model");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel3.setText("Inv. Sites     ");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel4.setText("Gamma     ");
-
-        modelPanel.setLayout(new javax.swing.BoxLayout(modelPanel, javax.swing.BoxLayout.X_AXIS));
-
-        draft.setAlignmentX(Component.TOP_ALIGNMENT);
-        draft.setAlignmentY(Component.LEFT_ALIGNMENT);
-        draft.setMaximumSize(new java.awt.Dimension(32767, 35));
-        draft.setMinimumSize(new java.awt.Dimension(100, 35));
-        draft.setPreferredSize(new java.awt.Dimension(100, 35));
-        jCheckBox4.setText(" JC");
-        jCheckBox4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox4.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
-        jCheckBox5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox5.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
-        jCheckBox6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox6.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
-        javax.swing.GroupLayout draftLayout = new javax.swing.GroupLayout(draft);
-        draft.setLayout(draftLayout);
-        draftLayout.setHorizontalGroup(
-            draftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(draftLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBox4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
-                .addComponent(jCheckBox6)
-                .addGap(52, 52, 52)
-                .addComponent(jCheckBox5)
-                .addGap(38, 38, 38))
-        );
-        draftLayout.setVerticalGroup(
-            draftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(draftLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(draftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jCheckBox4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        modelPanel.add(draft);
-
-        jScrollPane1.setViewportView(modelPanel);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inv)
+                    .addComponent(gamma)
+                    .addComponent(models, 0, 93, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(models, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(gamma))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(inv))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel draft;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox gamma;
+    private javax.swing.JCheckBox inv;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel modelPanel;
+    private javax.swing.JComboBox models;
     // End of variables declaration//GEN-END:variables
     
 }

@@ -6,10 +6,7 @@
 
 package topali.gui.results;
 
-import java.net.URL;
 import java.util.List;
-
-import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
@@ -77,39 +74,22 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         		setAIC2(aic2);
         		setBIC(bic);
         		
-        		if(mod.isGamma()) {
-        			setGamma(m.getGammaCat(), m.getAlpha());
-        			URL url = getGammaImg(m.getAlpha());
-        			if(url!=null)
-        				imgGamma.setIcon(new ImageIcon(url));
-        		}
-        		else {
-        			setGamma(-1, Double.NaN);
-        			URL url = getGammaImg(-1);
-        			if(url!=null)
-        				imgGamma.setIcon(new ImageIcon(url));
-        		}
-        		if(mod.isInv()) {
-        			setInv(m.getInvProp());
-        			URL url = getInvImg(m.getInvProp());
-        			if(url!=null)
-        				imgInv.setIcon(new ImageIcon(url));
-        		}
-        		else {
-        			setInv(Double.NaN);
-        			URL url = getInvImg(-1);
-        			if(url!=null)
-        				imgInv.setIcon(new ImageIcon(url));
-        		}
+        		if(mod.isGamma()) 
+					setGamma(m.getGammaCat(), m.getAlpha());
+				else
+					setGamma(-1, Double.NaN);
+				if(mod.isInv()) 
+					setInv(m.getInvProp());
+				else 
+					setInv(Double.NaN);
+				
+        		modelDiagram.setModel(m);
+        		rateHetDiagram.setModel(m);
         		
         		setSubRates(m.getSubRates());
         		setSubRateGroups(m.getSubRateGroups());
         		setBaseFreqs(m.getBaseFreqs());
         		setBaseFreqGroups(m.getBaseFreqGroups());
-        		
-        		URL url = ImageIcon.class.getResource("/res/images/"+m.getName().toLowerCase()+".png");
-        		if(url!=null)
-        			imgModel.setIcon(new ImageIcon(url));
     		}
     		else if(mod instanceof ProteinModel) {
     			ProteinModel m = (ProteinModel)mod;
@@ -120,30 +100,17 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         		setAIC2(MathUtils.calcAIC2(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
         		setBIC(MathUtils.calcBIC(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
         		
-        		if(mod.isGamma()) {
-        			setGamma(m.getGammaCat(), m.getAlpha());
-        			URL url = getGammaImg(m.getAlpha());
-        			if(url!=null)
-        				imgGamma.setIcon(new ImageIcon(url));
-        		}
-        		else {
-        			setGamma(-1, Double.NaN);
-        			URL url = getGammaImg(-1);
-        			if(url!=null)
-        				imgGamma.setIcon(new ImageIcon(url));
-        		}
-        		if(mod.isInv()) {
-        			setInv(m.getInvProp());
-        			URL url = getInvImg(m.getInvProp());
-        			if(url!=null)
-        				imgInv.setIcon(new ImageIcon(url));
-        		}
-        		else {
-        			setInv(Double.NaN);
-        			URL url = getInvImg(-1);
-        			if(url!=null)
-        				imgInv.setIcon(new ImageIcon(url));
-        		}
+        		if(mod.isGamma())
+					setGamma(m.getGammaCat(), m.getAlpha());
+				else 
+					setGamma(-1, Double.NaN);
+				if(mod.isInv()) 
+					setInv(m.getInvProp());
+				else 
+					setInv(Double.NaN);
+				
+        		modelDiagram.setModel(null);
+        		rateHetDiagram.setModel(m);
         		
         		setSubRates(null);
         		setSubRateGroups(null);
@@ -152,39 +119,9 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     		}
     	}
     	
+    	repaint();
+    	
     	defaultButton.setEnabled(mod!=null && !data.getSequenceSet().getParams().getModel().matches(mod));
-    }
-    
-    private URL getGammaImg(double alpha) {
-    	URL result = null;
-    	if(alpha==-1)
-    		result = URL.class.getResource("/res/images/nogamma.png");
-    	else if(alpha<0.3)
-    		result = URL.class.getResource("/res/images/gamma0.1.png");
-    	else if(alpha<0.75)
-    		result = URL.class.getResource("/res/images/gamma0.5.png");
-    	else if(alpha<2)
-    		result = URL.class.getResource("/res/images/gamma1.png");
-    	else if(alpha<=10)
-    		result = URL.class.getResource("/res/images/gamma5.png");
-    	else
-    		result = URL.class.getResource("/res/images/gamma20.png");
-    	return result;
-    }
-    
-    private URL getInvImg(double inv) {
-    	URL result = null;
-    	if(inv==-1)
-    		result = URL.class.getResource("/res/images/noinv.png");
-    	else if(inv<0.3)
-    		result = URL.class.getResource("/res/images/inv0.2.png");
-    	else if(inv<0.5)
-    		result = URL.class.getResource("/res/images/inv0.4.png");
-    	else if(inv<0.7)
-    		result = URL.class.getResource("/res/images/inv0.6.png");
-    	else
-    		result = URL.class.getResource("/res/images/inv0.8.png");
-    	return result;
     }
     
     private void setModName(String name) {
@@ -241,14 +178,14 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     	if(cat<0 || new Double(a).isNaN())
     		this.gamma.setText("--");
     	else
-    		this.gamma.setText("Gamma categories: "+cat+";  Gamma shape parameter (alpha): "+a);
+    		this.gamma.setText("\u03b1="+Prefs.d2.format(a)+" (4 Cat.)");
     }
     
     private void setInv(double inv) {
     	if(new Double(inv).isNaN())
     		this.inv.setText("--");
     	else
-    		this.inv.setText(""+inv);
+    		this.inv.setText(""+Prefs.d2.format(inv));
     }
     
     private void setSubRates(double... rates) {
@@ -256,7 +193,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     		this.subRates.setText("--");
     	}
     	else {
-    		String tmp = rates[0]+" | "+rates[1]+" | "+rates[2]+" | "+rates[3]+" | "+rates[4]+" | "+rates[5];
+    		String tmp = Prefs.d2.format(rates[0])+" | "+Prefs.d2.format(rates[1])+" | "+Prefs.d2.format(rates[2])+" | "+Prefs.d2.format(rates[3])+" | "+Prefs.d2.format(rates[4])+" | "+Prefs.d2.format(rates[5]);
     		this.subRates.setText(tmp);
     	}
     }
@@ -275,7 +212,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     		this.baseFreq.setText("--");
     	}
     	else {
-    		String tmp = freqs[0]+" | "+freqs[1]+" | "+freqs[2]+" | "+freqs[3];
+    		String tmp = Prefs.d2.format(freqs[0])+" | "+Prefs.d2.format(freqs[1])+" | "+Prefs.d2.format(freqs[2])+" | "+Prefs.d2.format(freqs[3]);
     		this.baseFreq.setText(tmp);
     	}
     }
@@ -320,11 +257,12 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         gamma = new javax.swing.JLabel();
         inv = new javax.swing.JLabel();
-        imgModel = new javax.swing.JLabel();
-        imgGamma = new javax.swing.JLabel();
-        imgInv = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        modelDiagram = new topali.gui.results.ModelDiagram();
+        rateHetDiagram = new topali.gui.results.RateHetDiagram();
         defaultButton = new javax.swing.JButton();
 
         modelName.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -335,15 +273,15 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel1.setText("Model Test Scores:");
 
-        jLabel2.setText("\\u2113 = ");
+        jLabel2.setText("\u2113 = ");
 
         lnl.setText("123;  ");
 
-        jLabel4.setText("AIC\\u2081 = ");
+        jLabel4.setText("AIC\u2081 = ");
 
         aic1.setText("123;   ");
 
-        jLabel6.setText("AIC\\u2082 = ");
+        jLabel6.setText("AIC\u2082 = ");
 
         aic2.setText("123;   ");
 
@@ -375,7 +313,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bic)))
-                .addContainerGap(360, Short.MAX_VALUE))
+                .addContainerGap(398, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -402,7 +340,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
 
         jLabel5.setText("Base Frequencies:");
 
-        subRates.setText("0.1 | 0.1 |  0.1  | 0.1 |  0.1 |  0.1     ");
+        subRates.setText("0.1 | 0.1 |  0.1  | 0.1 |  0.1 |  0.1");
         subRates.setToolTipText("A-C | A-G | A-T | C-G | C-T | G-T");
 
         baseFreq.setText("0.1 | 0.1 | 0.1 | 0.1");
@@ -414,71 +352,109 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         baseFreqGroups.setText("(0000)");
         baseFreqGroups.setToolTipText("A | C | G | T");
 
-        jLabel13.setText("Rate Heterogeneity:  ");
+        jLabel13.setText("Rate Heterogeneity (\u0393):  ");
 
-        jLabel14.setText("Proportion of Invariant Sites:  ");
+        jLabel14.setText("Proportion of Invariant Sites (pInv):  ");
 
         gamma.setText("--");
 
         inv.setText("--");
 
-        imgModel.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\gtr.png"));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel9.setForeground(new java.awt.Color(200,0,0));
+        jLabel9.setText("pINV");
 
-        imgGamma.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\gamma5.png"));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel11.setForeground(new java.awt.Color(0,0,200));
+        jLabel11.setText("\u0393");
 
-        imgInv.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\images\\inv0.2.png"));
+        jLabel7.setText(",");
 
-        jLabel12.setText("Gamma:");
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        javax.swing.GroupLayout modelDiagramLayout = new javax.swing.GroupLayout(modelDiagram);
+        modelDiagram.setLayout(modelDiagramLayout);
+        modelDiagramLayout.setHorizontalGroup(
+            modelDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        modelDiagramLayout.setVerticalGroup(
+            modelDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 120, Short.MAX_VALUE)
+        );
 
-        jLabel15.setText("Prop. Inv. Sites:");
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(modelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(modelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout rateHetDiagramLayout = new javax.swing.GroupLayout(rateHetDiagram);
+        rateHetDiagram.setLayout(rateHetDiagramLayout);
+        rateHetDiagramLayout.setHorizontalGroup(
+            rateHetDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        rateHetDiagramLayout.setVerticalGroup(
+            rateHetDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 124, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
                     .addComponent(jLabel10)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel13)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gamma))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel14)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(inv)))
+                    .addComponent(jLabel3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
+                            .addComponent(jLabel14)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(subRates)
-                            .addComponent(baseFreq))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(baseFreqGroups)
-                            .addComponent(subRateGroups))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                .addComponent(imgModel)
-                .addGap(6, 6, 6)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imgGamma)
-                    .addComponent(jLabel12))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(baseFreq)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(baseFreqGroups))
+                            .addComponent(inv)
+                            .addComponent(gamma)
+                            .addComponent(subRates))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addComponent(imgInv))
+                .addComponent(subRateGroups)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9))
+                    .addComponent(rateHetDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -497,20 +473,15 @@ public class ModelInfoPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(baseFreq)
-                            .addComponent(baseFreqGroups))
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jLabel15))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(imgGamma)
-                                    .addComponent(imgInv)))
-                            .addComponent(imgModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                            .addComponent(baseFreqGroups)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rateHetDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         defaultButton.setText("Select");
@@ -528,10 +499,10 @@ public class ModelInfoPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(modelName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 692, Short.MAX_VALUE)
                         .addComponent(defaultButton))
                     .addComponent(aliases)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -571,26 +542,27 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     private javax.swing.JLabel bic;
     private javax.swing.JButton defaultButton;
     private javax.swing.JLabel gamma;
-    private javax.swing.JLabel imgGamma;
-    private javax.swing.JLabel imgInv;
-    private javax.swing.JLabel imgModel;
     private javax.swing.JLabel inv;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lnl;
+    private topali.gui.results.ModelDiagram modelDiagram;
     private javax.swing.JLabel modelName;
+    private topali.gui.results.RateHetDiagram rateHetDiagram;
     private javax.swing.JLabel subRateGroups;
     private javax.swing.JLabel subRates;
     // End of variables declaration//GEN-END:variables

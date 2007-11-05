@@ -690,6 +690,7 @@
 			<bind-xml node="attribute" />
 		</field>
 		<field name="treeStr" type="string" />
+		<field name="lnl" type="double" />
 		<field name="info" type="string" direct="true" />
 		<field name="clusters" type="topali.data.SequenceCluster"
 			collection="collection" />

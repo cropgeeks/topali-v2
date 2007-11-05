@@ -232,20 +232,19 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
+		if(e==null || e.getValueIsAdjusting())
+			return;
+		
 		int index = tp.accessTable().getSelectedRow();
 		if(index<0)
 			return;
 		
 		String modName = (String) tp.accessTable().getValueAt(index, 0);
 		String[] tmp = modName.split("\\+");
+		tmp[0] = tmp[0].replaceAll("\\<.*\\>", "");
 		boolean gamma = (modName.contains("+G"));
 		boolean inv = (modName.contains("+I"));
-		for(Model m : ((ModelTestResult)result).models) {
-			if(m.getName().equals(tmp[0]) && m.isGamma()==gamma && m.isInv()==inv) {
-				this.selModel = m;
-				break;
-			}
-		}
+		this.selModel = ModelUtils.getModel(tmp[0], gamma, inv, ((ModelTestResult)result).models);
 		
 		infoPanel.setModel(this.selModel);
 	}

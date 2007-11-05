@@ -28,7 +28,7 @@ import topali.gui.dialog.*;
 import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
-import topali.gui.dialog.jobs.mt.ModelTestDialog;
+import topali.gui.dialog.jobs.mt.*;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
@@ -580,7 +580,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
-		ModelTestDialog dlg = new ModelTestDialog(data, result);
+//		ModelTestDialog dlg = new ModelTestDialog(data, result);
+//		dlg.setVisible(true);
+		
+		MTDialog dlg = new MTDialog(this, data, result);
 		dlg.setVisible(true);
 		
 		ModelTestResult res = dlg.getResult();
