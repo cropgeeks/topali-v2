@@ -14,6 +14,7 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
+import topali.data.ModelTestResult;
 import topali.mod.Filters;
 import doe.PreferencesXML;
 
@@ -196,6 +197,11 @@ public class Prefs extends PreferencesXML
 	public static boolean phyml_opttop;
 	public static boolean phyml_optbranch;
 	
+	// Model selection run settings
+	public static String ms_models;
+	public static boolean ms_gamma;
+	public static boolean ms_inv;
+	
 	// Vamsas/web settings
 	public static String web_direct_url;
 	public static String web_broker_url;
@@ -225,6 +231,7 @@ public class Prefs extends PreferencesXML
 		setLRTDefaults();
 		setMBDefaults();
 		setPhymlDefaults();
+		setMSDefaults();
 		setWebDefaults();
 
 
@@ -394,6 +401,10 @@ public class Prefs extends PreferencesXML
 		phyml_optbranch = getBool("phyml_optbranch", phyml_optbranch);
 		phyml_opttop = getBool("phyml_opttop", phyml_opttop);
 		
+		ms_models = getStr("ms_models", ms_models);
+		ms_gamma = getBool("ms_gamma", ms_gamma);
+		ms_inv = getBool("ms_inv", ms_inv);
+		
 		web_direct_url = getStr("web_direct_url", web_direct_url);
 		web_broker_url = getStr("web_broker_url", web_broker_url);
 		web_use_rbroker = getBool("web_use_rbroker", web_use_rbroker);
@@ -561,6 +572,10 @@ public class Prefs extends PreferencesXML
 		p.setProperty("phyml_optbranch", ""+phyml_optbranch);
 		p.setProperty("phyml_opttop", ""+phyml_opttop);
 		
+		p.setProperty("ms_models", ms_models);
+		p.setProperty("ms_gamma", ""+ms_gamma);
+		p.setProperty("ms_inv", ""+ms_inv);
+		
 		setStr("web_direct_url", web_direct_url);
 		setStr("web_broker_url", web_broker_url);
 		p.setProperty("web_use_rbroker", "" + web_use_rbroker);
@@ -693,6 +708,12 @@ public class Prefs extends PreferencesXML
 		phyml_bootstrap = 0;
 		phyml_optbranch = true;
 		phyml_opttop = true;
+	}
+	
+	public static void setMSDefaults() {
+		ms_models = ModelTestResult.PHYML;
+		ms_gamma = true;
+		ms_inv = true;
 	}
 	
 	public static void setWebDefaults()

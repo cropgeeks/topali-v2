@@ -12,9 +12,9 @@ import topali.data.PhymlResult;
 public class PhymlParser
 {
 
-	public static PhymlResult parse(File f, PhymlResult res) throws Exception {
+	public static PhymlResult parse(File treeFile, File statFile, PhymlResult res) throws Exception {
 		
-		BufferedReader in = new BufferedReader(new FileReader(f));
+		BufferedReader in = new BufferedReader(new FileReader(treeFile));
 		StringBuffer sb = new StringBuffer();
 		String line = null;
 		while((line = in.readLine())!=null)
@@ -22,6 +22,14 @@ public class PhymlParser
 		
 		res.setTreeStr(sb.toString());
 		
+		in = new BufferedReader(new FileReader(statFile));
+		line = null;
+		while((line=in.readLine())!=null) {
+			String[] tmp = line.split("\\s+");
+			if(tmp.length>1 && tmp[1].equals("Likelihood")) {
+				res.setLnl(Double.parseDouble(tmp[5]));
+			}
+		}
 		return res;
 	}
 }

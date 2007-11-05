@@ -16,11 +16,7 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 	private File wrkDir;
 	private File pctDir;
 	int totalGen;
-	
-	boolean parse = false;
-	boolean summaryParse = false;
-	StringBuffer summary = new StringBuffer();
-	
+
 	MrBayesProcess(File wrkDir, MBTreeResult result)
 	{
 		this.wrkDir = wrkDir;
@@ -46,11 +42,10 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(proc
 				.getOutputStream()));
 
-		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false);
+		StreamCatcher sc = new StreamCatcher(proc.getInputStream(), false, true);
 		sc.addParser(this);
 		sc.start();
 		
-		// writer.println("Y");
 		writer.close();
 
 		try
@@ -72,33 +67,22 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 			//if sc has already finished, its ok...
 		}
 		
-		File summaryFile = new File(wrkDir, "summary.txt");
-		BufferedWriter out = new BufferedWriter(new FileWriter(summaryFile));
-		out.write(summary.toString());
+		File mbout = new File(wrkDir, "mb.out");
+		BufferedWriter out = new BufferedWriter(new FileWriter(mbout));
+		out.write(sc.getOutput());
 		out.flush();
 		out.close();
 	}
-
-	int i = 0;
 	
+	boolean parse = false;
 	public void parseLine(String line)
 	{
-		i++;
 		line = line.trim();
 		String tmp[] = line.split("\\s+");
 		if(tmp[0].equals("Chain"))
 			parse = true;
 		else if(tmp[0].equals("Analysis"))
 			parse = false;
-		else if(line.contains("Summary statistics for taxon bipartitions:")) {
-			summaryParse =  true;
-			parse = false;
-			return;
-		}
-		else if(line.contains("Clade credibility values:")) {
-			summaryParse =  false;
-			return;
-		}
 		
 		if(parse) {
 			try
@@ -111,14 +95,6 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 				//Ignore NumberFormatExceptions
 			}
 		}
-		
-		if(summaryParse) {
-			line = line.trim();
-			if(!line.equals("")) {
-				summary.append(line+"\n");
-			}
-		}
 	}
-	
 	
 }

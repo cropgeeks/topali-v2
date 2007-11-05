@@ -9,6 +9,7 @@ import static topali.mod.Filters.TOP;
 
 import java.beans.*;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.zip.*;
 
@@ -17,6 +18,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 import org.exolab.castor.xml.*;
 
+import sbrn.commons.file.FileUtils;
 import topali.data.*;
 import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
@@ -159,7 +161,9 @@ public class Project extends DataObject
 			if(!appVersion.equals(TOPALi.VERSION)) {
 				String notes = "";
 				if(appVersion.equals("2.16")) {
-					File xsltFile = new File(Project.class.getResource("/res/xslt/2.16-2.17.xsl").toURI());
+					URL tmpUrl = Project.class.getResource("/res/xslt/2.16-2.17.xsl");
+					File xsltFile = new File(Prefs.tmpDir, "topali_2.16-2.17.xsl");
+					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
 					notes += getTranformationNotes(xsltFile);
 					StringOutputStream sos = new StringOutputStream();
 					InputStream xmlin = zipFile.getInputStream(new ZipEntry("project.xml"));

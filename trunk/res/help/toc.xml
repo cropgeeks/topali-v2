@@ -49,7 +49,7 @@
     <tocitem text="CodeML branch model settings" target="cmlbranch_settings" image="topic" />		
   </tocitem>
   <tocitem text="Phylogenetic Trees" expand="true">
-    <tocitem text="Model selection" target="modelgenerator" image="topic" />
+    <tocitem text="Model Selection" target="modelselection" image="topic" />
     <tocitem text="Tree Estimation" target="estimate_tree" expand="true">
       <tocitem text="F84+Gamma" target="f84gamma" image="topic" />
       <tocitem text="Maximum Likelihood (using PhyML)" target="phyml" image="topic" />

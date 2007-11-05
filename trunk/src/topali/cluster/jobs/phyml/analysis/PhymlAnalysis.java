@@ -43,7 +43,7 @@ public class PhymlAnalysis extends AnalysisThread
 		PhymlProcess proc = new PhymlProcess(runDir, result);
 		proc.run();
 		
-		result = PhymlParser.parse(new File(runDir, "seq_phyml_tree.txt"), result);
+		result = PhymlParser.parse(new File(runDir, "seq_phyml_tree.txt"), new File(runDir, "seq_phyml_stat.txt"), result);
 		result.info = treeInfo();
 		Castor.saveXML(result, new File(runDir, "result.xml"));
 	}

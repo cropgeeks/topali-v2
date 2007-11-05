@@ -22,7 +22,7 @@
    <!-- presentation -->
   <presentation default="true" displayviews="true" displayviewimages="false">
     <name>TOPALi</name>
-    <size width="600" height="500" />
+    <size width="700" height="500" />
     <location x="50" y="50" />
     <title>TOPALi V2 Help</title>
     <image>helpIcon</image>

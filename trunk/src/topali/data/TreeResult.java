@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import pal.misc.Identifier;
 import pal.tree.*;
+import topali.gui.Prefs;
 
 /* Storage class that represents a phylogenetic tree (stored as a NH format
  * string. Trees created from a SequenceSet alignment track their sequences in
@@ -31,6 +32,9 @@ public class TreeResult extends AlignmentResult
 	// The tree bit
 	private String treeStr;
 
+	//log likelihood
+	private double lnl = 0;
+	
 	// What partition of the original alignment was used to created it?
 	private int pS, pE;
 
@@ -114,6 +118,16 @@ public class TreeResult extends AlignmentResult
 		return clusters;
 	}
 
+	public double getLnl()
+	{
+		return lnl;
+	}
+
+	public void setLnl(double lnl)
+	{
+		this.lnl = lnl;
+	}
+
 	public void setClusters(LinkedList<SequenceCluster> clusters)
 	{
 		this.clusters = clusters;
@@ -177,12 +191,19 @@ public class TreeResult extends AlignmentResult
 	/* Returns a suitable title for any windows displaying this tree */
 	public String getTitle()
 	{
+		String name = null;
 		if (guiName != null && (pS != 0 && pE != 0))
-			return guiName + " (" + pS + " - " + pE + ")";
+			name = guiName + " (" + pS + " - " + pE + ")";
 		else if (guiName != null)
-			return guiName;
+			name = guiName;
 		else
-			return "Unknown Tree";
+			name = "Unknown Tree";
+		
+		if(lnl!=0) {
+			name += " (lnl="+Prefs.d2.format(lnl)+")";
+		}
+		
+		return name;
 	}
 
 	// Returns a newick formatted string containing the real (unsafe) seq names.

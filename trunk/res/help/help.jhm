@@ -44,7 +44,7 @@
      <mapID target="cmlsite_settings" url="html/cmlsite_settings.html" />
      <mapID target="cmlbranch_settings" url="html/cmlbranch_settings.html" />
      
-     <mapID target="modelgenerator" url="html/modelgenerator.html" />
+     <mapID target="modelselection" url="html/modelselection.html" />
      <mapID target="estimate_tree" url="html/estimate_tree.html" />
      <mapID target="f84gamma" url="html/estimate_tree.html#f84gamma" />
      <mapID target="phyml" url="html/estimate_tree.html#phyml" />
