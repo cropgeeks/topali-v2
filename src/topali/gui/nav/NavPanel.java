@@ -31,7 +31,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		PropertyChangeListener
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	static JPanel blankPanel;
 
 	private DefaultMutableTreeNode root;
@@ -320,13 +320,13 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 			{
 				node.setUserObject(new MTResultsNode(data, (ModelTestResult) result));
 			}
-			
+
 			if (result instanceof CodonWResult)
 			{
 				node.setUserObject(new CodonWResultsNode(data,
 						(CodonWResult) result));
 			}
-			
+
 			if(result instanceof FastMLResult) {
 				FastMLResult fres = (FastMLResult)result;
 				try
@@ -566,17 +566,21 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		if (treePath == null)
 			return;
 
-		TreePath path = new TreePath(root);
-
-		TreeNode current = root;
-		for (int i = 0; i < treePath.length; i++)
+		try
 		{
-			current = current.getChildAt(treePath[i]);
-			path = path.pathByAddingChild(current);
-		}
+			TreePath path = new TreePath(root);
 
-		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
+			TreeNode current = root;
+			for (int i = 0; i < treePath.length; i++)
+			{
+				current = current.getChildAt(treePath[i]);
+				path = path.pathByAddingChild(current);
+			}
+
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+		}
+		catch (Exception e) {}
 	}
 
 	public void displayHelp()
