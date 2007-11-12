@@ -6,20 +6,24 @@
 
 package topali.gui.results;
 
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
+
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
 import topali.data.AlignmentData;
 import topali.data.models.*;
-import topali.gui.Prefs;
-import topali.var.MathUtils;
+import topali.gui.*;
+import topali.var.*;
 
 /**
  *
  * @author  dlindn
  */
-public class ModelInfoPanel extends javax.swing.JPanel {
+public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener {
     
 	MTResultPanel mtpanel; 
 	AlignmentData data;
@@ -32,6 +36,8 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     	this.mtpanel = mtpanel;
         initComponents();
         setModel(null);
+        modelDiagram.setToolTipText("Substitution model diagram (double click to expand)");
+        modelDiagram.addMouseListener(this);
     }
     
     public void setModel(Model mod) {
@@ -109,7 +115,12 @@ public class ModelInfoPanel extends javax.swing.JPanel {
 				else 
 					setInv(Double.NaN);
 				
-        		modelDiagram.setModel(null);
+        		modelDiagram.setModel(m);
+        		
+        		Color c = Utils.calcColor(m.getName());
+        		modelDiagram.setBackground(c);
+        		jPanel3.setBackground(c);
+        		
         		rateHetDiagram.setModel(m);
         		
         		setSubRates(null);
@@ -118,9 +129,7 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         		setBaseFreqGroups(null);
     		}
     	}
-    	
     	repaint();
-    	
     	defaultButton.setEnabled(mod!=null && !data.getSequenceSet().getParams().getModel().matches(mod));
     }
     
@@ -261,7 +270,12 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        modelDiagram = new topali.gui.results.ModelDiagram();
+        
+        if(data.getSequenceSet().isDNA())
+        	this.modelDiagram = new DNAModelDiagram();
+        else
+        	this.modelDiagram = new ProteinModelDiagram();
+        
         rateHetDiagram = new topali.gui.results.RateHetDiagram();
         defaultButton = new javax.swing.JButton();
 
@@ -361,11 +375,11 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         inv.setText("--");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel9.setForeground(new java.awt.Color(200,0,0));
+        jLabel9.setForeground(new java.awt.Color(140, 0, 0));
         jLabel9.setText("pINV");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel11.setForeground(new java.awt.Color(0,0,200));
+        jLabel11.setForeground(new java.awt.Color(0, 0, 160));
         jLabel11.setText("\u0393");
 
         jLabel7.setText(",");
@@ -386,17 +400,17 @@ public class ModelInfoPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(modelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(modelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(modelDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout rateHetDiagramLayout = new javax.swing.GroupLayout(rateHetDiagram);
@@ -533,7 +547,54 @@ public class ModelInfoPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_defaultButtonActionPerformed
     
     
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    @Override
+	public void mouseClicked(MouseEvent e)
+	{
+		if(e.getClickCount()>1) {
+			JFrame frame = new JFrame(model.getName());
+			JPanel p = new JPanel(new BorderLayout());
+			p.setBackground(Color.WHITE);
+			p.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+			ModelDiagram dia = data.getSequenceSet().isDNA() ?
+					new DNAModelDiagram((DNAModel)model) :
+						new ProteinModelDiagram((ProteinModel)model);
+			p.add(dia, BorderLayout.CENTER);
+			dia.setBackground(Color.WHITE);
+			frame.getContentPane().add(p);
+			frame.pack();
+			frame.setSize(400,480);
+			frame.setLocationRelativeTo(TOPALi.winMain);
+			frame.setVisible(true);
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		
+	}
+
+
+	// Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aic1;
     private javax.swing.JLabel aic2;
     private javax.swing.JLabel aliases;

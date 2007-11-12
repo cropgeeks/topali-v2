@@ -19,6 +19,8 @@ public class ModelTestLocalJob extends AnalysisJob
 	private SequenceSet ss;
 	public File jobDir;
 	
+	ModelTestMonitor mon;
+	
 	public ModelTestLocalJob(ModelTestResult result, AlignmentData data) {
 		this.result = result;    
 		this.data = data;
@@ -58,7 +60,10 @@ public class ModelTestLocalJob extends AnalysisJob
 	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
-		result = (new ModelTestMonitor(jobDir)).getResult();
+		if(mon==null)
+			mon = new ModelTestMonitor(jobDir);
+		
+		result = mon.getResult();
 		result.status = JobStatus.COMPLETING;
 		return result;
 	}
@@ -66,7 +71,10 @@ public class ModelTestLocalJob extends AnalysisJob
 	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
-		return (new ModelTestMonitor(jobDir)).getPercentageComplete();
+		if(mon==null)
+			mon = new ModelTestMonitor(jobDir);
+		
+		return mon.getPercentageComplete();
 	}
 
 	@Override

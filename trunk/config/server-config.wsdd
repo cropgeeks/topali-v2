@@ -105,6 +105,12 @@
    <parameter name="className" value="topali.cluster.jobs.phyml.PhymlWebService"/>
    <parameter name="scope" value="request"/>
  </service>
+ <!-- RaxML -->
+ <service name="topali-rx" provider="java:RPC">
+   <parameter name="allowedMethods" value="*"/>
+   <parameter name="className" value="topali.cluster.jobs.raxml.RaxmlWebService"/>
+   <parameter name="scope" value="request"/>
+ </service>
  <!-- FastML -->
  <service name="topali-fm" provider="java:RPC">
    <parameter name="allowedMethods" value="*"/>

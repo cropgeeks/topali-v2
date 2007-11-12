@@ -20,6 +20,8 @@ import topali.fileio.Castor;
 public class ModelTestWebService extends WebService
 {
 
+	ModelTestMonitor mon;
+	
 	public String submit(String alignmentXML, String resultXML) throws AxisFault {
 		try
 		{
@@ -69,7 +71,9 @@ public class ModelTestWebService extends WebService
 	{
 		try
 		{
-			return new ModelTestMonitor(jobDir).getPercentageComplete();
+			if(mon==null)
+				mon =  new ModelTestMonitor(jobDir);
+			return mon.getPercentageComplete();
 		} catch (Exception e)
 		{
 			logger.log(Level.ERROR, e.getMessage(), e);
@@ -81,9 +85,12 @@ public class ModelTestWebService extends WebService
 	{
 		try
 		{
-			File jobDir = new File(getParameter("job-dir"), jobId);
-
-			ModelTestResult result = new ModelTestMonitor(jobDir).getResult();
+			if(mon==null) {
+				File jobDir = new File(getParameter("job-dir"), jobId);
+				mon =  new ModelTestMonitor(jobDir);
+			}
+			
+			ModelTestResult result = mon.getResult();
 
 			logger.info(jobId + " -  returning result");
 			accessLog.info("MT result  to   " + jobId);

@@ -4,7 +4,7 @@
  * Created on 07 September 2007, 08:35
  */
 
-package topali.gui.dialog.jobs.tree;
+package topali.gui.dialog.jobs.tree.mrbayes;
 
 import java.util.*;
 
@@ -43,7 +43,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
         	initPrevResult(result);
     }
     
-    private void setDefaults() {
+    public void setDefaults() {
 		SequenceSetParams params = ss.getParams();
 		
 		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.isDNA());
@@ -55,7 +55,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		this.subModel.setModel(cm);
 
 		Model m = params.getModel();
-		while(!Utils.contains(models, m.getName())) {
+		while(Utils.indexof(models, m.getName())==-1) {
 			modelIsSupported = false;
 			Model next = ModelManager.getInstance().getNearestModel(m);
 			if(next.getName().equals(m.getName())) {

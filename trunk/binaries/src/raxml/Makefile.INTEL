@@ -1,0 +1,46 @@
+# Makefile August 2006 by Alexandros Stamatakis
+# Makefile cleanup October 2006, Courtesy of Peter Cordes <peter@cordes.ca>
+
+CC = icc
+CFLAGS = -O3
+
+LIBRARIES = -lm
+
+RM = rm -f
+
+objs    = axml.o raxmlParsimony.o rev_functions.o GTRCAT.o  GTRCATPROT.o GTRCATPROTMULT.o GTRGAMMAPROT.o GTRGAMMAPROTMULT.o GTRCATMULT.o GTRGAMMA.o GTRGAMMAMULT.o optimizeModel.o multiple.o searchAlgo.o topologies.o parsePartitions.o treeIO.o models.o bipartitionList.o
+
+all : raxmlHPC 
+
+GLOBAL_DEPS = axml.h globalVariables.h
+
+raxmlHPC : $(objs)
+	$(CC) -o raxmlHPC $(objs) $(LIBRARIES) 
+
+# Optimization flag -O3 will yield an erroneous code for rev_functions !
+
+rev_functions.o : rev_functions.c $(GLOBAL_DEPS)
+	$(CC) -c -o $@ $<
+
+bipartitionList.o : bipartitionList.c $(GLOBAL_DEPS)
+GTRCAT.o : GTRCAT.c $(GLOBAL_DEPS)
+GTRCATPROT.o : GTRCATPROT.c $(GLOBAL_DEPS)
+GTRCATPROTMULT.o : GTRCATPROTMULT.c $(GLOBAL_DEPS)
+GTRGAMMAPROT.o : GTRGAMMAPROT.c $(GLOBAL_DEPS)
+GTRGAMMAPROTMULT.o : GTRGAMMAPROTMULT.c $(GLOBAL_DEPS)
+GTRCATMULT.o : GTRCATMULT.c $(GLOBAL_DEPS)
+GTRGAMMAMULT.o : GTRGAMMAMULT.c $(GLOBAL_DEPS)
+GTRGAMMA.o : GTRGAMMA.c $(GLOBAL_DEPS)
+optimizeModel.o : optimizeModel.c $(GLOBAL_DEPS)
+multiple.o : multiple.c $(GLOBAL_DEPS)
+axml.o : axml.c $(GLOBAL_DEPS)
+raxmlParsimony.o : raxmlParsimony.c $(GLOBAL_DEPS)
+searchAlgo.o : searchAlgo.c $(GLOBAL_DEPS)
+topologies.o : topologies.c $(GLOBAL_DEPS)
+parsePartitions.o : parsePartitions.c $(GLOBAL_DEPS)
+treeIO.o : treeIO.c $(GLOBAL_DEPS)
+models.o : models.c $(GLOBAL_DEPS)
+
+
+clean : 
+	$(RM) *.o raxmlHPC

@@ -92,6 +92,13 @@ public class Prefs extends PreferencesXML
 	public static int gui_odialog_h = 150;
 	public static int gui_auto_min = 75;
 	public static boolean gui_auto_discard = false;
+	/* 0 = f81+g tree
+	 * 1 = phyml
+	 * 2 = mrbayes (one model)
+	 * 3 = mrbayes (cdna models)
+	 * 4 = raxml (one model)
+	 * 5 = raxml (cdna models)
+	 */
 	public static int gui_tree_method = 0;
 	public static boolean gui_tree_useall = true;
 	public static float gui_group_threshold = 0.05f;
@@ -187,6 +194,7 @@ public class Prefs extends PreferencesXML
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 
 	// Mr Bayes run settings
+	public static int mb_type;
 	public static int mb_runs;
 	public static int mb_gens;
 	public static int mb_samplefreq;
@@ -196,6 +204,13 @@ public class Prefs extends PreferencesXML
 	public static int phyml_bootstrap;
 	public static boolean phyml_opttop;
 	public static boolean phyml_optbranch;
+	
+	//Raxml run settigns
+	public static int rax_type;
+	public static String rax_ratehet;
+	public static int rax_bootstrap;
+	public static boolean rax_empfreq;
+	public static String rax_protmodel;
 	
 	// Model selection run settings
 	public static String ms_models;
@@ -230,6 +245,7 @@ public class Prefs extends PreferencesXML
 		setDSSDefaults();
 		setLRTDefaults();
 		setMBDefaults();
+		setRaxDefaults();
 		setPhymlDefaults();
 		setMSDefaults();
 		setWebDefaults();
@@ -392,11 +408,18 @@ public class Prefs extends PreferencesXML
 		lrt_runs = getInt("lrt_runs", lrt_runs);
 		lrt_method = getInt("lrt_method", lrt_method);
 
+		mb_type = getInt("mb_type", mb_type);
 		mb_runs = getInt("mb_runs", mb_runs);
 		mb_gens = getInt("mb_gens", mb_gens);
 		mb_samplefreq = getInt("mb_samplefreq", mb_samplefreq);
 		mb_burnin = getInt("mb_burnin", mb_burnin);
 
+		rax_type = getInt("rax_type", rax_type);
+		rax_ratehet = getStr("rax_ratehet", rax_ratehet);
+		rax_empfreq = getBool("rax_empfreq", rax_empfreq);
+		rax_bootstrap = getInt("rax_bootstrap", rax_bootstrap);
+		rax_protmodel = getStr("rax_protmodel", rax_protmodel);
+		
 		phyml_bootstrap = getInt("phyml_bootstrap", phyml_bootstrap);
 		phyml_optbranch = getBool("phyml_optbranch", phyml_optbranch);
 		phyml_opttop = getBool("phyml_opttop", phyml_opttop);
@@ -563,11 +586,17 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
 
+		p.setProperty("mb_type", ""+mb_type);
 		p.setProperty("mb_runs", ""+mb_runs);
 		p.setProperty("mb_gens", ""+mb_gens);
 		p.setProperty("mb_samplefreq", ""+mb_samplefreq);
 		p.setProperty("mb_burnin", ""+mb_burnin);
 		
+		p.setProperty("rax_type", ""+rax_type);
+		p.setProperty("rax_ratehet", ""+rax_ratehet);
+		p.setProperty("rax_empfreq", ""+rax_empfreq);
+		p.setProperty("rax_protmodel", ""+rax_protmodel);
+			
 		p.setProperty("phyml_bootstrap", ""+phyml_bootstrap);
 		p.setProperty("phyml_optbranch", ""+phyml_optbranch);
 		p.setProperty("phyml_opttop", ""+phyml_opttop);
@@ -698,10 +727,19 @@ public class Prefs extends PreferencesXML
 	}
 
 	public static void setMBDefaults() {
+		mb_type = 0;
 		mb_runs = 2;
 		mb_gens = 100000;
 		mb_samplefreq = 10;
 		mb_burnin = 25;
+	}
+	
+	public static void setRaxDefaults() {
+		rax_type = 0;
+		rax_bootstrap = 0;
+		rax_empfreq = false;
+		rax_ratehet = "MIX";
+		rax_protmodel = "WAG";
 	}
 	
 	public static void setPhymlDefaults() {

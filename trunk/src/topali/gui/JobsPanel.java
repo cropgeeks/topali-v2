@@ -265,6 +265,19 @@ public class JobsPanel extends JPanel
 				job = new PhymlLocalJob((PhymlResult)result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
+		
+		else if(result instanceof RaxmlResult) {
+			RaxmlResult res = (RaxmlResult)result;
+			if(result.isRemote)
+				job = new RaxmlRemoteJob(res, data);
+			else
+				job = new RaxmlLocalJob(res, data);
+				
+			if(res.bootstrap>0)
+				entry = new ProgressBarJobEntry(job);
+			else
+				entry = new NoTrackingJobEntry(job);
+		}
 
 		else if(result instanceof MGResult) {
 			if(result.isRemote)

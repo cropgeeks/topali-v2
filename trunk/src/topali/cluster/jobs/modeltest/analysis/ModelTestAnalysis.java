@@ -29,6 +29,8 @@ public class ModelTestAnalysis extends AnalysisThread
 	{
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");
 		ModelTestResult result = (ModelTestResult) Castor.unmarshall(resultFile);
+		
+		System.out.println("ModelTestAnalysis runAnalysis()");
 		ModelTestProcess proc = new ModelTestProcess(runDir, result);
 		proc.run();
 	}

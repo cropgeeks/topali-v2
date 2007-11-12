@@ -7,7 +7,7 @@ package topali.cluster.jobs.mrbayes;
 
 import java.util.*;
 
-import topali.data.MBPartition;
+import topali.data.*;
 import topali.data.models.Model;
 
 public class MBCmdBuilder

@@ -44,16 +44,17 @@ public class WinMainMenuBar extends JMenuBar
 
 	public static JMenu mAnlsRunCodeML;
 	
+	JMenuItem mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove, mAnlsSettings;
+	
 	//Recombination
-	JMenuItem mAnlsRunPDM, mAnlsRunDSS, mAnlsRunHMM, mAnlsCreateTree,
-			mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove,
-			mAnlsSettings, mAnlsRunLRT, mAnlsRunPDM2;
+	JMenuItem mAnlsRunPDM, mAnlsRunDSS, mAnlsRunHMM, mAnlsRunLRT, mAnlsRunPDM2;
 	
 	//Positive Selection
 	JMenuItem mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
 	
-	//Model test
-	JMenuItem mAnlsRunMT;
+	//Phylogeny
+	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsPhyml, mAnlsRaxml;
+	JMenu mAnlsNJ, mAnlsBayes, mAnlsML; 
 
 	//CodonW
 	JMenuItem mAnlsRunCW;
@@ -87,8 +88,8 @@ public class WinMainMenuBar extends JMenuBar
 	//Positive Selection
 	public static AbstractAction aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
 	
-	//Model test
-	public static AbstractAction aAnlsRunMT;
+	//Phylogeny
+	public static AbstractAction aAnlsRunMT, aAnlsQuickTree, aAnlsMrBayes, aAnlsPhyml, aAnlsRaxml;
 	
 	//CodonW
 	public static AbstractAction aAnlsRunCW;
@@ -451,6 +452,34 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
+		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F81+G)") {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsQuickTree();
+			}
+		};
+		
+		aAnlsMrBayes = new AbstractAction("MrBayes...") {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsMrBayes(null);
+			}
+		};
+		
+		aAnlsPhyml = new AbstractAction("PhyML...") {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsPhyml(null);
+			}
+		};
+		
+		aAnlsRaxml = new AbstractAction("RaxML...") {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsRaxml(null);
+			}
+		};
+		
 		aAnlsRunCW = new AbstractAction("Check Codon Usage...") {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -715,29 +744,34 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls = new JMenu(Text.Gui.getString("menuAnls"));
 		mAnls.setMnemonic(KeyEvent.VK_N);
 
-//		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
-//		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0, Icons.RUN_PDM);
-//		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0, Icons.RUN_DSS);
-//		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0, Icons.RUN_HMM);
-//		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0, Icons.RUN_LRT);
-		//same without icons:
+		//Recombination
 		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0);
 		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0);
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0);
 		
+		//Positive Selection
 		mAnlsRunCodeMLSite = getItem(aAnlsRunCodeMLSite, KeyEvent.VK_S, 0, 0);
 		mAnlsRunCodeMLBranch = getItem(aAnlsRunCodeMLBranch, KeyEvent.VK_B, 0, 0);
 		
+		//Phylogeny
 		mAnlsRunMT = getItem(aAnlsRunMT, KeyEvent.VK_M, 0, 0);
+		mAnlsQuickTree = getItem(aAnlsQuickTree, KeyEvent.VK_Q, 0, 0);
+		mAnlsMrBayes = getItem(aAnlsMrBayes, 0, 0, 0);
+		mAnlsPhyml = getItem(aAnlsPhyml, 0, 0, 0);
+		mAnlsRaxml = getItem(aAnlsRaxml, 0, 0, 0);
+		mAnlsNJ = new JMenu("Neighbour Joining Tree");
+		mAnlsBayes = new JMenu("Bayesian Tree");
+		mAnlsML = new JMenu("Maximum Likelehood Tree");
 		
+		//Misc
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
 		
 		//mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
-		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK);
+//		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK);#
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
-		mAnlsCreateTree.setDisplayedMnemonicIndex(9);
+//		mAnlsCreateTree.setDisplayedMnemonicIndex(9);
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
 				InputEvent.CTRL_MASK);
 		mAnlsRename = getItem(aAnlsRename, KeyEvent.VK_N, 0, 0);
@@ -763,7 +797,14 @@ public class WinMainMenuBar extends JMenuBar
 		h3.setIcon(Icons.TREE);
 		mAnls.add(h3);
 		mAnls.add(mAnlsRunMT);
-		mAnls.add(mAnlsCreateTree);
+			mAnlsNJ.add(mAnlsQuickTree);
+		mAnls.add(mAnlsNJ);
+			mAnlsBayes.add(mAnlsMrBayes);
+		mAnls.add(mAnlsBayes);
+			mAnlsML.add(mAnlsPhyml);
+			mAnlsML.add(mAnlsRaxml);
+		mAnls.add(mAnlsML);
+		//mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
 		MenuHeading h4 = new MenuHeading("Codon Usage");
 		h4.setIcon(Icons.CODINGREGIONS);
@@ -915,6 +956,10 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunCodeMLBranch.setEnabled(false);
 		aAnlsRunCodeMLSite.setEnabled(false);
 		aAnlsRunMT.setEnabled(false);
+		aAnlsQuickTree.setEnabled(false);
+		aAnlsMrBayes.setEnabled(false);
+		aAnlsPhyml.setEnabled(false);
+		aAnlsRaxml.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);
 		aAnlsCreateTree.setEnabled(false);
 		aAnlsPartition.setEnabled(false);
