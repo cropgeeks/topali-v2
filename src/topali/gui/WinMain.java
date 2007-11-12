@@ -13,31 +13,31 @@ import java.beans.*;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import pal.alignment.Alignment;
 import pal.tree.Tree;
+import sbrn.commons.file.FileUtils;
 import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
-import topali.data.models.*;
 import topali.gui.dialog.*;
 import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
-import topali.gui.dialog.jobs.mt.*;
+import topali.gui.dialog.jobs.mt.MTDialog;
 import topali.gui.dialog.jobs.tree.CreateTreeDialog;
+import topali.gui.dialog.jobs.tree.mrbayes.MrBayesDialog;
+import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
+import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
-import topali.var.Utils;
 import doe.MsgBox;
-
-import sbrn.commons.file.*;
 
 public class WinMain extends JFrame implements PropertyChangeListener
 {
@@ -587,6 +587,85 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		dlg.setVisible(true);
 		
 		ModelTestResult res = dlg.getResult();
+		
+		if(res!=null)
+			submitJob(data, res);
+	}
+
+	public void menuAnlsQuickTree() {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		int[] indices = data.getSequenceSet().getSelectedSequences();
+		if (indices.length < 3)
+		{
+			MsgBox.msg("You must have at least 3 sequences selected to create "
+					+ "a phylogenetic tree.", MsgBox.ERR);
+			return;
+		}
+		
+		TreeResult tr = new TreeResult();
+		
+		tr.setPartitionStart(data.getActiveRegionS());
+		tr.setPartitionEnd(data.getActiveRegionE());
+		tr.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
+		
+		int runNum = data.getTracker().getTreeRunCount() + 1;
+		data.getTracker().setTreeRunCount(runNum);
+		
+		if(data.getSequenceSet().getParams().isDNA())
+			tr.guiName = "F84+G Tree" + runNum;
+		else
+			tr.guiName = "WAG+G Tree" + runNum;
+		tr.jobName = "Tree Estimation";
+		
+		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
+		TreeCreator creator = new TreeCreator(alignment, data
+				.getSequenceSet().getParams().isDNA(), true, true);
+		Tree palTree = creator.getTree();
+
+		if (palTree != null)
+		{
+			tr.setTreeStr(palTree.toString());
+			tr.startTime = creator.getStartTime();
+			tr.endTime = creator.getEndTime();
+			tr.status = topali.cluster.JobStatus.COMPLETED;
+			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)"
+					: "WAG";
+			tr.info = "Sub. Model: "
+					+ model
+					+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
+			data.addResult(tr);
+			ProjectState.setDataChanged();
+		}
+	}
+	
+	public void menuAnlsMrBayes(TreeResult result) {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		MrBayesDialog dlg = new MrBayesDialog(this, data, result);
+		dlg.setVisible(true);
+		
+		MBTreeResult res = dlg.getResult();
+		
+		if(res!=null)
+			submitJob(data, res);
+	}
+
+	public void menuAnlsPhyml(TreeResult result) {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		PhymlDialog dlg = new PhymlDialog(this, data, result);
+		dlg.setVisible(true);
+		
+		PhymlResult res = dlg.getResult();
+		
+		if(res!=null)
+			submitJob(data, res);
+	}
+	
+	public void menuAnlsRaxml(TreeResult result) {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		RaxmlDialog dlg = new RaxmlDialog(this, data, result);
+		dlg.setVisible(true);
+		
+		RaxmlResult res = dlg.getResult();
 		
 		if(res!=null)
 			submitJob(data, res);

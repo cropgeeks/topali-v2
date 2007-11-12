@@ -2,11 +2,9 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Replaced fixed model images with ModelDiagram and RateHetDiagram to visualize substitution models
-- TreeResult now also holds log likelihood (lnl)
-- Modified PhyML parser to read lnl
-- Modified MrBayes parser to read lnl (not working yet)
-
+- Added on-the-fly generation of protein model diagramms
+- Added new webservice RaxML
+- Split former TreeDialog into several submenus in the analysis menu
 
 
 TODO:

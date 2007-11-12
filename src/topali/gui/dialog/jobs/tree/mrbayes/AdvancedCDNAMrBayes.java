@@ -4,7 +4,7 @@
  * Created on 18 October 2007, 15:58
  */
 
-package topali.gui.dialog.jobs.tree;
+package topali.gui.dialog.jobs.tree.mrbayes;
 
 import java.util.List;
 

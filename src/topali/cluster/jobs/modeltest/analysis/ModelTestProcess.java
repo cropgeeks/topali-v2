@@ -17,6 +17,7 @@ public class ModelTestProcess extends StoppableProcess
 	ModelTestProcess(File wrkDir, ModelTestResult result)
 	{
 		this.wrkDir = wrkDir;
+		//super class StoppableProcess needs the result
 		this.result = result;
 		runCancelMonitor();
 	}

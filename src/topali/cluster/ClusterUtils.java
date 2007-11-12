@@ -84,6 +84,13 @@ public class ClusterUtils
 		return sb.toString();
 	}
 
+	public static void writeFile(File filename, String content) throws Exception {
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+		out.write(content);
+		out.flush();
+		out.close();
+	}
+	
 	// Given a percentage value (eg 30), the appropriate number of p[n] files
 	// will be written into the directory to track a job's progress. If files
 	// p1 to p25 already exist, then this would add p26-p30

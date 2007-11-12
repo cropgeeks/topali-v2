@@ -4,7 +4,7 @@
  * Created on 07 September 2007, 08:23
  */
 
-package topali.gui.dialog.jobs.tree;
+package topali.gui.dialog.jobs.tree.phyml;
 
 import java.util.*;
 
@@ -31,17 +31,17 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 	public String altModel = "";
 	
     /** Creates new form AdvancedPhyML */
-    public AdvancedPhyML(SequenceSet ss, PhymlResult result) {
+    public AdvancedPhyML(SequenceSet ss, TreeResult result) {
     	this.ss = ss;
 		this.result = new PhymlResult();
         initComponents();
         setDefaults();
         
         if(result!=null)
-        	initPrevResult(result);
+        	initPrevResult((PhymlResult)result);
     }
     
-    private void setDefaults() {
+    public void setDefaults() {
 		SequenceSetParams params = ss.getParams();
 		
 		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.isDNA());
@@ -53,7 +53,7 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		this.subModel.setModel(cm);
 		
 		Model m = params.getModel();
-		while(!Utils.contains(models, m.getName())) {
+		while(Utils.indexof(models, m.getName())==-1) {
 			modelIsSupported = false;
 			Model next = ModelManager.getInstance().getNearestModel(m);
 			if(next.getName().equals(m.getName())) {

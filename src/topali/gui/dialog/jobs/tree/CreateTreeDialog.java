@@ -13,6 +13,8 @@ import javax.swing.*;
 import pal.alignment.Alignment;
 import topali.data.*;
 import topali.gui.*;
+import topali.gui.dialog.jobs.tree.mrbayes.*;
+import topali.gui.dialog.jobs.tree.phyml.AdvancedPhyML;
 import topali.var.Utils;
 import doe.MsgBox;
 

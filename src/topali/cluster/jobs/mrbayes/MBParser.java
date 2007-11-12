@@ -54,7 +54,7 @@ public class MBParser
 			
 			if(str.startsWith("the phylogenetic context")) {
 				summary.append(str);
-				summary.append('\n');
+				summary.append("\n\n");
 				p2 = false;
 				continue;
 			}
@@ -83,7 +83,8 @@ public class MBParser
 				summary.append(str);
 				if(!p3)
 					summary.append("\n-----------------------------------------");
-				summary.append('\n');
+				else
+					summary.append('\n');
 				p3 = true;
 				String[] tmp = str.split("\\s+");
 				try

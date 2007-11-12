@@ -39,3 +39,9 @@ echo ""
 echo "Compiling FastML"
 cd ../fastml
 g++ -o fastml -O3 *.cpp
+
+echo ""
+echo "Compiling RaxML"
+cd ../raxml
+make
+

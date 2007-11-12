@@ -49,6 +49,12 @@
   <parameter name="scope" value="request"/>
 </service>
 
+<service name="topali-rx" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.raxml.RaxmlWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
 <service name="topali-mt" provider="java:RPC">
   <parameter name="className" value="topali.cluster.jobs.modeltest.ModelTestWebService"/>
   <parameter name="allowedMethods" value="*"/>

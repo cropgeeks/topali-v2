@@ -82,6 +82,10 @@ public class SequenceSetNode extends INode
 		aAnlsRunCodeMLBranch.setEnabled(dna);
 		aAnlsRunCodeMLSite.setEnabled(dna);
 		aAnlsRunMT.setEnabled(true);
+		aAnlsQuickTree.setEnabled(true);
+		aAnlsMrBayes.setEnabled(true);
+		aAnlsPhyml.setEnabled(true);
+		aAnlsRaxml.setEnabled(true);
 		aAnlsRunCW.setEnabled(dna);
 		
 		aAnlsCreateTree.setEnabled(true);

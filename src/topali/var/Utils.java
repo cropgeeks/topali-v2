@@ -371,16 +371,30 @@ public class Utils
 		return result;
 	}
 	
-	public static boolean contains(Object[] list, Object obj) {
-		for(Object o : list) {
-			if(o.equals(obj))
-				return true;
+	public static int indexof(Object[] list, Object obj, boolean ignoreCase) {
+		if(ignoreCase) {
+			String[] tmp = new String[list.length];
+			for(int i=0; i<list.length; i++)
+				tmp[i] = list[i].toString().toLowerCase();
+			return indexof(tmp, obj.toString().toLowerCase());
 		}
-		return false;
+		else
+			return indexof(list, obj);
 	}
 	
-	public static boolean contains(List<Object> list, Object obj) {
-		return contains(list.toArray(), obj);
+	public static int indexof(List<Object> list, Object obj) {
+		return indexof(list.toArray(), obj);
+	}
+	
+	public static int indexof(Object[] list, Object obj) {
+		int index = -1;
+		for(int i=0; i<list.length; i++) {
+			if(list[i].equals(obj)) {
+				index = i;
+				break;
+			}
+		}
+		return index;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -392,4 +406,36 @@ public class Utils
 		}
 		return result;
 	}
+	
+	/**
+	 * Generates a Color from a String
+	 * @param name
+	 * @return
+	 */
+	public static Color calcColor(String str) {
+    	final char[] abc = new char[] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    
+    	str = str.toLowerCase();
+    	int r=0, g=0, b=0;
+    	for(int i=0; i<str.length(); i++) {
+    		int j;
+    		for(j=0; j<abc.length; j++)
+    			if(abc[j]==str.charAt(i))
+    				break;
+    		
+    		int mod = i%3;
+    		if(mod==0)
+    			r += j;
+    		if(mod==1)
+    			g += j;
+    		if(mod==2)
+    			b += j;
+    	}
+    
+    	double f = (double)str.length()/3d;
+    	r = 255 - (int)(r/f);
+    	g = 255 - (int)(g/f);
+    	b = 255 - (int)(b/f);
+    	return new Color(r,g,b);
+    }
 }

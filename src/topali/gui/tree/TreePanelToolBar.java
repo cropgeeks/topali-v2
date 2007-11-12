@@ -205,6 +205,10 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			sb.append("\n" + ss.getNameForSafeName(seq));
 		sb.append("\n\nSelected Partition:\n"+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
 		
+		if(tResult.getLnl()!=0) {
+			sb.append("\n\nLikelihood: "+Prefs.d2.format(tResult.getLnl()));
+		}
+		
 		sb.append("\n\nAdditional parameters:\n");
 		sb.append(tResult.info);
 		

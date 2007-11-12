@@ -99,11 +99,11 @@ public class DNAModel extends Model
 	/**
 	 * A C G T
 	 * 0 1 2 3
-	 * @param baseFreqs
+	 * @param aaFreqs
 	 */
 	public void setBaseFreqs(double... baseFreqs) {
 		if(baseFreqs.length!=4)
-			throw new IllegalArgumentException("baseFreqs has to contain 4 doubles");
+			throw new IllegalArgumentException("aaFreqs has to contain 4 doubles");
 		this.baseFreqs = baseFreqs;
 	}
 	
@@ -250,7 +250,7 @@ public class DNAModel extends Model
 		sb.append("subRateGroups: "+Utils.arrayToString(subRateGroups, ',')+"\n");
 		sb.append("baseFreqGroups: "+Utils.arrayToString(baseFreqGroups, ',')+"\n");
 		sb.append("subRates: "+Utils.arrayToString(subRates, ',')+"\n");
-		sb.append("baseFreqs: "+Utils.arrayToString(baseFreqs, ',')+"\n");
+		sb.append("aaFreqs: "+Utils.arrayToString(baseFreqs, ',')+"\n");
 		return sb.toString();
 	}
 }
