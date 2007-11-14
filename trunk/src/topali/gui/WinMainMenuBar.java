@@ -54,7 +54,7 @@ public class WinMainMenuBar extends JMenuBar
 	
 	//Phylogeny
 	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsPhyml, mAnlsRaxml;
-	JMenu mAnlsNJ, mAnlsBayes, mAnlsML; 
+	public static JMenu mAnlsNJ, mAnlsBayes, mAnlsML; 
 
 	//CodonW
 	JMenuItem mAnlsRunCW;
@@ -452,7 +452,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F81+G)") {
+		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F81/WAG+G)...") {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsQuickTree();
@@ -768,10 +768,7 @@ public class WinMainMenuBar extends JMenuBar
 		//Misc
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
 		
-		//mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.CTRL_MASK, Icons.CREATE_TREE);
-//		mAnlsCreateTree = getItem(aAnlsCreateTree, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK);#
 		mAnlsPartition = getItem(aAnlsPartition, KeyEvent.VK_A, 0, 0);
-//		mAnlsCreateTree.setDisplayedMnemonicIndex(9);
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
 				InputEvent.CTRL_MASK);
 		mAnlsRename = getItem(aAnlsRename, KeyEvent.VK_N, 0, 0);
@@ -956,8 +953,12 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunCodeMLBranch.setEnabled(false);
 		aAnlsRunCodeMLSite.setEnabled(false);
 		aAnlsRunMT.setEnabled(false);
+		
+		mAnlsNJ.setEnabled(false);
 		aAnlsQuickTree.setEnabled(false);
+		mAnlsBayes.setEnabled(false);
 		aAnlsMrBayes.setEnabled(false);
+		mAnlsML.setEnabled(false);
 		aAnlsPhyml.setEnabled(false);
 		aAnlsRaxml.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);

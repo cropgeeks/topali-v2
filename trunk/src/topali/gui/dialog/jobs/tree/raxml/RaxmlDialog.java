@@ -52,6 +52,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		basic = new RaxmlBasicPanel();
 		basic.bCodonpos.addActionListener(this);
+		basic.bCodonpos.setEnabled(data.getSequenceSet().isCodons());
 		basic.bOnemodel.addActionListener(this);
 		advanced = new RaxmlAdvancedPanel(data);
 		advanced.init(result);
@@ -59,13 +60,13 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		cdnaadvanced.init(result);
 		
 		tabs.add(basic, 0);
-		if(Prefs.rax_type==0)  {
-			tabs.add(new JScrollPane(advanced), 1);
-			basic.bOnemodel.setSelected(true);
-		}
-		else {
+		if(Prefs.rax_type==1 && data.getSequenceSet().isCodons())  {
 			tabs.add(new JScrollPane(cdnaadvanced), 1);
 			basic.bCodonpos.setSelected(true);
+		}
+		else {
+			tabs.add(new JScrollPane(advanced), 1);
+			basic.bOnemodel.setSelected(true);
 		}
 		
 		tabs.setTitleAt(0, "Analysis");
@@ -77,9 +78,11 @@ public class RaxmlDialog extends JDialog implements ActionListener
 	private void ok(boolean remote) {
 		if(basic.bOnemodel.isSelected()) {
 			this.result = advanced.onOK();
+			Prefs.rax_type = 0;
 		}
 		else if(basic.bCodonpos.isSelected()) {
 			this.result = cdnaadvanced.onOK();
+			Prefs.rax_type = 1;
 		}
 		
 		result.isRemote = remote;

@@ -55,29 +55,14 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		this.subModel.setModel(cm);
 
 		Model m = params.getModel();
-		while(Utils.indexof(models, m.getName())==-1) {
-			modelIsSupported = false;
-			Model next = ModelManager.getInstance().getNearestModel(m);
-			if(next.getName().equals(m.getName())) {
-				altModelFound = false;
-				if(ss.isDNA()) 
-					m = ModelManager.getInstance().generateModel("hky", m.isGamma(), m.isInv());
-				else
-					m = ModelManager.getInstance().generateModel("wag", m.isGamma(), m.isInv());
-				break;
-			}
-			else 
-				m = next;
-		}
-		altModel = m.getName();
-		
-		for(int i=0; i<models.length; i++) {
-			if(models[i].equals(m.getName())) {
-				this.subModel.setSelectedIndex(i);
-				break;
-			}
+		if(Utils.indexof(models, m.getName())==-1) {
+			if(ss.isDNA())
+				m = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, m.isGamma(), m.isInv());
+			else
+				m = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, m.isGamma(), m.isInv());
 		}
 		
+		this.subModel.setSelectedItem(m.getName());
 		
 		this.gamma.setSelected(params.getModel().isGamma());
 		this.inv.setSelected(params.getModel().isInv());

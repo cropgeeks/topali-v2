@@ -22,10 +22,12 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import pal.misc.Identifier;
 import pal.tree.*;
 import topali.cluster.ClusterUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.var.tree.PalTree2NH;
 import doe.MsgBox;
 
 /**
@@ -303,14 +305,44 @@ public class Utils
 		try
 		{
 			PushbackReader pbread = new PushbackReader(new StringReader(tree));
+		
 			ReadTree t = new ReadTree(pbread);
+			Hashtable<List<Node>, String> bs = new Hashtable<List<Node>, String>();
+			int c = t.getInternalNodeCount();
+			for(int i=0; i<c; i++) {
+				Node node = t.getInternalNode(i);
+				List<Node> children = new LinkedList<Node>();
+				children = getChildren(node, children);
+				bs.put(children, node.getIdentifier().getName());
+			}
+		
 			Tree t2 = TreeRooter.getMidpointRooted(t);
-			return t2.toString();
+			c = t2.getInternalNodeCount();
+			for(int i=0; i<c; i++) {
+				Node node = t2.getInternalNode(i);
+				Node c1 = node.getChild(0);
+				Node c2 = node.getChild(1);
+				String tmp = bs.get(c1.toString()+"-"+c2.toString());
+				if(tmp!=null)
+					t2.setAttribute(node, "bootstrap", tmp);
+			}
+			
+			return (new PalTree2NH(t2)).getNW();
 		} catch (TreeParseException e)
 		{
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	private static List<Node> getChildren(Node node, List<Node> children) {
+		int c = node.getChildCount();
+		for(int i=0; i<c; i++) {
+			Node child = node.getChild(i);
+			children.add(child);
+			getChildren(child, children);
+		}
+		return children;
 	}
 	
 	public static String getSafenameTree(String tree, SequenceSet ss) {

@@ -64,8 +64,6 @@ public class PhymlDialog extends JDialog implements ActionListener
 		result.guiName = "Tree "+runNum+" (PhyML)";
 		result.jobName = "PhyML Tree Estimation";
 		
-		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		
 		//Path to Phyml
 		if (Prefs.isWindows)
 			result.phymlPath = Utils.getLocalPath() + "\\phyml_win32.exe";

@@ -43,7 +43,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 		rImport = new JRadioButton(
 				"by using an existing file on disk that already "
-						+ "contains aligned DNA");
+						+ "contains aligned DNA (or Protein)");
 		rImport.setMnemonic(KeyEvent.VK_E);
 		rImport.addMouseListener(dblListener);
 		rCDNA = new JRadioButton(

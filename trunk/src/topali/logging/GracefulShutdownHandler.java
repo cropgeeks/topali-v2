@@ -114,6 +114,9 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 
 	public void uncaughtException(Thread t, Throwable e)
 	{
+		if(e instanceof ThreadDeath)
+			return;
+		
 		Logger.getRootLogger().fatal(
 				"An uncaught Exception has been thrown in Thread "
 						+ t.getName() + "!", e);

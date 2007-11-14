@@ -52,12 +52,13 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		basic = new MrBayesBasicPanel();
 		basic.bCodonpos.addActionListener(this);
+		basic.bCodonpos.setEnabled(data.getSequenceSet().isCodons());
 		basic.bOnemodel.addActionListener(this);
 		advanced = new AdvancedMrBayes(data.getSequenceSet(), result);
 		advancedCDNA = new AdvancedCDNAMrBayes(data.getSequenceSet(), result);
 		
 		tabs.add(basic, 0);
-		if(Prefs.mb_type==1) {
+		if(Prefs.mb_type==1 && data.getSequenceSet().isCodons()) {
 			tabs.add(new JScrollPane(advancedCDNA), 1);
 			basic.bCodonpos.setSelected(true);
 		}

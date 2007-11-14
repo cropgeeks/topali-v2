@@ -15,6 +15,7 @@ import topali.cluster.jobs.mrbayes.MBCmdBuilder;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
+import topali.var.Utils;
 
 /**
  *
@@ -70,6 +71,12 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	p3mod.setModel(new DefaultComboBoxModel(models));
     	
     	Model defModel = ss.getParams().getModel();
+    	if(Utils.indexof(models, defModel.getName())==-1) {
+			if(ss.isDNA())
+				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel.isGamma(), defModel.isInv());
+			else
+				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel.isGamma(), defModel.isInv());
+		}
     	p1mod.setSelectedItem(defModel.getName());
     	p2mod.setSelectedItem(defModel.getName());
     	p3mod.setSelectedItem(defModel.getName());

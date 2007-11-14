@@ -22,6 +22,7 @@ import pal.alignment.Alignment;
 import pal.tree.Tree;
 import sbrn.commons.file.FileUtils;
 import topali.analyses.*;
+import topali.analyses.tree.BootstrapGenerator;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
@@ -35,8 +36,10 @@ import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
+import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
+import topali.var.tree.PalTree2NH;
 import doe.MsgBox;
 
 public class WinMain extends JFrame implements PropertyChangeListener
@@ -593,6 +596,22 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	}
 
 	public void menuAnlsQuickTree() {
+		JPanel p = new JPanel();
+		p.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		SpinnerNumberModel mod = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);
+		JSpinner bs = new JSpinner(mod);
+		p.add(new JLabel("Bootstraps:"));
+		p.add(bs);
+		
+		int ok = JOptionPane.showConfirmDialog(this, p, "Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		
+		if(ok==JOptionPane.OK_OPTION) {
+			Prefs.qt_bootstrap = (Integer)bs.getValue();
+			menuAnlsQuickTree((Integer)bs.getValue());
+		}
+	}
+	
+	public void menuAnlsQuickTree(int boots) {
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		int[] indices = data.getSequenceSet().getSelectedSequences();
 		if (indices.length < 3)
@@ -618,13 +637,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		tr.jobName = "Tree Estimation";
 		
 		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
-		TreeCreator creator = new TreeCreator(alignment, data
-				.getSequenceSet().getParams().isDNA(), true, true);
+		
+		TreeCreator creator = new TreeCreator(alignment, data.getSequenceSet().getParams().isDNA(), false, true);
 		Tree palTree = creator.getTree();
-
+				
+		if(boots>0) {
+			BootstrapGenerator bg = new BootstrapGenerator(palTree, alignment, data.getSequenceSet().isDNA(), false, boots);
+			palTree = bg.getTree();
+		}
+		
 		if (palTree != null)
 		{
-			tr.setTreeStr(palTree.toString());
+			//tr.setTreeStr(palTree.toString());
+			tr.setTreeStr((new PalTree2NH(palTree).getNW()));
 			tr.startTime = creator.getStartTime();
 			tr.endTime = creator.getEndTime();
 			tr.status = topali.cluster.JobStatus.COMPLETED;
@@ -632,11 +657,65 @@ public class WinMain extends JFrame implements PropertyChangeListener
 					: "WAG";
 			tr.info = "Sub. Model: "
 					+ model
-					+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
+					+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining\n" +
+							"Bootstrap: "+boots;
 			data.addResult(tr);
 			ProjectState.setDataChanged();
+			
+			 TreePane treePane = navPanel.getCurrentTreePane(data, true);
+			 treePane.displayTree(data.getSequenceSet(), tr);
 		}
+		
 	}
+	
+//	public void menuAnlsQuickTree() {
+//		AlignmentData data = navPanel.getCurrentAlignmentData();
+//		int[] indices = data.getSequenceSet().getSelectedSequences();
+//		if (indices.length < 3)
+//		{
+//			MsgBox.msg("You must have at least 3 sequences selected to create "
+//					+ "a phylogenetic tree.", MsgBox.ERR);
+//			return;
+//		}
+//		
+//		TreeResult tr = new TreeResult();
+//		
+//		tr.setPartitionStart(data.getActiveRegionS());
+//		tr.setPartitionEnd(data.getActiveRegionE());
+//		tr.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
+//		
+//		int runNum = data.getTracker().getTreeRunCount() + 1;
+//		data.getTracker().setTreeRunCount(runNum);
+//		
+//		if(data.getSequenceSet().getParams().isDNA())
+//			tr.guiName = "F84+G Tree" + runNum;
+//		else
+//			tr.guiName = "WAG+G Tree" + runNum;
+//		tr.jobName = "Tree Estimation";
+//		
+//		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
+//		TreeCreator creator = new TreeCreator(alignment, data
+//				.getSequenceSet().getParams().isDNA(), true, true);
+//		Tree palTree = creator.getTree();
+//
+//		if (palTree != null)
+//		{
+//			tr.setTreeStr(palTree.toString());
+//			tr.startTime = creator.getStartTime();
+//			tr.endTime = creator.getEndTime();
+//			tr.status = topali.cluster.JobStatus.COMPLETED;
+//			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)"
+//					: "WAG";
+//			tr.info = "Sub. Model: "
+//					+ model
+//					+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
+//			data.addResult(tr);
+//			ProjectState.setDataChanged();
+//			
+//			 TreePane treePane = navPanel.getCurrentTreePane(data, true);
+//			 treePane.displayTree(data.getSequenceSet(), tr);
+//		}
+//	}
 	
 	public void menuAnlsMrBayes(TreeResult result) {
 		AlignmentData data = navPanel.getCurrentAlignmentData();

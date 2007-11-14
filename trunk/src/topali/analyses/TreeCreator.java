@@ -37,6 +37,8 @@ public class TreeCreator extends JDialog
 	private boolean showDialog = false;
 	private boolean mproot = false;
 	
+	Thread treeCreationThread;
+	
 	public TreeCreator(Alignment alignment, boolean isDNA, boolean mproot, boolean showDialog)
 	{
 		super(MsgBox.frm, Text.Analyses.getString("TreeCreator.gui01"), true);
@@ -48,7 +50,7 @@ public class TreeCreator extends JDialog
 		createDialog();
 	}
 	
-	private void createTree()
+	public void createTree()
 	{
 		try
 		{
@@ -117,6 +119,11 @@ public class TreeCreator extends JDialog
 		return end;
 	}
 	
+	public void kill() {
+		if(treeCreationThread!=null && treeCreationThread.isAlive())
+			treeCreationThread.stop();
+	}
+	
 	private void createDialog()
 	{
 		addWindowListener(new WindowAdapter()
@@ -131,8 +138,19 @@ public class TreeCreator extends JDialog
 						createTree();
 					}
 				};
-				new Thread(r).start();
+				treeCreationThread = new Thread(r);
+				treeCreationThread.start();
 			}
+
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				kill();
+				setVisible(false);
+				super.windowClosing(e);
+			}
+			
+			
 		});
 
 		JPanel p1 = new JPanel(new BorderLayout());
@@ -146,4 +164,6 @@ public class TreeCreator extends JDialog
 		setResizable(false);
 		setLocationRelativeTo(MsgBox.frm);
 	}
+	
+	
 }

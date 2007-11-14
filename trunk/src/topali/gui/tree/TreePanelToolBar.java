@@ -11,10 +11,13 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import pal.tree.TreeRooter;
+
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.AnalysisInfoDialog;
 import topali.var.*;
+import topali.var.tree.*;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
@@ -157,14 +160,11 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				TreeResult res = new TreeResult(tResult);
 				res.x = tResult.x+50;
 				res.y = tResult.y+50;
-				res.setTreeStr(Utils.midPointRoot(tResult.getTreeStr()));
+				TreeRooting rooter = new TreeRooting(tResult.getTreeStr());
+				String rooted = rooter.mpRoot();
+				res.setTreeStr(rooted);
 				res.guiName = tResult.guiName+" (midpoint rooted)";
 				treePane.addNewTree(res);
-//				InternalTreeFrame tmp = new InternalTreeFrame(treePane, ss, res, 0);
-//				tmp.addInternalFrameListener(treePane);
-//				tmp.setVisible(true);
-//				treePane.add(tmp);
-//				tmp.setSelected(true);
 			} catch (Exception e1)
 			{
 				e1.printStackTrace();

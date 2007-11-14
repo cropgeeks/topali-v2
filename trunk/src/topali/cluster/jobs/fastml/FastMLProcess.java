@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import topali.cluster.*;
 import topali.data.FastMLResult;
+import topali.gui.TOPALi;
 
 public class FastMLProcess extends StoppableProcess
 {
@@ -47,12 +48,13 @@ public class FastMLProcess extends StoppableProcess
 		String[] cmds = new String[cmdList.size()];
 		cmds = cmdList.toArray(cmds);
 		
-		String tmp = "";
-		for(String s : cmds)
-			tmp += s+" ";
-		log.info("Running FastML with: "+tmp);
+		if(TOPALi.debugJobs) {
+			StringBuffer tmp = new StringBuffer();
+			for(String s : cmds)
+				tmp.append(s+" ");
+			ClusterUtils.writeFile(new File(wrkDir, "cmds.txt"), tmp.toString());
+		}
 		
-		//sbrn.commons.file.FileUtils.writeFile(new File(wrkDir, "wibble"), result.mgPath);
 		ProcessBuilder pb = new ProcessBuilder(cmds);
 	
 		pb.directory(wrkDir);

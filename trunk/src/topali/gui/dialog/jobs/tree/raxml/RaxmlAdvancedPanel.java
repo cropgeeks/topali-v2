@@ -40,14 +40,24 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     		empfreq.setEnabled(false);
     	}
     	else {
-    		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"Dayhoff", "DCMut", "JTT", "MTRev", "WAG", "RTRev", "CPRev", "VT", "Blosum", "MtMam", "GTR"});
+    		String[] models = new String[] {"Dayhoff", "DCMut", "JTT", "MTRev", "WAG", "RTRev", "CPRev", "VT", "Blosum", "MtMam", "GTR"};
+    		DefaultComboBoxModel mod = new DefaultComboBoxModel(models);
     		model.setModel(mod);
+    		
+    		String defModel = Prefs.rax_protmodel;
     		if(res!=null && res.partitions.size()>0) {
     			RaxPartition f = res.partitions.get(0);
-    			model.setSelectedItem(f.model);
+    			defModel = f.model;
     		}
-    		else
-    			model.setSelectedItem(Prefs.rax_protmodel);
+    		else if(data.getSequenceSet().getParams().getModel()!=null) {
+    			for(String s : models) {
+    				if(data.getSequenceSet().getParams().getModel().is(s)) {
+    					defModel = s;
+    					break;
+    				}
+    			}
+    		}
+    		model.setSelectedItem(defModel);
     		model.setEnabled(true);
     		empfreqLabel.setEnabled(true);
     		empfreq.setEnabled(true);

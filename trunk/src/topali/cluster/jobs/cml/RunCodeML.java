@@ -16,7 +16,7 @@ import pal.tree.*;
 import sbrn.commons.file.FileUtils;
 import topali.cluster.StreamCatcher;
 import topali.data.*;
-import topali.var.NHTreeUtils;
+import topali.var.tree.NHTreeUtils;
 
 class RunCodeML
 {

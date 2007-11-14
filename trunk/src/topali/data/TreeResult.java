@@ -179,7 +179,7 @@ public class TreeResult extends AlignmentResult
 				seqName = safeName;
 			node.setIdentifier(new Identifier(seqName));
 		}
-
+		
 		return palTree;
 	}
 
