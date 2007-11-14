@@ -18,7 +18,7 @@ import pal.gui.*;
 import pal.tree.Tree;
 import topali.data.*;
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.*;
 
 class TreePanel extends JPanel
 {
@@ -77,7 +77,7 @@ class TreePanel extends JPanel
 
 		try
 		{
-			txtNewHamp.setText(palTree.toString());
+			txtNewHamp.setText(tree.getTreeStrActual(ss));
 		} catch (Exception e)
 		{
 			log.warn(e);

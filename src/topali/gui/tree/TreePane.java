@@ -5,6 +5,7 @@
 
 package topali.gui.tree;
 
+import java.awt.Component;
 import java.awt.print.Printable;
 import java.util.LinkedList;
 
@@ -45,12 +46,29 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 	{
 		try
 		{
-			InternalTreeFrame frame = new InternalTreeFrame(this, ss, tree, n);
+			InternalTreeFrame frame = null;
+			
+			Component[] comps = this.getComponents();
+			for(Component comp : comps) {
+				if(comp instanceof InternalTreeFrame) {
+					InternalTreeFrame tmp = (InternalTreeFrame)comp;
+					if(tmp.getResult().equals(tree)) {
+						frame = tmp;
+						break;
+					}
+				}
+			}
 
-			frame.addInternalFrameListener(this);
+			if(frame==null) {
+				frame = new InternalTreeFrame(this, ss, tree, n);
+				frame.addInternalFrameListener(this);
+				add(frame);
+				// (Potentially) reset the n counter used to position frames
+				n = ((++n > 10) ? 1 : n);
+			}
+
+			
 			frame.setVisible(true);
-
-			add(frame);
 
 			try
 			{
@@ -59,14 +77,12 @@ public class TreePane extends JDesktopPane implements InternalFrameListener
 			{
 			}
 
-			// (Potentially) reset the n counter used to position frames
-			n = ((++n > 10) ? 1 : n);
 		} catch (Exception e)
 		{
 			log.warn("Problem showing tree.\n",e);
 		}
 	}
-
+	
 	// Either floats (or stops floating) the given TreePanel. Each part of the
 	// IF statement must find the internal or external frame that holds the
 	// panel, then swap it into the opposite type.

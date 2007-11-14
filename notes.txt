@@ -2,14 +2,17 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added on-the-fly generation of protein model diagramms
-- Added new webservice RaxML
-- Split former TreeDialog into several submenus in the analysis menu
+- Fixed: After quick tree is created, view should automatically be switched to tree pane
+- Fixed: Codon position models can now just be selected if there is a dna alignment and sequence length 
+  is dividable by 3.
+- Bootstrapping now also possible with quick F84/WAG+G tree (ported the relevant code from Topali v1)
+- Creation of quick tree can now also be cancelled
+- Fixed a problem with FastML (was writting tree with real seq names)
 
+  
 
 TODO:
 - UpdateChecker doesn't work anymore
-- Add model diagrams for protein sub. models
 - Implement/decide on analysis restrictions for remote jobs
 - Bug: Dundee cluster filesystem timeout problems
 - Future: Estimate Tree dialog needs defaults button
@@ -23,7 +26,7 @@ Some ideas:
 
 
 Known Bugs
-----------
+- RaxML process sometimes doesn't stop
 
 
 Some URLs

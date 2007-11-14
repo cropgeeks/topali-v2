@@ -59,6 +59,10 @@ class InternalTreeFrame extends JInternalFrame implements ComponentListener
 		addComponentListener(this);
 	}
 
+	public TreeResult getResult() {
+		return this.tree;
+	}
+	
 	public void componentMoved(ComponentEvent e)
 	{
 		handleEvent();

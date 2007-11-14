@@ -193,17 +193,24 @@ public class Prefs extends PreferencesXML
 	// LRT analysis run settings
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 
+	// Quick tree settings
+	public static int qt_bootstrap;
+	
 	// Mr Bayes run settings
 	public static int mb_type;
 	public static int mb_runs;
 	public static int mb_gens;
 	public static int mb_samplefreq;
 	public static int mb_burnin;
+	public static String mb_default_dnamodel;
+	public static String mb_default_proteinmodel;
 	
 	// Phyml run settings
 	public static int phyml_bootstrap;
 	public static boolean phyml_opttop;
 	public static boolean phyml_optbranch;
+	public static String phyml_default_dnamodel;
+	public static String phyml_default_proteinmodel;
 	
 	//Raxml run settigns
 	public static int rax_type;
@@ -244,6 +251,7 @@ public class Prefs extends PreferencesXML
 		setHMMDefaults();
 		setDSSDefaults();
 		setLRTDefaults();
+		setQTDefaults();
 		setMBDefaults();
 		setRaxDefaults();
 		setPhymlDefaults();
@@ -408,6 +416,8 @@ public class Prefs extends PreferencesXML
 		lrt_runs = getInt("lrt_runs", lrt_runs);
 		lrt_method = getInt("lrt_method", lrt_method);
 
+		qt_bootstrap = getInt("qt_bootstrap", qt_bootstrap);
+		
 		mb_type = getInt("mb_type", mb_type);
 		mb_runs = getInt("mb_runs", mb_runs);
 		mb_gens = getInt("mb_gens", mb_gens);
@@ -586,6 +596,8 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
 
+		p.setProperty("qt_bootstrap", ""+qt_bootstrap);
+		
 		p.setProperty("mb_type", ""+mb_type);
 		p.setProperty("mb_runs", ""+mb_runs);
 		p.setProperty("mb_gens", ""+mb_gens);
@@ -726,12 +738,18 @@ public class Prefs extends PreferencesXML
 		lrt_method = topali.cluster.jobs.lrt.LRT.METHOD_JC;
 	}
 
+	public static void setQTDefaults() {
+		qt_bootstrap = 100;
+	}
+	
 	public static void setMBDefaults() {
 		mb_type = 0;
 		mb_runs = 2;
 		mb_gens = 100000;
 		mb_samplefreq = 10;
 		mb_burnin = 25;
+		mb_default_dnamodel = "HKY";
+		mb_default_proteinmodel = "WAG";
 	}
 	
 	public static void setRaxDefaults() {
@@ -746,6 +764,8 @@ public class Prefs extends PreferencesXML
 		phyml_bootstrap = 0;
 		phyml_optbranch = true;
 		phyml_opttop = true;
+		phyml_default_dnamodel = "HKY";
+		phyml_default_proteinmodel = "WAG";
 	}
 	
 	public static void setMSDefaults() {

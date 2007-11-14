@@ -44,7 +44,7 @@ public class RaxmlInitializer extends Thread
 			// Sequences that should be selected/saved for processing
 			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 			//Store alignment
-			ss.save(new File(jobDir, "seq"), indices, Filters.PHY_I, false);
+			ss.save(new File(jobDir, "seq"), indices, Filters.PHY_I, true);
 			
 			StringBuffer sb = new StringBuffer();
 			for(RaxPartition p : result.partitions) {
@@ -65,7 +65,7 @@ public class RaxmlInitializer extends Thread
 				runDir.mkdirs();
 
 				//Store alignment
-				ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, false);
+				ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, true);
 				
 				ClusterUtils.writeFile(new File(runDir, "partitions"), sb.toString());
 				

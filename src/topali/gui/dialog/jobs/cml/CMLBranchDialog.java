@@ -16,6 +16,7 @@ import topali.analyses.TreeCreator;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.*;
+import topali.var.tree.NHTreeUtils;
 
 public class CMLBranchDialog extends JDialog implements ActionListener
 {

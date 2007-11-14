@@ -19,6 +19,7 @@ import topali.data.*;
 import topali.gui.Prefs;
 import topali.gui.atv.ATV;
 import topali.var.*;
+import topali.var.tree.NHTreeUtils;
 
 import sbrn.commons.gui.DoeLayout;
 

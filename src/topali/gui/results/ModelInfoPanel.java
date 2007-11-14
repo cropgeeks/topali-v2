@@ -117,7 +117,8 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 				
         		modelDiagram.setModel(m);
         		
-        		Color c = Utils.calcColor(m.getName());
+        		//Color c = Utils.calcColor(m.getName());
+        		Color c = Color.WHITE;
         		modelDiagram.setBackground(c);
         		jPanel3.setBackground(c);
         		
