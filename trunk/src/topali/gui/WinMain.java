@@ -22,7 +22,6 @@ import pal.alignment.Alignment;
 import pal.tree.Tree;
 import sbrn.commons.file.FileUtils;
 import topali.analyses.*;
-import topali.analyses.tree.BootstrapGenerator;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
@@ -638,11 +637,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		
 		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
 		
-		TreeCreator creator = new TreeCreator(alignment, data.getSequenceSet().getParams().isDNA(), false, true);
+		TreeCreatorThread creator = new TreeCreatorThread(alignment, data.getSequenceSet().getParams().isDNA(), true);
 		Tree palTree = creator.getTree();
 				
 		if(boots>0) {
-			BootstrapGenerator bg = new BootstrapGenerator(palTree, alignment, data.getSequenceSet().isDNA(), false, boots);
+			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().isDNA(), boots);
 			palTree = bg.getTree();
 		}
 		
@@ -804,50 +803,50 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		submitJob(data, res);
 	}
 
-	public void menuAnlsCreateTree(TreeResult res)
-	{
-		AlignmentData data = navPanel.getCurrentAlignmentData();
-
-		CreateTreeDialog dialog = new CreateTreeDialog(this, data, res);
-		TreeResult result = dialog.getTreeResult();
-		if (result == null)
-			return;
-
-		// Tree being created on-the-fly as part of TOPALi
-		if (Prefs.gui_tree_method == 0)
-		{
-			// TreePane treePane = navPanel.getCurrentTreePane(data, true);
-			// TreeCreator creator = new TreeCreator(dialog.getAlignment());
-			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data
-					.getSequenceSet().getParams().isDNA(), true, true);
-			Tree palTree = creator.getTree();
-
-			if (palTree != null)
-			{
-				result.setTreeStr(palTree.toString());
-				result.startTime = creator.getStartTime();
-				result.endTime = creator.getEndTime();
-				result.status = topali.cluster.JobStatus.COMPLETED;
-				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)"
-						: "WAG";
-				result.info = "Sub. Model: "
-						+ model
-						+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
-
-				// Add the tree to the project
-				// data.getResults().add(result);
-				data.addResult(result);
-
-				// treePane.displayTree(data.getSequenceSet(), result);
-				//WinMainMenuBar.aFileSave.setEnabled(true);
-				//WinMainMenuBar.aVamCommit.setEnabled(true);
-				ProjectState.setDataChanged();
-			}
-		}
-		// Tree being created as a cluster/local job
-		else
-			submitJob(data, result);
-	}
+//	public void menuAnlsCreateTree(TreeResult res)
+//	{
+//		AlignmentData data = navPanel.getCurrentAlignmentData();
+//
+//		CreateTreeDialog dialog = new CreateTreeDialog(this, data, res);
+//		TreeResult result = dialog.getTreeResult();
+//		if (result == null)
+//			return;
+//
+//		// Tree being created on-the-fly as part of TOPALi
+//		if (Prefs.gui_tree_method == 0)
+//		{
+//			// TreePane treePane = navPanel.getCurrentTreePane(data, true);
+//			// TreeCreator creator = new TreeCreator(dialog.getAlignment());
+//			TreeCreator creator = new TreeCreator(dialog.getAlignment(), data
+//					.getSequenceSet().getParams().isDNA(), true, true);
+//			Tree palTree = creator.getTree();
+//
+//			if (palTree != null)
+//			{
+//				result.setTreeStr(palTree.toString());
+//				result.startTime = creator.getStartTime();
+//				result.endTime = creator.getEndTime();
+//				result.status = topali.cluster.JobStatus.COMPLETED;
+//				String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv=2)"
+//						: "WAG";
+//				result.info = "Sub. Model: "
+//						+ model
+//						+ "\nRate Model: Gamma (alpha=4)\nAlgorithm: Neighbour Joining";
+//
+//				// Add the tree to the project
+//				// data.getResults().add(result);
+//				data.addResult(result);
+//
+//				// treePane.displayTree(data.getSequenceSet(), result);
+//				//WinMainMenuBar.aFileSave.setEnabled(true);
+//				//WinMainMenuBar.aVamCommit.setEnabled(true);
+//				ProjectState.setDataChanged();
+//			}
+//		}
+//		// Tree being created as a cluster/local job
+//		else
+//			submitJob(data, result);
+//	}
 
 	public void submitJob(AlignmentData data, AnalysisResult result)
 	{

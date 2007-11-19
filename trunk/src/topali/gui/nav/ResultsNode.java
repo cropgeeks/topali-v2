@@ -31,7 +31,7 @@ public abstract class ResultsNode extends INode implements IPrintable
 	{
 		aFileExportDataSet.setEnabled(true);
 
-		aAnlsCreateTree.setEnabled(true);
+		//aAnlsCreateTree.setEnabled(true);
 		aAnlsPartition.setEnabled(true);
 		aAnlsRename.setEnabled(true);
 		aAnlsRemove.setEnabled(true);

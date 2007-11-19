@@ -44,6 +44,8 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		for(int i=0; i<tp.accessTable().getColumnCount(); i++)
 			sorter.setComparator(i, new SimpleComparator());
 		tp.accessTable().setRowSorter(sorter);
+		Font f = tp.accessTable().getFont();
+		tp.accessTable().setFont(f.deriveFont(Font.ITALIC, 20f));
 		p1.add(tp, BorderLayout.CENTER);
 		
 		infoPanel = new ModelInfoPanel(data,this);

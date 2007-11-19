@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import pal.tree.TreeRooter;
 
+import topali.analyses.TreeRootingThread;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.AnalysisInfoDialog;
@@ -92,7 +93,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bRoot.addActionListener(this);
 		
 		bAncestor.addActionListener(this);
-		bAncestor.setEnabled(tResult instanceof MBTreeResult || tResult instanceof PhymlResult);
+		bAncestor.setEnabled(tResult instanceof MBTreeResult || tResult instanceof PhymlResult || tResult instanceof RaxmlResult);
 		
 		add(new JLabel(" "));
 		add(bExport);
@@ -160,8 +161,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 				TreeResult res = new TreeResult(tResult);
 				res.x = tResult.x+50;
 				res.y = tResult.y+50;
-				TreeRooting rooter = new TreeRooting(tResult.getTreeStr());
-				String rooted = rooter.mpRoot();
+				TreeRootingThread rooter = new TreeRootingThread(tResult.getTreeStr(), true);
+				String rooted = rooter.getMPRootedTree();
 				res.setTreeStr(rooted);
 				res.guiName = tResult.guiName+" (midpoint rooted)";
 				treePane.addNewTree(res);

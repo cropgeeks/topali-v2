@@ -78,6 +78,8 @@ public class ProteinModelDiagram extends ModelDiagram
 		try
 		{
 			Graphics2D g2d = (Graphics2D)g;
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 			
 			//total w, h
 			int w = getWidth();
@@ -118,10 +120,28 @@ public class ProteinModelDiagram extends ModelDiagram
 		int offsetX = cw/2;
 		Font f = font.deriveFont(Font.BOLD, AffineTransform.getScaleInstance(0.5*scale, 0.5*scale));
 		int xs = x + offsetX - fw/2;
-		int ys = y+ch;
+		int ys = y+ch + fw/4;
 		for(int i=0; i<20; i++) {
 			int fh = (int)((baseFreqs[i]*ch)/maxFreq);
 			g2d.fillRect(xs, ys-fh, fw, fh);
+			
+			int ax = xs;
+			int ay = ys-fh;
+			int bx = ax+fw;
+			int by = ay;
+			int cx = bx;
+			int cy = by + fh;
+			int dx = ax + fw/4;
+			int dy = ay - fw/4;
+			int ex = bx  + fw/4;
+			int ey = by - fw/4;
+			int fx = cx + fw/4;
+			int fy = cy - fw/4;
+			g2d.setPaint(new RadialGradientPaint(new Point(ex-(fw/8), ey+(fw/8)), (float)(fw), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c1}));
+			g2d.fillPolygon(new int[] {ax, bx, ex, dx}, new int[] {ay, by, ey, dy}, 4);
+			g2d.fillPolygon(new int[] {bx, ex, fx, cx}, new int[] {by, ey, fy, cy}, 4);
+			
+			
 			if(i>0)
 				drawString(g2d, f, aa[i], xs+(fw/2), ys+(ch/2));
 			xs += cw;
@@ -131,6 +151,7 @@ public class ProteinModelDiagram extends ModelDiagram
 		//g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, new float[]{1f, 1f}, 0));
 		g2d.setColor(Color.BLACK);
 		g2d.drawLine(x, ys, rect.width, ys);
+		
 	}
 	
 	private void drawSubRateMatrix(Graphics2D g2d, Rectangle rect) {
@@ -149,10 +170,14 @@ public class ProteinModelDiagram extends ModelDiagram
 			drawString(g2d, f, aa[i], xs-cw, ys);
 			for(int j=i+1; j<20; j++) {
 				int r = (int)((subRates[i][j]/maxRate)*cmax/2d);
-				if(r<1 && subRates[i][j]>0)
-					drawPoint(g2d, xs, ys);
-				else
+				if(r<1) {
+					if(subRates[i][j]>0)
+						drawPoint(g2d, xs, ys);
+				}
+				else {
+					g2d.setPaint(new RadialGradientPaint(new Point(xs+(r/2), ys-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c0}));
 					fillCircle(g2d, xs, ys, r);
+				}
 				xs += cw;
 			}
 			xs = (cw*(i+1)) + cw + offsetX;

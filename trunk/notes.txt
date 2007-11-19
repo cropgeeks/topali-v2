@@ -2,16 +2,16 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Fixed: After quick tree is created, view should automatically be switched to tree pane
-- Fixed: Codon position models can now just be selected if there is a dna alignment and sequence length 
-  is dividable by 3.
-- Bootstrapping now also possible with quick F84/WAG+G tree (ported the relevant code from Topali v1)
-- Creation of quick tree can now also be cancelled
-- Fixed a problem with FastML (was writting tree with real seq names)
-
-  
+- Updated help texts
+- Updated "what's new" part for topali website
+- Created a little "framework" for running small threads (e.g. quick tree estimation) locally on the desktop
+  ("killable" thread class, showing "please wait" dialogs, etc.) (package var.threads)
+- Created workaround for loosing bootstrap values when midpoint rooting trees with PAL.
+- Improved ModelDiagram graphics
 
 TODO:
+- Check if writing back bootstrap values after midpoint rooting really works.
+- Increase table font size
 - UpdateChecker doesn't work anymore
 - Implement/decide on analysis restrictions for remote jobs
 - Bug: Dundee cluster filesystem timeout problems
@@ -27,6 +27,7 @@ Some ideas:
 
 Known Bugs
 - RaxML process sometimes doesn't stop
+- PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
 
 
 Some URLs

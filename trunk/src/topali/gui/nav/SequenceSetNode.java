@@ -91,7 +91,7 @@ public class SequenceSetNode extends INode
 		aAnlsRaxml.setEnabled(true);
 		aAnlsRunCW.setEnabled(dna);
 		
-		aAnlsCreateTree.setEnabled(true);
+		//aAnlsCreateTree.setEnabled(true);
 
 
 		alignmentPanel.getListPanel().setMenus();

@@ -133,12 +133,17 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		
 		else if(aResult instanceof MBTreeResult) {
 			MBTreeResult res = (MBTreeResult)aResult;
-			TOPALi.winMain.menuAnlsCreateTree(res);
+			TOPALi.winMain.menuAnlsMrBayes(res);
 		}
 		
 		else if(aResult instanceof PhymlResult) {
 			PhymlResult res = (PhymlResult)aResult;
-			TOPALi.winMain.menuAnlsCreateTree(res);
+			TOPALi.winMain.menuAnlsPhyml(res);
+		}
+		
+		else if(aResult instanceof RaxmlResult) {
+			RaxmlResult res = (RaxmlResult)aResult;
+			TOPALi.winMain.menuAnlsRaxml(res);
 		}
 	}
 }

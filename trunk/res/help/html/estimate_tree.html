@@ -19,39 +19,50 @@ and from any set of <a href="select_seqs.html">selected
 sequences</a> (where the number of sequences
 is greater than three).</p>
 
-<p>To create a phylogenetic tree, select <b>Analysis |
-Estimate Phylogenetic Tree</b> from the menu
-bar. This brings up the Estimate New Tree dialog.</p>
+<p>You will find the different methods for creating phylogenetic trees in the <b>Analysis</b>
+menu under section <b>Phylogeny</b></p>
 
-<h2><a name="f84gamma">F84+Gamma</a></h2>
+<h2>Neighbour Joining Methods</h2>
+There is currently one method for estimating NJ trees:
+<h3>Quick Tree Estimation</h3>
+<p>This method allows you to get a quick, rough tree. It uses F84+Gamma model (with fixed ts/tv and alpha parameter)
+for DNA alignments and the WAG model for protein alignments.</p>
 
-<p> The F84+Gamma model (with fixed ts/tv and alpha parameter)
-can be used for a quick, rough tree estimation. It has no further
-options. </p>
+<h2>Bayesian Tree Estimation</h2>
+Bayesian Tree Estimation is done using 
+<h3><a name="mrbayes">MrBayes</a></h3>
+<p> MrBayes is probably the most sophisticated tree estimation, but is rather slow on larger datasets.<br>
+There are two ways you can launch a MrBayes job:</p>
+<ul>
+<li>One Model: MrBayes will then use one substitution model for the whole alignments</li>
+<li>Codon Position Models: MrBayes will use a separate model for each codon position</li>
+</ul>
+<p>You are able to specify the model(s) you want to use and general MrBayes parameters on the 'Advanced' tab.</p>
 
-<h2><a name="phyml">PhyML</a></h2>
-
-<p> Using a maximum likelihood method, like PhyML is a more
-sophisticated but still reasonable quick way for tree estimation. It
+<h2>Maximum Likelihood Tree Estimation</h2>
+<p> Using a maximum likelihood method is a more sophisticated way than using 
+Neighour Joining and is still reasonable quick for tree estimation. It
 can be used for larger datasets. <br>
+There are currently two methods available:</p>
+<h3><a name="phyml">PhyML</a></h3>
+<p>On the PhyML dialog you can specify the substitution model you want to use and general
+options for the PhyML program.</p>
 
-On the 'Advanced' tab you can specify the substitution model and
-further PhyML specific parameters. </p>
-
-<h2><a name="mrbayes">MrBayes</a></h2>
-
-<p> MrBayes is probably the most sophisticated tree estimation
-method at the moment, but is rather slow on larger datasets.<br>
-
-Like for the maximum likelihood method you can specify the substitution
-model and further MrBayes parameters on the 'Advanced' tab.</p>
-
-<h2><a name="cdnabayes">MrBayes (cDNA)</a></h2>
-
-<p>This method also uses MrBayes but with a cDNA model. Choosing
-this method, MrBayes will estimate a model for each codon position.</p>
-
-<br>
+<h3><a name="raxml">RaxML</a></h3>
+<p>Like MrBayes you can run RaxML either with one model for the whole alignment 
+or separated models for each codon position. Bootstrapping will run in parallel, so RaxML
+is a good choice for bootstrapped tree estimation on large datasets.</p>
+On the 'Advanced' tab you can specify the substitution model you want to use and general 
+RaxML parameters.<br>
+The substitution model options are different from the other methods:<br>
+For rate heterogenity you have three choices:
+<ul>
+<li>CAT: This will use a (faster) gamma approximation for rate heterogenity</li>
+<li>MIX: Uses CAT to perform tree inference and GAMMA for the final tree evaluation</li>
+<li>GAMMA: Uses the common gamma model with 4 rate categories</li>
+</ul>
+Note that for DNA alignments the only substition model available is GTR.
+</p>
 
 <h3>References</h3>
 
@@ -65,6 +76,9 @@ Bioinformatics, 19(12), pp 1572-1574</li>
 accurate algorithm to estimate large phylogenies by maximum likelihood.</b>,
 Systematic Biology, 52(5), pp 696-704. </li>
 
+<li>A Stamatakis, 2006,<b>RAxML-VI-HPC: Maximum Likelihood-based
+Phylogenetic Analyses with Thousands of Taxa and Mixed Models</b>,
+Bioinformatics 22(21), pp 2688–2690</li>
 </ul>
 
 </body>
