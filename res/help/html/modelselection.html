@@ -8,13 +8,38 @@
 <body>
 
 <h1>Model Selection</h1>
-
-<img src="images/submodels.png"/>
-
+Model Selection is done running PhyML on each model (in parallel on clusters 
+or multi-core machines). 
+<br><br>
+If you choose Model Selection for PhyML the following models will be tested.<br><br>
+For DNA alignments:<br>
+<img src="images/dna_submodels.png"/>
 <br>
-http://bioinf.may.ie/software/modelgenerator/<br><br>
-Thomas M Keane, Christopher J Creevey , Melissa M Pentony, Thomas J Naughton and James O McInerney, 2006,
-<span style="font-weight: bold;">Assessment of methods for amino acid matrix selection and their use on empirical data shows that ad hoc assumptions for choice of matrix are not justified.</span>, BMC Evolutionary Biology, 6:29<br>
+(gray: fixed values; color: estimated values)
 
+<br><br>
+For Protein alignments:<br>
+<img src="images/protein_submodels.png"/>
+<br>
+(all values fixed)
+<br><br>
+For both (DNA and protein) model types Model Selection will also test for rate heterogenity (proportion 
+if invariable sites and gamma distribution), if you selected these options.<br>
+<img src="images/rate_het.png"/>
+<br>
+(red: Proportion of invariable sites; blue: Gamma distribution)
+<br><br>
+Model Selection for MrBayes will test a subset of the above models.
+<br><br>
+
+The best model according to the BIC score will be selected automatically
+as default model for the alignment Model Selection was run with. You can change this by selecting
+a model in the Model Selection result and click on 'Select' button next to the model details.
+<br><br>
+The best model with regard to AIC1, AIC2 and BIC score will be highlighted in the according row.<br>
+If you run Model Selection on a DNA alignment, also the best models with regard to various likelihood
+ratio tests will be highlighted in the likelihood column.
+<br><br>
+<br><br>
 </body>
 </html>

@@ -46,7 +46,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 	private void init() {
 		this.getContentPane().setLayout(new BorderLayout());
 		
-		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "phyml");
+		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "raxml");
 		this.getContentPane().add(bp, BorderLayout.SOUTH);
 		
 		tabs = new JTabbedPane();

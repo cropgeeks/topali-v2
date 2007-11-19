@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import pal.alignment.SimpleAlignment;
 import pal.tree.Tree;
-import topali.analyses.TreeCreator;
+import topali.analyses.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.*;
@@ -75,7 +75,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 //		this.tree = this.tree.replaceAll(";", "");
 //		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
 		
-		TreeCreator tc = new TreeCreator(alignment, data.getSequenceSet().isDNA(), false, false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, data.getSequenceSet().isDNA(), false);
 		Tree tree = tc.getTree();
 		this.tree = tree.toString();
 		this.tree = this.tree.replaceAll(";", "");

@@ -314,10 +314,9 @@ public class RegionDialog extends JDialog implements ActionListener,
 		bClose.addActionListener(this);
 		bExport = new JButton("Export...");
 		bExport.addActionListener(this);
-		// bExport.setText("Export...");
 		bExport.setMnemonic(KeyEvent.VK_X);
-		bTree = new JButton(WinMainMenuBar.aAnlsCreateTree);
-		bTree.setText("Create Tree...");
+		bTree = new JButton(WinMainMenuBar.aAnlsQuickTree);
+		bTree.setText("Quick Tree...");
 		bTree.setMnemonic(KeyEvent.VK_C);
 		bNew = new JButton("New...");
 		bNew.setMnemonic(KeyEvent.VK_N);

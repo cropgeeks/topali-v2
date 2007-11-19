@@ -669,7 +669,7 @@ public class GraphPanel extends JPanel implements Printable
 
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0,
 					false);
-			add(aAnlsCreateTree, Icons.CREATE_TREE, KeyEvent.VK_T,
+			add(aAnlsQuickTree, Icons.CREATE_TREE, KeyEvent.VK_T,
 					KeyEvent.VK_T, InputEvent.CTRL_MASK, 9, true);
 		}
 

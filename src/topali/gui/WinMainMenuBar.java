@@ -82,7 +82,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	//Recombination
 	public static AbstractAction aAnlsRunPDM, aAnlsRunDSS, aAnlsRunHMM,
-			aAnlsCreateTree, aAnlsPartition, aAnlsShowJobs, aAnlsRename,
+			aAnlsPartition, aAnlsShowJobs, aAnlsRename,
 			aAnlsRemove, aAnlsSettings, aAnlsRunLRT, aAnlsRunPDM2;
 	
 	//Positive Selection
@@ -486,15 +486,6 @@ public class WinMainMenuBar extends JMenuBar
 				winMain.menuAnlsRunCW(null);
 			}
 		};
-		
-		aAnlsCreateTree = new AbstractAction(Text.Gui
-				.getString("aAnlsCreateTree"))
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				winMain.menuAnlsCreateTree(null);
-			}
-		};
 
 		aAnlsPartition = new AbstractAction(Text.Gui
 				.getString("aAnlsPartition"))
@@ -761,9 +752,9 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsMrBayes = getItem(aAnlsMrBayes, 0, 0, 0);
 		mAnlsPhyml = getItem(aAnlsPhyml, 0, 0, 0);
 		mAnlsRaxml = getItem(aAnlsRaxml, 0, 0, 0);
-		mAnlsNJ = new JMenu("Neighbour Joining Tree");
+		mAnlsNJ = new JMenu("Neighbor Joining Tree");
 		mAnlsBayes = new JMenu("Bayesian Tree");
-		mAnlsML = new JMenu("Maximum Likelehood Tree");
+		mAnlsML = new JMenu("Maximum Likelihood Tree");
 		
 		//Misc
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
@@ -962,7 +953,6 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsPhyml.setEnabled(false);
 		aAnlsRaxml.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);
-		aAnlsCreateTree.setEnabled(false);
 		aAnlsPartition.setEnabled(false);
 		aAnlsRename.setEnabled(false);
 		aAnlsRemove.setEnabled(false);
