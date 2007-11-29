@@ -171,6 +171,7 @@
 		<field name="alpha" type="double" />
 		<field name="invProp" type="double" />
 		<field name="gammaCat" type="int" />
+		<field name="tree" type="string" />
 	</class>
 
 	<class name="topali.data.models.DNAModel"

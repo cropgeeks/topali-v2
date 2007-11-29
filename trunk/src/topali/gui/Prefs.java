@@ -106,7 +106,7 @@ public class Prefs extends PreferencesXML
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
 	public static boolean gui_show_horizontal_highlight = false;
 	public static boolean gui_show_vertical_highlight = false;
-
+	
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
 	public static byte gui_seq_font_size;
@@ -317,7 +317,7 @@ public class Prefs extends PreferencesXML
 				gui_group_threshold);
 		gui_import_method = getInt("gui_import_method", gui_import_method);
 		gui_max_cpus = getInt("gui_max_cpus", gui_max_cpus);
-
+		
 		gui_seq_tooltip = getBool("gui_seq_tooltip", gui_seq_tooltip);
 		gui_seq_font_size = getByte("gui_seq_font_size", gui_seq_font_size);
 		gui_seq_font_bold = getBool("gui_seq_font_bold", gui_seq_font_bold);
@@ -503,7 +503,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_group_threshold", "" + gui_group_threshold);
 		p.setProperty("gui_import_method", "" + gui_import_method);
 		p.setProperty("gui_max_cpus", "" + gui_max_cpus);
-
+		
 		p.setProperty("gui_seq_tooltip", "" + gui_seq_tooltip);
 		p.setProperty("gui_seq_font_size", "" + gui_seq_font_size);
 		p.setProperty("gui_seq_font_bold", "" + gui_seq_font_bold);

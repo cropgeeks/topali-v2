@@ -57,10 +57,10 @@ public class ModelTestMonitor
 		for(int i=1; i<=result.models.size(); i++) {
 			Model model = result.models.get(i-1);
 			File runDir = new File(jobDir, "run"+i);
-			File file = new File(runDir, "seq_phyml_stat.txt");
 			
-			ModelTestParser mtp = new ModelTestParser(file);
+			ModelTestParser mtp = new ModelTestParser(runDir);
 			model.setLnl(mtp.getLnl());
+			model.setTree(mtp.getTree());
 			if(model.isGamma()) {
 				model.setGammaCat(mtp.getGammaCat());
 				model.setAlpha(mtp.getGamma());

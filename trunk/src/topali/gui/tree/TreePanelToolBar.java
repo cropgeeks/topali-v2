@@ -34,6 +34,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	JButton bExport, bCluster;
 	JButton bInfo;
 
+	JButton bBootstrap;
+	
 	JButton bRoot;
 	
 	JButton bAncestor;
@@ -76,6 +78,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		
+		bBootstrap = (JButton)WinMainToolBar.getButton(false, null, null, Icons.ADJUST_THRESHOLD, null);
+		
 		bRoot = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.MIDPOINT_ROOT, null);
 		
 		bAncestor = (JButton)WinMainToolBar.getButton(false, null, "tre12", Icons.TREE_ANCESTOR, null);
@@ -90,7 +94,11 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		bViewCluster.addActionListener(this);
 		bInfo.addActionListener(this);
 		
+		bBootstrap.addActionListener(this);
+		bBootstrap.setEnabled(!(tResult.guiName.contains("Ancestral")));
+		
 		bRoot.addActionListener(this);
+		bRoot.setEnabled(!(tResult.guiName.contains("Ancestral")));
 		
 		bAncestor.addActionListener(this);
 		bAncestor.setEnabled(tResult instanceof MBTreeResult || tResult instanceof PhymlResult || tResult instanceof RaxmlResult);
@@ -101,6 +109,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bDrawNormal);
 		add(bDrawCircular);
 		add(bDrawNewHamp);
+		addSeparator();
+		add(bBootstrap);
 		addSeparator();
 		add(bRoot);
 		addSeparator();
@@ -153,6 +163,25 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			AnalysisInfoDialog ad = new AnalysisInfoDialog(tResult);
 			ad.setText(getTreeInfo());
 			ad.setVisible(true);
+		}
+		
+		else if(e.getSource() == bBootstrap) {
+			BootstrapDialog dlg = new BootstrapDialog(TOPALi.winMain, true, tResult.getTreeStr());
+			dlg.setVisible(true);
+			
+			if(dlg.threshold>0) {
+				String tree = NHTreeUtils.removeBootstrapValues(tResult.getTreeStr(), dlg.threshold);
+				if(dlg.replacement!=null) {
+					tree = NHTreeUtils.replaceBootstrapValues(tree, dlg.replacement);
+				}
+				
+				TreeResult mod = new TreeResult(tResult);
+				mod.x = tResult.x+50;
+				mod.y = tResult.y+50;
+				mod.setTreeStr(tree);
+				
+				treePane.addNewTree(mod);
+			}
 		}
 		
 		else if(e.getSource()==bRoot) {

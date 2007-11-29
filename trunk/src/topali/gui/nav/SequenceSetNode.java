@@ -16,6 +16,7 @@ public class SequenceSetNode extends INode
 {
 	private String nodeName;
 
+	//private  AlignmentPanel alignmentPanel;
 	private  AlignmentPanel alignmentPanel;
 
 	SequenceSetNode(AlignmentData data)
@@ -94,6 +95,7 @@ public class SequenceSetNode extends INode
 		//aAnlsCreateTree.setEnabled(true);
 
 
-		alignmentPanel.getListPanel().setMenus();
+		//TODO:
+		//alignmentPanel.getListPanel().setMenus();
 	}
 }

@@ -27,7 +27,81 @@ public class NHTreeUtils
 	 * @return
 	 */
 	public static String removeBootstrapValues(String tree) {
-		String result = tree.replaceAll("\\)\\d+(\\.\\d+)?", ")");
+		String result = replaceBootstrapValues(tree, "");
 		return result;
+	}
+	
+	/**
+	 * Replace bootstrap values with a certain replacement
+	 * @param tree
+	 * @param replacement
+	 * @return
+	 */
+	public static String replaceBootstrapValues(String tree, String replacement) {
+		String result = tree.replaceAll("\\)\\d+(\\.\\d+)?", ")"+replacement);
+		return result;
+	}
+	
+	/**
+	 * Remove bootstrap values which are below a certain threshold
+	 * @param tree
+	 * @param threshold
+	 * @return
+	 */
+	public static String removeBootstrapValues(String tree, int threshold) {
+		int s = 0;
+		int e = 0;
+		while(true) {
+			s = tree.indexOf(')', e);
+			e = tree.indexOf(':', s);
+			
+			if(s==-1 || e==-1)
+				break;
+			if(e<=(s+1))
+				continue;
+			
+			int bs = Integer.parseInt(tree.substring(s+1, e));
+			if(bs<threshold) {
+				tree = tree.substring(0, s+1)+tree.substring(e);
+			}
+			
+		}
+		
+		return tree;
+	}
+	
+	/**
+	 * Determines min (int[0]), avg (int[1]) and max (int[2]) of
+	 * the bootstrap values in the tree
+	 * @param tree
+	 * @return
+	 */
+	public static int[] analyzeBootstrapValues(String tree) {
+		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE, avg = 0;
+		
+		int s = 0;
+		int e = 0;
+		int c = 0;
+		while(true) {
+			s = tree.indexOf(')', e);
+			e = tree.indexOf(':', s);
+			
+			if(s==-1 || e==-1)
+				break;
+			if(e<=(s+1))
+				continue;
+			
+			int bs = Integer.parseInt(tree.substring(s+1, e));
+			if(bs<min) {
+				min = bs;
+			}
+			if(bs>max) {
+				max = bs;
+			}
+			avg += bs;
+			c++;
+		}
+		
+		return new int[] {min,(int)((double)avg/(double)c),max};
 	}
 }

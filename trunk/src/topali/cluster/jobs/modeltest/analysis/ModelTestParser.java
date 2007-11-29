@@ -9,16 +9,18 @@ import java.io.*;
 
 public class ModelTestParser
 {
-	File file;
+	File file, treeFile;
 	double lnl;
 	double[] subRates;
 	double[] baseFreq;
 	double inv;
 	int gammaCat;
 	double gamma;
+	String tree = "";
 	
-	public ModelTestParser(File f) throws Exception {
-		this.file = f;
+	public ModelTestParser(File dir) throws Exception {
+		this.file = new File(dir, "seq_phyml_stat.txt");
+		this.treeFile = new File(dir, "seq_phyml_tree.txt");
 		subRates = new double[6];
 		baseFreq = new double[4];
 		parse();
@@ -54,6 +56,11 @@ public class ModelTestParser
 	public double getGamma()
 	{
 		return gamma;
+	}
+
+	public String getTree()
+	{
+		return tree;
 	}
 
 	private void parse() throws Exception{
@@ -113,5 +120,14 @@ public class ModelTestParser
 					sr=false;
 			}
 		}
+		
+		in.close();
+		
+		in = new BufferedReader(new FileReader(treeFile));
+		line = null;
+		while((line=in.readLine())!=null)
+			tree += line;
+		
+		in.close();
 	}
 }

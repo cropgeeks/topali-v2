@@ -118,8 +118,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 	{
 		int[] indices = list.getSelectedIndices();
 		ss.moveSequences(indices, up, top);
+		
 		disPanel.refreshAndRepaint();
-
+		
 		if (top)
 		{
 			int[] newIndices = new int[indices.length];
@@ -144,7 +145,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		list.setSelectedIndices(indices);
 		list.setValueIsAdjusting(false);
 
-		valueChanged();
+		valueChanged(null);
 	}
 
 	void selectAll()
@@ -252,22 +253,15 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 
 	public void valueChanged(ListSelectionEvent e)
 	{
-		if (e.getValueIsAdjusting())
+		if (e!=null && e.getValueIsAdjusting())
 			return;
 
-		valueChanged();
-	}
-
-	private void valueChanged()
-	{
 		setMenus();
-		disPanel.repaint();
+		disPanel.refreshAndRepaint();
 
 		if (Prefs.gui_preview_current)
 			WinMain.rDialog.updateTreePreview(false);
 
-		//WinMainMenuBar.aFileSave.setEnabled(true);
-		//WinMainMenuBar.aVamCommit.setEnabled(true);
 		ProjectState.setDataChanged();
 	}
 
@@ -340,12 +334,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					WinMain.rDialog.addRegion(disPanel.mouseHighlight.x,
-							disPanel.mouseHighlight.x
-									+ disPanel.mouseHighlight.width,
-							PartitionAnnotations.class);
+					WinMain.rDialog.addRegion(disPanel.displayCanvas.mouse.nucPosS+1, disPanel.displayCanvas.mouse.nucPosE+1, PartitionAnnotations.class);
 					disPanel.highlight(-1, -1, true);
-					disPanel.holdMouseHighlight = false;
 				}
 			});
 			addPart.setText(Text.Gui.getString("aAlgnAddPartition"));
@@ -356,12 +346,12 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					WinMain.rDialog.addRegion(disPanel.mouseHighlight.x,
-							disPanel.mouseHighlight.x
-									+ disPanel.mouseHighlight.width,
-							CDSAnnotations.class);
-					disPanel.highlight(-1, -1, true);
-					disPanel.holdMouseHighlight = false;
+//					WinMain.rDialog.addRegion(disPanel.mouseHighlight.x,
+//							disPanel.mouseHighlight.x
+//									+ disPanel.mouseHighlight.width,
+//							CDSAnnotations.class);
+//					disPanel.highlight(-1, -1, true);
+//					disPanel.holdMouseHighlight = false;
 				}
 			});
 			addCodReg.setText(Text.Gui.getString("aAlgnAddCDS"));

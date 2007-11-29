@@ -9,10 +9,15 @@ import javax.swing.JPanel;
 
 import topali.data.models.*;
 
-public abstract class ModelDiagram extends JPanel
+public class ModelDiagram extends JPanel
 {
 	
-	public abstract void setModel(Model m);
+    /**
+     *Override this method!
+     */
+	public void setModel(Model m) {
+            
+        }
 	
 }
 

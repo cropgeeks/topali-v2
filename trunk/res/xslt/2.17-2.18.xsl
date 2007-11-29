@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/1999/xhtml">
 
-<!-- XSLT Stylesheet to transform Topali 2.16 projects to Version 2.17 -->
+<!-- XSLT Stylesheet to transform Topali 2.16 and 2.17 projects to Version 2.18 -->
 <!-- 
 Notes:
 * Substitution Model choice will be ignored (set to default)

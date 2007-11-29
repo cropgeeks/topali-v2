@@ -144,8 +144,8 @@ public class Project extends DataObject
 			BufferedReader in = new BufferedReader(new InputStreamReader(zin));
 
 			//Check with which version we're dealing with:
-			//if there is no appVersion attribute it's 2.16
-			String appVersion = "2.16";
+			//if there is no appVersion attribute it's 2.17
+			String appVersion = "2.17";
 			String line = null;
 			while((line=in.readLine())!=null) {
 				if(line.matches(".*appversion=.*")) {
@@ -160,9 +160,9 @@ public class Project extends DataObject
 			
 			if(!appVersion.equals(TOPALi.VERSION)) {
 				String notes = "";
-				if(appVersion.equals("2.16")) {
-					URL tmpUrl = Project.class.getResource("/res/xslt/2.16-2.17.xsl");
-					File xsltFile = new File(Prefs.tmpDir, "topali_2.16-2.17.xsl");
+				if(appVersion.equals("2.17")) {
+					URL tmpUrl = Project.class.getResource("/res/xslt/2.17-2.18.xsl");
+					File xsltFile = new File(Prefs.tmpDir, "topali_2.17-2.18.xsl");
 					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
 					notes += getTranformationNotes(xsltFile);
 					StringOutputStream sos = new StringOutputStream();
@@ -173,7 +173,7 @@ public class Project extends DataObject
 					appVersion = "2.17";
 				}
 				
-				// ... do further tranformations in future (2.17-2.18, 2.18-...)
+				// ... do further tranformations in future (2.18-2.19, 2.19-...)
 				
 				if(!notes.equals("")) {
 					String msg = "This project was created with an older TOPALi version.\n" +

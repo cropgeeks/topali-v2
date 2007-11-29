@@ -350,13 +350,13 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	void menuAlgnSelectAll()
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().selectAll();
+		p.seqlistPanel.selectAll();
 	}
 
 	void menuAlgnSelectNone()
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().selectNone();
+		p.seqlistPanel.selectNone();
 	}
 
 	void menuAlgnSelectUnique()
@@ -364,27 +364,28 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
 
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-		p.getListPanel().selectUnique();
+		p.seqlistPanel.selectUnique();
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	void menuAlgnSelectInvert()
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().selectInvert();
+		p.seqlistPanel.selectInvert();
 	}
 
 	void menuAlgnSelectHighlighted()
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().selectHighlighted(p.mouseHighlight.y,
-				p.mouseHighlight.y + p.mouseHighlight.height);
+		int s = p.displayCanvas.mouse.seqPosS;
+		int e = p.displayCanvas.mouse.seqPosE;
+		p.seqlistPanel.selectHighlighted(s, e);
 	}
 
 	void menuAlgnMove(boolean up, boolean top)
 	{
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(null);
-		p.getListPanel().moveSequences(up, top);
+		p.seqlistPanel.moveSequences(up, top);
 	}
 
 	void menuAlgnFindSequence()
@@ -929,7 +930,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		// And select them in the GUI (which will reselect them in the ss)
 		AlignmentPanel p = navPanel.getCurrentAlignmentPanel(data);
-		p.getListPanel().updateList(indices);
+		p.seqlistPanel.updateList(indices);
 	}
 
 	void menuAnlsSettings()

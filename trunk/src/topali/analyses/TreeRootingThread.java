@@ -50,10 +50,11 @@ public class TreeRootingThread extends DesktopThread
 		{
 			PushbackReader pbread = new PushbackReader(new StringReader(tree));
 			ReadTree t = new ReadTree(pbread);
+			Tree t2 = TreeRooter.getMidpointRooted(t);
 			
-			//workaround for PAL tree loosing bootstrap values:
-			//bs values are stored in "table" and then after mp rooting written
-			//back to the tree.
+			//TODO: WORKAROUND for PAL tree loosing bootstrap values:
+			//bs values are stored in "table" and then written back 
+			//to the midpoint rooted tree.
 			int c = t.getExternalNodeCount();
 			List<Node> list = new LinkedList<Node>();
 			for(int i=0; i<c; i++) {
@@ -70,7 +71,6 @@ public class TreeRootingThread extends DesktopThread
 				table.put(list2String(children), node.getIdentifier().getName());
 			}
 			
-			Tree t2 = TreeRooter.getMidpointRooted(t);
 			c = t2.getInternalNodeCount();
 			for(int i=0; i<c; i++) {
 				Node node = t2.getInternalNode(i);
@@ -82,6 +82,7 @@ public class TreeRootingThread extends DesktopThread
 				if(tmp!=null)
 					t2.setAttribute(node, "bootstrap", tmp);
 			}
+			//END WORKAROUND
 			
 			mpRootedTree = (new PalTree2NH(t2)).getNW();
 		} catch (TreeParseException e)

@@ -20,10 +20,6 @@ class UpdateChecker extends Thread
 {
 	 Logger log = Logger.getLogger(this.getClass());
 
-	private static int RELEASE = 17;
-
-	private int webVersion = 0;
-
 	private boolean useGUI = false;
 
 	UpdateChecker(boolean useGUI)
@@ -36,6 +32,10 @@ class UpdateChecker extends Thread
 	@Override
 	public void run()
 	{
+		String tmp = TOPALi.VERSION.replaceAll("\\.", "");
+		int version = Integer.parseInt(tmp);
+		int webVersion = 0;
+		
 		try
 		{
 			URL url = new URL("http://www.topali.org/topali/version.txt");
@@ -44,23 +44,12 @@ class UpdateChecker extends Thread
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc
 					.getInputStream()));
 
-			String str = null;
-			while ((str = in.readLine()) != null)
-			{
-
-				if (str.startsWith("<!-- Current = "))
-				{
-					webVersion = Integer.parseInt(
-						str.substring(14, str.indexOf("-->")).trim());
-					break;
-				}
-			}
-
-//			webVersion = Integer.parseInt(in.readLine());
+			String str = in.readLine();
+			webVersion = Integer.parseInt(str);
 			in.close();
 
 			log.info("Connection to " + url);
-			log.info("webVersion: " + webVersion + " (current: "+ RELEASE + ")");
+			log.info("webVersion: " + webVersion + " (current: "+ version + ")");
 		} catch (Exception e)
 		{
 			if (useGUI)
@@ -74,7 +63,7 @@ class UpdateChecker extends Thread
 			return;
 		}
 
-		if (webVersion > RELEASE)
+		if (webVersion > version)
 		{
 			JPanel p = new JPanel(new BorderLayout());
 			p.add(new JLabel("<html>A new version of TOPALi v2 is available. Please visit our website to obtain it.<br><br>"
@@ -83,10 +72,6 @@ class UpdateChecker extends Thread
 			p.add(new LinkLabel("http://www.topali.org"), BorderLayout.SOUTH);
 			JOptionPane.showMessageDialog(TOPALi.winMain, p, "Update available", JOptionPane.INFORMATION_MESSAGE);
 
-//			String msg = "<html>A new version of TOPALi v2 is available. Please visit "
-//					+ "<b>http://www.bioss.ac.uk/knowledge/topali</b> to obtain it.</html>";
-//
-//			MsgBox.msg(msg, MsgBox.INF);
 		} else if (useGUI)
 		{
 			MsgBox.msg("You already have the latest version of TOPALi v2.",
@@ -96,7 +81,7 @@ class UpdateChecker extends Thread
 
 	static void helpAbout()
 	{
-		String msg = "<html><b>TOPALi v2</b> (2.17)<br><br>"
+		String msg = "<html><b>TOPALi v2</b> ("+TOPALi.VERSION+")<br><br>"
 				+ "Copyright &copy 2003-2007 Biomathematics & Statistics Scotland<br><br>"
 				+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
 				+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"

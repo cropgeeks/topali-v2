@@ -109,7 +109,7 @@ class HMMAnalysis extends AnalysisThread
 		{
 		}
 
-		int S = 20;
+		int S = 1;
 
 		// If we get this far, then it's ok to convert the vector data into
 		// normal float arrays

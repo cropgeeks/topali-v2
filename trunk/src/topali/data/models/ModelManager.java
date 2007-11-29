@@ -90,8 +90,6 @@ public class ModelManager
 		else {
 			result = new ArrayList<Model>();
 			for(Model m : proteinModels) {
-				if(m.is("poisson"))
-					result.add(m);
 				if(m.is("jtt"))
 					result.add(m);
 				if(m.is("day"))
@@ -109,8 +107,6 @@ public class ModelManager
 				if(m.is("vt"))
 					result.add(m);
 				if(m.is("blosum"))
-					result.add(m);
-				if(m.is("gtr"))
 					result.add(m);
 			}
 			return result;

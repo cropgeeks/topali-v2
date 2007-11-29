@@ -42,7 +42,8 @@ public class PhymlMonitor
 
 	public PhymlResult getResult() throws Exception
 	{
-		return (PhymlResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		PhymlResult res = (PhymlResult) Castor.unmarshall(new File(jobDir, "result.xml"));
+		return res;
 	}
 	
 }
