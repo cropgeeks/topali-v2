@@ -26,6 +26,8 @@ public abstract class Model extends DataObject implements Comparable<Model>
 	//proportino of invariant sites
 	double invProp;
 	
+	String tree;
+	
 	public Model() {
 		super();
 	}
@@ -45,6 +47,8 @@ public abstract class Model extends DataObject implements Comparable<Model>
 			this.aliases.add(new String(s));
 		this.gamma = m.gamma;
 		this.inv = m.inv;
+		if(m.tree!=null)
+			this.tree = new String(m.tree);
 	}
 	
 	/**
@@ -137,6 +141,16 @@ public abstract class Model extends DataObject implements Comparable<Model>
 	public void setInvProp(double invProp)
 	{
 		this.invProp = invProp;
+	}
+
+	public String getTree()
+	{
+		return tree;
+	}
+
+	public void setTree(String tree)
+	{
+		this.tree = tree;
 	}
 
 	public boolean is(String name) {

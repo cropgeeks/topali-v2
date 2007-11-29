@@ -2,12 +2,10 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Updated help texts
-- Updated "what's new" part for topali website
-- Created a little "framework" for running small threads (e.g. quick tree estimation) locally on the desktop
-  ("killable" thread class, showing "please wait" dialogs, etc.) (package var.threads)
-- Created workaround for loosing bootstrap values when midpoint rooting trees with PAL.
-- Improved ModelDiagram graphics
+- Added facility to remove/replace bootstrap values from trees.
+- Model selection results now also show trees
+- Improved alignment diplay by using offscreen buffering
+
 
 TODO:
 - Check if writing back bootstrap values after midpoint rooting really works.

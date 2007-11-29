@@ -161,6 +161,11 @@ public class CustomTable extends JTable
 
 	class MyRenderer extends MyTextArea implements TableCellRenderer {
 		
+		public MyRenderer() {
+			Font font = getTableHeader().getFont();
+			setFont(font);
+		}
+		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			String text = value.toString();
@@ -214,8 +219,12 @@ public class CustomTable extends JTable
 	
 	class MyEditor extends AbstractCellEditor implements TableCellEditor {
 
-		MyTextArea ta = new MyTextArea();
+		MyTextArea ta;
 		
+		public MyEditor() {
+			ta = new MyTextArea();
+		}
+			
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 		{
 			ta.setText(value.toString());
@@ -230,14 +239,15 @@ public class CustomTable extends JTable
 		}
 	}
 	
-	static Font cellFont = new JTableHeader().getFont();
-	
 	class MyTextArea extends JTextArea {
 
 		public MyTextArea() {
 			super(0,0);
 			setLineWrap(true);
-			setFont(cellFont);
+			
+			Font font = getTableHeader().getFont();		
+			setFont(font);
+			
 			setWrapStyleWord(true);
 		}
 		

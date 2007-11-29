@@ -63,11 +63,13 @@ public class StreamCatcher extends Thread
 		{
 		}
 
-		try
-		{
-			reader.close();
-		} catch (IOException e)
-		{
+		finally {
+			try
+			{
+				reader.close();
+			} catch (IOException e)
+			{
+			}
 		}
 	}
 	

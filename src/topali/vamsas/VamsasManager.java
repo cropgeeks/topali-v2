@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import topali.gui.Project;
+import topali.gui.*;
 import uk.ac.vamsas.client.*;
 import uk.ac.vamsas.client.picking.IPickManager;
 import uk.ac.vamsas.client.simpleclient.SimpleClientFactory;
@@ -19,7 +19,7 @@ public class VamsasManager
 	 Logger log = Logger.getLogger(this.getClass());
 	
 	public static final String newSession = "NewSession";
-	public static final ClientHandle client = new ClientHandle("topali", "2.16");
+	public static final ClientHandle client = new ClientHandle("topali", TOPALi.VERSION);
 	public static final UserHandle user = new UserHandle(System.getProperty("user.name"), "");
 	
 	public Project project;

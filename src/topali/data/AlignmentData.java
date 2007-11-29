@@ -159,15 +159,20 @@ public class AlignmentData extends DataObject
 
 	public void setActiveRegion(int start, int end)
 	{
+		int oldS = this.activeRegionS;
+		int oldE = this.activeRegionE;
+		
 		if (start == -1 || end == -1)
 		{
-			setActiveRegionS(1);
-			setActiveRegionE(sequenceSet.getLength());
-		} else
-		{
-			setActiveRegionS(start);
-			setActiveRegionE(end);
+			start = 1;
+			end = sequenceSet.getLength();
 		}
+		
+		this.activeRegionS = start;
+		this.activeRegionE = end;
+		
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldS+","+oldE, start+""+end));
 	}
 
 	// ------------------
@@ -180,27 +185,15 @@ public class AlignmentData extends DataObject
 	{
 		return activeRegionE;
 	}
-
-	public void setActiveRegionE(int activeRegionE)
-	{
-		int oldValue = this.activeRegionE;
-		this.activeRegionE = activeRegionE;
-		
-		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionE));
-		
-	}
-
-	public void setActiveRegionS(int activeRegionS)
-	{
-		int oldValue = this.activeRegionS;
-		this.activeRegionS = activeRegionS;
-		
-		for(PropertyChangeListener l : changeListeners) 
-			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldValue, activeRegionS));
-		
+	
+	public void setActiveRegionS(int i) {
+		this.activeRegionS = i;
 	}
 	
+	public void setActiveRegionE(int i) {
+		this.activeRegionE = i;
+	}
+
 	public boolean isPartitionCodons() {
 		return (activeRegionE-activeRegionS+1)%3==0;
 	}

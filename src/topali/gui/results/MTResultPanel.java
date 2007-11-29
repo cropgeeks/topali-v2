@@ -44,9 +44,10 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		for(int i=0; i<tp.accessTable().getColumnCount(); i++)
 			sorter.setComparator(i, new SimpleComparator());
 		tp.accessTable().setRowSorter(sorter);
-		Font f = tp.accessTable().getFont();
-		tp.accessTable().setFont(f.deriveFont(Font.ITALIC, 20f));
 		p1.add(tp, BorderLayout.CENTER);
+		
+//		Font f = tp.accessTable().getTableHeader().getFont();
+//		tp.accessTable().getTableHeader().setFont(f.deriveFont(15f));
 		
 		infoPanel = new ModelInfoPanel(data,this);
 		p1.add(infoPanel, BorderLayout.SOUTH);
@@ -213,10 +214,30 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	@Override
 	public String getAnalysisInfo()
 	{
-		StringBuffer sb = new StringBuffer();
+		ModelTestResult result = (ModelTestResult)this.result;
 		
+		StringBuffer sb = new StringBuffer();
+		sb.append(result.guiName);
+
+		sb.append("\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
+				+ " seconds");
+
+		sb.append("\n\nSelected sequences:");
+
+		for (String seq : result.selectedSeqs)
+			sb.append("\n  " + data.getSequenceSet().getNameForSafeName(seq));
+		
+		sb.append("\n\n");
+		sb.append("Algorithm: Maximum Likelihood (PhyML)\n");
+		sb.append("Application: PhyML-aLRT (Version 2.4.5)\n");
+		 sb.append("M. Anisimova, O. Gascuel (2006), Approximate likelihood ratio\n" +
+		 		"test for branchs: A fast, accurate and powerful alternative,\n" +
+		 		"Systematic Biology, 55(4), pp 539-552.\n");
+		 sb.append("Guindon S, Gascuel O. (2003), A simple, fast, and accurate\n" +
+		 		"algorithm to estimate large phylogenies by maximum likelihood,\n" +
+		 		"Systematic Biology. 52(5) pp 696-704. ");
 		return sb.toString();
-	}
+	} 
 
 	@Override
 	public Printable[] getPrintables()

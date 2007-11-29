@@ -20,7 +20,7 @@ import sbrn.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
-import topali.var.Utils;
+import topali.var.*;
 
 public class TOPALi extends Applet implements Application
 {
@@ -28,7 +28,7 @@ public class TOPALi extends Applet implements Application
 	public static final boolean debugClient = true;
 	public static final boolean debugJobs = true;
 	
-	public static final String VERSION = "2.17";
+	public static final String VERSION = "2.18";
 
 	private final String prefsFile = ".topali2-new.xml";
 
@@ -52,6 +52,7 @@ public class TOPALi extends Applet implements Application
 	public static void main(String[] args)
 	{
 
+		root.info("TOPALi V"+VERSION);
 		root.info("Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));
 
@@ -103,6 +104,11 @@ public class TOPALi extends Applet implements Application
 				sh.setApplication(this);
 				Thread.setDefaultUncaughtExceptionHandler(sh);
 			}
+		}
+		
+		if(debugClient) {
+			//MemoryMonitor memmon = new MemoryMonitor(MemoryMonitor.UNIT_MEGABYTES, 10);
+			//memmon.start();
 		}
 
 		showSplash();
