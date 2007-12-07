@@ -159,7 +159,7 @@ public class TextPanel extends JPanel implements Printable
 
 	    double scale = pageWidth / panelWidth;
 	    int totalNumPages = (int) Math.ceil(scale * panelHeight / pageHeight);
-	    System.out.println("np="+totalNumPages);
+	   // System.out.println("np="+totalNumPages);
 	    
 	    //  make sure not print empty pages
 	    if (pageIndex >= totalNumPages) {

@@ -11,6 +11,22 @@
 Model Selection is done running PhyML on each model (in parallel on clusters 
 or multi-core machines). 
 <br><br>
+Three different scores will be calculated:
+<ul>
+<li>Akaike information criterion (AIC1): -2lnl + 2df</li>
+<li>AIC with second order correction (AIC2): -2lnl + 2df + 2df(df+1)/(n-df-1)</li>
+<li>Bayesian information criterion (BIC): -2lnl + df * log(n)</li>
+</ul>
+(lnl: log likelihood; df: degrees of freedom (model + tree); n: sample size)<br>
+You can choose the parameter 'n' either to be the sequence length or the alignment size.
+<br><br>
+The result table will be sorted in ascending order according to the BIC score 
+(the best model has the lowest score). You can sort the table in ascending/descending order
+according to each score by clicking on the appropriate column header.<br>
+In brackets after the scores the Robinson Foulds distance for the best model versus all models is
+shown (AIC1 column: best AIC model vs. all; AIC2 column: best AIC2 model vs. all; BIC column: best BIC model
+vs. all).
+<br><br>
 If you choose Model Selection for PhyML the following models will be tested.<br><br>
 For DNA alignments:<br>
 <img src="images/dna_submodels.png"/>

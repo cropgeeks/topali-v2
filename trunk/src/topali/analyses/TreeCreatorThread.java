@@ -36,6 +36,11 @@ public class TreeCreatorThread extends DesktopThread
 		this.showDialog = showDialog;
 	}
 	
+	public void setParameters(double tsTv, double alpha) {
+		this.tsTv = tsTv;
+		this.alpha = alpha;
+	}
+	
 	public long getStartTime() {
 		return start;
 	}

@@ -84,7 +84,7 @@ public class ObjectMapper
 	public void registerObjects(Object topaliObject, Vobject vamsasObject)
 	{
 		VorbaId id = vamsasObject.getVorbaId();
-		System.out.print("Checking vorba id...");
+		//System.out.print("Checking vorba id...");
 		
 		if (id == null)
 		{

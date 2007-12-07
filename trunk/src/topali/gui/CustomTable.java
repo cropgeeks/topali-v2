@@ -6,6 +6,7 @@
 package topali.gui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.util.Vector;
@@ -20,6 +21,8 @@ import javax.swing.table.*;
 public class CustomTable extends JTable
 {
 	boolean editable = false;
+	
+	Vector<String> headerToolTips;
 	
 	public CustomTable(Object[][] rowData, Object[] columnNames)
 	{
@@ -40,6 +43,26 @@ public class CustomTable extends JTable
 	 */
 	public void setEditable(boolean b) {
 		this.editable = b;
+	}
+	
+	public void setHeaderToolTips(Vector<String> tt) {
+		if(tt.size()!=getColumnCount())
+			return;
+		
+		this.headerToolTips = tt;
+		
+		JTableHeader th = new JTableHeader(columnModel) {
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int index = columnModel.getColumnIndexAtX(p.x);
+                int realIndex = 
+                        columnModel.getColumn(index).getModelIndex();
+                return headerToolTips.get(realIndex);
+            }
+        };
+        
+        this.setTableHeader(th);
 	}
 	
 	private void init()
@@ -202,7 +225,7 @@ public class CustomTable extends JTable
 				setFont(getFont().deriveFont(Font.PLAIN));
 			
 			//remove all markup tags
-			text = text.replaceAll("\\<.*\\>", "");
+			text = text.replaceAll("\\<\\D+.*\\>", "");
 			
 			setText(text);
 		    

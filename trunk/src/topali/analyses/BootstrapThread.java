@@ -28,11 +28,19 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 	int count = 0;
 	Tree bsTree;
 	
+	double tstv = -1;
+	double alpha = -1;
+	
 	public BootstrapThread(Tree tree, Alignment align, boolean isDNA, int runs) {
 		this.tree = tree;
 		this.align = align;
 		this.isDNA = isDNA;
 		this.runs = runs;
+	}
+	
+	public void setParameters(double tstv, double alpha) {
+		this.tstv = tstv;
+		this.alpha = alpha;
 	}
 	
 	public Tree getTree()
@@ -74,6 +82,9 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 	{
 		BootstrappedAlignment boot = new BootstrappedAlignment(align);
 		creator = new TreeCreatorThread(boot, isDNA, false);
+		
+		if(tstv!=-1 || alpha!=-1)
+			creator.setParameters(tstv, alpha);
 		
 		updateObservers(count*100/runs);
 		

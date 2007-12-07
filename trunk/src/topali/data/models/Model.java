@@ -17,7 +17,10 @@ public abstract class Model extends DataObject implements Comparable<Model>
 	boolean gamma = false;
 	boolean inv = false;
 	
-	double lnl = 0;
+	double lnl = -1;
+	double aic1 = -1;
+	double aic2 = -1;
+	double bic = -1;
 	
 	//alpha shape parameter for gamma distribution
 	double alpha;
@@ -75,6 +78,15 @@ public abstract class Model extends DataObject implements Comparable<Model>
 		this.name = name;
 	}
 
+	public String getIGName() {
+		String result = name;
+		if(inv)
+			result += "+I";
+		if(gamma)
+			result += "+G";
+		return result;
+	}
+	
 	public void addAlias(String alias) {
 		this.aliases.add(alias);
 	}
@@ -111,6 +123,36 @@ public abstract class Model extends DataObject implements Comparable<Model>
 	public void setLnl(double lnl)
 	{
 		this.lnl = lnl;
+	}
+
+	public double getAic1()
+	{
+		return aic1;
+	}
+
+	public void setAic1(double aic1)
+	{
+		this.aic1 = aic1;
+	}
+
+	public double getAic2()
+	{
+		return aic2;
+	}
+
+	public void setAic2(double aic2)
+	{
+		this.aic2 = aic2;
+	}
+
+	public double getBic()
+	{
+		return bic;
+	}
+
+	public void setBic(double bic)
+	{
+		this.bic = bic;
 	}
 
 	public double getAlpha()

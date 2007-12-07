@@ -257,7 +257,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			return;
 
 		setMenus();
-		disPanel.refreshAndRepaint();
+		//disPanel.refreshAndRepaint();
+		disPanel.repaint();
 
 		if (Prefs.gui_preview_current)
 			WinMain.rDialog.updateTreePreview(false);

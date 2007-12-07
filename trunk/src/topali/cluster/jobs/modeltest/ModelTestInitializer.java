@@ -65,7 +65,7 @@ public class ModelTestInitializer extends Thread
 				tmp.createNewFile();
 
 				//Store alignment
-				ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, false);
+				ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, true);
 
 				//Store run scripts
 				if (ClusterUtils.isWindows){

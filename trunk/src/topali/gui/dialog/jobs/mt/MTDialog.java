@@ -62,7 +62,14 @@ public class MTDialog extends JDialog implements ActionListener
 			this.res = panel.getResult();
 			this.res.isRemote = remote;
 			this.res.selectedSeqs = ss.getSelectedSequenceSafeNames();
-
+			
+			if(this.res.sampleCrit==ModelTestResult.SAMPLE_SEQLENGTH) {
+				this.res.sampleSize = data.getActiveRegionE()-data.getActiveRegionS()+1;
+			}
+			else if(this.res.sampleCrit==ModelTestResult.SAMPLE_ALGNSIZE) {
+				this.res.sampleSize = (data.getActiveRegionE()-data.getActiveRegionS()+1)*this.res.selectedSeqs.length;
+			}
+			
 			int runNum = data.getTracker().getMtRunCount() + 1;
 			data.getTracker().setMtRunCount(runNum);
 			this.res.guiName = "Model Selection " + runNum;

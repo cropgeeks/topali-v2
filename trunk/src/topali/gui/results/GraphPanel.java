@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
 import topali.data.*;
@@ -187,14 +188,20 @@ public class GraphPanel extends JPanel implements Printable
 				null, PlotOrientation.VERTICAL, true, true, false);
 
 		//setChartData(this.data);
-
-		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_OFF);
+		
+		RenderingHints rh;
+		if(Prefs.gui_graph_smooth)
+			rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		else
+			rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		chart.setRenderingHints(rh);
 		chart.removeLegend();
 
 		XYPlot plot = chart.getXYPlot();
 
+		plot.setBackgroundPaint(Prefs.gui_graph_background);
+		((XYItemRenderer)plot.getRenderer()).setPaint(Prefs.gui_graph_color);
+		
 		// plot.setDomainGridlinesVisible(false);
 		// plot.setRangeGridlinesVisible(false);
 

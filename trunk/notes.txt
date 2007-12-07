@@ -2,21 +2,26 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added facility to remove/replace bootstrap values from trees.
-- Model selection results now also show trees
-- Improved alignment diplay by using offscreen buffering
-
+- Alignment display: Each nucleotid rectangle is now pre-painted and copied into the actual display canvas
+  (instead of repainted again and again)
+  Sequence and paritition dimming as well as mouse over highlighting is now done by transparent overlaying
+  (instead of repainting the panel or buffer on each action)
+  Also added a light color gradient to the nuc. rectangles
+- Fixed update checker (version.txt in /www, upload to webserver with next release)
+  (already done in previous svn commit)
+- Fixed a bug in "remove bootstrap value" dialog
+- Added ToolTips to various table headers
+- Removed some unneccessary System.out.println()s
+- Added RF tree distances to model selection webservice
+- Quick Tree Estimation: Now allows setting of ts/tv and alpha parameter
+- Fixed bug in model test: AIC2 and BIC score was wrong
+- Removed 'Optimize...' checkboxes from phyml dialog (not needed at the moment)
+- Fixed bug: AA sub. models have 0 degress of freedom not 19
 
 TODO:
-- Check if writing back bootstrap values after midpoint rooting really works.
-- Increase table font size
-- UpdateChecker doesn't work anymore
-- Implement/decide on analysis restrictions for remote jobs
 - Bug: Dundee cluster filesystem timeout problems
 - Future: Estimate Tree dialog needs defaults button
 - Future: Resumbittion of tree job
-- Future: Decide on mouse highlighting functionality
-- Future: Decide on how to handle local job submission
 - FRANK: come up with additional "TOPALi Tips"
 - Applications note
 
@@ -24,7 +29,7 @@ Some ideas:
 
 
 Known Bugs
-- RaxML process sometimes doesn't stop
+- RaxML process sometimes doesn't stop (can't reproduce this anymore...)
 - PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
 
 

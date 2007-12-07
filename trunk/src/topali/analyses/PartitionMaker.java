@@ -111,7 +111,7 @@ public class PartitionMaker
 		else if (data3[0][1] >= threshold)
 			state = 3;
 
-		System.out.println("INITIAL STATE=" + state);
+		//System.out.println("INITIAL STATE=" + state);
 
 		for (int i = 1; i < data1.length; i++)
 		{
@@ -127,8 +127,7 @@ public class PartitionMaker
 			// Change...
 			if (newState != state)
 			{
-				System.out.println("CHANGE AT " + data1[i][0] + " : "
-						+ newState);
+				//System.out.println("CHANGE AT " + data1[i][0] + " : "+ newState);
 
 				// Is this the start of a partition?
 				if (break1 == -1)
@@ -144,7 +143,7 @@ public class PartitionMaker
 					break2 = (int) data1[i][0];
 					end = break2;// - (int) ((break2-break1) / 2f);
 
-					System.out.println("ADDING PARTITION");
+					//System.out.println("ADDING PARTITION");
 					addPartition(start, end);
 
 					break1 = break2 = -1;

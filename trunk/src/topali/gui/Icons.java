@@ -52,7 +52,7 @@ public class Icons
 	
 	public static ImageIcon VAMSASON, VAMSASOFF;
 	
-	public static ImageIcon MIDPOINT_ROOT, TREE_ANCESTOR;
+	public static ImageIcon MIDPOINT_ROOT, TREE_ANCESTOR, REMOVE_BOOTSTRAP;
 	
 	private Icons()
 	{

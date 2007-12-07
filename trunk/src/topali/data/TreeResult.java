@@ -73,6 +73,7 @@ public class TreeResult extends AlignmentResult
 		this.treeStr = original.treeStr;
 		this.pS = original.pS;
 		this.pE = original.pE;
+		this.lnl = original.lnl;
 		if(original.clusters!=null) {
 			this.clusters = new LinkedList<SequenceCluster>();
 			for(SequenceCluster c : original.clusters)
@@ -200,7 +201,7 @@ public class TreeResult extends AlignmentResult
 			name = "Unknown Tree";
 		
 		if(lnl!=0) {
-			name += " (lnl="+Prefs.d2.format(lnl)+")";
+			name += " (l="+Prefs.d2.format(lnl)+")";
 		}
 		
 		return name;

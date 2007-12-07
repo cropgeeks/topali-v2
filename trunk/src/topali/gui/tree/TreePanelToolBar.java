@@ -40,6 +40,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 	
 	JButton bAncestor;
 	
+	JButton bHelp;
+	
 	JToggleButton bDrawNormal, bDrawCircular, bDrawNewHamp, bSizedToFit,
 			bFloat, bViewCluster;
 	
@@ -78,11 +80,13 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		
 		bInfo = (JButton)WinMainToolBar.getButton(false, null, "tre11", Icons.ANALYSIS_INFO, null);
 		
-		bBootstrap = (JButton)WinMainToolBar.getButton(false, null, null, Icons.ADJUST_THRESHOLD, null);
+		bBootstrap = (JButton)WinMainToolBar.getButton(false, null, "tre13", Icons.REMOVE_BOOTSTRAP, null);
 		
 		bRoot = (JButton)WinMainToolBar.getButton(false, null, "tre10", Icons.MIDPOINT_ROOT, null);
 		
 		bAncestor = (JButton)WinMainToolBar.getButton(false, null, "tre12", Icons.TREE_ANCESTOR, null);
+		
+		bHelp = TOPALiHelp.getHelpIconButton("trees");
 		
 		bExport.addActionListener(this);
 		bDrawNormal.addActionListener(this);
@@ -123,6 +127,8 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		add(bAncestor);
 		addSeparator();
 		add(bInfo);
+		addSeparator();
+		add(bHelp);
 		add(new JLabel(" "));
 		
 		// Add the toggle buttons into a group so that only one can be selected

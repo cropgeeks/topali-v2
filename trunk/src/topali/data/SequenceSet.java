@@ -130,7 +130,7 @@ public class SequenceSet extends DataObject
 	{
 		// Additional check because when Castor outputs a string containing all
 		// white space then it gets saved as an empty string
-		if (overview.length() == 0)
+		if (overview==null || overview.length() == 0)
 			calculateOverview();
 
 		return overview;
@@ -301,7 +301,7 @@ public class SequenceSet extends DataObject
 			for (Sequence seq : sequences)
 				if (seq.getLength() != size)
 				{
-					System.out.println(seq.getName() + " : " + seq.getLength());
+					//System.out.println(seq.getName() + " : " + seq.getLength());
 					throw new AlignmentLoadException(NOT_ALIGNED);
 				}
 		}
@@ -318,7 +318,7 @@ public class SequenceSet extends DataObject
 				String jName = itor2.next().getName();
 				if (iName.equals(jName))
 				{
-					System.out.println(jName);
+					//System.out.println(jName);
 					throw new AlignmentLoadException(DUPLICATE_NAMES_FOUND);
 				}
 			}

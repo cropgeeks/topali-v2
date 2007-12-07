@@ -41,11 +41,14 @@ public class ModelTestWebService extends WebService
 
 			if(ClusterUtils.isWindows) {
 				result.phymlPath = binPath + "\\phyml_win32.exe";
+				result.treeDistPath = binPath +"\\treedist.exe";
 			}
 			else {
 				result.phymlPath = binPath + "/src/phyml/phyml_linux";
+				result.treeDistPath = binPath +"/src/treedist/treedist";
 				//phyml's sometimes not executable
 				Runtime.getRuntime().exec("chmod +x " + result.phymlPath);
+				Runtime.getRuntime().exec("chmod +x " + result.treeDistPath);
 			}
 			
 			result.tmpDir = getParameter("tmp-dir");

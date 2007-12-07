@@ -48,7 +48,7 @@ public class ProteinModel extends Model
 	@Override
 	public int getFreeParameters()
 	{
-		return 19;
+		return 0;
 	}
 
 	@Override

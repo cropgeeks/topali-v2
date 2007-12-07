@@ -125,21 +125,21 @@ public class ProteinModelDiagram extends ModelDiagram
 			int fh = (int)((baseFreqs[i]*ch)/maxFreq);
 			g2d.fillRect(xs, ys-fh, fw, fh);
 			
-			int ax = xs;
-			int ay = ys-fh;
-			int bx = ax+fw;
-			int by = ay;
-			int cx = bx;
-			int cy = by + fh;
-			int dx = ax + fw/4;
-			int dy = ay - fw/4;
-			int ex = bx  + fw/4;
-			int ey = by - fw/4;
-			int fx = cx + fw/4;
-			int fy = cy - fw/4;
-			g2d.setPaint(new RadialGradientPaint(new Point(ex-(fw/8), ey+(fw/8)), (float)(fw), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c1}));
-			g2d.fillPolygon(new int[] {ax, bx, ex, dx}, new int[] {ay, by, ey, dy}, 4);
-			g2d.fillPolygon(new int[] {bx, ex, fx, cx}, new int[] {by, ey, fy, cy}, 4);
+//			int ax = xs;
+//			int ay = ys-fh;
+//			int bx = ax+fw;
+//			int by = ay;
+//			int cx = bx;
+//			int cy = by + fh;
+//			int dx = ax + fw/4;
+//			int dy = ay - fw/4;
+//			int ex = bx  + fw/4;
+//			int ey = by - fw/4;
+//			int fx = cx + fw/4;
+//			int fy = cy - fw/4;
+//			g2d.setPaint(new RadialGradientPaint(new Point(ex-(fw/8), ey+(fw/8)), (float)(fw), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c1}));
+//			g2d.fillPolygon(new int[] {ax, bx, ex, dx}, new int[] {ay, by, ey, dy}, 4);
+//			g2d.fillPolygon(new int[] {bx, ex, fx, cx}, new int[] {by, ey, fy, cy}, 4);
 			
 			
 			if(i>0)
@@ -169,7 +169,7 @@ public class ProteinModelDiagram extends ModelDiagram
 		for(int i=0; i<20; i++) { 
 			drawString(g2d, f, aa[i], xs-cw, ys);
 			for(int j=i+1; j<20; j++) {
-				int r = (int)((subRates[i][j]/maxRate)*cmax/2d);
+				int r = (int)((subRates[i][j]/maxRate)*cmax/2d*1.5);
 				if(r<1) {
 					if(subRates[i][j]>0)
 						drawPoint(g2d, xs, ys);
