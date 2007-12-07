@@ -66,4 +66,13 @@ public class TOPALiHelp
 
 		return bHelp;
 	}
+	
+	public static JButton getHelpIconButton(String helpPage)
+	{
+		JButton bHelp = new JButton(Icons.HELP16);
+		bHelp.setMnemonic(KeyEvent.VK_H);
+		enableHelpOnButton(bHelp, helpPage);
+
+		return bHelp;
+	}
 }

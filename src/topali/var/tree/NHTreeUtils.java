@@ -48,7 +48,7 @@ public class NHTreeUtils
 	 * @param threshold
 	 * @return
 	 */
-	public static String removeBootstrapValues(String tree, int threshold) {
+	public static String removeBootstrapValues(String tree, double threshold) {
 		int s = 0;
 		int e = 0;
 		while(true) {
@@ -60,7 +60,7 @@ public class NHTreeUtils
 			if(e<=(s+1))
 				continue;
 			
-			int bs = Integer.parseInt(tree.substring(s+1, e));
+			double bs = Double.parseDouble(tree.substring(s+1, e));
 			if(bs<threshold) {
 				tree = tree.substring(0, s+1)+tree.substring(e);
 			}
@@ -76,8 +76,8 @@ public class NHTreeUtils
 	 * @param tree
 	 * @return
 	 */
-	public static int[] analyzeBootstrapValues(String tree) {
-		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE, avg = 0;
+	public static double[] analyzeBootstrapValues(String tree) {
+		double min = Integer.MAX_VALUE, max = Integer.MIN_VALUE, avg = 0;
 		
 		int s = 0;
 		int e = 0;
@@ -91,7 +91,7 @@ public class NHTreeUtils
 			if(e<=(s+1))
 				continue;
 			
-			int bs = Integer.parseInt(tree.substring(s+1, e));
+			double bs = Double.parseDouble(tree.substring(s+1, e));
 			if(bs<min) {
 				min = bs;
 			}
@@ -102,6 +102,6 @@ public class NHTreeUtils
 			c++;
 		}
 		
-		return new int[] {min,(int)((double)avg/(double)c),max};
+		return new double[] {min, avg/(double)c,max};
 	}
 }

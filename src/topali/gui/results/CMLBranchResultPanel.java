@@ -16,7 +16,7 @@ import doe.GradientPanel;
 
 import pal.statistics.ChiSquareDistribution;
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 import topali.gui.atv.ATV;
 import topali.var.*;
 import topali.var.tree.NHTreeUtils;
@@ -109,17 +109,23 @@ public class CMLBranchResultPanel extends ResultPanel
 	{
 		CodeMLResult result = (CodeMLResult) super.result;
 
+		Vector<String> tt = new Vector<String>();
+		
 		Vector<String> names = new Vector<String>();
 		names.add("Hypothesis");
+		tt.add(null);
 		int n = 0;
 		for (CMLHypothesis hypo : result.hypos)
 		{
 			if (hypo.omegas.length > n)
 				n = hypo.omegas.length;
 		}
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++) {
 			names.add("\u03C9" + getUnicode(i));
+			tt.add("Omega Values");
+		}
 		names.add("\u2113");
+		tt.add("Log Likelihood");
 
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		for (int i = 0; i < result.hypos.size(); i++)
@@ -140,6 +146,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		}
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
 		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("Likelihood/Omega values"));

@@ -470,4 +470,16 @@ public class Utils
     	b = 255 - (int)(b/f);
     	return new Color(r,g,b);
     }
+	
+	/**
+	 * Cuts of decimal places
+	 * @param value Double value to get chopped
+	 * @param d Number of decimal places to preserve
+	 * @return
+	 */
+	public static double chop(double value, int d) {
+		double factor = Math.pow(10, d);
+		int tmp = (int)(value*factor);
+		return ((double)tmp/factor);
+	}
 }

@@ -7,7 +7,14 @@
    Permission is granted to copy and use this program provided no fee is
    charged for it and provided that this copyright notice is not removed. */
 
-#define VERSION "3.63"
+#define VERSION "3.67"
+
+/* Debugging options */
+/* Define this to disable assertions */
+#define NDEBUG
+
+/* Define this to enable debugging code */
+/* #define DEBUG */
 
 /* machine-specific stuff:
    based on a number of factors in the library stdlib.h, we will try
@@ -20,6 +27,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #ifdef WIN32
 #include <windows.h>
 
@@ -29,9 +37,6 @@ void phySetConsoleAttributes(void);
 void phyRestoreConsoleAttributes(void);
 void phyFillScreenColor(void);
 
-#endif
-#ifndef WIN32
-#include <unistd.h>   /* Contains the close(FILE *f) declaration */
 #endif
 
 #ifdef  GNUDOS
@@ -190,6 +195,7 @@ void phyFillScreenColor(void);
 #include <string.h>
 #endif
 
+#include <assert.h>
 #include <math.h>
 #include <ctype.h>
 
@@ -229,13 +235,23 @@ typedef unsigned char boolean;
 
 #define true    1
 #define false   0
+
+/* Number of items per machine word in set.
+ * Used in consensus programs and clique */
 #define SETBITS 31
 
 MALLOCRETURN    *mymalloc(long);
 
+/*** UI behavior ***/
+
+/* Set to 1 to not ask before overwriting files */
+#define OVERWRITE_FILES 0
+
+/*** Static memory parameters ***/
+
 #define FNMLNGTH        200  /* length of array to store a file name */
-#define MAXNCH          20
 #define nmlngth         10   /* number of characters in species name    */
+#define MAXNCH          20   /* must be greater than or equal to nmlngth */
 #define maxcategs       9    /* maximum number of site types */
 #define maxcategs2     11    /* maximum number of site types + 2 */
 #define point           "."
@@ -243,14 +259,60 @@ MALLOCRETURN    *mymalloc(long);
 #define down            2
 #define MAXSHIMOTREES 100
 
-#define smoothings      4    /* number of passes through smoothing algorithm */
-#define iterations      4    /* number of iterates for each branch           */
+/*** Maximum likelihood parameters ***/
+
+
+/* Used in proml, promlk, dnaml, dnamlk, etc. */
+#define UNDEFINED 1.0           /* undefined or invalid likelihood */
+#define smoothings      4       /* number of passes through smoothing algorithm */
+#define iterations      8       /* number of iterates for each branch           */
 #define epsilon         0.0001  /* small number used in makenewv */
-#define EPSILON         0.00001  /* small number used in hermite root-finding */
-#define initialv        0.1  /* starting branch length unless otherwise */
-#define over            60   /* maximum width all branches of tree on screen */
+#define EPSILON         0.00001 /* small number used in hermite root-finding */
+#define initialv        0.1     /* starting branch length unless otherwise */
+#define INSERT_MIN_TYME 0.0001  /* Minimum tyme between nodes during inserts */
+#define over            60      /* maximum width all branches of tree on screen */
+#define LIKE_EPSILON    1e-10   /* Estimate of round-off error in likelihood
+                                 * calculations. */
+
+/*** Math constants ***/
+
 #define SQRTPI 1.7724538509055160273
 #define SQRT2  1.4142135623730950488
+
+/*** Rearrangement parameters ***/
+
+#define NLRSAVES 5 /* number of views that need to be saved during local  *
+                    * rearrangement                                       */
+
+/*** Output options ***/
+
+/* Number of significant figures to display in numeric output */
+#define PRECISION               6
+
+/* Maximum line length of matrix output - 0 for unlimited */
+#define OUTPUT_TEXTWIDTH        78
+
+/** output_matrix() flags **/
+
+/* Block output: Matrices are vertically split into blocks that
+ * fit within OUTPUT_TEXTWIDTH columns */
+#define MAT_BLOCK       0x1
+/* Lower triangle: Values on or above the diagonal are not printed */
+#define MAT_LOWER       0x2
+/* Print a border between headings and data */
+#define MAT_BORDER      0x4
+/* Do not print the column header */
+#define MAT_NOHEAD      0x8
+/* Output the number of columns before the matrix */
+#define MAT_PCOLS       0x10
+/* Do not enforce maximum line width */
+#define MAT_NOBREAK     0x20
+/* Pad row header with spaces to 10 char */
+#define MAT_PADHEAD     0x40
+/* Human-readable format. */
+#define MAT_HUMAN       MAT_BLOCK
+/* Machine-readable format. */
+#define MAT_MACHINE     (MAT_PCOLS | MAT_NOHEAD | MAT_PADHEAD)
 
 typedef long *steptr;
 typedef long longer[6];
@@ -265,7 +327,7 @@ typedef struct bestelm {
   boolean collapse;
 } bestelm;
 
-extern FILE *infile, *outfile, *intree, *intree2, *outtree,
+extern FILE *infile, *outfile,  *intree, *intree2, *outtree,
     *weightfile, *catfile, *ancfile, *mixfile, *factfile;
 extern long spp, words, bits;
 extern boolean ibmpc, ansi, tranvsp;
@@ -454,17 +516,44 @@ typedef struct node {
 
 typedef node **pointarray;
 
+
+/*** tree structure ***/
+
 typedef struct tree {
+
+  /* An array of pointers to nodes. Each tip node and ring of nodes has a
+   * unique index starting from one. The nodep array contains pointers to each
+   * one, starting from 0. In the case of internal nodes, the entries in nodep
+   * point to the rootward node in the group. Since the trees are otherwise
+   * entirely symmetrical, except at the root, this is the only way to resolve
+   * parent, child, and sibling relationships.
+   *
+   * Indices in range [0, spp) point to tips, while indices [spp, nonodes)
+   * point to fork nodes
+   */
   pointarray nodep;
+
+  /* A pointer to the first node. Typically, root is used when the tree is rooted,
+   * and points to an internal node with no back link. */
+  node *root;                    
+  
+  /* start is used when trees are unrooted. It points to an internal node whose
+   * back link typically points to the outgroup leaf. */
+  node *start;                    
+
+  /* In maximum likelihood programs, the most recent evaluation is stored here */
   double likelihood;
-  transptr trans, transprod;       /* trans and transprod used in restml */
-  node *start;                    /* start used in dnaml & restml */
-  node *root;                     /* root used in dnamlk */
+
+  /* Branch transition matrices for restml */
+  transptr trans;                 /* all transition matrices */
+  long *freetrans;                /* an array of indexes of free matrices */
+  long transindex;                /* index of last valid entry in freetrans[] */
 } tree;
 
 typedef void (*initptr)(node **, node **, node *, long, long,
                          long *, long *, initops, pointarray,
                          pointarray, Char *, Char *, FILE *);
+
 
 #ifndef OLDC
 /* function prototypes */
@@ -473,6 +562,7 @@ boolean    eoff(FILE *);
 boolean    eoln(FILE *);
 int    filexists(char *);
 const char*  get_command_name (const char *);
+void   EOF_error(void);
 void   getstryng(char *);
 void   openfile(FILE **,const char *,const char *,const char *,const char *,
                 char *);
@@ -565,14 +655,15 @@ void   gnutreenode(node **, node **, long, long, long *);
 void   gnudisctreenode(node **, node **, long , long, long *,
                 unsigned char *);
 
-void   chucktreenode(node **, node *);
 void   setupnode(node *, long);
+node * pnode(tree *t, node *p);
 long   count_sibs (node *);
 void   inittrav (node *);
 void   commentskipper(FILE ***, long *);
 long   countcomma(FILE **, long *);
 long   countsemic(FILE **);
 void   hookup(node *, node *);
+void   unhookup(node *, node *);
 void   link_trees(long, long , long, pointarray);
 void   allocate_nodep(pointarray *, FILE **, long  *);
   
@@ -598,5 +689,13 @@ void unroot(tree* t,long nonodes);
 void unroot_here(node* root, node** nodep, long nonodes);
 void clear_connections(tree *t, long nonodes);
 void init(int argc, char** argv);
+char **stringnames_new(void);
+void stringnames_delete(char **names);
+int fieldwidth_double(double val, unsigned int precision);
+void output_matrix_d(FILE *fp, double **matrix,
+    unsigned long rows, unsigned long cols,
+    char **row_head, char **col_head, int flags);
+void debugtree (tree *, FILE *);
+void debugtree2 (pointarray, long, FILE *);
 #endif /* OLDC */
 #endif /* _PHYLIP_H_ */

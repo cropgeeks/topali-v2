@@ -34,7 +34,7 @@ public class PhymlDialog extends JDialog implements ActionListener
 		init();
 		
 		pack();
-		setSize(360,350);
+		setSize(360,250);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 	}

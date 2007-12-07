@@ -29,12 +29,18 @@ public class ModelTestLocalJob extends AnalysisJob
 		result.jobId = "" + System.currentTimeMillis();
 		result.tmpDir = Prefs.tmpDir.getPath();
 		
-		if (Prefs.isWindows)
+		if (Prefs.isWindows) {
 			result.phymlPath = Utils.getLocalPath() + "phyml_win32.exe";
-		else if(Prefs.isMacOSX)
+			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";
+		}
+		else if(Prefs.isMacOSX) {
 			result.phymlPath = Utils.getLocalPath() + "phyml/phyml_macOSX";
-		else 
+			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
+		}
+		else { 
 			result.phymlPath = Utils.getLocalPath() + "phyml/phyml_linux";
+			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
+		}
 		
 		jobDir = new File(Prefs.tmpDir, result.jobId);
 		

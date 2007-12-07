@@ -131,6 +131,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		rProject.setMnemonic(KeyEvent.VK_N);
 		rCodonPos = new JRadioButton("Split alignment according to codon positions");
 		rCodonPos.setMnemonic(KeyEvent.VK_C);
+		rCodonPos.setEnabled(ss.isCodons());
 		ButtonGroup group3 = new ButtonGroup();
 		group3.add(rDisk);
 		group3.add(rProject);

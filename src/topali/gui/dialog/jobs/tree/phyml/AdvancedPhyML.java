@@ -65,17 +65,12 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		this.gamma.setSelected(params.getModel().isGamma());
 		this.inv.setSelected(params.getModel().isInv());
 		
-		this.optBranch.setSelected(Prefs.phyml_optbranch);
-		this.optTop.setSelected(Prefs.phyml_opttop);
-		
 		SpinnerNumberModel mNBoot = new SpinnerNumberModel(Prefs.phyml_bootstrap, 0, 1000, 10);
 		this.bootstraps.setModel(mNBoot);
 	}
     
     private void initPrevResult(PhymlResult res) {
     	this.bootstraps.setValue(res.bootstrap);
-    	this.optTop.setSelected(res.optTopology);
-    	this.optBranch.setSelected(res.optBranchPara);
     }
     
     public PhymlResult onOK() {
@@ -88,8 +83,8 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		
 		result.model = ss.getParams().getModel();
 		result.bootstrap = (Integer)bootstraps.getValue();
-		result.optTopology = optTop.isSelected();
-		result.optBranchPara = optBranch.isSelected();
+		result.optTopology = true;
+		result.optBranchPara = true;
 		
 		Prefs.phyml_bootstrap = result.bootstrap;
 		Prefs.phyml_optbranch = result.optBranchPara;
@@ -112,14 +107,8 @@ public class AdvancedPhyML extends javax.swing.JPanel {
         inv = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         gamma = new javax.swing.JCheckBox();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        optTop = new javax.swing.JCheckBox();
-        jLabel5 = new javax.swing.JLabel();
-        optBranch = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         bootstraps = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Model parameters"));
         jLabel8.setText("Substitution Model:");
@@ -174,66 +163,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("PhyML specific parameters"));
-        jLabel4.setText("Optimize Topology:");
-
-        optTop.setToolTipText("Optimize tree topology (forces branch length/rate parameters optimization)\n");
-        optTop.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        optTop.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        optTop.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                optTopStateChanged(evt);
-            }
-        });
-
-        jLabel5.setText("Optimize branch length/");
-
-        optBranch.setToolTipText("Optimize branch lengths and rate parameters");
-        optBranch.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        optBranch.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
         jLabel6.setText("Bootstrap Runs: ");
 
         bootstraps.setToolTipText("Number of bootstrap runs");
-
-        jLabel1.setText("rate parameters:");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(optTop)
-                    .addComponent(bootstraps, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-                    .addComponent(optBranch))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(optTop)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel1))
-                    .addComponent(optBranch))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(bootstraps, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -242,8 +174,13 @@ public class AdvancedPhyML extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel6)
+                        .addGap(42, 42, 42)
+                        .addComponent(bootstraps, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                        .addGap(21, 21, 21)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -252,32 +189,23 @@ public class AdvancedPhyML extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bootstraps, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void optTopStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_optTopStateChanged
-        if(optTop.isSelected())
-            optBranch.setSelected(true);
-    }//GEN-LAST:event_optTopStateChanged
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner bootstraps;
     private javax.swing.JCheckBox gamma;
     private javax.swing.JCheckBox inv;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JCheckBox optBranch;
-    private javax.swing.JCheckBox optTop;
     private javax.swing.JComboBox subModel;
     // End of variables declaration//GEN-END:variables
     

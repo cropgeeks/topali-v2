@@ -95,7 +95,6 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		boldFont.setSelected(Prefs.gui_seq_font_bold);
 		showCols.setSelected(Prefs.gui_seq_show_colors);
 		smooth.setSelected(Prefs.gui_graph_smooth);
-		line.setSelected(Prefs.gui_graph_line);
 		tooltip.setSelected(Prefs.gui_seq_tooltip);
 		tree.setSelected(Prefs.gui_tree_unique_cols);
 		dimSeqs.setSelected(Prefs.gui_seq_dim);
@@ -151,14 +150,10 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 				.getString("DisplaySettingsDialog.gui14"),
 				Prefs.gui_graph_window));
 		m.addElement(new ColorObject(14, Text.GuiDiag
-				.getString("DisplaySettingsDialog.gui15"),
-				Prefs.gui_cardle_line));
-		m.addElement(new ColorObject(15, Text.GuiDiag
-				.getString("DisplaySettingsDialog.gui16"),
-				Prefs.gui_graph_background));
-		m.addElement(new ColorObject(16, Text.GuiDiag
 				.getString("DisplaySettingsDialog.gui17"),
-				Prefs.gui_histo_background));
+				Prefs.gui_graph_background));
+		m.addElement(new ColorObject(15, "Graph Line Color",
+				Prefs.gui_graph_color));
 
 		list.setModel(m);
 	}
@@ -207,7 +202,6 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 			Prefs.gui_seq_font_bold = boldFont.isSelected();
 			Prefs.gui_seq_show_colors = showCols.isSelected();
 			Prefs.gui_graph_smooth = smooth.isSelected();
-			Prefs.gui_graph_line = line.isSelected();
 			Prefs.gui_seq_tooltip = tooltip.isSelected();
 			Prefs.gui_tree_unique_cols = tree.isSelected();
 			Prefs.gui_seq_dim = dimSeqs.isSelected();
@@ -368,8 +362,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		layout.add(showCols, 0, 4, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(dimSeqs, 0, 5, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(boldFont, 0, 6, 1, 2, new Insets(0, 1, 0, 5));
-		// layout.add(smooth, 0, 7, 1, 2, new Insets(0, 1, 0, 5));
-		// layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(smooth, 0, 7, 1, 2, new Insets(0, 1, 0, 5));
+		//layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(tooltip, 0, 9, 1, 2, new Insets(0, 1, 0, 5));
 		// layout.add(tree, 0, 10, 1, 2, new Insets(0, 1, 5, 5));
 		layout.add(showVertHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
@@ -500,13 +494,10 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 				Prefs.gui_graph_window = color;
 				break;
 			case 14:
-				Prefs.gui_cardle_line = color;
-				break;
-			case 15:
 				Prefs.gui_graph_background = color;
 				break;
-			case 16:
-				Prefs.gui_histo_background = color;
+			case 15:
+				Prefs.gui_graph_color = color;
 				break;
 			}
 

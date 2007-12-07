@@ -31,6 +31,8 @@
   <tocitem text="Removing Alignments" target="remove_alignment" image="topic" />
 </tocitem>
 
+<tocitem text="Trees" target="trees" image="topic" />
+
 <tocitem text="Analysis Methods">
   <tocitem text="Running Jobs Locally" target="local_jobs" image="topic" />
   <tocitem text="Recombination Detection" expand="true">

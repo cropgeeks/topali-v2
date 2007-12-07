@@ -31,7 +31,7 @@ class FileReadSeq extends FileGeneric
 		File outFile = new File(Prefs.tmpDir, "tmpAlignment");
 
 		// Use ReadSeq to convert the file into a FASTA formatted file
-		System.out.println("Attempting ReadSeq conversion...");
+		//System.out.println("Attempting ReadSeq conversion...");
 		ReadSeq readSeq = new ReadSeq(file, outFile);
 		try
 		{

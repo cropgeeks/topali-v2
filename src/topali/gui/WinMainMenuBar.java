@@ -452,7 +452,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F81/WAG+G)...") {
+		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F84/WAG+G)...") {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsQuickTree();

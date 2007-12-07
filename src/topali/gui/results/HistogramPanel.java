@@ -61,7 +61,7 @@ class HistogramPanel extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		setBackground(Prefs.gui_histo_background);
+		setBackground(Prefs.gui_graph_background);
 
 		if (array == null)
 			return;

@@ -29,6 +29,8 @@
      <mapID target="overview_dialog" url="html/overview_dialog.html" />
      <mapID target="remove_alignment" url="html/remove_alignment.html" />
      
+     <mapID target="trees" url="html/trees.html" />
+     
      <mapID target="local_jobs" url="html/local_jobs.html" />
      
      <mapID target="pdm_method" url="html/pdm_method.html" />

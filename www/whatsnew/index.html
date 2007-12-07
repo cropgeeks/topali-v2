@@ -40,25 +40,47 @@ the full TOPALi version history</a> from the subversion server.</p>
 </ul>
 
 <h2><a name="v218"></a>New since version 2.18</h2>
+<br />
+
+<span style="font-weight: bold;">Improved Alignment Display</span><br />
+<ul>
+<li>Prettier: Light color gradients and anti-aliasing</li>
+<li>Faster: By using offscreen buffering the response time (for scrolling, mouse over highlighting, etc.)
+has increased, especially when displaying big alignments. </li>
+</ul>
+<img alt="" src="new_alignment_display.png" />
+<br />
+<br />
+
+<span style="font-weight: bold;">Customizable Graph Display</span><br />
+<p>You can now select the background color, the line color and switch on/off anti-aliasing
+for the the graph display (see 'Display settings' Dialog).</p>
+<img alt="" src="customizable_graph.png" />
+<br />
+<br />
 
 <span style="font-weight: bold;">Quick Tree estimation with Bootstrapping</span><br />
 <p>The quick (rough) tree estimation (Neighbor Joining with F84/WAG) can now also be done 
 with bootstrapping.</p>
 <br />
+<br />
 
-<span style="font-weight: bold;">New WebService: RaxML</span><br />
+<span style="font-weight: bold;">New WebService: <a href="http://icwww.epfl.ch/~stamatak/index-Dateien/Page443.htm" target="_blank">RaxML</a></span><br />
 <p>A fast (parallel) maximum likelihood tree estimation method</p>
 <img alt="" src="raxml.png" />
+<br />
 <br />
 
 <span style="font-weight: bold;">New Model Selection Method</span><br />
 <p>More accurate and faster (parallel) model selection based on PhyML.</p>
 <img alt="" src="modelselection.jpg" /><br />
 <br />
+<br />
 
 <span style="font-weight: bold;">New Phylogeny menu structure</span><br />
 <p>Each tree estimation method now has its own menu entry, grouped by method type.</p>
 <img alt="" src="phylogeny_menu.png" /><br />
+<br />
 <br />
 
 <span style="font-weight: bold;">Improved cDNA handling</span><br />
@@ -69,24 +91,22 @@ with bootstrapping.</p>
 </ul>
 <img alt="" src="codon_split_export.png" /><br />
 <br />
+<br />
 
 <span style="font-weight: bold;">Bugfixes:</span><br />
 <ul>
   <li>Replaced PhyML with PhyML-aLRT (but without using aLRT) because of a bug in PhyML, which prevented to run PhyML with
   bootstrapping.</li> 
 </ul>
-<br />
-
-
 
 <h2><a name="v217"></a>New since version 2.17</h2>
+<br />
 
 <span style="font-weight: bold;">Bugfixes:</span><br />
 <ul>
   <li>Fixed bug which caused sequence duplication when importing/exporting to VAMSAS sessions</li>
   <li>Fixed bug which prevented printing of tables.</li> 
 </ul>
-
 
 
 <h2><a name="v216"></a>New since version 2.16</h2>

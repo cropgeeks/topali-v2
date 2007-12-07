@@ -9,6 +9,7 @@ package topali.gui.tree;
 import javax.swing.SpinnerNumberModel;
 
 import topali.gui.Prefs;
+import topali.var.Utils;
 import topali.var.tree.NHTreeUtils;
 
 /**
@@ -17,7 +18,7 @@ import topali.var.tree.NHTreeUtils;
  */
 public class BootstrapDialog extends javax.swing.JDialog {
     
-    int threshold = -1;
+    double threshold = -1;
     String replacement = null;
     
     /** Creates new form BootstrapDialog */
@@ -25,9 +26,20 @@ public class BootstrapDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        int[] tmp = NHTreeUtils.analyzeBootstrapValues(tree);
-        
-        SpinnerNumberModel mod = new SpinnerNumberModel(tmp[1]+1, tmp[0]+1, tmp[2]+1, 1);
+        double[] tmp = NHTreeUtils.analyzeBootstrapValues(tree);
+        SpinnerNumberModel mod;
+        if(tmp[2]<=1) { //we're dealing with probabilities
+        	double min = Utils.chop(tmp[0], 2);
+        	double value = Utils.chop(tmp[1], 2);
+        	double max = Utils.chop(tmp[2], 2);
+        	mod = new SpinnerNumberModel(value, min, max+0.01, 0.01);
+        } 
+        else { // or "real" bootstrap values
+        	int min = (int)(tmp[0]);
+        	int value = (int)(tmp[1]);
+        	int max = (int)(tmp[2]);
+        	mod = new SpinnerNumberModel(value, min, max+1, 1);
+        }
         thresholdSpinner.setModel(mod);
         
         pack();
@@ -51,6 +63,8 @@ public class BootstrapDialog extends javax.swing.JDialog {
         okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Remove Bootstrap Values");
+        setResizable(false);
         jLabel1.setText("Remove bootstrap values");
 
         jLabel2.setText("< ");
@@ -128,7 +142,7 @@ public class BootstrapDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(repLabel)
                     .addComponent(repChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -142,7 +156,7 @@ public class BootstrapDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        threshold = Integer.parseInt(thresholdSpinner.getValue().toString());
+        threshold = Double.parseDouble(thresholdSpinner.getValue().toString());
         if(replace.isSelected()) 
             replacement = repChar.getText();
         else

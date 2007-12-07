@@ -69,7 +69,7 @@ public class TreeCanvas extends JPanel
 				painter.setUsingColor(false);
 			painter.setPenWidth(1);
 			painter.paint(g, w, h);
-			System.out.println(this.tree.toString());
+			//System.out.println(this.tree.toString());
 		}
 	}
 	

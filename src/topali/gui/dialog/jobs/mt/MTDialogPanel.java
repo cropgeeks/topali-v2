@@ -30,30 +30,35 @@ public class MTDialogPanel extends javax.swing.JPanel {
     	this.dna = dna;
         initComponents();
         
-        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.PHYML, ModelTestResult.MRBAYES});
+        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.TYPE_PHYML, ModelTestResult.TYPE_MRBAYES});
         models.setModel(mod);
+        
+        DefaultComboBoxModel mod2 = new DefaultComboBoxModel(new String[] {ModelTestResult.SAMPLE_SEQLENGTH, ModelTestResult.SAMPLE_ALGNSIZE});
+        sampleSize.setModel(mod2);
         
         models.setSelectedItem(Prefs.ms_models);
     	gamma.setSelected(Prefs.ms_gamma);
     	inv.setSelected(Prefs.ms_inv);
+    	sampleSize.setSelectedItem(Prefs.ms_samplesize);
     	
     	if(res!=null)
     		initPrevResult(res);
     }
     
     private void initPrevResult(ModelTestResult res) {
-    	this.models.setSelectedItem(res.selection);
+    	this.models.setSelectedItem(res.type);
     	this.gamma.setSelected(res.models.get(0).isGamma());
     	this.inv.setSelected(res.models.get(0).isInv());
+    	this.sampleSize.setSelectedItem(res.sampleSize);
     }
     
     public ModelTestResult getResult() {
     	
     	List<Model> availModels = null;
-		if(this.models.getSelectedItem().equals(ModelTestResult.PHYML)) {
+		if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_PHYML)) {
 			availModels = ModelManager.getInstance().listPhymlModels(dna);
 		}
-		else if(this.models.getSelectedItem().equals(ModelTestResult.MRBAYES)) { 
+		else if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_MRBAYES)) { 
 			availModels = ModelManager.getInstance().listMrBayesModels(dna);
 		}
 		ArrayList<Model> models = new ArrayList<Model>();
@@ -74,12 +79,18 @@ public class MTDialogPanel extends javax.swing.JPanel {
 				}
 		}
 		res.models = models;
-		res.selection = (String)this.models.getSelectedItem();
+		res.type = (String)this.models.getSelectedItem();
+		res.sampleCrit = (String)this.sampleSize.getSelectedItem();
 		
 		Prefs.ms_gamma = gamma.isSelected();
 		Prefs.ms_inv = inv.isSelected();
 		Prefs.ms_models = (String)this.models.getSelectedItem();
+		Prefs.ms_samplesize = (String)sampleSize.getSelectedItem();
     	return this.res;
+    }
+    
+    public String getSampleSizeSelection() {
+    	return (String)sampleSize.getSelectedItem();
     }
     
     public void setDefaults() {
@@ -101,6 +112,9 @@ public class MTDialogPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         gamma = new javax.swing.JCheckBox();
         inv = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        sampleSize = new javax.swing.JComboBox();
 
         jLabel1.setText("Models:");
 
@@ -116,6 +130,12 @@ public class MTDialogPanel extends javax.swing.JPanel {
         inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
+        jLabel4.setText("AIC2/BIC Calculation:");
+
+        jLabel5.setText("Sample Size =");
+
+        sampleSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequence Length", "Alignment Size" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,14 +143,19 @@ public class MTDialogPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inv)
-                    .addComponent(gamma)
-                    .addComponent(models, 0, 93, Short.MAX_VALUE))
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inv)
+                            .addComponent(gamma)
+                            .addComponent(models, 0, 113, Short.MAX_VALUE)
+                            .addComponent(sampleSize, 0, 113, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -148,6 +173,12 @@ public class MTDialogPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(inv))
+                .addGap(20, 20, 20)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(sampleSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -159,7 +190,10 @@ public class MTDialogPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JComboBox models;
+    private javax.swing.JComboBox sampleSize;
     // End of variables declaration//GEN-END:variables
     
 }

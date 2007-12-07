@@ -168,6 +168,9 @@
 		<field name="inv" type="boolean" get-method="isInv"
 			set-method="isInv" />
 		<field name="lnl" type="double" />
+		<field name="aic1" type="double" />
+		<field name="aic2" type="double" />
+		<field name="bic" type="double" />
 		<field name="alpha" type="double" />
 		<field name="invProp" type="double" />
 		<field name="gammaCat" type="int" />
@@ -661,11 +664,23 @@
 		<field name="phymlPath" type="string" direct="true">
 			<bind-xml node="attribute" />
 		</field>
-		<field name="selection" type="string" direct="true" />
+		<field name="treeDistPath" type="string" direct="true">
+			<bind-xml node="attribute" />
+		</field>
+		<field name="type" type="string" direct="true" />
+		<field name="sampleCrit" type="string" direct="true" />
+		<field name="sampleSize" type="int" direct="true" />
 		<field name="models" type="topali.data.models.Model"
 			direct="true" collection="arraylist" />
+		<field name="rfDistances" type="topali.data.Distance" collection="vector" direct="true" />
 	</class>
 
+	<class name="topali.data.Distance">
+		<field name="obj1"/>
+		<field name="obj2"/>
+		<field name="distance" type="double"/>
+	</class>
+	
 	<class name="topali.data.TreeResult"
 		extends="topali.data.AlignmentResult">
 		<field name="partitionStart" type="int">

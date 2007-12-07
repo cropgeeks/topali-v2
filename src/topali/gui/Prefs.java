@@ -114,7 +114,6 @@ public class Prefs extends PreferencesXML
 	public static boolean gui_seq_show_text;
 	public static boolean gui_seq_show_colors;
 	public static boolean gui_graph_smooth;
-	public static boolean gui_graph_line;
 	public static boolean gui_tree_unique_cols;
 	public static boolean gui_seq_dim;
 	public static int gui_color_seed = 0;
@@ -132,8 +131,7 @@ public class Prefs extends PreferencesXML
 	public static Color gui_graph_window;
 	public static Color gui_graph_threshold;
 	public static Color gui_graph_background;
-	public static Color gui_histo_background;
-	public static Color gui_cardle_line;
+	public static Color gui_graph_color;
 
 	// PDM2 analysis run settings
 	public static int pdm2_window;
@@ -195,6 +193,8 @@ public class Prefs extends PreferencesXML
 
 	// Quick tree settings
 	public static int qt_bootstrap;
+	public static double qt_tstv;
+	public static double qt_alpha;
 	
 	// Mr Bayes run settings
 	public static int mb_type;
@@ -223,6 +223,7 @@ public class Prefs extends PreferencesXML
 	public static String ms_models;
 	public static boolean ms_gamma;
 	public static boolean ms_inv;
+	public static String ms_samplesize;
 	
 	// Vamsas/web settings
 	public static String web_direct_url;
@@ -325,7 +326,6 @@ public class Prefs extends PreferencesXML
 		gui_seq_show_colors = getBool("gui_seq_show_colors",
 				gui_seq_show_colors);
 		gui_graph_smooth = getBool("gui_graph_smooth", gui_graph_smooth);
-		gui_graph_line = getBool("gui_graph_line", gui_graph_line);
 		gui_seq_dim = getBool("gui_seq_dim", gui_seq_dim);
 		gui_tree_unique_cols = getBool("gui_tree_unique_cols",
 				gui_tree_unique_cols);
@@ -346,9 +346,8 @@ public class Prefs extends PreferencesXML
 				gui_graph_threshold);
 		gui_graph_background = getColor("gui_graph_background",
 				gui_graph_background);
-		gui_histo_background = getColor("gui_histo_background",
-				gui_histo_background);
-		gui_cardle_line = getColor("gui_cardle_line", gui_cardle_line);
+		gui_graph_color = getColor("gui_graph_color", gui_graph_color);
+		
 		gui_show_horizontal_highlight = getBool(
 				"gui_show_horizontal_highlight", gui_show_horizontal_highlight);
 		gui_show_vertical_highlight = getBool("gui_show_vertical_highlight",
@@ -417,6 +416,8 @@ public class Prefs extends PreferencesXML
 		lrt_method = getInt("lrt_method", lrt_method);
 
 		qt_bootstrap = getInt("qt_bootstrap", qt_bootstrap);
+		qt_tstv = getFloat("qt_tstv", (float)qt_tstv);
+		qt_alpha = getFloat("qt_alpha", (float)qt_alpha);
 		
 		mb_type = getInt("mb_type", mb_type);
 		mb_runs = getInt("mb_runs", mb_runs);
@@ -437,6 +438,7 @@ public class Prefs extends PreferencesXML
 		ms_models = getStr("ms_models", ms_models);
 		ms_gamma = getBool("ms_gamma", ms_gamma);
 		ms_inv = getBool("ms_inv", ms_inv);
+		ms_samplesize = getStr("ms_samplesize", ms_samplesize);
 		
 		web_direct_url = getStr("web_direct_url", web_direct_url);
 		web_broker_url = getStr("web_broker_url", web_broker_url);
@@ -510,7 +512,6 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_seq_show_text", "" + gui_seq_show_text);
 		p.setProperty("gui_seq_show_colors", "" + gui_seq_show_colors);
 		p.setProperty("gui_graph_smooth", "" + gui_graph_smooth);
-		p.setProperty("gui_graph_line", "" + gui_graph_line);
 		p.setProperty("gui_seq_dim", "" + gui_seq_dim);
 		p.setProperty("gui_tree_unique_cols", "" + gui_tree_unique_cols);
 		p.setProperty("gui_color_seed", "" + gui_color_seed);
@@ -528,8 +529,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_graph_window", setColor(gui_graph_window));
 		p.setProperty("gui_graph_threshold", setColor(gui_graph_threshold));
 		p.setProperty("gui_graph_background", setColor(gui_graph_background));
-		p.setProperty("gui_histo_background", setColor(gui_histo_background));
-		p.setProperty("gui_cardle_line", setColor(gui_cardle_line));
+		p.setProperty("gui_graph_color", setColor(gui_graph_color));
 		p.setProperty("gui_show_horizontal_highlight", ""
 				+ gui_show_horizontal_highlight);
 		p.setProperty("gui_show_vertical_highlight", ""
@@ -597,6 +597,8 @@ public class Prefs extends PreferencesXML
 		p.setProperty("lrt_method", "" + lrt_method);
 
 		p.setProperty("qt_bootstrap", ""+qt_bootstrap);
+		p.setProperty("qt_tstv", ""+qt_tstv);
+		p.setProperty("qt_alpha", ""+qt_alpha);
 		
 		p.setProperty("mb_type", ""+mb_type);
 		p.setProperty("mb_runs", ""+mb_runs);
@@ -616,6 +618,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("ms_models", ms_models);
 		p.setProperty("ms_gamma", ""+ms_gamma);
 		p.setProperty("ms_inv", ""+ms_inv);
+		p.setProperty("ms_samplesize", ms_samplesize);
 		
 		setStr("web_direct_url", web_direct_url);
 		setStr("web_broker_url", web_broker_url);
@@ -638,8 +641,7 @@ public class Prefs extends PreferencesXML
 		gui_seq_font_bold = false;
 		gui_seq_show_text = true;
 		gui_seq_show_colors = true;
-		gui_graph_smooth = false;
-		gui_graph_line = true;
+		gui_graph_smooth = true;
 		gui_seq_dim = true;
 		gui_tree_unique_cols = true;
 		gui_color_seed = 0;
@@ -657,8 +659,7 @@ public class Prefs extends PreferencesXML
 		gui_graph_window = new Color(0, 0, 255);
 		gui_graph_threshold = new Color(0, 255, 64);
 		gui_graph_background = new Color(255, 255, 255);
-		gui_histo_background = new Color(255, 255, 255);
-		gui_cardle_line = new Color(0, 0, 0);
+		gui_graph_color = new Color(0, 0, 130);
 		gui_show_horizontal_highlight = true;
 		gui_show_vertical_highlight = true;
 	}
@@ -739,7 +740,9 @@ public class Prefs extends PreferencesXML
 	}
 
 	public static void setQTDefaults() {
-		qt_bootstrap = 100;
+		qt_bootstrap = 0;
+		qt_tstv = 2.0;
+		qt_alpha = 4.0;
 	}
 	
 	public static void setMBDefaults() {
@@ -769,9 +772,10 @@ public class Prefs extends PreferencesXML
 	}
 	
 	public static void setMSDefaults() {
-		ms_models = ModelTestResult.PHYML;
+		ms_models = ModelTestResult.TYPE_PHYML;
 		ms_gamma = true;
 		ms_inv = true;
+		ms_samplesize = ModelTestResult.SAMPLE_SEQLENGTH;
 	}
 	
 	public static void setWebDefaults()

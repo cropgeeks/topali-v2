@@ -2,8 +2,6 @@
 <head>
 <meta http-equiv="Content-Language" content="en-gb">
 <link rel="stylesheet" href="styles.css" type="text/css">
-<title>Title</title
-</title>
 
 <body>
 
@@ -31,13 +29,20 @@ an alignment that is a concatenation of all of the currently selected partitions
 </p>
 
 <p><b>Export options:</b><br>
-Exporting an alignmen to a file on disk will open a standard file chooser dialog
+Exporting an alignment to a file on disk will open a standard file chooser dialog
 allowing you to select where the file should be saved and the format to save it in.
+<br>
 Adding the alignment as a new alignment in TOPALi will add it as a new alignment
 within the same project that the current alignment is open in. This second option
 is a good option to select if you want to remove certain regions or sequences from
 an alignment and compare analyses results generated against the new alignment with
 those from the original alignment.
+<br>
+You can also split the alignment into three alignments according to codon positions
+(if your alignment consists of DNA and is divisible by three). These three alignments
+will be added to your current project, which gives you the opportunity to analyse
+these alignments separately (e. g. estimate a best fitting substitution model for each
+codon position).
 </p>
 
 </body>

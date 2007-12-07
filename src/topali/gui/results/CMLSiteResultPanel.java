@@ -14,9 +14,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.apache.log4j.Logger;
+import org.jfree.chart.block.ColumnArrangement;
 
 import topali.data.*;
-import topali.gui.Prefs;
+import topali.gui.*;
 import topali.var.MathUtils;
 
 import doe.*;
@@ -38,7 +39,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	public CMLSiteResultPanel(AlignmentData data, CodeMLResult result)
 	{
 		super(data, result);
-		System.out.println(result);
+		//System.out.println(result);
 		this.table = createTablePanel();
 		this.graph = createGraphPanel();
 	//	this.graph.setEnabled(false);
@@ -92,9 +93,26 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		names.add("Sig"); //12
 		names.add("PSS");
 
+		Vector<String> tt = new Vector<String>(14);
+		tt.add("Model Name (number of parameters)");
+		tt.add("Log Likelihood");
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add(null);
+		tt.add("Degrees of Freedom");
+		tt.add("Likelihood Ratio");
+		tt.add("Significance");
+		tt.add("Positive Selected Sites (Nuc. Position, Amino Acid)");
+				
 		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
 		
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
 		p.accessTable().getColumnModel().getColumn(1).setMaxWidth(60); 
@@ -111,6 +129,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		p.accessTable().getColumnModel().getColumn(12).setMaxWidth(60);
 		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		p.setBackground(Color.WHITE);
+		
 		return p;
 	}
 

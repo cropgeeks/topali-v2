@@ -52,8 +52,8 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 	/* Returns whether the given Region can be found within these annotations */
 	public boolean contains(Region r1)
 	{
-		System.out.println();
-		System.out.println("annotations.size()=" + annotations.size());
+		//System.out.println();
+		//System.out.println("annotations.size()=" + annotations.size());
 
 		for (Region r2 : this)
 		{
@@ -62,7 +62,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 				return true;
 		}
 
-		System.out.println("NOT FOUND");
+		//System.out.println("NOT FOUND");
 		return false;
 	}
 

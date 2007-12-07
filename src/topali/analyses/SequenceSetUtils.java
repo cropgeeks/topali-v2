@@ -72,7 +72,7 @@ public class SequenceSetUtils
 			if (indices[i] != -1)
 				finalIndices[c++] = indices[i];
 
-		System.out.println("DUPLICATE=" + duplicateCount);
+		//System.out.println("DUPLICATE=" + duplicateCount);
 
 		return finalIndices;
 	}

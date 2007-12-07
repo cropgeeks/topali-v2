@@ -30,6 +30,7 @@ boolean compatible(long, long);
 void elimboth(long);
 void enternohash(group_type*, long*);
 void enterpartition (group_type*, long*);
+void reorient(node* n);
 
 /* begin hash table code */
 
@@ -212,17 +213,22 @@ void initconsnode(node **p, node **grbg, node *q, long len, long nodei,
     break;
   case treewt:
     if (!eoln(intree)) {
-      fscanf(intree, "%lf", &trweight);
-      getch(ch, parens, intree);
-      if (*ch != ']') {
-        printf("\n\nERROR: Missing right square bracket\n\n");
-        exxit(-1);
-      } else {
+      if (fscanf(intree, "%lf", &trweight) == 1) {
         getch(ch, parens, intree);
-        if (*ch != ';') {
-          printf("\n\nERROR: Missing semicolon after square brackets\n\n");
+        if (*ch != ']') {
+          printf("\n\nERROR: Missing right square bracket\n\n");
           exxit(-1);
+        } else {
+          getch(ch, parens, intree);
+          if (*ch != ';') {
+            printf("\n\nERROR: Missing semicolon after square brackets\n\n");
+            exxit(-1);
+          }
         }
+      }
+      else {
+        printf("\n\nERROR: Expecting tree weight in last comment field\n\n");
+        exxit(-1);
       }
     }
     break;
@@ -691,7 +697,11 @@ void drawline(long i)
           fprintf(outfile, "------|");
         else {
           if (!strict) {   /* write number of times seen */
-            if (q->deltav >= 100)
+            if (q->deltav >= 10000)
+              fprintf(outfile, "%5.0f-|", (double)q->deltav);
+            else if (q->deltav >= 1000)
+              fprintf(outfile, "-%4.0f-|", (double)q->deltav);
+            else if (q->deltav >= 100)
               fprintf(outfile, "%5.1f-|", (double)q->deltav);
             else if (q->deltav >= 10)
               fprintf(outfile, "-%4.1f-|", (double)q->deltav);
@@ -965,6 +975,7 @@ void rehash()
   free(s);
 }  /* rehash */
 
+
 void enternodeset(node* r)
 { /* enter a set of species into the hash table */
   long i, j, start;
@@ -974,6 +985,8 @@ void enternodeset(node* r)
   group_type *s;
 
   s = r->nodeset;
+
+  /* do not enter full sets */
   same = true;
   for (i = 0; i < setsz; i++)
     if (s[i] != fullset[i])
@@ -1162,6 +1175,7 @@ void missingname(node *p){
   namesCheckTable();
 } /* missingname */
 
+
 void gdispose(node *p)
 {
   /* go through tree throwing away nodes */
@@ -1201,22 +1215,12 @@ void initreenode(node *p)
 
 void reroot(node *outgroup, long *nextnode)
 {
-  /* reorients tree, putting outgroup in desired position. */
+  /* reroots and reorients tree, placing root at outgroup  */
   long i;
-  boolean nroot;
   node *p, *q;
+  double newv;
 
-  nroot = false;
-  p = root->next;
-  while (p != root) {
-    if ((outgroup->back == p) && (root->next->next->next == root)) {
-      nroot = true;
-      p = root;
-    } else
-      p = p->next;
-  }
-  if (nroot)
-    return;
+  /* count root's children & find last */
   p = root;
   i = 0;
   while (p->next != root) {
@@ -1224,12 +1228,40 @@ void reroot(node *outgroup, long *nextnode)
     i++;
   }
   if (i == 2) {
-    root->next->back->back = p->back;
-    p->back->back = root->next->back;
+    /* 2 children: */
     q = root->next;
-  } else {
-    p->next = root->next;
-    nodep[root->index-1] = root->next;
+
+    newv = q->back->v + p->back->v;
+    
+    /* if outgroup is already here, just move
+     * its length to the other branch and finish */
+    if (outgroup == p->back) {
+      /* flip branch order at root so that outgroup 
+       * is first, just to be consistent */
+      root->next = p;
+      p->next = q;
+      q->next = root;
+      
+      q->back->v = newv;
+      p->back->v = 0;
+      return;
+    }
+    if (outgroup == q) {
+      p->back->v = newv;
+      q->back->v = 0;
+      return;
+    }
+   
+    /* detach root by linking child nodes */
+    q->back->back = p->back;
+    p->back->back = q->back;
+    p->back->v = newv;
+    q->back->v = newv;
+  } else { /* 3+ children */
+    p->next = root->next;              /* join old root nodes */
+    nodep[root->index-1] = root->next; /* make root->next the primary node */
+    
+    /* create new root nodes */
     gnu(&grbg, &root->next);
     q = root->next;
     gnu(&grbg, &q->next);
@@ -1243,11 +1275,38 @@ void reroot(node *outgroup, long *nextnode)
     root->next->index = root->index;
     root->next->next->index = root->index;
   }
+  newv = outgroup->v;
+  /* root is 3 "floating" nodes */
+  /* q == root->next */
+  /* p == root->next->next */
+
+  /* attach root at outgroup */
   q->back = outgroup;
   p->back = outgroup->back;
   outgroup->back->back = p;
   outgroup->back = q;
+  outgroup->v = 0;
+  outgroup->back->v = 0;
+  root->v = 0;
+  p->v = newv;
+  p->back->v = newv;
+  reorient(root);
 }  /* reroot */
+
+
+void reorient(node* n) {
+  node* p;
+  
+  if ( n->tip ) return;
+  if ( nodep[n->index - 1] != n )  {
+    nodep[n->index - 1] = n;
+    if ( n->back )
+      n->v = n->back->v;
+  }
+  
+  for ( p = n->next ; p != n ; p = p->next) 
+    reorient(p->back);
+}
 
 
 void store_pattern (pattern_elm ***pattern_array,
@@ -1302,30 +1361,30 @@ boolean samename(naym name1, plotstring name2)
 
 void reordertips()
 {
-  /* matchs tip nodes to species names first read in */
+  /* Reorders nodep[] and indexing to match species order from first tree */
+  /* Assumes tree has spp tips and nayme[] has spp elements, and that there is a
+   * one-to-one mapping between tip names and the names in nayme[].
+   */
+
   long i, j;
-  boolean done;
-  node *p, *q, *r;
-  for (i = 0;  i < spp; i++) {
-    j = 0;
-    done = false;
-    do {
+  node *t;
+
+  for (i = 0; i < spp-1; i++) {
+    for (j = i + 1; j < spp; j++) {
       if (samename(nayme[i], nodep[j]->nayme)) {
-        done =  true;
-        if (i != j) {
-          p = nodep[i];
-          q = nodep[j];
-          r = p->back;
-          p->back->back = q;
-          q->back->back = p;
-          p->back =  q->back;
-          q->back = r;
-          memcpy(q->nayme, p->nayme, MAXNCH);
-          memcpy(p->nayme, nayme[i], MAXNCH);
-        }
+        /* switch the pointers in
+         * nodep[] and set index accordingly for each node. */
+        t = nodep[i];
+        
+        nodep[i] = nodep[j];
+        nodep[i]->index = i+1;
+        
+        nodep[j] = t;
+        nodep[j]->index = j+1;
+        
+        break;  /* next i */
       }
-      j++;
-    } while (j < spp && !done);
+    }
   }
 }  /* reordertips */
 
@@ -1366,8 +1425,8 @@ void read_groups (pattern_elm ****pattern_array,double *timesseen_changes,
     treeread(intree, &root, treenode, &goteof, &firsttree, nodep, 
               &nextnode, &haslengths, &grbg, initconsnode,true,-1);
     if (!initial) { 
-      reordertips();
       missingname(root);
+      reordertips();
     } else {
       initial = false;
       hashp = (hashtype)Malloc(sizeof(namenode) * NUM_BUCKETS);

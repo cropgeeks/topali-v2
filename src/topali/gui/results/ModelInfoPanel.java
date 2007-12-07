@@ -61,10 +61,6 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     	if(mod==null) {
     		setModName(null);
     		setAliases(null);
-    		setlnl(Double.NaN);
-    		setAIC1(Double.NaN);
-    		setAIC2(Double.NaN);
-    		setBIC(Double.NaN);
     		setGamma(-1, Double.NaN);
     		setInv(Double.NaN);
     		setSubRates(null);
@@ -84,14 +80,6 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         			df++;
         		if(m.isInv())
         			df++;
-        		double lnl = m.getLnl();
-        		double aic1 = MathUtils.calcAIC1(m.getLnl(), df);
-        		double aic2 = MathUtils.calcAIC2(m.getLnl(),df, data.getSequenceSet().getLength());
-        		double bic = MathUtils.calcBIC(m.getLnl(), df, data.getSequenceSet().getLength());
-        		setlnl(lnl);
-        		setAIC1(aic1);
-        		setAIC2(aic2);
-        		setBIC(bic);
         		
         		if(mod.isGamma()) 
 					setGamma(m.getGammaCat(), m.getAlpha());
@@ -114,11 +102,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     			ProteinModel m = (ProteinModel)mod;
     			setModName(m.getName());
         		setAliases(m.getAliases());
-        		setlnl(m.getLnl());
-        		setAIC1(MathUtils.calcAIC1(m.getLnl(), m.getFreeParameters()));
-        		setAIC2(MathUtils.calcAIC2(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
-        		setBIC(MathUtils.calcBIC(m.getLnl(), m.getFreeParameters(), data.getSequenceSet().getLength()));
-        		
+
         		if(mod.isGamma())
 					setGamma(m.getGammaCat(), m.getAlpha());
 				else 
@@ -130,11 +114,6 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 				
         		modelDiagram.setModel(m);
         		
-        		//Color c = Utils.calcColor(m.getName());
-//        		Color c = Color.WHITE;
-//        		modelDiagram.setBackground(c);
-        		//jPanel3.setBackground(c);
-        		
         		rateHetDiagram.setModel(m);
         		
         		setSubRates(null);
@@ -143,6 +122,16 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         		setBaseFreqGroups(null);
     		}
     		
+    		int df = mod.getFreeParameters();
+			if(mod.isGamma())
+				df++;
+			if(mod.isInv())
+				df++;
+			df += (2 * mtpanel.getResult().selectedSeqs.length - 3);
+			
+			scores.setText("\u2113 = "+Prefs.d2.format(mod.getLnl())+"; AIC\u2081 = "+Prefs.d2.format(mod.getAic1())+"; AIC\u2082 = "+Prefs.d2.format(mod.getAic2())+"; BIC = "+Prefs.d2.format(mod.getBic()));
+	        calcpara.setText("(df = "+df+"; n = "+mtpanel.getResult().sampleSize+")");
+			
     		setTree(model.getTree());
     	}
     	repaint();
@@ -171,51 +160,23 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     	}
     }
     
-    private void setlnl(double lnl) {
-    	if(new Double(lnl).isNaN())
-    		this.lnl.setText("--");
-    	else
-    		this.lnl.setText(Prefs.d2.format(lnl)+";   ");
-    }
-    
-    private void setAIC1(double aic1) {
-    	if(new Double(aic1).isNaN())
-    		this.aic1.setText("--");
-    	else
-    		this.aic1.setText(Prefs.d2.format(aic1)+";   ");
-    }
-    
-    private void setAIC2(double aic2) {
-    	if(new Double(aic2).isNaN())
-    		this.aic2.setText("--");
-    	else
-    		this.aic2.setText(Prefs.d2.format(aic2)+";   ");
-    }
-    
-    private void setBIC(double bic) {
-    	if(new Double(bic).isNaN())
-    		this.bic.setText("--");
-    	else
-    		this.bic.setText(Prefs.d2.format(bic)+";");
-    }
-    
     private void setGamma(int cat, double a) {
     	if(cat<0 || new Double(a).isNaN())
-    		this.gamma.setText("--");
+    		this.gamma.setText("\u03b1 = n/a");
     	else
-    		this.gamma.setText("\u03b1="+Prefs.d3.format(a)+" (4 Cat.)");
+    		this.gamma.setText("\u03b1 = "+Prefs.d3.format(a));
     }
     
     private void setInv(double inv) {
     	if(new Double(inv).isNaN())
-    		this.inv.setText("--");
+    		this.inv.setText("pINV = n/a");
     	else
-    		this.inv.setText(""+Prefs.d3.format(inv));
+    		this.inv.setText("pINV = "+Prefs.d3.format(inv));
     }
     
     private void setSubRates(double... rates) {
     	if(rates==null) {
-    		this.subRates.setText("--");
+    		this.subRates.setText("[see matrix]");
     	}
     	else {
     		String tmp = Prefs.d3.format(rates[0])+" | "+Prefs.d3.format(rates[1])+" | "+Prefs.d3.format(rates[2])+" | "+Prefs.d3.format(rates[3])+" | "+Prefs.d3.format(rates[4])+" | "+Prefs.d3.format(rates[5]);
@@ -225,7 +186,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     
     private void setSubRateGroups(char... groups) {
     	if(groups==null)
-    		this.subRateGroups.setText("--");
+    		this.subRateGroups.setText("n/a");
     	else {
     		String tmp = "("+new String(groups)+")";
     		this.subRateGroups.setText(tmp);
@@ -234,7 +195,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     
     private void setBaseFreqs(double... freqs) {
     	if(freqs==null) {
-    		this.baseFreq.setText("--");
+    		this.baseFreq.setText("[see matrix]");
     	}
     	else {
     		String tmp = Prefs.d3.format(freqs[0])+" | "+Prefs.d3.format(freqs[1])+" | "+Prefs.d3.format(freqs[2])+" | "+Prefs.d3.format(freqs[3]);
@@ -244,7 +205,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
   
     private void setBaseFreqGroups(char... groups) {
     	if(groups==null)
-    		this.baseFreqGroups.setText("--");
+    		this.baseFreqGroups.setText("n/a");
     	else {
     		String tmp = "("+new String(groups)+")";
     		this.baseFreqGroups.setText(tmp);
@@ -254,6 +215,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     private void setTree(String tree) {
     	if(tree!=null) {
     		String mptree = (new TreeRootingThread(tree, false)).getMPRootedTree();
+    		mptree = mptree.replaceAll("SEQ0+", "");
     		treeCanvas.setTree(mptree);
     	}
     }
@@ -268,18 +230,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         jPanel5 = new javax.swing.JPanel();
         modelName = new javax.swing.JLabel();
         aliases = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        lnl = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        aic1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        aic2 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        bic = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         subRates = new javax.swing.JLabel();
@@ -305,6 +256,9 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
             this.modelDiagram = new ProteinModelDiagram();
         }
 
+        jLabel1 = new javax.swing.JLabel();
+        scores = new javax.swing.JLabel();
+        calcpara = new javax.swing.JLabel();
         defaultButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -323,72 +277,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 
         aliases.setText("(General Time Reversible)");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel1.setText("Model Test Scores:");
-
-        jLabel2.setText("\u2113 = ");
-
-        lnl.setText("123;  ");
-
-        jLabel4.setText("AIC\u2081 = ");
-
-        aic1.setText("123;   ");
-
-        jLabel6.setText("AIC\u2082 = ");
-
-        aic2.setText("123;   ");
-
-        jLabel8.setText("BIC = ");
-
-        bic.setText("123;");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lnl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aic1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aic2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bic)))
-                .addContainerGap(611, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(lnl)
-                    .addComponent(jLabel4)
-                    .addComponent(aic1)
-                    .addComponent(jLabel6)
-                    .addComponent(aic2)
-                    .addComponent(jLabel8)
-                    .addComponent(bic))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel10.setText("Parameters:");
-
         jLabel3.setText("Substitution Rates:");
 
         jLabel5.setText("Base Frequencies:");
@@ -405,9 +294,9 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         baseFreqGroups.setText("(0000)");
         baseFreqGroups.setToolTipText("A | C | G | T");
 
-        jLabel13.setText("Rate Heterogeneity (\u0393):  ");
+        jLabel13.setText("Rate Heterogeneity (\u0393, 4 Cat.):");
 
-        jLabel14.setText("Proportion of Invariant Sites (pInv):  ");
+        jLabel14.setText("Proportion of Invariable Sites:");
 
         gamma.setText("--");
 
@@ -431,7 +320,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         );
         rateHetDiagramLayout.setVerticalGroup(
             rateHetDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
+            .addGap(0, 148, Short.MAX_VALUE)
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -439,11 +328,11 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         treeCanvas.setLayout(treeCanvasLayout);
         treeCanvasLayout.setHorizontalGroup(
             treeCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 199, Short.MAX_VALUE)
+            .addGap(0, 214, Short.MAX_VALUE)
         );
         treeCanvasLayout.setVerticalGroup(
             treeCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 158, Short.MAX_VALUE)
+            .addGap(0, 166, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -462,11 +351,11 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         modelDiagram.setLayout(modelDiagramLayout);
         modelDiagramLayout.setHorizontalGroup(
             modelDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 114, Short.MAX_VALUE)
+            .addGap(0, 122, Short.MAX_VALUE)
         );
         modelDiagramLayout.setVerticalGroup(
             modelDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 136, Short.MAX_VALUE)
+            .addGap(0, 144, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -474,8 +363,8 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(modelDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(modelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -486,6 +375,14 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                 .addContainerGap())
         );
 
+        jLabel1.setText("Scores:");
+
+        scores.setText("\u2113=; AIC\u2081=; AIC\u2082=; BIC=");
+        scores.setToolTipText("Model Test Scores");
+
+        calcpara.setText("(df=; n=)");
+        calcpara.setToolTipText("df: Degrees of Freedom (Model + Tree); n: Sample Size ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -493,26 +390,29 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel10)
                     .addComponent(jLabel3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(baseFreq)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(baseFreqGroups))
-                            .addComponent(inv)
-                            .addComponent(gamma)
-                            .addComponent(subRates))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(inv)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(baseFreq)
+                                        .addComponent(subRates)
+                                        .addComponent(subRateGroups)
+                                        .addComponent(baseFreqGroups))))
+                            .addComponent(gamma, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel1)
+                    .addComponent(scores)
+                    .addComponent(calcpara))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(subRateGroups)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -523,7 +423,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9))
-                    .addComponent(rateHetDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rateHetDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -532,13 +432,11 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(gamma))
+                            .addComponent(gamma)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
@@ -546,13 +444,24 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(subRates)
-                            .addComponent(subRateGroups))
+                            .addComponent(subRates))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(subRateGroups)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(baseFreq)
-                            .addComponent(baseFreqGroups)))
+                            .addComponent(baseFreq))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(baseFreqGroups))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scores, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(calcpara))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
@@ -581,10 +490,9 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(modelName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 905, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 823, Short.MAX_VALUE)
                         .addComponent(defaultButton))
-                    .addComponent(aliases)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(aliases))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -598,8 +506,6 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
                 .addComponent(aliases)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -641,6 +547,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     			frame.setVisible(true);
     		}
     		else {
+    			frame.setVisible(true);
     			frame.requestFocus();
     		}
     	}
@@ -662,6 +569,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 				frame.setVisible(true);
     		}
     		else {
+    			frame.setVisible(true);
     			frame.requestFocus();
     		}
     	}
@@ -693,37 +601,29 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel aic1;
-    private javax.swing.JLabel aic2;
     private javax.swing.JLabel aliases;
     private javax.swing.JLabel baseFreq;
     private javax.swing.JLabel baseFreqGroups;
-    private javax.swing.JLabel bic;
+    private javax.swing.JLabel calcpara;
     private javax.swing.JButton defaultButton;
     private javax.swing.JLabel gamma;
     private javax.swing.JLabel inv;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JLabel lnl;
     private topali.gui.results.ModelDiagram modelDiagram;
     private javax.swing.JLabel modelName;
     private topali.gui.results.RateHetDiagram rateHetDiagram;
+    private javax.swing.JLabel scores;
     private javax.swing.JLabel subRateGroups;
     private javax.swing.JLabel subRates;
     private topali.gui.results.TreeCanvas treeCanvas;

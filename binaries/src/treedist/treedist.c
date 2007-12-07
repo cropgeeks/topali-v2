@@ -2,7 +2,7 @@
 #include "phylip.h"
 #include "cons.h"
 
-/* version 3.6. (c) Copyright 1993-2004 by the University of Washington.
+/* version 3.6. (c) Copyright 1993-2005 by the University of Washington.
    Written by Dan Fineman, Joseph Felsenstein, Mike Palczewski, Hisashi Horino,
    Akiko Fuseki, Sean Lamont, and Andrew Keeffe.
    Permission is granted to copy and use this program provided no fee
@@ -14,14 +14,13 @@ extern long tree_pairing;
 
 /* The following extern's refer to things declared in cons.c */
 
-typedef enum {SYMMETRIC, BSD } distance_type;
+typedef enum { SYMMETRIC, BSD } distance_type;
 
-boolean bsd_possible;
 distance_type  dtype;
 extern Char outfilename[FNMLNGTH], intreename[FNMLNGTH], intree2name[FNMLNGTH], outtreename[FNMLNGTH];
 extern node *root;
 
-extern long numopts, outgrno, col ;
+extern long numopts, outgrno, col;
 extern long maxgrp;               /* max. no. of groups in all trees found  */
 
 extern boolean trout, firsttree, noroot, outgropt, didreroot, prntsets,
@@ -248,6 +247,7 @@ double bsd_tree_diff(group_type **tree1, group_type **tree2,
   return return_value;
 }
 
+
 long symetric_diff(group_type **tree1, group_type **tree2,
                 long ntree1, long ntree2, long patternsz1, long patternsz2)
 {
@@ -397,10 +397,12 @@ void print_line_heading(long tree)
 void output_matrix_double(double diffl, long tree1, long tree2, long trees_in_1,
     long trees_in_2)
 {
-  if ( tree1 == 1 && ((tree2 - 1) % 7 == 0 || tree2 == 1 )) {
-    if ( (tree_pairing == ALL_IN_FIRST && tree2 + 6 < trees_in_1) ||
-         (tree_pairing == ALL_IN_1_AND_2 && tree2 + 6 < trees_in_2)) {
-      print_matrix_heading(tree2, tree2 + 6);
+  if ( tree1 == 1 && ((tree2 - 1) % get_num_columns() == 0 || tree2 == 1 )) {
+    if ( (tree_pairing == ALL_IN_FIRST && tree2 + get_num_columns() - 1
+          < trees_in_1) ||
+         (tree_pairing == ALL_IN_1_AND_2 && tree2 + get_num_columns() - 1
+          < trees_in_2)) {
+      print_matrix_heading(tree2, tree2 + get_num_columns() - 1);
     } else {
       if ( tree_pairing == ALL_IN_FIRST)
         print_matrix_heading(tree2, trees_in_1);
@@ -408,7 +410,7 @@ void output_matrix_double(double diffl, long tree1, long tree2, long trees_in_1,
         print_matrix_heading(tree2, trees_in_2);
     }
   }
-  if ( (tree2 - 1) % 7 == 0 || tree2 == 1) {
+  if ( (tree2 - 1) % get_num_columns() == 0 || tree2 == 1) {
     print_line_heading(tree1);
   }
   fprintf(outfile, " %9g  ", diffl);
@@ -422,10 +424,12 @@ void output_matrix_double(double diffl, long tree1, long tree2, long trees_in_1,
 void output_matrix_long(long diffl, long tree1, long tree2, long trees_in_1,
     long trees_in_2)
 {
-  if ( tree1 == 1 && ((tree2 - 1) % 10 == 0 || tree2 == 1 )) {
-    if ( (tree_pairing == ALL_IN_FIRST && tree2 + 9 < trees_in_1) ||
-         (tree_pairing == ALL_IN_1_AND_2 && tree2 + 9 < trees_in_2)) {
-      print_matrix_heading(tree2, tree2 + 9);
+  if ( tree1 == 1 && ((tree2 - 1) % get_num_columns() == 0 || tree2 == 1 )) {
+    if ( (tree_pairing == ALL_IN_FIRST && tree2 + get_num_columns() - 1
+          < trees_in_1) ||
+         (tree_pairing == ALL_IN_1_AND_2 && tree2 + get_num_columns() - 1
+          < trees_in_2)) {
+      print_matrix_heading(tree2, tree2 + get_num_columns() - 1);
     } else {
       if ( tree_pairing == ALL_IN_FIRST)
         print_matrix_heading(tree2, trees_in_1);
@@ -433,7 +437,7 @@ void output_matrix_long(long diffl, long tree1, long tree2, long trees_in_1,
         print_matrix_heading(tree2, trees_in_2);
     }
   }
-  if ( (tree2 - 1) % 10 == 0 || tree2 == 1) {
+  if ( (tree2 - 1) % get_num_columns() == 0 || tree2 == 1) {
     print_line_heading(tree1);
   }
   fprintf(outfile, "%4ld  ", diffl);
@@ -804,6 +808,7 @@ void output_submenu()
       else
         printf ("\n Choose one: (V,S)\n");
 
+      fflush(stdout);
       scanf("%c%*[^\n]", &ch);
       getchar();
       uppercase(&ch);
@@ -852,6 +857,7 @@ void pairing_submenu()
 
     printf ("\n Choose one: (A,P,C,L)\n");
       
+    fflush(stdout);
     scanf("%c%*[^\n]", &ch);
     getchar();
     uppercase(&ch);
@@ -897,9 +903,9 @@ void read_second_file(pattern_elm ***pattern_array,
     haslengths = false;
     allocate_nodep(&nodep, &intree2, &spp);
     treeread(intree2, &root, treenode, &goteof, &firsttree2, nodep, &nextnode,
-		    &haslengths, &grbg, initconsnode,false,-1);
-    reordertips();
+                    &haslengths, &grbg, initconsnode, false, -1);
     missingname(root);
+    reordertips();
     if (goteof)
       continue;
     ntrees += trweight;
@@ -924,9 +930,9 @@ void read_second_file(pattern_elm ***pattern_array,
 void getoptions()
 {
   /* interactively set options */
-  long loopcount, loopcount2;
+  long loopcount;
   Char ch;
-  boolean done, done1;
+  boolean done;
 
   /* Initial settings */
   dtype          = BSD;
@@ -938,7 +944,6 @@ void getoptions()
   spp            = 0;
   grbg           = NULL;
   col            = 0;
-  bsd_possible   = 1;
 
   putchar('\n');
   noroot = true;
@@ -968,14 +973,6 @@ void getoptions()
         printf("Branch Score Distance\n");
         break;
     }
-   
-    if (noroot) {
-      printf(" O                         Outgroup root:");
-      if (outgropt)
-        printf("  Yes, at species number%3ld\n", outgrno);
-      else
-        printf("  No, use as outgroup species%3ld\n", outgrno);
-      }
     printf(" R         Trees to be treated as Rooted:");
     if (noroot)
       printf("  No\n");
@@ -991,7 +988,6 @@ void getoptions()
     printf(" 1  Print indications of progress of run:  %s\n",
            (progress ? "Yes" : "No"));
 
-    /* Added by Dan F. */
     printf(" 2                 Tree distance submenu:");
     switch (tree_pairing) {
       case NO_PAIRING: 
@@ -1020,6 +1016,7 @@ void getoptions()
     }
 
     printf("\nAre these settings correct? (type Y or the letter for one to change)\n");
+    fflush(stdout);
     scanf("%c%*[^\n]", &ch);
     getchar();
     uppercase(&ch);
@@ -1033,25 +1030,6 @@ void getoptions()
             dtype = BSD;
           else if ( dtype == BSD )
             dtype = SYMMETRIC;
-          break;
-
-        case 'O':
-          outgropt = !outgropt;
-          if (outgropt) {
-            numopts++;
-            loopcount2 = 0;
-            do {
-              printf("Type number of the outgroup:\n");
-              scanf("%ld%*[^\n]", &outgrno);
-              getchar();
-              done1 = (outgrno >= 1);
-              if (!done1) {
-                printf("\n\nERROR: Bad outgroup number: %ld", outgrno);
-                printf("  (must be greater than zero)\n\n");
-              }
-              countup(&loopcount2, 10);
-            } while (done1 != true);
-          }
           break;
 
         case 'R':
@@ -1080,9 +1058,9 @@ void getoptions()
 
 int main(int argc, Char *argv[])
 {  
-  /* Local variables added by Dan F. */
   pattern_elm  ***pattern_array;
   double *timesseen_changes;
+  char *s; /* for getenv */
   long trees_in_1 = 0, trees_in_2 = 0;
 
 #ifdef MAC
@@ -1090,7 +1068,8 @@ int main(int argc, Char *argv[])
   argv[0] = "Treedist";
 #endif
   init(argc, argv);
-  openfile(&intree, INTREE, "input tree file", "r", argv[0], intreename);
+  /* Open in binary: ftell() is broken for UNIX line-endings under WIN32 */
+  openfile(&intree, INTREE, "input tree file", "rb", argv[0], intreename);
   openfile(&outfile, OUTFILE, "output file", "w", argv[0], outfilename);
 
   /* Initialize option-based variables, then ask for changes regarding
@@ -1098,7 +1077,10 @@ int main(int argc, Char *argv[])
   getoptions();
 
   ntrees = 0.0;
-  maxgrp = 10000;
+  maxgrp = 100000;
+  /* change maxgrp based on MAXGRP environment variable */
+  s=getenv("MAXGRP");
+  if(s) sscanf(s,"%ld",&maxgrp);
   lasti  = -1;
 
   /* how many trees do we have? */
@@ -1106,7 +1088,8 @@ int main(int argc, Char *argv[])
   if ((tree_pairing == ALL_IN_1_AND_2) ||
       (tree_pairing == CORR_IN_1_AND_2)){
     /* If another intree file should exist, */
-    openfile(&intree2, INTREE2, "input tree file 2", "r", 
+    /* Open in binary: ftell() is broken for UNIX line-endings under WIN32 */
+    openfile(&intree2, INTREE2, "input tree file 2", "rb", 
              argv[0], intree2name);
     trees_in_2 = countsemic(&intree2);
   }
