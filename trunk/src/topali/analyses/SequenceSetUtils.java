@@ -20,6 +20,8 @@ import doe.MsgBox;
  */
 public class SequenceSetUtils
 {
+	private static Random random = new Random();
+	
 	/*
 	 * Counts how many duplicate sequences were found when running
 	 * getUniqueSequences()
@@ -476,7 +478,6 @@ public class SequenceSetUtils
 	public static SequenceSet[] getBootstrappedSequenceSets(SequenceSet ss, int n) {
 		SequenceSet[] result = new SequenceSet[n];
 		
-		Random random = new Random();
 		int nSeqs = ss.getSize();
 		int length = ss.getLength();
 		
@@ -489,7 +490,7 @@ public class SequenceSetUtils
 			
 			char[][] bs = new char[nSeqs][length];
 			for(int i=0; i<length; i++) {
-				int rand = random.nextInt(n);
+				int rand = SequenceSetUtils.random.nextInt(n);
 				for(int j=0; j<nSeqs; j++) {
 					bs[j][i] = orig[j][rand];
 				}
@@ -502,6 +503,57 @@ public class SequenceSetUtils
 				seq.setSequence(new String(bs[i]));
 				result[k].addSequence(seq);
 			}
+		}
+		
+		return result;
+	}
+	
+	public static SequenceSet getBootstrappedSequenceSet(SequenceSet ss, int blockSize, boolean shuffleSeqOrder) {
+		int nSeqs = ss.getSize();
+		int nNucs = ss.getLength();
+		int nBlocks = nNucs/blockSize;
+		
+		char[][] bs = new char[nSeqs][nNucs];
+		
+		for(int i=0; i<nBlocks; i++) {
+			int rand = SequenceSetUtils.random.nextInt(nBlocks);
+			
+			for(int j=0; j<blockSize; j++) {
+				int nucPos = i*blockSize+j;
+				int randNucPos = rand*blockSize+j;
+				
+				for(int seqPos=0; seqPos<nSeqs; seqPos++) {
+					Sequence seq = ss.getSequence(seqPos);
+					bs[seqPos][nucPos] = seq.getSequence().charAt(randNucPos);
+				}
+				
+			}
+		}
+		
+		SequenceSet result = new SequenceSet(ss);
+		result.reset();
+		for(int i=0; i<nSeqs; i++) {
+			Sequence orgSeq = ss.getSequence(i);
+			Sequence newSeq = new Sequence();
+			newSeq.setName(orgSeq.getName());
+			newSeq.safeName = orgSeq.safeName;
+			newSeq.setSequence(new String(bs[i]));
+			result.addSequence(newSeq, false);
+		}
+		
+		if(shuffleSeqOrder) {
+			SequenceSet shuffled = new SequenceSet(ss);
+			shuffled.reset();
+			
+			while(result.getSequences().size()>0) {
+				int size = result.getSequences().size();
+				int rand = SequenceSetUtils.random.nextInt(size);
+				Sequence seq = result.getSequence(rand);
+				result.getSequences().remove(rand);
+				shuffled.addSequence(seq, false);
+			}
+			
+			return shuffled;
 		}
 		
 		return result;

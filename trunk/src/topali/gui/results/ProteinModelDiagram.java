@@ -215,17 +215,17 @@ public class ProteinModelDiagram extends ModelDiagram
 		g2d.setFont(oldFont);
 	}
 	
-	@Override
-	public Dimension getPreferredSize()
-	{
-		return getMinimumSize();
-	}
-	
-	@Override
-	public Dimension getMinimumSize()
-	{
-		return new Dimension(basicWidth, basicHeight);
-	}
+//	@Override
+//	public Dimension getPreferredSize()
+//	{
+//		return getMinimumSize();
+//	}
+//	
+//	@Override
+//	public Dimension getMinimumSize()
+//	{
+//		return new Dimension(basicWidth, basicHeight);
+//	}
 	
 	public static void main(String[] args) {
 		ProteinModel mod = (ProteinModel)ModelManager.getInstance().generateModel("mtart", true, true);

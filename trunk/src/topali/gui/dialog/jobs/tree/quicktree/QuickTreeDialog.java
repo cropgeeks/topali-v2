@@ -63,9 +63,9 @@ public class QuickTreeDialog extends JDialog implements ActionListener
 		}
 		
 		else if(e.getSource() == bDefault) {
-			panel.bs.setValue(0);
-			panel.tstv.setValue(2.0);
-			panel.alpha.setValue(4.0);
+			panel.bs.setValue(Prefs.qt_bootstrap_default);
+			panel.tstv.setValue(Prefs.qt_tstv_default);
+			panel.alpha.setValue(Prefs.qt_alpha_default);
 		}
 	}
 	

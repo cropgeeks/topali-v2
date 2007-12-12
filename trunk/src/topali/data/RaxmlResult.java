@@ -22,9 +22,11 @@ public class RaxmlResult extends TreeResult
 	public RaxmlResult()
 	{
 		super();
+		isResubmittable = true;
 	}
 	public RaxmlResult(int id)
 	{
 		super(id);
+		isResubmittable = true;
 	}
 }

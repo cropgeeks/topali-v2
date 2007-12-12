@@ -19,7 +19,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 {
 	private AlignmentResult aResult;
 
-	private JButton bClose, bSubmit, bHelp;
+	private JButton bClose, bClipboard, bSubmit, bHelp;
 
 	private JTextArea text;
 	
@@ -42,6 +42,9 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		bClose = new JButton(Text.Gui.getString("close"));
 		bClose.addActionListener(this);
 
+		bClipboard = new JButton(Text.Gui.getString("clipboard_1"));
+		bClipboard.addActionListener(this);
+		
 		bSubmit = new JButton("Resubmit Job");
 		bSubmit.addActionListener(this);
 
@@ -59,6 +62,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 		p2.add(bClose);
+		p2.add(bClipboard);
 		if(aResult.isResubmittable())
 			p2.add(bSubmit);
 		p2.add(bHelp);
@@ -75,6 +79,9 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		if (e.getSource() == bClose)
 			setVisible(false);
 
+		else if (e.getSource() == bClipboard)
+			Utils.copyToClipboard(text.getText());
+		
 		else if (e.getSource() == bSubmit)
 			resubmitAnalysis();
 	}

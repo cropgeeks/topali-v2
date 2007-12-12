@@ -69,8 +69,8 @@ public class PhymlAnalysis extends AnalysisThread
 		 
 		 sb.append("Algorithm: Maximum Likelihood (PhyML)\n");
 		 sb.append("Bootstrap runs: "+result.bootstrap+"\n");
-		 sb.append("Optimize Topology: "+result.optTopology+"\n");
-		 sb.append("Optimize branch lengths/rate para.: "+result.optBranchPara+"\n\n");
+		 sb.append("Optimize Topology: true\n");
+		 sb.append("Optimize branch lengths/rate para.: true\n\n");
 		 
 		 sb.append("\n\nApplication: PhyML-aLRT (Version 2.4.5)\n");
 		 sb.append("M. Anisimova, O. Gascuel (2006), Approximate likelihood ratio\n" +

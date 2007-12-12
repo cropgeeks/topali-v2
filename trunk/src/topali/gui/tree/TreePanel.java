@@ -260,8 +260,11 @@ class TreePanel extends JPanel
 		// Creates a BufferedImage and draws the tree directly onto it
 		BufferedImage getSavableImage()
 		{
-			int w = dimension.width;
-			int h = dimension.height;
+//			int w = dimension.width;
+//			int h = dimension.height;
+			
+			int w = getWidth();
+			int h = getHeight();
 
 			BufferedImage image = new BufferedImage(w, h,
 					BufferedImage.TYPE_INT_RGB);

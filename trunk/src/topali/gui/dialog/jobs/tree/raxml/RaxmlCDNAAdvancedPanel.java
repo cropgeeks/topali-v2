@@ -23,16 +23,7 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
     /** Creates new form RaxmlCDNAAdvancedPanel */
     public RaxmlCDNAAdvancedPanel() {
         initComponents();
-        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
-        model1.setModel(mod);
-        model2.setModel(mod);
-        model3.setModel(mod);
-        model1.setSelectedIndex(0);
-        model2.setSelectedIndex(0);
-        model3.setSelectedIndex(0);
-        
-        SpinnerNumberModel smod = new SpinnerNumberModel(0,0,1000,10);
-        bs.setModel(smod);
+        initValues();
     }
     
     public RaxmlCDNAAdvancedPanel(AlignmentData data) {
@@ -40,25 +31,32 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
     	this.data = data;
     }
     
-    public void init(RaxmlResult res) {
-    	if(res!=null) {
-    		bs.setValue(res.bootstrap);
-    		ratehet.setSelectedItem(res.rateHet);
-    	}
-    	else {
-    		bs.setValue(Prefs.rax_bootstrap);
-    		ratehet.setSelectedItem(Prefs.rax_ratehet);
-    	}
-    	
-    	empfreq.setSelected(false);
-    	empfreq.setEnabled(false);
-    	jLabel6.setEnabled(false);
+    private void initValues() {
+    	DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
+        model1.setModel(mod);
+        model2.setModel(mod);
+        model3.setModel(mod);
+        model1.setSelectedIndex(0);
+        model2.setSelectedIndex(0);
+        model3.setSelectedIndex(0);
+        
+        SpinnerNumberModel smod = new SpinnerNumberModel(Prefs.rax_bootstrap,0,1000,10);
+        bs.setModel(smod);
+        
+        ratehet.setSelectedItem(Prefs.rax_ratehet);
+    }
+    
+    public void initPrevResult(RaxmlResult res) {
+    	bs.setValue(res.bootstrap);
+    	ratehet.setSelectedItem(res.rateHet);
     }
     
     public void setDefaults() {
-    	bs.setValue(0);
-    	ratehet.setSelectedItem("MIX");
-		empfreq.setSelected(false);
+    	bs.setValue(Prefs.rax_bootstrap_default);
+    	ratehet.setSelectedItem(Prefs.rax_ratehet_default);
+    	empfreq.setSelected(false);
+    	empfreq.setEnabled(false);
+    	jLabel6.setEnabled(false);
     }
     
     public RaxmlResult onOK() {
@@ -66,11 +64,12 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
     	res.bootstrap = (Integer)bs.getValue();
     	res.empFreq = empfreq.isSelected();
     	res.rateHet = (String)ratehet.getSelectedItem();
-    	RaxPartition p1 = new RaxPartition("1-"+data.getSequenceSet().getLength()+"\\3", "partition1", "GTR", data.getSequenceSet().isDNA());
+    	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
+    	RaxPartition p1 = new RaxPartition("1-"+length+"\\3", "partition1", "GTR", data.getSequenceSet().isDNA());
     	res.partitions.add(p1);
-    	RaxPartition p2 = new RaxPartition("2-"+data.getSequenceSet().getLength()+"\\3", "partition2", "GTR", data.getSequenceSet().isDNA());
+    	RaxPartition p2 = new RaxPartition("2-"+length+"\\3", "partition2", "GTR", data.getSequenceSet().isDNA());
     	res.partitions.add(p2);
-    	RaxPartition p3 = new RaxPartition("3-"+data.getSequenceSet().getLength()+"\\3", "partition3", "GTR", data.getSequenceSet().isDNA());
+    	RaxPartition p3 = new RaxPartition("3-"+length+"\\3", "partition3", "GTR", data.getSequenceSet().isDNA());
     	res.partitions.add(p3);
     	
     	Prefs.rax_bootstrap = res.bootstrap;

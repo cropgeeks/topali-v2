@@ -32,7 +32,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 	String tree;
 	
 	public CMLBranchDialog(WinMain winMain, AlignmentData data, CodeMLResult result) {
-		super(winMain, "Positive Selection - Branch Models", false);
+		super(winMain, "Positive Selection - Branch Models (under test)", false);
 		
 		this.winMain = winMain;
 		this.data = data;

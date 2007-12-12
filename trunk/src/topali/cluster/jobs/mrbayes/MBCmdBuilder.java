@@ -37,7 +37,10 @@ public class MBCmdBuilder
 	public double burnin = 0.25;
 
 	
-	public String getCmds(Vector<MBPartition> parts) {
+	public String getCmds(MBTreeResult result) {
+		Vector<MBPartition> parts = result.partitions;
+		Vector<String> linked = result.linkedParameters;
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("begin mrbayes;\n\n");
 	
@@ -125,7 +128,19 @@ public class MBCmdBuilder
 			}
 		}
 		sb.append("\t lset applyto=(all) ngammacat=4;\n");
-		sb.append("\t lset applyto=(all) nbetacat=5;\n");
+		
+		//(un)link parameteres (if there is more than one partition)
+		sb.append("\t unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all) tratio=(all);\n");
+		for(String str1 : linked) {
+			String[] split = str1.split(",");
+			sb.append("\t link "+split[0]+"=(");
+			for(int i=1; i<split.length-1; i++) {
+				sb.append(split[i]+",");
+			}
+			sb.append(split[split.length-1]+");\n");
+		}
+		
+		//sb.append("\t lset applyto=(all) nbetacat=5;\n");
 		sb.append("\t prset applyto=(all) ratepr=variable;\n");
 		
 		sb.append("\n\t mcmc nruns="+nruns+" ngen=" + ngen + " samplefreq=" + sampleFreq+ ";\n");

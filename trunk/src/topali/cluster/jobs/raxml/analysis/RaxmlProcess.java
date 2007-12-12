@@ -30,7 +30,7 @@ public class RaxmlProcess extends StoppableProcess
 		RaxmlResult res = (RaxmlResult)result;
 		RaxPartition p = res.partitions.get(res.partitions.size()-1);
 		
-		String[] cmds = new String[] {res.raxmlPath, "-f", "d", "-m", getModel(res, p), "-q", "partitions", "-s", "seq", "-n", "out.txt"};
+		String[] cmds = new String[] {res.raxmlPath, "-f", "d", "-c", "16", "-m", getModel(res, p), "-q", "partitions", "-s", "seq", "-n", "out.txt"};
 		
 		if(TOPALi.debugJobs) {
 			StringBuffer tmp = new StringBuffer();

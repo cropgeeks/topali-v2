@@ -21,6 +21,7 @@ public class MBTreeResult extends TreeResult
 	public int sampleFreq = 10;
 	public String summary = "";
 	public Vector<MBPartition> partitions = new Vector<MBPartition>();
+	public Vector<String> linkedParameters = new Vector<String>();
 	
 	public MBTreeResult()
 	{

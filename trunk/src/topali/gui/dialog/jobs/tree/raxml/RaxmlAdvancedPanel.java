@@ -22,16 +22,37 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     /** Creates new form RaxmlAdvancedPanel */
     public RaxmlAdvancedPanel() {
         initComponents();
-        SpinnerNumberModel mod = new SpinnerNumberModel(0, 0, 1000, 10);
-        bs.setModel(mod);
     }
     
     public RaxmlAdvancedPanel(AlignmentData data) {
     	this();
     	this.data = data;
+    	initValues();
     }
     
-    public void init(RaxmlResult res) {
+    public void initPrevResult(RaxmlResult res) {
+    	if(data.getSequenceSet().isDNA()) {
+    		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
+    		model.setModel(mod);
+    		model.setEnabled(false);
+    		empfreqLabel.setEnabled(false);
+    		empfreq.setEnabled(false);
+    	}
+    	else {	
+    		String defModel = Prefs.rax_protmodel;
+    		if(res!=null && res.partitions.size()>0) {
+    			RaxPartition f = res.partitions.get(0);
+    			defModel = f.model;
+    		}
+    		model.setSelectedItem(defModel);
+    	}
+    	
+    	bs.setValue(res.bootstrap);
+    	empfreq.setSelected(res.empFreq);
+    	ratehet.setSelectedItem(res.rateHet);
+    }
+    
+    private void initValues() {
     	if(data.getSequenceSet().isDNA()) {
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
     		model.setModel(mod);
@@ -40,16 +61,12 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     		empfreq.setEnabled(false);
     	}
     	else {
-    		String[] models = new String[] {"Dayhoff", "DCMut", "JTT", "MTRev", "WAG", "RTRev", "CPRev", "VT", "Blosum", "MtMam", "GTR"};
+    		String[] models = new String[] {"DAYHOFF", "DCMUT", "JTT", "MTREV", "WAG", "RTREV", "CPREV", "VT", "BlOSUM", "MTMAM", "GTR"};
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(models);
     		model.setModel(mod);
     		
     		String defModel = Prefs.rax_protmodel;
-    		if(res!=null && res.partitions.size()>0) {
-    			RaxPartition f = res.partitions.get(0);
-    			defModel = f.model;
-    		}
-    		else if(data.getSequenceSet().getParams().getModel()!=null) {
+    		if(data.getSequenceSet().getParams().getModel()!=null) {
     			for(String s : models) {
     				if(data.getSequenceSet().getParams().getModel().is(s)) {
     					defModel = s;
@@ -62,28 +79,19 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     		empfreqLabel.setEnabled(true);
     		empfreq.setEnabled(true);
     	}
-    	if(res!=null)
-    		bs.setValue(res.bootstrap);
-    	else
-    		bs.setValue(Prefs.rax_bootstrap);
     	
-    	if(res!=null)
-    		empfreq.setSelected(res.empFreq);
-    	else 
-    		empfreq.setSelected(Prefs.rax_empfreq);
-    	
-    	if(res!=null)
-    		ratehet.setSelectedItem(res.rateHet);
-    	else
-    		ratehet.setSelectedItem(Prefs.rax_ratehet);
+    	SpinnerNumberModel mod = new SpinnerNumberModel(Prefs.rax_bootstrap, 0, 1000, 10);
+        bs.setModel(mod);
+    	empfreq.setSelected(Prefs.rax_empfreq);
+    	ratehet.setSelectedItem(Prefs.rax_ratehet);
     }
     
     public void setDefaults() {
-    	bs.setValue(0);
-    	ratehet.setSelectedItem("MIX");
-    	empfreq.setSelected(false);
+    	bs.setValue(Prefs.rax_bootstrap_default);
+    	ratehet.setSelectedItem(Prefs.rax_ratehet_default);
+    	empfreq.setSelected(Prefs.rax_empfreq_default);
     	if(!data.getSequenceSet().isDNA()) 
-    		model.setSelectedItem("WAG");
+    		model.setSelectedItem(Prefs.rax_protmodel_default);
     }
     
     public RaxmlResult onOK() {
@@ -91,7 +99,8 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     	res.bootstrap = (Integer)bs.getValue();
     	res.empFreq = empfreq.isSelected();
     	res.rateHet = (String)ratehet.getSelectedItem();
-    	RaxPartition p1 = new RaxPartition("1-"+data.getSequenceSet().getLength(), "partition", (String)model.getSelectedItem(), data.getSequenceSet().isDNA());
+    	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
+    	RaxPartition p1 = new RaxPartition("1-"+length, "partition", (String)model.getSelectedItem(), data.getSequenceSet().isDNA());
     	res.partitions.add(p1);
     	
     	Prefs.rax_bootstrap = res.bootstrap;

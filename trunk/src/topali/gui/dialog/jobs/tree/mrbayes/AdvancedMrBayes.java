@@ -24,6 +24,7 @@ import topali.var.Utils;
  */
 public class AdvancedMrBayes extends javax.swing.JPanel {
     
+	AlignmentData data;
 	SequenceSet ss;
 	MBTreeResult result;
 	
@@ -32,18 +33,19 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 	public String altModel = "";
 	
     /** Creates new form AdvancedMrBayes */
-    public AdvancedMrBayes(SequenceSet ss, MBTreeResult result) {
-    	this.ss = ss;
+    public AdvancedMrBayes(AlignmentData data, MBTreeResult result) {
+    	this.data = data;
+    	this.ss = data.getSequenceSet();
 		this.result = new MBTreeResult();
 		
         initComponents();
-        setDefaults();
+        initValues();
         
         if(result!=null)
         	initPrevResult(result);
     }
     
-    public void setDefaults() {
+    public void initValues() {
 		SequenceSetParams params = ss.getParams();
 		
 		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.isDNA());
@@ -80,6 +82,31 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		this.burnin.setModel(mBurn);
 	}
     
+    public void setDefaults() {
+    	String model;
+    	if(ss.isDNA())
+    		model = Prefs.mb_default_dnamodel;
+    	else
+    		model = Prefs.mb_default_proteinmodel;
+    	
+    	this.subModel.setSelectedItem(model);
+    	
+    	this.gamma.setSelected(Prefs.mb_default_model_gamma);
+		this.inv.setSelected(Prefs.mb_default_model_inv);
+		
+    	SpinnerNumberModel mNRuns = new SpinnerNumberModel(Prefs.mb_runs_default, 1, 5, 1);
+		this.nRuns.setModel(mNRuns);
+		
+		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens_default, 10000, 500000, 10000);
+		this.nGen.setModel(mNGen);
+		
+		SpinnerNumberModel mFreq = new SpinnerNumberModel(Prefs.mb_samplefreq_default, 1, 1000, 1);
+		this.samFreq.setModel(mFreq);
+		
+		SpinnerNumberModel mBurn = new SpinnerNumberModel(Prefs.mb_burnin_default, 1, 99, 1);
+		this.burnin.setModel(mBurn);
+    }
+    
     private void initPrevResult(MBTreeResult res) {
     	this.nRuns.setValue(res.nRuns);
     	this.nGen.setValue(res.nGen);
@@ -95,7 +122,8 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		
 		ss.getParams().setModel(ModelManager.getInstance().generateModel(name, g, i));
 		
-		MBPartition p = new MBPartition("1-"+ss.getLength(), "part", ModelManager.getInstance().generateModel(name, g, i));
+		int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
+		MBPartition p = new MBPartition("1-"+length, "part", ModelManager.getInstance().generateModel(name, g, i));
 		result.partitions.add(p);
 		result.nRuns = (Integer) nRuns.getValue();
 		result.burnin = ((Integer)burnin.getValue()).doubleValue()/100d;
