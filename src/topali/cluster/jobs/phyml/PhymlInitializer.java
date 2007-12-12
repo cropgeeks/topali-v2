@@ -47,7 +47,7 @@ public class PhymlInitializer extends Thread
 			// Sequences that should be selected/saved for processing
 			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 			//Store alignment
-			ss.save(new File(jobDir, "seq"), indices, Filters.PHY_I, true);
+			ss.save(new File(jobDir, "seq"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.PHY_I, true);
 			
 			Model model = result.model;
 			

@@ -34,4 +34,34 @@ public class RaxmlParser
 		in.close();
 		return 0;
 	}
+	
+	public static String getOutput(File file) throws Exception {
+		StringBuffer result = new StringBuffer();
+		
+		BufferedReader in = new BufferedReader(new FileReader(file));
+		String line;
+		boolean parse = false;
+		while((line=in.readLine())!=null) {
+			if(line.startsWith("Executing")) {
+				parse = true;
+				continue;
+			}
+			if(line.startsWith("RAxML")) {
+				parse = false;
+				continue;
+			}
+			if(line.contains(" alpha ")) {
+				int i = line.indexOf("alpha");
+				result.append("alpha1 (, alpha2, alpha3): "+line.substring(i+5));
+				parse = false;
+				continue;
+			}
+			if(parse) {
+				result.append(line+"\n");
+			}
+		}
+		in.close();
+		
+		return result.toString();
+	}
 }

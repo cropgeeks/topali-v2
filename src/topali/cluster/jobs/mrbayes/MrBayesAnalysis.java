@@ -76,7 +76,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		cmd.nruns = result.nRuns;
 		cmd.sampleFreq = result.sampleFreq;
 
-		String cmds = cmd.getCmds(result.partitions);
+		String cmds = cmd.getCmds(result);
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		"mb.nex"), true));
 		out.write("\n\n"+cmds);

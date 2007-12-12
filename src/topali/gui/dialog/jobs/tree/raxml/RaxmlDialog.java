@@ -52,15 +52,18 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		basic = new RaxmlBasicPanel();
 		basic.bCodonpos.addActionListener(this);
-		basic.bCodonpos.setEnabled(data.getSequenceSet().isCodons());
+		boolean div3 = (((data.getActiveRegionE()-data.getActiveRegionS()+1)%3)==0);
+		basic.bCodonpos.setEnabled(div3);
 		basic.bOnemodel.addActionListener(this);
 		advanced = new RaxmlAdvancedPanel(data);
-		advanced.init(result);
+		if(result!=null)
+			advanced.initPrevResult(result);
 		cdnaadvanced = new RaxmlCDNAAdvancedPanel(data);
-		cdnaadvanced.init(result);
+		if(result!=null)
+			cdnaadvanced.initPrevResult(result);
 		
 		tabs.add(basic, 0);
-		if(Prefs.rax_type==1 && data.getSequenceSet().isCodons())  {
+		if(Prefs.rax_type==1 && div3)  {
 			tabs.add(new JScrollPane(cdnaadvanced), 1);
 			basic.bCodonpos.setSelected(true);
 		}
@@ -91,7 +94,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		result.guiName = "Tree "+runNum+" (RaxML)";
+		result.guiName = "#"+runNum+" Tree (RaxML)";
 		result.jobName = "RaxML Tree Estimation";
 		
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
@@ -139,6 +142,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 			basic.bOnemodel.setSelected(true);
 			tabs.remove(1);
 			tabs.add(new JScrollPane(advanced), 1);
+			tabs.setTitleAt(1, "Advanced");
 		}
 		
 	}

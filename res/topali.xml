@@ -726,6 +726,8 @@
 		<field name="summary" type="string" direct="true" />
 		<field name="partitions" type="topali.data.MBPartition"
 			collection="vector" direct="true" />
+		<field name="linkedParameters" type="string"
+			collection="vector" direct="true" />
 	</class>
 
 	<class name="topali.data.MBPartition">
@@ -740,8 +742,6 @@
 			<bind-xml node="attribute" />
 		</field>
 		<field name="bootstrap" type="int" direct="true" />
-		<field name="optTopology" type="boolean" direct="true" />
-		<field name="optBranchPara" type="boolean" direct="true" />
 		<field name="model" type="topali.data.models.Model" direct="true"/>
 	</class>
 

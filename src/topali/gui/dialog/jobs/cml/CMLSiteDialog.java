@@ -26,7 +26,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 	public JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	
 	public CMLSiteDialog(WinMain winMain, AlignmentData data, CodeMLResult res) {
-		super(winMain, "Positive Selection - Site Models", false);
+		super(winMain, "Positive Selection - Site Models  (under test)", false);
 		
 		this.winmain = winMain;
 		this.data = data;

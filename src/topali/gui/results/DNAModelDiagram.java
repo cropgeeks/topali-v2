@@ -72,9 +72,9 @@ public class DNAModelDiagram extends ModelDiagram
 					maxRate = this.subRates[i];
 			}
 			
-			for(double d: this.model.getBaseFreqs()) {
-				if(d>maxFreq)
-					maxFreq = d;
+			for(int i=0; i<this.baseFreqs.length; i++) {
+				if(this.baseFreqs[i]>maxFreq)
+					maxFreq = this.baseFreqs[i];
 			}
 		}
 	}
@@ -187,6 +187,8 @@ public class DNAModelDiagram extends ModelDiagram
 			Color col = (subRateGroups[0]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[0]);
 			//g2d.setColor(col);
 			int r = (int)((subRates[0]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[3][1];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
@@ -194,6 +196,8 @@ public class DNAModelDiagram extends ModelDiagram
 			col = (subRateGroups[1]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[1]);
 			//g2d.setColor(col);
 			r = (int)((subRates[1]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[3][2];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
@@ -201,6 +205,8 @@ public class DNAModelDiagram extends ModelDiagram
 			col = (subRateGroups[2]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[2]);
 			//g2d.setColor(col);
 			r = (int)((subRates[2]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[3][3];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
@@ -208,6 +214,8 @@ public class DNAModelDiagram extends ModelDiagram
 			col = (subRateGroups[3]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[3]);
 			//g2d.setColor(col);
 			r = (int)((subRates[3]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[4][2];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
@@ -215,12 +223,16 @@ public class DNAModelDiagram extends ModelDiagram
 			col = (subRateGroups[4]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[4]);
 			//g2d.setColor(col);
 			r = (int)((subRates[4]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[4][3];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			//g2d.setColor(c5);
 			r = (int)((subRates[5]/maxRate)*l/2);
+			if(r==0)
+				r = 1;
 			p = mp[5][3];
 			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c5}));
 			fillCircle(g2d, p.x, p.y, r);
@@ -372,17 +384,17 @@ public class DNAModelDiagram extends ModelDiagram
 		}
 	}
 	
-	@Override
-	public Dimension getPreferredSize()
-	{
-		return getMinimumSize();
-	}
-	
-	@Override
-	public Dimension getMinimumSize()
-	{
-		return new Dimension(basicWidth, basicHeight);
-	}
+//	@Override
+//	public Dimension getPreferredSize()
+//	{
+//		return getMinimumSize();
+//	}
+//	
+//	@Override
+//	public Dimension getMinimumSize()
+//	{
+//		return new Dimension(basicWidth, basicHeight);
+//	}
 	
 	public static void main(String[] args) {
 		DNAModel mod = (DNAModel)ModelManager.getInstance().generateModel("gtr", true, true);

@@ -29,7 +29,6 @@ import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
 import topali.gui.dialog.jobs.mt.MTDialog;
-import topali.gui.dialog.jobs.tree.CreateTreeDialog;
 import topali.gui.dialog.jobs.tree.mrbayes.MrBayesDialog;
 import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.quicktree.QuickTreeDialog;
@@ -619,9 +618,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		if(data.getSequenceSet().getParams().isDNA())
-			tr.guiName = "F84+G Tree" + runNum;
+			tr.guiName = "#"+runNum+" F84+G Tree";
 		else
-			tr.guiName = "WAG+G Tree" + runNum;
+			tr.guiName = "#"+runNum+" WAG+G Tree";
 		tr.jobName = "Tree Estimation";
 		
 		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);

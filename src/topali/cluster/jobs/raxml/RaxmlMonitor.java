@@ -60,10 +60,13 @@ public class RaxmlMonitor
 	
 	public RaxmlResult getResult() throws Exception
 	{
+		String output = "";
+		
 		if(result.bootstrap==0) {
 			File dir = new File(jobDir, "run1");
 			result.setTreeStr(RaxmlParser.getTree(new File(dir, "RAxML_result.out.txt")));
 			result.setLnl(RaxmlParser.getLikelihood(new File(dir, "RAxML_info.out.txt")));
+			output = RaxmlParser.getOutput(new File(dir, "RAxML_info.out.txt"));
 		}
 		
 		else {
@@ -92,6 +95,7 @@ public class RaxmlMonitor
 			File dir = new File(jobDir, "run"+bestLnlRun);
 			out.write(RaxmlParser.getTree(new File(dir, "RAxML_result.out.txt")));
 			out.close();
+			output = RaxmlParser.getOutput(new File(dir, "RAxML_info.out.txt"));
 			
 			RaxPartition p = result.partitions.get(result.partitions.size()-1);
 			
@@ -123,7 +127,7 @@ public class RaxmlMonitor
 			result.setLnl(bestLnl);
 		}
 		
-		result.info = getInfo();
+		result.info = getInfo(output);
 		
 		Castor.saveXML(result, new File(jobDir, "result.xml"));
 		
@@ -147,7 +151,7 @@ public class RaxmlMonitor
 		}
 	}
 	
-	private String getInfo() {
+	private String getInfo(String output) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Algorithm: RaxML\n");
 		sb.append("Model: "+result.partitions.get(0).model+"\n");
@@ -165,6 +169,9 @@ public class RaxmlMonitor
 			else
 				sb.append(p.name+" = "+p.indeces+"\n");
 		}
+		
+		sb.append("\n\nRaxML output:\n");
+		sb.append(output);
 		
 		sb.append("\n\nApplication: RaxML (Version 2.2.3)\n");
 		sb.append("A Stamatakis, 2006, RAxML-VI-HPC: Maximum Likelihood-based\n" +

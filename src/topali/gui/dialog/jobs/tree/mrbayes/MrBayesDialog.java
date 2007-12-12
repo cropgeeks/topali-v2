@@ -52,13 +52,14 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		basic = new MrBayesBasicPanel();
 		basic.bCodonpos.addActionListener(this);
-		basic.bCodonpos.setEnabled(data.getSequenceSet().isCodons());
+		boolean div3 = (((data.getActiveRegionE()-data.getActiveRegionS()+1)%3)==0);
+		basic.bCodonpos.setEnabled(div3);
 		basic.bOnemodel.addActionListener(this);
-		advanced = new AdvancedMrBayes(data.getSequenceSet(), result);
+		advanced = new AdvancedMrBayes(data, result);
 		advancedCDNA = new AdvancedCDNAMrBayes(data.getSequenceSet(), result);
 		
 		tabs.add(basic, 0);
-		if(Prefs.mb_type==1 && data.getSequenceSet().isCodons()) {
+		if(Prefs.mb_type==1 && div3) {
 			tabs.add(new JScrollPane(advancedCDNA), 1);
 			basic.bCodonpos.setSelected(true);
 		}
@@ -89,7 +90,7 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		result.guiName = "Tree "+runNum+" (MrBayes)";
+		result.guiName = "#"+runNum+" Tree (MrBayes)";
 		result.jobName = "MrBayes Tree Estimation";
 		
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
@@ -137,6 +138,7 @@ public class MrBayesDialog extends JDialog implements ActionListener
 			basic.bOnemodel.setSelected(true);
 			tabs.remove(1);
 			tabs.add(new JScrollPane(advanced), 1);
+			tabs.setTitleAt(1, "Advanced");
 		}
 		
 	}

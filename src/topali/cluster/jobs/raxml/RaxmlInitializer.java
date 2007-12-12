@@ -7,6 +7,7 @@ package topali.cluster.jobs.raxml;
 
 import java.io.*;
 
+import topali.analyses.SequenceSetUtils;
 import topali.cluster.*;
 import topali.cluster.jobs.modeltest.ModelTestWebService;
 import topali.cluster.jobs.modeltest.analysis.ModelTestAnalysis;
@@ -44,7 +45,7 @@ public class RaxmlInitializer extends Thread
 			// Sequences that should be selected/saved for processing
 			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 			//Store alignment
-			ss.save(new File(jobDir, "seq"), indices, Filters.PHY_I, true);
+			ss.save(new File(jobDir, "seq"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.PHY_I, true);
 			
 			StringBuffer sb = new StringBuffer();
 			for(RaxPartition p : result.partitions) {
@@ -65,7 +66,16 @@ public class RaxmlInitializer extends Thread
 				runDir.mkdirs();
 
 				//Store alignment
-				ss.save(new File(runDir, "seq"), indices, Filters.PHY_I, true);
+				if(i==1)
+					ss.save(new File(runDir, "seq"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.PHY_I, true);
+				else {
+					SequenceSet boot = ss.subSet(result.getPartitionStart(), result.getPartitionEnd(), indices);
+					if(result.partitions.size()>1)
+						boot = SequenceSetUtils.getBootstrappedSequenceSet(boot, 3, true);
+					else
+						boot = SequenceSetUtils.getBootstrappedSequenceSet(boot, 1, true);
+					boot.save(new File(runDir, "seq"), Filters.PHY_I, true);
+				}
 				
 				ClusterUtils.writeFile(new File(runDir, "partitions"), sb.toString());
 				

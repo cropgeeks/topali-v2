@@ -2,21 +2,11 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Alignment display: Each nucleotid rectangle is now pre-painted and copied into the actual display canvas
-  (instead of repainted again and again)
-  Sequence and paritition dimming as well as mouse over highlighting is now done by transparent overlaying
-  (instead of repainting the panel or buffer on each action)
-  Also added a light color gradient to the nuc. rectangles
-- Fixed update checker (version.txt in /www, upload to webserver with next release)
-  (already done in previous svn commit)
-- Fixed a bug in "remove bootstrap value" dialog
-- Added ToolTips to various table headers
-- Removed some unneccessary System.out.println()s
-- Added RF tree distances to model selection webservice
-- Quick Tree Estimation: Now allows setting of ts/tv and alpha parameter
-- Fixed bug in model test: AIC2 and BIC score was wrong
-- Removed 'Optimize...' checkboxes from phyml dialog (not needed at the moment)
-- Fixed bug: AA sub. models have 0 degress of freedom not 19
+- Fixed RaxML bootstrapping
+- Added "copy to clipboard" button to analysis info dialog
+- Fixed: PhyML partition was ignored
+- Export tree as PNG: Size of the image = size of the actual window
+- DNAModelDiagram: Fixed loss of rate 'bubbles' when rates are extremly high 
 
 TODO:
 - Bug: Dundee cluster filesystem timeout problems
@@ -26,10 +16,11 @@ TODO:
 - Applications note
 
 Some ideas:
-
+- Store all default values in Prefs, so that there is one central file
+  were the default values can be viewed/changed.
 
 Known Bugs
-- RaxML process sometimes doesn't stop (can't reproduce this anymore...)
+- RaxML process sometimes doesn't stop (seems to happen on quite short alignments)
 - PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
 
 
@@ -60,11 +51,13 @@ If libs changes, edit:
 
 Release
 -------
-- Update website (whatsnew/index.html and version.txt)
 - Set TOPALi.debug = false
 - Set logger level to warn/error
+- Build TOPALi
+- Create installers
 - Build/deploy public topali server:
 	ant -Dproperties=build.scri-public.properties update
-- Create and upload installers
+- Upload installers
 - Sign and upload jars for WebStart
+- Update website (whatsnew/index.html and version.txt)
 

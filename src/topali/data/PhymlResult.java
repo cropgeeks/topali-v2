@@ -12,8 +12,6 @@ public class PhymlResult extends TreeResult
 
 	public String phymlPath;
 	public int bootstrap = 0;
-	public boolean optTopology = true;
-	public boolean optBranchPara = true;
 	
 	public Model model;
 	

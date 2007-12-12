@@ -195,6 +195,9 @@ public class Prefs extends PreferencesXML
 	public static int qt_bootstrap;
 	public static double qt_tstv;
 	public static double qt_alpha;
+	public static int qt_bootstrap_default;
+	public static double qt_tstv_default;
+	public static double qt_alpha_default;
 	
 	// Mr Bayes run settings
 	public static int mb_type;
@@ -204,13 +207,18 @@ public class Prefs extends PreferencesXML
 	public static int mb_burnin;
 	public static String mb_default_dnamodel;
 	public static String mb_default_proteinmodel;
+	public static boolean mb_default_model_gamma;
+	public static boolean mb_default_model_inv;
+	public static int mb_runs_default;
+	public static int mb_gens_default;
+	public static int mb_samplefreq_default;
+	public static int mb_burnin_default;
 	
 	// Phyml run settings
 	public static int phyml_bootstrap;
-	public static boolean phyml_opttop;
-	public static boolean phyml_optbranch;
-	public static String phyml_default_dnamodel;
-	public static String phyml_default_proteinmodel;
+	public static int phyml_bootstrap_default;
+	public static String phyml_dnamodel_default;
+	public static String phyml_proteinmodel_default;
 	
 	//Raxml run settigns
 	public static int rax_type;
@@ -218,6 +226,11 @@ public class Prefs extends PreferencesXML
 	public static int rax_bootstrap;
 	public static boolean rax_empfreq;
 	public static String rax_protmodel;
+	public static int rax_type_default;
+	public static String rax_ratehet_default;
+	public static int rax_bootstrap_default;
+	public static boolean rax_empfreq_default;
+	public static String rax_protmodel_default;
 	
 	// Model selection run settings
 	public static String ms_models;
@@ -432,8 +445,6 @@ public class Prefs extends PreferencesXML
 		rax_protmodel = getStr("rax_protmodel", rax_protmodel);
 		
 		phyml_bootstrap = getInt("phyml_bootstrap", phyml_bootstrap);
-		phyml_optbranch = getBool("phyml_optbranch", phyml_optbranch);
-		phyml_opttop = getBool("phyml_opttop", phyml_opttop);
 		
 		ms_models = getStr("ms_models", ms_models);
 		ms_gamma = getBool("ms_gamma", ms_gamma);
@@ -607,13 +618,12 @@ public class Prefs extends PreferencesXML
 		p.setProperty("mb_burnin", ""+mb_burnin);
 		
 		p.setProperty("rax_type", ""+rax_type);
+		p.setProperty("rax_bootstrap", ""+rax_bootstrap);
 		p.setProperty("rax_ratehet", ""+rax_ratehet);
 		p.setProperty("rax_empfreq", ""+rax_empfreq);
 		p.setProperty("rax_protmodel", ""+rax_protmodel);
 			
 		p.setProperty("phyml_bootstrap", ""+phyml_bootstrap);
-		p.setProperty("phyml_optbranch", ""+phyml_optbranch);
-		p.setProperty("phyml_opttop", ""+phyml_opttop);
 		
 		p.setProperty("ms_models", ms_models);
 		p.setProperty("ms_gamma", ""+ms_gamma);
@@ -743,6 +753,9 @@ public class Prefs extends PreferencesXML
 		qt_bootstrap = 0;
 		qt_tstv = 2.0;
 		qt_alpha = 4.0;
+		qt_bootstrap_default = 0;
+		qt_tstv_default = 2.0;
+		qt_alpha_default = 4.0;
 	}
 	
 	public static void setMBDefaults() {
@@ -753,22 +766,32 @@ public class Prefs extends PreferencesXML
 		mb_burnin = 25;
 		mb_default_dnamodel = "HKY";
 		mb_default_proteinmodel = "WAG";
+		mb_default_model_gamma = true;
+		mb_default_model_inv = false;
+		mb_runs_default = 2;
+		mb_gens_default = 100000;
+		mb_samplefreq_default = 10;
+		mb_burnin_default = 25;
 	}
 	
 	public static void setRaxDefaults() {
 		rax_type = 0;
-		rax_bootstrap = 0;
+		rax_bootstrap = 100;
 		rax_empfreq = false;
 		rax_ratehet = "MIX";
 		rax_protmodel = "WAG";
+		rax_type_default = 0;
+		rax_bootstrap_default = 100;
+		rax_empfreq_default = false;
+		rax_ratehet_default = "MIX";
+		rax_protmodel_default = "WAG";
 	}
 	
 	public static void setPhymlDefaults() {
 		phyml_bootstrap = 0;
-		phyml_optbranch = true;
-		phyml_opttop = true;
-		phyml_default_dnamodel = "HKY";
-		phyml_default_proteinmodel = "WAG";
+		phyml_bootstrap_default = 0;
+		phyml_dnamodel_default = "HKY";
+		phyml_proteinmodel_default = "WAG";
 	}
 	
 	public static void setMSDefaults() {

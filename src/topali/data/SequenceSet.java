@@ -165,6 +165,11 @@ public class SequenceSet extends DataObject
 
 	public void addSequence(Sequence sequence)
 	{
+		addSequence(sequence, true);
+	}
+
+	public void addSequence(Sequence sequence, boolean generateSafeName)
+	{
 		sequences.add(sequence);
 		length = sequence.getLength();
 
@@ -172,15 +177,17 @@ public class SequenceSet extends DataObject
 		String seq = sequence.getBuffer().toString().toUpperCase();
 		sequence.getBuffer().replace(0, seq.length(), seq);
 
-		// Give the sequence a safe name to work with
-		DecimalFormat d = new DecimalFormat("00000");
-		sequence.safeName = "SEQ" + d.format(sequences.size());
+		if(generateSafeName) {
+			// Give the sequence a safe name to work with
+			DecimalFormat d = new DecimalFormat("00000");
+			sequence.safeName = "SEQ" + d.format(sequences.size());
+		}
 		
 		for(PropertyChangeListener li : changeListeners) {
 			li.propertyChange(new PropertyChangeEvent(this, "addSequence", null, sequence));
 		}
 	}
-
+	
 	/* Returns the sequence at the given index position. */
 	public Sequence getSequence(int index)
 	{
@@ -271,6 +278,7 @@ public class SequenceSet extends DataObject
 	public void reset()
 	{
 		sequences = new Vector<Sequence>();
+		overview = null;
 		length = 0;
 	}
 
@@ -440,6 +448,20 @@ public class SequenceSet extends DataObject
 		return nameColouriser;
 	}
 
+	public SequenceSet subSet(int start, int end, int[] selectedSequences) {
+		SequenceSet result = new SequenceSet(this);
+		result.reset();
+		for(int i=0; i<selectedSequences.length; i++) {
+			Sequence orgSeq = getSequence(selectedSequences[i]);
+			Sequence newSeq = new Sequence();
+			newSeq.setSequence(orgSeq.getPartition(start, end));
+			newSeq.setName(orgSeq.getName());
+			newSeq.safeName = orgSeq.safeName;
+			result.addSequence(newSeq, false);
+		}
+		return result;
+	}
+	
 	/*
 	 * Scans all sequences and produces a ClustalX-like string that shows
 	 * changes between the strains.

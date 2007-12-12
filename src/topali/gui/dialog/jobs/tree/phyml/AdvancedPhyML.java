@@ -35,10 +35,38 @@ public class AdvancedPhyML extends javax.swing.JPanel {
     	this.ss = ss;
 		this.result = new PhymlResult();
         initComponents();
-        setDefaults();
+        initValues();
         
         if(result!=null)
         	initPrevResult((PhymlResult)result);
+    }
+    
+    private void initValues() {
+    	SequenceSetParams params = ss.getParams();
+		
+		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.isDNA());
+		String[] models = new String[mlist.size()];
+		for(int i=0; i<mlist.size(); i++)
+				models[i] = mlist.get(i).getName();
+		
+		ComboBoxModel cm = new DefaultComboBoxModel(models);
+		this.subModel.setModel(cm);
+		
+		Model m = params.getModel();
+		if(Utils.indexof(models, m.getName())==-1) {
+			if(ss.isDNA())
+				m = ModelManager.getInstance().generateModel(Prefs.phyml_dnamodel_default, m.isGamma(), m.isInv());
+			else
+				m = ModelManager.getInstance().generateModel(Prefs.phyml_proteinmodel_default, m.isGamma(), m.isInv());
+		}
+		
+		this.subModel.setSelectedItem(m.getName());
+		
+		this.gamma.setSelected(params.getModel().isGamma());
+		this.inv.setSelected(params.getModel().isInv());
+		
+		SpinnerNumberModel mNBoot = new SpinnerNumberModel(Prefs.phyml_bootstrap, 0, 1000, 10);
+		this.bootstraps.setModel(mNBoot);
     }
     
     public void setDefaults() {
@@ -55,9 +83,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		Model m = params.getModel();
 		if(Utils.indexof(models, m.getName())==-1) {
 			if(ss.isDNA())
-				m = ModelManager.getInstance().generateModel(Prefs.phyml_default_dnamodel, m.isGamma(), m.isInv());
+				m = ModelManager.getInstance().generateModel(Prefs.phyml_dnamodel_default, m.isGamma(), m.isInv());
 			else
-				m = ModelManager.getInstance().generateModel(Prefs.phyml_default_proteinmodel, m.isGamma(), m.isInv());
+				m = ModelManager.getInstance().generateModel(Prefs.phyml_proteinmodel_default, m.isGamma(), m.isInv());
 		}
 		
 		this.subModel.setSelectedItem(m.getName());
@@ -65,7 +93,7 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		this.gamma.setSelected(params.getModel().isGamma());
 		this.inv.setSelected(params.getModel().isInv());
 		
-		SpinnerNumberModel mNBoot = new SpinnerNumberModel(Prefs.phyml_bootstrap, 0, 1000, 10);
+		SpinnerNumberModel mNBoot = new SpinnerNumberModel(Prefs.phyml_bootstrap_default, 0, 1000, 10);
 		this.bootstraps.setModel(mNBoot);
 	}
     
@@ -83,12 +111,8 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		
 		result.model = ss.getParams().getModel();
 		result.bootstrap = (Integer)bootstraps.getValue();
-		result.optTopology = true;
-		result.optBranchPara = true;
 		
 		Prefs.phyml_bootstrap = result.bootstrap;
-		Prefs.phyml_optbranch = result.optBranchPara;
-		Prefs.phyml_opttop = result.optTopology;
 		
 		return result;
 	}

@@ -61,7 +61,7 @@ public class PhymlDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		result.guiName = "Tree "+runNum+" (PhyML)";
+		result.guiName = "#"+runNum+" Tree (PhyML)";
 		result.jobName = "PhyML Tree Estimation";
 		
 		//Path to Phyml
