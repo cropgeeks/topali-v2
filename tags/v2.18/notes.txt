@@ -1,0 +1,63 @@
+Current state of affairs
+-----------------------
+
+Last modifications:
+- Fixed RaxML bootstrapping
+- Added "copy to clipboard" button to analysis info dialog
+- Fixed: PhyML partition was ignored
+- Export tree as PNG: Size of the image = size of the actual window
+- DNAModelDiagram: Fixed loss of rate 'bubbles' when rates are extremly high 
+
+TODO:
+- Bug: Dundee cluster filesystem timeout problems
+- Future: Estimate Tree dialog needs defaults button
+- Future: Resumbittion of tree job
+- FRANK: come up with additional "TOPALi Tips"
+- Applications note
+
+Some ideas:
+- Store all default values in Prefs, so that there is one central file
+  were the default values can be viewed/changed.
+
+Known Bugs
+- RaxML process sometimes doesn't stop (seems to happen on quite short alignments)
+- PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
+
+
+Some URLs
+---------
+Tomcat Manager:
+http://gruffalo:8080/
+
+Grid Report
+http://gruffalo/scri/ganglia/
+
+SCRI Cluster:
+http://gruffalo.scri.ac.uk/topali
+http://gruffalo.scri.ac.uk/broker
+
+www.topali.org - Usage:
+file://///gruffalo/www.topali.org/site_stats/index.html
+
+Misc.
+-----
+To run a script in a certain queue:
+#$ -q fast.q@n1
+
+If libs changes, edit:
+- j.bat (for testing)
+- build.xml (generates meta-inf classpath for topali.jar) (used by installer)
+- webstart/topali.jnlp
+
+Release
+-------
+- Set TOPALi.debug = false
+- Set logger level to warn/error
+- Build TOPALi
+- Create installers
+- Build/deploy public topali server:
+	ant -Dproperties=build.scri-public.properties update
+- Upload installers
+- Sign and upload jars for WebStart
+- Update website (whatsnew/index.html and version.txt)
+

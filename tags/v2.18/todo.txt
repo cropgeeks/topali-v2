@@ -1,0 +1,34 @@
+* Move website to SCRI hosting
+- Applications note
++ Online help updates and linking with buttons
+- FRANK: come up with additional "TOPALi Tips"
++ Write paragraphs and produce images for "What's New" for web (see below)
+
+- Implement/decide on analysis restrictions for remote jobs
+
+* Bug: Annotations dialog combo box no longer works
+* GUI: Tidy up layout of Annotations dialog
+- Bug: Dundee cluster filesystem timeout problems
+* GUI: Estimate Tree dialog layouts need sorting
+- Future: Estimate Tree dialog needs defaults button
+- Future: Resumbittion of tree job
+* GUI: Jobs tracking progress bar for non-tracking jobs is too large
+- Future: Decide on mouse highlighting functionality
+- Future: Decide on how to handle local job submission
+* GUI: Icons for job results in the left-hand navigation panel
+* GUI: Model generator output - toggle between TOPALi-compatible results and all results (toolbar button)
+* GUI: Site model analysis dialog tidy up
+* BUG: FRANK: m1, m2 etc are doing the wrong analysis
+* GUI: Branch model dialog needs a "ATV Launching..." dialog while waiting
+* GUI: Close ATV if it's still running and the TOPALi dialog has been closed/cancelled.
+* GUI: Show graph related toolbar buttons only if there is a graph (concerns: ResultPanels)
+* GUI: Clean up CodonW dialog
+
+* GUI: Center Omega-Start-Dialog over parent dialog
+* GUI: Clean up Advanced phyml settings
+* Future: Catch failing codeml jobs
+* Check if all jobs can be resubmitted
+* Switch to tree view when f84 tree job has finished (Removed again!)
+
+* Loading example sequence fails
+

@@ -1,0 +1,86 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+<service name="topali-hmm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.hmm.HMMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-pdm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.pdm.PDMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-pdm2" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.pdm2.PDMWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-dss" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.dss.DSSWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+ </service>
+
+<service name="topali-lrt" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.lrt.LRTWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+ </service>
+ 
+<service name="topali-cml" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.cml.CodeMLWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-mb" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.mrbayes.MrBayesWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-phyml" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.phyml.PhymlWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-rx" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.raxml.RaxmlWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-mt" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.modeltest.ModelTestWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-mg" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-cw" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.codonw.CodonWWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+<service name="topali-fm" provider="java:RPC">
+  <parameter name="className" value="topali.cluster.jobs.fastml.FastMLWebService"/>
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+</service>
+
+</deployment>
+
+<!-- Deploy via:
+  java org.apache.axis.client.AdminClient -lhttp://localhost:8080/topali/services/AxisServlet deploy.wsdd
+-->
