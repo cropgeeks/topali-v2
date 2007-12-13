@@ -113,6 +113,8 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
 		
+		result.gapThreshold = Prefs.dss_gap_threshold;
+		
 		int runNum = data.getTracker().getDssRunCount() + 1;
 		data.getTracker().setDssRunCount(runNum);
 		result.guiName = "DSS " + runNum;
@@ -130,6 +132,8 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		Prefs.dss_method = iResult.method;
 		Prefs.dss_power = iResult.power;
 		Prefs.dss_pass_count = iResult.passCount;
+		
+		Prefs.dss_gap_threshold = iResult.gapThreshold;
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -199,12 +203,15 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 	static class AdvancedPanel extends JScrollPane
 	{
 		JLabel lPower, lRuns, lModel, lType, lCompute, lPass;
+		JLabel lGaps;
 
 		JComboBox cPower, cModel, cType, cCompute, cPass;
 
 		private SpinnerNumberModel runsModel;
+		private SpinnerNumberModel gapsModel;
 
 		private JSpinner cRuns;
+		private JSpinner cGaps;
 
 		AdvancedPanel()
 		{
@@ -265,6 +272,11 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 							+ "forward and backward)");
 			lPass = new JLabel("Number of passes:");
 
+			lGaps = new JLabel("Gap Threshold:");
+			gapsModel = new SpinnerNumberModel(Prefs.dss_gap_threshold, 0d, 1d, 0.1d);
+			cGaps = new JSpinner(gapsModel);
+			cGaps.setToolTipText("Sequences exceeding this threshold (per window), will be ignored.");
+			
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
 			setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
@@ -287,6 +299,9 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 			layout.add(lPass, 0, 5, 0, 1, new Insets(5, 10, 10, 5));
 			layout.add(cPass, 1, 5, 1, 1, new Insets(5, 5, 10, 10));
+			
+			layout.add(lGaps, 0, 6, 0, 1, new Insets(5, 10, 10, 5));
+			layout.add(cGaps, 1, 6, 1, 1, new Insets(5, 5, 10, 10));
 		}
 
 		void saveSettings()
@@ -295,6 +310,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 			Prefs.dss_power = cPower.getSelectedIndex() + 1;
 			Prefs.dss_method = cModel.getSelectedIndex() + 1;
 			Prefs.dss_pass_count = cPass.getSelectedIndex() + 1;
+			Prefs.dss_gap_threshold = gapsModel.getNumber().doubleValue();
 
 			/*
 			 * Prefs.dss_model = (String) cModel.getSelectedItem();

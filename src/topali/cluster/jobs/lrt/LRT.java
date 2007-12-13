@@ -5,9 +5,12 @@
 
 package topali.cluster.jobs.lrt;
 
+import java.util.ArrayList;
+
 import pal.alignment.*;
 import pal.distance.DistanceMatrix;
 import pal.eval.LikelihoodValue;
+import pal.misc.Identifier;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.*;
 import topali.analyses.TreeUtilities;
@@ -25,18 +28,24 @@ public class LRT
 
 	private double alpha, ratio;
 
+	private double gapThreshold;
+	
 	public LRT(LRTResult result, SimpleAlignment[] windows, double alpha,
-			double ratio)
+			double ratio, double gapThreshold)
 	{
 		this.result = result;
 		this.windows = windows;
 
 		this.alpha = alpha;
 		this.ratio = ratio;
+		this.gapThreshold = gapThreshold;
 	}
 
 	double calculate() throws Exception
 	{
+		if(gapThreshold<1);
+			removeGapSequences();
+		
 		// Calculate distances for the two windows
 		DistanceMatrix dm1 = getDistance(windows[0], result.method);
 		Tree t1 = new NeighborJoiningTree(dm1);
@@ -81,6 +90,56 @@ public class LRT
 
 	}
 
+	private void removeGapSequences () {
+		//Determine sequences which exceed gap treshold
+		ArrayList<Integer> removeSeqPos = new ArrayList<Integer>(windows[0].getSequenceCount());
+		for(int i=0; i<windows[0].getSequenceCount(); i++) {
+			char[] seq = windows[0].getAlignedSequenceString(i).toCharArray();
+			int count = 0;
+			for(char c : seq) {
+				if(c==SimpleAlignment.GAP)
+					count++;
+			}
+			double gaps = ((double)count/(double)(seq.length));
+			if(gaps>gapThreshold)
+				removeSeqPos.add(new Integer(i));
+		}
+		
+		for(int i=0; i<windows[1].getSequenceCount(); i++) {
+			char[] seq = windows[1].getAlignedSequenceString(i).toCharArray();
+			int count = 0;
+			for(char c : seq) {
+				if(c==SimpleAlignment.GAP)
+					count++;
+			}
+			double gaps = ((double)count/(double)(seq.length));
+			if(gaps>gapThreshold && !removeSeqPos.contains(new Integer(i)))
+				removeSeqPos.add(new Integer(i));
+		}
+		
+		//create new alignments without the bad sequences
+		int newSize = windows[0].getSequenceCount()-removeSeqPos.size();
+		System.out.println(newSize);
+		Identifier[] ids1 = new Identifier[newSize];
+		Identifier[] ids2 = new Identifier[newSize];
+		String[] seqs1 = new String[newSize];
+		String[] seqs2 = new String[newSize];
+		for(int i=0, j=0; i<windows[0].getSequenceCount(); i++) {
+			if(!removeSeqPos.contains(new Integer(i))) {
+				ids1[j] = windows[0].getIdentifier(i);
+				ids2[j] = windows[1].getIdentifier(i);
+				seqs1[j] = windows[0].getAlignedSequenceString(i);
+				seqs2[j] = windows[1].getAlignedSequenceString(i);
+				j++;
+			}
+			else {
+				System.out.println("Leaving out seq "+i);
+			}
+		}
+		this.windows[0] = new SimpleAlignment(ids1, seqs1, windows[0].getDataType());
+		this.windows[1] = new SimpleAlignment(ids2, seqs2, windows[1].getDataType());
+	}
+	
 	private double getLikelihood(Alignment alignment, Tree tree)
 	{
 		SubstitutionModel sm = null;

@@ -82,8 +82,8 @@ public class Utils
 		
 		addCloseHandler(parent, bCancel);
 		
-		//JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
-		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
+		//JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		p1.add(bRun);
 		p1.add(bDefault);
@@ -91,7 +91,7 @@ public class Utils
 		p1.add(bHelp);
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		p2.add(p1);
-		return p1;
+		return p2;
 	}
 	
 	/**

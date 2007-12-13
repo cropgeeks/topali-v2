@@ -11,6 +11,7 @@ import pal.alignment.SimpleAlignment;
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
+import topali.gui.Prefs;
 
 class LRTAnalysis extends AnalysisThread
 {
@@ -93,7 +94,8 @@ class LRTAnalysis extends AnalysisThread
 
 			// Work out the LRT statistic
 			// alpha, ratio
-			LRT lrt = new LRT(result, win[i], 1.86, 4.29);
+			//LRT lrt = new LRT(result, win[i], 1.86, 4.29, Prefs.lrt_gap_threshold);
+			LRT lrt = new LRT(result, win[i], ss.getParams().getAlpha(), ss.getParams().getTRatio(), Prefs.lrt_gap_threshold);
 			data[i][1] = lrt.calculate();
 
 			// Is it bigger than the current maximum?

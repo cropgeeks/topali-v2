@@ -341,6 +341,7 @@
 		<field name="data" type="string" />
 		<field name="thresholds" type="float" direct="true"
 			collection="array" />
+		<field name="gapThreshold" type="double" direct="true"/>
 	</class>
 
 	<class name="topali.data.LRTResult"
@@ -366,6 +367,7 @@
 		<field name="data" type="string" />
 		<field name="thresholds" type="float" direct="true"
 			collection="array" />
+		<field name="gapThreshold" type="double" direct="true"/>
 	</class>
 
 	<class name="topali.data.PDMResult"

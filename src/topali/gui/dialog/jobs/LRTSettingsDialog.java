@@ -103,6 +103,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.method = Prefs.lrt_method;
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
+		result.gapThreshold = Prefs.lrt_gap_threshold;
 		
 		int runNum = data.getTracker().getLrtRunCount() + 1;
 		data.getTracker().setLrtRunCount(runNum);
@@ -117,6 +118,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		Prefs.lrt_window = iResult.window;
 		Prefs.lrt_step = iResult.step;
 		Prefs.lrt_runs = iResult.runs - 1;
+		Prefs.lrt_gap_threshold = iResult.gapThreshold;
 
 		Prefs.lrt_method = iResult.method;
 	}
@@ -187,13 +189,13 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 	static class AdvancedPanel extends JScrollPane
 	{
-		JLabel lRuns, lModel, lType, lCompute;
+		JLabel lRuns, lModel, lType, lCompute, lGaps;
 
 		JComboBox cModel, cType, cCompute;
 
-		private SpinnerNumberModel runsModel;
+		private SpinnerNumberModel runsModel, gapsModel;
 
-		private JSpinner cRuns;
+		private JSpinner cRuns, cGaps;
 
 		AdvancedPanel()
 		{
@@ -217,6 +219,14 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 					.setToolTipText("Nucleotide substitution model to use in distance matrix calculations");
 			lModel = new JLabel("Nucleotide substitution model:");
 
+			gapsModel = new SpinnerNumberModel(Prefs.lrt_gap_threshold, 0d, 1d, 0.1d);
+			cGaps = new JSpinner(gapsModel);
+			((JSpinner.NumberEditor) cGaps.getEditor())
+					.getTextField()
+					.setToolTipText(
+							"bla bla");
+			lGaps = new JLabel("Gap threshold:");
+			
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
 			setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
@@ -227,12 +237,16 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 			layout.add(lModel, 0, 2, 0, 1, new Insets(5, 10, 5, 5));
 			layout.add(cModel, 1, 2, 1, 1, new Insets(5, 5, 5, 10));
+			
+			layout.add(lGaps, 0, 3, 0, 1, new Insets(5, 10, 5, 5));
+			layout.add(cGaps, 1, 3, 1, 1, new Insets(5, 5, 5, 10));
 		}
 
 		void saveSettings()
 		{
 			Prefs.lrt_runs = runsModel.getNumber().intValue();
 			Prefs.lrt_method = cModel.getSelectedIndex() + 1;
+			Prefs.lrt_gap_threshold = gapsModel.getNumber().doubleValue();
 		}
 	}
 }

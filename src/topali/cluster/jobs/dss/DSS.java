@@ -6,15 +6,23 @@
 package topali.cluster.jobs.dss;
 
 import java.io.File;
+import java.util.*;
+
+import org.apache.log4j.Logger;
 
 import pal.alignment.SimpleAlignment;
+import pal.datatype.Nucleotides;
 import pal.distance.*;
+import pal.misc.Identifier;
 import pal.tree.*;
 import topali.analyses.TreeUtilities;
 import topali.data.*;
+import topali.gui.TOPALi;
 
 public class DSS
 {
+	static final Logger log = Logger.getLogger(DSS.class);
+	
 	public static final int METHOD_JC = 1;
 
 	public static final int METHOD_F84 = 2;
@@ -35,17 +43,24 @@ public class DSS
 
 	private double fitch1, fitch2, fitch3, fitch4;
 
+	private double gapThreshold;
+	
 	public DSS(File wrkDir, DSSResult result, SimpleAlignment win1,
-			SimpleAlignment win2)
+			SimpleAlignment win2, double gapThreshold)
 	{
 		this.wrkDir = wrkDir;
 		this.result = result;
 		this.win1 = win1;
 		this.win2 = win2;
+		this.gapThreshold = gapThreshold;
 	}
 
 	void calculateFitchScores() throws Exception
 	{
+		//Exclude bad sequences
+		if(this.gapThreshold<1)
+			removeGapSequences();
+		
 		// Calculate distances for the two windows
 		DistanceMatrix dm1 = getDistance(win1, result.method);
 		DistanceMatrix dm2 = getDistance(win2, result.method);
@@ -137,6 +152,56 @@ public class DSS
 				dm.setDistance(i, j, (dm.getDistance(i, j) * scaleBy));
 	}
 
+	private void removeGapSequences () {
+		//Determine sequences which exceed gap treshold
+		ArrayList<Integer> removeSeqPos = new ArrayList<Integer>(win1.getSequenceCount());
+		for(int i=0; i<win1.getSequenceCount(); i++) {
+			char[] seq = win1.getAlignedSequenceString(i).toCharArray();
+			int count = 0;
+			for(char c : seq) {
+				if(c==SimpleAlignment.GAP)
+					count++;
+			}
+			double gaps = ((double)count/(double)(seq.length));
+			if(gaps>gapThreshold)
+				removeSeqPos.add(new Integer(i));
+		}
+		
+		for(int i=0; i<win2.getSequenceCount(); i++) {
+			char[] seq = win2.getAlignedSequenceString(i).toCharArray();
+			int count = 0;
+			for(char c : seq) {
+				if(c==SimpleAlignment.GAP)
+					count++;
+			}
+			double gaps = ((double)count/(double)(seq.length));
+			if(gaps>gapThreshold && !removeSeqPos.contains(new Integer(i)))
+				removeSeqPos.add(new Integer(i));
+		}
+		
+		//create new alignments without the bad sequences
+		int newSize = win1.getSequenceCount()-removeSeqPos.size();
+		System.out.println(newSize);
+		Identifier[] ids1 = new Identifier[newSize];
+		Identifier[] ids2 = new Identifier[newSize];
+		String[] seqs1 = new String[newSize];
+		String[] seqs2 = new String[newSize];
+		for(int i=0, j=0; i<win1.getSequenceCount(); i++) {
+			if(!removeSeqPos.contains(new Integer(i))) {
+				ids1[j] = win1.getIdentifier(i);
+				ids2[j] = win2.getIdentifier(i);
+				seqs1[j] = win1.getAlignedSequenceString(i);
+				seqs2[j] = win2.getAlignedSequenceString(i);
+				j++;
+			}
+			else {
+				System.out.println("Leaving out seq "+i);
+			}
+		}
+		this.win1 = new SimpleAlignment(ids1, seqs1, win1.getDataType());
+		this.win2 = new SimpleAlignment(ids2, seqs2, win1.getDataType());
+	}
+	
 	// Static helper methods
 
 	/*

@@ -2,11 +2,12 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Fixed RaxML bootstrapping
-- Added "copy to clipboard" button to analysis info dialog
-- Fixed: PhyML partition was ignored
-- Export tree as PNG: Size of the image = size of the actual window
-- DNAModelDiagram: Fixed loss of rate 'bubbles' when rates are extremly high 
+- AlignmentPanel: Cursor is now crosshair cursor if mouse over highlighting is enabled
+- DSS ans LRT: Added option for ignoring sequences, if they exceed a certain gap threshold
+- Removed "Emp. Freq." choice from RaxMl cdna panel
+- Wait dialog will be displayed while alignment display buffer is created
+- Antialiasing for alignment display is now optional
+- Run, Cancel, ... buttons are now again layout in GridLayout
 
 TODO:
 - Bug: Dundee cluster filesystem timeout problems
@@ -54,7 +55,7 @@ Release
 - Set TOPALi.debug = false
 - Set logger level to warn/error
 - Build TOPALi
-- Create installers
+- Create installers (check JRE bundling)
 - Build/deploy public topali server:
 	ant -Dproperties=build.scri-public.properties update
 - Upload installers
