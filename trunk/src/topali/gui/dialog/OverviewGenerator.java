@@ -63,6 +63,12 @@ class OverviewGenerator extends Thread
 		// Width of each nucleotide
 		nWidth = 1 + (int) ((nScale >= 1) ? nScale : 1);
 
+		// What were the x and y positions of the last point drawn? If the next
+		// point to be drawn ISN'T different, then we won't bother drawing it,
+		// and will save a significant amount of time
+		int lastX = -1;
+		int lastY = -1;
+
 		// For each sequence
 		float y = 0;
 		for (int seq = 0; seq < s; seq++)
@@ -73,8 +79,15 @@ class OverviewGenerator extends Thread
 			float x = 0;
 			for (int nuc = 0; nuc < c.length; nuc++)
 			{
-				g.setColor(panel.getColor(c[nuc]));
-				g.fillRect((int) x, (int) y, nWidth, sHeight);
+				// This is where we save the time...
+		//		if ((int)x != lastX || (int)y != lastY)
+				{
+					g.setColor(panel.getColor(c[nuc]));
+					g.fillRect((int) x, (int) y, nWidth, sHeight);
+
+					lastX = (int)x;
+					lastY = (int)y;
+				}
 
 				x += nScale;
 			}
