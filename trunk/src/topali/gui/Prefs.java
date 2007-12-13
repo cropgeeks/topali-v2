@@ -112,6 +112,7 @@ public class Prefs extends PreferencesXML
 	public static byte gui_seq_font_size;
 	public static boolean gui_seq_font_bold;
 	public static boolean gui_seq_show_text;
+	public static boolean gui_seq_antialias;
 	public static boolean gui_seq_show_colors;
 	public static boolean gui_graph_smooth;
 	public static boolean gui_tree_unique_cols;
@@ -187,9 +188,11 @@ public class Prefs extends PreferencesXML
 	// DSS analysis run settings
 	public static int dss_window, dss_step, dss_runs;
 	public static int dss_power, dss_method, dss_pass_count;
-
+	public static double dss_gap_threshold;
+	
 	// LRT analysis run settings
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
+	public static double lrt_gap_threshold;
 
 	// Quick tree settings
 	public static int qt_bootstrap;
@@ -336,6 +339,7 @@ public class Prefs extends PreferencesXML
 		gui_seq_font_size = getByte("gui_seq_font_size", gui_seq_font_size);
 		gui_seq_font_bold = getBool("gui_seq_font_bold", gui_seq_font_bold);
 		gui_seq_show_text = getBool("gui_seq_show_text", gui_seq_show_text);
+		gui_seq_antialias = getBool("gui_seq_antialias", gui_seq_antialias);
 		gui_seq_show_colors = getBool("gui_seq_show_colors",
 				gui_seq_show_colors);
 		gui_graph_smooth = getBool("gui_graph_smooth", gui_graph_smooth);
@@ -422,11 +426,13 @@ public class Prefs extends PreferencesXML
 		dss_power = getInt("dss_power", dss_power);
 		dss_method = getInt("dss_method", dss_method);
 		dss_pass_count = getInt("dss_pass_count", dss_pass_count);
+		dss_gap_threshold = getFloat("dss_gap_threshold", (float)dss_gap_threshold);
 
 		lrt_window = getInt("lrt_window", lrt_window);
 		lrt_step = getInt("lrt_step", lrt_step);
 		lrt_runs = getInt("lrt_runs", lrt_runs);
 		lrt_method = getInt("lrt_method", lrt_method);
+		lrt_gap_threshold = getFloat("lrt_gap_threshold", (float)lrt_gap_threshold);
 
 		qt_bootstrap = getInt("qt_bootstrap", qt_bootstrap);
 		qt_tstv = getFloat("qt_tstv", (float)qt_tstv);
@@ -521,6 +527,7 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_seq_font_size", "" + gui_seq_font_size);
 		p.setProperty("gui_seq_font_bold", "" + gui_seq_font_bold);
 		p.setProperty("gui_seq_show_text", "" + gui_seq_show_text);
+		p.setProperty("gui_seq_antialias", ""+gui_seq_antialias);
 		p.setProperty("gui_seq_show_colors", "" + gui_seq_show_colors);
 		p.setProperty("gui_graph_smooth", "" + gui_graph_smooth);
 		p.setProperty("gui_seq_dim", "" + gui_seq_dim);
@@ -601,11 +608,13 @@ public class Prefs extends PreferencesXML
 		p.setProperty("dss_power", "" + dss_power);
 		p.setProperty("dss_method", "" + dss_method);
 		p.setProperty("dss_pass_count", "" + dss_pass_count);
+		p.setProperty("dss_gap_threshold", ""+dss_gap_threshold);
 
 		p.setProperty("lrt_window", "" + lrt_window);
 		p.setProperty("lrt_step", "" + lrt_step);
 		p.setProperty("lrt_runs", "" + lrt_runs);
 		p.setProperty("lrt_method", "" + lrt_method);
+		p.setProperty("lrt_gap_threshold", ""+lrt_gap_threshold);
 
 		p.setProperty("qt_bootstrap", ""+qt_bootstrap);
 		p.setProperty("qt_tstv", ""+qt_tstv);
@@ -650,6 +659,7 @@ public class Prefs extends PreferencesXML
 		gui_seq_font_size = 12;
 		gui_seq_font_bold = false;
 		gui_seq_show_text = true;
+		gui_seq_antialias = true;
 		gui_seq_show_colors = true;
 		gui_graph_smooth = true;
 		gui_seq_dim = true;
@@ -739,6 +749,7 @@ public class Prefs extends PreferencesXML
 		dss_power = topali.cluster.jobs.dss.DSS.POWER_UNWEIGHTED;
 		dss_method = topali.cluster.jobs.dss.DSS.METHOD_JC;
 		dss_pass_count = topali.cluster.jobs.dss.DSS.ONE_PASS;
+		dss_gap_threshold = 0.5;
 	}
 
 	public static void setLRTDefaults()
@@ -747,6 +758,7 @@ public class Prefs extends PreferencesXML
 		lrt_step = 10;
 		lrt_runs = 100;
 		lrt_method = topali.cluster.jobs.lrt.LRT.METHOD_JC;
+		lrt_gap_threshold = 0.5;
 	}
 
 	public static void setQTDefaults() {

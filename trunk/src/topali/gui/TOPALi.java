@@ -25,10 +25,10 @@ import topali.var.*;
 public class TOPALi extends Applet implements Application
 {
 	//enables/disables extensive logging
-	public static final boolean debugClient = false;
+	public static final boolean debugClient = true;
 	public static final boolean debugJobs = false;
 	
-	public static final String VERSION = "2.18";
+	public static final String VERSION = "2.19";
 
 	private final String prefsFile = ".topali2-new.xml";
 

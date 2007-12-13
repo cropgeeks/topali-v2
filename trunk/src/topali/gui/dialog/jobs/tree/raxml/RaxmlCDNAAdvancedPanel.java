@@ -54,15 +54,11 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
     public void setDefaults() {
     	bs.setValue(Prefs.rax_bootstrap_default);
     	ratehet.setSelectedItem(Prefs.rax_ratehet_default);
-    	empfreq.setSelected(false);
-    	empfreq.setEnabled(false);
-    	jLabel6.setEnabled(false);
     }
     
     public RaxmlResult onOK() {
     	RaxmlResult res = new RaxmlResult();
     	res.bootstrap = (Integer)bs.getValue();
-    	res.empFreq = empfreq.isSelected();
     	res.rateHet = (String)ratehet.getSelectedItem();
     	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
     	RaxPartition p1 = new RaxPartition("1-"+length+"\\3", "partition1", "GTR", data.getSequenceSet().isDNA());
@@ -99,8 +95,6 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
         bs = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         ratehet = new javax.swing.JComboBox();
-        jLabel6 = new javax.swing.JLabel();
-        empfreq = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Codon Position 1"));
         jLabel1.setText("Model:");
@@ -186,11 +180,6 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
 
         ratehet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CAT", "MIX", "GAMMA" }));
 
-        jLabel6.setText("Emp. Frequencies:");
-
-        empfreq.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        empfreq.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -204,13 +193,13 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ratehet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(empfreq)
-                            .addComponent(bs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+                            .addComponent(bs, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ratehet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -226,28 +215,22 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(ratehet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(empfreq))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JSpinner bs;
-    public javax.swing.JCheckBox empfreq;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
     public javax.swing.JLabel jLabel4;
     public javax.swing.JLabel jLabel5;
-    public javax.swing.JLabel jLabel6;
     public javax.swing.JPanel jPanel1;
     public javax.swing.JPanel jPanel2;
     public javax.swing.JPanel jPanel3;

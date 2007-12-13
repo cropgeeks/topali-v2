@@ -43,6 +43,8 @@ public class DSSResult extends AlignmentResult
 	// Bootstrap information (maximum y found for each run)
 	public float[] thresholds;
 
+	public double gapThreshold = 1;
+	
 	public DSSResult()
 	{
 		super();

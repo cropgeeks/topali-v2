@@ -34,7 +34,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	private JSpinner fontSpin, colorSpin;
 
-	private JCheckBox showText, boldFont, showCols, smooth, line, tooltip,
+	private JCheckBox showText, antialias, boldFont, showCols, smooth, line, tooltip,
 			tree;
 
 	private JCheckBox dimSeqs;
@@ -92,6 +92,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 	private void setStartupState()
 	{
 		showText.setSelected(Prefs.gui_seq_show_text);
+		antialias.setSelected(Prefs.gui_seq_antialias);
 		boldFont.setSelected(Prefs.gui_seq_font_bold);
 		showCols.setSelected(Prefs.gui_seq_show_colors);
 		smooth.setSelected(Prefs.gui_graph_smooth);
@@ -199,6 +200,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		else
 		{
 			Prefs.gui_seq_show_text = showText.isSelected();
+			Prefs.gui_seq_antialias = antialias.isSelected();
 			Prefs.gui_seq_font_bold = boldFont.isSelected();
 			Prefs.gui_seq_show_colors = showCols.isSelected();
 			Prefs.gui_graph_smooth = smooth.isSelected();
@@ -279,6 +281,11 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		showText.setToolTipText(Text.GuiDiag
 				.getString("DisplaySettingsDialog.gui24"));
 
+		antialias = new JCheckBox("Use anti-aliasing");
+		antialias.addActionListener(this);
+		antialias.setMnemonic(KeyEvent.VK_A);
+		antialias.setToolTipText("Anti-aliasing smoothens the alignment display.");
+		
 		boldFont = new JCheckBox(Text.GuiDiag
 				.getString("DisplaySettingsDialog.gui25"));
 		boldFont.addActionListener(this);
@@ -359,15 +366,16 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		layout.add(colorSpin, 1, 2, 0, 1, new Insets(5, 5, 5, 5));
 
 		layout.add(showText, 0, 3, 1, 2, new Insets(5, 1, 0, 5));
-		layout.add(showCols, 0, 4, 1, 2, new Insets(0, 1, 0, 5));
-		layout.add(dimSeqs, 0, 5, 1, 2, new Insets(0, 1, 0, 5));
-		layout.add(boldFont, 0, 6, 1, 2, new Insets(0, 1, 0, 5));
-		layout.add(smooth, 0, 7, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(antialias, 0, 4, 1, 2, new Insets(5, 1, 0, 5));
+		layout.add(showCols, 0, 5, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(dimSeqs, 0, 6, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(boldFont, 0, 7, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(smooth, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		//layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(tooltip, 0, 9, 1, 2, new Insets(0, 1, 0, 5));
 		// layout.add(tree, 0, 10, 1, 2, new Insets(0, 1, 5, 5));
-		layout.add(showVertHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
-		layout.add(showHorzHighlight, 0, 12, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(showVertHighlight, 0, 10, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
 
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.setBorder(BorderFactory.createTitledBorder(Text.GuiDiag

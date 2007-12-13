@@ -14,9 +14,11 @@ import java.lang.management.*;
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
+import org.jfree.data.xy.DefaultWindDataset;
 
 import topali.data.*;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
+import topali.var.threads.*;
 
 /* Parent container for the canvas used to draw the sequence data. */
 public class AlignmentPanel extends JPanel implements AdjustmentListener, PropertyChangeListener
@@ -562,7 +564,10 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		private BufferedImage createMiniImg(char c) {
 			BufferedImage img = new BufferedImage(charW, charH, imgBufferType);
 			Graphics2D g = (Graphics2D)img.createGraphics();
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			if(Prefs.gui_seq_antialias)
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			else
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g.setFont(font);
 			Color txtCol = Color.BLACK;
 			Color col1 = getColor(c);
@@ -688,68 +693,18 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 		
 		private void createBuffer() {
-			long start = System.currentTimeMillis();
+			BufferThread th = new BufferThread();
+			DefaultWaitDialog dlg = new DefaultWaitDialog(TOPALi.winMain, "Please wait...", "Creating alignment display buffer.", th);
+			dlg.setLocationRelativeTo(TOPALi.winMain);
+			dlg.setVisible(true);
 			
-			init();
-			
-			if(imgBuffer!=null) {
-				imgBuffer = null;
-				System.runFinalization();
-				System.gc();
-			}
-			
-			//Use a maximum of 50% of the free heap space for buffering:
-			MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
-			long freeMem = membean.getHeapMemoryUsage().getMax()-membean.getHeapMemoryUsage().getUsed();
-			long maxBufferSize = (long)(freeMem/2);
-			long factor = 1;
-			switch(imgBufferType) {
-				case BufferedImage.TYPE_INT_RGB: factor = 3; break;
-				case BufferedImage.TYPE_USHORT_555_RGB: factor = 2; break;
-				case BufferedImage.TYPE_BYTE_INDEXED: factor = 1; break;
-				default: factor = 1;
-			}
-			long imgSize = canH*canW*factor;
-			String logMsg = "Using max. "+(maxBufferSize/1024/1024)+" mb for alignment display buffer. " +
-					"("+(imgSize/1024/1024)+" mb needed)";
-			log.info(logMsg);
-			if(imgSize<maxBufferSize) {
-				try {
-					imgBuffer = new BufferedImage(canW, canH, imgBufferType);
-				}
-				catch (Throwable e) {
-					log.warn("Image Buffer still too big, switched back to direct painting.");
-					imgBuffer = null;
-					return;
-				}
-			}
-			else {
-				log.info("Image buffer size to high, will use direct painting");
-				imgBuffer = null;
-				return;
-			}
-			
-			Graphics g = imgBuffer.createGraphics();
-			
-			g.setFont(font);
-
-			//Draw alignment
-			int size = ss.getSize();
-			for (int seq = 0, y = 0; seq < size; seq++, y += charH)
+			try
 			{
-				// Extract the text to display in this section
-				char str[] = ss.getSequence(seq).getBuffer().toString().toCharArray();
-
-				for (int i = 0, x = 0; i < str.length; i++, x += charW)
-				{
-					BufferedImage img = getMiniImg(str[i]);
-					g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
-				}
+				th.join();
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
 			}
-			
-			g.dispose();
-			
-			log.info("Alignment display buffer created ("+(System.currentTimeMillis()-start)+" ms)");
 		}
 		
 		/**
@@ -936,6 +891,79 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			else
 				popupAdapt.enableSelectHighlighted(false);
 		}
+		
+		class BufferThread extends DesktopThread {
+
+			@Override
+			public void run()
+			{
+				long start = System.currentTimeMillis();
+				
+				init();
+				
+				if(imgBuffer!=null) {
+					imgBuffer = null;
+					System.runFinalization();
+					System.gc();
+				}
+				
+				//Use a maximum of 50% of the free heap space for buffering:
+				MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
+				long freeMem = membean.getHeapMemoryUsage().getMax()-membean.getHeapMemoryUsage().getUsed();
+				long maxBufferSize = (long)(freeMem/2);
+				long factor = 1;
+				switch(imgBufferType) {
+					case BufferedImage.TYPE_INT_RGB: factor = 3; break;
+					case BufferedImage.TYPE_USHORT_555_RGB: factor = 2; break;
+					case BufferedImage.TYPE_BYTE_INDEXED: factor = 1; break;
+					default: factor = 1;
+				}
+				long imgSize = canH*canW*factor;
+				String logMsg = "Using max. "+(maxBufferSize/1024/1024)+" mb for alignment display buffer. " +
+						"("+(imgSize/1024/1024)+" mb needed)";
+				log.info(logMsg);
+				if(imgSize<maxBufferSize) {
+					try {
+						imgBuffer = new BufferedImage(canW, canH, imgBufferType);
+					}
+					catch (Throwable e) {
+						log.warn("Image Buffer still too big, switched back to direct painting.");
+						imgBuffer = null;
+						return;
+					}
+				}
+				else {
+					log.info("Image buffer size to high, will use direct painting");
+					imgBuffer = null;
+					return;
+				}
+				
+				Graphics g = imgBuffer.createGraphics();
+				
+				g.setFont(font);
+
+				//Draw alignment
+				int size = ss.getSize();
+				for (int seq = 0, y = 0; seq < size; seq++, y += charH)
+				{
+					// Extract the text to display in this section
+					char str[] = ss.getSequence(seq).getBuffer().toString().toCharArray();
+
+					for (int i = 0, x = 0; i < str.length; i++, x += charW)
+					{
+						BufferedImage img = getMiniImg(str[i]);
+						g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
+					}
+				}
+				
+				g.dispose();
+				
+				log.info("Alignment display buffer created ("+(System.currentTimeMillis()-start)+" ms)");
+				
+				updateObservers(DesktopThread.THREAD_FINISHED);
+			}
+			
+		}
 	}
 	
 	class DiplayCanvasMouseListener implements MouseListener, MouseMotionListener {
@@ -1049,6 +1077,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		@Override
 		public void mouseEntered(MouseEvent e)
 		{	
+			if(Prefs.gui_show_horizontal_highlight || Prefs.gui_show_vertical_highlight) {
+				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			}
 		}
 
 		@Override
@@ -1057,6 +1088,8 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			curNucPos = -1;
 			curSeqPos = -1;
 			canvas.repaint();
+			
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		@Override

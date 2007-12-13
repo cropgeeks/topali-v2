@@ -96,7 +96,7 @@ class DSSAnalysis extends AnalysisThread
 			SimpleAlignment win2 = ss.getAlignment(win2S, win2E, true);
 
 			File dssWrkDir = new File(wrkDir, "win" + (i + 1));
-			dssWin[i] = new DSS(dssWrkDir, result, win1, win2);
+			dssWin[i] = new DSS(dssWrkDir, result, win1, win2, result.gapThreshold);
 		}
 
 		// 2) Run all the Fitch calculations

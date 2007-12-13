@@ -20,23 +20,27 @@ public abstract class WaitDialog extends JDialog implements DesktopThreadObserve
 	public WaitDialog(Frame owner, String title, final DesktopThread t) {
 		super(owner, title, true);
 		
-		t.addObserver(this);
-		
-		addWindowListener(new WindowAdapter() {
-
-			@Override
-			public void windowClosing(WindowEvent e)
-			{
-				t.kill();
-			}
-
-			@Override
-			public void windowOpened(WindowEvent e)
-			{
-				t.start();
-			}
+		if(t!=null) {
 			
-		});
+			t.addObserver(this);
+			
+			addWindowListener(new WindowAdapter() {
+	
+				@Override
+				public void windowClosing(WindowEvent e)
+				{
+					t.kill();
+				}
+	
+				@Override
+				public void windowOpened(WindowEvent e)
+				{
+					t.start();
+				}
+				
+			});
+		
+		}
 	}
 
 	@Override

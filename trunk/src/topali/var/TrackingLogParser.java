@@ -12,7 +12,7 @@ import java.util.*;
 public class TrackingLogParser
 {
 
-	final static String logFileName = "\\\\gruffalo\\tomcat\\topali\\public\\tracking.log";
+	final static String logFileName = "\\\\gruffalo\\tomcat\\topali\\public\\old\\tracking.log";
 	final static boolean dnsLookup = true;
 	
 	HashSet<String> excludedIps = new HashSet<String>();
