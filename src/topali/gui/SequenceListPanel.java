@@ -37,7 +37,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		this.disPanel = disPanel;
 		this.ss = ss;
 		this.ss.addChangeListener(this);
-		
+
 		// Create the JList of sequence names
 		model = new DefaultListModel();
 		list = new JList(model);
@@ -266,7 +266,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		ProjectState.setDataChanged();
 	}
 
-	
+
 	public void propertyChange(PropertyChangeEvent evt)
 	{
 		//if(evt.getPropertyName().equals("name"))
@@ -305,9 +305,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
 		JMenuItem selectHighlighted;
-		
+
 		JMenuItem addPart;
-		
+
 		JMenu annotate;
 
 		MyPopupMenuAdapter()
@@ -329,7 +329,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			menu.add(m3);
 			menu.addSeparator();
 			menu.add(m4);
-			
+
 			addPart = new JMenuItem();
 			addPart.setAction(new AbstractAction()
 			{
@@ -391,9 +391,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		@Override
 		protected void handlePopup(int x, int y)
 		{
-			
+
 		}
-		
-		
+
+
 	}
 }

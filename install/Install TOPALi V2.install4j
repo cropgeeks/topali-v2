@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="3.2.4">
+<install4j version="3.2.5">
   <directoryPresets config=".." />
-  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.topali.org" version="2.17" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
+  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" lzmaCompression="false" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.topali.org" version="2.18" allPathsRelative="true" backupOnSave="false" autoSave="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false">
     <searchSequence>
       <registry />
       <envVar name="JAVA_HOME" />
@@ -77,7 +77,7 @@
     <customScreens />
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2" allLaunchers="true" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" programGroup="TOPALi v2" allowUserDisableStartMenuCreation="false" reboot="false" rebootUninstaller="false" modeQuickLaunchIon="1">
+    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2" allLaunchers="true" includedJRE="windows-x86-1.6.0_03" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" programGroup="TOPALi v2" allowUserDisableStartMenuCreation="false" reboot="false" rebootUninstaller="false" modeQuickLaunchIon="1">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
@@ -87,7 +87,7 @@
       <excludedScreenIds />
       <additionalStartMenuEntries />
     </win32>
-    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" allLaunchers="true" includedJRE="linux-x86-1.6.0_02" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
+    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" allLaunchers="true" includedJRE="linux-x86-1.6.0_03" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
@@ -99,13 +99,14 @@
         <entry location="binaries/fitch.exe" launcher="false" />
         <entry location="binaries/mb.exe" launcher="false" />
         <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/raxml.exe" launcher="false" />
         <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />
       <customScriptLines />
     </unixInstaller>
-    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" allLaunchers="true" includedJRE="solaris-sparc-1.6.0_02" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
+    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" allLaunchers="true" includedJRE="solaris-sparc-1.6.0_03" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" adminRequired="false" languageID="en" modeDesktopIcon="1" desktopLauncherId="" customScriptMode="1" customScriptFile="">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>
@@ -117,6 +118,7 @@
         <entry location="binaries/fitch.exe" launcher="false" />
         <entry location="binaries/mb.exe" launcher="false" />
         <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/raxml.exe" launcher="false" />
         <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
@@ -137,13 +139,14 @@
         <entry location="binaries/fitch.exe" launcher="false" />
         <entry location="binaries/mb.exe" launcher="false" />
         <entry location="binaries/phyml_win32.exe" launcher="false" />
+        <entry location="binaries/raxml.exe" launcher="false" />
         <entry location="binaries/treedist.exe" launcher="false" />
       </exclude>
       <variables />
       <excludedScreenIds />
     </macos>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="4" />
   </buildIds>
 </install4j>
