@@ -94,7 +94,7 @@ public class SgeClient implements ICluster
 				}
 
 			getJobId(jobDir);
-			return processBuffer(reader.buffer.toString());
+			return processBuffer(jobDir, reader.buffer.toString());
 		} catch (Exception e)
 		{
 			logger.warning("unable to determine job status: " + e);
@@ -110,32 +110,32 @@ public class SgeClient implements ICluster
 	 * private int processBuffer(String output) throws Exception { int status =
 	 * JobStatus.UNKNOWN; System.out.println("searching for job id " +
 	 * sge_job_id);
-	 * 
+	 *
 	 * BufferedReader in = new BufferedReader(new StringReader(output)); String
 	 * str = in.readLine();
-	 * 
+	 *
 	 * while (str != null) { // qstat -f response has ID on token [0] and status
 	 * on [4] String[] tokens = str.trim().split("\\s+");
-	 * 
+	 *
 	 * if (tokens.length >= 5 && tokens[0].equals(sge_job_id)) { int newStatus =
 	 * JobStatus.UNKNOWN;
-	 * 
+	 *
 	 * if (tokens[4].contains("q")) newStatus = JobStatus.QUEUING; // TODO:
 	 * monitor deletions? if (tokens[4].contains("t") || str.contains("r"))
 	 * newStatus = JobStatus.RUNNING; if (tokens[4].contains("s") ||
 	 * str.contains("h")) newStatus = JobStatus.HOLDING;
 	 *  // System.out.println("Code is " + str + " (" + newStatus + ")"); if
 	 * (newStatus > status) status = newStatus; }
-	 * 
+	 *
 	 * str = in.readLine(); }
-	 * 
+	 *
 	 * in.close();
-	 * 
+	 *
 	 * return status; }
 	 */
 
 	// XML read
-	private int processBuffer(String output) throws Exception
+	private int processBuffer(File jobDir, String output) throws Exception
 	{
 		int status = JobStatus.UNKNOWN;
 
@@ -191,6 +191,59 @@ public class SgeClient implements ICluster
 
 		in.close();
 
+		if (status == JobStatus.UNKNOWN)
+			return getQAcctStatus(jobDir, status);
+		else
+			return status;
+	}
+
+	// If a normal qstat query fails to find job info, fall back on qacct
+	// (accounting) data to see if we can determine what happened to the job.
+	// For now, this will just give UNKNOWN or ERROR states...no reasons (yet)
+	private int getQAcctStatus(File jobDir, int status)
+	{
+		if (sge_job_id == null)
+			return status;
+
+		try
+		{
+			ProcessBuilder pb = new ProcessBuilder("qacct", "-j", sge_job_id);
+			pb.redirectErrorStream(true);
+
+			Process p = pb.start();
+			SGEStreamReader reader = new SGEStreamReader(p.getInputStream());
+
+			// Run the job
+			p.waitFor();
+			// And give the buffer time to be read properly
+			while (reader.stillReading)
+				try
+				{
+					Thread.sleep(100);
+				} catch (InterruptedException e)
+				{
+				}
+
+			BufferedReader in = new BufferedReader(new StringReader(reader.buffer.toString()));
+			String str = null;
+
+			while ((str = in.readLine()) != null)
+			{
+				if (str.startsWith("failed") && !str.equals("failed       0"))
+				{
+					status = JobStatus.CLUSTER_ERROR;
+					break;
+				}
+			}
+
+			in.close();
+		}
+		catch (Exception e)
+		{
+			logger.warning("unable to determine job status: " + e);
+			return status;
+		}
+
 		return status;
 	}
 
@@ -222,7 +275,7 @@ public class SgeClient implements ICluster
 		System.out
 				.println("status = " + client.getJobStatus(new File(args[0])));
 	}
-	
+
 	// Counts how many jobs are ahead of you in the queue while in qw mode
 	public int getQueueCount(File jobDir)
 		throws Exception
@@ -245,13 +298,13 @@ public class SgeClient implements ICluster
 				try { Thread.sleep(100); }
 				catch (InterruptedException e) {}
 
-			StringBuffer buffer = reader.buffer;			
+			StringBuffer buffer = reader.buffer;
 			BufferedReader in = new BufferedReader(new StringReader(buffer.toString()));
-			
+
 			// Ignore the header lines
 			in.readLine();
 			in.readLine();
-			
+
 			String str = in.readLine();
 			int count = 1;
 
@@ -263,14 +316,14 @@ public class SgeClient implements ICluster
 				else
 					count++;
 			}
-			
+
 			return count;
 		}
 		catch (Exception e)
 		{
 			logger.warning("grid engine exception: " + e);
 			return -1;
-		}	
+		}
 	}
 }
 

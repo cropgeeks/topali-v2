@@ -53,8 +53,8 @@ public class JobsPanel extends JPanel
 		JSplitPane splits = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splits.setTopComponent(mainPanel);
 		splits.setBottomComponent(getControlPanel());
-		splits.setResizeWeight(0.85);
-		splits.setDividerLocation(0.85);
+		splits.setResizeWeight(0.75);
+		splits.setDividerLocation(0.75);
 
 		setLayout(new BorderLayout());
 		add(splits);
@@ -68,8 +68,11 @@ public class JobsPanel extends JPanel
 	private JPanel getControlPanel()
 	{
 		infoText = new JTextArea();
+		infoText.setLineWrap(true);
+		infoText.setWrapStyleWord(true);
 		Utils.setTextAreaDefaults(infoText);
 		JScrollPane sp = new JScrollPane(infoText);
+		sp.setHorizontalScrollBarPolicy(sp.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -104,13 +107,13 @@ public class JobsPanel extends JPanel
 		if (getResults)
 		{
 			AnalysisResult res = job.getResult();
-			
+
 			if(!res.warning.equals("")) {
 				String msg = "Job '"+res.guiName+"' finished with a warning:\n\n";
 				msg += res.warning;
 				MsgBox.msg(msg, MsgBox.WAR);
 			}
-			
+
 			WinMain.navPanel.addResultsNode(null, job.getAlignmentData(), res);
 		} else
 			job.getAlignmentData().removeResult(job.getResult());
@@ -265,14 +268,14 @@ public class JobsPanel extends JPanel
 				job = new PhymlLocalJob((PhymlResult)result, data);
 			entry = new NoTrackingJobEntry(job);
 		}
-		
+
 		else if(result instanceof RaxmlResult) {
 			RaxmlResult res = (RaxmlResult)result;
 			if(result.isRemote)
 				job = new RaxmlRemoteJob(res, data);
 			else
 				job = new RaxmlLocalJob(res, data);
-				
+
 			if(res.bootstrap>0)
 				entry = new ProgressBarJobEntry(job);
 			else
@@ -295,7 +298,7 @@ public class JobsPanel extends JPanel
 				job = new ModelTestLocalJob((ModelTestResult)result, data);
 			entry = new ProgressBarJobEntry(job);
 		}
-		
+
 		else if(result instanceof CodonWResult) {
 			if(result.isRemote)
 				job = new CodonWRemoteJob((CodonWResult)result, data);
@@ -351,6 +354,21 @@ public class JobsPanel extends JPanel
 		for (JobsPanelEntry entry : jobs)
 			entry.setSelected(false);
 		e.setSelected(true);
-		infoText.setText(e.getJob().errorInfo);
+
+		if (e.getJob().errorInfo != null)
+		{
+			String txt = "This job has failed.\n\nIf you continue to see such "
+				+ "errors, either with this job submission or with others, then "
+				+ "please get in touch with us at topali@bioss.ac.uk and we will "
+				+ "attempt to diagnose the problem for you.\n\nThe most common "
+				+ "causes for job failure are (combinations of) submission "
+				+ "settings that result in an invalid analysis or the job "
+				+ "attempting to access more memory than is available.\n\n"
+				+ "The specific error in this case follows:\n\n"
+				+ e.getJob().errorInfo;
+
+			infoText.setText(txt);
+			infoText.setCaretPosition(0);
+		}
 	}
 }
