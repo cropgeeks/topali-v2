@@ -29,6 +29,8 @@ public class JobStatus
 
 	public static final int FATAL_ERROR = 21;
 
+	public static final int CLUSTER_ERROR = 22;
+
 	public float progress;
 
 	public int status;
@@ -59,6 +61,6 @@ public class JobStatus
 	{
 		return "progress="+progress+"; status="+status+" text="+text;
 	}
-	
-	
+
+
 }

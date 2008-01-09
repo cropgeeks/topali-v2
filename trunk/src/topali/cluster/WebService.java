@@ -174,6 +174,14 @@ public abstract class WebService
 			if (js.status == JobStatus.QUEUING)
 				js.text = "" + cluster.getQueueCount(jobDir);
 
+			if (js.status == JobStatus.CLUSTER_ERROR)
+			{
+				throw AxisFault.makeFault(new Exception(
+					"This job has been terminated by Sun "
+					+ "Grid Engine - either by an admin or by exceeding one or "
+					+ "more set limits"));
+			}
+
 			// TODO: Find out WTF qstat won't always return the state
 			// TODO: Following not suitable for SGE 5.3
 			// if (status == JobStatus.UNKNOWN && progress < 100f)
@@ -230,7 +238,7 @@ public abstract class WebService
 		logger.info(jobId + " - cleaning up and removing files");
 
 		File jobDir = new File(getParameter("job-dir"), jobId);
-		
+
 		if(!TOPALi.debugJobs)
 			ClusterUtils.emptyDirectory(jobDir, true);
 	}
