@@ -176,7 +176,7 @@ public class RaxmlMonitor
 		sb.append("\n\nApplication: RaxML (Version 2.2.3)\n");
 		sb.append("A Stamatakis, 2006, RAxML-VI-HPC: Maximum Likelihood-based\n" +
 				"Phylogenetic Analyses with Thousands of Taxa and Mixed Models,\n" +
-				"Bioinformatics 22(21), pp 2688–2690");
+				"Bioinformatics 22(21), pp 2688-2690");
 		return sb.toString();
 	}
 }

@@ -12,8 +12,9 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
-import java.nio.ByteBuffer;
+import java.nio.*;
 import java.nio.channels.FileChannel;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.List;
 

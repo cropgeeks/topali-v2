@@ -2,12 +2,10 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- AlignmentPanel: Cursor is now crosshair cursor if mouse over highlighting is enabled
-- DSS ans LRT: Added option for ignoring sequences, if they exceed a certain gap threshold
-- Removed "Emp. Freq." choice from RaxMl cdna panel
-- Wait dialog will be displayed while alignment display buffer is created
-- Antialiasing for alignment display is now optional
-- Run, Cancel, ... buttons are now again layout in GridLayout
+- Added XSLT file for 2.18-2.19 transformation (doesn't do anything yet)
+- Fixed bug: RaxML result (field: anlysis info) contained an invalid character
+  (therefore project.xml will now be checked when loaded)
+  
 
 TODO:
 - Bug: Dundee cluster filesystem timeout problems
@@ -16,14 +14,15 @@ TODO:
 - FRANK: come up with additional "TOPALi Tips"
 - Applications note
 
-Some ideas:
+Suggestions:
 - Store all default values in Prefs, so that there is one central file
   were the default values can be viewed/changed.
+- Topali trees: Sequence coloring (by species) (Diego Miranda, dm435@cam.ac.uk)
+- Job cleanup: Check, does Topali really clean up the job directory (Jim Procter)
 
 Known Bugs
 - RaxML process sometimes doesn't stop (seems to happen on quite short alignments)
 - PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
-
 
 Some URLs
 ---------
