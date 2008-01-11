@@ -10,6 +10,7 @@ import static topali.mod.Filters.TOP;
 import java.beans.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.*;
 
@@ -17,13 +18,14 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 import org.exolab.castor.xml.*;
+import org.xml.sax.InputSource;
 
 import sbrn.commons.file.FileUtils;
 import topali.data.*;
 import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
-import topali.var.StringOutputStream;
+import topali.var.*;
 import doe.MsgBox;
 
 public class Project extends DataObject 
@@ -138,25 +140,28 @@ public class Project extends DataObject
 	{
 		try
 		{
-			ZipFile zipFile = new ZipFile(filename);
-			InputStream zin = zipFile
-					.getInputStream(new ZipEntry("project.xml"));
-			BufferedReader in = new BufferedReader(new InputStreamReader(zin));
-
+			byte[] xml = readZipFileEntry(filename, "project.xml");
+			
 			//Check with which version we're dealing with:
 			//if there is no appVersion attribute it's 2.17
 			String appVersion = "2.17";
+			BufferedReader reader = new BufferedReader(new StringReader(new String(xml, "UTF-8")));
 			String line = null;
-			while((line=in.readLine())!=null) {
-				if(line.matches(".*appversion=.*")) {
+			while((line=reader.readLine())!=null) {
+				if(line.matches("\\.*<project.*\\>.*")) {
 					int i = line.indexOf("appversion=");
-					int s = line.indexOf('"', i);
-					int e = line.indexOf('"', s+1);
-					appVersion = line.substring(s+1, e);
+					if(i!=-1) {
+						int s = line.indexOf('"', i);
+						int e = line.indexOf('"', s+1);
+						appVersion = line.substring(s+1, e);
+						log.info("Project file appVersion="+appVersion);
+					}
+					else
+						log.info("Project file appVersion<2.17");
+					break;
 				}
 			}
-			in.close();
-			zin.close();
+			reader.close();
 			
 			if(!appVersion.equals(TOPALi.VERSION)) {
 				String notes = "";
@@ -165,12 +170,31 @@ public class Project extends DataObject
 					File xsltFile = new File(Prefs.tmpDir, "topali_2.17-2.18.xsl");
 					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
 					notes += getTranformationNotes(xsltFile);
-					StringOutputStream sos = new StringOutputStream();
-					InputStream xmlin = zipFile.getInputStream(new ZipEntry("project.xml"));
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					InputStream xmlin = new ByteArrayInputStream(xml);
 					InputStream xslin = new FileInputStream(xsltFile);
-					XSLTransformer.transform(xmlin, xslin, sos);
-					in = new BufferedReader(new StringReader(sos.toString()));
-					appVersion = "2.17";
+					XSLTransformer.transform(xmlin, xslin, bos);
+					xml = bos.toByteArray();
+					bos.close();
+					xmlin.close();
+					xslin.close();
+					appVersion = "2.18";
+				}
+				
+				if(appVersion.equals("2.18")) {
+					URL tmpUrl = Project.class.getResource("/res/xslt/2.18-2.19.xsl");
+					File xsltFile = new File(Prefs.tmpDir, "topali_2.18-2.19.xsl");
+					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
+					notes += getTranformationNotes(xsltFile);
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					InputStream xmlin = new ByteArrayInputStream(xml);
+					InputStream xslin = new FileInputStream(xsltFile);
+					XSLTransformer.transform(xmlin, xslin, bos);
+					xml = bos.toByteArray();
+					bos.close();
+					xmlin.close();
+					xslin.close();
+					appVersion = "2.19";
 				}
 				
 				// ... do further tranformations in future (2.18-2.19, 2.19-...)
@@ -183,23 +207,18 @@ public class Project extends DataObject
 					MsgBox.msg(msg, MsgBox.INF);
 				}
 			}
-			else {
-				zin = zipFile.getInputStream(new ZipEntry("project.xml"));
-				in = new BufferedReader(new InputStreamReader(zin));
-			}
 			
 			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
 			Unmarshaller unmarshaller = Castor.getUnmarshaller();
-			Project p = (Project) unmarshaller.unmarshal(in);
-			in.close();
-
+			ByteArrayInputStream bis = new ByteArrayInputStream(xml);
+			Project p = (Project) unmarshaller.unmarshal(new InputSource(bis));
+			bis.close();
+			
 			p.filename = filename;
-
-			zipFile.close();
-
 			return p;
+			
 		} catch (Exception e)
 		{
 			MsgBox.msg(Text.format(Text.Gui.getString("Project.err01"),
@@ -210,6 +229,30 @@ public class Project extends DataObject
 		}
 	}
 
+	private static byte[] readZipFileEntry(File zipFile, String entry) throws Exception {
+		ZipFile zip = new ZipFile(zipFile);
+		ZipEntry e = zip.getEntry(entry);
+		InputStream zin = zip.getInputStream(e);
+		
+		byte[] data = null;
+		ArrayList<Byte> buffer = new ArrayList<Byte>();
+		int c = -1;
+		while((c=zin.read())!=-1) {
+			buffer.add((byte)c);
+		}
+		zin.close();
+		zip.close();
+		
+		data = new byte[buffer.size()];
+		for(int i=0; i<buffer.size(); i++)
+			data[i] = buffer.get(i);
+		
+		//Convert to String and back to bytes, to remove possible invalid characters
+		String st = new String(data, "UTF-8");
+		st = st.replaceAll("\uFFFD", "_"); //replace invalid char with _
+		return st.getBytes("UTF-8");
+	}
+	
 	private static String getTranformationNotes(File xsltFile) throws Exception {
 		BufferedReader in = new BufferedReader(new FileReader(xsltFile));
 		String line = null;
@@ -227,6 +270,8 @@ public class Project extends DataObject
 				sb.append(line+"\n");
 			}
 		}
+		in.close();
+		
 		return sb.toString();
 	}
 	
@@ -240,7 +285,7 @@ public class Project extends DataObject
 		try
 		{
 			long s = System.currentTimeMillis();
-
+ 
 			// Open an output stream to the zip...
 			ZipOutputStream zOut = new ZipOutputStream(
 					new BufferedOutputStream(new FileOutputStream(p.filename)));

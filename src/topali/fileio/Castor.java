@@ -96,7 +96,8 @@ public class Castor
 		
 		StringReader sr = new StringReader(xml);
 		
-		return unmarshaller.unmarshal(sr);
+		Object obj = unmarshaller.unmarshal(sr);
+		return obj;
 	}
 
 	public static Object unmarshall(File file) throws IOException,
