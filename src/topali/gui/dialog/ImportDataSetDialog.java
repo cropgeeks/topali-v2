@@ -133,8 +133,11 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 		{
 			log.warn("Import failed.\n",e);
 			int code = e.getReason();
-			MsgBox.msg(Text.GuiFile
-					.getString("ImportDataSetDialog.err0" + code), MsgBox.ERR);
+			
+			String text = Text.GuiFile.getString("ImportDataSetDialog.err0" + code);
+			if(e.getInfo()!=null)
+				text += "\n["+e.getInfo()+"]";
+			MsgBox.msg(text, MsgBox.ERR);
 		}
 
 		setVisible(false);
