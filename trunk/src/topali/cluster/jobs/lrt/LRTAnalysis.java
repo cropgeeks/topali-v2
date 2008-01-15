@@ -95,7 +95,7 @@ class LRTAnalysis extends AnalysisThread
 			// Work out the LRT statistic
 			// alpha, ratio
 			//LRT lrt = new LRT(result, win[i], 1.86, 4.29, Prefs.lrt_gap_threshold);
-			LRT lrt = new LRT(result, win[i], ss.getParams().getAlpha(), ss.getParams().getTRatio(), Prefs.lrt_gap_threshold);
+			LRT lrt = new LRT(result, win[i], result.alpha, result.tRatio, result.gapThreshold);
 			data[i][1] = lrt.calculate();
 
 			// Is it bigger than the current maximum?

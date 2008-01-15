@@ -135,6 +135,8 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 					{
 						log.warn("Could not load alignment.\n",e);
 						text.append("Loading alignment '"+file.getName()+"' failed. Error:\n"+e.getLocalizedMessage());
+						if(e.getInfo()!=null)
+							text.append("["+e.getInfo()+"]");
 					}
 
 				text.setCaretPosition(text.getText().length() - 1);

@@ -321,13 +321,14 @@ public class SequenceSet extends DataObject
 			String iName = itor1.next().getName();
 
 			ListIterator<Sequence> itor2 = sequences.listIterator(i + 1);
-			while (itor2.hasNext())
+			for (int j=i+1; itor2.hasNext(); j++)
 			{
 				String jName = itor2.next().getName();
 				if (iName.equals(jName))
 				{
 					//System.out.println(jName);
-					throw new AlignmentLoadException(DUPLICATE_NAMES_FOUND);
+					String info = "Sequences: "+(i+1)+","+(j+1)+" ("+iName+")";
+					throw new AlignmentLoadException(DUPLICATE_NAMES_FOUND, info);
 				}
 			}
 		}

@@ -2,10 +2,11 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Added XSLT file for 2.18-2.19 transformation (doesn't do anything yet)
-- Fixed bug: RaxML result (field: anlysis info) contained an invalid character
-  (therefore project.xml will now be checked when loaded)
-  
+- Fixed bug in LRT: 
+  LRT.getLikelihood(): JC and F84 were interchanged
+  LRTAnalysis: alpha and tRatio were always -1
+  Gap removal caused Exception
+- If a alignment has duplicate seq. names, the user now get's told which seq. these are.
 
 TODO:
 - Bug: Dundee cluster filesystem timeout problems

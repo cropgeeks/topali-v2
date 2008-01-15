@@ -119,17 +119,20 @@ public class LRT
 		
 		//create new alignments without the bad sequences
 		int newSize = windows[0].getSequenceCount()-removeSeqPos.size();
-		System.out.println(newSize);
 		Identifier[] ids1 = new Identifier[newSize];
 		Identifier[] ids2 = new Identifier[newSize];
+		Identifier[] ids3 = new Identifier[newSize];
 		String[] seqs1 = new String[newSize];
 		String[] seqs2 = new String[newSize];
+		String[] seqs3 = new String[newSize];
 		for(int i=0, j=0; i<windows[0].getSequenceCount(); i++) {
 			if(!removeSeqPos.contains(new Integer(i))) {
 				ids1[j] = windows[0].getIdentifier(i);
 				ids2[j] = windows[1].getIdentifier(i);
+				ids3[j] = windows[2].getIdentifier(i);
 				seqs1[j] = windows[0].getAlignedSequenceString(i);
 				seqs2[j] = windows[1].getAlignedSequenceString(i);
+				seqs3[j] = windows[2].getAlignedSequenceString(i);
 				j++;
 			}
 			else {
@@ -138,6 +141,7 @@ public class LRT
 		}
 		this.windows[0] = new SimpleAlignment(ids1, seqs1, windows[0].getDataType());
 		this.windows[1] = new SimpleAlignment(ids2, seqs2, windows[1].getDataType());
+		this.windows[2] = new SimpleAlignment(ids3, seqs3, windows[2].getDataType());
 	}
 	
 	private double getLikelihood(Alignment alignment, Tree tree)
@@ -145,9 +149,9 @@ public class LRT
 		SubstitutionModel sm = null;
 
 		if (result.method == METHOD_JC)
-			sm = TreeUtilities.getF84SubstitutionModel(alignment, ratio, alpha);
-		else if (result.method == METHOD_F84)
 			sm = TreeUtilities.getJCSubstitutionModel(alignment);
+		else if (result.method == METHOD_F84)
+			sm = TreeUtilities.getF84SubstitutionModel(alignment, ratio, alpha);
 
 		SitePattern sp = new SitePattern(alignment);
 

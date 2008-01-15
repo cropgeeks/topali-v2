@@ -17,13 +17,25 @@ public class AlignmentLoadException extends Exception
 
 	private int code;
 
+	private String info = null;
+	
 	public AlignmentLoadException(int code)
 	{
 		this.code = code;
 	}
-
+	
+	public AlignmentLoadException(int code, String info)
+	{
+		this.code = code;
+		this.info = info;
+	}
+	
 	public int getReason()
 	{
 		return code;
+	}
+	
+	public String getInfo() {
+		return info;
 	}
 }
