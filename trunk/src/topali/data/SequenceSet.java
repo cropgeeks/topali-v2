@@ -9,7 +9,7 @@ import static topali.fileio.AlignmentLoadException.*;
 
 import java.awt.Color;
 import java.beans.*;
-import java.io.*;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
 

@@ -9,7 +9,6 @@ package topali.gui.dialog.jobs.tree.raxml;
 import javax.swing.*;
 
 import topali.data.*;
-import topali.data.models.ModelManager;
 import topali.gui.Prefs;
 
 /**

@@ -5,7 +5,7 @@
 
 package topali.cluster.jobs.phyml.analysis;
 
-import java.io.*;
+import java.io.File;
 
 import topali.cluster.*;
 import topali.data.PhymlResult;

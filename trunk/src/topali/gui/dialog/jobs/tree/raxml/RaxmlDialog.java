@@ -12,7 +12,8 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class RaxmlDialog extends JDialog implements ActionListener
 {
@@ -99,7 +100,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 		
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.raxmlPath = Utils.getLocalPath() + "\\raxml.exe";
 		else
 			result.raxmlPath = Utils.getLocalPath() + "/raxml/raxmlHPC";

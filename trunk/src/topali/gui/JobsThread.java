@@ -7,15 +7,14 @@ package topali.gui;
 
 import static topali.cluster.JobStatus.*;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.data.AnalysisResult;
-
-import doe.*;
+import doe.MsgBox;
 
 public class JobsThread extends Thread
 {

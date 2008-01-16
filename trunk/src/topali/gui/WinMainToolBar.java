@@ -11,14 +11,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.nav.NavPanel;
+import topali.var.SysPrefs;
 
 public class WinMainToolBar extends JToolBar
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5874172250858381338L;
-
 	private JButton bFileNewProject;
 
 	private JButton bFileOpenProject;
@@ -123,7 +119,7 @@ public class WinMainToolBar extends JToolBar
 		if (tt != null)
 			button.setToolTipText(Text.Gui.getString("WinMainToolBar." + tt));
 
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			button.setBorderPainted(false);
 
 		button.setMargin(new Insets(1, 1, 1, 1));

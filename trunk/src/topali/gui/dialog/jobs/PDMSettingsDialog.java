@@ -13,7 +13,8 @@ import javax.swing.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class PDMSettingsDialog extends JDialog implements ActionListener
@@ -83,7 +84,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		result = new PDMResult();
 
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 		{
 			result.bambePath = Utils.getLocalPath() + "bambe.exe";
 			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";
@@ -240,31 +241,28 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 	static class BambePanel extends JScrollPane
 	{
-		JLabel lSeed, lBurn, lCycles, lBurnAlg, lMainAlg, lUseBeta, lSample;
+		JLabel lSeed, lBurn, lCycles, lBurnAlg, lMainAlg, lUseBeta;
 
-		JLabel lNewick, lMole, lModel, lCat, lSingleKap, lInitKap, lInitThet;
+		JLabel lMole, lCat, lInitThet;
 
-		JLabel lEstimate, lPIA, lPIG, lPIC, lPIT, lTTP, lGAM, lParam,
-				lTreeFile;
+		JLabel lParam;
 
-		JLabel luKap, luThet, luPi, luTTP, luGAM, ltInt, ltGlo, ltLoc, ltThe;
+		JLabel luThet, ltInt, ltGlo, ltLoc, ltThe;
 
-		JLabel ltPi, ltKap, ltTTP, ltGam, ltBet, lOutgroup, lTree, lHeight;
+		JLabel ltBet, lOutgroup;
 
 		JLabel lPrune, lRuns;
 
-		JTextField cSeed, cBurn, cCycles, cSample, cCat, cInitKap, cInitThet;
+		JTextField cSeed, cBurn, cCycles, cCat, cInitThet;
 
-		JTextField cTTP, cGAM, cParam, cOutgroup;
+		JTextField cParam, cOutgroup;
 
-		JTextField ctInt, ctGlo, ctLoc, ctThe, ctPi, ctKap, ctTTP, ctGam,
+		JTextField ctInt, ctGlo, ctLoc, ctThe,
 				ctBet;
 
-		JTextField cHeight, cTreeFile;
+		JComboBox cBurnAlg, cMainAlg, cUseBeta, cMole;
 
-		JComboBox cBurnAlg, cMainAlg, cUseBeta, cNewick, cMole, cModel, cTree;
-
-		JComboBox cSingleKap, cEstimate, cuKap, cuThet, cuPi, cuTTP, cuGAM;
+		JComboBox cuThet;
 
 		JComboBox cPrune;
 
@@ -437,17 +435,17 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			ltInt = new JLabel("Tune-interval:");
 
 			// Global-tune
-			ctGlo = new JTextField("" + Prefs.d5.format(Prefs.pdm_global_tune));
+			ctGlo = new JTextField("" + Utils.d5.format(Prefs.pdm_global_tune));
 			ctGlo.setToolTipText("Half window width for global");
 			ltGlo = new JLabel("Global-tune:");
 
 			// Local-tune
-			ctLoc = new JTextField("" + Prefs.d5.format(Prefs.pdm_local_tune));
+			ctLoc = new JTextField("" + Utils.d5.format(Prefs.pdm_local_tune));
 			ctLoc.setToolTipText("Stretch parameter for local");
 			ltLoc = new JLabel("Local-tune:");
 
 			// Theta-tune
-			ctThe = new JTextField("" + Prefs.d5.format(Prefs.pdm_theta_tune));
+			ctThe = new JTextField("" + Utils.d5.format(Prefs.pdm_theta_tune));
 			ctThe.setToolTipText("Dirichlet parameter for theta update");
 			ltThe = new JLabel("Theta-tune:");
 
@@ -474,7 +472,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			// ltGam = new JLabel("Gamma-tune:");
 
 			// Beta-tune
-			ctBet = new JTextField("" + Prefs.d5.format(Prefs.pdm_beta_tune));
+			ctBet = new JTextField("" + Utils.d5.format(Prefs.pdm_beta_tune));
 			ctBet.setToolTipText("Half window width for beta update");
 			ltBet = new JLabel("Beta-tune:");
 
@@ -709,7 +707,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.pdm_global_tune = Prefs.d5.parse(ctGlo.getText())
+				Prefs.pdm_global_tune = Utils.d5.parse(ctGlo.getText())
 						.floatValue();
 			} catch (Exception e)
 			{
@@ -718,7 +716,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.pdm_local_tune = Prefs.d5.parse(ctLoc.getText())
+				Prefs.pdm_local_tune = Utils.d5.parse(ctLoc.getText())
 						.floatValue();
 			} catch (Exception e)
 			{
@@ -727,7 +725,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.pdm_theta_tune = Prefs.d5.parse(ctThe.getText())
+				Prefs.pdm_theta_tune = Utils.d5.parse(ctThe.getText())
 						.floatValue();
 			} catch (Exception e)
 			{
@@ -760,7 +758,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.pdm_beta_tune = Prefs.d5.parse(ctBet.getText())
+				Prefs.pdm_beta_tune = Utils.d5.parse(ctBet.getText())
 						.floatValue();
 			} catch (Exception e)
 			{

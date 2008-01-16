@@ -12,8 +12,8 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.dialog.jobs.tree.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class MrBayesDialog extends JDialog implements ActionListener
 {
@@ -95,7 +95,7 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 		
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.mbPath = Utils.getLocalPath() + "\\mb.exe";
 		else
 			result.mbPath = Utils.getLocalPath() + "/mrbayes/mb";

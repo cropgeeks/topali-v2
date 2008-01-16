@@ -17,7 +17,7 @@ import topali.data.*;
 import topali.data.RegionAnnotations.Region;
 import topali.gui.*;
 import topali.gui.dialog.ExportDialog;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public class RegionDialog extends JDialog implements ActionListener,
@@ -202,33 +202,6 @@ public class RegionDialog extends JDialog implements ActionListener,
 			log.warn(e);
 		}
 		return null;
-	}
-
-	/**
-	 * Get the RegionAnnotation class matching a certain label
-	 * 
-	 * @param name
-	 * @return
-	 */
-	private Class getAnnotationClass(String name)
-	{
-		Class result = null;
-		try
-		{
-			for (Class c : supportedAnnotations)
-			{
-				RegionAnnotations tmp = (RegionAnnotations) c.newInstance();
-				if (tmp.getLabel().equals(name))
-				{
-					result = c;
-					break;
-				}
-			}
-		} catch (Exception e)
-		{
-			log.warn(e);
-		}
-		return result;
 	}
 
 	private void checkList()

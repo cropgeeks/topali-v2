@@ -16,10 +16,6 @@ import doe.DoeLayout;
 /* Simple panel containing oft-used Window and Step size settings controls */
 class SlidePanel extends JPanel
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4196118566726774726L;
 
 	private JLabel label1, label2;
 

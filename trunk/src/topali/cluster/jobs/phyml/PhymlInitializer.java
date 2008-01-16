@@ -9,8 +9,6 @@ import java.io.*;
 
 import topali.cluster.*;
 import topali.cluster.jobs.PhyMLCmdGenerator;
-import topali.cluster.jobs.modeltest.ModelTestWebService;
-import topali.cluster.jobs.modeltest.analysis.ModelTestAnalysis;
 import topali.cluster.jobs.phyml.analysis.PhymlAnalysis;
 import topali.data.*;
 import topali.data.models.Model;

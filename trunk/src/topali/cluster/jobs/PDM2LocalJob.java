@@ -11,6 +11,7 @@ import topali.cluster.*;
 import topali.cluster.jobs.pdm2.*;
 import topali.data.*;
 import topali.gui.*;
+import topali.var.SysPrefs;
 
 public class PDM2LocalJob extends AnalysisJob
 {
@@ -25,9 +26,9 @@ public class PDM2LocalJob extends AnalysisJob
 		this.ss = data.getSequenceSet();
 		result.startTime = System.currentTimeMillis();
 		result.jobId = "" + System.currentTimeMillis();
-		result.tmpDir = Prefs.tmpDir.getPath();
+		result.tmpDir = SysPrefs.tmpDir.getPath();
 
-		jobDir = new File(Prefs.tmpDir, result.jobId);
+		jobDir = new File(SysPrefs.tmpDir, result.jobId);
 
 		LocalJobs.addJob(result.jobId);
 	}

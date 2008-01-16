@@ -6,7 +6,7 @@
 package topali.cluster.jobs.fastml;
 
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 

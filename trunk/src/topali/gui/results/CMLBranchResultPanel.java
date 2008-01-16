@@ -12,16 +12,14 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import doe.GradientPanel;
-
 import pal.statistics.ChiSquareDistribution;
+import sbrn.commons.gui.DoeLayout;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
 import topali.var.*;
-import topali.var.tree.NHTreeUtils;
-
-import sbrn.commons.gui.DoeLayout;
+import topali.var.utils.*;
+import doe.GradientPanel;
 
 /**
  * Panel for displaying codeml branch model results
@@ -136,18 +134,18 @@ public class CMLBranchResultPanel extends ResultPanel
 			for (int j = 0; j < n; j++)
 			{
 				if (j < hypo.omegas.length)
-					row.add(Prefs.d3.format(hypo.omegas[j]));
+					row.add(Utils.d3.format(hypo.omegas[j]));
 				else
 					row.add("");
 			}
-			row.add(Prefs.d2
+			row.add(Utils.d2
 					.format(result.hypos.get(i).likelihood));
 			data.add(row);
 		}
 
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
-		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+		p.accessTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("Likelihood/Omega values"));
 		return p;
@@ -204,7 +202,7 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		TablePanel p = new TablePanel(data, names,
 				TablePanel.RIGHT);
-		p.accessTable().setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+		p.accessTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));
 		return p;
@@ -239,7 +237,7 @@ public class CMLBranchResultPanel extends ResultPanel
 	 */
 	private String tree2ATV(String tree)
 	{
-		tree = NHTreeUtils.removeBranchLengths(tree);
+		tree = TreeUtils.removeBranchLengths(tree);
 
 		// transform omega values to branch lengths
 		StringBuffer sb = new StringBuffer();
@@ -266,7 +264,7 @@ public class CMLBranchResultPanel extends ResultPanel
 	 */
 	private String tree2ATV(String tree, double w)
 	{
-		tree = NHTreeUtils.removeBranchLengths(tree);
+		tree = TreeUtils.removeBranchLengths(tree);
 
 		StringBuffer sb = new StringBuffer();
 		for (char c : tree.toCharArray())

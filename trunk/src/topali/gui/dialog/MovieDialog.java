@@ -14,10 +14,10 @@ import javax.swing.event.*;
 import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
-import topali.analyses.*;
+import topali.analyses.TreeCreatorThread;
 import topali.data.SequenceSet;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.DoeLayout;
 
 public class MovieDialog extends JDialog implements ActionListener,

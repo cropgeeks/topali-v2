@@ -5,7 +5,7 @@
 
 package topali.gui.nav;
 
-import static topali.gui.WinMainMenuBar.*;
+import static topali.gui.WinMainMenuBar.aFileExportDataSet;
 
 import java.awt.*;
 

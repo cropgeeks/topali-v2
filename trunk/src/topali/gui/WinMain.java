@@ -38,7 +38,8 @@ import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
-import topali.var.tree.PalTree2NH;
+import topali.var.*;
+import topali.var.utils.*;
 import doe.MsgBox;
 
 public class WinMain extends JFrame implements PropertyChangeListener
@@ -223,7 +224,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				URL url = getClass().getResource("/res/example-alignment.phy");
 				try
 				{
-					File tmpFile = new File(Prefs.tmpDir, "example.txt");
+					File tmpFile = new File(SysPrefs.tmpDir, "example.txt");
 					FileUtils.writeFile(tmpFile, url.openStream());
 					d.loadAlignment(tmpFile);
 				} catch (Exception e)
@@ -637,15 +638,15 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if (palTree != null)
 		{
 			//tr.setTreeStr(palTree.toString());
-			tr.setTreeStr((new PalTree2NH(palTree).getNW()));
+			tr.setTreeStr(TreeUtils.getNewick(palTree));
 			tr.startTime = creator.getStartTime();
 			tr.endTime = creator.getEndTime();
 			tr.status = topali.cluster.JobStatus.COMPLETED;
-			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv="+Prefs.d2.format(dlg.tstv)+")"
+			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv="+Utils.d2.format(dlg.tstv)+")"
 					: "WAG";
 			tr.info = "Sub. Model: "
 					+ model
-					+ "\nRate Model: Gamma (alpha="+Prefs.d2.format(dlg.alpha)+")\nAlgorithm: Neighbour Joining\n" +
+					+ "\nRate Model: Gamma (alpha="+Utils.d2.format(dlg.alpha)+")\nAlgorithm: Neighbour Joining\n" +
 							"Bootstrap: "+dlg.bs;
 			data.addResult(tr);
 			ProjectState.setDataChanged();
@@ -963,43 +964,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			try
 			{
 				vamsas.write();
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		} else
-			MsgBox
-					.msg(
-							"TOPALi has not been associated with a VAMSAS session yet.",
-							MsgBox.WAR);
-	}
-
-	void menuVamsasExport()
-	{
-		if (vamsas != null)
-		{
-			try
-			{
-				vamsas.write();
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		} else
-			MsgBox
-					.msg(
-							"TOPALi has not been associated with a VAMSAS session yet.",
-							MsgBox.WAR);
-	}
-
-
-	void menuVamsasImport()
-	{
-		if (vamsas != null)
-		{
-			try
-			{
-				vamsas.read();
 			} catch (Exception e)
 			{
 				e.printStackTrace();

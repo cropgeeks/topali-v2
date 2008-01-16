@@ -8,11 +8,11 @@ package topali.cluster.jobs;
 import java.io.File;
 
 import topali.cluster.*;
-import topali.cluster.jobs.modeltest.*;
 import topali.cluster.jobs.raxml.*;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class RaxmlLocalJob extends AnalysisJob
 {
@@ -28,14 +28,14 @@ public class RaxmlLocalJob extends AnalysisJob
 		this.ss = data.getSequenceSet();
 		result.startTime = System.currentTimeMillis();
 		result.jobId = "" + System.currentTimeMillis();
-		result.tmpDir = Prefs.tmpDir.getPath();
+		result.tmpDir = SysPrefs.tmpDir.getPath();
 		
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.raxmlPath = Utils.getLocalPath() + "raxml.exe";
 		else 
 			result.raxmlPath = Utils.getLocalPath() + "raxml/raxmlHPC";
 		
-		jobDir = new File(Prefs.tmpDir, result.jobId);
+		jobDir = new File(SysPrefs.tmpDir, result.jobId);
 		
 		LocalJobs.addJob(result.jobId);
 	}

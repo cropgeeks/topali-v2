@@ -5,7 +5,7 @@
 
 package topali.data;
 
-import java.io.*;
+import java.io.File;
 
 public class AlignmentFileStat
 {

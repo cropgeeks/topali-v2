@@ -28,6 +28,7 @@ import org.jfree.data.xy.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 /**
@@ -200,7 +201,7 @@ public class GraphPanel extends JPanel implements Printable
 		XYPlot plot = chart.getXYPlot();
 
 		plot.setBackgroundPaint(Prefs.gui_graph_background);
-		((XYItemRenderer)plot.getRenderer()).setPaint(Prefs.gui_graph_color);
+		(plot.getRenderer()).setPaint(Prefs.gui_graph_color);
 		
 		// plot.setDomainGridlinesVisible(false);
 		// plot.setRangeGridlinesVisible(false);
@@ -278,37 +279,7 @@ public class GraphPanel extends JPanel implements Printable
 	}
 	
 	// ----------------
-	// Actions
-	
-	protected void actionReselectSequences()
-	{
-		String msg = "This will reselect the sequences used at the time of this "
-				+ "analysis in the main alignment view window. Continue?";
-
-		if (MsgBox.yesno(msg, 0) == JOptionPane.YES_OPTION)
-			TOPALi.winMain.menuAnlsReselectSequences(aResult.selectedSeqs);
-	}
-	
-	protected void actionAddSelectedRegion(Class type)
-	{
-		WinMain.rDialog.addCurrentRegion(type);
-		//WinMainMenuBar.aFileSave.setEnabled(true);
-		//WinMainMenuBar.aVamCommit.setEnabled(true);
-		ProjectState.setDataChanged();
-	}
-	
-	protected void actionShowToolTipDialog()
-	{
-		TreeToolTipDialog dialog = new TreeToolTipDialog(
-				aResult.useTreeToolTips, aResult.treeToolTipWindow, aData.getSequenceSet().getLength());
-
-		aResult.useTreeToolTips = dialog.isOptionChecked();
-		aResult.treeToolTipWindow = dialog.getWindowSize();
-
-		//WinMainMenuBar.aFileSave.setEnabled(true);
-		//WinMainMenuBar.aVamCommit.setEnabled(true);
-		ProjectState.setDataChanged();
-	}
+	// Action
 	
 	protected void actionSaveGraph()
 	{
@@ -443,7 +414,7 @@ public class GraphPanel extends JPanel implements Printable
 			double[] d = getValuesFromPoint(x, y);
 
 			String msg = "Nucleotide: " + ((int) d[0]) + " (value: "
-					+ Prefs.d5.format(d[1]) + ")";
+					+ Utils.d5.format(d[1]) + ")";
 			WinMainStatusBar.setText(msg);
 		}
 

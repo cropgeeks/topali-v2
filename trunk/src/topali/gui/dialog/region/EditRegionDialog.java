@@ -12,7 +12,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import topali.data.RegionAnnotations.Region;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 public class EditRegionDialog extends JDialog implements ActionListener,
 		ChangeListener

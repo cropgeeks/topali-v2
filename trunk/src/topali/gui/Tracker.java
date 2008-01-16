@@ -1,6 +1,6 @@
 package topali.gui;
 
-import java.io.*;
+import java.io.BufferedInputStream;
 import java.net.*;
 
 /**

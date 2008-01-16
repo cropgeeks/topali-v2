@@ -11,6 +11,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import topali.var.SysPrefs;
+
 import doe.GradientPanel;
 
 public class WinMainTipsPanel extends JPanel implements ActionListener
@@ -77,7 +79,7 @@ public class WinMainTipsPanel extends JPanel implements ActionListener
 
 	private void createTips()
 	{
-		tips = ResourceBundle.getBundle("res.text.tips", Prefs.locale);
+		tips = ResourceBundle.getBundle("res.text.tips", SysPrefs.locale);
 
 		tips_aln = new TipsText("aln");
 		tips_tre = new TipsText("tre");

@@ -97,7 +97,7 @@ public class LRT
 			char[] seq = windows[0].getAlignedSequenceString(i).toCharArray();
 			int count = 0;
 			for(char c : seq) {
-				if(c==SimpleAlignment.GAP)
+				if(c==Alignment.GAP)
 					count++;
 			}
 			double gaps = ((double)count/(double)(seq.length));
@@ -109,7 +109,7 @@ public class LRT
 			char[] seq = windows[1].getAlignedSequenceString(i).toCharArray();
 			int count = 0;
 			for(char c : seq) {
-				if(c==SimpleAlignment.GAP)
+				if(c==Alignment.GAP)
 					count++;
 			}
 			double gaps = ((double)count/(double)(seq.length));

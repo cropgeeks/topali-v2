@@ -6,7 +6,6 @@
 package topali.cluster.jobs.modeltest;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.logging.Logger;
 
 import topali.cluster.JobStatus;
@@ -15,6 +14,7 @@ import topali.data.*;
 import topali.data.models.*;
 import topali.fileio.Castor;
 import topali.var.*;
+import topali.var.utils.*;
 
 public class ModelTestMonitor
 {

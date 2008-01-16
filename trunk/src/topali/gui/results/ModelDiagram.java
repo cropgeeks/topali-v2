@@ -7,7 +7,7 @@ package topali.gui.results;
 
 import javax.swing.JPanel;
 
-import topali.data.models.*;
+import topali.data.models.Model;
 
 public class ModelDiagram extends JPanel
 {

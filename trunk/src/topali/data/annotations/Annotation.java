@@ -6,7 +6,7 @@
 package topali.data.annotations;
 
 import java.io.File;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
 
@@ -97,7 +97,7 @@ public abstract class Annotation implements Comparable<Annotation>
 	                    try {
 	                    	Class c = Class.forName(pack.getName()+"."+classname);
 	                        if (c.getGenericSuperclass().equals(Annotation.class)) {
-	                        	Annotation.availableAnnotationTypes.add((Class<Annotation>)c);
+	                        	Annotation.availableAnnotationTypes.add(c);
 	                        }
 	                    } catch (Exception e) {
 	                    }

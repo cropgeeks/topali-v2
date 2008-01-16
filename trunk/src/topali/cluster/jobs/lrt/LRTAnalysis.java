@@ -11,7 +11,6 @@ import pal.alignment.SimpleAlignment;
 import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
-import topali.gui.Prefs;
 
 class LRTAnalysis extends AnalysisThread
 {

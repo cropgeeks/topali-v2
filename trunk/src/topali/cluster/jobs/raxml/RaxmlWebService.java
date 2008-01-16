@@ -12,7 +12,6 @@ import org.apache.axis.AxisFault;
 import org.apache.log4j.Level;
 
 import topali.cluster.*;
-import topali.cluster.jobs.modeltest.*;
 import topali.data.*;
 import topali.fileio.Castor;
 

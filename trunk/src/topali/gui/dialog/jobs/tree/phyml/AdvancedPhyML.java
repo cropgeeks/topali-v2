@@ -6,16 +6,14 @@
 
 package topali.gui.dialog.jobs.tree.phyml;
 
-import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
-
-import doe.MsgBox;
 
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 /**
  *
@@ -25,10 +23,6 @@ public class AdvancedPhyML extends javax.swing.JPanel {
     
 	SequenceSet ss;
 	PhymlResult result;
-	
-	public boolean modelIsSupported = true;
-	public boolean altModelFound = true;
-	public String altModel = "";
 	
     /** Creates new form AdvancedPhyML */
     public AdvancedPhyML(SequenceSet ss, TreeResult result) {

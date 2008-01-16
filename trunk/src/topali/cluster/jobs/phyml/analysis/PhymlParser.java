@@ -8,7 +8,7 @@ package topali.cluster.jobs.phyml.analysis;
 import java.io.*;
 
 import topali.data.PhymlResult;
-import topali.var.tree.NHTreeUtils;
+import topali.var.utils.TreeUtils;
 
 public class PhymlParser
 {
@@ -23,7 +23,7 @@ public class PhymlParser
 		
 		String tree = sb.toString();
 		//TODO: WORKAROUND for phyml's zero bootstrap values
-		tree = NHTreeUtils.removeBootstrapValues(tree, 1);
+		tree = TreeUtils.removeBootstrapValues(tree, 1);
 		//END WORKAROUND
 		res.setTreeStr(tree);
 		

@@ -8,10 +8,10 @@ package topali.gui.dialog.jobs.cml;
 
 import java.awt.event.*;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
 
 import topali.gui.atv.ATV;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 /**
  *

@@ -46,6 +46,7 @@ public class ProteinModelDiagram extends ModelDiagram
 		setModel(model);
 	}
 
+	@Override
 	public void setModel(Model model) {
 		this.model = (ProteinModel)model;
 		maxRate = 0;
@@ -175,7 +176,7 @@ public class ProteinModelDiagram extends ModelDiagram
 						drawPoint(g2d, xs, ys);
 				}
 				else {
-					g2d.setPaint(new RadialGradientPaint(new Point(xs+(r/2), ys-(r/2)), (float)(r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c0}));
+					g2d.setPaint(new RadialGradientPaint(new Point(xs+(r/2), ys-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c0}));
 					fillCircle(g2d, xs, ys, r);
 				}
 				xs += cw;
@@ -184,8 +185,8 @@ public class ProteinModelDiagram extends ModelDiagram
 			ys += ch;
 		}
 		
-		x = (int)(rect.width/5);
-		y = (int)(rect.height);
+		x = (rect.width/5);
+		y = (rect.height);
 		drawString(g2d, model.getName(), x, y);
 	}
 	

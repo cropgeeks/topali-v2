@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.data.SequenceSet;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class FindSequenceDialog extends JDialog implements ActionListener

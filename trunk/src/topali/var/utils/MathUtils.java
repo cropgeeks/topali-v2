@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.var;
+package topali.var.utils;
 
 import pal.statistics.ChiSquareDistribution;
 
@@ -17,7 +17,7 @@ public class MathUtils
 	 * @return
 	 */
 	public static double round(double d, int n) {
-		double f = 1 * Math.pow(10, n);
+		double f = Math.pow(10, n);
 		return (Math.round(d*f))/f;
 	}
 	
@@ -90,8 +90,8 @@ public class MathUtils
 	 * @return
 	 */
 	public static double calcAIC2(double lnl, int df, int n) {
-		double dfd = (double)df;
-		double nd = (double)n;
+		double dfd = df;
+		double nd = n;
 		return (calcAIC1(lnl, df) + 2d*dfd*(dfd + 1d)/(nd - dfd - 1d));
 	}
 	
@@ -103,8 +103,8 @@ public class MathUtils
 	 * @return
 	 */
 	public static double calcBIC(double lnl, int df, int n) {
-		double dfd = (double)df;
-		double nd = (double)n;
+		double dfd = df;
+		double nd = n;
 		return (-2d*lnl + dfd * Math.log(nd));
 	}
 }

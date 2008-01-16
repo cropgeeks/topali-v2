@@ -6,17 +6,14 @@
 
 package topali.gui.dialog.jobs.tree.mrbayes;
 
-import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
-import doe.MsgBox;
-
-import topali.cluster.jobs.mrbayes.MBCmdBuilder;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 /**
  *
@@ -27,10 +24,6 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 	AlignmentData data;
 	SequenceSet ss;
 	MBTreeResult result;
-	
-	public boolean modelIsSupported = true;
-	public boolean altModelFound = true;
-	public String altModel = "";
 	
     /** Creates new form AdvancedMrBayes */
     public AdvancedMrBayes(AlignmentData data, MBTreeResult result) {

@@ -5,75 +5,82 @@
 
 package topali.gui.results;
 
+import java.awt.BorderLayout;
 import java.awt.print.Printable;
-import java.awt.*;
-import javax.swing.*;
+
+import javax.swing.JPanel;
+
+import org.apache.log4j.Logger;
 
 import topali.analyses.AnalysisUtils;
 import topali.data.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
+import doe.GradientPanel;
 
-import doe.*;
+public class LRTResultPanel extends ResultPanel {
 
-public class LRTResultPanel extends ResultPanel
-{
+    Logger log = Logger.getLogger(this.getClass());
 
-	GraphPanel graph;
+    GraphPanel graph;
 
-	public LRTResultPanel(AlignmentData data, LRTResult result)
-	{
-		super(data, result);
-		graph = new GraphPanel(data, result, Utils.float2doubleArray(result.data), -1.0, GraphPanel.RIGHT);
+    public LRTResultPanel(AlignmentData data, LRTResult result) {
+	super(data, result);
+	try {
+	    double[][] graphData = (double[][]) Utils.castArray(result.data,
+		    double.class);
+	    graph = new GraphPanel(data, result, graphData, -1,
+		    GraphPanel.RIGHT);
 
-		GradientPanel gp = new GradientPanel("Likelihood Ratio Test (LRT)");
-		gp.setStyle(GradientPanel.OFFICE2003);
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.add(gp, BorderLayout.NORTH);
-		p1.add(graph);
+	    GradientPanel gp = new GradientPanel("Likelihood Ratio Test (LRT)");
+	    gp.setStyle(GradientPanel.OFFICE2003);
+	    JPanel p1 = new JPanel(new BorderLayout());
+	    p1.add(gp, BorderLayout.NORTH);
+	    p1.add(graph);
 
-		addContent(p1, true);
-		setThreshold(result.threshold);
+	    addContent(p1, true);
+	    setThreshold(result.threshold);
+
+	} catch (Exception e) {
+	    log.warn(e);
 	}
+    }
 
-	@Override
-	public String getAnalysisInfo()
-	{
-		LRTResult result = (LRTResult) this.result;
-		String str = new String(result.guiName);
+    @Override
+    public String getAnalysisInfo() {
+	LRTResult result = (LRTResult) this.result;
+	String str = new String(result.guiName);
 
-		str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
-				+ " seconds";
+	str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
+		+ " seconds";
 
-		str += "\n\nWindow size:    " + result.window;
-		str += "\nStep size:      " + result.step;
-		str += "\nMethod:         " + result.method;
-		str += "\nThreshold runs: " + (result.runs - 1);
-		str += "\n\nSelected sequences:";
+	str += "\n\nWindow size:    " + result.window;
+	str += "\nStep size:      " + result.step;
+	str += "\nMethod:         " + result.method;
+	str += "\nThreshold runs: " + (result.runs - 1);
+	str += "\n\nSelected sequences:";
 
-		for (String seq : result.selectedSeqs)
-			str += "\n  " + data.getSequenceSet().getNameForSafeName(seq);
+	for (String seq : result.selectedSeqs)
+	    str += "\n  " + data.getSequenceSet().getNameForSafeName(seq);
 
-		return str;
-	}
+	return str;
+    }
 
-	@Override
-	public Printable[] getPrintables()
-	{
-		return new Printable[] {graph};
-	}
+    @Override
+    public Printable[] getPrintables() {
+	return new Printable[] { graph };
+    }
 
-	@Override
-	public void setThreshold(double t)
-	{
-		LRTResult res = (LRTResult) this.result;
-		if(res.thresholds==null)
-			return;
+    @Override
+    public void setThreshold(double t) {
+	LRTResult res = (LRTResult) this.result;
+	if (res.thresholds == null)
+	    return;
 
-		((AlignmentResult)result).threshold = t;
-		float thres = AnalysisUtils.getArrayValue(res.thresholds,(float)t);
+	((AlignmentResult) result).threshold = t;
+	float thres = AnalysisUtils.getArrayValue(res.thresholds, (float) t);
 
-		graph.setThreshold(thres);
+	graph.setThreshold(thres);
 
-	}
+    }
 
 }

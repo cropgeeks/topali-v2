@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import pal.misc.Identifier;
 import pal.tree.*;
 import topali.gui.Prefs;
+import topali.var.utils.Utils;
 
 /* Storage class that represents a phylogenetic tree (stored as a NH format
  * string. Trees created from a SequenceSet alignment track their sequences in
@@ -201,7 +202,7 @@ public class TreeResult extends AlignmentResult
 			name = "Unknown Tree";
 		
 		if(lnl!=0) {
-			name += " (l="+Prefs.d2.format(lnl)+")";
+			name += " (l="+Utils.d2.format(lnl)+")";
 		}
 		
 		return name;

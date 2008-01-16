@@ -13,7 +13,7 @@ import topali.cluster.jobs.ModelTestLocalJob;
 import topali.cluster.jobs.modeltest.ModelTestMonitor;
 import topali.data.*;
 import topali.data.models.*;
-import topali.var.ModelUtils;
+import topali.var.utils.ModelUtils;
 
 import junit.framework.TestCase;
 

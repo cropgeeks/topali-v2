@@ -6,18 +6,16 @@
 package topali.cluster.jobs.dss;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import pal.alignment.SimpleAlignment;
-import pal.datatype.Nucleotides;
+import pal.alignment.*;
 import pal.distance.*;
 import pal.misc.Identifier;
 import pal.tree.*;
 import topali.analyses.TreeUtilities;
 import topali.data.*;
-import topali.gui.TOPALi;
 
 public class DSS
 {
@@ -159,7 +157,7 @@ public class DSS
 			char[] seq = win1.getAlignedSequenceString(i).toCharArray();
 			int count = 0;
 			for(char c : seq) {
-				if(c==SimpleAlignment.GAP)
+				if(c==Alignment.GAP)
 					count++;
 			}
 			double gaps = ((double)count/(double)(seq.length));
@@ -171,7 +169,7 @@ public class DSS
 			char[] seq = win2.getAlignedSequenceString(i).toCharArray();
 			int count = 0;
 			for(char c : seq) {
-				if(c==SimpleAlignment.GAP)
+				if(c==Alignment.GAP)
 					count++;
 			}
 			double gaps = ((double)count/(double)(seq.length));

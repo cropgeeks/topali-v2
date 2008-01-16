@@ -5,7 +5,7 @@
 
 package topali.test;
 
-import topali.var.MathUtils;
+import topali.var.utils.MathUtils;
 import junit.framework.TestCase;
 
 public class MathUtilsTest extends TestCase

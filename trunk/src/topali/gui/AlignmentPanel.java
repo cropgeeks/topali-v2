@@ -14,7 +14,6 @@ import java.lang.management.*;
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
-import org.jfree.data.xy.DefaultWindDataset;
 
 import topali.data.*;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
@@ -510,7 +509,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		BufferedImage[] aas;
 		BufferedImage gap;
 		BufferedImage unknown;
-		BufferedImage empty;
 		
 		DisplayCanvas()
 		{
@@ -563,7 +561,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		
 		private BufferedImage createMiniImg(char c) {
 			BufferedImage img = new BufferedImage(charW, charH, imgBufferType);
-			Graphics2D g = (Graphics2D)img.createGraphics();
+			Graphics2D g = img.createGraphics();
 			if(Prefs.gui_seq_antialias)
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			else
@@ -577,7 +575,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			int y = 0;
 			
 			if(Prefs.gui_seq_show_colors)
-				g.setPaint(new GradientPaint((float)x, (float)(y+charH), col2, (float)(x+charW), (float)y, col1));
+				g.setPaint(new GradientPaint(x, (y+charH), col2, (x+charW), y, col1));
 			else
 				g.setColor(Color.WHITE);
 			
@@ -910,7 +908,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				//Use a maximum of 50% of the free heap space for buffering:
 				MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
 				long freeMem = membean.getHeapMemoryUsage().getMax()-membean.getHeapMemoryUsage().getUsed();
-				long maxBufferSize = (long)(freeMem/2);
+				long maxBufferSize = (freeMem/2);
 				long factor = 1;
 				switch(imgBufferType) {
 					case BufferedImage.TYPE_INT_RGB: factor = 3; break;
@@ -1228,11 +1226,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		public void setRunning(boolean b)
 		{
 			this.running = b;
-		}
-
-		public boolean isRunning()
-		{
-			return this.running;
 		}
 	}
 }

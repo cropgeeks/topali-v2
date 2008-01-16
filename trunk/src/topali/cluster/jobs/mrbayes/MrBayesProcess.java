@@ -6,7 +6,6 @@
 package topali.cluster.jobs.mrbayes;
 
 import java.io.*;
-import java.util.logging.Logger;
 
 import topali.cluster.*;
 import topali.data.MBTreeResult;

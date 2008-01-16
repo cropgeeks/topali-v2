@@ -12,7 +12,8 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class PDM2SettingsDialog extends JDialog implements ActionListener
@@ -82,7 +83,7 @@ public class PDM2SettingsDialog extends JDialog implements ActionListener
 
 		result = new PDM2Result();
 
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 		{
 			result.mbPath = Utils.getLocalPath() + "mb.exe";
 			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";

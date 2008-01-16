@@ -5,7 +5,7 @@
 
 package topali.gui.atv;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +18,7 @@ import org.forester.phylogeny.Phylogeny;
 import org.forester.phylogeny.factories.*;
 import org.forester.phylogeny.parsers.nhx.NHXParser;
 
-import topali.gui.*;
+import topali.gui.TOPALi;
 
 /**
  * Helper class for launching ATV

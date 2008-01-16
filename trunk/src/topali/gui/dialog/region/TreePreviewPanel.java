@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
-import topali.analyses.*;
+import topali.analyses.TreeCreatorThread;
 import topali.data.*;
 import topali.gui.*;
 import doe.MsgBox;

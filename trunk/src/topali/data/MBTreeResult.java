@@ -5,7 +5,7 @@
 
 package topali.data;
 
-import java.util.*;
+import java.util.Vector;
 
 /*
  * Class that stores both the results from running MrBayes and the

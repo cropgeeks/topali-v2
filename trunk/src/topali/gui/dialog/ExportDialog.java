@@ -20,7 +20,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class ExportDialog extends JDialog implements ActionListener

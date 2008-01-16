@@ -8,8 +8,7 @@ package topali.cluster.jobs.raxml.analysis;
 import java.io.File;
 
 import topali.cluster.AnalysisThread;
-import topali.cluster.jobs.modeltest.analysis.*;
-import topali.data.*;
+import topali.data.RaxmlResult;
 import topali.fileio.Castor;
 
 public class RaxmlAnalysis extends AnalysisThread

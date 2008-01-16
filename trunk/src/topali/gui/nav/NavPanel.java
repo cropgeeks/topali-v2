@@ -12,7 +12,6 @@ import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
 import java.beans.*;
 import java.util.*;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -311,11 +310,6 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				node.setUserObject(new CodeMLResultsNode(data,
 						(CodeMLResult) result));
 
-			if (result instanceof MGResult)
-			{
-				node.setUserObject(new MGResultsNode(data, (MGResult) result));
-			}
-
 			if (result instanceof ModelTestResult)
 			{
 				node.setUserObject(new MTResultsNode(data, (ModelTestResult) result));
@@ -398,14 +392,6 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				return node.getAlignmentPanel();
 
 		return null;
-	}
-
-	public List<AlignmentData> getAllAlignmentData()
-	{
-		List<AlignmentData> res = new LinkedList<AlignmentData>();
-		for (SequenceSetNode node : seqNodes)
-			res.add(node.getAlignmentData());
-		return res;
 	}
 
 	// Can be called at any time, as all nodes can return the Alignment info

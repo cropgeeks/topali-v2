@@ -10,7 +10,6 @@ import static topali.mod.Filters.TOP;
 import java.beans.*;
 import java.io.*;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.*;
 
@@ -25,7 +24,7 @@ import topali.data.*;
 import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
-import topali.var.*;
+import topali.var.SysPrefs;
 import doe.MsgBox;
 
 public class Project extends DataObject 
@@ -53,11 +52,6 @@ public class Project extends DataObject
 	public LinkedList<AlignmentData> getDatasets()
 	{
 		return datasets;
-	}
-
-	public void setDatasets(LinkedList<AlignmentData> datasets)
-	{
-		this.datasets = datasets;
 	}
 
 	public void addDataSet(AlignmentData data) {
@@ -167,7 +161,7 @@ public class Project extends DataObject
 				String notes = "";
 				if(appVersion.equals("2.17")) {
 					URL tmpUrl = Project.class.getResource("/res/xslt/2.17-2.18.xsl");
-					File xsltFile = new File(Prefs.tmpDir, "topali_2.17-2.18.xsl");
+					File xsltFile = new File(SysPrefs.tmpDir, "topali_2.17-2.18.xsl");
 					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
 					notes += getTranformationNotes(xsltFile);
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -183,7 +177,7 @@ public class Project extends DataObject
 				
 				if(appVersion.equals("2.18")) {
 					URL tmpUrl = Project.class.getResource("/res/xslt/2.18-2.19.xsl");
-					File xsltFile = new File(Prefs.tmpDir, "topali_2.18-2.19.xsl");
+					File xsltFile = new File(SysPrefs.tmpDir, "topali_2.18-2.19.xsl");
 					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
 					notes += getTranformationNotes(xsltFile);
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();

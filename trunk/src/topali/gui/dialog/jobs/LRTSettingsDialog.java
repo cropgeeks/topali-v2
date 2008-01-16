@@ -13,7 +13,7 @@ import javax.swing.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class LRTSettingsDialog extends JDialog implements ActionListener
@@ -189,9 +189,9 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 	static class AdvancedPanel extends JScrollPane
 	{
-		JLabel lRuns, lModel, lType, lCompute, lGaps;
+		JLabel lRuns, lModel, lGaps;
 
-		JComboBox cModel, cType, cCompute;
+		JComboBox cModel;
 
 		private SpinnerNumberModel runsModel, gapsModel;
 

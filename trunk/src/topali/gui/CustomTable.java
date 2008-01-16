@@ -8,7 +8,6 @@ package topali.gui;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.print.*;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -23,13 +22,6 @@ public class CustomTable extends JTable
 	boolean editable = false;
 	
 	Vector<String> headerToolTips;
-	
-	public CustomTable(Object[][] rowData, Object[] columnNames)
-	{
-		this.setModel(new MyTablemodel(rowData, columnNames));
-		init();
-	}
-
 	
 	public CustomTable(Vector rowData, Vector columnNames)
 	{
@@ -52,7 +44,8 @@ public class CustomTable extends JTable
 		this.headerToolTips = tt;
 		
 		JTableHeader th = new JTableHeader(columnModel) {
-            public String getToolTipText(MouseEvent e) {
+            @Override
+	    public String getToolTipText(MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
@@ -158,11 +151,6 @@ public class CustomTable extends JTable
 
 	class MyTablemodel extends DefaultTableModel
 	{
-
-		public MyTablemodel()
-		{
-			super();
-		}
 
 		public MyTablemodel(Object[][] data, Object[] columnNames)
 		{

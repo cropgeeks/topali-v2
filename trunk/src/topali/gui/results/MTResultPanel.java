@@ -17,6 +17,7 @@ import topali.data.*;
 import topali.data.models.Model;
 import topali.gui.*;
 import topali.var.*;
+import topali.var.utils.*;
 import doe.GradientPanel;
 
 @SuppressWarnings("unchecked")
@@ -128,7 +129,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			if(m.isInv())
 				df++;
 			
-			String col1 = Prefs.d2.format((m.getLnl()*(-1)));
+			String col1 = Utils.d2.format((m.getLnl()*(-1)));
 			//col1 += " ("+getDistance(bestLRT.getIGName(), m.getIGName(), result)+")";
 			if(data.getSequenceSet().isDNA()) {
 				String tt = "Best Model according to ";
@@ -162,7 +163,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				}
 			}
 			
-			String col2 = Prefs.d2.format(m.getAic1());
+			String col2 = Utils.d2.format(m.getAic1());
 			col2 += " ("+getDistance(bestAIC1.getIGName(), m.getIGName(), result)+")";
 			if(bestAIC1.matches(m)) {
 				Color c = new Color(240,240,100);
@@ -170,7 +171,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				col2 +="<tooltip=\"Best Model\">";
 			}
 			
-			String col3 = Prefs.d2.format(m.getAic2());
+			String col3 = Utils.d2.format(m.getAic2());
 			col3 += " ("+getDistance(bestAIC2.getIGName(), m.getIGName(), result)+")";
 			if(bestAIC2.matches(m)) {
 				Color c = new Color(240,240,100);
@@ -178,7 +179,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				col3 +="<tooltip=\"Best Model\">";
 			}
 			
-			String col4 = Prefs.d2.format(m.getBic());
+			String col4 = Utils.d2.format(m.getBic());
 			col4 += " ("+getDistance(bestBIC.getIGName(), m.getIGName(), result)+")";
 			if(bestBIC.matches(m)) {
 				Color c = new Color(240,240,100);

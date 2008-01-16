@@ -5,15 +5,13 @@
 
 package topali.cluster.jobs.modeltest;
 
-import java.io.*;
+import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
 
 import org.apache.axis.AxisFault;
 import org.apache.log4j.Level;
 
 import topali.cluster.*;
-import topali.cluster.jobs.dss.CollateDSS;
-import topali.cluster.jobs.lrt.CollateLRT;
 import topali.data.*;
 import topali.fileio.Castor;
 

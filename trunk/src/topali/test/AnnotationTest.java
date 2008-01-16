@@ -8,8 +8,7 @@ package topali.test;
 import java.util.*;
 
 import junit.framework.TestCase;
-
-import topali.data.annotations.*;
+import topali.data.annotations.Annotation;
 
 
 public class AnnotationTest extends TestCase

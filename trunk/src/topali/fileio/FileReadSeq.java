@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import sbrn.commons.bioinf.ReadSeq;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
+import topali.var.SysPrefs;
 import doe.MsgBox;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
@@ -28,7 +29,7 @@ class FileReadSeq extends FileGeneric
 	@Override
 	public boolean readFile(File file)
 	{
-		File outFile = new File(Prefs.tmpDir, "tmpAlignment");
+		File outFile = new File(SysPrefs.tmpDir, "tmpAlignment");
 
 		// Use ReadSeq to convert the file into a FASTA formatted file
 		//System.out.println("Attempting ReadSeq conversion...");
