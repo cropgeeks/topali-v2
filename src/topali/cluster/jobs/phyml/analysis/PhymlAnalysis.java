@@ -6,13 +6,10 @@
 package topali.cluster.jobs.phyml.analysis;
 
 import java.io.File;
-import java.util.LinkedList;
 
 import topali.cluster.AnalysisThread;
-import topali.cluster.jobs.phyml.*;
 import topali.data.*;
 import topali.fileio.Castor;
-import topali.mod.Filters;
 
 public class PhymlAnalysis extends AnalysisThread
 {

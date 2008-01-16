@@ -13,7 +13,8 @@ import javax.swing.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class HMMSettingsDialog extends JDialog implements ActionListener
@@ -92,7 +93,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 	{
 		result = new HMMResult();
 
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.barcePath = Utils.getLocalPath() + "barce.exe";
 		else
 			result.barcePath = Utils.getLocalPath() + "barce/barce";
@@ -255,10 +256,10 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			lInitial = new JLabel(
 					"Estimate initial character frequencies from data:");
 
-			cFreqEst1 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_est_1));
-			cFreqEst2 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_est_2));
-			cFreqEst3 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_est_3));
-			cFreqEst4 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_est_4));
+			cFreqEst1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_1));
+			cFreqEst2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_2));
+			cFreqEst3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_3));
+			cFreqEst4 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_4));
 			lFreqEst = new JLabel("    Frequency estimates:");
 
 			// Transition
@@ -268,19 +269,19 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			lTransition = new JLabel(
 					"Estimate transition/transversion ratio from data:");
 
-			cTransRatio = new JTextField(Prefs.d4
+			cTransRatio = new JTextField(Utils.d4
 					.format(Prefs.hmm_transition_ratio));
 			lTransRatio = new JLabel(
 					"    Initial transition-transversion ratio:");
 
 			// Frequencies
-			cFreq1 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_1));
-			cFreq2 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_2));
-			cFreq3 = new JTextField(Prefs.d4.format(Prefs.hmm_freq_3));
+			cFreq1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_1));
+			cFreq2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_2));
+			cFreq3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_3));
 			lFreq = new JLabel("Frequencies of the three topologies:");
 
 			// Difficulty
-			cDifficulty = new JTextField(Prefs.d4.format(Prefs.hmm_difficulty));
+			cDifficulty = new JTextField(Utils.d4.format(Prefs.hmm_difficulty));
 			lDifficulty = new JLabel("Difficulty of changing trees:");
 
 			DoeLayout layout = new DoeLayout();
@@ -387,13 +388,13 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.hmm_freq_est_1 = Prefs.d4.parse(cFreqEst1.getText())
+				Prefs.hmm_freq_est_1 = Utils.d4.parse(cFreqEst1.getText())
 						.floatValue();
-				Prefs.hmm_freq_est_2 = Prefs.d4.parse(cFreqEst2.getText())
+				Prefs.hmm_freq_est_2 = Utils.d4.parse(cFreqEst2.getText())
 						.floatValue();
-				Prefs.hmm_freq_est_3 = Prefs.d4.parse(cFreqEst3.getText())
+				Prefs.hmm_freq_est_3 = Utils.d4.parse(cFreqEst3.getText())
 						.floatValue();
-				Prefs.hmm_freq_est_4 = Prefs.d4.parse(cFreqEst4.getText())
+				Prefs.hmm_freq_est_4 = Utils.d4.parse(cFreqEst4.getText())
 						.floatValue();
 
 				if (Prefs.hmm_freq_est_1 + Prefs.hmm_freq_est_2
@@ -409,7 +410,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.hmm_transition_ratio = Prefs.d4.parse(
+				Prefs.hmm_transition_ratio = Utils.d4.parse(
 						cTransRatio.getText()).floatValue();
 				if (Prefs.hmm_transition_ratio < 0)
 					throw new Exception();
@@ -422,11 +423,11 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.hmm_freq_1 = Prefs.d4.parse(cFreq1.getText())
+				Prefs.hmm_freq_1 = Utils.d4.parse(cFreq1.getText())
 						.floatValue();
-				Prefs.hmm_freq_2 = Prefs.d4.parse(cFreq2.getText())
+				Prefs.hmm_freq_2 = Utils.d4.parse(cFreq2.getText())
 						.floatValue();
-				Prefs.hmm_freq_3 = Prefs.d4.parse(cFreq3.getText())
+				Prefs.hmm_freq_3 = Utils.d4.parse(cFreq3.getText())
 						.floatValue();
 
 				float sum = Prefs.hmm_freq_1 + Prefs.hmm_freq_2
@@ -449,7 +450,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.hmm_difficulty = Prefs.d4.parse(cDifficulty.getText())
+				Prefs.hmm_difficulty = Utils.d4.parse(cDifficulty.getText())
 						.floatValue();
 				if (Prefs.hmm_difficulty < 0 || Prefs.hmm_difficulty > 1)
 					throw new Exception();
@@ -539,7 +540,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					"Update transition-transversion ratio in MCMC algorithm:");
 
 			// Branch length
-			cBranch = new JTextField(Prefs.d4.format(Prefs.hmm_branch));
+			cBranch = new JTextField(Utils.d4.format(Prefs.hmm_branch));
 			lBranch = new JLabel("Branch length in initial trees:");
 
 			DoeLayout layout = new DoeLayout();
@@ -701,7 +702,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			try
 			{
-				Prefs.hmm_branch = Prefs.d4.parse(cBranch.getText())
+				Prefs.hmm_branch = Utils.d4.parse(cBranch.getText())
 						.floatValue();
 				if (Prefs.hmm_branch < 0)
 					throw new Exception();

@@ -11,7 +11,8 @@ import topali.cluster.*;
 import topali.cluster.jobs.modeltest.*;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class ModelTestLocalJob extends AnalysisJob
 {
@@ -27,13 +28,13 @@ public class ModelTestLocalJob extends AnalysisJob
 		this.ss = data.getSequenceSet();
 		result.startTime = System.currentTimeMillis();
 		result.jobId = "" + System.currentTimeMillis();
-		result.tmpDir = Prefs.tmpDir.getPath();
+		result.tmpDir = SysPrefs.tmpDir.getPath();
 		
-		if (Prefs.isWindows) {
+		if (SysPrefs.isWindows) {
 			result.phymlPath = Utils.getLocalPath() + "phyml_win32.exe";
 			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";
 		}
-		else if(Prefs.isMacOSX) {
+		else if(SysPrefs.isMacOSX) {
 			result.phymlPath = Utils.getLocalPath() + "phyml/phyml_macOSX";
 			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
 		}
@@ -42,7 +43,7 @@ public class ModelTestLocalJob extends AnalysisJob
 			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
 		}
 		
-		jobDir = new File(Prefs.tmpDir, result.jobId);
+		jobDir = new File(SysPrefs.tmpDir, result.jobId);
 		
 		LocalJobs.addJob(result.jobId);
 	}

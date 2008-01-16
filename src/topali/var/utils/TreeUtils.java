@@ -3,13 +3,15 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.var.tree;
+package topali.var.utils;
+
+import pal.tree.*;
 
 
 /**
  * Utilities to deal with New Hampshire trees
  */
-public class NHTreeUtils
+public class TreeUtils
 {
 	/**
 	 * Removes the branch lengths of a tree
@@ -102,6 +104,28 @@ public class NHTreeUtils
 			c++;
 		}
 		
-		return new double[] {min, avg/(double)c,max};
+		return new double[] {min, avg/c,max};
+	}
+	
+	public static String getNewick(Tree tree) {
+	    return newickTraverse(tree, tree.getRoot())+";";
+	}
+	
+	private static String newickTraverse(Tree tree, Node node) {
+		if(node.isLeaf())
+			return node.getIdentifier()+":"+node.getBranchLength();
+		
+		String s = "(";
+		for(int i=0; i<node.getChildCount(); i++) {
+			s += newickTraverse(tree, node.getChild(i))+",";
+		}
+		s = s.substring(0, s.length()-1);
+		s += ")";
+		Object obj = tree.getAttribute(node, "bootstrap");
+		if(obj!=null)
+			s += obj.toString();
+		s+= ":"+node.getBranchLength();
+		
+		return s;
 	}
 }

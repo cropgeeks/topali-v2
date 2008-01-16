@@ -6,10 +6,9 @@
 
 package topali.gui.dialog.jobs.mt;
 
-import java.awt.Component;
 import java.util.*;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
 
 import topali.data.ModelTestResult;
 import topali.data.models.*;
@@ -87,10 +86,6 @@ public class MTDialogPanel extends javax.swing.JPanel {
 		Prefs.ms_models = (String)this.models.getSelectedItem();
 		Prefs.ms_samplesize = (String)sampleSize.getSelectedItem();
     	return this.res;
-    }
-    
-    public String getSampleSizeSelection() {
-    	return (String)sampleSize.getSelectedItem();
     }
     
     public void setDefaults() {

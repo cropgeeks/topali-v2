@@ -20,37 +20,10 @@ import doe.PreferencesXML;
 
 public class Prefs extends PreferencesXML
 {
-	 static Logger log = Logger.getLogger(Prefs.class);
-
-	// Variables not definable by the user...
-	public static Locale locale = Locale.getDefault();
-
-	public static DecimalFormat d1 = new DecimalFormat("0.0");
-	public static DecimalFormat d2 = new DecimalFormat("0.00");
-	public static DecimalFormat d3 = new DecimalFormat("0.000");
-	public static DecimalFormat d4 = new DecimalFormat("0.0000");
-	public static DecimalFormat d5 = new DecimalFormat("0.00000");
-	public static DecimalFormat i = new DecimalFormat("###");
-	public static DecimalFormat i2 = new DecimalFormat("00");
-	public static DecimalFormat i3 = new DecimalFormat("000");
-	public static DecimalFormat i4 = new DecimalFormat("0000");
-	public static Font labelFont = (Font) UIManager.get("Label.font");
-
-	public static File tmpDir = new File(System.getProperty("java.io.tmpdir"),
-	// public static File tmpDir = new File("R:\\",
-			System.getProperty("user.name") + "-topaliv2");
-
-	public static boolean isWindows = System.getProperty("os.name").startsWith(
-			"Windows");
-
-	public static boolean isMacOSX = System.getProperty("os.name").startsWith(
-			"Mac OS");
-
-	public static boolean isLinux = System.getProperty("os.name").startsWith(
-			"Linux");
-
-	// All other variables...
-	public static LinkedList<String> gui_recent = new LinkedList<String>();
+	public static String gui_recent0;
+	public static String gui_recent1;
+	public static String gui_recent2;
+	public static String gui_recent3;
 	public static String gui_dir = System.getProperty("user.home");
 	public static boolean gui_first_run = true;
 	public static boolean gui_maximized = false;
@@ -69,7 +42,6 @@ public class Prefs extends PreferencesXML
 	public static int gui_filter_table = Filters.CSV;
 	public static int gui_goto_nuc = 1;
 	public static int gui_project_count = 1;
-	public static boolean gui_menu_icons = true;
 	public static int gui_movie_x = -1;
 	public static int gui_movie_y = -1;
 	public static int gui_movie_width = 550;
@@ -92,15 +64,6 @@ public class Prefs extends PreferencesXML
 	public static int gui_odialog_h = 150;
 	public static int gui_auto_min = 75;
 	public static boolean gui_auto_discard = false;
-	/* 0 = f81+g tree
-	 * 1 = phyml
-	 * 2 = mrbayes (one model)
-	 * 3 = mrbayes (cdna models)
-	 * 4 = raxml (one model)
-	 * 5 = raxml (cdna models)
-	 */
-	public static int gui_tree_method = 0;
-	public static boolean gui_tree_useall = true;
 	public static float gui_group_threshold = 0.05f;
 	public static int gui_import_method = 0;
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
@@ -229,7 +192,6 @@ public class Prefs extends PreferencesXML
 	public static int rax_bootstrap;
 	public static boolean rax_empfreq;
 	public static String rax_protmodel;
-	public static int rax_type_default;
 	public static String rax_ratehet_default;
 	public static int rax_bootstrap_default;
 	public static boolean rax_empfreq_default;
@@ -275,14 +237,10 @@ public class Prefs extends PreferencesXML
 		setMSDefaults();
 		setWebDefaults();
 
-
-		for (int i = 0; i < 4; i++)
-		{
-			String str = getStr("gui_recent_" + i, "");
-			if (str.length() > 0)
-				gui_recent.add(str);
-		}
-
+		gui_recent0 = getStr("gui_recent0", gui_recent0);
+		gui_recent1 = getStr("gui_recent1", gui_recent1);
+		gui_recent2 = getStr("gui_recent2", gui_recent2);
+		gui_recent3 = getStr("gui_recent3", gui_recent3);
 		gui_dir = getStr("gui_dir", gui_dir);
 		gui_first_run = getBool("gui_first_run", gui_first_run);
 		gui_maximized = getBool("gui_maximized", gui_maximized);
@@ -303,7 +261,6 @@ public class Prefs extends PreferencesXML
 		gui_filter_table = getInt("gui_filter_table", gui_filter_table);
 		gui_goto_nuc = getInt("gui_goto_nuc", gui_goto_nuc);
 		gui_project_count = getInt("gui_project_count", gui_project_count);
-		gui_menu_icons = getBool("gui_menu_icons", gui_menu_icons);
 		gui_movie_x = getInt("gui_movie_x", gui_movie_x);
 		gui_movie_y = getInt("gui_movie_y", gui_movie_y);
 		gui_movie_width = getInt("gui_movie_width", gui_movie_width);
@@ -328,8 +285,6 @@ public class Prefs extends PreferencesXML
 		gui_odialog_h = getInt("gui_odialog_h", gui_odialog_h);
 		gui_auto_min = getInt("gui_auto_min", gui_auto_min);
 		gui_auto_discard = getBool("gui_auto_discard", gui_auto_discard);
-		gui_tree_method = getInt("gui_tree_method", gui_tree_method);
-		gui_tree_useall = getBool("gui_tree_useall", gui_tree_useall);
 		gui_group_threshold = getFloat("gui_group_threshold",
 				gui_group_threshold);
 		gui_import_method = getInt("gui_import_method", gui_import_method);
@@ -473,10 +428,12 @@ public class Prefs extends PreferencesXML
 
 	protected void setPreferences()
 	{
-		for (int i = 0; i < gui_recent.size(); i++)
-			p.setProperty("gui_recent_" + i, gui_recent.get(i));
 
 		setStr("gui_dir", gui_dir);
+		p.setProperty("gui_recent0", ""+gui_recent0);
+		p.setProperty("gui_recent1", ""+gui_recent1);
+		p.setProperty("gui_recent2", ""+gui_recent2);
+		p.setProperty("gui_recent3", ""+gui_recent3);
 		p.setProperty("gui_first_run", "" + gui_first_run);
 		p.setProperty("gui_maximized", "" + gui_maximized);
 		p.setProperty("gui_toolbar_visible", "" + gui_toolbar_visible);
@@ -494,7 +451,6 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_filter_table", "" + gui_filter_table);
 		p.setProperty("gui_goto_nuc", "" + gui_goto_nuc);
 		p.setProperty("gui_project_count", "" + gui_project_count);
-		p.setProperty("gui_menu_icons", "" + gui_menu_icons);
 		p.setProperty("gui_movie_x", "" + gui_movie_x);
 		p.setProperty("gui_movie_y", "" + gui_movie_y);
 		p.setProperty("gui_movie_width", "" + gui_movie_width);
@@ -517,8 +473,6 @@ public class Prefs extends PreferencesXML
 		p.setProperty("gui_odialog_h", "" + gui_odialog_h);
 		p.setProperty("gui_auto_min", "" + gui_auto_min);
 		p.setProperty("gui_auto_discard", "" + gui_auto_discard);
-		p.setProperty("gui_tree_method", "" + gui_tree_method);
-		p.setProperty("gui_tree_useall", "" + gui_tree_useall);
 		p.setProperty("gui_group_threshold", "" + gui_group_threshold);
 		p.setProperty("gui_import_method", "" + gui_import_method);
 		p.setProperty("gui_max_cpus", "" + gui_max_cpus);
@@ -708,7 +662,7 @@ public class Prefs extends PreferencesXML
 		pdm_tune_interval = 200;
 		pdm_molecular_clock = "false";
 		pdm_category_list = "1*";
-		pdm_initial_theta = d5.format(1.0);
+		pdm_initial_theta = "1";
 		pdm_outgroup = 1;
 		pdm_global_tune = 0.01f;
 		pdm_local_tune = 0.19f;
@@ -792,7 +746,6 @@ public class Prefs extends PreferencesXML
 		rax_empfreq = false;
 		rax_ratehet = "MIX";
 		rax_protmodel = "WAG";
-		rax_type_default = 0;
 		rax_bootstrap_default = 100;
 		rax_empfreq_default = false;
 		rax_ratehet_default = "MIX";

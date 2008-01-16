@@ -6,7 +6,6 @@
 package topali.test;
 
 import topali.cluster.jobs.PhyMLCmdGenerator;
-import topali.cluster.jobs.phyml.*;
 import topali.data.models.*;
 
 public class PhymlCmdGeneratorTest

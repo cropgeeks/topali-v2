@@ -10,12 +10,10 @@ import java.util.List;
 
 import javax.swing.*;
 
-import topali.cluster.jobs.modelgenerator.ModelGeneratorProcess;
-import topali.cluster.jobs.mrbayes.MBCmdBuilder;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 /**
  *

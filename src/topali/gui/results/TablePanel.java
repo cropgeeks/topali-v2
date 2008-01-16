@@ -7,9 +7,9 @@ package topali.gui.results;
 
 import static topali.mod.Filters.*;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.print.*;
+import java.awt.print.Printable;
 import java.io.*;
 import java.util.Vector;
 

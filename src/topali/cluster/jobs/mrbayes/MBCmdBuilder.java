@@ -5,7 +5,7 @@
 
 package topali.cluster.jobs.mrbayes;
 
-import java.util.*;
+import java.util.Vector;
 
 import topali.data.*;
 import topali.data.models.Model;

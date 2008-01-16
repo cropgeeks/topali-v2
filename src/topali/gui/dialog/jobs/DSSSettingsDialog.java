@@ -13,7 +13,8 @@ import javax.swing.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class DSSSettingsDialog extends JDialog implements ActionListener
@@ -89,7 +90,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 		result = new DSSResult();
 
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.fitchPath = Utils.getLocalPath() + "fitch.exe";
 		else
 			result.fitchPath = Utils.getLocalPath() + "fitch/fitch";
@@ -202,10 +203,10 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 	static class AdvancedPanel extends JScrollPane
 	{
-		JLabel lPower, lRuns, lModel, lType, lCompute, lPass;
+		JLabel lPower, lRuns, lModel, lPass;
 		JLabel lGaps;
 
-		JComboBox cPower, cModel, cType, cCompute, cPass;
+		JComboBox cPower, cModel, cPass;
 
 		private SpinnerNumberModel runsModel;
 		private SpinnerNumberModel gapsModel;

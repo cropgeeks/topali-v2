@@ -9,7 +9,6 @@ import java.io.File;
 
 import topali.cluster.*;
 import topali.data.*;
-import topali.data.models.*;
 import topali.gui.TOPALi;
 
 public class RaxmlProcess extends StoppableProcess

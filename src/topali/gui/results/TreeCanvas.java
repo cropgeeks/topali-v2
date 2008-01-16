@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import pal.gui.*;
 import pal.tree.*;
-import topali.gui.Prefs;
 
 public class TreeCanvas extends JPanel
 {
@@ -48,10 +47,6 @@ public class TreeCanvas extends JPanel
 				log.warn("Error parsing tree.", e);
 			}
 		}
-	}
-	
-	public void setTree(Tree tree) {
-		this.tree = tree;
 	}
 	
 	@Override

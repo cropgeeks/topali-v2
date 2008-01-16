@@ -5,10 +5,10 @@
 
 package topali.var.threads;
 
-import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.*;
 
-import javax.swing.*;
+import javax.swing.JDialog;
 
 /**
  * Base class for WaitDialogs, which start a DesktopThread when set to visible,

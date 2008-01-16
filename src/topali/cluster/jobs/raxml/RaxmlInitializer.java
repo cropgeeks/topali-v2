@@ -5,15 +5,12 @@
 
 package topali.cluster.jobs.raxml;
 
-import java.io.*;
+import java.io.File;
 
 import topali.analyses.SequenceSetUtils;
 import topali.cluster.*;
-import topali.cluster.jobs.modeltest.ModelTestWebService;
-import topali.cluster.jobs.modeltest.analysis.ModelTestAnalysis;
 import topali.cluster.jobs.raxml.analysis.RaxmlAnalysis;
 import topali.data.*;
-import topali.data.models.Model;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 

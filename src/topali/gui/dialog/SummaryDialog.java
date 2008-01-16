@@ -15,7 +15,7 @@ import pal.alignment.SimpleAlignment;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public class SummaryDialog extends JDialog implements ActionListener, Runnable
@@ -234,8 +234,8 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			{
 				// What were the two characters?
 				Enumeration<Integer> values = map.elements();
-				int char1 = ((Integer) values.nextElement()).intValue();
-				int char2 = ((Integer) values.nextElement()).intValue();
+				int char1 = (values.nextElement()).intValue();
+				int char2 = (values.nextElement()).intValue();
 
 				if (char1 > 1 && char2 > 1)
 					PhyIS = true;

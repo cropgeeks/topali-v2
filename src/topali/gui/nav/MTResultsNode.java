@@ -10,7 +10,7 @@ import java.awt.print.Printable;
 import javax.swing.JComponent;
 
 import topali.data.*;
-import topali.gui.results.*;
+import topali.gui.results.MTResultPanel;
 
 public class MTResultsNode extends ResultsNode
 {

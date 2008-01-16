@@ -9,7 +9,7 @@ package topali.gui.dialog.jobs.cml;
 import java.util.*;
 import javax.swing.*;
 import topali.data.CMLModel;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 /**
  *

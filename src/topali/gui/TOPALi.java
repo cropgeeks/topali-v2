@@ -21,6 +21,7 @@ import topali.cluster.LocalJobs;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
 import topali.var.*;
+import topali.var.utils.Utils;
 
 public class TOPALi extends Applet implements Application
 {
@@ -123,7 +124,7 @@ public class TOPALi extends Applet implements Application
 
 		try
 		{
-			if (Prefs.isWindows)
+			if (SysPrefs.isWindows)
 			{
 				// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -136,7 +137,7 @@ public class TOPALi extends Applet implements Application
 				UIManager.put("OptionPane.warningIcon", Icons.WIN_WARN);
 				UIManager.put("OptionPane.questionIcon", Icons.WIN_QUESTION);
 
-			} else if (Prefs.isMacOSX)
+			} else if (SysPrefs.isMacOSX)
 				UIManager.setLookAndFeel(UIManager
 						.getSystemLookAndFeelClassName());
 			else

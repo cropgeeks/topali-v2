@@ -5,13 +5,13 @@
 
 package topali.gui.results;
 
+import java.awt.BorderLayout;
 import java.awt.print.Printable;
-import java.awt.*;
-import javax.swing.*;
+
+import javax.swing.JPanel;
 
 import topali.data.*;
-
-import doe.*;
+import doe.GradientPanel;
 
 public class CodonWResultPanel extends ResultPanel
 {

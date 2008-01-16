@@ -12,7 +12,8 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.gui.*;
+import topali.gui.TOPALi;
+import topali.var.utils.Utils;
 
 public class LinkLabel extends JLabel implements MouseListener
 {

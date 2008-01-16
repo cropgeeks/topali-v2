@@ -12,11 +12,11 @@ import javax.swing.*;
 
 import pal.alignment.SimpleAlignment;
 import pal.tree.Tree;
-import topali.analyses.*;
+import topali.analyses.TreeCreatorThread;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.*;
-import topali.var.tree.NHTreeUtils;
+import topali.var.utils.*;
 
 public class CMLBranchDialog extends JDialog implements ActionListener
 {
@@ -79,7 +79,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		Tree tree = tc.getTree();
 		this.tree = tree.toString();
 		this.tree = this.tree.replaceAll(";", "");
-		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
+		this.tree = TreeUtils.removeBranchLengths(this.tree);
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		
 		SequenceSet ss = data.getSequenceSet();
 		
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.codemlPath = Utils.getLocalPath() + "codeml.exe";
 		else
 			result.codemlPath = Utils.getLocalPath() + "codeml/codeml";

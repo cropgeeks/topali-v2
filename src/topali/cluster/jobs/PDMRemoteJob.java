@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.data.*;
-import topali.gui.*;
 import topali.fileio.Castor;
+import topali.gui.Tracker;
 
 public class PDMRemoteJob extends RemoteJob
 {

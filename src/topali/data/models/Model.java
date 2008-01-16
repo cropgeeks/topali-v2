@@ -8,7 +8,6 @@ package topali.data.models;
 import java.util.*;
 
 import topali.data.DataObject;
-import topali.var.MathUtils;
 
 public abstract class Model extends DataObject implements Comparable<Model>
 {

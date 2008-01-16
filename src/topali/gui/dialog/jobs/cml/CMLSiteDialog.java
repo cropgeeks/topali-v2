@@ -5,14 +5,15 @@
 
 package topali.gui.dialog.jobs.cml;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class CMLSiteDialog extends JDialog implements ActionListener
 {
@@ -67,7 +68,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 
 			res = panel.getResult();
 
-			if (Prefs.isWindows)
+			if (SysPrefs.isWindows)
 				res.codemlPath = Utils.getLocalPath() + "codeml.exe";
 			else
 				res.codemlPath = Utils.getLocalPath() + "codeml/codeml";

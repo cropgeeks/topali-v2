@@ -6,8 +6,8 @@
 package topali.data;
 
 import java.beans.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.LinkedList;
 
 /* Represents an Alignment and the results/analyses run upon it. */
 public class AlignmentData extends DataObject

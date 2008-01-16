@@ -12,7 +12,7 @@ import javax.swing.JToolTip;
 import pal.alignment.SimpleAlignment;
 import pal.gui.TreePainterNormal;
 import pal.tree.Tree;
-import topali.analyses.*;
+import topali.analyses.TreeCreatorThread;
 import topali.data.*;
 import topali.gui.Prefs;
 

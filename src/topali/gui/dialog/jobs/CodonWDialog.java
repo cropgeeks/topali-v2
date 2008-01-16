@@ -5,14 +5,15 @@
 
 package topali.gui.dialog.jobs;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class CodonWDialog extends JDialog implements ActionListener
 {
@@ -72,7 +73,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 
 			result = new CodonWResult();
 
-			if(Prefs.isWindows)
+			if(SysPrefs.isWindows)
 				result.codonwPath = Utils.getLocalPath() + "CodonW.exe";
 			else
 				result.codonwPath = Utils.getLocalPath() + "codonW/codonw";

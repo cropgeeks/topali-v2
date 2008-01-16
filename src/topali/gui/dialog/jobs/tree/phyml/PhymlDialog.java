@@ -12,7 +12,8 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 
 public class PhymlDialog extends JDialog implements ActionListener
 {
@@ -65,11 +66,11 @@ public class PhymlDialog extends JDialog implements ActionListener
 		result.jobName = "PhyML Tree Estimation";
 		
 		//Path to Phyml
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			result.phymlPath = Utils.getLocalPath() + "\\phyml_win32.exe";
-		else if(Prefs.isMacOSX)
+		else if(SysPrefs.isMacOSX)
 			result.phymlPath = Utils.getLocalPath() + "/phyml/phyml_macOSX";
-		else if (Prefs.isLinux)
+		else if (SysPrefs.isLinux)
 			result.phymlPath = Utils.getLocalPath() + "/phyml/phyml_linux";
 		else
 			result.phymlPath = Utils.getLocalPath() + "/phyml/phyml_sunOS";

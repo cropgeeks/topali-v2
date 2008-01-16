@@ -6,16 +6,6 @@
 
 package topali.gui.dialog.jobs.tree.phyml;
 
-import java.util.*;
-
-import javax.swing.*;
-
-import doe.MsgBox;
-
-import topali.data.*;
-import topali.data.models.*;
-import topali.gui.Prefs;
-import topali.var.Utils;
 
 /**
  *

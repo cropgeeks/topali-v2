@@ -33,7 +33,7 @@ public class TOPALiAnnotations
 	{
 		this.annotations = annotations;
 	}
-
+	
 	public AlignmentAnnotations getAnnotations(Class<? extends AlignmentAnnotations> type)
 	{
 		if (!AlignmentAnnotations.class.isAssignableFrom(type))
@@ -54,7 +54,7 @@ public class TOPALiAnnotations
 		{
 			try
 			{
-				result = (AlignmentAnnotations) type.newInstance();
+				result = type.newInstance();
 				annotations.add(result);
 			} catch (Exception e)
 			{

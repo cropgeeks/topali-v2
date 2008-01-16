@@ -18,7 +18,7 @@ import pal.gui.*;
 import pal.tree.Tree;
 import topali.data.*;
 import topali.gui.Prefs;
-import topali.var.*;
+import topali.var.utils.Utils;
 
 class TreePanel extends JPanel
 {

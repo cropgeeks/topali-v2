@@ -11,7 +11,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public class TreeToolTipDialog extends JDialog implements ActionListener
@@ -51,7 +52,7 @@ public class TreeToolTipDialog extends JDialog implements ActionListener
 	private JPanel getControls()
 	{
 		checkEnable = new JCheckBox("Enable phylogenetic tree tooltips", enable);
-		if (Prefs.isWindows)
+		if (SysPrefs.isWindows)
 			checkEnable.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
 		if (window > length)

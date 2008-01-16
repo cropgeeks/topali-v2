@@ -8,9 +8,8 @@ package topali.gui.tree;
 
 import javax.swing.SpinnerNumberModel;
 
-import topali.gui.Prefs;
-import topali.var.Utils;
-import topali.var.tree.NHTreeUtils;
+import topali.var.*;
+import topali.var.utils.*;
 
 /**
  *
@@ -26,12 +25,12 @@ public class BootstrapDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        double[] tmp = NHTreeUtils.analyzeBootstrapValues(tree);
+        double[] tmp = TreeUtils.analyzeBootstrapValues(tree);
         SpinnerNumberModel mod;
         if(tmp[2]<=1) { //we're dealing with probabilities
-        	double min = Utils.chop(tmp[0], 2);
-        	double value = Utils.chop(tmp[1], 2);
-        	double max = Utils.chop(tmp[2], 2);
+        	double min = MathUtils.round(tmp[0], 2);
+        	double value = MathUtils.round(tmp[1], 2);
+        	double max = MathUtils.round(tmp[2], 2);
         	mod = new SpinnerNumberModel(value, min, max+0.01, 0.01);
         } 
         else { // or "real" bootstrap values

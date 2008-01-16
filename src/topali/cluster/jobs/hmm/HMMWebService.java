@@ -5,7 +5,7 @@
 
 package topali.cluster.jobs.hmm;
 
-import java.io.*;
+import java.io.File;
 import java.util.concurrent.RejectedExecutionException;
 
 import org.apache.axis.AxisFault;

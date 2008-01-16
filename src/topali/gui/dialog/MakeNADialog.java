@@ -17,7 +17,7 @@ import topali.analyses.MakeNA;
 import topali.data.AlignmentData;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class MakeNADialog extends JDialog implements ActionListener

@@ -9,7 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import topali.data.SequenceSet;
-import topali.gui.*;
+import topali.gui.AlignmentPanel;
 
 class OverviewGenerator extends Thread
 {

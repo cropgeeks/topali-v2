@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.gui.*;
+import topali.gui.TOPALi;
 
 public class VamsasSessionDialog extends JDialog implements MouseListener
 {

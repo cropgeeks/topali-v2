@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.vamsas.client.*;
+import uk.ac.vamsas.client.Events;
 
 public class VamsasEventHandler
 {

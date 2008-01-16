@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import pal.tree.*;
 import topali.gui.TOPALi;
 import topali.var.threads.*;
-import topali.var.tree.PalTree2NH;
+import topali.var.utils.TreeUtils;
 
 public class TreeRootingThread extends DesktopThread
 {
@@ -84,7 +84,7 @@ public class TreeRootingThread extends DesktopThread
 			}
 			//END WORKAROUND
 			
-			mpRootedTree = (new PalTree2NH(t2)).getNW();
+			mpRootedTree = TreeUtils.getNewick(t2);
 		} catch (TreeParseException e)
 		{
 			log.warn("Midpoint rooting failed.", e);

@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 /* Displays a dialog containing options for choosing the colours and fonts
@@ -446,8 +446,6 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		String name = null;
 
 		Color color = null;
-
-		int value = -1;
 
 		ColorObject(int index, String name, Color color)
 		{

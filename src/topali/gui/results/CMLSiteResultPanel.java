@@ -14,13 +14,12 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.block.ColumnArrangement;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.MathUtils;
-
-import doe.*;
+import topali.var.*;
+import topali.var.utils.*;
+import doe.GradientPanel;
 
 /**
  * Panel for displaying codeml site model result
@@ -132,34 +131,6 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		
 		return p;
 	}
-
-	private Vector<Color> getColorVector() {
-		
-		Color c1 = UIManager.getColor("Table.background");
-		Color c2 = new Color(220,220,220);
-		Color c3 = new Color(235,235,235);
-		
-		CodeMLResult result = (CodeMLResult) this.result;
-		Vector<Color> c = new Vector<Color>();
-		for (CMLModel m : result.models)
-		{
-			if(m.name.startsWith("M0"))
-					c.add(c1);
-			else if(m.name.startsWith("M3"))
-					c.add(c1);
-			else if(m.name.startsWith("M1a"))
-				c.add(c2);
-			else if(m.name.startsWith("M2a"))
-				c.add(c2);
-			else if(m.name.startsWith("M7"))
-				c.add(c3);
-			else if(m.name.startsWith("M8"))
-				c.add(c3);
-			else
-				c.add(c1);
-		}
-		return c;
-	}
 	
 	private Vector<Vector<String>> getTableVector(double thres)
 	{
@@ -193,37 +164,37 @@ public class CMLSiteResultPanel extends ResultPanel implements
 			
 			Vector<String> v = new Vector<String>();
 			v.add(m.name+"("+m.nParameter+")"+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
-			v.add(Prefs.d2.format(m.likelihood)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+			v.add(Utils.d2.format(m.likelihood)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p0 != -1)
-				v.add(Prefs.d3.format(m.p0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.p0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p1 != -1)
-				v.add(Prefs.d3.format(m.p1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.p1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p2 != -1)
-				v.add(Prefs.d3.format(m.p2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.p2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w0 != -1)
-				v.add(Prefs.d3.format(m.w0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.w0)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w1 != -1)
-				v.add(Prefs.d3.format(m.w1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.w1)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.w2 != -1)
-				v.add(Prefs.d3.format(m.w2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.w2)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p != -1)
-				v.add(Prefs.d3.format(m.p)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.p)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.q != -1)
-				v.add(Prefs.d3.format(m.q)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+				v.add(Utils.d3.format(m.q)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			else
 				v.add(""+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 
@@ -235,7 +206,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 					double lrt = MathUtils.calcLRT(lr, df);
 					String lrtString = MathUtils.getRoughSignificance(lrt);
 					v.add(""+df+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
-					v.add(Prefs.d3.format(lr)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
+					v.add(Utils.d3.format(lr)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 					v.add(lrtString+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 				} catch (RuntimeException e)
 				{

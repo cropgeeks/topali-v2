@@ -14,6 +14,8 @@ import javax.swing.*;
 import sbrn.commons.multicore.TokenManager;
 import topali.cluster.*;
 import topali.gui.Prefs;
+import topali.var.*;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 class CachePanel extends JPanel implements ActionListener
@@ -81,7 +83,7 @@ class CachePanel extends JPanel implements ActionListener
 		{
 			public void run()
 			{
-				long size = determineSize(Prefs.tmpDir);
+				long size = determineSize(SysPrefs.tmpDir);
 				setText(size);
 			}
 		};
@@ -97,7 +99,7 @@ class CachePanel extends JPanel implements ActionListener
 		if (size == -1)
 			txt += "(calculating)";
 		else
-			txt += Prefs.d2.format(mb) + " MB in use";
+			txt += Utils.d2.format(mb) + " MB in use";
 
 		sizeLabel.setText(txt);
 	}
@@ -124,7 +126,7 @@ class CachePanel extends JPanel implements ActionListener
 				return;
 			else
 			{
-				ClusterUtils.emptyDirectory(Prefs.tmpDir, false);
+				ClusterUtils.emptyDirectory(SysPrefs.tmpDir, false);
 				updateLabel();
 			}
 		}

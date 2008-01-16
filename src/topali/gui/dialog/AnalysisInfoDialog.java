@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public class AnalysisInfoDialog extends JDialog implements ActionListener

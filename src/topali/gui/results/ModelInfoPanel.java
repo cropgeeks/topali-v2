@@ -19,8 +19,7 @@ import topali.analyses.TreeRootingThread;
 import topali.data.AlignmentData;
 import topali.data.models.*;
 import topali.gui.*;
-import topali.var.*;
-import topali.var.tree.NHTreeUtils;
+import topali.var.utils.Utils;
 
 /**
  *
@@ -129,7 +128,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
 				df++;
 			df += (2 * mtpanel.getResult().selectedSeqs.length - 3);
 			
-			scores.setText("\u2113 = "+Prefs.d2.format(mod.getLnl())+"; AIC\u2081 = "+Prefs.d2.format(mod.getAic1())+"; AIC\u2082 = "+Prefs.d2.format(mod.getAic2())+"; BIC = "+Prefs.d2.format(mod.getBic()));
+			scores.setText("\u2113 = "+Utils.d2.format(mod.getLnl())+"; AIC\u2081 = "+Utils.d2.format(mod.getAic1())+"; AIC\u2082 = "+Utils.d2.format(mod.getAic2())+"; BIC = "+Utils.d2.format(mod.getBic()));
 	        calcpara.setText("(df = "+df+"; n = "+mtpanel.getResult().sampleSize+")");
 			
     		setTree(model.getTree());
@@ -164,14 +163,14 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     	if(cat<0 || new Double(a).isNaN())
     		this.gamma.setText("\u03b1 = n/a");
     	else
-    		this.gamma.setText("\u03b1 = "+Prefs.d3.format(a));
+    		this.gamma.setText("\u03b1 = "+Utils.d3.format(a));
     }
     
     private void setInv(double inv) {
     	if(new Double(inv).isNaN())
     		this.inv.setText("pINV = n/a");
     	else
-    		this.inv.setText("pINV = "+Prefs.d3.format(inv));
+    		this.inv.setText("pINV = "+Utils.d3.format(inv));
     }
     
     private void setSubRates(double... rates) {
@@ -179,7 +178,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     		this.subRates.setText("[see matrix]");
     	}
     	else {
-    		String tmp = Prefs.d3.format(rates[0])+" | "+Prefs.d3.format(rates[1])+" | "+Prefs.d3.format(rates[2])+" | "+Prefs.d3.format(rates[3])+" | "+Prefs.d3.format(rates[4])+" | "+Prefs.d3.format(rates[5]);
+    		String tmp = Utils.d3.format(rates[0])+" | "+Utils.d3.format(rates[1])+" | "+Utils.d3.format(rates[2])+" | "+Utils.d3.format(rates[3])+" | "+Utils.d3.format(rates[4])+" | "+Utils.d3.format(rates[5]);
     		this.subRates.setText(tmp);
     	}
     }
@@ -198,7 +197,7 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     		this.baseFreq.setText("[see matrix]");
     	}
     	else {
-    		String tmp = Prefs.d3.format(freqs[0])+" | "+Prefs.d3.format(freqs[1])+" | "+Prefs.d3.format(freqs[2])+" | "+Prefs.d3.format(freqs[3]);
+    		String tmp = Utils.d3.format(freqs[0])+" | "+Utils.d3.format(freqs[1])+" | "+Utils.d3.format(freqs[2])+" | "+Utils.d3.format(freqs[3]);
     		this.baseFreq.setText(tmp);
     	}
     }

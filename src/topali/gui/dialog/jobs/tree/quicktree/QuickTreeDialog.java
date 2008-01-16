@@ -11,7 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 public class QuickTreeDialog extends JDialog implements ActionListener
 {

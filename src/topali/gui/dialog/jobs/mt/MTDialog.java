@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.WinMain;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 public class MTDialog extends JDialog implements ActionListener
 {

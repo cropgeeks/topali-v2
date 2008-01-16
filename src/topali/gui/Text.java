@@ -8,6 +8,8 @@ package topali.gui;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import topali.var.SysPrefs;
+
 public class Text
 {
 	public static ResourceBundle Analyses = null;
@@ -24,17 +26,17 @@ public class Text
 
 	static
 	{
-		Analyses = ResourceBundle.getBundle("res.text.analyses", Prefs.locale);
-		Gui = ResourceBundle.getBundle("res.text.gui", Prefs.locale);
-		GuiDiag = ResourceBundle.getBundle("res.text.gui_dialog", Prefs.locale);
-		GuiNav = ResourceBundle.getBundle("res.text.gui_nav", Prefs.locale);
-		GuiFile = ResourceBundle.getBundle("res.text.gui_file", Prefs.locale);
-		GuiTree = ResourceBundle.getBundle("res.text.gui_tree", Prefs.locale);
+		Analyses = ResourceBundle.getBundle("res.text.analyses", SysPrefs.locale);
+		Gui = ResourceBundle.getBundle("res.text.gui", SysPrefs.locale);
+		GuiDiag = ResourceBundle.getBundle("res.text.gui_dialog", SysPrefs.locale);
+		GuiNav = ResourceBundle.getBundle("res.text.gui_nav", SysPrefs.locale);
+		GuiFile = ResourceBundle.getBundle("res.text.gui_file", SysPrefs.locale);
+		GuiTree = ResourceBundle.getBundle("res.text.gui_tree", SysPrefs.locale);
 	}
 
 	public static String format(String text, Object... args)
 	{
-		MessageFormat msg = new MessageFormat(text, Prefs.locale);
+		MessageFormat msg = new MessageFormat(text, SysPrefs.locale);
 
 		return msg.format(args);
 	}

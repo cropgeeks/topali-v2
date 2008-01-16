@@ -11,14 +11,12 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.tree.TreeRooter;
-
 import topali.analyses.TreeRootingThread;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.AnalysisInfoDialog;
 import topali.var.*;
-import topali.var.tree.*;
+import topali.var.utils.*;
 
 class TreePanelToolBar extends JToolBar implements ActionListener
 {
@@ -176,9 +174,9 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			dlg.setVisible(true);
 			
 			if(dlg.threshold>0) {
-				String tree = NHTreeUtils.removeBootstrapValues(tResult.getTreeStr(), dlg.threshold);
+				String tree = TreeUtils.removeBootstrapValues(tResult.getTreeStr(), dlg.threshold);
 				if(dlg.replacement!=null) {
-					tree = NHTreeUtils.replaceBootstrapValues(tree, dlg.replacement);
+					tree = TreeUtils.replaceBootstrapValues(tree, dlg.replacement);
 				}
 				
 				TreeResult mod = new TreeResult(tResult);
@@ -213,13 +211,13 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 			
 			FastMLResult fastml = new FastMLResult();
 			fastml.isRemote = remote;
-			if(Prefs.isWindows)
+			if(SysPrefs.isWindows)
 				fastml.fastmlPath = Utils.getLocalPath() + "fastml.exe";
 			else
 				fastml.fastmlPath = Utils.getLocalPath() + "fastml/fastml";
 			
 			fastml.selectedSeqs = tResult.selectedSeqs;
-			fastml.origTree = NHTreeUtils.removeBootstrapValues(tResult.getTreeStr());
+			fastml.origTree = TreeUtils.removeBootstrapValues(tResult.getTreeStr());
 			//fastml.origTree = tResult.getTreeStr();
 			
 			fastml.guiName = "Ancestor";
@@ -242,7 +240,7 @@ class TreePanelToolBar extends JToolBar implements ActionListener
 		sb.append("\n\nSelected Partition:\n"+tResult.getPartitionStart()+"-"+tResult.getPartitionEnd());
 		
 		if(tResult.getLnl()!=0) {
-			sb.append("\n\nLikelihood: "+Prefs.d2.format(tResult.getLnl()));
+			sb.append("\n\nLikelihood: "+Utils.d2.format(tResult.getLnl()));
 		}
 		
 		sb.append("\n\nAdditional parameters:\n");

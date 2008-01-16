@@ -36,11 +36,6 @@ abstract class INode
 		return data;
 	}
 
-	public SequenceSet getSequenceSet()
-	{
-		return ss;
-	}
-
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_NONE;

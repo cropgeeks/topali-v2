@@ -5,7 +5,7 @@
 
 package topali.data.models;
 
-import topali.var.*;
+import topali.var.utils.Utils;
 
 
 public class DNAModel extends Model
@@ -88,7 +88,7 @@ public class DNAModel extends Model
 		try
 		{
 			Double[] tmp = (Double[])Utils.stringToArray(Double.class, s, ','); 
-			subRates = (double[])Utils.castArrayToPrimitives(tmp, Double.class, double.class);
+			subRates = (double[])Utils.castArray(tmp, double.class);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
@@ -111,7 +111,7 @@ public class DNAModel extends Model
 		try
 		{
 			Double[] tmp = (Double[])Utils.stringToArray(Double.class, s, ',');
-			baseFreqs = (double[])Utils.castArrayToPrimitives(tmp, Double.class, double.class);
+			baseFreqs = (double[])Utils.castArray(tmp, double.class);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block

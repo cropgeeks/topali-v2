@@ -100,7 +100,7 @@ public class VAMSASUtils
 	public static Tree createVamsasTree(TreeResult res, AlignmentData align, ObjectMapper map) {
 		try
 		{
-			TreeResult tree = (TreeResult) res;
+			TreeResult tree = res;
 			Tree vTree = new Tree();
 			vTree.setTitle(tree.getTitle());
 			String safeTreeString = tree.getTreeStr();

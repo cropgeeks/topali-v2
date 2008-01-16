@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 import topali.gui.*;
 import topali.mod.Filters;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public class TextPanel extends JPanel implements Printable

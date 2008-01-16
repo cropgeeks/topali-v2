@@ -5,80 +5,87 @@
 
 package topali.gui.results;
 
+import java.awt.BorderLayout;
 import java.awt.print.Printable;
-import java.awt.*;
-import javax.swing.*;
+
+import javax.swing.JPanel;
+
+import org.apache.log4j.Logger;
 
 import topali.analyses.AnalysisUtils;
 import topali.data.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
+import doe.GradientPanel;
 
-import doe.*;
+public class DSSResultPanel extends ResultPanel {
 
-public class DSSResultPanel extends ResultPanel
-{
+    Logger log = Logger.getLogger(this.getClass());
 
-	GraphPanel graph;
+    GraphPanel graph;
 
-	public DSSResultPanel(AlignmentData data, DSSResult result)
-	{
-		super(data, result);
-		graph = new GraphPanel(data, result, Utils.float2doubleArray(result.data), -1, GraphPanel.RIGHT);
+    public DSSResultPanel(AlignmentData data, DSSResult result) {
+	super(data, result);
+	try {
+	    double[][] graphData = (double[][]) Utils.castArray(result.data,
+		    double.class);
+	    graph = new GraphPanel(data, result, graphData, -1,
+		    GraphPanel.RIGHT);
 
-		GradientPanel gp = new GradientPanel("Difference of Sums of Squares (DSS)");
-		gp.setStyle(GradientPanel.OFFICE2003);
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.add(gp, BorderLayout.NORTH);
-		p1.add(graph);
+	    GradientPanel gp = new GradientPanel(
+		    "Difference of Sums of Squares (DSS)");
+	    gp.setStyle(GradientPanel.OFFICE2003);
+	    JPanel p1 = new JPanel(new BorderLayout());
+	    p1.add(gp, BorderLayout.NORTH);
+	    p1.add(graph);
 
-		addContent(p1, true);
-		setThreshold(result.threshold);
+	    addContent(p1, true);
+	    setThreshold(result.threshold);
+
+	} catch (Exception e) {
+	    log.warn(e);
 	}
+    }
 
-	@Override
-	public void setThreshold(double threshold)
-	{
-		DSSResult res = (DSSResult)result;
-		if(res.thresholds==null)
-			return;
+    @Override
+    public void setThreshold(double threshold) {
+	DSSResult res = (DSSResult) result;
+	if (res.thresholds == null)
+	    return;
 
-		res.threshold= threshold;
+	res.threshold = threshold;
 
-		float thres= AnalysisUtils.getArrayValue(res.thresholds,
-				(float)threshold);
+	float thres = AnalysisUtils.getArrayValue(res.thresholds,
+		(float) threshold);
 
-		graph.setThreshold(thres);
-	}
+	graph.setThreshold(thres);
+    }
 
-	@Override
-	public String getAnalysisInfo()
-	{
-		DSSResult result = (DSSResult)this.result;
+    @Override
+    public String getAnalysisInfo() {
+	DSSResult result = (DSSResult) this.result;
 
-		String str = new String(result.guiName);
+	String str = new String(result.guiName);
 
-		str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
-				+ " seconds";
+	str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
+		+ " seconds";
 
-		str += "\n\nWindow size:    " + result.window;
-		str += "\nStep size:      " + result.step;
-		str += "\nMethod:         " + result.method;
-		str += "\nPower:          " + result.power;
-		str += "\nPass count:     " + result.passCount;
-		str += "\nThreshold runs: " + (result.runs - 1);
-		str += "\n\nSelected sequences:";
+	str += "\n\nWindow size:    " + result.window;
+	str += "\nStep size:      " + result.step;
+	str += "\nMethod:         " + result.method;
+	str += "\nPower:          " + result.power;
+	str += "\nPass count:     " + result.passCount;
+	str += "\nThreshold runs: " + (result.runs - 1);
+	str += "\n\nSelected sequences:";
 
-		for (String seq : result.selectedSeqs)
-			str += "\n  " + data.getSequenceSet().getNameForSafeName(seq);
+	for (String seq : result.selectedSeqs)
+	    str += "\n  " + data.getSequenceSet().getNameForSafeName(seq);
 
-		return str;
-	}
+	return str;
+    }
 
-	@Override
-	public Printable[] getPrintables()
-	{
-		return new Printable[] {graph};
-	}
-
+    @Override
+    public Printable[] getPrintables() {
+	return new Printable[] { graph };
+    }
 
 }

@@ -14,7 +14,7 @@ import topali.cluster.JobStatus;
 import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.jobs.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.*;
 
 public class JobsPanel extends JPanel
@@ -72,7 +72,7 @@ public class JobsPanel extends JPanel
 		infoText.setWrapStyleWord(true);
 		Utils.setTextAreaDefaults(infoText);
 		JScrollPane sp = new JScrollPane(infoText);
-		sp.setHorizontalScrollBarPolicy(sp.HORIZONTAL_SCROLLBAR_NEVER);
+		sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JPanel p2 = new JPanel(new BorderLayout(5, 5));
 		p2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -280,15 +280,6 @@ public class JobsPanel extends JPanel
 				entry = new ProgressBarJobEntry(job);
 			else
 				entry = new NoTrackingJobEntry(job);
-		}
-
-		else if(result instanceof MGResult) {
-			if(result.isRemote)
-				job = new MGRemoteJob((MGResult)result, data);
-			else
-				job = new MGLocalJob((MGResult)result, data);
-			//entry = new NoTrackingJobEntry(job);
-			entry = new ProgressBarJobEntry(job);
 		}
 
 		else if(result instanceof ModelTestResult) {

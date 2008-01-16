@@ -7,6 +7,7 @@ package topali.gui;
 
 import java.awt.Font;
 import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -41,8 +42,6 @@ public class WinMainMenuBar extends JMenuBar
 			mAlgnShowOvDialog;
 
 	JMenu mAnls;
-
-	public static JMenu mAnlsRunCodeML;
 	
 	JMenuItem mAnlsPartition, mAnlsShowJobs, mAnlsRename, mAnlsRemove, mAnlsSettings;
 	
@@ -970,10 +969,20 @@ public class WinMainMenuBar extends JMenuBar
 		mFileRecent.removeAll();
 		int loc = -1;
 
+		LinkedList<String> gui_recent = new LinkedList<String>();
+		if(Prefs.gui_recent0!=null && !Prefs.gui_recent0.equals("null"))
+		    gui_recent.add(Prefs.gui_recent0);
+		if(Prefs.gui_recent1!=null && !Prefs.gui_recent1.equals("null"))
+		    gui_recent.add(Prefs.gui_recent1);
+		if(Prefs.gui_recent2!=null && !Prefs.gui_recent2.equals("null"))
+		    gui_recent.add(Prefs.gui_recent2);
+		if(Prefs.gui_recent3!=null && !Prefs.gui_recent3.equals("null"))
+		    gui_recent.add(Prefs.gui_recent3);
+		
 		// First see if it already exists, and reorder the list if it does
-		for (int i = 0; i < Prefs.gui_recent.size(); i++)
+		for (int i = 0; i < gui_recent.size(); i++)
 		{
-			String value = Prefs.gui_recent.get(i);
+			String value = gui_recent.get(i);
 
 			if (value.equals(newStr))
 				loc = i;
@@ -981,27 +990,38 @@ public class WinMainMenuBar extends JMenuBar
 
 		if (loc != -1)
 		{
-			Prefs.gui_recent.remove(loc);
-			Prefs.gui_recent.addFirst(newStr);
+			gui_recent.remove(loc);
+			gui_recent.addFirst(newStr);
 		} else if (newStr.length() > 0)
-			Prefs.gui_recent.addFirst(newStr);
+			gui_recent.addFirst(newStr);
 
 		// Then ensure the list only contains 5 elements
-		while (Prefs.gui_recent.size() > 5)
-			Prefs.gui_recent.removeLast();
+		while (gui_recent.size() > 4)
+			gui_recent.removeLast();
 
 		// Finally, convert the list into menu items...
-		for (int i = 0; i < Prefs.gui_recent.size(); i++)
+		for (int i = 0; i < gui_recent.size(); i++)
 		{
-			String value = Prefs.gui_recent.get(i);
+			String value = gui_recent.get(i);
 			createRecentMenuItem(value, (i + 1));
 		}
 
 		// ... and enable/disable the menu depending on its contents
-		if (Prefs.gui_recent.size() == 0)
+		if (gui_recent.size() == 0)
 			mFileRecent.setEnabled(false);
 		else
 			mFileRecent.setEnabled(true);
+		
+		for(int i=0; i<gui_recent.size(); i++) {
+		    if(i==0)
+			Prefs.gui_recent0 = gui_recent.get(0);
+		    if(i==1)
+			Prefs.gui_recent1 = gui_recent.get(1);
+		    if(i==2)
+			Prefs.gui_recent2 = gui_recent.get(2);
+		    if(i==3)
+			Prefs.gui_recent3 = gui_recent.get(3);
+		}
 	}
 
 	private void createRecentMenuItem(final String filename, int shortcut)

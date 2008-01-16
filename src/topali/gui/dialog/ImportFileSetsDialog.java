@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 import doe.DoeLayout;
 
 public class ImportFileSetsDialog extends JDialog implements ActionListener

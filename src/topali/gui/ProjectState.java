@@ -60,15 +60,5 @@ public class ProjectState
 	{
 		return vamsasSession;
 	}
-
-	public static boolean isVamsasCommitted()
-	{
-		return vamsasCommitted;
-	}
-
-	public static boolean isFileSaved()
-	{
-		return fileSaved;
-	}
 	
 }

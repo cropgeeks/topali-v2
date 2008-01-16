@@ -6,7 +6,6 @@
 package topali.cluster.jobs.modeltest.analysis;
 
 import java.io.*;
-import java.util.Vector;
 
 public class TreeDistParser
 {

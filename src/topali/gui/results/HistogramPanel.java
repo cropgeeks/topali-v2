@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import topali.gui.Prefs;
-import topali.var.Utils;
+import topali.var.utils.Utils;
 
 class HistogramPanel extends JPanel
 {
@@ -40,22 +40,6 @@ class HistogramPanel extends JPanel
 	@Override
 	public Dimension getPreferredSize()
 		{ return new Dimension(150, 35); }
-
-	public void setTitledBorder(TitledBorder t)
-	{
-		border = t;
-		border.setTitle("Probability distribution:");
-	}
-
-	public void setBorderPanel(JPanel panel)
-	{
-		borderPanel = panel;
-	}
-
-	public TitledBorder getTitledBorder()
-	{
-		return border;
-	}
 
 	@Override
 	public void paintComponent(Graphics g)

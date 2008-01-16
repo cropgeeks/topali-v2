@@ -119,26 +119,4 @@ public class WinMainStatusBar extends JPanel
 		currentIcon = icon;
 		resetIcon = false;
 	}
-
-	static String getText()
-	{
-		return label.getText();
-	}
-
-	public static void setMenu(String text)
-	{
-		if (oldText == null)
-			oldText = label.getText().trim();
-
-		label.setText(" " + text);
-	}
-
-	public static void clearMenu()
-	{
-		if (oldText != null)
-		{
-			label.setText(" " + oldText);
-			oldText = null;
-		}
-	}
 }

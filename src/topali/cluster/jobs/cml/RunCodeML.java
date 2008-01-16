@@ -16,7 +16,7 @@ import pal.tree.*;
 import sbrn.commons.file.FileUtils;
 import topali.cluster.StreamCatcher;
 import topali.data.*;
-import topali.var.tree.NHTreeUtils;
+import topali.var.utils.TreeUtils;
 
 class RunCodeML
 {
@@ -92,7 +92,7 @@ class RunCodeML
 		
 		String treeSt = tree.toString();
 		treeSt = treeSt.replaceAll(";", "");
-		treeSt = NHTreeUtils.removeBranchLengths(treeSt);
+		treeSt = TreeUtils.removeBranchLengths(treeSt);
 		
 		FileUtils.writeFile(new File(wrkDir, "tree.txt"), treeSt);
 	}

@@ -16,6 +16,7 @@ import javax.swing.*;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
+import topali.var.utils.Utils;
 import doe.MsgBox;
 
 public abstract class JobsPanelEntry extends JPanel implements MouseListener
@@ -184,7 +185,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		}
 	}
 
-	long h = 0, m = 0, s = 0;
+	long h = 0, m = 0;
 
 	long elapsed;
 
@@ -196,7 +197,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		m = (elapsed - (h * 1000 * 60 * 60)) / (1000 * 60);
 
 		timeLabel.setText(startStr + " (Runtime: " + h + "h:"
-				+ Prefs.i2.format(m) + "m)");
+				+ Utils.i2.format(m) + "m)");
 	}
 
 	AnalysisJob getJob()
