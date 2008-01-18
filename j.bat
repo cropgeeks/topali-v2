@@ -19,9 +19,8 @@ set topali=%topali%;%lib%\log4j-1.2.8.jar
 set topali=%topali%;%lib%\office-2.0.jar
 set topali=%topali%;%lib%\pal.jar
 set topali=%topali%;%lib%\saaj.jar
-set topali=%topali%;%lib%\sbrn-commons.jar
+set topali=%topali%;%lib%\scri-commons.jar
 set topali=%topali%;%lib%\swing-layout-1.0.jar
 set topali=%topali%;%lib%\vamsas-client.jar
-set topali=%topali%;%lib%\xercesImpl.jar
 
 java -Xmx256m -cp .;classes;res;%topali% topali.gui.TOPALi %1

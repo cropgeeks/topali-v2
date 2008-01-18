@@ -23,11 +23,10 @@
 		<jar href="office-2.0.jar"/>
 		<jar href="pal.jar"/>
 		<jar href="saaj.jar"/>
-		<jar href="sbrn-commons.jar"/>
+		<jar href="scri-commons.jar"/>
 		<jar href="swing-layout-1.0.jar"/>
 		<jar href="topali.jar" main="true"/>
 		<jar href="vamsas-client.jar"/>
-		<jar href="xercesImpl.jar"/>
 	</resources>
 	<application-desc main-class="topali.gui.TOPALi">
 	</application-desc>

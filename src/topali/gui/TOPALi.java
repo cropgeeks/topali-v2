@@ -16,7 +16,7 @@ import javax.swing.*;
 
 import org.apache.log4j.*;
 
-import sbrn.commons.multicore.TokenManager;
+import scri.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
@@ -116,7 +116,7 @@ public class TOPALi extends Applet implements Application
 
 		// Load the preferences
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
-				prefsFile));
+				prefsFile), Prefs.class);
 		doEncryption(true);
 
 		setProxy();
@@ -240,7 +240,7 @@ public class TOPALi extends Applet implements Application
 		// Save the preferences
 		doEncryption(false);
 		prefs.savePreferences(new File(System.getProperty("user.home"),
-				prefsFile));
+				prefsFile), Prefs.class);
 		// Remove tmp files
 		// Utils.emptyScratch();
 

@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.exolab.castor.xml.*;
 import org.xml.sax.InputSource;
 
-import sbrn.commons.file.FileUtils;
+import scri.commons.file.FileUtils;
 import topali.data.*;
 import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;

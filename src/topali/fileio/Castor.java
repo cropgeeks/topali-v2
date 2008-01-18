@@ -26,10 +26,12 @@ public class Castor
 
 	static
 	{
-		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
-				.setProperty("org.exolab.castor.serializer",
-						"org.apache.xml.serialize.XMLSerializer");
-		
+	    org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
+	    .setProperty("org.exolab.castor.parser", "org.xml.sax.helpers.XMLReaderAdapter");
+
+	  org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
+	    .setProperty("org.exolab.castor.xml.serializer.factory", "org.exolab.castor.xml.XercesJDK5XMLSerializerFactory");
+	  
 		try
 		{
 			mapping = new Mapping();

@@ -19,12 +19,13 @@ import javax.swing.tree.*;
 
 import org.apache.log4j.Logger;
 
+import doe.MsgBox;
+
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.gui.tree.TreePane;
-import doe.*;
 
 public class NavPanel extends JPanel implements TreeSelectionListener,
 		PropertyChangeListener

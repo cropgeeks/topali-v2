@@ -7,7 +7,7 @@ package topali.cluster;
 
 import java.io.File;
 
-import sbrn.commons.multicore.TokenThread;
+import scri.commons.multicore.TokenThread;
 
 // Base class for the analysis tasks that run the TOPALi jobs. Just holds some
 // common fields for them (the directory for results and working directory)
