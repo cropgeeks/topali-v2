@@ -11,12 +11,12 @@ import java.io.File;
 
 import javax.swing.*;
 
+import scri.commons.gui.MsgBox;
 import scri.commons.multicore.TokenManager;
 import topali.cluster.*;
 import topali.gui.Prefs;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
-import doe.MsgBox;
 
 class CachePanel extends JPanel implements ActionListener
 {

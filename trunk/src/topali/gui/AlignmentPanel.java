@@ -947,7 +947,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					// Extract the text to display in this section
 					char str[] = ss.getSequence(seq).getBuffer().toString().toCharArray();
 
-					for (int i = 0, x = 0; i < str.length; i++, x += charW)
+					for (int i = 0, x = 0; i < str.length && !stop; i++, x += charW)
 					{
 						BufferedImage img = getMiniImg(str[i]);
 						g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
@@ -960,7 +960,11 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				
 				updateObservers(DesktopThread.THREAD_FINISHED);
 			}
-			
+
+			@Override
+			public void kill() {
+			   stop = false;
+			}
 		}
 	}
 	

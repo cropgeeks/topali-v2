@@ -13,7 +13,6 @@ import topali.cluster.jobs.modeltest.analysis.*;
 import topali.data.*;
 import topali.data.models.*;
 import topali.fileio.Castor;
-import topali.var.*;
 import topali.var.utils.*;
 
 public class ModelTestMonitor

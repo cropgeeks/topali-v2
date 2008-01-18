@@ -10,11 +10,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import scri.commons.gui.*;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
-import doe.*;
 
 public class PDM2SettingsDialog extends JDialog implements ActionListener
 {

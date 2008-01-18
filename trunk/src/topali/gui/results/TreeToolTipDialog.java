@@ -11,9 +11,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.*;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
-import doe.MsgBox;
 
 public class TreeToolTipDialog extends JDialog implements ActionListener
 {
@@ -31,7 +30,7 @@ public class TreeToolTipDialog extends JDialog implements ActionListener
 
 	public TreeToolTipDialog(boolean enable, int window, int length)
 	{
-		super(MsgBox.frm, "Tree ToolTips", true);
+		super(TOPALi.winMain, "Tree ToolTips", true);
 
 		this.enable = enable;
 		this.window = window;
@@ -44,7 +43,7 @@ public class TreeToolTipDialog extends JDialog implements ActionListener
 
 		pack();
 
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 		setResizable(false);
 		setVisible(true);
 	}

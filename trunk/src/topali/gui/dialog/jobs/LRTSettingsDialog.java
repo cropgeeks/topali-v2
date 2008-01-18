@@ -14,7 +14,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.*;
+import scri.commons.gui.*;
 
 public class LRTSettingsDialog extends JDialog implements ActionListener
 {

@@ -20,7 +20,7 @@ import pal.tree.*;
 import topali.data.SequenceCluster;
 import topali.gui.*;
 import topali.mod.Filters;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 class TreePanelUtils
 {
@@ -35,7 +35,7 @@ class TreePanelUtils
 		Filters.setFilters(fc, Prefs.gui_filter_tree, PNG, TRE, CLU);
 		fc.setAcceptAllFileFilterUsed(false);
 
-		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = Filters.getSelectedFileForSaving(fc);
 
@@ -147,7 +147,7 @@ class TreePanelUtils
 		{
 			// TODO: Make a nice dialog with a spinner control to enter the num
 			DecimalFormat d = new DecimalFormat("0.000000");
-			String input = (String) JOptionPane.showInputDialog(MsgBox.frm,
+			String input = (String) JOptionPane.showInputDialog(TOPALi.winMain,
 					"Please enter the threshold limit for the new grouping:",
 					"Enter Threshold", JOptionPane.PLAIN_MESSAGE, null, null, d
 							.format(Prefs.gui_group_threshold));
@@ -250,7 +250,7 @@ class TreePanelUtils
 			}
 
 			panel.getSequenceSet().setSelectedSequences(indices);
-			((WinMain) MsgBox.frm).menuViewDisplaySettings(true);
+			((WinMain) TOPALi.winMain).menuViewDisplaySettings(true);
 			//WinMainMenuBar.aFileSave.setEnabled(true);
 			//WinMainMenuBar.aVamCommit.setEnabled(true);
 			ProjectState.setDataChanged();

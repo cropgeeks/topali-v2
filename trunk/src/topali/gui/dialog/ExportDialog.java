@@ -21,7 +21,7 @@ import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
 import topali.var.utils.Utils;
-import doe.*;
+import scri.commons.gui.*;
 
 public class ExportDialog extends JDialog implements ActionListener
 {
@@ -275,7 +275,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		Filters.setFilters(fc, Prefs.gui_filter_algn, FAS, PHY_S, PHY_I, ALN,
 				MSF, NEX, NEX_B);
 
-		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = Filters.getSelectedFileForSaving(fc);
 

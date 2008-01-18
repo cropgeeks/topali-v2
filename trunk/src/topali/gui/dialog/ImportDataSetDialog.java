@@ -21,7 +21,7 @@ import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.mod.Filters;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class ImportDataSetDialog extends JDialog implements Runnable
 {

@@ -12,7 +12,7 @@ import javax.swing.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.*;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class ResultPanelToolbar extends JToolBar
 {

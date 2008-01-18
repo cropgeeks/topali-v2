@@ -11,7 +11,7 @@ import java.awt.print.Printable;
 import javax.swing.JPanel;
 
 import topali.data.*;
-import doe.GradientPanel;
+import topali.gui.GradientPanel;
 
 public class CodonWResultPanel extends ResultPanel
 {

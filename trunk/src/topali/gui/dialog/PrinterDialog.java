@@ -15,7 +15,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import topali.gui.*;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class PrinterDialog extends JDialog
 {
@@ -32,7 +32,7 @@ public class PrinterDialog extends JDialog
 
 	public PrinterDialog(Printable[] toPrint)
 	{
-		super(MsgBox.frm, Text.GuiDiag.getString("PrinterDialog.gui01"), true);
+		super(TOPALi.winMain, Text.GuiDiag.getString("PrinterDialog.gui01"), true);
 
 		this.toPrint = toPrint;
 
@@ -55,7 +55,7 @@ public class PrinterDialog extends JDialog
 
 		pack();
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 		setResizable(false);
 	}
 
@@ -76,7 +76,7 @@ public class PrinterDialog extends JDialog
 				label.setText(Text.GuiDiag.getString("PrinterDialog.gui03"));
 
 				pack();
-				setLocationRelativeTo(MsgBox.frm);
+				setLocationRelativeTo(TOPALi.winMain);
 			}
 		};
 

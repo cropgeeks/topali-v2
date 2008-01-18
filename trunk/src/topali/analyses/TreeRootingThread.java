@@ -52,7 +52,7 @@ public class TreeRootingThread extends DesktopThread
 			ReadTree t = new ReadTree(pbread);
 			Tree t2 = TreeRooter.getMidpointRooted(t);
 			
-			//TODO: WORKAROUND for PAL tree loosing bootstrap values:
+			//WORKAROUND for PAL tree loosing bootstrap values:
 			//bs values are stored in "table" and then written back 
 			//to the midpoint rooted tree.
 			int c = t.getExternalNodeCount();
@@ -84,7 +84,10 @@ public class TreeRootingThread extends DesktopThread
 			}
 			//END WORKAROUND
 			
-			mpRootedTree = TreeUtils.getNewick(t2);
+			if(!stop)
+			    mpRootedTree = TreeUtils.getNewick(t2);
+			else
+			    mpRootedTree = null;
 		} catch (TreeParseException e)
 		{
 			log.warn("Midpoint rooting failed.", e);
@@ -93,7 +96,7 @@ public class TreeRootingThread extends DesktopThread
 			updateObservers(DesktopThread.THREAD_FINISHED);
 		}
 	}
-	
+
 	private List<Node> getChildren(Node node, List<Node> children) {
 		int c = node.getChildCount();
 		for(int i=0; i<c; i++) {

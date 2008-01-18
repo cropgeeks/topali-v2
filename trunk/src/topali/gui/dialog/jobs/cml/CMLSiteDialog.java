@@ -11,8 +11,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.*;
-import topali.var.*;
+import topali.gui.WinMain;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class CMLSiteDialog extends JDialog implements ActionListener

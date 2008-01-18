@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 import topali.gui.*;
 import topali.mod.Filters;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 /**
  * Panel for displaying a table
@@ -148,7 +148,7 @@ public class TablePanel extends JPanel
 				Filters.setFilters(fc, Prefs.gui_filter_table, CSV, PNG);
 				fc.setAcceptAllFileFilterUsed(false);
 
-				if (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+				if (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 				{
 					File file = Filters.getSelectedFileForSaving(fc);
 

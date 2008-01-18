@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 
 import topali.analyses.AnalysisUtils;
 import topali.data.*;
+import topali.gui.GradientPanel;
 import topali.var.utils.Utils;
-import doe.GradientPanel;
 
 public class LRTResultPanel extends ResultPanel {
 

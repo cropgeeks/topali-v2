@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 import javax.swing.JDialog;
 
-import doe.MsgBox;
+import topali.gui.TOPALi;
 
 class ExternalTreeFrame extends JDialog
 {
@@ -22,7 +22,7 @@ class ExternalTreeFrame extends JDialog
 	ExternalTreeFrame(TreePane treePane, TreePanel panel,
 			InternalTreeFrame iFrame)
 	{
-		super(MsgBox.frm, panel.getTreeResult().getTitle(), false);
+		super(TOPALi.winMain, panel.getTreeResult().getTitle(), false);
 
 		this.treePane = treePane;
 		this.panel = panel;

@@ -16,7 +16,7 @@ import javax.swing.table.*;
 import org.apache.log4j.Logger;
 
 import topali.data.*;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 class MosaicPanel extends JPanel implements ActionListener
 {

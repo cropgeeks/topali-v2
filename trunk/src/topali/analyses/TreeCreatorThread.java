@@ -14,7 +14,7 @@ import pal.substmodel.*;
 import pal.tree.*;
 import topali.gui.*;
 import topali.var.threads.*;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class TreeCreatorThread extends DesktopThread
 {

@@ -25,7 +25,7 @@ import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.mod.Filters;
 import topali.var.SysPrefs;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class Project extends DataObject 
 {
@@ -119,7 +119,7 @@ public class Project extends DataObject
 
 		Filters.setFilters(fc, TOP, TOP);
 
-		if (fc.showOpenDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+		if (fc.showOpenDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 			Prefs.gui_dir = "" + fc.getCurrentDirectory();
@@ -325,7 +325,7 @@ public class Project extends DataObject
 
 		Filters.setFilters(fc, TOP, TOP);
 
-		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = Filters.getSelectedFileForSaving(fc);
 

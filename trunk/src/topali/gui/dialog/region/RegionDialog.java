@@ -18,7 +18,7 @@ import topali.data.RegionAnnotations.Region;
 import topali.gui.*;
 import topali.gui.dialog.ExportDialog;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class RegionDialog extends JDialog implements ActionListener,
 		ListSelectionListener, ItemListener

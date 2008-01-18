@@ -13,7 +13,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.Text;
-import doe.DoeLayout;
+import scri.commons.gui.DoeLayout;
 
 public class ResultsNodeFolder extends INode
 {

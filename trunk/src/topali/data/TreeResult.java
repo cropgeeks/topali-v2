@@ -11,7 +11,6 @@ import java.util.LinkedList;
 
 import pal.misc.Identifier;
 import pal.tree.*;
-import topali.gui.Prefs;
 import topali.var.utils.Utils;
 
 /* Storage class that represents a phylogenetic tree (stored as a NH format

@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.data.AnalysisResult;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class JobsThread extends Thread
 {

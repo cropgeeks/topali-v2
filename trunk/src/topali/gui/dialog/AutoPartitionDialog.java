@@ -15,7 +15,7 @@ import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.*;
+import scri.commons.gui.*;
 
 public class AutoPartitionDialog extends JDialog implements ActionListener
 {

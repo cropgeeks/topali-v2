@@ -13,7 +13,7 @@ import javax.swing.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class AnalysisInfoDialog extends JDialog implements ActionListener
 {
@@ -24,7 +24,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 	private JTextArea text;
 	
 	public AnalysisInfoDialog(AlignmentResult aResult) {
-		super(MsgBox.frm, "Analysis Information", true);
+		super(TOPALi.winMain, "Analysis Information", true);
 		this.aResult = aResult;
 		
 		add(createControls());
@@ -34,7 +34,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 		setSize(500, 375);
 		setResizable(false);
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 	}
 
 	private JPanel createControls()

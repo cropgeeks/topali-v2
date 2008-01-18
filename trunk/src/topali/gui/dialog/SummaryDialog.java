@@ -16,7 +16,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class SummaryDialog extends JDialog implements ActionListener, Runnable
 {

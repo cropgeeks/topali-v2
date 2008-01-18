@@ -7,7 +7,7 @@ package topali.gui;
 
 import java.awt.Font;
 import java.awt.event.*;
-import java.util.*;
+import java.util.LinkedList;
 
 import javax.swing.*;
 

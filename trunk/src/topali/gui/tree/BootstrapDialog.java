@@ -8,7 +8,6 @@ package topali.gui.tree;
 
 import javax.swing.SpinnerNumberModel;
 
-import topali.var.*;
 import topali.var.utils.*;
 
 /**

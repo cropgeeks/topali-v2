@@ -10,12 +10,12 @@ import java.util.Vector;
 
 import javax.swing.*;
 
+import scri.commons.gui.MsgBox;
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.jobs.*;
 import topali.var.utils.Utils;
-import doe.*;
 
 public class JobsPanel extends JPanel
 {

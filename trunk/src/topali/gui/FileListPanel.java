@@ -16,7 +16,7 @@ import javax.swing.table.*;
 
 import topali.data.*;
 import topali.gui.dialog.ImportDataSetDialog;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class FileListPanel extends JPanel implements ListSelectionListener
 {

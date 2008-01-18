@@ -14,7 +14,6 @@ import javax.swing.event.*;
 import topali.gui.*;
 import topali.gui.results.ResultPanel;
 import topali.var.utils.Utils;
-import doe.MsgBox;
 
 public class ThresholdDialog extends JDialog implements ActionListener, ChangeListener
 {
@@ -30,7 +29,7 @@ public class ThresholdDialog extends JDialog implements ActionListener, ChangeLi
 
 	public ThresholdDialog(ResultPanel panel, double threshold)
 	{
-		super(MsgBox.frm, "Adjust Threshold Significance", true);
+		super(TOPALi.winMain, "Adjust Threshold Significance", true);
 
 		this.panel = panel;
 		this.threshold = threshold;
@@ -42,7 +41,7 @@ public class ThresholdDialog extends JDialog implements ActionListener, ChangeLi
 
 		pack();
 
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 		setResizable(false);
 	}
 

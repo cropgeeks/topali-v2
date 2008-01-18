@@ -11,9 +11,8 @@ import javax.swing.border.MatteBorder;
 
 import org.apache.log4j.Logger;
 
-import topali.gui.Icons;
+import topali.gui.*;
 import topali.gui.dialog.PrinterDialog;
-import doe.MsgBox;
 
 /**
  * Based on Matthew Robinson, Pavel Vorobiev "Swing - Second Edition"
@@ -79,7 +78,7 @@ public class PrintPreview extends JFrame implements ActionListener
 		pf.setOrientation(PageFormat.PORTRAIT);
 		buildPreview(pf);
 		
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 	}
 
 	private void buildPreview(PageFormat pageFormat) {
