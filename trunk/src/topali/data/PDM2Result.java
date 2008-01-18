@@ -5,7 +5,7 @@
 
 package topali.data;
 
-import sbrn.commons.MatrixXML;
+import scri.commons.MatrixXML;
 
 /*
  * Class that stores both the results from running a PDM2 analysis and the

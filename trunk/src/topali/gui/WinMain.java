@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
-import sbrn.commons.file.FileUtils;
+import scri.commons.file.FileUtils;
 import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;

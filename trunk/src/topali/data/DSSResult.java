@@ -5,7 +5,7 @@
 
 package topali.data;
 
-import sbrn.commons.MatrixXML;
+import scri.commons.MatrixXML;
 
 /*
  * Class that stores both the results from running a DSS analysis and the

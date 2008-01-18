@@ -13,7 +13,7 @@ import java.util.Vector;
 import javax.swing.*;
 
 import pal.statistics.ChiSquareDistribution;
-import sbrn.commons.gui.DoeLayout;
+import scri.commons.gui.DoeLayout;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;

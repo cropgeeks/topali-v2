@@ -7,7 +7,7 @@ package topali.cluster.jobs.cml;
 
 import java.io.File;
 
-import sbrn.commons.file.FileUtils;
+import scri.commons.file.FileUtils;
 import topali.cluster.*;
 import topali.cluster.jobs.cml.parser.CMLResultParser;
 import topali.data.*;

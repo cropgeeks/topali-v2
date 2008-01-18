@@ -76,9 +76,7 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 		}
 	}
 
-
-	@Override
-	public Tree getNextTree(Tree arg0, AlgorithmCallback arg1)
+	public Tree getNextTree(AlgorithmCallback arg1)
 	{
 		BootstrappedAlignment boot = new BootstrappedAlignment(align);
 		creator = new TreeCreatorThread(boot, isDNA, false);
@@ -100,5 +98,12 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 			return null;
 		}
 	}
+
+	@Override
+	public Tree getNextTree(Tree arg0, AlgorithmCallback arg1) {
+	    return getNextTree(arg1);
+	}
+	
+	
 
 }

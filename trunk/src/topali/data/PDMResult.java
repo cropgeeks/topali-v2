@@ -6,7 +6,7 @@
 package topali.data;
 
 import pal.statistics.ChiSquareDistribution;
-import sbrn.commons.MatrixXML;
+import scri.commons.MatrixXML;
 import topali.analyses.AnalysisUtils;
 
 /*

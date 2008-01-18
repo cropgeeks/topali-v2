@@ -7,7 +7,7 @@ package topali.cluster;
 
 import java.util.*;
 
-import sbrn.commons.multicore.TokenManager;
+import scri.commons.multicore.TokenManager;
 
 /* Maintains a list of all jobs currently running locally. The jobs check this
  * list to see if they're still allowed to run (if not, it means they've been

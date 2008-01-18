@@ -9,7 +9,7 @@ import java.io.*;
 
 import org.apache.log4j.Logger;
 
-import sbrn.commons.bioinf.ReadSeq;
+import scri.commons.bioinf.ReadSeq;
 import topali.data.SequenceSet;
 import topali.gui.Prefs;
 import topali.var.SysPrefs;
