@@ -16,9 +16,7 @@ import javax.swing.table.TableRowSorter;
 import topali.data.*;
 import topali.data.models.Model;
 import topali.gui.*;
-import topali.var.*;
 import topali.var.utils.*;
-import doe.GradientPanel;
 
 @SuppressWarnings("unchecked")
 public class MTResultPanel extends ResultPanel implements ListSelectionListener

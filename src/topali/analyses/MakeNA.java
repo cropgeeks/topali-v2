@@ -13,7 +13,7 @@ import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.Text;
 import topali.var.AssociationMap;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class MakeNA
 {

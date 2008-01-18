@@ -19,11 +19,10 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import pal.tree.Node;
+import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
 import topali.var.SysPrefs;
-import doe.MsgBox;
 
 /**
  * Contains misc methods that don't really fit in anywhere else (but are likely

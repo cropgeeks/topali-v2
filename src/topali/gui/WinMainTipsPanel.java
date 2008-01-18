@@ -13,8 +13,6 @@ import javax.swing.*;
 
 import topali.var.SysPrefs;
 
-import doe.GradientPanel;
-
 public class WinMainTipsPanel extends JPanel implements ActionListener
 {
 	public static final int TIPS_NONE = 0;

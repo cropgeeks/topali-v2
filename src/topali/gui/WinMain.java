@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import pal.alignment.Alignment;
 import pal.tree.Tree;
 import scri.commons.file.FileUtils;
+import scri.commons.gui.MsgBox;
 import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
@@ -38,9 +39,8 @@ import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.*;
-import doe.MsgBox;
 
 public class WinMain extends JFrame implements PropertyChangeListener
 {

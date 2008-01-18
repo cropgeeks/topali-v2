@@ -10,7 +10,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.phyml.*;
 import topali.data.*;
-import topali.gui.*;
+import topali.gui.TOPALi;
 import topali.var.SysPrefs;
 
 public class PhymlLocalJob extends AnalysisJob

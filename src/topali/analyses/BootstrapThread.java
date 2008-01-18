@@ -99,7 +99,6 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 		}
 	}
 
-	@Override
 	public Tree getNextTree(Tree arg0, AlgorithmCallback arg1) {
 	    return getNextTree(arg1);
 	}

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.ParamEstDialog;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 /*
  * Helper class that performs various analyses on a SequenceSet (Alignment)
@@ -91,7 +91,7 @@ public class SequenceSetUtils
 		while (!ok)
 		{
 			// Prompt for the new sequence name
-			newname = (String) JOptionPane.showInputDialog(MsgBox.frm,
+			newname = (String) JOptionPane.showInputDialog(TOPALi.winMain,
 					Text.Analyses.getString("SequenceSetUtils.gui01"),
 					Text.Analyses.getString("SequenceSetUtils.gui02"),
 					JOptionPane.PLAIN_MESSAGE, null, null, selected.getName());

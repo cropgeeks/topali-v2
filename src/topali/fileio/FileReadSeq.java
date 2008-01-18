@@ -10,10 +10,9 @@ import java.io.*;
 import org.apache.log4j.Logger;
 
 import scri.commons.bioinf.ReadSeq;
+import scri.commons.gui.MsgBox;
 import topali.data.SequenceSet;
-import topali.gui.Prefs;
 import topali.var.SysPrefs;
-import doe.MsgBox;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
 // delegating the actual work to the ReadSeq util class (web/cgi service)

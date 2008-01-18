@@ -17,7 +17,7 @@ import javax.swing.*;
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public abstract class JobsPanelEntry extends JPanel implements MouseListener
 {

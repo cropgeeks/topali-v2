@@ -14,8 +14,8 @@ import pal.alignment.SimpleAlignment;
 import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
 import topali.data.*;
-import topali.gui.*;
-import topali.var.*;
+import topali.gui.WinMain;
+import topali.var.SysPrefs;
 import topali.var.utils.*;
 
 public class CMLBranchDialog extends JDialog implements ActionListener

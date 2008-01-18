@@ -22,14 +22,13 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
+import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
 import topali.mod.Filters;
 import topali.var.utils.Utils;
-import doe.MsgBox;
 
 /**
  * Panel for displaying a graph
@@ -291,7 +290,7 @@ public class GraphPanel extends JPanel implements Printable
 		Filters.setFilters(fc, Prefs.gui_filter_graph, CSV, PNG);
 		fc.setAcceptAllFileFilterUsed(false);
 
-		while (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = Filters.getSelectedFileForSaving(fc);
 

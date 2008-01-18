@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 import topali.data.AlignmentData;
-import doe.DoeLayout;
+import scri.commons.gui.DoeLayout;
 
 /* Simple panel containing oft-used Window and Step size settings controls */
 class SlidePanel extends JPanel

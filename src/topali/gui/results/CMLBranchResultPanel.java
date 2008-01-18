@@ -17,9 +17,7 @@ import scri.commons.gui.DoeLayout;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.atv.ATV;
-import topali.var.*;
 import topali.var.utils.*;
-import doe.GradientPanel;
 
 /**
  * Panel for displaying codeml branch model results

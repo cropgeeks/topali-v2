@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import topali.gui.*;
 import topali.mod.Filters;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class TextPanel extends JPanel implements Printable
 {
@@ -95,7 +95,7 @@ public class TextPanel extends JPanel implements Printable
 				Filters.setFilters(fc, Prefs.gui_filter_table, TXT);
 				fc.setAcceptAllFileFilterUsed(false);
 
-				if (fc.showSaveDialog(MsgBox.frm) == JFileChooser.APPROVE_OPTION)
+				if (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
 				{
 					File file = Filters.getSelectedFileForSaving(fc);
 

@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class RaxmlDialog extends JDialog implements ActionListener

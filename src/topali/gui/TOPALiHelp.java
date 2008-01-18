@@ -33,7 +33,7 @@ public class TOPALiHelp
 			hb = hs.createHelpBroker("TOPALi");
 			hb.setFont(new Font("SansSerif", Font.PLAIN, 12));
 
-			// ((DefaultHelpBroker)hb).setActivationWindow(doe.MsgBox.frm);
+			// ((DefaultHelpBroker)hb).setActivationWindow(scri.commons.gui.TOPALi.winMain);
 		} catch (Exception e)
 		{
 			log.warn("Error loading help",e);

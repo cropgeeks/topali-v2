@@ -14,7 +14,7 @@ import javax.swing.event.*;
 
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.*;
+import scri.commons.gui.*;
 
 /* Displays a dialog containing options for choosing the colours and fonts
  * used to display the sequence data within the main display.

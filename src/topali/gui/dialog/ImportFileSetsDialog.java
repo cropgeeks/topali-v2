@@ -17,7 +17,7 @@ import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.DoeLayout;
+import scri.commons.gui.DoeLayout;
 
 public class ImportFileSetsDialog extends JDialog implements ActionListener
 {

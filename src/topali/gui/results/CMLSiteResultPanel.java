@@ -17,9 +17,7 @@ import org.apache.log4j.Logger;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.*;
 import topali.var.utils.*;
-import doe.GradientPanel;
 
 /**
  * Panel for displaying codeml site model result

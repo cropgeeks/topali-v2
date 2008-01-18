@@ -19,7 +19,7 @@ import javax.swing.tree.*;
 
 import org.apache.log4j.Logger;
 
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 import topali.cluster.JobStatus;
 import topali.data.*;

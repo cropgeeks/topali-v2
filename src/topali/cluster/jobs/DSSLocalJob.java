@@ -10,7 +10,7 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.dss.*;
 import topali.data.*;
-import topali.gui.*;
+import topali.gui.TOPALi;
 import topali.var.SysPrefs;
 
 public class DSSLocalJob extends AnalysisJob

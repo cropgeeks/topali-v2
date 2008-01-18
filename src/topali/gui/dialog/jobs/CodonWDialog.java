@@ -11,8 +11,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.*;
-import topali.var.*;
+import topali.gui.TOPALi;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class CodonWDialog extends JDialog implements ActionListener

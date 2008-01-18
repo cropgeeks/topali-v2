@@ -13,8 +13,7 @@ import javax.swing.*;
 import pal.alignment.SimpleAlignment;
 import topali.analyses.ParamEstimateThread;
 import topali.data.SequenceSet;
-import topali.gui.Text;
-import doe.MsgBox;
+import topali.gui.*;
 
 public class ParamEstDialog extends JDialog
 {
@@ -22,7 +21,7 @@ public class ParamEstDialog extends JDialog
 	
 	public ParamEstDialog(SequenceSet ss, int[] indices)
 	{
-		super(MsgBox.frm, Text.Analyses.getString("ParamEstDialog.gui01"), true);
+		super(TOPALi.winMain, Text.Analyses.getString("ParamEstDialog.gui01"), true);
 
 		SimpleAlignment alignment = ss.getAlignment(indices, 1, ss.getLength(),
 				true);
@@ -70,7 +69,7 @@ public class ParamEstDialog extends JDialog
 
 		pack();
 		setResizable(false);
-		setLocationRelativeTo(MsgBox.frm);
+		setLocationRelativeTo(TOPALi.winMain);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}

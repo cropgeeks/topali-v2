@@ -20,7 +20,7 @@ import scri.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
-import topali.var.*;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class TOPALi extends Applet implements Application
@@ -183,7 +183,7 @@ public class TOPALi extends Applet implements Application
 			}
 		});
 
-		new doe.MsgBox(winMain, Text.Gui.getString("WinMain.gui01"));
+		new scri.commons.gui.MsgBox(winMain, Text.Gui.getString("WinMain.gui01"));
 		winMain.setVisible(true);
 	}
 

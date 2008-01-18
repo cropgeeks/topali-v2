@@ -214,8 +214,10 @@ public class ModelInfoPanel extends javax.swing.JPanel implements MouseListener 
     private void setTree(String tree) {
     	if(tree!=null) {
     		String mptree = (new TreeRootingThread(tree, false)).getMPRootedTree();
-    		mptree = mptree.replaceAll("SEQ0+", "");
-    		treeCanvas.setTree(mptree);
+    		if(mptree!=null) {
+    		    mptree = mptree.replaceAll("SEQ0+", "");
+    		    treeCanvas.setTree(mptree);
+    		}
     	}
     }
     

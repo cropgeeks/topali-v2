@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.gui.*;
 import topali.var.utils.Utils;
-import doe.MsgBox;
+import scri.commons.gui.MsgBox;
 
 public class SettingsDialog extends JDialog implements ActionListener
 {

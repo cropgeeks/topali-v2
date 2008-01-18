@@ -10,8 +10,8 @@ import java.io.File;
 import topali.cluster.*;
 import topali.cluster.jobs.raxml.*;
 import topali.data.*;
-import topali.gui.*;
-import topali.var.*;
+import topali.gui.TOPALi;
+import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class RaxmlLocalJob extends AnalysisJob
