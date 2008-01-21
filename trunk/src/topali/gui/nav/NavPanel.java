@@ -429,7 +429,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 	// Searches for the TreePaneNode associated with the given dataset
 	private DefaultMutableTreeNode getCurrentTreePaneNode(AlignmentData data)
 	{
-		Enumeration e = root.breadthFirstEnumeration();
+		Enumeration<?> e = root.breadthFirstEnumeration();
 		while (e.hasMoreElements())
 		{
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode) e.nextElement();

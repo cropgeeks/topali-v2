@@ -28,70 +28,91 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        modelpanel = new javax.swing.JPanel();
+        tstvlabel = new javax.swing.JLabel();
+        tstvlabel2 = new javax.swing.JLabel();
+        alphalabel = new javax.swing.JLabel();
+        alphalabel2 = new javax.swing.JLabel();
         tstv = new javax.swing.JSpinner();
         alpha = new javax.swing.JSpinner();
-        jPanel2 = new javax.swing.JPanel();
+        estimate = new javax.swing.JCheckBox();
+        runpanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         bs = new javax.swing.JSpinner();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Model Settings"));
-        jLabel1.setText("Transition/Transversion Ratio:");
+        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Model Settings"));
+        tstvlabel.setText("Transition/Transversion Ratio:");
+        tstvlabel.setEnabled(false);
 
-        jLabel2.setText("ts/tv = ");
+        tstvlabel2.setText("ts/tv = ");
+        tstvlabel2.setEnabled(false);
 
-        jLabel3.setText("Rate Heterogenity:");
+        alphalabel.setText("Rate Heterogenity:");
+        alphalabel.setEnabled(false);
 
-        jLabel4.setText("alpha = ");
+        alphalabel2.setText("alpha = ");
+        alphalabel2.setEnabled(false);
 
+        tstv.setEnabled(false);
         SpinnerNumberModel mod0 = new SpinnerNumberModel(Prefs.qt_tstv, 0d, 100d, 0.1d);
         tstv.setModel(mod0);
 
+        alpha.setEnabled(false);
         SpinnerNumberModel mod1 = new SpinnerNumberModel(Prefs.qt_alpha, 0.1d, 100d, 0.1d);
         alpha.setModel(mod1);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        estimate.setSelected(true);
+        estimate.setText("Estimate");
+        estimate.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        estimate.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        estimate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estimateActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout modelpanelLayout = new javax.swing.GroupLayout(modelpanel);
+        modelpanel.setLayout(modelpanelLayout);
+        modelpanelLayout.setHorizontalGroup(
+            modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(modelpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(14, 14, 14)
-                        .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(12, 12, 12)
-                        .addComponent(alpha)))
+                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(estimate)
+                    .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(tstvlabel)
+                        .addComponent(alphalabel)
+                        .addGroup(modelpanelLayout.createSequentialGroup()
+                            .addComponent(tstvlabel2)
+                            .addGap(14, 14, 14)
+                            .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(modelpanelLayout.createSequentialGroup()
+                            .addComponent(alphalabel2)
+                            .addGap(12, 12, 12)
+                            .addComponent(alpha))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+        modelpanelLayout.setVerticalGroup(
+            modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(modelpanelLayout.createSequentialGroup()
+                .addComponent(estimate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                .addComponent(tstvlabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tstvlabel2)
                     .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(alphalabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(alphalabel2)
                     .addComponent(alpha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Run Settings"));
+        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Run Settings"));
         jLabel5.setText("Bootstrap Runs:");
 
         jLabel6.setText("Bootstraps: ");
@@ -99,26 +120,26 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);
         bs.setModel(mod2);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        javax.swing.GroupLayout runpanelLayout = new javax.swing.GroupLayout(runpanel);
+        runpanel.setLayout(runpanelLayout);
+        runpanelLayout.setHorizontalGroup(
+            runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(runpanelLayout.createSequentialGroup()
+                .addGroup(runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(runpanelLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bs, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        runpanelLayout.setVerticalGroup(
+            runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(runpanelLayout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -130,35 +151,55 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(modelpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(runpanel, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(modelpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(runpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void estimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estimateActionPerformed
+        if(estimate.isSelected()) {
+            tstvlabel.setEnabled(false);
+            tstvlabel2.setEnabled(false);
+            tstv.setEnabled(false);
+            alphalabel.setEnabled(false);
+            alphalabel2.setEnabled(false);
+            alpha.setEnabled(false);
+        }
+        else {
+            tstvlabel.setEnabled(true);
+            tstvlabel2.setEnabled(true);
+            tstv.setEnabled(true);
+            alphalabel.setEnabled(true);
+            alphalabel2.setEnabled(true);
+            alpha.setEnabled(true);
+        }
+    }//GEN-LAST:event_estimateActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JSpinner alpha;
+    public javax.swing.JLabel alphalabel;
+    public javax.swing.JLabel alphalabel2;
     public javax.swing.JSpinner bs;
-    public javax.swing.JLabel jLabel1;
-    public javax.swing.JLabel jLabel2;
-    public javax.swing.JLabel jLabel3;
-    public javax.swing.JLabel jLabel4;
+    public javax.swing.JCheckBox estimate;
     public javax.swing.JLabel jLabel5;
     public javax.swing.JLabel jLabel6;
-    public javax.swing.JPanel jPanel1;
-    public javax.swing.JPanel jPanel2;
+    public javax.swing.JPanel modelpanel;
+    public javax.swing.JPanel runpanel;
     public javax.swing.JSpinner tstv;
+    public javax.swing.JLabel tstvlabel;
+    public javax.swing.JLabel tstvlabel2;
     // End of variables declaration//GEN-END:variables
     
 }

@@ -43,6 +43,8 @@ public class DSS
 
 	private double gapThreshold;
 	
+	boolean less4 = false;
+	
 	public DSS(File wrkDir, DSSResult result, SimpleAlignment win1,
 			SimpleAlignment win2, double gapThreshold)
 	{
@@ -55,9 +57,16 @@ public class DSS
 
 	void calculateFitchScores() throws Exception
 	{
+	    if(wrkDir.toString().contains("win27")) {
+		System.out.println("");
+	    }
+	    
 		//Exclude bad sequences
-		if(this.gapThreshold<1)
-			removeGapSequences();
+		if(this.gapThreshold<1) {
+			less4 = removeGapSequences();
+			if(less4)
+			    return;
+		}
 		
 		// Calculate distances for the two windows
 		DistanceMatrix dm1 = getDistance(win1, result.method);
@@ -97,6 +106,13 @@ public class DSS
 	 */
 	double calculateDSS() throws Exception
 	{
+	    if(wrkDir.toString().contains("win27")) {
+		System.out.println("");
+	    }
+	    
+	    if(less4)
+		return 0;
+	    
 		readFitchResults();
 
 		// Scores for forward/backward
@@ -150,7 +166,11 @@ public class DSS
 				dm.setDistance(i, j, (dm.getDistance(i, j) * scaleBy));
 	}
 
-	private void removeGapSequences () {
+	/**
+	 * Removes sequences from the calculation which exceed the gap threshold
+	 * @return true if there are less than 4 seq. left!
+	 */
+	private boolean removeGapSequences () {
 		//Determine sequences which exceed gap treshold
 		ArrayList<Integer> removeSeqPos = new ArrayList<Integer>(win1.getSequenceCount());
 		for(int i=0; i<win1.getSequenceCount(); i++) {
@@ -179,7 +199,9 @@ public class DSS
 		
 		//create new alignments without the bad sequences
 		int newSize = win1.getSequenceCount()-removeSeqPos.size();
-		System.out.println(newSize);
+		if(newSize<4)
+		    return true;
+		
 		Identifier[] ids1 = new Identifier[newSize];
 		Identifier[] ids2 = new Identifier[newSize];
 		String[] seqs1 = new String[newSize];
@@ -192,12 +214,11 @@ public class DSS
 				seqs2[j] = win2.getAlignedSequenceString(i);
 				j++;
 			}
-			else {
-				System.out.println("Leaving out seq "+i);
-			}
 		}
 		this.win1 = new SimpleAlignment(ids1, seqs1, win1.getDataType());
 		this.win2 = new SimpleAlignment(ids2, seqs2, win1.getDataType());
+		
+		return false;
 	}
 	
 	// Static helper methods

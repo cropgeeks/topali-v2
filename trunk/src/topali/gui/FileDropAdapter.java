@@ -40,7 +40,7 @@ public class FileDropAdapter extends DropTargetAdapter
 				if (dataFlavors[i].getRepresentationClass().equals(
 						Class.forName("java.util.List")))
 				{
-					List list = (List) t.getTransferData(dataFlavors[i]);
+					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
 					// Check for a .topali project
 					if (list.size() == 1)

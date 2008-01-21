@@ -26,7 +26,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 	 Logger log = Logger.getLogger(this.getClass());
 	
 	// Holds all currently supported RegionAnnotation classes
-	private final Class[] supportedAnnotations = new Class[]
+	private final Class<?>[] supportedAnnotations = new Class[]
 	{ PartitionAnnotations.class, CDSAnnotations.class };
 
 	private WinMain winMain;
@@ -87,14 +87,14 @@ public class RegionDialog extends JDialog implements ActionListener,
 		refreshList();
 	}
 
-	public void addCurrentRegion(Class type)
+	public void addCurrentRegion(Class<?> type)
 	{
 		addRegion(alignData.getActiveRegionS(), alignData.getActiveRegionE(),
 				type);
 	}
 
 	// Adds a new partition to the current list
-	public boolean addRegion(int start, int end, Class type)
+	public boolean addRegion(int start, int end, Class<?> type)
 	{
 		annotations = (RegionAnnotations) alignData.getTopaliAnnotations()
 				.getAnnotations(type);
@@ -110,7 +110,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 		}
 
 		// Add it
-		String selection = getAnnotationLabel(type);
+		//String selection = getAnnotationLabel(type);
 		//annoType.setSelectedItem(selection);
 		refreshList();
 
@@ -185,11 +185,11 @@ public class RegionDialog extends JDialog implements ActionListener,
 	 * @param c
 	 * @return
 	 */
-	private String getAnnotationLabel(Class c)
+	private String getAnnotationLabel(Class<?> c)
 	{
 		try
 		{
-			for (Class c2 : supportedAnnotations)
+			for (Class<?> c2 : supportedAnnotations)
 			{
 				if (c2.equals(c))
 				{

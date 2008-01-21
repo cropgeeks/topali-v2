@@ -80,7 +80,7 @@ class OverviewGenerator extends Thread
 			for (int nuc = 0; nuc < c.length; nuc++)
 			{
 				// This is where we save the time...
-		//		if ((int)x != lastX || (int)y != lastY)
+				if ((int)x != lastX || (int)y != lastY)
 				{
 					g.setColor(panel.getColor(c[nuc]));
 					g.fillRect((int) x, (int) y, nWidth, sHeight);

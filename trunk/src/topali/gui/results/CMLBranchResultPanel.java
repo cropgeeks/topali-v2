@@ -123,10 +123,10 @@ public class CMLBranchResultPanel extends ResultPanel
 		names.add("\u2113");
 		tt.add("Log Likelihood");
 
-		Vector<Vector<String>> data = new Vector<Vector<String>>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		for (int i = 0; i < result.hypos.size(); i++)
 		{
-			Vector<String> row = new Vector<String>();
+			Vector<Object> row = new Vector<Object>();
 			CMLHypothesis hypo = result.hypos.get(i);
 			row.add("H" + getUnicode(i));
 			for (int j = 0; j < n; j++)
@@ -158,10 +158,10 @@ public class CMLBranchResultPanel extends ResultPanel
 		for (int i = 0; i < result.hypos.size(); i++)
 			names.add("H" + getUnicode(i));
 
-		Vector<Vector<String>> data = new Vector<Vector<String>>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		for (int i = 0; i < result.hypos.size(); i++)
 		{
-			Vector<String> row = new Vector<String>();
+			Vector<Object> row = new Vector<Object>();
 			row.add("H" + getUnicode(i));
 			for (int j = 0; j < result.hypos.size(); j++)
 			{

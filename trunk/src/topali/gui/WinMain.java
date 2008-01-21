@@ -611,6 +611,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		if(dlg.bs==-1)
 			return;
 		
+		if(dlg.estimate && !data.getSequenceSet().hasParametersEstimated()) {
+		    SequenceSetUtils.estimateParameters(data.getSequenceSet());
+		}
 		
 		TreeResult tr = new TreeResult();
 		tr.setPartitionStart(data.getActiveRegionS());
@@ -629,9 +632,12 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		creator.setParameters(dlg.tstv, dlg.alpha);
 		Tree palTree = creator.getTree();
 				
+		double tstv = dlg.estimate ? data.getSequenceSet().getParams().getTRatio() : dlg.tstv;
+		double alpha = dlg.estimate ? data.getSequenceSet().getParams().getAlpha() : dlg.alpha;
+		
 		if(dlg.bs>0) {
 			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().isDNA(), dlg.bs);
-			bg.setParameters(dlg.tstv, dlg.alpha);
+			bg.setParameters(tstv, alpha);
 			palTree = bg.getTree();
 		}
 		
@@ -642,11 +648,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			tr.startTime = creator.getStartTime();
 			tr.endTime = creator.getEndTime();
 			tr.status = topali.cluster.JobStatus.COMPLETED;
-			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv="+Utils.d2.format(dlg.tstv)+")"
+			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv="+Utils.d2.format(tstv)+")"
 					: "WAG";
 			tr.info = "Sub. Model: "
 					+ model
-					+ "\nRate Model: Gamma (alpha="+Utils.d2.format(dlg.alpha)+")\nAlgorithm: Neighbour Joining\n" +
+					+ "\nRate Model: Gamma (alpha="+Utils.d2.format(alpha)+")\nAlgorithm: Neighbour Joining\n" +
 							"Bootstrap: "+dlg.bs;
 			data.addResult(tr);
 			ProjectState.setDataChanged();

@@ -34,7 +34,7 @@ public class TOPALiAnnotations
 		this.annotations = annotations;
 	}
 	
-	public AlignmentAnnotations getAnnotations(Class<? extends AlignmentAnnotations> type)
+	public AlignmentAnnotations getAnnotations(Class<?> type)
 	{
 		if (!AlignmentAnnotations.class.isAssignableFrom(type))
 			throw new IllegalArgumentException(
@@ -54,7 +54,7 @@ public class TOPALiAnnotations
 		{
 			try
 			{
-				result = type.newInstance();
+				result = (AlignmentAnnotations)type.newInstance();
 				annotations.add(result);
 			} catch (Exception e)
 			{

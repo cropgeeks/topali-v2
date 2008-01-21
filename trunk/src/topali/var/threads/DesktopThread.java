@@ -27,6 +27,7 @@ public abstract class DesktopThread extends Thread
 	 * Immediately stop the thread
 	 * (if possible override in sub classes, and use 'stop' flag!)
 	 */
+	@SuppressWarnings("deprecation")
 	public void kill() {
 		if(this.isAlive()) {
 			this.stop();

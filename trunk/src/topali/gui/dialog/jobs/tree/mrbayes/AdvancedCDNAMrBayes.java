@@ -25,17 +25,14 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
 	SequenceSet ss;
 	
     /** Creates new form AdvancedCDNAMrBayes */
-    public AdvancedCDNAMrBayes(SequenceSet ss, MBTreeResult result) {
+    public AdvancedCDNAMrBayes(SequenceSet ss) {
     	this.result =new MBTreeResult();
     	this.ss = ss;
         initComponents();
         setDefaults();
-        
-        if(result!=null)
-        	initPrevResult(result);
     }
     
-    private void initPrevResult(MBTreeResult result) {
+    public void initPrevResult(MBTreeResult result) {
     	MBPartition p1 = result.partitions.get(0);
     	MBPartition p2 = result.partitions.get(1);
     	MBPartition p3 = result.partitions.get(2);

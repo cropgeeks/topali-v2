@@ -140,8 +140,6 @@ public class VAMSASUtils
 			ent.addInput(inp);
 			
 			if(tree instanceof PhymlResult) {
-				PhymlResult phyml = (PhymlResult)tree;
-				
 				Param par = new Param();
 				par.setType("string");
 				par.setName("application");
@@ -155,7 +153,6 @@ public class VAMSASUtils
 				ent.addParam(par);
 			}
 			else if(tree instanceof MBTreeResult) {
-				MBTreeResult mb = (MBTreeResult)tree;
 				Param par = new Param();
 				par.setType("string");
 				par.setName("application");

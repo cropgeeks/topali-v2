@@ -371,7 +371,7 @@ class PDMPostAnalysis
 		});
 	}
 
-	private static class TreeScore implements Comparable
+	private static class TreeScore implements Comparable<Object>
 	{
 		String treeStr;
 

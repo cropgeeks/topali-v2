@@ -23,7 +23,7 @@ public class CustomTable extends JTable
 	
 	Vector<String> headerToolTips;
 	
-	public CustomTable(Vector rowData, Vector columnNames)
+	public CustomTable(Vector<Vector<Object>> rowData, Vector<String> columnNames)
 	{
 		this.setModel(new MyTablemodel(rowData, columnNames));
 		init();
@@ -46,7 +46,6 @@ public class CustomTable extends JTable
 		JTableHeader th = new JTableHeader(columnModel) {
             @Override
 	    public String getToolTipText(MouseEvent e) {
-                String tip = null;
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
                 int realIndex = 
@@ -157,7 +156,7 @@ public class CustomTable extends JTable
 			super(data, columnNames);
 		}
 
-		public MyTablemodel(Vector data, Vector columnNames)
+		public MyTablemodel(Vector<Vector<Object>> data, Vector<String> columnNames)
 		{
 			super(data, columnNames);
 		}

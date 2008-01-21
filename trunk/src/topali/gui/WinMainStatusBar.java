@@ -28,8 +28,6 @@ public class WinMainStatusBar extends JPanel
 
 	private static JLabel jobIconLabel = new JLabel();
 
-	private static String oldText = null;
-
 	public static boolean resetIcon = true;
 
 	public static byte currentIcon = OFF;
