@@ -43,8 +43,12 @@ public class LRT
 
 	double calculate() throws Exception
 	{
-		if(gapThreshold<1);
-			removeGapSequences();
+		if(gapThreshold<1) {
+			 boolean less4 = removeGapSequences();
+			 if(less4) {
+			     return 0;
+			 }
+		}
 		
 		// Calculate distances for the two windows
 		DistanceMatrix dm1 = getDistance(windows[0], result.method);
@@ -90,7 +94,11 @@ public class LRT
 
 	}
 
-	private void removeGapSequences () {
+	/**
+	 * Removes sequences from the calculation which exceed the gap threshold
+	 * @return true if there are less than 4 seq. left!
+	 */
+	private boolean removeGapSequences () {
 		//Determine sequences which exceed gap treshold
 		ArrayList<Integer> removeSeqPos = new ArrayList<Integer>(windows[0].getSequenceCount());
 		for(int i=0; i<windows[0].getSequenceCount(); i++) {
@@ -119,6 +127,9 @@ public class LRT
 		
 		//create new alignments without the bad sequences
 		int newSize = windows[0].getSequenceCount()-removeSeqPos.size();
+		if(newSize<4)
+		    return true;
+		
 		Identifier[] ids1 = new Identifier[newSize];
 		Identifier[] ids2 = new Identifier[newSize];
 		Identifier[] ids3 = new Identifier[newSize];
@@ -135,13 +146,12 @@ public class LRT
 				seqs3[j] = windows[2].getAlignedSequenceString(i);
 				j++;
 			}
-			else {
-				System.out.println("Leaving out seq "+i);
-			}
 		}
 		this.windows[0] = new SimpleAlignment(ids1, seqs1, windows[0].getDataType());
 		this.windows[1] = new SimpleAlignment(ids2, seqs2, windows[1].getDataType());
 		this.windows[2] = new SimpleAlignment(ids3, seqs3, windows[2].getDataType());
+		
+		return false;
 	}
 	
 	private double getLikelihood(Alignment alignment, Tree tree)

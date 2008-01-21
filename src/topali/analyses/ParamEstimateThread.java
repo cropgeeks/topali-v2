@@ -12,8 +12,10 @@ import pal.distance.AlignmentDistanceMatrix;
 import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.NeighborJoiningTree;
+import topali.gui.*;
+import topali.var.threads.*;
 
-public class ParamEstimateThread extends Thread
+public class ParamEstimateThread extends DesktopThread
 {
 	 Logger log = Logger.getLogger(this.getClass());
 	
@@ -41,6 +43,15 @@ public class ParamEstimateThread extends Thread
 		this.alignment = alignment;
 	}
 
+	public void go() {
+	    	String title = Text.Analyses.getString("ParamEstDialog.gui01");
+		String text = "<html>"+Text.Analyses.getString("ParamEstDialog.gui02")+"<br>"+Text.Analyses.getString("ParamEstDialog.gui03")+"</html>";
+		DefaultWaitDialog dlg = new DefaultWaitDialog(TOPALi.winMain, title, text, this);
+		dlg.pack();
+		dlg.setLocationRelativeTo(TOPALi.winMain);
+		dlg.setVisible(true);
+	}
+	
 	public double getRatio()
 	{
 		return ratio;
@@ -66,6 +77,10 @@ public class ParamEstimateThread extends Thread
 		return freqs;
 	}
 
+	public boolean wasCancelled() {
+	    return stop;
+	}
+	
 	@Override
 	public void run()
 	{
@@ -74,7 +89,7 @@ public class ParamEstimateThread extends Thread
 		// Work out the frequencies
 		freqs = AlignmentUtils.estimateFrequencies(alignment);
 
-		for (int iteration = 0; iteration < 20; iteration++)
+		for (int iteration = 0; iteration < 20 && !stop; iteration++)
 		{
 			// Work out Alpha
 			alpha = estimateParameter(0.1, 200, 1, true);
@@ -98,6 +113,13 @@ public class ParamEstimateThread extends Thread
 
 		// And finally, work out kappa
 		calculateKappa();
+		
+		updateObservers(DesktopThread.THREAD_FINISHED);
+	}
+	
+	@Override
+	public void kill() {
+	    stop = true;
 	}
 
 	private boolean isDifferenceSignificant()
@@ -125,7 +147,7 @@ public class ParamEstimateThread extends Thread
 
 		// BUT...if the difference between the two points is less than 0.1, then
 		// just stop now (or if the number of iterations is 20)
-		if (difference < 0.1 || iteration == 20)
+		if (difference < 0.1 || iteration == 20 || stop)
 		{
 			cLL = (lPoint + rPoint) / 2;
 			return (d1 + d2) / 2;

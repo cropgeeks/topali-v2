@@ -174,7 +174,7 @@ public class WinMainTipsPanel extends JPanel implements ActionListener
 
 		TipsText(String key)
 		{
-			for (Enumeration e = tips.getKeys(); e.hasMoreElements();)
+			for (Enumeration<String> e = tips.getKeys(); e.hasMoreElements();)
 			{
 				String str = (String) e.nextElement();
 				if (str.startsWith(key))

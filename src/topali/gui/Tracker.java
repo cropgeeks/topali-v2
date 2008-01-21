@@ -11,6 +11,7 @@ import java.net.*;
  */
 public class Tracker
 {
+    @SuppressWarnings("unused")
 	public static void log(final Object...msgs)
 	{
 		Runnable r = new Runnable()	{

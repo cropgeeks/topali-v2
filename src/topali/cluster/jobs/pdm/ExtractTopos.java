@@ -21,7 +21,7 @@ public class ExtractTopos
 	// String array, in which the nth row vector
 	// shows all the topology strings of
 	// the nth simulation (the nth window position).
-	private Vector<Vector> vectorOfVectors = new Vector<Vector>(1, 1);
+	private Vector<Vector<?>> vectorOfVectors = new Vector<Vector<?>>(1, 1);
 
 	private Vector<String> topoStrings = new Vector<String>(1, 1);
 
@@ -36,7 +36,7 @@ public class ExtractTopos
 	{
 		this.wrkDir = wrkDir;
 		// Constructor
-		vectorOfVectors = new Vector<Vector>(1, 1);
+		vectorOfVectors = new Vector<Vector<?>>(1, 1);
 		nDiscard = 0;
 	}
 
@@ -45,7 +45,7 @@ public class ExtractTopos
 	{
 		this.wrkDir = wrkDir;
 		// Constructor
-		vectorOfVectors = new Vector<Vector>(1, 1);
+		vectorOfVectors = new Vector<Vector<?>>(1, 1);
 		nDiscard = n;
 	}
 
@@ -59,7 +59,7 @@ public class ExtractTopos
 		int i, k, nColsTest;
 		vectorOfVectors.trimToSize();
 		int nRows = this.vectorOfVectors.size();
-		Vector topoVector = this.vectorOfVectors.elementAt(0);
+		Vector<?> topoVector = this.vectorOfVectors.elementAt(0);
 		int nCols = topoVector.size();
 		this.topoArray = new String[nRows][nCols];
 

@@ -201,6 +201,9 @@ class RunFitch
 
 		for (int i = 0; i < windowCount; i++)
 		{
+		    if(!(new File(wrkDir, "win"+(i+1))).exists())
+			continue;
+		    
 			out.write("cd win" + (i + 1) + CR);
 
 			writeDOSScript(out, 1, false);

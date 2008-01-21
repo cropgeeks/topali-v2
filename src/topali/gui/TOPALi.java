@@ -38,6 +38,13 @@ public class TOPALi extends Applet implements Application
 
 	static {
 		PropertyConfigurator.configure(TOPALi.class.getResource("/res/client.log4j.properties"));
+		
+		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
+		    .setProperty("org.exolab.castor.parser", "org.xml.sax.helpers.XMLReaderAdapter");
+
+		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
+		    .setProperty("org.exolab.castor.xml.serializer.factory", "org.exolab.castor.xml.XercesJDK5XMLSerializerFactory");
+		  
 		root = Logger.getRootLogger();
 		log = Logger.getLogger(TOPALi.class);
 	}
@@ -97,7 +104,7 @@ public class TOPALi extends Applet implements Application
 	{
 		//If there is a GracefulShutdownHandler, tell it about TOPALi
 		//and also use it as UncaughtExceptionHandler
-		Enumeration en = root.getAllAppenders();
+		Enumeration<?> en = root.getAllAppenders();
 		while(en.hasMoreElements()) {
 			Object o = en.nextElement();
 			if(o instanceof GracefulShutdownHandler) {

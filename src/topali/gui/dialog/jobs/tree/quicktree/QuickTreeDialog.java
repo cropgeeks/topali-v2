@@ -19,18 +19,23 @@ public class QuickTreeDialog extends JDialog implements ActionListener
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	private QuickTreeDialogPanel panel;
 	
+	private boolean dna;
+	
 	public int bs = -1;
 	public double tstv;
 	public double alpha;
+	public boolean estimate;
 	
 	public QuickTreeDialog(Frame owner, boolean dna) {
 		super(owner, "Quick Tree Estimation", true);
+		this.dna = dna;
 		
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		panel = new QuickTreeDialogPanel();
 		if(!dna) {
-			panel.tstv.setEnabled(false);
+			panel.estimate.setSelected(false);
+			panel.estimate.setEnabled(false);
 		}
 		this.getContentPane().add(panel, BorderLayout.CENTER);
 		
@@ -54,10 +59,12 @@ public class QuickTreeDialog extends JDialog implements ActionListener
 			this.bs = (Integer)panel.bs.getValue();
 			this.tstv = (Double)panel.tstv.getValue();
 			this.alpha = (Double)panel.alpha.getValue();
+			this.estimate = panel.estimate.isSelected();
 			
 			Prefs.qt_alpha = this.alpha;
 			Prefs.qt_tstv = this.tstv;
 			Prefs.qt_bootstrap = this.bs;
+			Prefs.qt_estimate = this.estimate;
 			
 			setVisible(false);
 		}
@@ -66,6 +73,10 @@ public class QuickTreeDialog extends JDialog implements ActionListener
 			panel.bs.setValue(Prefs.qt_bootstrap_default);
 			panel.tstv.setValue(Prefs.qt_tstv_default);
 			panel.alpha.setValue(Prefs.qt_alpha_default);
+			if(dna)
+			    panel.estimate.setSelected(Prefs.qt_estimate_default);
+			else
+			    panel.estimate.setSelected(false);
 		}
 	}
 	

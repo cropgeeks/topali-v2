@@ -106,7 +106,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		tt.add("Significance");
 		tt.add("Positive Selected Sites (Nuc. Position, Amino Acid)");
 				
-		Vector<Vector<String>> data = getTableVector(((AlignmentResult)result).threshold);
+		Vector<Vector<Object>> data = getTableVector(((AlignmentResult)result).threshold);
 		
 		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
 		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
@@ -130,11 +130,11 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		return p;
 	}
 	
-	private Vector<Vector<String>> getTableVector(double thres)
+	private Vector<Vector<Object>> getTableVector(double thres)
 	{
 		
 		CodeMLResult result = (CodeMLResult) this.result;
-		Vector<Vector<String>> data = new Vector<Vector<String>>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		
 		double ll = -1;
 		int np = -1;
@@ -160,7 +160,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 			else if(m.name.startsWith("M8"))
 			    c = c3;
 			
-			Vector<String> v = new Vector<String>();
+			Vector<Object> v = new Vector<Object>();
 			v.add(m.name+"("+m.nParameter+")"+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			v.add(Utils.d2.format(m.likelihood)+"<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">");
 			if (m.p0 != -1)
@@ -271,7 +271,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	{
 		((AlignmentResult)this.result).threshold = t;
 		graph.setThreshold(t);
-		Vector<Vector<String>> data = getTableVector(t);
+		Vector<Vector<Object>> data = getTableVector(t);
 		table.setData(data);
 	}
 

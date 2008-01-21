@@ -37,6 +37,9 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		
 		init();
 		
+		if(result!=null)
+		    initPrefResult((MBTreeResult)result);
+		
 		pack();
 		setSize(360,350);
 		setLocationRelativeTo(winMain);
@@ -55,8 +58,8 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		boolean div3 = (((data.getActiveRegionE()-data.getActiveRegionS()+1)%3)==0);
 		basic.bCodonpos.setEnabled(div3);
 		basic.bOnemodel.addActionListener(this);
-		advanced = new AdvancedMrBayes(data, result);
-		advancedCDNA = new AdvancedCDNAMrBayes(data.getSequenceSet(), result);
+		advanced = new AdvancedMrBayes(data);
+		advancedCDNA = new AdvancedCDNAMrBayes(data.getSequenceSet());
 		
 		tabs.add(basic, 0);
 		if(Prefs.mb_type==1 && div3) {
@@ -72,6 +75,22 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		tabs.setTitleAt(1, "Advanced");
 		
 		this.getContentPane().add(tabs, BorderLayout.CENTER);
+	}
+	
+	private void initPrefResult(MBTreeResult res) {
+	    tabs.remove(1);
+	    if(res.partitions.size()>1) {
+		tabs.add(new JScrollPane(advancedCDNA), 1);
+		basic.bCodonpos.setSelected(true);
+		advancedCDNA.initPrevResult(res);
+	    }
+	    else {
+		tabs.add(new JScrollPane(advanced), 1);
+		basic.bOnemodel.setSelected(true);
+		advanced.initPrevResult(res);
+	    }
+	    tabs.setTitleAt(0, "Analysis");
+	    tabs.setTitleAt(1, "Advanced");
 	}
 
 	private void ok(boolean remote) {

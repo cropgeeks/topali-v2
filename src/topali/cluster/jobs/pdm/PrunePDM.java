@@ -253,7 +253,7 @@ class PrunePDM
 		// the histogram columns) rather than strings
 		for (int i = 0; i < groups.size(); i++)
 		{
-			Vector nodes = (Vector) groups.get(i);
+			Vector<?> nodes = (Vector<?>) groups.get(i);
 			int[] array = new int[nodes.size()];
 
 			System.out.println("Group:");

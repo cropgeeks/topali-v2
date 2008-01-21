@@ -80,7 +80,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		Model bestAIC1 = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_AIC1);
 		Model bestAIC2 = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_AIC2);
 		Model bestBIC = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_BIC);
-		Model bestLRT = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_LNL);
+		//Model bestLRT = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_LNL);
 		Model best5SHLRT = null;
 		Model bestHLRT1 = null;
 		Model bestHLRT2 = null;
@@ -98,7 +98,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			}
 		}
 		
-		Vector<Object> colNames = new Vector<Object>();
+		Vector<String> colNames = new Vector<String>();
 		colNames.add("Model");
 		colNames.add("K");
 		colNames.add("-\u2113");
@@ -114,7 +114,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		tips.add("<html>AIC with second order correction<br>(R.F. distance: Best vs All)<br>(click to sort)</html>");
 		tips.add("<html>Bayesian information criterion<br>(R.F. distance: Best vs All)<br>(click to sort)</html>");
 		
-		Vector<Object> rowData = new Vector<Object>(result.models.size());
+		Vector<Vector<Object>> rowData = new Vector<Vector<Object>>(result.models.size());
 		int i = 0;
 		for(Model m : result.models) {
 			Vector<Object> row = new Vector<Object>();

@@ -7,6 +7,7 @@ package topali.gui;
 
 public class ProjectState
 {
+    @SuppressWarnings("unused")
 	private static boolean dataChanged, vamsasSession, vamsasCommitted, fileSaved;
 
 	public static void reset() {

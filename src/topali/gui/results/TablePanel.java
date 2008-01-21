@@ -47,7 +47,8 @@ public class TablePanel extends JPanel
 
 	CustomTable table;
 	JScrollPane scroll;
-	Vector rowData, columnNames;
+	Vector<Vector<Object>> rowData;
+	Vector<String> columnNames;
 
 	/**
 	 * Panel for displaying a table
@@ -55,7 +56,7 @@ public class TablePanel extends JPanel
 	 * @param columnNames
 	 * @param toolbarPos Position where the toolbar should be placed
 	 */
-	public TablePanel(Vector rowData, Vector columnNames,
+	public TablePanel(Vector<Vector<Object>> rowData, Vector<String> columnNames,
 			int toolbarPos)
 	{
 		this.rowData = rowData;
@@ -95,11 +96,11 @@ public class TablePanel extends JPanel
 	 * Sets the data for the table
 	 * @param rowData
 	 */
-	public void setData(Vector rowData)
+	public void setData(Vector<Vector<Object>> rowData)
 	{
 		for (int i = 0; i < rowData.size(); i++)
 		{
-			Vector row = (Vector) rowData.get(i);
+			Vector<Object> row = (Vector<Object>) rowData.get(i);
 			for (int j = 0; j < row.size(); j++)
 				table.setValueAt(row.get(j), i, j);
 		}

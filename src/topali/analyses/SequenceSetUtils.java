@@ -9,10 +9,10 @@ import java.util.*;
 
 import javax.swing.JOptionPane;
 
+import pal.alignment.SimpleAlignment;
+import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
-import topali.gui.dialog.ParamEstDialog;
-import scri.commons.gui.MsgBox;
 
 /*
  * Helper class that performs various analyses on a SequenceSet (Alignment)
@@ -135,22 +135,25 @@ public class SequenceSetUtils
 	{
 		int[] indices = getSequencesForParamEstimation(ss);
 
-		ParamEstDialog dialog = new ParamEstDialog(ss, indices);
-		SequenceSetParams params = new SequenceSetParams();
+		SimpleAlignment alignment = ss.getAlignment(indices, 1, ss.getLength(),
+			true);
+		
+		ParamEstimateThread pest = new ParamEstimateThread(alignment);
+		pest.go();
+		
+		SequenceSetParams params = ss.getParams();
 		
 		if(ss.isDNA()) {
-			params.setAlpha(dialog.getAlpha());
-			params.setKappa(dialog.getKappa());
-			params.setAvgDist(dialog.getAvgDistance());
-			params.setFreqs(dialog.getFreqs());
-			params.setTRatio(dialog.getRatio());
-			
+			params.setAlpha(pest.getAlpha());
+			params.setKappa(pest.getKappa());
+			params.setAvgDist(pest.getAvgDistance());
+			params.setFreqs(pest.getFreqs());
+			params.setTRatio(pest.getRatio());
 		}
 		
+		if(!pest.wasCancelled())
+		    params.setNeedCalculation(false);
 		
-		params.setNeedCalculation(false);
-		
-		ss.setParams(params);
 		//WinMainMenuBar.aFileSave.setEnabled(true);
 		//WinMainMenuBar.aVamCommit.setEnabled(true);
 		ProjectState.setDataChanged();

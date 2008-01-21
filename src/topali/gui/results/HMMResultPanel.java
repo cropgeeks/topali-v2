@@ -34,9 +34,9 @@ public class HMMResultPanel extends ResultPanel {
 
 	    graph1 = new GraphPanel(data, result, graph1data, 1.01,
 		    GraphPanel.RIGHT);
-	    graph2 = new GraphPanel(data, result, graph1data, 1.01,
+	    graph2 = new GraphPanel(data, result, graph2data, 1.01,
 		    GraphPanel.RIGHT);
-	    graph3 = new GraphPanel(data, result, graph1data, 1.01,
+	    graph3 = new GraphPanel(data, result, graph3data, 1.01,
 		    GraphPanel.RIGHT);
 
 	    graph1

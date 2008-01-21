@@ -26,16 +26,14 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 	MBTreeResult result;
 	
     /** Creates new form AdvancedMrBayes */
-    public AdvancedMrBayes(AlignmentData data, MBTreeResult result) {
+    public AdvancedMrBayes(AlignmentData data) {
     	this.data = data;
     	this.ss = data.getSequenceSet();
-		this.result = new MBTreeResult();
+	this.result = new MBTreeResult();
 		
         initComponents();
         initValues();
         
-        if(result!=null)
-        	initPrevResult(result);
     }
     
     public void initValues() {
@@ -100,7 +98,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		this.burnin.setModel(mBurn);
     }
     
-    private void initPrevResult(MBTreeResult res) {
+    public void initPrevResult(MBTreeResult res) {
     	this.nRuns.setValue(res.nRuns);
     	this.nGen.setValue(res.nGen);
     	this.burnin.setValue((int)(res.burnin*100));
