@@ -144,7 +144,13 @@ public class SequenceSetParams
 
 	public Model getModel()
 	{
-		return model;
+	    if(model==null) {
+		//Fix for loading old project files (there model might be null due to a bug in an old version)
+		ModelManager mm = ModelManager.getInstance();
+		model = isDNA ? mm.generateModel("HKY", true, false) : mm.generateModel("WAG", true, false);
+	    }
+	    
+	    return model;
 	}
 
 	public void setModel(Model model)

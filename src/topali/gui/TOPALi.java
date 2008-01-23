@@ -59,7 +59,7 @@ public class TOPALi extends Applet implements Application
 
 	public static void main(String[] args)
 	{
-
+	    
 		root.info("TOPALi V. "+VERSION);
 		root.info("Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));

@@ -46,9 +46,17 @@ public class MTDialogPanel extends javax.swing.JPanel {
     
     private void initPrevResult(ModelTestResult res) {
     	this.models.setSelectedItem(res.type);
-    	this.gamma.setSelected(res.models.get(0).isGamma());
-    	this.inv.setSelected(res.models.get(0).isInv());
-    	this.sampleSize.setSelectedItem(res.sampleSize);
+    	boolean gamma = false;
+    	boolean inv = false;
+    	for(Model mod : res.models) {
+    	    if(mod.isGamma())
+    		gamma = true;
+    	    if(mod.isInv())
+    		inv = true;
+    	}
+    	this.gamma.setSelected(gamma);
+    	this.inv.setSelected(inv);
+    	this.sampleSize.setSelectedItem(res.sampleCrit);
     }
     
     public ModelTestResult getResult() {

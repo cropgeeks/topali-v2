@@ -2,31 +2,19 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Extended ParamEstThread from DesktopThread (now it's cancellable)
-  (therefore removed ParamEstDialog because now a DefaultWaitDialog is used instead)
-- Added "Estimate Parameters" option to QuickTreeDialog
-- Fixed DSS/LRT gap threshold (in case everything except less than 4 sequences are removed due to 
-  exceeding gap threshold)
-- Moved XML property settings from Castor.java to Topali.java, because of some XML serializer 
-  errors when saving projects (saving a Topali project does not instantiate Castor.java!)
-- Fixed bug: Phyml and MrBayes dialog throw error after parameter estimation
-- Fixed MrBayes job resubmission
-
+- ModeltestResults are now resubmittable
 
 TODO:
 - DSS/LRT gap threshold: Check with Frank again!
 - Bug: Dundee cluster filesystem timeout problems
-- Future: Resumbittion of tree job
 - FRANK: come up with additional "TOPALi Tips"
-- Applications note
 
 Suggestions:
 - Store all default values in Prefs, so that there is one central file
   were the default values can be viewed/changed.
 - Topali trees: Sequence coloring (by species) (Diego Miranda, dm435@cam.ac.uk)
 - Job cleanup: Check, does Topali really clean up the job directory (Jim Procter)
-- Check parameter estimation again. (Quick tree with estimated parameters produces worse
-  bootstrap values than with fixed tstv=2, alpha=4 parameters)
+
 
 Known Bugs
 - RaxML process sometimes doesn't stop (seems to happen on quite short alignments)

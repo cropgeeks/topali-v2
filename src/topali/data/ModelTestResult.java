@@ -32,9 +32,11 @@ public class ModelTestResult extends AlignmentResult
 	
 	public ModelTestResult() {
 		super();
+		isResubmittable = true;
 	}
 	
 	public ModelTestResult(int id) {
 		super(id);
+		isResubmittable = true;
 	}
 }
