@@ -28,7 +28,7 @@ public class GoToNucDialog extends JDialog implements ActionListener
 
 	public GoToNucDialog(WinMain winMain, AlignmentPanel panel)
 	{
-		super(winMain, Text.GuiDiag.getString("GoToNucDialog.gui01"), true);
+		super(winMain, Text.I18N.getString("GoToNucDialog.gui01"), true);
 
 		this.panel = panel;
 		ss = panel.getSequenceSet();
@@ -54,7 +54,7 @@ public class GoToNucDialog extends JDialog implements ActionListener
 				100);
 		spinner = new JSpinner(model);
 		spinner.requestFocus();
-		JLabel label = new JLabel(Text.GuiDiag.getString("GoToNucDialog.gui02"));
+		JLabel label = new JLabel(Text.I18N.getString("GoToNucDialog.gui02"));
 		label.setDisplayedMnemonic(KeyEvent.VK_G);
 		label.setLabelFor(spinner);
 
@@ -71,8 +71,8 @@ public class GoToNucDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.Gui.getString("ok"));
-		bCancel = new JButton(Text.Gui.getString("cancel"));
+		bOK = new JButton(Text.I18N.getString("ok"));
+		bCancel = new JButton(Text.I18N.getString("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "go_to_nucleotide");
 	}

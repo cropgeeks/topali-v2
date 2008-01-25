@@ -34,7 +34,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 	public DSSSettingsDialog(WinMain winMain, AlignmentData data,
 			DSSResult iResult)
 	{
-		super(winMain, Text.GuiDiag.getString("DSSSettingsDialog.gui01"), true);
+		super(winMain, Text.I18N.getString("DSSSettingsDialog.gui01"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -73,9 +73,9 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		basicPanel = new BasicPanel();
 
 		tabs.removeAll();
-		tabs.addTab(Text.GuiDiag.getString("DSSSettingsDialog.gui04"),
+		tabs.addTab(Text.I18N.getString("DSSSettingsDialog.gui04"),
 				basicPanel);
-		tabs.addTab(Text.GuiDiag.getString("DSSSettingsDialog.gui05"),
+		tabs.addTab(Text.I18N.getString("DSSSettingsDialog.gui05"),
 				advancedPanel);
 	}
 
@@ -157,7 +157,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(Text.GuiDiag
+		int res = MsgBox.yesno(Text.I18N
 				.getString("DSSSettingsDialog.gui06"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;

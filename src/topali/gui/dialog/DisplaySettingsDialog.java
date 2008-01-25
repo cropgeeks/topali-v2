@@ -29,6 +29,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	private JScrollPane sp;
 
+	private JComboBox language;
+	
 	// Controls used by other settings
 	private SpinnerNumberModel fontModel, colorModel;
 
@@ -45,13 +47,13 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	public DisplaySettingsDialog(WinMain winMain)
 	{
-		super(winMain, Text.GuiDiag.getString("DisplaySettingsDialog.gui01"),
+		super(winMain, Text.I18N.getString("DisplaySettingsDialog.gui01"),
 				true);
 		this.winMain = winMain;
 
-		close = new JButton(Text.Gui.getString("close"));
+		close = new JButton(Text.I18N.getString("close"));
 		close.addActionListener(this);
-		defaults = new JButton(Text.Gui.getString("defaults"));
+		defaults = new JButton(Text.I18N.getString("defaults"));
 		defaults.addActionListener(this);
 		help = TOPALiHelp.getHelpButton("display_settings");
 
@@ -111,46 +113,46 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 	private void createListColours()
 	{
 		DefaultListModel m = new DefaultListModel();
-		m.addElement(new ColorObject(1, Text.GuiDiag
+		m.addElement(new ColorObject(1, Text.I18N
 				.getString("DisplaySettingsDialog.gui04"),
 				Prefs.gui_seq_color_text));
-		m.addElement(new ColorObject(2, Text.GuiDiag
+		m.addElement(new ColorObject(2, Text.I18N
 				.getString("DisplaySettingsDialog.gui05"),
 				Prefs.gui_seq_color_a));
-		m.addElement(new ColorObject(3, Text.GuiDiag
+		m.addElement(new ColorObject(3, Text.I18N
 				.getString("DisplaySettingsDialog.gui06"),
 				Prefs.gui_seq_color_c));
-		m.addElement(new ColorObject(4, Text.GuiDiag
+		m.addElement(new ColorObject(4, Text.I18N
 				.getString("DisplaySettingsDialog.gui07"),
 				Prefs.gui_seq_color_g));
-		m.addElement(new ColorObject(5, Text.GuiDiag
+		m.addElement(new ColorObject(5, Text.I18N
 				.getString("DisplaySettingsDialog.gui08"),
 				Prefs.gui_seq_color_t));
-		m.addElement(new ColorObject(6, Text.GuiDiag
+		m.addElement(new ColorObject(6, Text.I18N
 				.getString("DisplaySettingsDialog.gui09"),
 				Prefs.gui_seq_color_gpst));
-		m.addElement(new ColorObject(7, Text.GuiDiag
+		m.addElement(new ColorObject(7, Text.I18N
 				.getString("DisplaySettingsDialog.gui10"),
 				Prefs.gui_seq_color_hkr));
-		m.addElement(new ColorObject(8, Text.GuiDiag
+		m.addElement(new ColorObject(8, Text.I18N
 				.getString("DisplaySettingsDialog.gui11"),
 				Prefs.gui_seq_color_fwy));
-		m.addElement(new ColorObject(9, Text.GuiDiag
+		m.addElement(new ColorObject(9, Text.I18N
 				.getString("DisplaySettingsDialog.gui11"),
 				Prefs.gui_seq_color_ilmv));
-		m.addElement(new ColorObject(10, Text.GuiDiag
+		m.addElement(new ColorObject(10, Text.I18N
 				.getString("DisplaySettingsDialog.gui12"),
 				Prefs.gui_seq_color_gaps));
-		m.addElement(new ColorObject(11, Text.GuiDiag
+		m.addElement(new ColorObject(11, Text.I18N
 				.getString("DisplaySettingsDialog.gui47"),
 				Prefs.gui_seq_highlight));
-		m.addElement(new ColorObject(12, Text.GuiDiag
+		m.addElement(new ColorObject(12, Text.I18N
 				.getString("DisplaySettingsDialog.gui13"),
 				Prefs.gui_graph_threshold));
-		m.addElement(new ColorObject(13, Text.GuiDiag
+		m.addElement(new ColorObject(13, Text.I18N
 				.getString("DisplaySettingsDialog.gui14"),
 				Prefs.gui_graph_window));
-		m.addElement(new ColorObject(14, Text.GuiDiag
+		m.addElement(new ColorObject(14, Text.I18N
 				.getString("DisplaySettingsDialog.gui17"),
 				Prefs.gui_graph_background));
 		m.addElement(new ColorObject(15, "Graph Line Color",
@@ -178,7 +180,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	private void defaultClicked()
 	{
-		String msg = Text.GuiDiag.getString("DisplaySettingsDialog.msg01");
+		String msg = Text.I18N.getString("DisplaySettingsDialog.msg01");
 		if (MsgBox.yesno(msg, 1) != JOptionPane.YES_OPTION)
 			return;
 
@@ -194,8 +196,25 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		if (e.getSource() == defaults)
 			defaultClicked();
 
-		else if (e.getSource() == close)
+		else if (e.getSource() == close) {
 			setVisible(false);
+			
+			String oldLocale = Prefs.locale;
+			
+			if(language.getSelectedItem().equals(Text.I18N.getString("automatic"))) {
+			    Prefs.locale = "default";
+			}
+			else if(language.getSelectedItem().equals(Text.I18N.getString("english"))) {
+			    Prefs.locale = "en";
+			}
+			else if(language.getSelectedItem().equals(Text.I18N.getString("german"))) {
+			    Prefs.locale = "de";
+			}
+			
+			if(!Prefs.locale.equals(oldLocale)) {
+			    MsgBox.msg(Text.I18N.getString("locale_changed"), JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
 
 		else
 		{
@@ -219,7 +238,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 	{
 		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setToolTipText(Text.GuiDiag
+		list.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui19"));
 
 		list.addMouseListener(new MouseAdapter()
@@ -251,7 +270,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		p1.add(sp, BorderLayout.CENTER);
 
 		JPanel p2 = new JPanel(new BorderLayout());
-		p2.setBorder(BorderFactory.createTitledBorder(Text.GuiDiag
+		p2.setBorder(BorderFactory.createTitledBorder(Text.I18N
 				.getString("DisplaySettingsDialog.gui20")));
 		p2.add(p1);
 
@@ -260,25 +279,39 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	private JPanel getFontControls()
 	{
+	    String[] langs = new String[] {Text.I18N.getString("automatic"), Text.I18N.getString("english"), Text.I18N.getString("german")};
+	    language = new JComboBox(langs);
+	    int selIndex = 0;
+	    if(Prefs.locale.equals("default")) {
+		    selIndex = 0;
+		}
+		else if(Prefs.locale.equals("en")) {
+		    selIndex = 1;
+		}
+		else if(Prefs.locale.equals("de")) {
+		    selIndex = 2;
+		}
+	    language.setSelectedIndex(selIndex);
+	    
 		fontModel = new SpinnerNumberModel(Prefs.gui_seq_font_size, 1, 50, 1);
 		fontSpin = new JSpinner(fontModel);
 		fontSpin.addChangeListener(this);
 		((JSpinner.NumberEditor) fontSpin.getEditor()).getTextField()
 				.setToolTipText(
-						Text.GuiDiag.getString("DisplaySettingsDialog.gui21"));
+						Text.I18N.getString("DisplaySettingsDialog.gui21"));
 
 		colorModel = new SpinnerNumberModel(Prefs.gui_color_seed, 0, 999999, 1);
 		colorSpin = new JSpinner(colorModel);
 		colorSpin.addChangeListener(this);
 		((JSpinner.NumberEditor) colorSpin.getEditor()).getTextField()
 				.setToolTipText(
-						Text.GuiDiag.getString("DisplaySettingsDialog.gui22"));
+						Text.I18N.getString("DisplaySettingsDialog.gui22"));
 
-		showText = new JCheckBox(Text.GuiDiag
+		showText = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui23"));
 		showText.addActionListener(this);
 		showText.setMnemonic(KeyEvent.VK_N);
-		showText.setToolTipText(Text.GuiDiag
+		showText.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui24"));
 
 		antialias = new JCheckBox("Use anti-aliasing");
@@ -286,73 +319,75 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		antialias.setMnemonic(KeyEvent.VK_A);
 		antialias.setToolTipText("Anti-aliasing smoothens the alignment display.");
 		
-		boldFont = new JCheckBox(Text.GuiDiag
+		boldFont = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui25"));
 		boldFont.addActionListener(this);
 		boldFont.setMnemonic(KeyEvent.VK_B);
-		boldFont.setToolTipText(Text.GuiDiag
+		boldFont.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui26"));
 
-		showCols = new JCheckBox(Text.GuiDiag
+		showCols = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui27"));
 		showCols.addActionListener(this);
 		showCols.setMnemonic(KeyEvent.VK_C);
-		showCols.setToolTipText(Text.GuiDiag
+		showCols.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui28"));
 
-		dimSeqs = new JCheckBox(Text.GuiDiag
+		dimSeqs = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui41"));
 		dimSeqs.addActionListener(this);
 		dimSeqs.setMnemonic(KeyEvent.VK_D);
-		dimSeqs.setToolTipText(Text.GuiDiag
+		dimSeqs.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui42"));
 
-		showHorzHighlight = new JCheckBox(Text.GuiDiag
+		showHorzHighlight = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui44"));
 		showHorzHighlight.addActionListener(this);
-		showHorzHighlight.setToolTipText(Text.GuiDiag
+		showHorzHighlight.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui46"));
 
-		showVertHighlight = new JCheckBox(Text.GuiDiag
+		showVertHighlight = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui43"));
 		showVertHighlight.addActionListener(this);
-		showVertHighlight.setToolTipText(Text.GuiDiag
+		showVertHighlight.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui45"));
 
-		smooth = new JCheckBox(Text.GuiDiag
+		smooth = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui29"));
 		smooth.addActionListener(this);
 		smooth.setMnemonic(KeyEvent.VK_S);
-		smooth.setToolTipText(Text.GuiDiag
+		smooth.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui30"));
 
-		line = new JCheckBox(Text.GuiDiag
+		line = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui31"));
 		line.addActionListener(this);
 		line.setMnemonic(KeyEvent.VK_G);
-		line.setToolTipText(Text.GuiDiag
+		line.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui32"));
 
-		tooltip = new JCheckBox(Text.GuiDiag
+		tooltip = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui33"));
 		tooltip.addActionListener(this);
 		tooltip.setMnemonic(KeyEvent.VK_A);
-		tooltip.setToolTipText(Text.GuiDiag
+		tooltip.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui34"));
 
-		tree = new JCheckBox(Text.GuiDiag
+		tree = new JCheckBox(Text.I18N
 				.getString("DisplaySettingsDialog.gui35"));
 		tree.addActionListener(this);
 		tree.setMnemonic(KeyEvent.VK_U);
-		tree.setToolTipText(Text.GuiDiag
+		tree.setToolTipText(Text.I18N
 				.getString("DisplaySettingsDialog.gui36"));
 
-		JLabel label2 = new JLabel(Text.GuiDiag
+		JLabel label1 = new JLabel(Text.I18N.getString("language"));
+		
+		JLabel label2 = new JLabel(Text.I18N
 				.getString("DisplaySettingsDialog.gui37"));
 		label2.setDisplayedMnemonic('F');
 		label2.setLabelFor(((JSpinner.NumberEditor) fontSpin.getEditor())
 				.getTextField());
-		JLabel label3 = new JLabel(Text.GuiDiag
+		JLabel label3 = new JLabel(Text.I18N
 				.getString("DisplaySettingsDialog.gui38"));
 		label3.setDisplayedMnemonic('S');
 		label3.setLabelFor(((JSpinner.NumberEditor) colorSpin.getEditor())
@@ -360,8 +395,12 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		DoeLayout layout = new DoeLayout();
 
-		layout.add(label2, 0, 0, 1, 1, new Insets(5, 5, 5, 5));
-		layout.add(fontSpin, 1, 0, 1, 1, new Insets(5, 5, 5, 5));
+		layout.add(label1, 0, 0, 1, 1, new Insets(5, 5, 5, 5));
+		layout.add(language, 1, 0, 1, 1, new Insets(5, 5, 5, 5));
+		
+		layout.add(label2, 0, 1, 1, 1, new Insets(5, 5, 5, 5));
+		layout.add(fontSpin, 1, 1, 1, 1, new Insets(5, 5, 5, 5));
+		
 		layout.add(label3, 0, 2, 1, 1, new Insets(5, 5, 5, 5));
 		layout.add(colorSpin, 1, 2, 0, 1, new Insets(5, 5, 5, 5));
 
@@ -378,7 +417,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
 
 		JPanel p1 = new JPanel(new BorderLayout());
-		p1.setBorder(BorderFactory.createTitledBorder(Text.GuiDiag
+		p1.setBorder(BorderFactory.createTitledBorder(Text.I18N
 				.getString("DisplaySettingsDialog.gui39")));
 		p1.add(layout.getPanel(), BorderLayout.CENTER);
 
@@ -513,7 +552,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		Color getColor(Color old)
 		{
-			Color newColor = JColorChooser.showDialog(winMain, Text.GuiDiag
+			Color newColor = JColorChooser.showDialog(winMain, Text.I18N
 					.getString("DisplaySettingsDialog.gui40"), old);
 
 			if (newColor != null)

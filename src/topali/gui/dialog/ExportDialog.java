@@ -64,7 +64,7 @@ public class ExportDialog extends JDialog implements ActionListener
 
 		pack();
 
-		setTitle(Text.format(Text.GuiDiag.getString("ExportDialog.gui01"),
+		setTitle(Text.format(Text.I18N.getString("ExportDialog.gui01"),
 				data.name));
 		setLocationRelativeTo(winMain);
 		setResizable(false);
@@ -153,8 +153,8 @@ public class ExportDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.Gui.getString("ok"));
-		bCancel = new JButton(Text.Gui.getString("cancel"));
+		bOK = new JButton(Text.I18N.getString("ok"));
+		bCancel = new JButton(Text.I18N.getString("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "export_alignment");
 	}

@@ -29,7 +29,7 @@ class TreePanelUtils
 	static void exportTree(TreePanel panel)
 	{
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle(Text.GuiTree.getString("TreePanelUtils.gui01"));
+		fc.setDialogTitle(Text.I18N.getString("TreePanelUtils.gui01"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 
 		Filters.setFilters(fc, Prefs.gui_filter_tree, PNG, TRE, CLU);
@@ -42,7 +42,7 @@ class TreePanelUtils
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = Text.format(Text.GuiTree
+				String msg = Text.format(Text.I18N
 						.getString("TreePanelUtils.msg01"), file);
 				int response = MsgBox.yesnocan(msg, 1);
 
@@ -73,11 +73,11 @@ class TreePanelUtils
 		try
 		{
 			ImageIO.write(panel.getSavableImage(), "png", file);
-			MsgBox.msg(Text.format(Text.GuiTree
+			MsgBox.msg(Text.format(Text.I18N
 					.getString("TreePanelUtils.msg02"), file), MsgBox.INF);
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.GuiTree
+			MsgBox.msg(Text.format(Text.I18N
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
 			log.warn(e);
 		}
@@ -92,11 +92,11 @@ class TreePanelUtils
 			out = new PrintWriter(new FileOutputStream(file));
 			TreeUtils.printNH(panel.getPalTree(), out, true, true);
 
-			MsgBox.msg(Text.format(Text.GuiTree
+			MsgBox.msg(Text.format(Text.I18N
 					.getString("TreePanelUtils.msg03"), file), MsgBox.INF);
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.GuiTree
+			MsgBox.msg(Text.format(Text.I18N
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
 			log.warn(e);
 		}
@@ -119,7 +119,7 @@ class TreePanelUtils
 			out.write(panel.getClusterText());
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.GuiTree
+			MsgBox.msg(Text.format(Text.I18N
 					.getString("TreePanelUtils.err01"), e), MsgBox.ERR);
 			log.warn(e);
 		}

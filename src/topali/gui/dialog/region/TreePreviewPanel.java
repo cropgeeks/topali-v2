@@ -45,12 +45,12 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 
 	public TreePreviewPanel()
 	{
-		checkCurrent = new JCheckBox(Text.GuiDiag
+		checkCurrent = new JCheckBox(Text.I18N
 				.getString("TreePreviewPanel.gui01"), Prefs.gui_preview_current);
 		checkCurrent.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 5));
 		checkCurrent.addActionListener(this);
 		checkCurrent.setMnemonic(KeyEvent.VK_O);
-		checkCurrent.setToolTipText(Text.GuiDiag
+		checkCurrent.setToolTipText(Text.I18N
 				.getString("TreePreviewPanel.gui02"));
 
 		setLayout(new BorderLayout(5, 5));
@@ -134,7 +134,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 				// seconds
 				if ((e - s) >= 1250 && slowWarningShown == false)
 				{
-					String msg = Text.GuiDiag
+					String msg = Text.I18N
 							.getString("TreePreviewPanel.msg01");
 
 					// Offer to disable generating tree previews for this
@@ -163,7 +163,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 		{
 			setBackground(Color.white);
 			setBorder(BorderFactory.createLineBorder(Icons.blueBorder));
-			setToolTipText(Text.GuiDiag.getString("TreePreviewPanel.gui03"));
+			setToolTipText(Text.I18N.getString("TreePreviewPanel.gui03"));
 
 			// Mouse listener to catch double-click events
 			addMouseListener(new MouseAdapter()

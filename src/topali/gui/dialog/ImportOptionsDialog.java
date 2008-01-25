@@ -110,8 +110,8 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.Gui.getString("ok"));
-		bCancel = new JButton(Text.Gui.getString("cancel"));
+		bOK = new JButton(Text.I18N.getString("ok"));
+		bCancel = new JButton(Text.I18N.getString("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "import_alignment");
 	}

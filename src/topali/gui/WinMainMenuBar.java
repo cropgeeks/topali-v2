@@ -130,7 +130,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createActions()
 	{
-		aFileNewProject = new AbstractAction(Text.Gui
+		aFileNewProject = new AbstractAction(Text.I18N
 				.getString("aFileNewProject"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -139,7 +139,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileOpenProject = new AbstractAction(Text.Gui
+		aFileOpenProject = new AbstractAction(Text.I18N
 				.getString("aFileOpenProject"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -148,7 +148,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileSave = new AbstractAction(Text.Gui.getString("aFileSave"))
+		aFileSave = new AbstractAction(Text.I18N.getString("aFileSave"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -156,7 +156,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileSaveAs = new AbstractAction(Text.Gui.getString("aFileSaveAs"))
+		aFileSaveAs = new AbstractAction(Text.I18N.getString("aFileSaveAs"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -164,7 +164,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileImportDataSet = new AbstractAction(Text.Gui
+		aFileImportDataSet = new AbstractAction(Text.I18N
 				.getString("aFileImportDataSet"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -173,7 +173,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileExportDataSet = new AbstractAction(Text.Gui
+		aFileExportDataSet = new AbstractAction(Text.I18N
 				.getString("aFileExportDataSet"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -182,7 +182,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFilePrintSetup = new AbstractAction(Text.Gui
+		aFilePrintSetup = new AbstractAction(Text.I18N
 				.getString("aFilePrintSetup"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -191,7 +191,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFilePrintPreview = new AbstractAction(Text.Gui
+		aFilePrintPreview = new AbstractAction(Text.I18N
 				.getString("aFilePrintPreview"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -200,7 +200,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aFilePrint = new AbstractAction(Text.Gui.getString("aFilePrint"))
+		aFilePrint = new AbstractAction(Text.I18N.getString("aFilePrint"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -208,7 +208,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aFileExit = new AbstractAction(Text.Gui.getString("aFileExit"))
+		aFileExit = new AbstractAction(Text.I18N.getString("aFileExit"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -216,7 +216,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aViewToolBar = new AbstractAction(Text.Gui.getString("aViewToolBar"))
+		aViewToolBar = new AbstractAction(Text.I18N.getString("aViewToolBar"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -224,7 +224,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aViewStatusBar = new AbstractAction(Text.Gui
+		aViewStatusBar = new AbstractAction(Text.I18N
 				.getString("aViewStatusBar"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -233,7 +233,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aViewTipsPanel = new AbstractAction(Text.Gui
+		aViewTipsPanel = new AbstractAction(Text.I18N
 				.getString("aViewTipsPanel"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -242,7 +242,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aViewDisplaySettings = new AbstractAction(Text.Gui
+		aViewDisplaySettings = new AbstractAction(Text.I18N
 				.getString("aViewDisplaySettings"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -251,7 +251,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnDisplaySummary = new AbstractAction(Text.Gui
+		aAlgnDisplaySummary = new AbstractAction(Text.I18N
 				.getString("aAlgnDisplaySummary"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -260,7 +260,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnPhyloView = new AbstractAction(Text.Gui
+		aAlgnPhyloView = new AbstractAction(Text.I18N
 				.getString("aAlgnPhyloView"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -269,7 +269,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnFindSeq = new AbstractAction(Text.Gui.getString("aAlgnFindSeq"))
+		aAlgnFindSeq = new AbstractAction(Text.I18N.getString("aAlgnFindSeq"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -277,7 +277,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnSelectAll = new AbstractAction(Text.Gui
+		aAlgnSelectAll = new AbstractAction(Text.I18N
 				.getString("aAlgnSelectAll"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -286,7 +286,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnSelectNone = new AbstractAction(Text.Gui
+		aAlgnSelectNone = new AbstractAction(Text.I18N
 				.getString("aAlgnSelectNone"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -295,7 +295,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnSelectUnique = new AbstractAction(Text.Gui
+		aAlgnSelectUnique = new AbstractAction(Text.I18N
 				.getString("aAlgnSelectUnique"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -304,7 +304,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnSelectInvert = new AbstractAction(Text.Gui
+		aAlgnSelectInvert = new AbstractAction(Text.I18N
 				.getString("aAlgnSelectInvert"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -313,7 +313,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnSelectHighlighted = new AbstractAction(Text.Gui
+		aAlgnSelectHighlighted = new AbstractAction(Text.I18N
 				.getString("aAlgnSelectHighlighted"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -322,7 +322,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnRename = new AbstractAction(Text.Gui.getString("aAlgnRename"))
+		aAlgnRename = new AbstractAction(Text.I18N.getString("aAlgnRename"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -330,7 +330,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnMoveUp = new AbstractAction(Text.Gui.getString("aAlgnMoveUp"))
+		aAlgnMoveUp = new AbstractAction(Text.I18N.getString("aAlgnMoveUp"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -338,7 +338,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnMoveDown = new AbstractAction(Text.Gui.getString("aAlgnMoveDown"))
+		aAlgnMoveDown = new AbstractAction(Text.I18N.getString("aAlgnMoveDown"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -346,7 +346,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnMoveTop = new AbstractAction(Text.Gui.getString("aAlgnMoveTop"))
+		aAlgnMoveTop = new AbstractAction(Text.I18N.getString("aAlgnMoveTop"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -354,7 +354,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnRemove = new AbstractAction(Text.Gui.getString("aAlgnRemove"))
+		aAlgnRemove = new AbstractAction(Text.I18N.getString("aAlgnRemove"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -362,7 +362,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnGoTo = new AbstractAction(Text.Gui.getString("aAlgnGoTo"))
+		aAlgnGoTo = new AbstractAction(Text.I18N.getString("aAlgnGoTo"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -370,7 +370,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnShowPDialog = new AbstractAction(Text.Gui
+		aAlgnShowPDialog = new AbstractAction(Text.I18N
 				.getString("aAlgnShowPDialog"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -379,7 +379,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnShowOvDialog = new AbstractAction(Text.Gui
+		aAlgnShowOvDialog = new AbstractAction(Text.I18N
 				.getString("aAlgnShowOvDialog"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -388,7 +388,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunPDM = new AbstractAction(Text.Gui.getString("aAnlsRunPDM"))
+		aAnlsRunPDM = new AbstractAction(Text.I18N.getString("aAnlsRunPDM"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -396,7 +396,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunPDM2 = new AbstractAction(Text.Gui.getString("aAnlsRunPDM2"))
+		aAnlsRunPDM2 = new AbstractAction(Text.I18N.getString("aAnlsRunPDM2"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -404,7 +404,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunHMM = new AbstractAction(Text.Gui.getString("aAnlsRunHMM"))
+		aAnlsRunHMM = new AbstractAction(Text.I18N.getString("aAnlsRunHMM"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -412,7 +412,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunDSS = new AbstractAction(Text.Gui.getString("aAnlsRunDSS"))
+		aAnlsRunDSS = new AbstractAction(Text.I18N.getString("aAnlsRunDSS"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -420,7 +420,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunLRT = new AbstractAction(Text.Gui.getString("aAnlsRunLRT"))
+		aAnlsRunLRT = new AbstractAction(Text.I18N.getString("aAnlsRunLRT"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -428,7 +428,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLSite = new AbstractAction("Site Model Analysis...")
+		aAnlsRunCodeMLSite = new AbstractAction(Text.I18N.getString("aAnlsRunCodeMLSite"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -436,7 +436,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRunCodeMLBranch = new AbstractAction("Branch Model Analysis...")
+		aAnlsRunCodeMLBranch = new AbstractAction(Text.I18N.getString("aAnlsRunCodeMLBranch"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -444,49 +444,49 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aAnlsRunMT = new AbstractAction("Model Selection...") {
+		aAnlsRunMT = new AbstractAction(Text.I18N.getString("aAnlsRunMT")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunMT(null);
 			}
 		};
 		
-		aAnlsQuickTree = new AbstractAction("Quick NJ Tree (F84/WAG+G)...") {
+		aAnlsQuickTree = new AbstractAction(Text.I18N.getString("aAnlsQuickTree")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsQuickTree();
 			}
 		};
 		
-		aAnlsMrBayes = new AbstractAction("MrBayes...") {
+		aAnlsMrBayes = new AbstractAction(Text.I18N.getString("aAnlsMrBayes")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsMrBayes(null);
 			}
 		};
 		
-		aAnlsPhyml = new AbstractAction("PhyML...") {
+		aAnlsPhyml = new AbstractAction(Text.I18N.getString("aAnlsPhyml")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsPhyml(null);
 			}
 		};
 		
-		aAnlsRaxml = new AbstractAction("RaxML...") {
+		aAnlsRaxml = new AbstractAction(Text.I18N.getString("aAnlsRaxml")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRaxml(null);
 			}
 		};
 		
-		aAnlsRunCW = new AbstractAction("Check Codon Usage...") {
+		aAnlsRunCW = new AbstractAction(Text.I18N.getString("aAnlsRunCW")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				winMain.menuAnlsRunCW(null);
 			}
 		};
 
-		aAnlsPartition = new AbstractAction(Text.Gui
+		aAnlsPartition = new AbstractAction(Text.I18N
 				.getString("aAnlsPartition"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -495,7 +495,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsShowJobs = new AbstractAction(Text.Gui.getString("aAnlsShowJobs"))
+		aAnlsShowJobs = new AbstractAction(Text.I18N.getString("aAnlsShowJobs"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -503,7 +503,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRename = new AbstractAction(Text.Gui.getString("aAnlsRename"))
+		aAnlsRename = new AbstractAction(Text.I18N.getString("aAnlsRename"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -511,7 +511,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsRemove = new AbstractAction(Text.Gui.getString("aAnlsRemove"))
+		aAnlsRemove = new AbstractAction(Text.I18N.getString("aAnlsRemove"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -519,7 +519,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAnlsSettings = new AbstractAction(Text.Gui.getString("aAnlsSettings"))
+		aAnlsSettings = new AbstractAction(Text.I18N.getString("aAnlsSettings"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -527,7 +527,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aVamSelectSession = new AbstractAction(Text.Gui
+		aVamSelectSession = new AbstractAction(Text.I18N
 				.getString("aVamSelectSession"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -536,7 +536,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aVamCommit = new AbstractAction(Text.Gui
+		aVamCommit = new AbstractAction(Text.I18N
 				.getString("aVamCommit"))
 		{
 			public void actionPerformed(ActionEvent e)
@@ -545,7 +545,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aVamsasButton = new AbstractAction("VAMSAS") {
+		aVamsasButton = new AbstractAction(Text.I18N.getString("aVamsasButton")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				if(!ProjectState.isVamsasSession()) {
@@ -557,21 +557,21 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		
-		aHelpContents = new AbstractAction(Text.Gui.getString("aHelpContents"))
+		aHelpContents = new AbstractAction(Text.I18N.getString("aHelpContents"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 			}
 		};
 		
-		aHelpLicense = new AbstractAction(Text.Gui.getString("aHelpLicense"))
+		aHelpLicense = new AbstractAction(Text.I18N.getString("aHelpLicense"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 			}
 		};
 
-		aHelpAbout = new AbstractAction(Text.Gui.getString("aHelpAbout"))
+		aHelpAbout = new AbstractAction(Text.I18N.getString("aHelpAbout"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -579,7 +579,7 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aHelpUpdate = new AbstractAction(Text.Gui.getString("aHelpUpdate"))
+		aHelpUpdate = new AbstractAction(Text.I18N.getString("aHelpUpdate"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -598,10 +598,10 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createFileMenu()
 	{
-		mFile = new JMenu(Text.Gui.getString("menuFile"));
+		mFile = new JMenu(Text.I18N.getString("menuFile"));
 		mFile.setMnemonic(KeyEvent.VK_F);
 
-		mFileRecent = new JMenu("Recent Projects");
+		mFileRecent = new JMenu(Text.I18N.getString("mFileRecent"));
 		mFileRecent.setMnemonic(KeyEvent.VK_R);
 		setRecentMenu("");
 
@@ -644,7 +644,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createViewMenu()
 	{
-		mView = new JMenu(Text.Gui.getString("menuView"));
+		mView = new JMenu(Text.I18N.getString("menuView"));
 		mView.setMnemonic(KeyEvent.VK_V);
 
 		mViewToolBar = getItem(aViewToolBar, KeyEvent.VK_T,
@@ -667,9 +667,9 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createAlgnMenu()
 	{
-		mAlgn = new JMenu(Text.Gui.getString("menuAlgn"));
+		mAlgn = new JMenu(Text.I18N.getString("menuAlgn"));
 		mAlgn.setMnemonic(KeyEvent.VK_A);
-		mAlgnSelect = new JMenu(Text.Gui.getString("menuAlgnSelect"));
+		mAlgnSelect = new JMenu(Text.I18N.getString("menuAlgnSelect"));
 		mAlgnSelect.setMnemonic(KeyEvent.VK_S);
 
 		mAlgnDisplaySummary = getItem(aAlgnDisplaySummary, KeyEvent.VK_I, 0, 0,
@@ -731,7 +731,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createAnlsMenu()
 	{
-		mAnls = new JMenu(Text.Gui.getString("menuAnls"));
+		mAnls = new JMenu(Text.I18N.getString("menuAnls"));
 		mAnls.setMnemonic(KeyEvent.VK_N);
 
 		//Recombination
@@ -751,9 +751,9 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsMrBayes = getItem(aAnlsMrBayes, 0, 0, 0);
 		mAnlsPhyml = getItem(aAnlsPhyml, 0, 0, 0);
 		mAnlsRaxml = getItem(aAnlsRaxml, 0, 0, 0);
-		mAnlsNJ = new JMenu("Neighbor Joining Tree");
-		mAnlsBayes = new JMenu("Bayesian Tree");
-		mAnlsML = new JMenu("Maximum Likelihood Tree");
+		mAnlsNJ = new JMenu(Text.I18N.getString("mNJ"));
+		mAnlsBayes = new JMenu(Text.I18N.getString("mBayes"));
+		mAnlsML = new JMenu(Text.I18N.getString("mML"));
 		
 		//Misc
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
@@ -766,7 +766,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				Icons.SETTINGS);
 
-		MenuHeading h1 = new MenuHeading("Recombination");
+		MenuHeading h1 = new MenuHeading(Text.I18N.getString("mRecomb"));
 		h1.setIcon(Icons.RECOMBINATION);
 		mAnls.add(h1);
 		mAnls.add(mAnlsRunPDM);
@@ -774,13 +774,13 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls.add(mAnlsRunDSS);
 		mAnls.add(mAnlsRunLRT);
 		mAnls.addSeparator();
-		MenuHeading h2 = new MenuHeading("Selection");
+		MenuHeading h2 = new MenuHeading(Text.I18N.getString("mSelection"));
 		h2.setIcon(Icons.POSSELECTION);
 		mAnls.add(h2);
 		mAnls.add(mAnlsRunCodeMLSite);
 		mAnls.add(mAnlsRunCodeMLBranch);
 		mAnls.addSeparator();
-		MenuHeading h3 = new MenuHeading("Phylogenetics");
+		MenuHeading h3 = new MenuHeading(Text.I18N.getString("mPhylo"));
 		h3.setIcon(Icons.TREE);
 		mAnls.add(h3);
 		mAnls.add(mAnlsRunMT);
@@ -793,7 +793,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnls.add(mAnlsML);
 		//mAnls.add(mAnlsCreateTree);
 		mAnls.addSeparator();
-		MenuHeading h4 = new MenuHeading("Codon Usage");
+		MenuHeading h4 = new MenuHeading(Text.I18N.getString("mCodon"));
 		h4.setIcon(Icons.CODINGREGIONS);
 		mAnls.add(h4);
 		mAnls.add(mAnlsRunCW);
@@ -811,7 +811,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createVamsasMenu()
 	{
-		mVamsas = new JMenu(Text.Gui.getString("menuVamsas"));
+		mVamsas = new JMenu(Text.I18N.getString("menuVamsas"));
 		mVamsas.setMnemonic(KeyEvent.VK_S);
 
 		mVamSelectSession = getItem(aVamSelectSession, KeyEvent.VK_S, 0, 0);
@@ -830,7 +830,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	private void createHelpMenu()
 	{
-		mHelp = new JMenu(Text.Gui.getString("menuHelp"));
+		mHelp = new JMenu(Text.I18N.getString("menuHelp"));
 		mHelp.setMnemonic(KeyEvent.VK_H);
 
 		mHelpContents = getItem(aHelpContents, KeyEvent.VK_H, KeyEvent.VK_F1,
@@ -960,7 +960,7 @@ public class WinMainMenuBar extends JMenuBar
 	public void updateRecentFileList(Project project)
 	{
 		setRecentMenu(project.filename.getPath());
-		winMain.setTitle(Text.Gui.getString("WinMain.gui01") + " - "
+		winMain.setTitle(Text.I18N.getString("title") + " - "
 				+ project.filename.getName());
 	}
 

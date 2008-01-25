@@ -126,8 +126,6 @@ public class Utils {
 
 	Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,
 		null);
-
-	MsgBox.msg(Text.Gui.getString("clipboard_2"), MsgBox.INF);
     }
 
     /**
@@ -164,6 +162,20 @@ public class Utils {
 	    Desktop desktop = Desktop.getDesktop();
 	    if (desktop.isSupported(Desktop.Action.BROWSE)) {
 		desktop.browse(uri);
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    public static boolean openMailclient(String address, String subject, String message) throws URISyntaxException, IOException {
+	if (Desktop.isDesktopSupported()) {
+	    Desktop desktop = Desktop.getDesktop();
+	    if(desktop.isSupported(Desktop.Action.MAIL)) {
+		subject = URLEncoder.encode(subject, "utf8");
+		message = URLEncoder.encode(message, "utf8");
+		URI uri = new URI("mailto:"+address+"?SUBJECT="+subject+"&BODY="+message);
+		desktop.mail(uri);
 		return true;
 	    }
 	}

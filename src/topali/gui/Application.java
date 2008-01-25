@@ -8,6 +8,6 @@ package topali.gui;
 public interface Application
 {
 	
-	public void shutdown();
+	public void shutdown(String errorLog);
 	
 }

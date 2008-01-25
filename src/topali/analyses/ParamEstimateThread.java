@@ -44,8 +44,8 @@ public class ParamEstimateThread extends DesktopThread
 	}
 
 	public void go() {
-	    	String title = Text.Analyses.getString("ParamEstDialog.gui01");
-		String text = "<html>"+Text.Analyses.getString("ParamEstDialog.gui02")+"<br>"+Text.Analyses.getString("ParamEstDialog.gui03")+"</html>";
+	    	String title = Text.I18N.getString("ParamEstDialog.gui01");
+		String text = "<html>"+Text.I18N.getString("ParamEstDialog.gui02")+"<br>"+Text.I18N.getString("ParamEstDialog.gui03")+"</html>";
 		DefaultWaitDialog dlg = new DefaultWaitDialog(TOPALi.winMain, title, text, this);
 		dlg.pack();
 		dlg.setLocationRelativeTo(TOPALi.winMain);

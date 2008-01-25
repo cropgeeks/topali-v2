@@ -94,7 +94,7 @@ public class TreeCreatorThread extends DesktopThread
 		{
 			log.warn(e);
 			MsgBox.msg(Text.format(
-					Text.Analyses.getString("TreeCreator.err01"), e),
+					Text.I18N.getString("TreeCreator.err01"), e),
 					MsgBox.ERR);
 
 			// Ensure the tree cannot be returned in a readable format

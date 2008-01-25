@@ -14,6 +14,8 @@ import topali.mod.Filters;
 
 public class Prefs extends XMLPreferences
 {
+    public static String locale;
+    
 	public static String gui_recent0;
 	public static String gui_recent1;
 	public static String gui_recent2;
@@ -219,7 +221,7 @@ public class Prefs extends XMLPreferences
 		Random rnd = new Random();
 		for (int i = 0; i < 32; i++)
 			appId += rnd.nextInt(10);
-
+		
 		setDisplayDefaults();
 		setPDMDefaults();
 		setPDM2Defaults();
@@ -236,6 +238,7 @@ public class Prefs extends XMLPreferences
 
 	public static void setDisplayDefaults()
 	{
+	    	locale = "default";
 		gui_seq_tooltip = false;
 		gui_seq_font_size = 12;
 		gui_seq_font_bold = false;

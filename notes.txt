@@ -2,7 +2,10 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- ModeltestResults are now resubmittable
+- Moved all i18n texts in one file (i18n.properties)
+- Added language option in DisplaySettings dialog
+- Started translation to German
+- Fixed bug in Phyml sge-script
 
 TODO:
 - DSS/LRT gap threshold: Check with Frank again!

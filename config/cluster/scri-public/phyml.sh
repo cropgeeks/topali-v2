@@ -5,4 +5,4 @@
 #$ -j y
 
 hostname
-$JAVA -Xmx256m -cp $TOPALi topali.cluster.jobs.phyml.PhymlAnalysis "$JOB_DIR"
+$JAVA -Xmx256m -cp $TOPALi topali.cluster.jobs.phyml.analysis.PhymlAnalysis "$JOB_DIR"
