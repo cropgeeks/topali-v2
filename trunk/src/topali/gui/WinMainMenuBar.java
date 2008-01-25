@@ -126,6 +126,15 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 		registerKeyboardAction(aShowLogs, showLogs, JComponent.WHEN_IN_FOCUSED_WINDOW);
+		
+		KeyStroke provokeError = KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
+		Action aprovokeError = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				String s = null;
+				s.length();
+			}
+		};
+		registerKeyboardAction(aprovokeError, provokeError, JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void createActions()
