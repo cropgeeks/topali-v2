@@ -57,11 +57,11 @@ public class SettingsDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.Gui.getString("ok"));
+		bOK = new JButton(Text.I18N.getString("ok"));
 		bOK.addActionListener(this);
-		bCancel = new JButton(Text.Gui.getString("cancel"));
+		bCancel = new JButton(Text.I18N.getString("cancel"));
 		bCancel.addActionListener(this);
-		bDefault = new JButton(Text.Gui.getString("defaults"));
+		bDefault = new JButton(Text.I18N.getString("defaults"));
 		bDefault.addActionListener(this);
 		bHelp = TOPALiHelp.getHelpButton("settings");
 

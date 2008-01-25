@@ -56,7 +56,7 @@ public class ThresholdDialog extends JDialog implements ActionListener, ChangeLi
 		numSpin.setPreferredSize(d);
 
 		// ((JSpinner.NumberEditor)winSpin.getEditor()).getTextField()
-		// .setToolTipText(Text.GuiDiag.getString("DSSSettingsDialog.gui07"));
+		// .setToolTipText(Text.I18N.getString("DSSSettingsDialog.gui07"));
 
 		JLabel label1 = new JLabel(
 				"Adjust threshold (percentile) significance: ");
@@ -73,7 +73,7 @@ public class ThresholdDialog extends JDialog implements ActionListener, ChangeLi
 
 	private JPanel getButtons()
 	{
-		bClose = new JButton(Text.Gui.getString("close"));
+		bClose = new JButton(Text.I18N.getString("close"));
 		bClose.addActionListener(this);
 		bHelp = TOPALiHelp.getHelpButton("adjust_threshold");
 

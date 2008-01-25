@@ -30,14 +30,14 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 
 	public SummaryDialog(JFrame parent, AlignmentData data)
 	{
-		super(parent, Text.GuiDiag.getString("SummaryDialog.gui01"), true);
+		super(parent, Text.I18N.getString("SummaryDialog.gui01"), true);
 		this.data = data;
 		ss = data.getSequenceSet();
 
 		// Is it even worth progressing?
 		if (ss.getSize() < 3)
 		{
-			MsgBox.msg(Text.GuiDiag.getString("SummaryDialog.err01"),
+			MsgBox.msg(Text.I18N.getString("SummaryDialog.err01"),
 					MsgBox.ERR);
 			return;
 		}
@@ -69,15 +69,15 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 
 	private JPanel createControls()
 	{
-		bClose = new JButton(Text.Gui.getString("close"));
+		bClose = new JButton(Text.I18N.getString("close"));
 		bClose.addActionListener(this);
 
-		bClipboard = new JButton(Text.Gui.getString("clipboard_1"));
+		bClipboard = new JButton(Text.I18N.getString("clipboard_1"));
 		bClipboard.addActionListener(this);
 
 		bHelp = TOPALiHelp.getHelpButton("summary_info");
 
-		text = new JTextArea(Text.GuiDiag.getString("SummaryDialog.gui02"));
+		text = new JTextArea(Text.I18N.getString("SummaryDialog.gui02"));
 		Utils.setTextAreaDefaults(text);
 
 		JScrollPane sp = new JScrollPane(text);
@@ -104,8 +104,10 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 		if (e.getSource() == bClose)
 			setVisible(false);
 
-		else if (e.getSource() == bClipboard)
+		else if (e.getSource() == bClipboard) {
 			Utils.copyToClipboard(text.getText());
+			MsgBox.msg(Text.I18N.getString("clipboard_2"), MsgBox.INF);
+		}
 	}
 
 	public void run()
@@ -131,16 +133,16 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 		str[4] = "" + (int) results[0];
 		str[5] = results[1];
 
-		String summaryInfo = Text.format(Text.GuiDiag
+		String summaryInfo = Text.format(Text.I18N
 				.getString("SummaryDialog.gui03"), str);
 
 		// Duplicates information
 		String duplicates = doDuplicateCheck();
 		if (duplicates != null)
-			summaryInfo += Text.format(Text.GuiDiag
+			summaryInfo += Text.format(Text.I18N
 					.getString("SummaryDialog.gui04"), duplicates);
 		else
-			summaryInfo += Text.GuiDiag.getString("SummaryDialog.gui05");
+			summaryInfo += Text.I18N.getString("SummaryDialog.gui05");
 
 		// Additional DNA-specific information
 		if (ss.isDNA())
@@ -161,7 +163,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			str[7] = ss.getParams().getAlpha();
 			str[8] = ss.getParams().getKappa();
 
-			summaryInfo += Text.format(Text.GuiDiag
+			summaryInfo += Text.format(Text.I18N
 					.getString("SummaryDialog.gui06"), str);
 		}
 

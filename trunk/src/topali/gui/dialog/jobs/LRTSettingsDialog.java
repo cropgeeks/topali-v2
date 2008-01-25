@@ -33,7 +33,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 	public LRTSettingsDialog(WinMain winMain, AlignmentData data,
 			LRTResult iResult)
 	{
-		super(winMain, Text.GuiDiag.getString("LRTSettingsDialog.gui01"), true);
+		super(winMain, Text.I18N.getString("LRTSettingsDialog.gui01"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -71,9 +71,9 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		basicPanel = new BasicPanel();
 
 		tabs.removeAll();
-		tabs.addTab(Text.GuiDiag.getString("LRTSettingsDialog.gui04"),
+		tabs.addTab(Text.I18N.getString("LRTSettingsDialog.gui04"),
 				basicPanel);
-		tabs.addTab(Text.GuiDiag.getString("LRTSettingsDialog.gui05"),
+		tabs.addTab(Text.I18N.getString("LRTSettingsDialog.gui05"),
 				advancedPanel);
 	}
 
@@ -143,7 +143,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(Text.GuiDiag
+		int res = MsgBox.yesno(Text.I18N
 				.getString("LRTSettingsDialog.gui06"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;

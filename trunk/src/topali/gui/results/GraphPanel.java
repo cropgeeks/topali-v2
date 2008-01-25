@@ -623,7 +623,7 @@ public class GraphPanel extends JPanel implements Printable
 							.getActiveRegionE(), PartitionAnnotations.class);
 				}
 			});
-			addPart.setText(Text.Gui.getString("aAlgnAddPartition"));
+			addPart.setText(Text.I18N.getString("aAlgnAddPartition"));
 			addPart.setMnemonic(KeyEvent.VK_P);
 
 			JMenuItem addCodReg = new JMenuItem();
@@ -635,10 +635,10 @@ public class GraphPanel extends JPanel implements Printable
 							.getActiveRegionE(), CDSAnnotations.class);
 				}
 			});
-			addCodReg.setText(Text.Gui.getString("aAlgnAddCDS"));
+			addCodReg.setText(Text.I18N.getString("aAlgnAddCDS"));
 			addCodReg.setMnemonic(KeyEvent.VK_C);
 
-			annotate = new JMenu(Text.Gui.getString("menuAlgnAnnotate"));
+			annotate = new JMenu(Text.I18N.getString("menuAlgnAnnotate"));
 			annotate.setIcon(Icons.ADD_PARTITION);
 			annotate.add(addPart);
 			annotate.add(addCodReg);

@@ -60,7 +60,7 @@ public class TOPALiHelp
 
 	public static JButton getHelpButton(String helpPage)
 	{
-		JButton bHelp = new JButton(Text.Gui.getString("help"));
+		JButton bHelp = new JButton(Text.I18N.getString("help"));
 		bHelp.setMnemonic(KeyEvent.VK_H);
 		enableHelpOnButton(bHelp, helpPage);
 

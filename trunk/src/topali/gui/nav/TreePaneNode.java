@@ -38,7 +38,7 @@ public class TreePaneNode extends INode implements IPrintable
 	{
 		int count = treePane.getFrameCount();
 
-		return Text.format(Text.GuiNav.getString("TreePaneNode.gui01"), count);
+		return Text.format(Text.I18N.getString("TreePaneNode.gui01"), count);
 	}
 
 	@Override

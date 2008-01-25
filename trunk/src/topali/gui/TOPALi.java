@@ -8,7 +8,7 @@ package topali.gui;
 import java.applet.Applet;
 import java.awt.Frame;
 import java.awt.event.*;
-import java.io.File;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 
@@ -26,7 +26,7 @@ import topali.var.utils.Utils;
 public class TOPALi extends Applet implements Application
 {
 	//enables/disables extensive logging
-	public static final boolean debugClient = true;
+	public static final boolean debugClient = false;
 	public static final boolean debugJobs = false;
 	
 	public static final String VERSION = "2.19";
@@ -53,7 +53,7 @@ public class TOPALi extends Applet implements Application
 
 	private JWindow splash = null;
 
-	private Prefs prefs = new Prefs();
+	private static Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
 
@@ -61,7 +61,7 @@ public class TOPALi extends Applet implements Application
 	{
 	    
 		root.info("TOPALi V. "+VERSION);
-		root.info("Locale is " + Locale.getDefault());
+		root.info("Default Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));
 
 		// Let axis know where its config file is
@@ -97,7 +97,7 @@ public class TOPALi extends Applet implements Application
 	@Override
 	public void destroy()
 	{
-		shutdown();
+		shutdown(null);
 	}
 
 	private TOPALi(final File initialProject)
@@ -125,6 +125,12 @@ public class TOPALi extends Applet implements Application
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
 				prefsFile), Prefs.class);
 		doEncryption(true);
+		
+		if(!Prefs.locale.equals("default")) {
+		    String loc = Prefs.locale;
+		    log.info("Set Locale to "+loc);
+			Locale.setDefault(new Locale(loc));
+		}
 
 		setProxy();
 		LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);
@@ -163,7 +169,7 @@ public class TOPALi extends Applet implements Application
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				shutdown();
+				shutdown(null);
 			}
 
 			@Override
@@ -190,7 +196,7 @@ public class TOPALi extends Applet implements Application
 			}
 		});
 
-		new scri.commons.gui.MsgBox(winMain, Text.Gui.getString("WinMain.gui01"));
+		new scri.commons.gui.MsgBox(winMain, Text.I18N.getString("title"));
 		winMain.setVisible(true);
 	}
 
@@ -218,7 +224,7 @@ public class TOPALi extends Applet implements Application
 		}
 	}
 
-	public void shutdown()
+	public void shutdown(String errorLog)
 	{
 		log.info("Shutting down TOPALi");
 
@@ -251,6 +257,20 @@ public class TOPALi extends Applet implements Application
 		// Remove tmp files
 		// Utils.emptyScratch();
 
+		if(errorLog!=null) {
+		    try {
+			Utils.openMailclient("help@topali.org", "TOPALi Bug Report", errorLog);
+		    } catch (Exception e) {
+			e.printStackTrace();
+			Utils.copyToClipboard(errorLog);
+			String msg = "Could not launch eMail client...\n" +
+					"The error information has been copied to the clipboard.\n" +
+					"Please send an eMail manually to help@topali.org,\n" +
+					"pasting in your clipboard content. Thank you!";
+			JOptionPane.showMessageDialog(null, msg, "Error opening eMail client", JOptionPane.ERROR_MESSAGE);
+		    }
+		}
+		
 		// And exit
 		if (isApplet == false)
 			System.exit(0);

@@ -115,7 +115,7 @@ public class Project extends DataObject
 		// Create the dialog
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-		fc.setDialogTitle(Text.Gui.getString("Project.gui01"));
+		fc.setDialogTitle(Text.I18N.getString("Project.gui01"));
 
 		Filters.setFilters(fc, TOP, TOP);
 
@@ -176,18 +176,7 @@ public class Project extends DataObject
 				}
 				
 				if(appVersion.equals("2.18")) {
-					URL tmpUrl = Project.class.getResource("/res/xslt/2.18-2.19.xsl");
-					File xsltFile = new File(SysPrefs.tmpDir, "topali_2.18-2.19.xsl");
-					FileUtils.writeFile(xsltFile, tmpUrl.openStream());
-					notes += getTranformationNotes(xsltFile);
-					ByteArrayOutputStream bos = new ByteArrayOutputStream();
-					InputStream xmlin = new ByteArrayInputStream(xml);
-					InputStream xslin = new FileInputStream(xsltFile);
-					XSLTransformer.transform(xmlin, xslin, bos);
-					xml = bos.toByteArray();
-					bos.close();
-					xmlin.close();
-					xslin.close();
+				  //2.19 is just a bug fix release, data structure didn't change
 					appVersion = "2.19";
 				}
 				
@@ -202,7 +191,7 @@ public class Project extends DataObject
 				}
 			}
 			
-			String str = Text.GuiDiag.getString("LoadMonitorDialog.gui06");
+			String str = Text.I18N.getString("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
 			Unmarshaller unmarshaller = Castor.getUnmarshaller();
@@ -215,7 +204,7 @@ public class Project extends DataObject
 			
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.Gui.getString("Project.err01"),
+			MsgBox.msg(Text.format(Text.I18N.getString("Project.err01"),
 					filename, e), MsgBox.ERR);
 
 			log.warn("Error opening file\n",e);
@@ -270,7 +259,7 @@ public class Project extends DataObject
 	}
 	
 	static boolean save(Project p, boolean saveAs)
-	{
+	{	
 		if (p.filename == null)
 			saveAs = true;
 		if (saveAs && p.saveAs() == false)
@@ -301,7 +290,7 @@ public class Project extends DataObject
 			log.info("XML/Zip Write: "+ (System.currentTimeMillis() - s));
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.Gui.getString("Project.err02"),
+			MsgBox.msg(Text.format(Text.I18N.getString("Project.err02"),
 					p.filename, e.getMessage()), MsgBox.ERR);
 
 			log.warn("Error saving file\n",e);
@@ -314,7 +303,7 @@ public class Project extends DataObject
 	private boolean saveAs()
 	{
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle(Text.Gui.getString("Project.gui02"));
+		fc.setDialogTitle(Text.I18N.getString("Project.gui02"));
 		fc.setAcceptAllFileFilterUsed(false);
 		// If the project has never been saved it won't have a filename object
 		if (filename != null)
@@ -332,7 +321,7 @@ public class Project extends DataObject
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = Text.format(Text.Gui.getString("Project.msg01"),
+				String msg = Text.format(Text.I18N.getString("Project.msg01"),
 						file);
 				int response = MsgBox.yesnocan(msg, 1);
 

@@ -27,7 +27,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 	public LoadMonitorDialog(WinMain winMain, WinMainMenuBar menubar,
 			String filename)
 	{
-		super(winMain, Text.GuiDiag.getString("LoadMonitorDialog.gui01"), true);
+		super(winMain, Text.I18N.getString("LoadMonitorDialog.gui01"), true);
 
 		this.menubar = menubar;
 		this.filename = filename;
@@ -43,7 +43,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 
 		JLabel icon = new JLabel(Icons.OPEN_PROJECT);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
-		label1 = new JLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui02"));
+		label1 = new JLabel(Text.I18N.getString("LoadMonitorDialog.gui02"));
 		label2 = new JLabel(" ");
 		JPanel p1 = new JPanel(new GridLayout(2, 1, 0, 2));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
@@ -71,9 +71,9 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 
 	public void run()
 	{
-		setLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui03"));
+		setLabel(Text.I18N.getString("LoadMonitorDialog.gui03"));
 		Project temp = Project.open(filename);
-		setLabel(Text.GuiDiag.getString("LoadMonitorDialog.gui04"));
+		setLabel(Text.I18N.getString("LoadMonitorDialog.gui04"));
 
 		if (temp != null)
 		{

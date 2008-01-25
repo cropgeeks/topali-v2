@@ -14,6 +14,8 @@ import javax.swing.*;
 import org.apache.log4j.*;
 import org.apache.log4j.spi.LoggingEvent;
 
+import com.sun.crypto.provider.JceKeyStore;
+
 import topali.gui.*;
 
 public class GracefulShutdownHandler extends AppenderSkeleton implements
@@ -77,9 +79,15 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(l, BorderLayout.NORTH);
 		p.add(new JScrollPane(ta), BorderLayout.CENTER);
-		if (shutdown)
-			p.add(new JLabel("<html><br>Shutdown application?</html>"),
+		JCheckBox mail = null;
+		if (shutdown) {
+		    JPanel p2 = new JPanel(new BorderLayout());
+		    mail = new JCheckBox("Send eMail to the developers");
+		    p2.add(mail, BorderLayout.NORTH);
+		    p2.add(new JLabel("<html><br>Save changes and shutdown application?</html>"),
 					BorderLayout.SOUTH);
+		    p.add(p2, BorderLayout.SOUTH);
+		}
 		p.setPreferredSize(new Dimension(400, 300));
 
 		if (shutdown)
@@ -88,8 +96,12 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 					JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 			if (x == JOptionPane.YES_OPTION)
 			{
-				if (application != null)
-					application.shutdown();
+				if (application != null) {
+				    if(mail.isSelected())
+					application.shutdown("TOPALi v2 ("+TOPALi.VERSION+") Bug Report:\n\n"+sb.toString());
+				    else
+					application.shutdown(null);
+				}
 				else
 					System.exit(1);
 			}
