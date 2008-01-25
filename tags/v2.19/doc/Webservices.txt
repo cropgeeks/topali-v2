@@ -1,0 +1,44 @@
+How to implement a new JOB
+-------------------------
+
+Directory structure:
+
+topali
+	/cluster
+		/jobs
+			/JOB
+				/analysis
+				JOBAnalysis
+				JOBProcess
+				...
+			JOBInitializer
+			JOBMonitor
+			JOBWebservice			
+		JOBRemoteJob
+		JOBLocalJob
+
+1) JOBInitializer extends Thread
+Set up everything the job needs to run, e.g. create
+directories, write the sequences to a file, store the
+JOBResult (containing various parameters for the job).
+At the end of the overriden run() method launch the job:
+if(remote)
+	JOBWebservice.runscript()
+else
+	JOBAnalysis.start()
+	
+	
+2) JOBAnalysis extends AnalysisThread
+This class runs the actual analysis, e.g. by launching
+external applications via JOBProcess.
+Has to override runAnalysis().
+
+3) JOBProcess extends StoppableProcess
+External applications should be wrapped in this class, 
+to provide a proper cancel mechanism.
+
+
+
+
+
+ 

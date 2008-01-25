@@ -1,0 +1,63 @@
+Current state of affairs
+-----------------------
+
+Last modifications:
+- Moved all i18n texts in one file (i18n.properties)
+- Added language option in DisplaySettings dialog
+- Started translation to German
+- Fixed bug in Phyml sge-script
+
+TODO:
+- DSS/LRT gap threshold: Check with Frank again!
+- Bug: Dundee cluster filesystem timeout problems
+- FRANK: come up with additional "TOPALi Tips"
+
+Suggestions:
+- Store all default values in Prefs, so that there is one central file
+  were the default values can be viewed/changed.
+- Topali trees: Sequence coloring (by species) (Diego Miranda, dm435@cam.ac.uk)
+- Job cleanup: Check, does Topali really clean up the job directory (Jim Procter)
+
+
+Known Bugs
+- RaxML process sometimes doesn't stop (seems to happen on quite short alignments)
+- PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
+
+
+Some URLs
+---------
+Tomcat Manager:
+http://gruffalo:8080/
+
+Grid Report
+http://gruffalo/scri/ganglia/
+
+SCRI Cluster:
+http://gruffalo.scri.ac.uk/topali
+http://gruffalo.scri.ac.uk/broker
+
+www.topali.org - Usage:
+file://///gruffalo/www.topali.org/site_stats/index.html
+
+Misc.
+-----
+To run a script in a certain queue:
+#$ -q fast.q@n1
+
+If libs changes, edit:
+- j.bat (for testing)
+- build.xml (generates meta-inf classpath for topali.jar) (used by installer)
+- webstart/topali.jnlp
+
+Release
+-------
+- Set TOPALi.debug = false
+- Set logger level to warn/error
+- Build TOPALi
+- Create installers (check JRE bundling)
+- Build/deploy public topali server:
+	ant -Dproperties=build.scri-public.properties update
+- Upload installers
+- Sign and upload jars for WebStart
+- Update website (whatsnew/index.html and version.txt)
+

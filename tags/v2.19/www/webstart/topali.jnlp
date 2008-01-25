@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp codebase="http://www.topali.org/webstart" href="topali.jnlp">
+	<information>
+		<title>TOPALi v2</title>
+		<vendor>Biomathematics and Statistics Scotland</vendor>
+	</information>
+	<resources>
+		<j2se version="1.5+"/>
+		<jar href="axis.jar"/>
+		<jar href="castor-1.1-cycle-xml.jar"/>
+		<jar href="commons-codec-1.3.jar"/>
+		<jar href="commons-discovery-0.2.jar"/>
+		<jar href="commons-httpclient-3.0.jar"/>
+		<jar href="commons-logging-1.0.4.jar"/>
+		<jar href="forester.jar"/>
+		<jar href="jaxrpc.jar"/>
+		<jar href="jcommon-1.0.0.jar"/>
+		<jar href="jfreechart-1.0.1.jar"/>
+		<jar href="jh.jar"/>
+		<jar href="log4j-1.2.8.jar"/>
+		<jar href="looks-2.0.2.jar"/>
+		<jar href="office-2.0.jar"/>
+		<jar href="pal.jar"/>
+		<jar href="saaj.jar"/>
+		<jar href="scri-commons.jar"/>
+		<jar href="swing-layout-1.0.jar"/>
+		<jar href="topali.jar" main="true"/>
+		<jar href="vamsas-client.jar"/>
+	</resources>
+	<application-desc main-class="topali.gui.TOPALi">
+	</application-desc>
+	<security>
+		<all-permissions/>
+	</security>
+</jnlp>
+

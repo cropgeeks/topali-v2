@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Partitioning</title
+</title>
+
+<body>
+
+<h1>Partitioning</h1>
+
+<p>Working with partitions involves the use of the Current Partitions dialog, accessible
+by selecting <b>Alignment | Show Partitions Dialog</b> from the menu bar.</p>
+
+<p>A <i>partition</i> is defined as any region of the current alignment, and 
+contains both a starting nucleotide and an ending nucleotide. Splitting an
+alignment up into multiple partitions allows you to more easily
+analyze the various regions, and perform additional tasks upon them such as
+estimating phylogenetic trees relate only to that region and not the alignment
+as a whole.</p>
+
+<p>The Current Partitions dialog lists all defined partitions for an alignment,
+and also provides a Jukes Cantor/Neighbor Joining phylogenetic tree preview of the 
+currently selected partition.</p>
+
+<p><b>Working with partitions:</b><br>
+The dialog contains several buttons for working with partitions:
+<ul>
+  <li><b>New</b> - manually specific a new partition.</li>
+  <li><b>Edit</b> - edit selected partition.</li>
+  <li><b>Auto Partition</b> - <a href="auto_partition.html">automatically create partitions</a>
+based on analysis results.</li>
+  <li><b>Remove</b> - remove selected partition from list.</li>
+  <li><b>Remove All</b> - remove all partitions from list.</li>
+</ul>
+</p>
+
+<p>Two shortcut buttons for other commonly used TOPALi functions are located here
+too:
+<ul>
+  <li><b>Export</b> - <a href="export_alignment.html">export selected partition</a> to disk.</li>
+  <li><b>Create Tree</b> - <a href="estimate_tree.html">estimate phylogenetic tree</a> from partition.</li>
+</ul>
+</p>
+
+<p><b>Viewing partitions:</b><br>
+In addition to the JC/NJ tree preview, the currently selected partition will also
+be mirrored in TOPALi's Alignment View by dimming regions of the alignment outwith
+the selected partition's start and end points. Similarly, result sets that show
+a graph plotted against alignment length will highlight the current partition in a
+lighter colour.</p>
+
+<p><b>Selecting partitions:</b><br>
+In addition to creating partitions manually, it is also possible to create a new
+partition by selecting it directly from compatible graphs.</p>
+
+<p>To define a new partition click and hold the left-mouse button over the graph,
+then drag left or right with the mouse until the partition highlighting covers
+the desired region. Release the mouse to confirm the new partition.</p>
+
+<p>Note that partitions created in this way are not automatically added to the
+Current Partitions dialog. To do this, click the <b>Add Selection as New
+Partition</b> button located on the graph's toolbar.</p>
+
+</body>
+</html>

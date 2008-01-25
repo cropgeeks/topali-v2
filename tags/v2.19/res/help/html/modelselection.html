@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Title</title
+</title>
+
+<body>
+
+<h1>Model Selection</h1>
+Model Selection is done running PhyML on each model (in parallel on clusters 
+or multi-core machines). 
+<br><br>
+Three different scores will be calculated:
+<ul>
+<li>Akaike information criterion (AIC1): -2lnl + 2df</li>
+<li>AIC with second order correction (AIC2): -2lnl + 2df + 2df(df+1)/(n-df-1)</li>
+<li>Bayesian information criterion (BIC): -2lnl + df * log(n)</li>
+</ul>
+(lnl: log likelihood; df: degrees of freedom (model + tree); n: sample size)<br>
+You can choose the parameter 'n' either to be the sequence length or the alignment size.
+<br><br>
+The result table will be sorted in ascending order according to the BIC score 
+(the best model has the lowest score). You can sort the table in ascending/descending order
+according to each score by clicking on the appropriate column header.<br>
+In brackets after the scores the Robinson Foulds distance for the best model versus all models is
+shown (AIC1 column: best AIC model vs. all; AIC2 column: best AIC2 model vs. all; BIC column: best BIC model
+vs. all).
+<br><br>
+If you choose Model Selection for PhyML the following models will be tested.<br><br>
+For DNA alignments:<br>
+<img src="images/dna_submodels.png"/>
+<br>
+(gray: fixed values; color: estimated values)
+
+<br><br>
+For Protein alignments:<br>
+<img src="images/protein_submodels.png"/>
+<br>
+(all values fixed)
+<br><br>
+For both (DNA and protein) model types Model Selection will also test for rate heterogenity (proportion 
+if invariable sites and gamma distribution), if you selected these options.<br>
+<img src="images/rate_het.png"/>
+<br>
+(red: Proportion of invariable sites; blue: Gamma distribution)
+<br><br>
+Model Selection for MrBayes will test a subset of the above models.
+<br><br>
+
+The best model according to the BIC score will be selected automatically
+as default model for the alignment Model Selection was run with. You can change this by selecting
+a model in the Model Selection result and click on 'Select' button next to the model details.
+<br><br>
+The best model with regard to AIC1, AIC2 and BIC score will be highlighted in the according row.<br>
+If you run Model Selection on a DNA alignment, also the best models with regard to various likelihood
+ratio tests will be highlighted in the likelihood column.
+<br><br>
+<br><br>
+</body>
+</html>

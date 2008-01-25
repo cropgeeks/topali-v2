@@ -1,0 +1,122 @@
+/* ok, so it's a mess. sue me */
+
+html, body {
+background:white;
+color:black;
+font-family: "Tahoma", "Helvetica", "Arial", "sans-serif";
+padding:0;
+margin:0;}
+
+/* header styles **************************************************************/
+
+#header h1{
+color:white;
+text-transform:none;
+margin:0;
+padding:0;
+display:inline;
+letter-spacing:-3px;}
+
+#header {
+padding:0.5em;
+padding-top:1.5em;
+padding-bottom:0.5em;
+background:#3779cd;}
+
+#header a img {
+position:absolute;
+top:-1.6em;
+left:-0.2em;}
+
+#header a img {
+border:none;}
+
+#header #subtitle {
+color:white;
+position:relative;
+top:-0.4em;
+font-size:0.8em;}
+
+/* footer styles **************************************************************/
+
+#footer {
+padding:1em;
+color:white;
+background:#3779cd;}
+
+#footer p {
+text-align:left;
+font-size: 14px;
+margin:0.2em;
+line-height:0.5em;
+font-weight:900;}
+
+#lastChanged {
+color:#FBE79B;}
+
+/* front page styles, boxes, and stuff ****************************************/
+ 
+.category {
+text-align:justify;}
+
+.category *{
+display:inline;}
+
+.item {
+margin:1.5em;
+padding:1em;
+border: 1px solid #dedede;}
+
+.item p {
+display:block;
+margin:0;}
+
+/* general styles *************************************************************/
+
+.body {
+max-width: 750px;
+margin:5px;
+margin-left:auto;
+margin-right:auto;
+
+font-size: 13px;
+    line-height: 16px; color: #666666;
+}
+
+IMG
+{
+	border: 0;
+}
+
+.body h1, .body h2, .body h3{
+position:relative;
+top:0.35em;}
+
+.body .category h1, .body .category h2, .body .category h3 {
+position:static;}
+
+h3, h4 {
+font-weight:500;}
+
+dl, p, ol, ul, blockquote {
+//text-align:justify;
+//font-size:0.9em;
+//line-height:1.7em;}
+
+
+/* following to prevent shrinking nested text */
+ol ol, ul ol, ol ul, ul ul, ol p, ul p  {
+font-size:1em;}
+
+
+pre {
+border: 1px solid #dedede;
+padding:1em;}
+
+A:link, 
+A:visited, 
+A:active { 
+    text-decoration: none;
+    color: #0000ff;
+}
+                                                              
