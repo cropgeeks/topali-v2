@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 

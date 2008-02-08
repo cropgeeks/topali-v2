@@ -13,6 +13,7 @@ import javax.swing.event.*;
 
 import topali.gui.*;
 import topali.gui.results.ResultPanel;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 public class ThresholdDialog extends JDialog implements ActionListener, ChangeListener

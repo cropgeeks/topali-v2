@@ -41,7 +41,7 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		    initPrefResult((MBTreeResult)result);
 		
 		pack();
-		setSize(360,350);
+		setSize(getWidth(),370);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 	}

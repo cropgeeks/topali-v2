@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 
 /**
@@ -66,11 +67,11 @@ public class Utils {
 
     public static JPanel getButtonPanel(JButton bRun, JButton bCancel,
 	    JButton bDefault, JButton bHelp, JDialog parent, String help) {
-	bRun.setText("Run");
+	bRun.setText(Text.getString("run"));
 	bRun.addActionListener((ActionListener) parent);
-	bCancel.setText("Cancel");
+	bCancel.setText(Text.getString("cancel"));
 	bCancel.addActionListener((ActionListener) parent);
-	bDefault.setText("Defaults");
+	bDefault.setText(Text.getString("defaults"));
 	bDefault.addActionListener((ActionListener) parent);
 	if (help != null)
 	    bHelp = TOPALiHelp.getHelpButton(help);
@@ -253,11 +254,16 @@ public class Utils {
     /**
      * Copies an array into a new array of a certain type (dstClass) (usefull
      * for "casting" arrays, e.g. a float to double array, etc.) Also works with
-     * multidimensional arrays!
+     * multidimensional arrays
      * 
-     * Note: You can't directly cast a String[][]... into a primitive array
+     * Notes: 
+     * 1)
+     * You can't directly cast a String[][]... into a primitive array
      * (e.g. int[][]...). First cast String[][]... to Integer[][]..., then cast
      * Integer[][]... to int[][]...
+     * 2)
+     * If you want to cast ClassA[][]... to ClassB[][]... ClassB must have a
+     * constructor of the form ClassB(ClassA obj)
      * 
      * @param array
      * @param dstClass

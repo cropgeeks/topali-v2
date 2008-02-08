@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 
 import topali.data.AlignmentData;
 import topali.gui.*;
+import topali.i18n.Text;
 
 public class SequenceSetNode extends INode 
 {

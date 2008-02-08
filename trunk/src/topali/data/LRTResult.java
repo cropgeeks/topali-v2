@@ -13,7 +13,9 @@ import scri.commons.MatrixXML;
  */
 public class LRTResult extends AlignmentResult
 {
-
+    public static final int TYPE_FIXED = 0;
+    public static final int TYPE_VARIABLE = 1;
+    
 	// The method (JC, F84, etc)
 	public int method;
 
@@ -21,6 +23,10 @@ public class LRTResult extends AlignmentResult
 	public int window;
 
 	public int step;
+	
+	public int type = 0;
+
+	public boolean estimate = false;
 
 	// Number of LRT runs (including bootstraps)
 	public int runs;

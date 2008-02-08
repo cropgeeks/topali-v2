@@ -19,6 +19,7 @@ import pal.alignment.Alignment;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.mod.Filters;
 import topali.var.utils.Utils;
 import scri.commons.gui.*;
@@ -76,10 +77,8 @@ public class ExportDialog extends JDialog implements ActionListener
 		int allCount = ss.getSize();
 		int selCount = ss.getSelectedSequences().length;
 
-		String tAllSeq = "Export all sequences in the alignment (" + allCount
-				+ ")";
-		String tSelSeq = "Only export the currently selected sequences ("
-				+ selCount + "/" + allCount + ")";
+		String tAllSeq = Text.format(Text.I18N.getString("ExportDialog.1"), allCount);
+		String tSelSeq = Text.format(Text.I18N.getString("ExportDialog.2"), selCount, allCount);
 		rAllSeq = new JRadioButton(tAllSeq, Prefs.gui_export_allseqs);
 		rAllSeq.setMnemonic(KeyEvent.VK_A);
 		rSelSeq = new JRadioButton(tSelSeq, !Prefs.gui_export_allseqs);
@@ -95,13 +94,12 @@ public class ExportDialog extends JDialog implements ActionListener
 		}
 
 		JPanel p1 = new JPanel(new GridLayout(2, 1, 0, 0));
-		p1.setBorder(BorderFactory.createTitledBorder("Sequence selection:"));
+		p1.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("Sequence_selection")));
 		p1.add(rAllSeq);
 		p1.add(rSelSeq);
 
-		String tAllPar = "Export the full alignment (1-" + ss.getLength() + ")";
-		String tSelPar = "Export a concatenation of the currently selected "
-				+ "partitions (length = " + countConcatenatedLength() + ")";
+		String tAllPar = Text.format(Text.I18N.getString("ExportDialog.3"), ss.getLength());
+		String tSelPar = Text.format(Text.I18N.getString("ExportDialog.4"), countConcatenatedLength());
 		rAllPar = new JRadioButton(tAllPar, true);
 		rAllPar.setMnemonic(KeyEvent.VK_F);
 		rSelPar = new JRadioButton(tSelPar);
@@ -118,18 +116,18 @@ public class ExportDialog extends JDialog implements ActionListener
 			rSelPar.setSelected(true);
 
 		JPanel p2 = new JPanel(new GridLayout(2, 1, 0, 0));
-		p2.setBorder(BorderFactory.createTitledBorder("Alignment length:"));
+		p2.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("Alignment_length")));
 		p2.add(rAllPar);
 		p2.add(rSelPar);
 
-		rDisk = new JRadioButton("Export to a file on disk",
+		rDisk = new JRadioButton(Text.I18N.getString("ExportDialog.5"),
 				Prefs.gui_export_todisk);
 		rDisk.setMnemonic(KeyEvent.VK_D);
 		rProject = new JRadioButton(
-				"Add as a new alignment within the current project",
+			Text.I18N.getString("ExportDialog.6"),
 				!Prefs.gui_export_todisk);
 		rProject.setMnemonic(KeyEvent.VK_N);
-		rCodonPos = new JRadioButton("Split alignment according to codon positions");
+		rCodonPos = new JRadioButton(Text.I18N.getString("ExportDialog.7"));
 		rCodonPos.setMnemonic(KeyEvent.VK_C);
 		rCodonPos.setEnabled(ss.isCodons());
 		ButtonGroup group3 = new ButtonGroup();
@@ -138,7 +136,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		group3.add(rCodonPos);
 		
 		JPanel p3 = new JPanel(new GridLayout(3, 1, 0, 0));
-		p3.setBorder(BorderFactory.createTitledBorder("Export options:"));
+		p3.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("ExportDialog.8")));
 		p3.add(rDisk);
 		p3.add(rProject);
 		p3.add(rCodonPos);
@@ -241,14 +239,13 @@ public class ExportDialog extends JDialog implements ActionListener
 			try
 			{
 				toExport.save(filename, Prefs.gui_filter_algn, false);
-				MsgBox.msg(filename + " was successfully saved to disk.",
+				MsgBox.msg(Text.format(Text.I18N.getString("ExportDialog.9"), filename),
 						MsgBox.INF);
 				return true;
 			} catch (Exception e)
 			{
 				log.warn("Export failed.\n",e);
-				MsgBox.msg(filename
-						+ " could not be saved due to the following error:\n "
+				MsgBox.msg(Text.format(Text.I18N.getString("ExportDialog.10"), filename)+"\n"
 						+ e, MsgBox.ERR);
 				return false;
 			}
@@ -282,8 +279,7 @@ public class ExportDialog extends JDialog implements ActionListener
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = file
-						+ " already exists.\nDo you want to replace it?";
+				String msg = Text.format(Text.I18N.getString("ExportDialog.11"), file);
 				int response = MsgBox.yesnocan(msg, 1);
 
 				if (response == JOptionPane.NO_OPTION)

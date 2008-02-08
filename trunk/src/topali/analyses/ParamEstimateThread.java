@@ -13,6 +13,7 @@ import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.NeighborJoiningTree;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.threads.*;
 
 public class ParamEstimateThread extends DesktopThread

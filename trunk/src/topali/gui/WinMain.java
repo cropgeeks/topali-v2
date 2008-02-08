@@ -37,6 +37,7 @@ import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
 import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
+import topali.i18n.Text;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
 import topali.var.SysPrefs;
@@ -141,9 +142,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			if (WinMainMenuBar.aFileSave.isEnabled())
 			{
-				String msg = "The current project has unsaved changes. Save now?";
+				String msg = Text.I18N.getString("shutdown.1");
 				if (jobsPanel.hasJobs())
-					msg = "The current project has unsaved changes (and analysis jobs are still running!). Save now?";
+					msg = Text.I18N.getString("shutdown.2");
 
 				int res = MsgBox.yesnocan(msg, 0);
 
@@ -224,7 +225,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 				URL url = getClass().getResource("/res/example-alignment.phy");
 				try
 				{
-					File tmpFile = new File(SysPrefs.tmpDir, "example.txt");
+					File tmpFile = new File(SysPrefs.tmpDir, "Example.txt");
 					FileUtils.writeFile(tmpFile, url.openStream());
 					d.loadAlignment(tmpFile);
 				} catch (Exception e)

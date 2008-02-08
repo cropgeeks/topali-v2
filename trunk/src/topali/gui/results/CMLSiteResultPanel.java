@@ -68,7 +68,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	private GraphPanel createGraphPanel()
 	{
 		GraphPanel p = new GraphPanel(data, (AlignmentResult)result, new double[][]
-		{}, 1.05, GraphPanel.RIGHT);
+		{}, 1.05, "graph");
 		return p;
 	}
 
@@ -108,7 +108,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 				
 		Vector<Vector<Object>> data = getTableVector(((AlignmentResult)result).threshold);
 		
-		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, "table");
 		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
 		p.accessTable().getSelectionModel().addListSelectionListener(this);
 		p.accessTable().getColumnModel().getColumn(0).setMinWidth(120);
@@ -280,7 +280,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 	{
 		Printable[] p = new Printable[2];
 		p[0] = table.getPrintable();
-		p[1] = graph;
+		p[1] = graph.getPrintable();
 		return p;
 	}
 

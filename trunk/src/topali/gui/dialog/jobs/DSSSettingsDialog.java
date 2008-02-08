@@ -14,6 +14,7 @@ import scri.commons.gui.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
@@ -105,12 +106,13 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.window = Prefs.dss_window;
 		result.treeToolTipWindow = Prefs.dss_window;
 		result.step = Prefs.dss_step;
+		result.type = Prefs.dss_varwindow ? DSSResult.TYPE_VARIABLE : DSSResult.TYPE_FIXED;
 		result.runs = Prefs.dss_runs + 1;
 
 		result.method = Prefs.dss_method;
 		result.power = Prefs.dss_power;
 		result.passCount = Prefs.dss_pass_count;
-		result.avgDist = topali.cluster.jobs.dss.DSS.getAverageDistance(ss);
+		result.avgDist = topali.cluster.jobs.dss.analysis.DSS.getAverageDistance(ss);
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
 		
@@ -177,27 +179,22 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 		BasicPanel()
 		{
-			slidePanel = new SlidePanel(data, Prefs.dss_window, Prefs.dss_step);
+		    int varWindow = Prefs.dss_varwindow ? 1 : 0;
+			slidePanel = new SlidePanel(data, Prefs.dss_window, Prefs.dss_step, varWindow);
 
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(
-					"Please confirm the current settings for "
-							+ "running DSS. Additional configuration is also");
-			JLabel info2 = new JLabel("<html>available by selecting the <b>"
-					+ "Advanced</b> tab and modifying the options found there."
-					+ "</html>");
-
+			JLabel info1 = new JLabel(Text.I18N.getString("DSSSettingsDialog.gui11"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(info2, 0, 1, 1, 1, new Insets(0, 5, 10, 5));
-			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
 		}
 
 		void saveSettings()
 		{
 			Prefs.dss_window = slidePanel.getWindowSize();
 			Prefs.dss_step = slidePanel.getStepSize();
+			Prefs.dss_varwindow = slidePanel.getVarWinSize();
 		}
 	}
 
@@ -216,7 +213,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 		AdvancedPanel()
 		{
-			setPreferredSize(new Dimension(50, 50));
+			//setPreferredSize(new Dimension(300, 50));
 
 			// Threshold runs
 			runsModel = new SpinnerNumberModel(Prefs.dss_runs, 10, 1000, 1);

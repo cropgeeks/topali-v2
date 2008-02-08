@@ -141,7 +141,7 @@ public class CMLBranchResultPanel extends ResultPanel
 			data.add(row);
 		}
 
-		TablePanel p = new TablePanel(data, names, TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, "table1");
 		((CustomTable)p.accessTable()).setHeaderToolTips(tt);
 		p.accessTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
@@ -198,8 +198,7 @@ public class CMLBranchResultPanel extends ResultPanel
 			data.add(row);
 		}
 
-		TablePanel p = new TablePanel(data, names,
-				TablePanel.RIGHT);
+		TablePanel p = new TablePanel(data, names, "table2");
 		p.accessTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//	p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createTitledBorder("LRT - p values"));

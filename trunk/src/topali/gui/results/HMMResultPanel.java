@@ -32,12 +32,9 @@ public class HMMResultPanel extends ResultPanel {
 	    double[][] graph3data = (double[][]) Utils.castArray(result.data3,
 		    double.class);
 
-	    graph1 = new GraphPanel(data, result, graph1data, 1.01,
-		    GraphPanel.RIGHT);
-	    graph2 = new GraphPanel(data, result, graph2data, 1.01,
-		    GraphPanel.RIGHT);
-	    graph3 = new GraphPanel(data, result, graph3data, 1.01,
-		    GraphPanel.RIGHT);
+	    graph1 = new GraphPanel(data, result, graph1data, 1.01, "topology1");
+	    graph2 = new GraphPanel(data, result, graph2data, 1.01, "topology2");
+	    graph3 = new GraphPanel(data, result, graph3data, 1.01, "topology3");
 
 	    graph1
 		    .setBorder(BorderFactory
@@ -131,7 +128,7 @@ public class HMMResultPanel extends ResultPanel {
 
     @Override
     public Printable[] getPrintables() {
-	return new Printable[] { graph1, graph2, graph3 };
+	return new Printable[] { graph1.getPrintable(), graph2.getPrintable(), graph3.getPrintable() };
     }
 
     @Override

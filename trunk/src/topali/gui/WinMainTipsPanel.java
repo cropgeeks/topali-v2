@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 
 public class WinMainTipsPanel extends JPanel implements ActionListener

@@ -14,6 +14,7 @@ import topali.analyses.*;
 import topali.cluster.JobStatus;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.*;
 

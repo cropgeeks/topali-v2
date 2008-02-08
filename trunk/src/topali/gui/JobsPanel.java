@@ -15,10 +15,10 @@ import topali.cluster.JobStatus;
 import topali.cluster.jobs.*;
 import topali.data.*;
 import topali.gui.jobs.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
-public class JobsPanel extends JPanel
-{
+public class JobsPanel extends JPanel {
 
 	private final JobsThread jobsThread;
 
@@ -27,7 +27,7 @@ public class JobsPanel extends JPanel
 	private final JPanel jp;
 
 	public Vector<JobsPanelEntry> jobs;
-
+	
 	public JobsPanel()
 	{
 		jobs = new Vector<JobsPanelEntry>();
@@ -345,7 +345,7 @@ public class JobsPanel extends JPanel
 		for (JobsPanelEntry entry : jobs)
 			entry.setSelected(false);
 		e.setSelected(true);
-
+		
 		if (e.getJob().errorInfo != null)
 		{
 			String txt = "This job has failed.\n\nIf you continue to see such "
@@ -362,4 +362,9 @@ public class JobsPanel extends JPanel
 			infoText.setCaretPosition(0);
 		}
 	}
+
+	public void clearInfoPanel() {
+	    infoText.setText("");
+	}
+	
 }

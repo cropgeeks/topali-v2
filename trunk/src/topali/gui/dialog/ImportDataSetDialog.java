@@ -20,6 +20,7 @@ import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.mod.Filters;
 import scri.commons.gui.MsgBox;
 
@@ -54,7 +55,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		JLabel icon = new JLabel(Icons.UNKNOWN);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
-		JLabel label1 = new JLabel("Processing alignment...please be patient.");
+		JLabel label1 = new JLabel(Text.I18N.getString("ImportDataSetDialog.gui02"));
 		JPanel p1 = new JPanel(new GridLayout(1, 1, 0, 2));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
 		p1.add(label1);

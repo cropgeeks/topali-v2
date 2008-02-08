@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -84,6 +84,7 @@ int CheckModel (void)
 {
 	
 	int			a, b, d, i, j, k, m, n, ns, paramCount, nOfParam, isFirst, shouldPrint, isSame;
+	char		tempName[100];
 
 	/* set up table of linkages */
 	if (SetUpModel () == ERROR)
@@ -133,7 +134,7 @@ int CheckModel (void)
 		if (modelParams[i].dataType == CONTINUOUS)
 			{
 			/* begin description of continuous models */
-			  if (!strcmp(modelParams[i].brownCorPr, "Fixed") && fabs(modelParams[i].brownCorrFix)<ETA) /*==0.0*/
+			  if (!strcmp(modelParams[i].brownCorPr, "Fixed") && AreDoublesEqual(modelParams[i].brownCorrFix, 0.0, ETA)==YES)
 				MrBayesPrint ("%s         Model     = Independent Brownian motion\n", spacer);
 			else
 				MrBayesPrint ("%s         Model     = Correlated Brownian motion\n", spacer);
@@ -413,8 +414,8 @@ int CheckModel (void)
 					if (modelParams[i].dataType == STANDARD)
 						{
 						if (!strcmp(modelParams[i].symPiPr,"Fixed"))
-						        { /* modelParams[i].symBetaFix == -1 */
-							if (fabs(modelParams[i].symBetaFix+1.0)<ETA)
+						        { 
+							  if (AreDoublesEqual(modelParams[i].symBetaFix, -1.0,ETA)==YES)
 								MrBayesPrint ("%s                     State frequencies are fixed to be equal\n", spacer);
 							else
 								MrBayesPrint ("%s                     Symmetric Dirichlet is fixed to %1.2lf\n", spacer, modelParams[i].symBetaFix);
@@ -935,7 +936,7 @@ int CheckModel (void)
 								MrBayesPrint ("%s            Prior      = Symmetric dirichlet with exponential(%1.2lf) variance parameter\n", spacer, modelParams[i].symBetaExp);
 							else
 							        { /* modelParams[i].symBetaFix == -1 */
-								if (fabs(modelParams[i].symBetaFix + 1.0)<ETA)
+								  if (AreDoublesEqual(modelParams[i].symBetaFix, 1.0, ETA)==YES)
 									MrBayesPrint ("%s            Prior      = State frequencies are equal\n", spacer);
 								else
 									MrBayesPrint ("%s            Prior      = Symmetric dirichlet with fixed(%1.2lf) variance parameter\n", spacer, modelParams[i].symBetaFix);
@@ -1066,6 +1067,39 @@ int CheckModel (void)
 									else
 										MrBayesPrint ("%s                         Tree height has an Exponential(%1.3lf) distribution\n", spacer, modelParams[i].treeHeightExp);
 									}
+								b = 0;
+								for (a=0; a<numTaxa; a++)
+									{
+									if (taxaInfo[a].isDeleted == NO && taxaInfo[a].calibration.prior != unconstrained)
+										b++;
+									}
+								for (a=0; a<MAX_NUM_CONSTRAINTS; a++)
+									{
+									if (modelParams[i].activeConstraints[a] == YES && constraintCalibration[a].prior != unconstrained)
+										b++;
+									}
+								if (b > 0)
+									{
+									MrBayesPrint ("%s                         Branch lengths are constrained by the following age constraint%s:\n", spacer, b > 1 ? "s" : "");
+									for (a=0; a<numTaxa; a++)
+										{
+										if (taxaInfo[a].isDeleted == NO && taxaInfo[a].calibration.prior != unconstrained)
+											{
+											GetNameFromString (taxaNames, tempName, a+1);
+											MrBayesPrint ("%s                         -- The age of terminal \"%s\" is %s\n", spacer, tempName,
+												taxaInfo[a].calibration.name);
+											}
+										}
+									for (a=0; a<numDefinedConstraints; a++)
+										{
+										if (modelParams[i].activeConstraints[a-numTaxa] == YES && constraintCalibration[a].prior != unconstrained)
+											{
+											GetNameFromString (constraintNames, tempName, a+1);
+											MrBayesPrint ("%s                         -- The age of constrained node \"%s\" is %s\n", spacer, tempName,
+												constraintCalibration[a].name);
+											}
+										}
+									}
 								}
 							}
 						}
@@ -1116,7 +1150,7 @@ int CheckModel (void)
 							for (a=0; a<9; a++)
 								for (b=a+1; b<10; b++)
 								        /* modelParams[i].aaModelPrProbs[a] != modelParams[i].aaModelPrProbs[b] */
-								        if (fabs(modelParams[i].aaModelPrProbs[a]-modelParams[i].aaModelPrProbs[b])>ETA)
+ 						        if (AreDoublesEqual(modelParams[i].aaModelPrProbs[a], modelParams[i].aaModelPrProbs[b], ETA)==FALSE)
 										isSame = NO;
 							MrBayesPrint ("%s            Prior      = Poisson, Jones, Dayhoff, Mtrev, Mtmam, Wag, Rtrev,\n", spacer);
 							if (isSame == YES)
@@ -4497,7 +4531,7 @@ int DoPrsetParm (char *parmName, char *tkn)
 						else if (!strcmp(modelParams[i].speciationPr,"Fixed"))
 							{
 							sscanf (tkn, "%lf", &tempD);
-							if (fabs(tempD)<ETA)
+							if (AreDoublesEqual(tempD, 0.0, ETA)==YES)
 								{
 								MrBayesPrint ("%s   Speciation rate cannot be fixed to 0.0\n", spacer);
 								return (ERROR);
@@ -4786,7 +4820,7 @@ int DoPrsetParm (char *parmName, char *tkn)
 						else if (!strcmp(modelParams[i].thetaPr,"Fixed"))
 							{
 							sscanf (tkn, "%lf", &tempD);
-							if (fabs(tempD)<ETA)
+							if (AreDoublesEqual(tempD, 0.0, ETA)==YES)
 								{
 								MrBayesPrint ("%s   Theta cannot be fixed to 0.0\n", spacer);
 								return (ERROR);
@@ -4881,7 +4915,7 @@ int DoPrsetParm (char *parmName, char *tkn)
 						else if (!strcmp(modelParams[i].calWaitPr,"Fixed"))
 							{
 							sscanf (tkn, "%lf", &tempD);
-							if (fabs(tempD)<ETA)
+							if (AreDoublesEqual(tempD, 0.0,ETA)==YES)
 								{
 								MrBayesPrint ("%s   Clock waiting time cannot be fixed to 0.0\n", spacer);
 								return (ERROR);

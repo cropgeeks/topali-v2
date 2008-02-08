@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 public class ImportOptionsDialog extends JDialog implements ActionListener
@@ -23,7 +24,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	public ImportOptionsDialog(WinMain winMain)
 	{
-		super(winMain, "Import Alignment", true);
+		super(winMain, java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.1"), true);
 
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
@@ -42,26 +43,22 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		DblClickListener dblListener = new DblClickListener();
 
 		rImport = new JRadioButton(
-				"by using an existing file on disk that already "
-						+ "contains aligned DNA (or Protein)");
+				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.2"));
 		rImport.setMnemonic(KeyEvent.VK_E);
 		rImport.addMouseListener(dblListener);
 		rCDNA = new JRadioButton(
-				"by creating a new DNA alignment from unaligned cDNAs and "
-						+ "a guide protein alignment");
+				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.3"));
 		rCDNA.setMnemonic(KeyEvent.VK_C);
 		rCDNA.addMouseListener(dblListener);
-		rAlign = new JRadioButton("by performing a (clustal) alignment on "
-				+ "existing, unaligned DNA");
+		rAlign = new JRadioButton(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.4"));
 		rAlign.setMnemonic(KeyEvent.VK_P);
 		rAlign.setEnabled(false);
 		rMulti = new JRadioButton(
-				"by selecting a folder of multiple, multiple alignments "
-						+ "for comparitive genomic analysis");
+				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.5"));
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
 
-		rExSeq = new JRadioButton("by allowing TOPALi to provide me with an example alignment");
+		rExSeq = new JRadioButton(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.6"));
 		rExSeq.setMnemonic(KeyEvent.VK_T);
 		rExSeq.addMouseListener(dblListener);
 
@@ -93,8 +90,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 		JPanel p1 = new JPanel(new GridLayout(5, 1));
 		p1.setBorder(BorderFactory
-				.createTitledBorder("Please select how you'd "
-						+ "like to import data into TOPALi:"));
+				.createTitledBorder(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.7")));
 		p1.add(rImport);
 		p1.add(rCDNA);
 		p1.add(rAlign);

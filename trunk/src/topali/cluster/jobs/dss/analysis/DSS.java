@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.dss;
+package topali.cluster.jobs.dss.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,9 +57,6 @@ public class DSS
 
 	void calculateFitchScores() throws Exception
 	{
-	    if(wrkDir.toString().contains("win27")) {
-		System.out.println("");
-	    }
 	    
 		//Exclude bad sequences
 		if(this.gapThreshold<1) {
@@ -106,9 +103,6 @@ public class DSS
 	 */
 	double calculateDSS() throws Exception
 	{
-	    if(wrkDir.toString().contains("win27")) {
-		System.out.println("");
-	    }
 	    
 	    if(less4)
 		return 0;

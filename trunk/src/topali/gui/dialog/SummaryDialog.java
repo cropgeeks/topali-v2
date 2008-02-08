@@ -15,6 +15,7 @@ import pal.alignment.SimpleAlignment;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.MsgBox;
 

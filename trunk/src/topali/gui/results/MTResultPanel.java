@@ -45,7 +45,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		tp.accessTable().setRowSorter(sorter);
 		p1.add(tp, BorderLayout.CENTER);
 		
-		infoPanel = new ModelInfoPanel(data,this);
+		infoPanel = new ModelInfoPanel(data,this, "model");
 		p1.add(infoPanel, BorderLayout.SOUTH);
 		
 		addContent(p1, false);
@@ -198,7 +198,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			i++;
 		}
 		
-		TablePanel tp = new TablePanel(rowData, colNames, TablePanel.RIGHT);
+		TablePanel tp = new TablePanel(rowData, colNames, "table");
 		((CustomTable)tp.accessTable()).setHeaderToolTips(tips);
 		tp.accessTable().getColumnModel().getColumn(1).setMaxWidth(50); 
 		
@@ -246,7 +246,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	@Override
 	public Printable[] getPrintables()
 	{
-		return new Printable[] {tp.getPrintable()};
+		return new Printable[] {tp.getPrintable(), infoPanel.getPrintable()};
 	}
 
 	@Override

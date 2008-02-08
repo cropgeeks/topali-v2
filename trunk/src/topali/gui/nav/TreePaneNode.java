@@ -15,6 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import topali.data.AlignmentData;
 import topali.gui.*;
 import topali.gui.tree.TreePane;
+import topali.i18n.Text;
 
 public class TreePaneNode extends INode implements IPrintable
 {

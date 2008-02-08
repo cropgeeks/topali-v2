@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.*;
 

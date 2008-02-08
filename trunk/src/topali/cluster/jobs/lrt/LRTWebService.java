@@ -41,7 +41,7 @@ public class LRTWebService extends WebService
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			RunLRT lrt = new RunLRT(jobDir, ss, result);
+			LRTInitializer lrt = new LRTInitializer(jobDir, ss, result);
 			lrt.start();
 
 			accessLog.info("LRT request from " + jobId);
@@ -59,7 +59,7 @@ public class LRTWebService extends WebService
 	{
 		try
 		{
-			return new CollateLRT(jobDir).getPercentageComplete();
+			return new LRTMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
 			logger.log(Level.ERROR, e.getMessage(), e);
@@ -73,7 +73,7 @@ public class LRTWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
-			LRTResult result = new CollateLRT(jobDir).getResult();
+			LRTResult result = new LRTMonitor(jobDir).getResult();
 
 			logger.info(jobId + " - returning result");
 			accessLog.info("LRT result  to   " + jobId);

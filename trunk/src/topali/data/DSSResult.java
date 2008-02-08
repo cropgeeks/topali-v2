@@ -13,6 +13,9 @@ import scri.commons.MatrixXML;
  */
 public class DSSResult extends AlignmentResult 
 {
+    public static final int TYPE_FIXED = 0;
+    public static final int TYPE_VARIABLE = 1;
+    
 
 	// The location of the Fitch binary
 	public String fitchPath;
@@ -25,7 +28,11 @@ public class DSSResult extends AlignmentResult
 
 	// Step size and window size
 	public int window;
+	
+	public int type = 0;
 
+	public boolean estimate = false;
+	
 	public int step;
 
 	// One pass or two

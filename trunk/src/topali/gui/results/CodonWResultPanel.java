@@ -21,7 +21,7 @@ public class CodonWResultPanel extends ResultPanel
 	public CodonWResultPanel(AlignmentData data, CodonWResult result)
 	{
 		super(data, result);
-		panel = new TextPanel(TextPanel.RIGHT);
+		panel = new TextPanel(null);
 		panel.setText(result.result);
 
 		GradientPanel gp = new GradientPanel("CodonW Output");
@@ -61,7 +61,7 @@ public class CodonWResultPanel extends ResultPanel
 	@Override
 	public Printable[] getPrintables()
 	{
-		return new Printable[] {panel};
+		return new Printable[] {panel.getPrintable()};
 	}
 
 	@Override

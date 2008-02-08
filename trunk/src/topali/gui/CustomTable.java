@@ -94,7 +94,7 @@ public class CustomTable extends JTable
 	 * 
 	 * @return PNG encoded image of the table
 	 */
-	public BufferedImage getPNGImage() {
+	public BufferedImage getBufferedImage() {
 		int selected = getSelectedRow();
 		getSelectionModel().clearSelection();
 		

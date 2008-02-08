@@ -13,6 +13,7 @@ import javax.swing.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.*;
 
@@ -98,6 +99,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.window = Prefs.lrt_window;
 		result.treeToolTipWindow = Prefs.lrt_window;
 		result.step = Prefs.lrt_step;
+		result.type = Prefs.lrt_varwindow ? LRTResult.TYPE_VARIABLE : LRTResult.TYPE_FIXED;
 		result.runs = Prefs.lrt_runs + 1;
 
 		result.method = Prefs.lrt_method;
@@ -144,7 +146,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 	private void defaultClicked()
 	{
 		int res = MsgBox.yesno(Text.I18N
-				.getString("LRTSettingsDialog.gui06"), 1);
+				.getString("default_settings_warning"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -163,27 +165,22 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 		BasicPanel()
 		{
-			slidePanel = new SlidePanel(data, Prefs.lrt_window, Prefs.lrt_step);
+		    int varWindow = Prefs.lrt_varwindow ? 1 : 0;
+			slidePanel = new SlidePanel(data, Prefs.lrt_window, Prefs.lrt_step, varWindow);
 
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(
-					"Please confirm the current settings for "
-							+ "running LRT. Additional configuration is also");
-			JLabel info2 = new JLabel("<html>available by selecting the <b>"
-					+ "Advanced</b> tab and modifying the options found there."
-					+ "</html>");
-
+			JLabel info1 = new JLabel(Text.I18N.getString("LRTSettingsDialog.gui11"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(info2, 0, 1, 1, 1, new Insets(0, 5, 10, 5));
-			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
 		}
 
 		void saveSettings()
 		{
 			Prefs.lrt_window = slidePanel.getWindowSize();
 			Prefs.lrt_step = slidePanel.getStepSize();
+			Prefs.lrt_varwindow = slidePanel.getVarWinSize();
 		}
 	}
 
@@ -199,7 +196,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 		AdvancedPanel()
 		{
-			setPreferredSize(new Dimension(50, 50));
+			//setPreferredSize(new Dimension(300, 50));
 
 			// Threshold runs
 			runsModel = new SpinnerNumberModel(Prefs.lrt_runs, 10, 1000, 1);
@@ -207,8 +204,8 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 			((JSpinner.NumberEditor) cRuns.getEditor())
 					.getTextField()
 					.setToolTipText(
-							"Number of times to re-run the analysis to calculate the threshold values");
-			lRuns = new JLabel("Number of bootstrapping threshold runs:");
+							java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui12"));
+			lRuns = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui13"));
 
 			// Substitution model
 			String[] v4 =
@@ -216,16 +213,16 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 			cModel = new JComboBox(v4);
 			cModel.setSelectedIndex(Prefs.lrt_method - 1);
 			cModel
-					.setToolTipText("Nucleotide substitution model to use in distance matrix calculations");
-			lModel = new JLabel("Nucleotide substitution model:");
+					.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui14"));
+			lModel = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui15"));
 
 			gapsModel = new SpinnerNumberModel(Prefs.lrt_gap_threshold, 0d, 1d, 0.1d);
 			cGaps = new JSpinner(gapsModel);
 			((JSpinner.NumberEditor) cGaps.getEditor())
 					.getTextField()
 					.setToolTipText(
-							"bla bla");
-			lGaps = new JLabel("Gap threshold:");
+							java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui16"));
+			lGaps = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui17"));
 			
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());

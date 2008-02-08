@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import topali.gui.nav.NavPanel;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 
 public class WinMainToolBar extends JToolBar

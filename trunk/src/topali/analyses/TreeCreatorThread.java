@@ -13,6 +13,7 @@ import pal.misc.Identifier;
 import pal.substmodel.*;
 import pal.tree.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.threads.*;
 import scri.commons.gui.MsgBox;
 

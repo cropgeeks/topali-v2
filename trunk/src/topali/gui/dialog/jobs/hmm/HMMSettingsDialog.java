@@ -14,6 +14,7 @@ import scri.commons.gui.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
@@ -38,7 +39,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 	public HMMSettingsDialog(WinMain winMain, AlignmentData data,
 			HMMResult iResult)
 	{
-		super(winMain, "Hidden Markov Model - Confirm Settings", true);
+		super(winMain, java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.2"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -78,10 +79,10 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		runPanel = new RunPanel();
 
 		tabs.removeAll();
-		tabs.addTab("Basic", basicPanel);
-		tabs.addTab("Topology Structure", mosaicPanel);
-		tabs.addTab("Model Settings", modelPanel);
-		tabs.addTab("Run Settings", runPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Basic"), basicPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.3"), mosaicPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Model_Settings"), modelPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Run_Settings"), runPanel);
 	}
 
 	public HMMResult getHMMResult()
@@ -185,9 +186,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(
-				"This will return all settings (on all tabs) to their default "
-						+ "values. Continue?", 1);
+		int res = MsgBox.yesno(Text.I18N.getString("default_settings_warning"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -207,19 +206,12 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(
-					"Please confirm the current settings for "
-							+ "running HMM. Additional configuration is also available");
-			JLabel info2 = new JLabel(
-					"<html>by selecting the <b>Topology</b>, "
-							+ "<b>Model</b> or <b>Run</b> tabs and modifying the options "
-							+ "found there.</html>");
-
+			JLabel info1 = new JLabel(Text.getString("HMMSettingsDialog.1"));
+			
 			layout.add(info1, 0, 0, 1, 5, new Insets(5, 5, 2, 5));
-			layout.add(info2, 0, 1, 1, 5, new Insets(0, 5, 10, 5));
 
-			layout.add(new JLabel(" "), 0, 2, 1, 4, new Insets(5, 5, 5, 5));
-			layout.add(new JLabel(" "), 0, 3, 1, 3, new Insets(5, 5, 5, 5));
+			layout.add(new JLabel(" "), 0, 1, 1, 4, new Insets(5, 5, 5, 5));
+			layout.add(new JLabel(" "), 0, 2, 1, 3, new Insets(5, 5, 5, 5));
 		}
 	}
 
@@ -238,14 +230,14 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		ModelPanel()
 		{
 			setPreferredSize(new Dimension(50, 50));
-
+                        
 			// Model
 			String[] v1 =
 			{ "F84+gaps", "JC+gaps", "K2P+gaps", "F81+gaps" };
 			cModel = new JComboBox(v1);
 			cModel.setSelectedItem(Prefs.hmm_model);
 			cModel.addActionListener(this);
-			lModel = new JLabel("Nucleotide substitution model:");
+			lModel = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.7"));
 
 			// Initial
 			String[] v2 =
@@ -253,36 +245,33 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			cInitial = new JComboBox(v2);
 			cInitial.setSelectedItem(Prefs.hmm_initial);
 			cInitial.addActionListener(this);
-			lInitial = new JLabel(
-					"Estimate initial character frequencies from data:");
+			lInitial = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.4"));
 
 			cFreqEst1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_1));
 			cFreqEst2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_2));
 			cFreqEst3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_3));
 			cFreqEst4 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_4));
-			lFreqEst = new JLabel("    Frequency estimates:");
+			lFreqEst = new JLabel("    "+ java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.5"));
 
 			// Transition
 			cTransition = new JComboBox(v2);
 			cTransition.setSelectedItem(Prefs.hmm_transition);
 			cTransition.addActionListener(this);
-			lTransition = new JLabel(
-					"Estimate transition/transversion ratio from data:");
+			lTransition = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.6"));
 
 			cTransRatio = new JTextField(Utils.d4
 					.format(Prefs.hmm_transition_ratio));
-			lTransRatio = new JLabel(
-					"    Initial transition-transversion ratio:");
+			lTransRatio = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.8"));
 
 			// Frequencies
 			cFreq1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_1));
 			cFreq2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_2));
 			cFreq3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_3));
-			lFreq = new JLabel("Frequencies of the three topologies:");
+			lFreq = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.9"));
 
 			// Difficulty
 			cDifficulty = new JTextField(Utils.d4.format(Prefs.hmm_difficulty));
-			lDifficulty = new JLabel("Difficulty of changing trees:");
+			lDifficulty = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.10"));
 
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
@@ -402,7 +391,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error("Frequency estimates: values must sum to one.",
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.11"),
 						cFreqEst1);
 			}
 
@@ -417,7 +406,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						"Initial transition-transversion ratio: positive number expected.",
+						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.12"),
 						cTransRatio);
 			}
 
@@ -444,7 +433,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 				Prefs.hmm_freq_3 = Prefs.hmm_freq_3 / sum;
 			} catch (Exception e)
 			{
-				return error("Topology frequencies: values must sum to one.",
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.13"),
 						cFreq1);
 			}
 
@@ -457,7 +446,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						"Difficulty of changing trees: number must be between zero and one.",
+						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.14"),
 						cDifficulty);
 			}
 
@@ -466,8 +455,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 		private boolean error(String msg, Component control)
 		{
-			String str = "An incorrect value has been entered for the "
-					+ "following model setting:\n" + msg;
+			String str = java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.15") + msg;
 
 			MsgBox.msg(str, MsgBox.ERR);
 			control.requestFocus();
@@ -491,26 +479,26 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			// Burn
 			cBurn = new JTextField("" + Prefs.hmm_burn);
-			lBurn = new JLabel("Length of the burn-in period:");
+			lBurn = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.16"));
 
 			// Sample
 			cSample = new JTextField("" + Prefs.hmm_points * Prefs.hmm_thinning);
 			cSample.setEnabled(false);
 			lSample = new JLabel(
-					"Length of the sampling period (determined by):");
+					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.17"));
 			lSample.setEnabled(false);
 
 			// Points
 			cPoints = new JTextField("" + Prefs.hmm_points);
-			lPoints = new JLabel("    Number of points to return:");
+			lPoints = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.18"));
 
 			// Thinning
 			cThinning = new JTextField("" + Prefs.hmm_thinning);
-			lThinning = new JLabel("    Thinning interval:");
+			lThinning = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.19"));
 
 			// Tuning intervale
 			cTune = new JTextField("" + Prefs.hmm_tuning);
-			lTune = new JLabel("Tuning interval:");
+			lTune = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.20"));
 
 			// Lambda
 			String[] v1 =
@@ -518,30 +506,30 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			cLambda = new JComboBox(v1);
 			cLambda.setSelectedItem(Prefs.hmm_lambda);
 			cLambda.addActionListener(this);
-			lLambda = new JLabel("Update lambda with Gibbs sampling:");
+			lLambda = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.21"));
 
 			// Annealing
 			String[] v2 =
 			{ "PAR", "PROB", "NONE" };
 			cAnneal = new JComboBox(v2);
 			cAnneal.setSelectedItem(Prefs.hmm_annealing);
-			lAnneal = new JLabel("    Annealing scheme for lambda:");
+			lAnneal = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.22"));
 
 			// Stationary frequencies
 			cStation = new JComboBox(v1);
 			cStation.setSelectedItem(Prefs.hmm_station);
 			lStation = new JLabel(
-					"Update stationary frequencies in MCMC algorithm:");
+					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.23"));
 
 			// Transition-transversion ratio
 			cUpdate = new JComboBox(v1);
 			cUpdate.setSelectedItem(Prefs.hmm_update);
 			lUpdate = new JLabel(
-					"Update transition-transversion ratio in MCMC algorithm:");
+					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.24"));
 
 			// Branch length
 			cBranch = new JTextField(Utils.d4.format(Prefs.hmm_branch));
-			lBranch = new JLabel("Branch length in initial trees:");
+			lBranch = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.25"));
 
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
@@ -657,7 +645,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error("Burn-in period: positive integer expexted.",
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.26"),
 						cBurn);
 			}
 
@@ -669,7 +657,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						"Number of points to return: positive integer expexted.",
+						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.27"),
 						cPoints);
 			}
 
@@ -680,7 +668,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error("Thinning interval: positive integer expexted.",
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.28"),
 						cThinning);
 			}
 
@@ -691,7 +679,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error("Tuning interval: positive integer expexted.",
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.29"),
 						cTune);
 			}
 
@@ -708,7 +696,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error("Branch length: positive number expexted.", cTune);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.30"), cTune);
 			}
 
 			return true;
@@ -716,8 +704,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 		private boolean error(String msg, Component control)
 		{
-			String str = "An incorrect value has been entered for the "
-					+ "following run setting:\n" + msg;
+			String str = java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.31") + msg;
 
 			MsgBox.msg(str, MsgBox.ERR);
 			control.requestFocus();

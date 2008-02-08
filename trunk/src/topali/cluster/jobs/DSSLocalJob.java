@@ -38,7 +38,7 @@ public class DSSLocalJob extends AnalysisJob
 	{
 		try
 		{
-			new RunDSS(jobDir, ss, (DSSResult) result).start();
+			new DSSInitializer(jobDir, ss, (DSSResult) result).start();
 
 			result.status = JobStatus.RUNNING;
 			return result.jobId;
@@ -53,13 +53,13 @@ public class DSSLocalJob extends AnalysisJob
 	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
-		return new CollateDSS(jobDir).getPercentageComplete();
+		return new DSSMonitor(jobDir).getPercentageComplete();
 	}
 
 	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
-		result = new CollateDSS(jobDir).getResult();
+		result = new DSSMonitor(jobDir).getResult();
 		result.status = JobStatus.COMPLETING;
 
 		return result;

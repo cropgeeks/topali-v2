@@ -5,6 +5,8 @@
 
 package topali.data.models;
 
+import topali.var.utils.Utils;
+
 
 public class ProteinModel extends Model
 {
@@ -125,7 +127,11 @@ public class ProteinModel extends Model
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(super.toString());
-		sb.append("Special matrix: "+this.isSpecialMatrix);
+		sb.append("AA Frequencies: "+Utils.arrayToString(aaFreqs, ',')+"\n");
+		sb.append("Substitution Rates:\n");
+		for(int i=0; i<20; i++) {
+		    sb.append(Utils.arrayToString(subRates[i], ',')+"\n");
+		}
 		return sb.toString();
 	}
 }

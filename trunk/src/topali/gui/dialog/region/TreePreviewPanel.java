@@ -18,6 +18,7 @@ import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import scri.commons.gui.MsgBox;
 
 public class TreePreviewPanel extends JPanel implements ActionListener

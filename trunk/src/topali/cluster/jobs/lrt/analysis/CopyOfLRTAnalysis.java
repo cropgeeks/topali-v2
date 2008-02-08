@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.lrt;
+package topali.cluster.jobs.lrt.analysis;
 
 import java.io.*;
 
@@ -12,7 +12,7 @@ import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
 
-class LRTAnalysis extends AnalysisThread
+public class CopyOfLRTAnalysis extends AnalysisThread
 {
 	private SequenceSet ss;
 
@@ -29,11 +29,11 @@ class LRTAnalysis extends AnalysisThread
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 	{
-		new LRTAnalysis(new File(args[0])).run();
+		new CopyOfLRTAnalysis(new File(args[0])).run();
 	}
 
 	// If running locally, the job will be started via a normal constructor call
-	LRTAnalysis(File runDir)
+	public CopyOfLRTAnalysis(File runDir)
 	{
 		super(runDir);
 	}
