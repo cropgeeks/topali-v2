@@ -6,7 +6,7 @@ int      DoTranslate (void);
 int      DoTranslateParm (char *parmName, char *tkn);
 int      DoTree (void);
 int      DoTreeParm (char *parmName, char *tkn);
-void     FlipBits (long int *partition, int length, long int *lastMask);
+void     FlipBits (long int *partition, int length, long int *mask);
 int      IsPartCompatible (long int *smaller, long int *larger, int length);
 int      IsPartNested (long int *smaller, long int *larger, int length);
 void     SortInts (int *item, int *assoc, int count, int descendingOrder);

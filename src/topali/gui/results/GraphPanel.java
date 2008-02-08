@@ -6,16 +6,13 @@
 package topali.gui.results;
 
 import static topali.gui.WinMainMenuBar.*;
-import static topali.mod.Filters.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.awt.print.*;
-import java.io.*;
+import java.awt.print.Printable;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
@@ -24,16 +21,15 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.xy.*;
 
-import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
-import topali.mod.Filters;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 /**
  * Panel for displaying a graph
  */
-public class GraphPanel extends JPanel implements Printable
+public class GraphPanel extends DataVisPanel
 {
 	 Logger log = Logger.getLogger(this.getClass());
 	
@@ -54,7 +50,6 @@ public class GraphPanel extends JPanel implements Printable
 	
 	JFreeChart chart;
 	ChartPanel chartPanel;
-	JToolBar toolbar;
 	
 	/**
 	 * Panel for displaying a graph
@@ -65,8 +60,10 @@ public class GraphPanel extends JPanel implements Printable
 	 * @param toolbarPos Position where the toolbar should be placed
 	 */
 	public GraphPanel(AlignmentData aData, AlignmentResult aResult,
-			double[][] data, double fixedYBound, int toolbarPos)
+			double[][] data, double fixedYBound, String name)
 	{
+	    super(name);
+	    
 		this.aData = aData;
 		this.aResult = aResult;
 		this.data = data;
@@ -80,41 +77,6 @@ public class GraphPanel extends JPanel implements Printable
 		
 		this.setLayout(new BorderLayout());
 		this.add(chartPanel, BorderLayout.CENTER);
-		
-		switch(toolbarPos) {
-		case TOP: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.NORTH); break;
-		case RIGHT: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.EAST); break;
-		case BOTTOM: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.SOUTH); break;
-		case LEFT: this.toolbar = createToolbar(toolbarPos); this.add(toolbar, BorderLayout.WEST); break;
-		}
-	}
-	
-	public JToolBar createToolbar(int pos) {
-		int p = (pos==LEFT||pos==RIGHT) ? SwingConstants.VERTICAL : SwingConstants.HORIZONTAL;
-		JToolBar tb = new JToolBar(p);
-		
-		tb.setFloatable(false);
-		tb.setBorderPainted(false);
-		tb.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		
-		JButton bExport;
-		AbstractAction aExport;
-		
-		aExport = new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				actionSaveGraph();
-			}
-		};
-
-		bExport = (JButton) WinMainToolBar.getButton(false, null, "dss01",
-				Icons.EXPORT, aExport);
-
-
-		tb.add(bExport);
-		
-		return tb;
 	}
 	
 	public void setChartData(double[][] data)
@@ -251,92 +213,35 @@ public class GraphPanel extends JPanel implements Printable
 		yAxis.setUpperBound(max);
 	}
 
-	private void saveCSV(File filename) throws IOException
-	{
-		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 
-		out.write("Nucleotide, Score");
-		out.newLine();
-
+	@Override
+	public Printable getPrintable() {
+	    return (Printable)chartPanel;
+	}
+	
+	@Override
+	public Object getExportable(int format) {
+	    switch(format) {
+	    case FORMAT_TXT:
+	    case FORMAT_CSV:
+		StringBuffer sb = new StringBuffer();
+		sb.append("Nucleotide, Score\n");
 		for (int i = 0; i < data.length; i++)
 		{
-			out.write(data[i][0] + "," + data[i][1]);
-			out.newLine();
+		    sb.append(data[i][0] + "," + data[i][1]+"\n");
 		}
-
-		out.close();
-	}
-
-	private void savePNG(File filename) throws IOException
-	{
+		return sb.toString();
+	    case FORMAT_IMAGE:
 		BufferedImage bi = new BufferedImage(chartPanel.getSize().width, chartPanel.getSize().height, BufferedImage.TYPE_BYTE_INDEXED);
 		Graphics2D g2d = bi.createGraphics();
 		chartPanel.paint(g2d);
 		updateUI();
-		
-		ImageIO.write(bi, "png", filename);
+		return bi;
+	    default:
+		return null;
+	    }
 	}
-	
-	// ----------------
-	// Action
-	
-	protected void actionSaveGraph()
-	{
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Export Graphs");
-		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-		fc.setSelectedFile(new File(aResult.guiName));
 
-		Filters.setFilters(fc, Prefs.gui_filter_graph, CSV, PNG);
-		fc.setAcceptAllFileFilterUsed(false);
-
-		while (fc.showSaveDialog(TOPALi.winMain) == JFileChooser.APPROVE_OPTION)
-		{
-			File file = Filters.getSelectedFileForSaving(fc);
-
-			// Confirm overwrite
-			if (file.exists())
-			{
-				String msg = file
-						+ " already exists.\nDo you want to replace it?";
-				int response = MsgBox.yesnocan(msg, 1);
-
-				if (response == JOptionPane.NO_OPTION)
-					continue;
-				else if (response == JOptionPane.CANCEL_OPTION
-						|| response == JOptionPane.CLOSED_OPTION)
-					return;
-			}
-
-			// Otherwise it's ok to save...
-			Prefs.gui_dir = "" + fc.getCurrentDirectory();
-			Prefs.gui_filter_graph = ((Filters) fc.getFileFilter()).getExtInt();
-
-			try
-			{
-				if (Prefs.gui_filter_graph == CSV)
-					saveCSV(file);
-				else if (Prefs.gui_filter_graph == PNG)
-					savePNG(file);
-				
-				MsgBox.msg("Graph data successfully saved to " + file,
-						MsgBox.INF);
-			} catch (Exception e)
-			{
-				MsgBox.msg(
-						"There was an unexpected error while saving graph data:\n "
-								+ e, MsgBox.ERR);
-				log.warn(e);
-			}
-
-			return;
-		}
-	}
-	
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException
-	{
-		return chartPanel.print(graphics, pageFormat, pageIndex);
-	}
 
 	private static Cursor CROSS = new Cursor(Cursor.CROSSHAIR_CURSOR);
 	private static Cursor DEFAULT = new Cursor(Cursor.DEFAULT_CURSOR);

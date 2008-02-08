@@ -14,6 +14,8 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import topali.i18n.Text;
+
 public class TOPALiHelp
 {
 	 static Logger log = Logger.getLogger(TOPALiHelp.class);

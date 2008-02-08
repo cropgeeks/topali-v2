@@ -21,6 +21,15 @@ OPTFLAGS ?= -O3
 # version regardless of this setting)
 CC = gcc
 
+# set to yes if you want to use the readline library (make sure you have it
+# installed on your machine)
+# defaults to yes for unix machines
+#ifeq ($(strip $(ARCHITECTURE)), unix)
+#   USEREADLINE ?= yes
+#else
+   USEREADLINE ?= no
+#endif
+
 #
 # End of user configuration
 
@@ -38,6 +47,11 @@ endif
 endif
 endif
 
+ifeq  ($(strip $(USEREADLINE)),yes)
+    CFLAGS += -DUSE_READLINE
+	LIBS += -lncurses -lreadline 
+endif
+
 ifeq  ($(strip $(MPI)),yes)
 	CFLAGS += -DMPI_ENABLED
 	CC = mpicc
@@ -49,11 +63,12 @@ else
 	CFLAGS += $(OPTFLAGS)
 endif
 
-CFLAGS   +=   -Wall -Wno-uninitialized
+CFLAGS   +=   -Wall 
 
-LIBS      =   -lm
+LIBS     +=   -lm
 
-LDFLAGS   =   $(CFLAGS) $(LIBS)
+LDFLAGS  =   $(CFLAGS)
+LDLIBS   =   $(LIBS)
 
 OBJECTS   =   bayes.o command.o mbmath.o mcmc.o model.o plot.o sump.o sumt.o
 

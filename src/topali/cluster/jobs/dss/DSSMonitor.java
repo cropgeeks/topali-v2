@@ -3,33 +3,33 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.lrt;
+package topali.cluster.jobs.dss;
 
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
 import topali.cluster.JobStatus;
-import topali.data.LRTResult;
+import topali.data.DSSResult;
 import topali.fileio.Castor;
 
-public class CollateLRT
+public class DSSMonitor
 {
 	private static  Logger logger = Logger.getLogger("topali.cluster.info-log");
 
 	private File jobDir;
 
-	private LRTResult result;
+	private DSSResult result;
 
-	public CollateLRT(File jobDir) throws Exception
+	public DSSMonitor(File jobDir) throws Exception
 	{
 		this.jobDir = jobDir;
 
-		result = (LRTResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
+		result = (DSSResult) Castor.unmarshall(new File(jobDir, "submit.xml"));
 	}
 
 	/*
-	 * Works out the percentage complete for the current LRT run. This is
+	 * Works out the percentage complete for the current DSS run. This is
 	 * calculated by counting each instance of "out.xls" - there should be one
 	 * file for each run directory. This is then returned as a percentage of the
 	 * total number of runs.
@@ -39,11 +39,13 @@ public class CollateLRT
 		if (new File(jobDir, "error.txt").exists())
 		{
 			logger.severe(jobDir.getName() + " - error.txt found");
-			throw new Exception("LRT error.txt");
+			throw new Exception("DSS error.txt");
 		}
 
+		// How many p[n] do we expect to find..
+		float total = 0;
+		// Over how many separate runs (1 run per node)
 		int runs = result.runs;
-		int total = 0;
 
 		for (int i = 1; i <= runs; i++)
 		{
@@ -62,22 +64,25 @@ public class CollateLRT
 			{
 				logger.severe(jobDir.getName() + " - error.txt found for run "
 						+ i);
-				throw new Exception("LRT error.txt (run " + i + ")");
+				throw new Exception("PDM error.txt (run " + i + ")");
 			}
 		}
 
-		float progress = ((float) total / (float) runs / 105f) * 100f;
+		// Return this total as a percentage
+		// (the main run finishes at 100% but we don't *really* finish until the
+		// post-analysis is done, which writes 105% to disk)
+		float progress = ((total / runs) / 105f) * 100;
 
 		return new JobStatus(progress, 0, "_status");
 	}
 
 	/*
-	 * Returns the final LRTResult object. Each run directory is scanned for its
+	 * Returns the final DSSResult object. Each run directory is scanned for its
 	 * output - run1 contains the data required to plot the graph, whereas all
 	 * other run directories contain information on the maximum threshold value
 	 * found during that run.
 	 */
-	public LRTResult getResult() throws Exception
+	public DSSResult getResult() throws Exception
 	{
 		result.thresholds = new float[result.runs - 1];
 
@@ -87,7 +92,7 @@ public class CollateLRT
 			File xlsFile = new File(runDir, "out.xls");
 
 			if (i == 1)
-				setLRTData(xlsFile);
+				setDSSData(xlsFile);
 			else
 				setThresholdData(xlsFile, i - 2);
 		}
@@ -101,7 +106,7 @@ public class CollateLRT
 		return result;
 	}
 
-	private void setLRTData(File xlsFile) throws Exception
+	private void setDSSData(File xlsFile) throws Exception
 	{
 		BufferedReader in = new BufferedReader(new FileReader(xlsFile));
 

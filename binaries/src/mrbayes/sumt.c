@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -109,6 +109,7 @@ int      TreeProb (void);
 void     WriteConTree (PolyNode *p, FILE *fp, int showSupport);
 void     WriteTree (PolyNode *p, FILE *fp);
 
+extern int SafeFclose(FILE **);
 
 /* local (to this file) */
 char		*sumtTokenP, sumtToken[CMD_STRING_LENGTH];
@@ -207,14 +208,14 @@ int AllocBits (int n)
 	treeBits = NULL;
 	treePartNums = NULL;
 	treePartLengths = NULL;
-	treeBits = (long *)malloc((size_t) (2 * n * taxonLongsNeeded * sizeof(long)));
-	treePartNums = (int *)malloc((size_t) (2 * n * sizeof(int)));
+	treeBits = (long *)SafeMalloc((size_t) (2 * n * taxonLongsNeeded * sizeof(long)));
+	treePartNums = (int *)SafeMalloc((size_t) (2 * n * sizeof(int)));
 	if (!treeBits || !treePartNums)
 		{
 		MrBayesPrint ("%s   Problem allocating treeBits (%d)\n", spacer, 2 * n * taxonLongsNeeded * sizeof(long));
 		goto errorExit;
 		}
-	treePartLengths = (MrBFlt *)malloc((size_t) (2 * n * sizeof(MrBFlt)));
+	treePartLengths = (MrBFlt *)SafeMalloc((size_t) (2 * n * sizeof(MrBFlt)));
 	if (!treePartLengths)
 		{
 		MrBayesPrint ("%s   Problem allocating treePartLengths (%d)\n", spacer, 2 * n * sizeof(MrBFlt));
@@ -228,13 +229,13 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	fullTreePartIds = numOfThisFullTree = NULL;
-	fullTreePartIds = (int *)malloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
+	fullTreePartIds = (int *)SafeMalloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
 	if (!fullTreePartIds)
 		{
 		MrBayesPrint ("%s   Problem allocating fullTreePartIds (%d)\n", spacer, 2 * n * MAX_TREES * sizeof(int));
 		goto errorExit;
 		}
-	numOfThisFullTree = (int *)malloc((size_t) (MAX_PARTITIONS * sizeof(int)));
+	numOfThisFullTree = (int *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(int)));
 	if (!numOfThisFullTree)
 		{
 		MrBayesPrint ("%s   Problem allocating numOfThisFullTree (%d)\n", spacer, MAX_TREES * sizeof(int));
@@ -248,7 +249,7 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	treePartsFound = NULL;
-	treePartsFound = (long *)malloc((size_t) (taxonLongsNeeded * MAX_PARTITIONS * sizeof(long)));
+	treePartsFound = (long *)SafeMalloc((size_t) (taxonLongsNeeded * MAX_PARTITIONS * sizeof(long)));
 	if (!treePartsFound)
 		{
 		MrBayesPrint ("%s   Problem allocating treePartsFound (%d)\n", spacer, taxonLongsNeeded * MAX_PARTITIONS * sizeof(long));
@@ -262,7 +263,7 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	numFoundOfThisPart = NULL;
-	numFoundOfThisPart = (int *)malloc((size_t) (MAX_PARTITIONS * sizeof(int)));
+	numFoundOfThisPart = (int *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(int)));
 	if (!numFoundOfThisPart)
 		{
 		MrBayesPrint ("%s   Problem allocating numFoundOfThisPart (%d)\n", spacer, MAX_PARTITIONS * sizeof(int));
@@ -284,7 +285,7 @@ int AllocBits (int n)
 			}
 		for (i=0; i<sumtParams.numRuns; i++)
 			{
-			numFoundInRunOfPart[i] = (int *) malloc ((size_t) (MAX_PARTITIONS * sizeof(int)));
+			numFoundInRunOfPart[i] = (int *) SafeMalloc ((size_t) (MAX_PARTITIONS * sizeof(int)));
 			if (!numFoundInRunOfPart[i])
 				{
 				MrBayesPrint ("%s   Problem allocating numFoundInRunOfPart[%d] (%d bytes)\n", spacer, i, MAX_PARTITIONS * sizeof (int *));
@@ -297,13 +298,13 @@ int AllocBits (int n)
 	if (comparingFiles == YES)
 		{
 		numFoundOfThisPart1 = numFoundOfThisPart2 = NULL;
-		numFoundOfThisPart1 = (int *)malloc((size_t) (MAX_PARTITIONS * sizeof(int)));
+		numFoundOfThisPart1 = (int *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(int)));
 		if (!numFoundOfThisPart1)
 			{
 			MrBayesPrint ("%s   Problem allocating numFoundOfThisPart1 (%d)\n", spacer, MAX_PARTITIONS * sizeof(int));
 			goto errorExit;
 			}
-		numFoundOfThisPart2 = (int *)malloc((size_t) (MAX_PARTITIONS * sizeof(int)));
+		numFoundOfThisPart2 = (int *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(int)));
 		if (!numFoundOfThisPart2)
 			{
 			MrBayesPrint ("%s   Problem allocating numFoundOfThisPart2 (%d)\n", spacer, MAX_PARTITIONS * sizeof(int));
@@ -321,25 +322,25 @@ int AllocBits (int n)
 			}
 		fullCompTreePartIds1 = fullCompTreePartIds2 = NULL;
 		fullCompTreePartLengths1 = fullCompTreePartLengths2 = NULL;
-		fullCompTreePartIds1 = (int *)malloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
+		fullCompTreePartIds1 = (int *)SafeMalloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
 		if (!fullCompTreePartIds1)
 			{
 			MrBayesPrint ("%s   Problem allocating fullCompTreePartIds1 (%d)\n", spacer, 2 * n * MAX_TREES * sizeof(int));
 			goto errorExit;
 			}
-		fullCompTreePartIds2 = (int *)malloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
+		fullCompTreePartIds2 = (int *)SafeMalloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(int)));
 		if (!fullCompTreePartIds2)
 			{
 			MrBayesPrint ("%s   Problem allocating fullCompTreePartIds2 (%d)\n", spacer, 2 * n * MAX_TREES * sizeof(int));
 			goto errorExit;
 			}
-		fullCompTreePartLengths1 = (MrBFlt *)malloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(MrBFlt)));
+		fullCompTreePartLengths1 = (MrBFlt *)SafeMalloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(MrBFlt)));
 		if (!fullCompTreePartLengths1)
 			{
 			MrBayesPrint ("%s   Problem allocating fullCompTreePartLengths1 (%d)\n", spacer, 2 * n * MAX_TREES * sizeof(MrBFlt));
 			goto errorExit;
 			}
-		fullCompTreePartLengths2 = (MrBFlt *)malloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(MrBFlt)));
+		fullCompTreePartLengths2 = (MrBFlt *)SafeMalloc((size_t) (2 * numTaxa * MAX_TREES * sizeof(MrBFlt)));
 		if (!fullCompTreePartLengths2)
 			{
 			MrBayesPrint ("%s   Problem allocating fullCompTreePartLengths2 (%d)\n", spacer, 2 * n * MAX_TREES * sizeof(MrBFlt));
@@ -356,7 +357,7 @@ int AllocBits (int n)
 			goto errorExit;
 			}
 		aBrlens = NULL;
-		aBrlens = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		aBrlens = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!aBrlens)
 			{
 			MrBayesPrint ("%s   Problem allocating aBrlens (%d)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -370,7 +371,7 @@ int AllocBits (int n)
 			goto errorExit;
 			}
 		sBrlens = NULL;
-		sBrlens = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		sBrlens = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!sBrlens)
 			{
 			MrBayesPrint ("%s   Problem allocating sBrlens (%d)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -386,7 +387,7 @@ int AllocBits (int n)
 			MrBayesPrint ("%s   aWithinBrlens not free in AllocBits\n", spacer);
 			goto errorExit;
 			}
-		aWithinBrlens = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		aWithinBrlens = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!aWithinBrlens)
 			{
 			MrBayesPrint ("%s   Problem allocating aWithinBrlens (%d)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -399,7 +400,7 @@ int AllocBits (int n)
 			MrBayesPrint ("%s   sWithinBrlens not free in AllocBits\n", spacer);
 			goto errorExit;
 			}
-		sWithinBrlens = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		sWithinBrlens = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!sWithinBrlens)
 			{
 			MrBayesPrint ("%s   Problem allocating sWithinBrlens (%d)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -412,7 +413,7 @@ int AllocBits (int n)
 			MrBayesPrint ("%s   sumB not free in AllocBits\n", spacer);
 			goto errorExit;
 			}
-		sumB = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		sumB = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!sumB)
 			{
 			MrBayesPrint ("%s   Problem allocating sumB (%d bytes)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -425,7 +426,7 @@ int AllocBits (int n)
 			MrBayesPrint ("%s   sumsqB not free in AllocBits\n", spacer);
 			goto errorExit;
 			}
-		sumsqB = (MrBFlt *)malloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
+		sumsqB = (MrBFlt *)SafeMalloc((size_t) (MAX_PARTITIONS * sizeof(MrBFlt)));
 		if (!sumsqB)
 			{
 			MrBayesPrint ("%s   Problem allocating sumsqB (%d bytes)\n", spacer, MAX_PARTITIONS * sizeof(MrBFlt));
@@ -440,7 +441,7 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	sumTaxaFound = NULL;
-	sumTaxaFound = (int *)malloc((size_t) (numTaxa * sizeof(int)));
+	sumTaxaFound = (int *)SafeMalloc((size_t) (numTaxa * sizeof(int)));
 	if (!sumTaxaFound)
 		{
 		MrBayesPrint ("%s   Problem allocating sumTaxaFound (%d)\n", spacer, numTaxa * sizeof(int));
@@ -456,17 +457,17 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	taxonMask = NULL;
-	taxonMask = (long *)malloc((size_t) (taxonLongsNeeded * sizeof(long)));
+	taxonMask = (long *)SafeMalloc((size_t) (taxonLongsNeeded * sizeof(long)));
 	if (!taxonMask)
 		{
-		MrBayesPrint ("%s   Problem allocating aOldBrlens (%d)\n", spacer, taxonLongsNeeded * sizeof(long));
+		MrBayesPrint ("%s   Problem allocating taxonMask (%d)\n", spacer, taxonLongsNeeded * sizeof(long));
 		goto errorExit;
 		}
 	memAllocs[ALLOC_TAXONMASK] = YES;
 	
 	if (memAllocs[ALLOC_PRUNEINFO] == YES)
 		{
-		MrBayesPrint ("%s   taxonMask not free in AllocBits\n", spacer);
+		MrBayesPrint ("%s   prunedTaxa not free in AllocBits\n", spacer);
 		goto errorExit;
 		}
 	prunedTaxa = NULL;
@@ -474,7 +475,7 @@ int AllocBits (int n)
 		i = 4 * numTaxa;
 	else
 		i = 2 * numTaxa;
-	prunedTaxa = (int *)malloc((size_t) (i * sizeof(int)));
+	prunedTaxa = (int *)SafeMalloc((size_t) (i * sizeof(int)));
 	if (!prunedTaxa)
 		{
 		MrBayesPrint ("%s   Problem allocating prunedTaxa (%d)\n", spacer, i * sizeof(long));
@@ -494,7 +495,7 @@ int AllocBits (int n)
 		goto errorExit;
 		}
 	sumtNodes = NULL;
-	sumtNodes = (SumtNode *)malloc((size_t) (2 * numTaxa * sizeof(SumtNode)));
+	sumtNodes = (SumtNode *)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode)));
 	if (!sumtNodes)
 		{
 		MrBayesPrint ("%s   Problem allocating sumtNodes (%d)\n", spacer, 2 * numTaxa * sizeof(SumtNode));
@@ -636,10 +637,10 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 		return ERROR;
 
 	/* allocate space for brlens */
-	brlens = (MrBFlt *) malloc (numBrlens * sizeof(MrBFlt));
+	brlens = (MrBFlt *) SafeMalloc (numBrlens * sizeof(MrBFlt));
 	if (brlens == NULL)
 		{
-		fclose (fpBrlens);
+		SafeFclose (&fpBrlens);
 		return ERROR;
 		}
 	for (i=0; i<numBrlens; i++)
@@ -652,7 +653,7 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 		{
 		/* Open tree file */
 		if (sumtParams.numRuns == 1 && sumtParams.numTrees == 1)
-			strcpy (fileName, sumtParams.sumtFileName);
+			sprintf (fileName, "%s.t", sumtParams.sumtFileName);
 		else if (sumtParams.numRuns > 1 && sumtParams.numTrees == 1)
 			sprintf (fileName, "%s.run%d.t", sumtParams.sumtFileName, runNo+1);
 		else if (sumtParams.numRuns == 1 && sumtParams.numTrees > 1)
@@ -663,7 +664,7 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 		/* open binary file */
 		if ((fp = OpenBinaryFileR (fileName)) == NULL)
 			{
-			fclose (fpBrlens);
+			SafeFclose (&fpBrlens);
 			free (brlens);
 			return ERROR;
 			}
@@ -674,27 +675,27 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 	
 		/* allocate a string long enough to hold a line */
 		if (runNo == 0)
-			s = (char *) malloc (sizeof (char) * longestLineLength);
+			s = (char *) SafeMalloc (sizeof (char) * longestLineLength);
 		else
 			{
 			free (s);
-			s = (char *) malloc (sizeof (char) * longestLineLength);
+			s = (char *) SafeMalloc (sizeof (char) * longestLineLength);
 			}
 
 		if (!s)
 			{
 			free (brlens);
-			fclose (fpBrlens);
+			SafeFclose (&fpBrlens);
 			return ERROR;
 			}
 
 		/* close binary file */
-		fclose (fp);
+		SafeFclose (&fp);
 	
 		/* open text file */
 		if ((fp = OpenTextFileR (fileName)) == NULL)
 			{
-			fclose (fpBrlens);
+			SafeFclose (&fpBrlens);
 			free (brlens);
 			free (s);
 			return ERROR;
@@ -787,7 +788,7 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 			if (ParseCommand (s) == ERROR)
 				{
 				free (brlens);
-				fclose (fpBrlens);
+				SafeFclose (&fpBrlens);
 				return ERROR;
 				}
 			}
@@ -802,14 +803,14 @@ int BrlensVals (int treeNo, char *s, int longestLineLength, int lastTreeBlockBeg
 			MrBayesPrint ("\n\n");
 			}
 
-		fclose (fp);
+		SafeFclose (&fp);
 		}	/* next file */
 		
 	/* reset status variable */
 	printingBrlens = NO;
 
 	/* close brlens file */
-	fclose (fpBrlens);
+	SafeFclose (&fpBrlens);
 	MrBayesPrint ("%s   Branch length values printed to file.\n", spacer);
 
 	return NO_ERROR;
@@ -833,7 +834,7 @@ void CalculateTreeToTreeDistance (int *lst[2], MrBFlt *lngs[2], int nnds, int ha
 	lengths1 = lngs[0];
 	lengths2 = lngs[1];
 
-	identifiedParts = (int *)malloc((size_t) (nnds * sizeof(int)));
+	identifiedParts = (int *)SafeMalloc((size_t) (nnds * sizeof(int)));
 	if (!identifiedParts)
 		{
 		MrBayesPrint ("%s   Could not allocate identifiedParts\n", spacer);
@@ -936,7 +937,7 @@ int CheckSumtSpecies (void)
 	SumtNode		**downPass, *q;
 
 	/* allocate memory for downpass */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
@@ -990,8 +991,8 @@ int ConTree (void)
 
 {
 
-	int			i, j, targetNode, nBits, nextConNode, isCompat, localOutgroupNum;
-	long		x, y, *mask, *partition, *ingroupPartition, *outgroupPartition=NULL;
+	int			i, j, targetNode, nBits, nextConNode, isCompat, localOutgroupNum, numTerminalsEncountered;
+	long		x, *mask = NULL, *partition = NULL, *ingroupPartition = NULL, *outgroupPartition = NULL;
 	MrBFlt		freq;
 	char		tempName[100];
 	PolyNode	*cp, *q, *r, *ql, *rl, *pl, **downPass = NULL;
@@ -1035,7 +1036,7 @@ int ConTree (void)
 		MrBayesPrint ("%s   conNodes is already allocated\n", spacer);
 		goto errorExit;
 		}
-	conNodes = (PolyNode *)malloc((size_t) (2 * numTaxa * sizeof(PolyNode)));
+	conNodes = (PolyNode *)SafeMalloc((size_t) (2 * numTaxa * sizeof(PolyNode)));
 	if (!conNodes)
 		{
 		MrBayesPrint ("%s   Could not allocate conNodes\n", spacer);
@@ -1090,24 +1091,12 @@ int ConTree (void)
 		j++;
 		}
 		
-	/* Set lastMask - needed to trim last element in partition.
+	/* Set mask - needed to trim last bits in the partition bit field.
 	   This could be done when a new matrix is read in
 	   and adjusted when taxa are deleted or restored. */
-#	if 0
-	j = numIncludedTaxa % nBitsInALong;
-	mask = 1;
-	for (i=1; i<j; i++)
-		mask |= (mask<<1);
-#	else
-	for (i=0; i<taxonLongsNeeded; i++)
-		mask[i] = 0;
 	for (i=0; i<numIncludedTaxa; i++)
-		{
-		y = 1;
-		y = 1 << (i % nBitsInALong);
-		mask[i / nBitsInALong] |= y;
-		}
-#	endif		
+		SetBit (i, mask);
+
 #	if defined (DEBUG_CONTREE)
 	for (i=0; i<taxonLongsNeeded; i++)
 		ShowBits (&mask[i], nBitsInALong);
@@ -1117,7 +1106,8 @@ int ConTree (void)
 	/* Set ingroup and outgroup partitions.
 	   This could be done when a new matrix is read in
 	   and adjusted when an outgroup command is issued.
-	   This mechanism allows multiple taxa in outgroup. */
+	   This mechanism allows multiple taxa in outgroup 
+	   but only one outgroup taxon is used here. */
 	x = 1;
 	x <<= (localOutgroupNum) % nBitsInALong;
 	i = (localOutgroupNum) / nBitsInALong;
@@ -1166,10 +1156,11 @@ int ConTree (void)
 	else
 		targetNode = 2 * numIncludedTaxa - 3;
 
+	numTerminalsEncountered = 0;
 	for (i=0; i<numTreePartsFound; i++)
 		{
 		/* calculate frequency and test if time to quit */
-		if (nextConNode > targetNode)
+		if (nextConNode > targetNode && numTerminalsEncountered == numIncludedTaxa)
 			break;
 		freq = (MrBFlt)numFoundOfThisPart[i]/ (MrBFlt)(sumtParams.numRuns * numSumTreesSampled);
 		if (freq < 0.50 && !strcmp(sumtParams.sumtConType, "Halfcompat"))
@@ -1179,6 +1170,9 @@ int ConTree (void)
 		partition = &treePartsFound[i*taxonLongsNeeded];
 
 		/* flip bits if necessary */
+		/* This code is needed if single outgroup is indexed incorrectly or if the partition
+		   defines a clade in a multispecies outgroup but the indexing is reversed. Note that
+		   bits should not be flipped for rooted trees. */
 		if (isSumtTreeRooted == NO)
 			{
 			if (!IsPartNested(partition, ingroupPartition, taxonLongsNeeded) && !IsPartCompatible(partition, ingroupPartition, taxonLongsNeeded))
@@ -1193,7 +1187,7 @@ int ConTree (void)
 				nBits++;
 			}
 			
-		/* flip this partition if it leaves single outgroup outside */
+		/* flip this partition if it leaves single outgroup outside and tree is unrooted */
 		if (nBits == numIncludedTaxa - 1  && isSumtTreeRooted == NO)
 			{
 			nBits = 1;
@@ -1205,7 +1199,7 @@ int ConTree (void)
 			{
 			/* find anc of partition */
 			j = FirstTaxonInPartition (partition, taxonLongsNeeded);
-			for (cp = &conNodes[j]; cp!=NULL; cp = cp->anc) /* see if this works */
+			for (cp = &conNodes[j]; cp!=NULL; cp = cp->anc)
 				if (cp->x > nBits)
 					break;
 					
@@ -1278,6 +1272,7 @@ int ConTree (void)
 			else
 				q->length = 0.0;
 			q->support = freq * 100;
+			numTerminalsEncountered++;
 			}
 		}
 
@@ -1462,13 +1457,13 @@ int DerootSumtTree (SumtNode *p, int n, int outGrp)
 	nNodes = 2 * n;
 
 	/* allocate space for derooting tree */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
 		goto errorExit;
 		}
-	localTaxaFound = (int *)malloc((size_t) (numTaxa * sizeof(int)));
+	localTaxaFound = (int *)SafeMalloc((size_t) (numTaxa * sizeof(int)));
 	if (!localTaxaFound)
 		{
 		MrBayesPrint ("%s   Could not allocate localTaxaFound\n", spacer);
@@ -1774,7 +1769,7 @@ int DoCompareTree (void)
 		MrBayesPrint ("%s   Comparetree string is already allocated\n", spacer);
 		goto errorExit;
 		}
-	s = (char *)malloc((size_t) (longestLineLength * sizeof(char)));
+	s = (char *)SafeMalloc((size_t) (longestLineLength * sizeof(char)));
 	if (!s)
 		{
 		MrBayesPrint ("%s   Problem allocating string for reading comparetree file\n", spacer);
@@ -1783,8 +1778,8 @@ int DoCompareTree (void)
 	memAllocs[ALLOC_SUMTSTRING] = YES;
 		
 	/* close binary file */
-	fclose (fp[0]);
-	fclose (fp[1]);
+	SafeFclose (&fp[0]);
+	SafeFclose (&fp[1]);
 	
 	/* read in data file 1 ***************************************************************************/
 
@@ -2373,7 +2368,7 @@ int DoCompareTree (void)
 		MrBayesPrint ("%s   numFoundOfThisPart not free in AllocBits\n", spacer);
 		goto errorExit;
 		}
-	partOrigOrder = (int *)malloc((size_t) (numTreePartsFound * sizeof(int)));
+	partOrigOrder = (int *)SafeMalloc((size_t) (numTreePartsFound * sizeof(int)));
 	if (!partOrigOrder)
 		{
 		MrBayesPrint ("%s   Problem allocating partOrigOrder (%d)\n", spacer, numTreePartsFound * sizeof(int));
@@ -2516,19 +2511,19 @@ int DoCompareTree (void)
 		MrBayesPrint ("%s   Topological distances all ready allocated\n", spacer);
 		goto errorExit;
 		}
-	dT1 = (MrBFlt *)malloc((size_t) (minNumTrees * sizeof(MrBFlt)));
+	dT1 = (MrBFlt *)SafeMalloc((size_t) (minNumTrees * sizeof(MrBFlt)));
 	if (!dT1)
 		{
 		MrBayesPrint ("%s   Problem allocating topological distances\n", spacer);
 		goto errorExit;
 		}
-	dT2 = (MrBFlt *)malloc((size_t) (minNumTrees * sizeof(MrBFlt)));
+	dT2 = (MrBFlt *)SafeMalloc((size_t) (minNumTrees * sizeof(MrBFlt)));
 	if (!dT2)
 		{
 		MrBayesPrint ("%s   Problem allocating topological distances\n", spacer);
 		goto errorExit;
 		}
-	dT3 = (MrBFlt *)malloc((size_t) (minNumTrees * sizeof(MrBFlt)));
+	dT3 = (MrBFlt *)SafeMalloc((size_t) (minNumTrees * sizeof(MrBFlt)));
 	if (!dT3)
 		{
 		MrBayesPrint ("%s   Problem allocating topological distances\n", spacer);
@@ -2779,14 +2774,10 @@ int DoCompareTree (void)
 	expecting = Expecting(COMMAND);
 
 	/* close files */
-	if (fp[0])
-		fclose (fp[0]);
-	if (fp[1])
-		fclose (fp[1]);
-	if (fpCompParts != NULL)  
-		fclose (fpCompParts);
-	if (fpCompDists != NULL)  
-		fclose (fpCompDists);
+	SafeFclose (&fp[0]);
+	SafeFclose (&fp[1]);
+	SafeFclose (&fpCompParts);
+	SafeFclose (&fpCompDists);
 	
 #	if defined (MPI_ENABLED)
 		}
@@ -2816,14 +2807,10 @@ int DoCompareTree (void)
 			memAllocs[ALLOC_PARTORIGORDER] = NO;
 			}
 		FreeBits ();
-		if (fp[0] != NULL)
-			fclose (fp[0]);
-		if (fp[1] != NULL)
-			fclose (fp[1]);
-		if (fpCompParts != NULL)  
-			fclose (fpCompParts);
-		if (fpCompDists != NULL)  
-			fclose (fpCompDists);
+		SafeFclose (&fp[0]);
+		SafeFclose (&fp[1]);
+		SafeFclose (&fpCompParts);
+		SafeFclose (&fpCompDists);
 		strcpy (spacer, "");
 		strcpy (sumtToken, "Comparetree");
 		i = 0;
@@ -3010,7 +2997,6 @@ int DoSumt (void)
 
 			if ((fp = OpenBinaryFileR(tempName)) == NULL)
 				{
-				MrBayesPrint ("%s   Could not open file '%s'\n", spacer, tempName);
 				if (strcmp (fileName+strlen(fileName)-2, ".t") == 0)
 					{
 					MrBayesPrint ("%s   You probably need to remove '.t' from 'Filename'\n", spacer);
@@ -3059,7 +3045,7 @@ int DoSumt (void)
 					MrBayesPrint ("%s   Sumt string is already allocated\n", spacer);
 					goto errorExit;
 					}
-				s = (char *)malloc((size_t) (longestLineLength * sizeof(char)));
+				s = (char *)SafeMalloc((size_t) (longestLineLength * sizeof(char)));
 				if (!s)
 					{
 					MrBayesPrint ("%s   Problem allocating string for reading sumt file\n", spacer);
@@ -3070,11 +3056,11 @@ int DoSumt (void)
 			else
 				{
 				free (s);
-				s = (char *) malloc (sizeof (char) * longestLineLength);
+				s = (char *) SafeMalloc (sizeof (char) * longestLineLength);
 				}
 		
 			/* close binary file */
-			fclose (fp);
+			SafeFclose (&fp);
 	
 			/* open text file */
 			if ((fp = OpenTextFileR(tempName)) == NULL)
@@ -3210,10 +3196,10 @@ int DoSumt (void)
 			if (runNo == 0)
 				{
 				if (numTreeBlocks == 1)
-					MrBayesPrint ("%s   Found one tree block in file \"%s\" with %d trees in last block\n", spacer, sumtParams.sumtFileName, numTreesInLastBlock);
+					MrBayesPrint ("%s   Found one tree block in file \"%s\" with %d trees in last block\n", spacer, tempName, numTreesInLastBlock);
 				else
 					{
-					MrBayesPrint ("%s   Found %d tree blocks in file \"%s\" with %d trees in last block\n", spacer, numTreeBlocks, sumtParams.sumtFileName, numTreesInLastBlock);
+					MrBayesPrint ("%s   Found %d tree blocks in file \"%s\" with %d trees in last block\n", spacer, numTreeBlocks, tempName, numTreesInLastBlock);
 					MrBayesPrint ("%s   Only the %d trees in last tree block will be summarized\n", spacer, numTreesInLastBlock);
 					}
 				if (sumtParams.numRuns > 1)
@@ -3446,7 +3432,7 @@ int DoSumt (void)
 				goto errorExit;
 				}
 
-			fclose (fp);
+			SafeFclose (&fp);
 			}	/* next run for this tree */
 				
 		/* Sort partitions... */
@@ -3457,7 +3443,7 @@ int DoSumt (void)
 				MrBayesPrint ("%s   partOrigOrder not free in DoSumt\n", spacer);
 				goto errorExit;
 				}
-			partOrigOrder = (int *)malloc((size_t) (numTreePartsFound * sizeof(int)));
+			partOrigOrder = (int *)SafeMalloc((size_t) (numTreePartsFound * sizeof(int)));
 			if (!partOrigOrder)
 				{
 				MrBayesPrint ("%s   Problem allocating partOrigOrder (%d)\n", spacer, numTreePartsFound * sizeof(int));
@@ -3468,7 +3454,7 @@ int DoSumt (void)
 		else
 			{
 			free (partOrigOrder);
-			partOrigOrder = (int *)malloc((size_t) (numTreePartsFound * sizeof(int)));
+			partOrigOrder = (int *)SafeMalloc((size_t) (numTreePartsFound * sizeof(int)));
 			if (!partOrigOrder)
 				{
 				MrBayesPrint ("%s   Problem allocating partOrigOrder (%d)\n", spacer, numTreePartsFound * sizeof(int));
@@ -3844,12 +3830,10 @@ int DoSumt (void)
 		if (TreeProb () == ERROR)
 			goto errorExit;
 		
-		fclose (fpParts);
-		fclose (fpCon);
-		if (fpTrees != NULL)
-			fclose (fpTrees);
-		if (fpBrlens != NULL)
-			fclose (fpBrlens);
+		SafeFclose (&fpParts);
+		SafeFclose (&fpCon);
+		SafeFclose (&fpTrees);
+		SafeFclose (&fpBrlens);
 		} /* next tree */
 
 	/* free memory and file pointers */
@@ -3886,16 +3870,11 @@ int DoSumt (void)
 			memAllocs[ALLOC_PARTORIGORDER] = NO;
 			}
 		FreeBits ();
-		if (fp != NULL)
-			fclose (fp);
-		if (fpParts != NULL)  
-			fclose (fpParts);
-		if (fpCon != NULL)  
-			fclose (fpCon);
-		if (fpTrees != NULL)  
-			fclose (fpTrees);
-		if (fpBrlens != NULL)
-			fclose (fpBrlens);
+		SafeFclose (&fp);
+		SafeFclose (&fpParts);
+		SafeFclose (&fpCon);
+		SafeFclose (&fpTrees);
+		SafeFclose (&fpBrlens);
 		strcpy (spacer, "");
 		strcpy (sumtToken, "Sumt");
 		i = 0;
@@ -4406,7 +4385,6 @@ int DoTree (void)
 	MrBFlt		x, y;
 	
 	/* check that we are in a trees block */
-
 	if (inSumtBlock == NO)
 		{
 		MrBayesPrint ("%s   You must be in a trees block to read a tree\n", spacer);
@@ -5035,7 +5013,7 @@ int FindParts (void)
 	SumtNode		**downPass, *p;
 
 	/* allocate memory for downpass */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
@@ -5239,19 +5217,16 @@ int FirstTaxonInPartition (long *partition, int length)
 
 
 
-void FlipBits (long int *partition, int length, long *lastMask)
+void FlipBits (long int *partition, int length, long *mask)
 
 {
 
-	int		i;
-
+	int			i;
+	
 	for (i=0; i<length; i++)
 		{
-		partition[i] ^= -1;
-		partition[i] &= lastMask[i];
+		partition[i] ^= mask[i];
 		}
-	/*partition[i - 1] &= lastMask;*/
-
 }
 
 
@@ -5426,7 +5401,7 @@ int GetPartitions (void)
 	SumtNode		**downPass, *p;
 
 	/* allocate memory for downpass */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
@@ -5807,15 +5782,15 @@ int OpenSumtFiles (int treeNo)
 		return ERROR;
 	if ((fpCon = OpenNewMBPrintFile(cFilename)) == NULL)
 		{
-		fclose (fpParts);
+		SafeFclose (&fpParts);
 		return ERROR;
 		}
 	if (sumtParams.calcTrprobs == YES)
 		{
 		if ((fpTrees = OpenNewMBPrintFile(tFilename)) == NULL)
 			{
-			fclose (fpParts);
-			fclose (fpCon);
+			SafeFclose (&fpParts);
+			SafeFclose (&fpCon);
 			return ERROR;
 			}
 		}
@@ -6068,7 +6043,7 @@ int PruneSumt (void)
 	SumtNode		**downPass, *p, *q, *sis, *qAnc;
 
 	/* allocate memory for downpass */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
@@ -6206,15 +6181,15 @@ int RealloateBits (void)
 		{
 		if (memAllocs[ALLOC_NUMINRUNOFPART] == NO)
 			goto errorExit;
-		for (i=0; i<sumtParams.numRuns; i++)
+		for (i=0; i<sumtParams.numRuns; i++) {
 			numFoundInRunOfPart[i] = (int *)realloc(numFoundInRunOfPart[i], (size_t) (numPartsAllocated * sizeof(int)));
-		if (!numFoundInRunOfPart[i])
-			{
-			MrBayesPrint ("%s   Problem reallocating numFoundInRunOfPart (%d)\n", spacer, numPartsAllocated * sizeof(int));
-			goto errorExit;
+			if (!numFoundInRunOfPart[i])
+				{
+				MrBayesPrint ("%s   Problem reallocating numFoundInRunOfPart (%d)\n", spacer, numPartsAllocated * sizeof(int));
+				goto errorExit;
+				}
 			}
 		}
-
 	if (comparingFiles == YES)
 		{
 		numFoundOfThisPart1 = (int *)realloc(numFoundOfThisPart1, (size_t) (numPartsAllocated * sizeof(int)));
@@ -6398,7 +6373,7 @@ int ReorderParts (void)
 	int			n, i, j;
 	long		*x, y, z, *newBits;
 
-	newBits = (long *)malloc((size_t) (taxonLongsNeeded * sizeof(long)));
+	newBits = (long *)SafeMalloc((size_t) (taxonLongsNeeded * sizeof(long)));
 	if (!newBits)
 		{
 		MrBayesPrint ("%s   Could not allocate newBits\n", spacer);
@@ -6468,7 +6443,7 @@ int RootSumtTree (SumtNode *p, int n, int out)
 		}
 		
 	/* allocate memory */
-	downPass = (SumtNode **)malloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
+	downPass = (SumtNode **)SafeMalloc((size_t) (2 * numTaxa * sizeof(SumtNode *)));
 	if (!downPass)
 		{
 		MrBayesPrint ("%s   Could not allocate downPass\n", spacer);
@@ -6477,7 +6452,7 @@ int RootSumtTree (SumtNode *p, int n, int out)
 	i = 0;
 	GetSumtDownPass (sumtRoot, downPass, &i);
 	nNodes = i;
-	localTaxaFound = (int *)malloc((size_t) (numTaxa * sizeof(int)));
+	localTaxaFound = (int *)SafeMalloc((size_t) (numTaxa * sizeof(int)));
 	if (!localTaxaFound)
 		{
 		MrBayesPrint ("%s   Could not allocate localTaxaFound\n", spacer);
@@ -6485,7 +6460,7 @@ int RootSumtTree (SumtNode *p, int n, int out)
 		}
 	for (i=0; i<numTaxa; i++)
 		localTaxaFound[i] = NO;
-	usedMemIndex = (int *)malloc((size_t) (2 * numTaxa * sizeof(int)));
+	usedMemIndex = (int *)SafeMalloc((size_t) (2 * numTaxa * sizeof(int)));
 	if (!usedMemIndex)
 		{
 		MrBayesPrint ("%s   Could not allocate usedMemIndex\n", spacer);
@@ -6762,7 +6737,7 @@ int ShowConPhylogram (FILE *fp, int nNodes, PolyNode *root, int screenWidth)
 	markLine = printLine + screenWidth + 1;
 
 	/* allocate allDownPass */
-	allDownPass = (PolyNode **) malloc (nNodes * sizeof(PolyNode *));
+	allDownPass = (PolyNode **) SafeMalloc (nNodes * sizeof(PolyNode *));
 	if (!allDownPass)
 		{
 		free (printLine);
@@ -6987,7 +6962,7 @@ int ShowConTree (FILE *fp, int nNodes, PolyNode *root, int screenWidth, int show
 	markLine = printLine + screenWidth + 1;
 
 	/* allocate allDownPass */
-	allDownPass = (PolyNode **) malloc (nNodes * sizeof(PolyNode *));
+	allDownPass = (PolyNode **) SafeMalloc (nNodes * sizeof(PolyNode *));
 	if (!allDownPass)
 		{
 		free (printLine);
@@ -7506,7 +7481,7 @@ int SortParts (int *item, int count)
 	
 	SortParts2 (item, 0, count-1);
 		
-	tempVect = (int *)malloc((size_t) (numTreePartsFound * sizeof(int)));
+	tempVect = (int *)SafeMalloc((size_t) (numTreePartsFound * sizeof(int)));
 	if (!tempVect)
 		{
 		MrBayesPrint ("%s   Problem allocating tempVect (%d)\n", spacer, numTreePartsFound * sizeof(int));
@@ -7660,7 +7635,7 @@ int TreeProb (void)
 	int			i, j, n, num, targetNode, nBits, nextConNode, isCompat, 
 				localOutgroupNum, origPartNum, reorderedPartNum, *tempTreeNum=NULL, *tempNumOfTree=NULL,
 				nInSets[5];
-	long		x, y, *mask, *partition, *ingroupPartition, *outgroupPartition=NULL;
+	long		x, *mask, *partition, *ingroupPartition, *outgroupPartition=NULL;
 	MrBFlt		treeProb, cumTreeProb;
 	char		tempName[100];
 	PolyNode	*cp, *q, *r, *ql, *pl;
@@ -7683,13 +7658,13 @@ int TreeProb (void)
 		}
 		
 	/* sort trees, from most probable to least probable */
-	tempTreeNum = (int *)malloc((size_t) (numFullTreesFound * sizeof(int)));
+	tempTreeNum = (int *)SafeMalloc((size_t) (numFullTreesFound * sizeof(int)));
 	if (!tempTreeNum)
 		{
 		MrBayesPrint ("%s   Problem allocating tempTreeNum (%d)\n", spacer, numFullTreesFound * sizeof(int));
 		goto errorExit;
 		}
-	tempNumOfTree = (int *)malloc((size_t) (numFullTreesFound * sizeof(int)));
+	tempNumOfTree = (int *)SafeMalloc((size_t) (numFullTreesFound * sizeof(int)));
 	if (!tempNumOfTree)
 		{
 		MrBayesPrint ("%s   Problem allocating tempNumOfTree (%d)\n", spacer, numFullTreesFound * sizeof(int));
@@ -7730,7 +7705,7 @@ int TreeProb (void)
 		MrBayesPrint ("%s   conNodes is already allocated\n", spacer);
 		goto errorExit;
 		}
-	conNodes = (PolyNode *)malloc((size_t) (2 * numTaxa * sizeof(PolyNode)));
+	conNodes = (PolyNode *)SafeMalloc((size_t) (2 * numTaxa * sizeof(PolyNode)));
 	if (!conNodes)
 		{
 		MrBayesPrint ("%s   Could not allocate conNodes\n", spacer);
@@ -7759,19 +7734,11 @@ int TreeProb (void)
 	mask = ingroupPartition + taxonLongsNeeded;
 	memAllocs[ALLOC_OUTPART] = YES;
 
-	/* Set lastMask - needed to trim last element in partition.
+	/* Set mask - needed to trim last element in partition.
 	   This could be done when a new matrix is read in
 	   and adjusted when taxa are deleted or restored. */
-	for (i=0; i<taxonLongsNeeded; i++)
-		mask[i] = 0;
 	for (i=0; i<numIncludedTaxa; i++)
-		{
-		y = 1;
-		y = 1 << (i % nBitsInALong);
-		mask[i / nBitsInALong] |= y;
-		}
-	/*ShowBits (&mask[0], nBitsInALong*taxonLongsNeeded);
-	MrBayesPrint (" <- mask\n");*/
+		SetBit (i, mask);
 
 	/* Set ingroup and outgroup partitions.
 	   This could be done when a new matrix is read in

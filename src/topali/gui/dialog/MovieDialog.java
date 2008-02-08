@@ -17,6 +17,7 @@ import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
 import topali.data.SequenceSet;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.DoeLayout;
 

@@ -17,6 +17,7 @@ import topali.analyses.MakeNA;
 import topali.data.AlignmentData;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 import scri.commons.gui.*;
 

@@ -23,6 +23,7 @@ import scri.commons.file.FileUtils;
 import topali.data.*;
 import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
+import topali.i18n.Text;
 import topali.mod.Filters;
 import topali.var.SysPrefs;
 import scri.commons.gui.MsgBox;

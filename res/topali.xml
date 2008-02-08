@@ -323,6 +323,12 @@
 		<field name="step" type="int" direct="true">
 			<bind-xml node="attribute" />
 		</field>
+		<field name="type" type="int" direct="true">
+			<bind-xml node="attribute" />
+		</field>
+		<field name="estimate" type="boolean" direct="true">
+			<bind-xml node="attribute" />
+		</field>
 		<field name="passCount" type="int" direct="true">
 			<bind-xml node="attribute" />
 		</field>
@@ -353,6 +359,12 @@
 			<bind-xml node="attribute" />
 		</field>
 		<field name="step" type="int" direct="true">
+			<bind-xml node="attribute" />
+		</field>
+		<field name="type" type="int" direct="true">
+			<bind-xml node="attribute" />
+		</field>
+		<field name="estimate" type="boolean" direct="true">
 			<bind-xml node="attribute" />
 		</field>
 		<field name="runs" type="int" direct="true">

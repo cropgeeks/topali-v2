@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -40,6 +40,7 @@
 #include "globals.h"
 #include "mbmath.h"
 #include "bayes.h"
+#include "model.h"
 
 #define	MAX_GAMMA_CATS						20
 #define PIOVER2 							1.57079632679489662
@@ -162,13 +163,13 @@ complex **AllocateSquareComplexMatrix (int dim)
 	int 		i;
 	complex 	**m;
 
-	m = (complex **) malloc((size_t)((dim)*sizeof(complex*)));
+	m = (complex **) SafeMalloc((size_t)((dim)*sizeof(complex*)));
 	if (!m) 
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square complex matrix.\n", spacer);
 		exit (0);
 		}
-	m[0]=(complex *) malloc((size_t)((dim*dim)*sizeof(complex)));
+	m[0]=(complex *) SafeMalloc((size_t)((dim*dim)*sizeof(complex)));
 	if (!m[0]) 
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square complex matrix.\n", spacer);
@@ -202,13 +203,13 @@ MrBFlt **AllocateSquareDoubleMatrix (int dim)
 	int			i;
 	MrBFlt		**m;
 	
-	m = (MrBFlt **)malloc((size_t)((dim)*sizeof(MrBFlt*)));
+	m = (MrBFlt **)SafeMalloc((size_t)((dim)*sizeof(MrBFlt*)));
 	if (!m)
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square matrix of doubles.\n", spacer);
 		exit(1);
 		}
-	m[0] = (MrBFlt *)malloc((size_t)((dim*dim)*sizeof(MrBFlt)));
+	m[0] = (MrBFlt *)SafeMalloc((size_t)((dim*dim)*sizeof(MrBFlt)));
 	if (!m[0])
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square matrix of doubles.\n", spacer);
@@ -240,13 +241,13 @@ int **AllocateSquareIntegerMatrix (int dim)
 
 	int		i, **m;
 	
-	m = (int **)malloc((size_t)((dim)*sizeof(int*)));
+	m = (int **)SafeMalloc((size_t)((dim)*sizeof(int*)));
 	if (!m)
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square matrix of integers.\n", spacer);
 		exit(1);
 		}
-	m[0] = (int *)malloc((size_t)((dim*dim)*sizeof(int)));
+	m[0] = (int *)SafeMalloc((size_t)((dim*dim)*sizeof(int)));
 	if (!m[0])
 		{
 		MrBayesPrint ("%s   Error: Problem allocating a square matrix of integers.\n", spacer);
@@ -298,7 +299,7 @@ int AutodGamma (MrBFlt *M, MrBFlt rho, int K)
 			{
 			i = i2 / K; 
 			j = i2 % K;
-			if (/*i+j != 2*(K-1.0)-i1*/fabs( (i+j) - ((2*K-1.0)-i1) )>ETA)
+			if (AreDoublesEqual(i+j, 2*(K-1.0)-i1, ETA)==NO)
 				continue;
 			y = 0;
 			if (i > 0) 
@@ -433,7 +434,7 @@ void Balanc (int dim, MrBFlt **a, int *low, int *high, MrBFlt *scale)
 			{
 			if (i != j)
 				{
-	       		        if (/*a[j][i] != 0.0*/ fabs(a[j][i])>ETA)
+				  if (AreDoublesEqual(a[j][i],0.0, ETA)==NO)
 					goto next_j1;
 				}
 			}
@@ -459,7 +460,7 @@ void Balanc (int dim, MrBFlt **a, int *low, int *high, MrBFlt *scale)
 			{
 			if (i != j)
 				{
-				if (fabs(a[i][j])>ETA)
+				if (AreDoublesEqual(a[i][j], 0.0, ETA)==NO)
 					goto next_j;
 				}
 			}
@@ -487,7 +488,7 @@ void Balanc (int dim, MrBFlt **a, int *low, int *high, MrBFlt *scale)
 					r += fabs(a[i][j]);
 					}
 				}
-			if ((fabs(c)>ETA) && (fabs(r)>ETA))
+			if (AreDoublesEqual(c,0.0,ETA)==NO && AreDoublesEqual(r,0.0,ETA)==NO)
 				{
 				g = r / FLT_RADIX;
 				f = 1.0;
@@ -1187,9 +1188,9 @@ MrBFlt ComplexAbsoluteValue (complex a)
 	
 	x = fabs(a.re);
 	y = fabs(a.im);
-	if(x < ETA)  /* x == 0.0 */
+	if(AreDoublesEqual(x, 0.0, ETA)==YES)  /* x == 0.0 */
 		answer = y;
-	else if (y < ETA) /* y == 0.0 */
+	else if (AreDoublesEqual(y, 0.0, ETA)==YES) /* y == 0.0 */
 		answer = x;
 	else if (x > y) 
 		{
@@ -1338,7 +1339,7 @@ complex ComplexExponentiation (complex a)
 	complex		c;
 
 	c.re = exp(a.re);
-	if (fabs(a.im) < ETA) /* == 0 */
+	if (AreDoublesEqual(a.im,0.0, ETA)==YES) /* == 0 */
 		c.im = 0; 
 	else
 		{ 
@@ -1413,7 +1414,7 @@ complex ComplexLog (complex a)
 	complex 	c;
 	
 	c.re = log(ComplexAbsoluteValue(a));
-	if (a.re < ETA) /* == 0.0 */ 
+	if (AreDoublesEqual(a.re,0.0,ETA)==YES) /* == 0.0 */ 
 		{
 		c.im = PIOVER2;
 		} 
@@ -1456,7 +1457,7 @@ void ComplexLUBackSubstitution (int dim, complex **a, int *indx, complex *b)
 			for (j = ii; j <= i - 1; j++)
 				sum = ComplexSubtraction (sum, ComplexMultiplication (a[i][j], b[j]));
 			} 
-		else if ((fabs(sum.re)>ETA) || (fabs(sum.im)>ETA)) /* 2x != 0.0 */
+		else if (AreDoublesEqual(sum.re,0.0,ETA)==NO || AreDoublesEqual(sum.im, 0.0, ETA)==NO) /* 2x != 0.0 */
 			ii = i;
 		b[i] = sum;
 		}
@@ -1511,7 +1512,7 @@ int ComplexLUDecompose (int dim, complex **a, MrBFlt *vv, int *indx, MrBFlt *pd)
 			if ((temp = ComplexAbsoluteValue (a[i][j])) > big)
 				big = temp;
 			}
-		if (fabs(big) < ETA) /* == 0.0 */
+		if (AreDoublesEqual(big, 0.0, ETA)==YES) /* == 0.0 */
 			{
 			MrBayesPrint ("%s   Error: Problem in ComplexLUDecompose\n", spacer);
 			return (1);
@@ -1554,7 +1555,7 @@ int ComplexLUDecompose (int dim, complex **a, MrBFlt *vv, int *indx, MrBFlt *pd)
 			vv[imax] = vv[j];
 			}
 		indx[j] = imax;
-		if (fabs(a[j][j].re) < ETA && fabs(a[j][j].im) < ETA) /* 2x == 0.0 */
+		if (AreDoublesEqual(a[j][j].re, 0.0, ETA)==YES && AreDoublesEqual(a[j][j].im, 0.0, ETA)==YES) /* 2x == 0.0 */
 			a[j][j] = Complex (1.0e-20, 1.0e-20);
 		if (j != dim - 1)
 			{
@@ -1613,7 +1614,7 @@ complex ComplexSquareRoot (complex a)
     complex 		c;
     MrBFlt 			x, y, w, r;
     
-    if ((fabs(a.re) < ETA) && (fabs(a.im) < ETA)) /* 2x == 0.0 */
+    if (AreDoublesEqual(a.re, 0.0, ETA)==YES && AreDoublesEqual(a.im, 0.0, ETA)==YES) /* 2x == 0.0 */
     	{
         c.re = 0.0;
         c.im = 0.0;
@@ -1698,7 +1699,7 @@ int ComputeEigenSystem (int dim, MrBFlt **a, MrBFlt *v, MrBFlt *vi, MrBFlt **u, 
 		}
 	for (i=0; i<dim; i++)
 		{
-		if (fabs(vi[i]) > ETA) /* != 0.0 */
+		if (AreDoublesEqual(vi[i], 0.0, ETA)==NO) /* != 0.0 */
 			return (EVALUATE_COMPLEX_NUMBERS);
 		}
 
@@ -2137,14 +2138,14 @@ void ElmHes (int dim, int low, int high, MrBFlt **a, int *interchanged)
 				}
 			}
 
-		if (fabs(x)>ETA) /* != 0.0 */ /* change "==" to "!=", eliminating goto statement */
+		if (AreDoublesEqual(x, 0.0, ETA)==NO) /* change "==" to "!=", eliminating goto statement */
 			{
 			mp1 = m + 1;
 		
 			for (i=mp1; i<=high; i++)
 				{
 				y = a[i][mm1];
-				if (fabs(y)>ETA) /* != 0.0 */
+				if (AreDoublesEqual(y, 0.0, ETA)==NO) /* != 0.0 */
 					{
 					y /= x;
 					a[i][mm1] = y;
@@ -2603,7 +2604,7 @@ void GaussianElimination (int dim, MrBFlt **a, MrBFlt **bMat, MrBFlt **xMat)
 
 	lMat = AllocateSquareDoubleMatrix (dim);
 	uMat = AllocateSquareDoubleMatrix (dim);
-	bVec = (MrBFlt *)malloc((size_t) ((dim) * sizeof(MrBFlt)));
+	bVec = (MrBFlt *)SafeMalloc((size_t) ((dim) * sizeof(MrBFlt)));
 	if (!bVec)
 		{
 		MrBayesPrint ("%s   Error: Problem allocating bVec\n", spacer);
@@ -2654,8 +2655,8 @@ int GetEigens (int dim, MrBFlt **q, MrBFlt *eigenValues, MrBFlt *eigvalsImag, Mr
 	complex 	**cWork, *Ccol;
 
 	/* allocate memory */
-	dWork = (MrBFlt *)malloc((size_t) (dim * sizeof(MrBFlt)));
-	iWork = (int *)malloc((size_t) (dim * sizeof(int)));
+	dWork = (MrBFlt *)SafeMalloc((size_t) (dim * sizeof(MrBFlt)));
+	iWork = (int *)SafeMalloc((size_t) (dim * sizeof(int)));
 	if (!dWork || !iWork)
 		{
 		MrBayesPrint ("%s   Error: Problem in GetEigens\n", spacer);
@@ -2683,7 +2684,7 @@ int GetEigens (int dim, MrBFlt **q, MrBFlt *eigenValues, MrBFlt *eigvalsImag, Mr
 		{
 		for(i=0; i<dim; i++)
 			{
-			  if (fabs(eigvalsImag[i])<ETA) /* == 0.0 */
+			  if (fabs(eigvalsImag[i])<1E-20) /* == 0.0 */
 				{ 
 				for(j=0; j<dim; j++)
 					{
@@ -2691,7 +2692,7 @@ int GetEigens (int dim, MrBFlt **q, MrBFlt *eigenValues, MrBFlt *eigvalsImag, Mr
 					Ceigvecs[j][i].im = 0.0;
 					}
 				}
-			else if (eigvalsImag[i] > 0.0)
+			else if (eigvalsImag[i] > 0)
 				{ 
 				for (j=0; j<dim; j++)
 					{
@@ -2699,7 +2700,7 @@ int GetEigens (int dim, MrBFlt **q, MrBFlt *eigenValues, MrBFlt *eigvalsImag, Mr
 					Ceigvecs[j][i].im = eigvecs[j][i + 1];
 					}
 				}
-			else if (eigvalsImag[i] < 0.0)
+			else if (eigvalsImag[i] < 0)
 				{ 
 				for (j=0; j<dim; j++)
 					{
@@ -2708,7 +2709,7 @@ int GetEigens (int dim, MrBFlt **q, MrBFlt *eigenValues, MrBFlt *eigvalsImag, Mr
 					}
 				}
 			}
-		Ccol = (complex *)malloc((size_t) (dim * sizeof(complex)));
+		Ccol = (complex *)SafeMalloc((size_t) (dim * sizeof(complex)));
 		if (!Ccol)
 			{
 			MrBayesPrint ("%s   Error: Problem in GetEigens\n", spacer);
@@ -2827,7 +2828,7 @@ int Hqr2 (int dim, int low, int high, MrBFlt **h, MrBFlt *wr, MrBFlt *wi, MrBFlt
 			for (l=en; l>low; l--) /* changed indexing, got rid of lo, ll */
 				{
 				s = fabs(h[l-1][l-1]) + fabs(h[l][l]);
-				if (s < ETA) /* == 0.0 */
+				if (AreDoublesEqual(s, 0.0, ETA)==YES) /* == 0.0 */
 					s = norm;
 				tst1 = s;
 				tst2 = tst1 + fabs(h[l][l-1]);
@@ -3884,17 +3885,17 @@ MrBFlt IncompleteBetaFunction (MrBFlt alpha, MrBFlt beta, MrBFlt x)
 		MrBayesPrint ("%s   Error: Problem in IncompleteBetaFunction.\n", spacer);
 		exit (0);
 		}
-	if (x > 0.0 && x < 1.0) 
+	if (fabs(x) < ETA || fabs(x-1.0)<ETA) /* x == 0.0 || x == 1.0 */
+		{
+		bt = 0.0;
+		}
+	else
 		{
 		gm1 = LnGamma (alpha + beta);
 		gm2 = LnGamma (alpha);
 		gm3 = LnGamma (beta);
 		temp = gm1 - gm2 - gm3 + (alpha) * log(x) + (beta) * log(1.0 - x);
 		bt = exp(temp);
-		}
-	else
-		{
-		bt = 0.0;
 		}
 	if (x < (alpha + 1.0)/(alpha + beta + 2.0))
 		return (bt * BetaCf(alpha, beta, x) / alpha);

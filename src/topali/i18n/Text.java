@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui;
+package topali.i18n;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -23,7 +23,8 @@ public class Text
 //		GuiNav = ResourceBundle.getBundle("res.text.gui_nav", SysPrefs.locale);
 //		GuiFile = ResourceBundle.getBundle("res.text.gui_file", SysPrefs.locale);
 //		GuiTree = ResourceBundle.getBundle("res.text.gui_tree", SysPrefs.locale);
-		I18N = ResourceBundle.getBundle("res.text.i18n", Locale.getDefault());
+		//I18N = ResourceBundle.getBundle("res.text.i18n", Locale.getDefault());
+	    I18N = ResourceBundle.getBundle("topali.i18n.i18n", Locale.getDefault());
 	}
 
 	public static String format(String text, Object... args)

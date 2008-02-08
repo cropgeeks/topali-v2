@@ -38,7 +38,7 @@ public class LRTLocalJob extends AnalysisJob
 	{
 		try
 		{
-			RunLRT lrt = new RunLRT(jobDir, ss, (LRTResult) result);
+			LRTInitializer lrt = new LRTInitializer(jobDir, ss, (LRTResult) result);
 			lrt.start();
 
 			result.status = JobStatus.RUNNING;
@@ -54,13 +54,13 @@ public class LRTLocalJob extends AnalysisJob
 	@Override
 	public JobStatus ws_getProgress() throws Exception
 	{
-		return new CollateLRT(jobDir).getPercentageComplete();
+		return new LRTMonitor(jobDir).getPercentageComplete();
 	}
 
 	@Override
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
-		result = new CollateLRT(jobDir).getResult();
+		result = new LRTMonitor(jobDir).getResult();
 		result.status = JobStatus.COMPLETING;
 
 		return result;

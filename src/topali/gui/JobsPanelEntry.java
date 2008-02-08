@@ -30,6 +30,8 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 
 	protected Color bgColor = (Color) UIManager.get("list.background");
 
+	boolean isSelected = false;
+	
 	public JobsPanelEntry(AnalysisJob job)
 	{
 		this.job = job;
@@ -207,6 +209,8 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 
 	public void setSelected(boolean selected)
 	{
+	    this.isSelected = selected;
+	    
 		if (selected)
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.BOLD));
 		else
@@ -232,6 +236,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 
 	public void mouseClicked(MouseEvent e)
 	{
+	    
 		if (e.getSource().equals(cancelLabel))
 		{
 			String msg = job.getResult().jobName
@@ -241,12 +246,15 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			else
 			{
 				WinMain.jobsPanel.cancelJob(this);
+				if(isSelected)
+				    WinMain.jobsPanel.clearInfoPanel();
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				cancelLabel.setText("<html>Cancel</html>");
 				cancelLabel.setForeground(Color.LIGHT_GRAY);
 				cancelLabel.removeMouseListener(this);
 			}
 		}
+		
 
 	}
 

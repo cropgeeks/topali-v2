@@ -44,7 +44,7 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         bs = new javax.swing.JSpinner();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("res/text/i18n"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
         modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Model_Settings"))); // NOI18N
 
         tstvlabel.setText(bundle.getString("Transition/Transversion_Ratio")); // NOI18N
@@ -97,14 +97,14 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
                         .addComponent(tstvlabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tstvlabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tstv, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                        .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, modelpanelLayout.createSequentialGroup()
                         .addComponent(alphalabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(alphalabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(alpha, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(alpha, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         modelpanelLayout.setVerticalGroup(
@@ -146,8 +146,8 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
                     .addComponent(jLabel5)
                     .addGroup(runpanelLayout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bs, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         runpanelLayout.setVerticalGroup(
@@ -169,7 +169,7 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(modelpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(runpanel, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                    .addComponent(runpanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

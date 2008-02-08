@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.lrt;
+package topali.cluster.jobs.lrt.analysis;
 
 import java.util.ArrayList;
 

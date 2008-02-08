@@ -30,7 +30,7 @@ public class MrBayesBasicPanel extends javax.swing.JPanel {
         bCodonpos = new javax.swing.JRadioButton();
 
         buttonGroup1.add(bOnemodel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("res/text/i18n"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
         bOnemodel.setText(bundle.getString("One_Model")); // NOI18N
         bOnemodel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         bOnemodel.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -49,7 +49,7 @@ public class MrBayesBasicPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bOnemodel)
                     .addComponent(bCodonpos))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap(251, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

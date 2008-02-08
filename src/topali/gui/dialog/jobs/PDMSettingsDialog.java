@@ -14,6 +14,7 @@ import scri.commons.gui.*;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
@@ -35,7 +36,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 	public PDMSettingsDialog(WinMain winMain, AlignmentData data,
 			PDMResult iResult)
 	{
-		super(winMain, "Probabilistic Divergence Measures - Confirm Settings",
+		super(winMain, java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.2"),
 				true);
 		this.data = data;
 
@@ -46,9 +47,9 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		basicPanel = new BasicPanel();
 		// extraPanel = new ExtraPanel();
 		bambePanel = new BambePanel();
-		tabs.addTab("Basic", basicPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Basic"), basicPanel);
 		// tabs.addTab("Advanced", extraPanel);
-		tabs.addTab("Advanced", bambePanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Advanced"), bambePanel);
 
 		addWindowListener(new WindowAdapter()
 		{
@@ -188,8 +189,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 	private void defaultClicked()
 	{
 		int res = MsgBox.yesno(
-				"This will return all settings (on all tabs) to their default "
-						+ "values. Continue?", 1);
+				java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("default_settings_warning"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -203,9 +203,9 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		int index = tabs.getSelectedIndex();
 		tabs.removeAll();
-		tabs.addTab("Basic", basicPanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Basic"), basicPanel);
 		// tabs.addTab("Advanced", extraPanel);
-		tabs.addTab("Advanced", bambePanel);
+		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Advanced"), bambePanel);
 		tabs.setSelectedIndex(index);
 	}
 
@@ -215,21 +215,14 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		BasicPanel()
 		{
-			slidePanel = new SlidePanel(data, Prefs.pdm_window, Prefs.pdm_step);
+			slidePanel = new SlidePanel(data, Prefs.pdm_window, Prefs.pdm_step, -1);
 
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(
-					"Please confirm the current settings for "
-							+ "running PDM. Additional configuration is also");
-			JLabel info2 = new JLabel("<html>available by selecting the <b>"
-					+ "Advanced</b> tab and modifying the options found there."
-					+ "</html>");
-
+			JLabel info1 = new JLabel(Text.I18N.getString("PDMSettingsDialog.1"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(info2, 0, 1, 1, 1, new Insets(0, 5, 10, 5));
-			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
 		}
 
 		void saveSettings()
@@ -280,39 +273,38 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			((JSpinner.NumberEditor) cRuns.getEditor())
 					.getTextField()
 					.setToolTipText(
-							"Number of times to re-run the analysis to calculate the threshold values");
-			lRuns = new JLabel("Number of bootstrapping threshold runs:");
+							java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.4"));
+			lRuns = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.5"));
 
 			// Pruning
 			String[] v1 =
-			{ "Yes", "No" };
+			{"Yes", "No" };
 			cPrune = new JComboBox(v1);
-			lPrune = new JLabel("Prune histogram results:");
-			cPrune.setToolTipText("Toggle whether or not to use Pruned PDM "
-					+ "(recommended for large numbers of sequences)");
+			lPrune = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.6"));
+			cPrune.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.7"));
 			if (Prefs.pdm_prune == false)
 				cPrune.setSelectedIndex(1);
 
 			// Seed
 			cSeed = new JTextField("" + Prefs.pdm_seed);
-			cSeed.setToolTipText("1 < odd integer < 2147483647 (2^31 - 1)");
-			lSeed = new JLabel("Seed:");
+			cSeed.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.8"));
+			lSeed = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.9"));
 
 			// Burn
 			cBurn = new JTextField("" + Prefs.pdm_burn);
-			cBurn.setToolTipText("Number of cycles to run burn algorithm");
-			lBurn = new JLabel("Burn-in time:");
+			cBurn.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.10"));
+			lBurn = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.11"));
 
 			// Cycles
 			cCycles = new JTextField("" + Prefs.pdm_cycles);
-			cCycles.setToolTipText("Number of cycles to run main algorithm");
-			lCycles = new JLabel("Cycles:");
+			cCycles.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.12"));
+			lCycles = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.13"));
 
 			// Burn-algorithm
 			String[] v2 =
 			{ "global", "local" };
 			cBurnAlg = new JComboBox(v2);
-			lBurnAlg = new JLabel("Burn-algorithm:");
+			lBurnAlg = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.14"));
 			if (Prefs.pdm_burn_algorithm.equals("local"))
 				cBurnAlg.setSelectedIndex(1);
 
@@ -321,7 +313,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			{ "local", "global" };
 			cMainAlg = new JComboBox(v3);
 			cMainAlg.setSelectedItem(Prefs.pdm_main_algorithm);
-			lMainAlg = new JLabel("Main-algorithm:");
+			lMainAlg = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.15"));
 
 			// Use-beta
 			String[] v4 =
@@ -329,8 +321,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			cUseBeta = new JComboBox(v4);
 			cUseBeta.setSelectedItem(Prefs.pdm_use_beta);
 			cUseBeta
-					.setToolTipText("Use scaled beta distribution modification of local");
-			lUseBeta = new JLabel("Use-beta:");
+					.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.16"));
+			lUseBeta = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.17"));
 
 			// Sample-interval
 			// cSample = new JTextField("" + Prefs.pdm_sample_interval);
@@ -349,9 +341,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			// Molecular clock
 			cMole = new JComboBox(v4);
 			cMole.setSelectedItem(Prefs.pdm_molecular_clock);
-			cMole.setToolTipText("If true, assume constant rate of evolution "
-					+ "for all branches");
-			lMole = new JLabel("Molecular-clock:");
+			cMole.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.18"));
+			lMole = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.19"));
 
 			// Lilelihood-model
 			// String[] v5 = { "HKY85", "F84", "TN93" };
@@ -361,8 +352,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			// Category-list
 			cCat = new JTextField("" + Prefs.pdm_category_list);
-			cCat.setToolTipText("One site category");
-			lCat = new JLabel("Category-list:");
+			cCat.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.20"));
+			lCat = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.21"));
 
 			// Single-kappa
 			// cSingleKap = new JComboBox(v4);
@@ -373,7 +364,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			// Initial-theta
 			cInitThet = new JTextField("" + Prefs.pdm_initial_theta);
-			lInitThet = new JLabel("Initial-theta:");
+			lInitThet = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.22"));
 
 			// Estimate-pi
 			// cEstimate = new JComboBox(v4);
@@ -392,8 +383,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			// Parameter-update-interval
 			cParam = new JTextField("" + Prefs.pdm_parameter_update_interval);
 			cParam
-					.setToolTipText("Number of tree updates after each parameter update");
-			lParam = new JLabel("Parameter-update-interval:");
+					.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.23"));
+			lParam = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.24"));
 
 			// Update-kappa
 			// cuKap = new JComboBox(v4);
@@ -405,8 +396,8 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			// Update-theta
 			cuThet = new JComboBox(v5);
 			cuThet.setSelectedItem(Prefs.pdm_update_theta);
-			cuThet.setToolTipText("Substitution rate parameters");
-			luThet = new JLabel("Update-theta:");
+			cuThet.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.25"));
+			luThet = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.26"));
 
 			// Update-pi
 			// cuPi = new JComboBox(v4);
@@ -431,23 +422,23 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			// Tune-interval
 			ctInt = new JTextField("" + Prefs.pdm_tune_interval);
 			ctInt
-					.setToolTipText("Interval to adapt to global-tune during burn-in");
-			ltInt = new JLabel("Tune-interval:");
+					.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.27"));
+			ltInt = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.28"));
 
 			// Global-tune
 			ctGlo = new JTextField("" + Utils.d5.format(Prefs.pdm_global_tune));
-			ctGlo.setToolTipText("Half window width for global");
-			ltGlo = new JLabel("Global-tune:");
+			ctGlo.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.29"));
+			ltGlo = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.30"));
 
 			// Local-tune
 			ctLoc = new JTextField("" + Utils.d5.format(Prefs.pdm_local_tune));
-			ctLoc.setToolTipText("Stretch parameter for local");
-			ltLoc = new JLabel("Local-tune:");
+			ctLoc.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.31"));
+			ltLoc = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.32"));
 
 			// Theta-tune
 			ctThe = new JTextField("" + Utils.d5.format(Prefs.pdm_theta_tune));
-			ctThe.setToolTipText("Dirichlet parameter for theta update");
-			ltThe = new JLabel("Theta-tune:");
+			ctThe.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.33"));
+			ltThe = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.34"));
 
 			// Pi-tune
 			// ctPi = new JTextField("" + Prefs.d5.format(Prefs.pdm_pi_tune));
@@ -473,12 +464,12 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 			// Beta-tune
 			ctBet = new JTextField("" + Utils.d5.format(Prefs.pdm_beta_tune));
-			ctBet.setToolTipText("Half window width for beta update");
-			ltBet = new JLabel("Beta-tune:");
+			ctBet.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.35"));
+			ltBet = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.36"));
 
 			// Outgroup
 			cOutgroup = new JTextField("" + Prefs.pdm_outgroup);
-			lOutgroup = new JLabel("Outgroup:");
+			lOutgroup = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.37"));
 
 			// Intitial-tree-type
 			// String[] v6 = { "random", "upgma", "neighbor-joining", "newick",
@@ -640,7 +631,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 				Prefs.pdm_seed = Integer.parseInt(cSeed.getText());
 			} catch (Exception e)
 			{
-				return error("Seed: positive (odd) integer expected.", cSeed);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.38"), cSeed);
 			}
 
 			try
@@ -648,7 +639,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 				Prefs.pdm_burn = Integer.parseInt(cBurn.getText());
 			} catch (Exception e)
 			{
-				return error("Burn-in time: positive integer expected.", cBurn);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.39"), cBurn);
 			}
 
 			try
@@ -656,7 +647,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 				Prefs.pdm_cycles = Integer.parseInt(cCycles.getText());
 			} catch (Exception e)
 			{
-				return error("Cycles: positive integer expected.", cCycles);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.40"), cCycles);
 			}
 
 			Prefs.pdm_burn_algorithm = (String) cBurnAlg.getSelectedItem();
@@ -687,7 +678,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						"Parameter-update-interval: positive integer expected.",
+						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.41"),
 						cParam);
 			}
 
@@ -702,7 +693,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 				Prefs.pdm_tune_interval = Integer.parseInt(ctInt.getText());
 			} catch (Exception e)
 			{
-				return error("Tune-interval: positive integer expected.", ctInt);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.42"), ctInt);
 			}
 
 			try
@@ -711,7 +702,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 						.floatValue();
 			} catch (Exception e)
 			{
-				return error("Global-tune: positive number expected.", ctInt);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.43"), ctInt);
 			}
 
 			try
@@ -720,7 +711,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 						.floatValue();
 			} catch (Exception e)
 			{
-				return error("Local-tune: positive number expected.", ctLoc);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.44"), ctLoc);
 			}
 
 			try
@@ -729,7 +720,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 						.floatValue();
 			} catch (Exception e)
 			{
-				return error("Theta-tune: positive number expected.", ctThe);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.45"), ctThe);
 			}
 
 			// try { Prefs.pdm_pi_tune =
@@ -762,7 +753,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 						.floatValue();
 			} catch (Exception e)
 			{
-				return error("Beta-tune: positive number expected.", ctBet);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.46"), ctBet);
 			}
 
 			try
@@ -770,7 +761,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 				Prefs.pdm_outgroup = Integer.parseInt(cOutgroup.getText());
 			} catch (Exception e)
 			{
-				return error("Outgroup: positive integer expected.", ctBet);
+				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.47"), ctBet);
 			}
 
 			Prefs.pdm_prune = cPrune.getSelectedIndex() == 0;
@@ -791,8 +782,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		private boolean error(String msg, Component control)
 		{
-			String str = "An incorrect value has been entered for the "
-					+ "following advanced setting:\n" + msg;
+			String str = java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("PDMSettingsDialog.48") + msg;
 
 			MsgBox.msg(str, MsgBox.ERR);
 			control.requestFocus();

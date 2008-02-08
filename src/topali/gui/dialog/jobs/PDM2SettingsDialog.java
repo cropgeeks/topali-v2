@@ -151,7 +151,7 @@ public class PDM2SettingsDialog extends JDialog implements ActionListener
 		BasicPanel()
 		{
 			slidePanel = new SlidePanel(data, Prefs.pdm2_window,
-					Prefs.pdm2_step);
+					Prefs.pdm2_step, -1);
 
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);

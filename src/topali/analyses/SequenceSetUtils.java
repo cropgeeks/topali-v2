@@ -13,6 +13,7 @@ import pal.alignment.SimpleAlignment;
 import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
+import topali.i18n.Text;
 
 /*
  * Helper class that performs various analyses on a SequenceSet (Alignment)

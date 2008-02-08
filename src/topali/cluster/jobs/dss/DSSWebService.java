@@ -44,7 +44,7 @@ public class DSSWebService extends WebService
 
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
-			RunDSS dss = new RunDSS(jobDir, ss, result);
+			DSSInitializer dss = new DSSInitializer(jobDir, ss, result);
 			dss.start();
 
 			accessLog.info("DSS request from " + jobId);
@@ -62,7 +62,7 @@ public class DSSWebService extends WebService
 	{
 		try
 		{
-			return new CollateDSS(jobDir).getPercentageComplete();
+			return new DSSMonitor(jobDir).getPercentageComplete();
 		} catch (Exception e)
 		{
 			logger.log(Level.ERROR, e.getMessage(), e);
@@ -76,7 +76,7 @@ public class DSSWebService extends WebService
 		{
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
-			DSSResult result = new CollateDSS(jobDir).getResult();
+			DSSResult result = new DSSMonitor(jobDir).getResult();
 
 			logger.info(jobId + " -  returning result");
 			accessLog.info("DSS result  to   " + jobId);

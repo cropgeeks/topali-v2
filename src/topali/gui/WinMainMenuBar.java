@@ -13,6 +13,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import topali.i18n.Text;
 import topali.logging.GracefulShutdownHandler;
 
 public class WinMainMenuBar extends JMenuBar

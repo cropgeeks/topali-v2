@@ -35,10 +35,8 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener,
 	    double[][] graph2Data = (double[][]) Utils.castArray(
 		    result.locData, double.class);
 
-	    graph1 = new GraphPanel(data, result, graph1Data, -1,
-		    GraphPanel.RIGHT);
-	    graph2 = new GraphPanel(data, result, graph2Data, -1,
-		    GraphPanel.RIGHT);
+	    graph1 = new GraphPanel(data, result, graph1Data, -1, "global");
+	    graph2 = new GraphPanel(data, result, graph2Data, -1, "local");
 
 	    graph2.setThreshold(result.threshold);
 
@@ -128,7 +126,7 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener,
 
     @Override
     public Printable[] getPrintables() {
-	return new Printable[] { graph1, graph2 };
+	return new Printable[] { graph1.getPrintable(), graph2.getPrintable() };
     }
 
     @Override

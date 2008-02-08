@@ -13,11 +13,12 @@ import pal.substmodel.SubstitutionModel;
 import pal.tree.*;
 import topali.analyses.TreeUtilities;
 import topali.cluster.*;
+import topali.cluster.jobs.dss.analysis.*;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 
-public class RunDSS extends Thread
+public class DSSInitializer extends Thread
 {
 	private SequenceSet ss;
 
@@ -26,7 +27,7 @@ public class RunDSS extends Thread
 	// Directory where the job's data will be stored
 	private File jobDir;
 
-	public RunDSS(File jobDir, SequenceSet ss, DSSResult result)
+	public DSSInitializer(File jobDir, SequenceSet ss, DSSResult result)
 	{
 		this.jobDir = jobDir;
 		this.ss = ss;

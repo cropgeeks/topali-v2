@@ -18,6 +18,7 @@ import org.apache.log4j.*;
 
 import scri.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
+import topali.i18n.Text;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
 import topali.var.SysPrefs;
@@ -26,7 +27,7 @@ import topali.var.utils.Utils;
 public class TOPALi extends Applet implements Application
 {
 	//enables/disables extensive logging
-	public static final boolean debugClient = false;
+	public static final boolean debugClient = true;
 	public static final boolean debugJobs = false;
 	
 	public static final String VERSION = "2.19";
@@ -124,13 +125,15 @@ public class TOPALi extends Applet implements Application
 		// Load the preferences
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
 				prefsFile), Prefs.class);
-		doEncryption(true);
 		
 		if(!Prefs.locale.equals("default")) {
 		    String loc = Prefs.locale;
 		    log.info("Set Locale to "+loc);
 			Locale.setDefault(new Locale(loc));
 		}
+		
+		doEncryption(true);
+		
 
 		setProxy();
 		LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);

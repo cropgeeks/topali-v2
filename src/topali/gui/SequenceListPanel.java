@@ -16,6 +16,7 @@ import javax.swing.event.*;
 
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
+import topali.i18n.Text;
 import scri.commons.gui.MsgBox;
 
 public class SequenceListPanel extends JPanel implements ListSelectionListener, PropertyChangeListener

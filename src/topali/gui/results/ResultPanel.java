@@ -5,8 +5,9 @@
 
 package topali.gui.results;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.print.Printable;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -39,9 +40,9 @@ public abstract class ResultPanel extends JPanel
 		toolbar = new ResultPanelToolbar(this, data, (AlignmentResult)result);
 		toolbar.setFloatable(false);
 		toolbar.setBorderPainted(false);
-		toolbar.setOrientation(SwingConstants.HORIZONTAL);
+		toolbar.setOrientation(SwingConstants.VERTICAL);
 		toolbar.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		add(toolbar, BorderLayout.NORTH);
+		add(toolbar, BorderLayout.EAST);
 		}
 	}
 
@@ -51,13 +52,30 @@ public abstract class ResultPanel extends JPanel
 	 * @param comp
 	 * @param containGraphs
 	 */
-	public void addContent(JComponent comp, boolean containGraphs) {
+	public void addContent(Component comp, boolean containsGraphs) {
 		this.contentPanel.add(comp, BorderLayout.CENTER);
 		if(toolbar!=null) {
-			if(containGraphs)
+			if(containsGraphs)
 				toolbar.addGraphActions();
 			//toolbar.enableGraphButtons(containGraphs);
 		}
+	}
+	
+	public java.util.List<DataVisPanel> getDataPanels() {
+	    LinkedList<DataVisPanel> result = new LinkedList<DataVisPanel>();
+	    searchDataPanels(this.contentPanel, result);
+	    return result;
+	}
+	
+	private void searchDataPanels(JComponent comp, java.util.List<DataVisPanel> list) {
+	    if(comp instanceof DataVisPanel)
+		list.add((DataVisPanel)comp);
+	    
+	    for(int i=0; i<comp.getComponentCount(); i++) {
+		Component tmp = comp.getComponent(i);
+		if(tmp instanceof JComponent)
+		    searchDataPanels((JComponent)comp.getComponent(i), list);
+	    }
 	}
 
 	/**

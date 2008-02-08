@@ -39,7 +39,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		init();
 		
 		pack();
-		setSize(360,350);
+		setSize(getWidth(),370);
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 	}

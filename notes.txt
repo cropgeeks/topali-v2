@@ -2,22 +2,28 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Moved all i18n texts in one file (i18n.properties)
-- Added language option in DisplaySettings dialog
-- Started translation to German
-- Fixed bug in Phyml sge-script
+- Replaced MrBayes 3.1.1 with 3.1.2 (due to a bug in 3.1.1)
+- Had to move i18n stuff into src directory (otherwise NetBeans complains)
+- Implemented variable window sizes in DSS and LRT
+- If job entry gets removed (cancelled), the error info panel now also gets cleared.
+- Resultpanels: Again just one right-aligned toolbar (no separated toolbars for each graph etc. anymore)
+- Fixed: Printpreview just showed first page for multipage Printables
+- ModelDiagrams are now also exportable/printable (but still some problem with printing)
 
 TODO:
-- DSS/LRT gap threshold: Check with Frank again!
+- Optimising RaxML parameters (that means running jobs prior to the actual analysis!)
+- Full LRT test for selected windows
+- Automatically determine window size for LRT and DSS
+- Webservices for 3rd parties
+- Release for UoD cluster
+- Investigate SVG support?
 - Bug: Dundee cluster filesystem timeout problems
 - FRANK: come up with additional "TOPALi Tips"
 
 Suggestions:
-- Store all default values in Prefs, so that there is one central file
-  were the default values can be viewed/changed.
 - Topali trees: Sequence coloring (by species) (Diego Miranda, dm435@cam.ac.uk)
 - Job cleanup: Check, does Topali really clean up the job directory (Jim Procter)
-
+- Time limit on public queue: different limit for single and parallel jobs?
 
 Known Bugs
 - RaxML process sometimes doesn't stop (seems to happen on quite short alignments)

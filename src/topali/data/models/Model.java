@@ -233,7 +233,6 @@ public abstract class Model extends DataObject implements Comparable<Model>
 		sb.append("Inv: "+this.inv+"\n");
 		sb.append("      p="+this.invProp+"\n");
 		sb.append("Lnl: "+this.lnl+"\n");
-		sb.append("Ranking score: "+getRankingScore()+"\n");
 		return sb.toString();
 	}
 	

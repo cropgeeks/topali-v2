@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -27,8 +27,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details (www.gnu.org).
- *
- * 07/06/2005: Paul, added patch from Konrad Scheffler <konrad@cbio.uct.ac.za>, tagged khs07062005. 
  * 
  */
 #include <stdio.h>
@@ -38,6 +36,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <stdarg.h>
 #include "mb.h"
 #include "globals.h"
 #include "bayes.h"
@@ -48,6 +47,10 @@
 #include "sump.h"
 #include "sumt.h"
 #include "plot.h"
+
+#ifdef DEBUG
+#include <assert.h>
+#endif
 
 #if defined(WIN_VERSION) && !defined(__GNUC__)
 #define VISUAL
@@ -125,6 +128,10 @@ typedef void (*sighandler_t)(int);
 #undef	DEBUG_UNROOTED_SLIDER
 #undef	DEBUG_BIASED_SPR
 #undef  DEBUG_CONSTRAINTS
+#undef  DEBUG_ExtSS
+#undef  DEBUG_CSLIDER
+#undef  DEBUG_ExtSPRClock
+#undef  DEBUG_TREEHEIGHT
 
 /* local (to this file) data types */
 typedef struct pfnode
@@ -198,6 +205,7 @@ void	CopyPFNodeDown (PFNODE *p);
 void    CopySubtreeToTree (Tree *subtree, Tree *t);
 int		CopyToTreeFromPolyTree (Tree *to, PolyTree *from);
 int		CopyToTreeFromTree (Tree *to, Tree *from);
+void	CopyTreeNodes (TreeNode *p, TreeNode *q);
 void    CopyTrees (int chain);
 void    CopyTreeToSubtree (Tree *t, Tree *subtree);
 int     CreateParsMatrix (void);
@@ -237,15 +245,17 @@ void    GetSwappers (int *swapA, int *swapB, int curGen);
 void    GetTempDownPassSeq (TreeNode *p, int *i, TreeNode **dp);
 Tree    *GetTree (Param *parm, int chain, int state);
 Tree    *GetTreeFromIndex (int index, int chain, int state);
-int     InitCalibratedBrlens (Tree *t);
+int     InitCalibratedBrlens (Tree *t, MrBFlt minLength);
 int     InitChainCondLikes (void);
 int     InitClockBrlens (Tree *t);
 int     InitInvCondLikes (void);
 int     InitParsSets (void);
 int     InitSprParsSets (void);
 int     InitTermCondLikes (void);
+void	InitTreeNode (TreeNode *p);
 int     IsBitSet (int i, long *bits);
 int     IsClockSatisfied (Tree *t, MrBFlt tol);
+int		IsCalibratedClockSatisfied (Tree *t, MrBFlt tol);
 int		IsPFNodeEmpty (PFNODE *p);
 void    JukesCantor (MrBFlt *tiP, MrBFlt length);
 PFNODE *LargestNonemptyPFNode (PFNODE *p, int *i, int j);
@@ -275,10 +285,17 @@ int     Move_Beta (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, Mr
 int     Move_Beta_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_BiasedSpr (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_BrLen (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
-int     Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Extinction (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Extinction_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtSPR1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtSPR2 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtSPRClock (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtSS (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_ExtTBR (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtTBR1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtTBR2 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtTBR3 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_ExtTBR4 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_GammaShape_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Growth (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Local (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
@@ -286,26 +303,33 @@ int     Move_LocalClock (Param *param, int chain, long *seed, MrBFlt *lnPriorRat
 int     Move_NNI (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int		Move_NNI_Hetero (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int		Move_NodeSlider (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int		Move_NodeSliderClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Omega (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Omega_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_OmegaBeta_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
-int     Move_OmegaGamma_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_OmegaCat (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_OmegaGamma_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_OmegaNeu (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_OmegaPos (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_OmegaPur (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Pinvar (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_RanSPR1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_RanSPR2 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_RanSPR3 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_RanSPR4 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_RateMult_Dir (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Revmat_Dir (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Speciation (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Speciation_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_SPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Statefreqs (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int		Move_StatefreqsSymDirMultistate (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_SwitchRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_SwitchRate_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Theta (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_Tratio_Dir (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
+int     Move_TreeHeight (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 int     Move_UnrootedSlider (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp);
 void    NodeToNodeDistances (Tree *t, TreeNode *fromNode);
 int     NumNonExcludedChar (void);
@@ -336,6 +360,7 @@ void    PrintToScreen (int curGen, time_t endingT, time_t startingT);
 /* void    PrintToScreen (int curGen, clock_t endingT, clock_t startingT);*/
 int     PrintTree (int curGen, Tree *tree);
 int     ProcessStdChars (void);
+int		PruneTree (Tree *t);
 int		RandResolve (Tree *destination, PolyTree *t, long *seed);
 #       if defined (MPI_ENABLED)
 int     ReassembleMoveInfo (void);
@@ -346,11 +371,11 @@ int     RemovePartition (PFNODE *r, long *p, int runId);
 int     RemoveTreeFromPartitionCounters (Tree *tree, int treeId, int runId);
 int     RemoveTreeSamples (int from, int to);
 int     ReopenMBPrintFiles (void);
-int     requestAbortRun(void);
+int     RequestAbortRun(void);
 int     ResetScalers (void);
 int     RunChain (long int *seed);
+int     SaveSprintf(char **target, int *targetLen, char *fmt, ...);
 int     SetAARates (void);
-void    SetBit (int i, long *bits);
 int     SetChainParams (void);
 int		SetLikeFunctions (void);
 int		SetModelInfo (void);
@@ -358,10 +383,12 @@ int		SetMoves (void);
 int     SetNucQMatrix (MrBFlt **a, int n, int whichChain, int division, MrBFlt rateMult, MrBFlt *rA, MrBFlt *rS);
 int     SetProteinQMatrix (MrBFlt **a, int n, int whichChain, int division, MrBFlt rateMult);
 int	    SetStdQMatrix (MrBFlt **a, int nStates, MrBFlt *bs, int cType);
-void    SetUpMoveTypes (void);
 int     SetUpPartitionCounters (void);
 int	    SetUpTermState (void);
 int     ShowMCMCTree (Tree *t);
+#if defined (DEBUG_CONSTRAINTS)
+int		ShowPolyNodes (PolyTree *pt);
+#endif
 void    ShowValuesForChain (int chn);
 PFNODE *SmallestNonemptyPFNode (PFNODE *p, int *i, int j);
 int		StateCode_AA (int n);
@@ -386,10 +413,12 @@ void    WriteTreeToFile (TreeNode *p, int showBrlens, int isRooted);
 void    WriteCalTreeToFile (TreeNode *p, MrBFlt clockRate);
 
 /* globals */
-char			inputFileName[100];          /* input (NEXUS) file name                      */
 Chain			chainParams;                 /* parameters of Markov chain                   */
-int				numTaxa;                     /* number of taxa in character matrix           */
+char			inputFileName[100];          /* input (NEXUS) file name                      */
+MoveType		moveTypes[NUM_MOVE_TYPES];   /* holds information on the move types          */
 int				numChar;                     /* number of characters in character matrix     */
+int				numMoveTypes;		         /* the number of move types                     */
+int				numTaxa;                     /* number of taxa in character matrix           */
 char			stamp[11];                   /* holds a unique identifier for each analysis  */
 
 /* local (to this file) variables */
@@ -397,7 +426,7 @@ int				numLocalChains;              /* number of Markov chains                  
 int				numLocalTaxa;                /* number of non-excluded taxa                  */
 int				localOutGroup;               /* outgroup for non-excluded taxa               */
 char			*localTaxonNames = NULL;            /* stores names of non-excluded taxa            */
-MrBFlt			*localTaxonAges = NULL;			 /* stores local taxon ages                      */
+Calibration		**localTaxonCalibration = NULL;	 /* stores local taxon calibrations (ages)       */
 int				*chainId = NULL;                    /* information on the id (0 ...) of the chain   */
 MrBFlt			*curLnL = NULL;                     /* stores log likelihood                        */
 MrBFlt			*curLnPr = NULL;                    /* stores log prior probability                 */
@@ -469,10 +498,7 @@ CLFlt			*preLikeR;			         /* precalculated cond likes for right descendant*/
 CLFlt			*preLikeA;			         /* precalculated cond likes for ancestor        */
 MrBFlt			*invCondLikes = NULL;		         /* cond likes for invariable sites  		     */
 MCMCMove		*moves;				         /* vector of moves							 	 */
-int				numCalibratedLocalTaxa;	     /* the number of dated local terminal taxa  	 */
 int				numMoves;			         /* the number of moves used by chain			 */
-int				numMoveTypes;		         /* the number of move types                     */
-MoveType		moveTypes[NUM_MOVE_TYPES];   /* holds information on the move types          */
 int				codon[6][64];                /* holds info on amino acids coded in code      */
 MrBFlt			aaJones[20][20];	         /* rates for Jones model                        */
 MrBFlt			aaDayhoff[20][20];           /* rates for Dayhoff model                      */
@@ -913,12 +939,22 @@ int AddTreeSamples (int from, int to)
 	char	*word, *s, *lineBuf;
 	FILE	*fp;
 	Tree	*t;
-	char	temp[100];
+	char	*tempStr;
+	int     tempStrSize = 200;
 
+
+	
 #	if defined (MPI_ENABLED)
 	if (proc_id != 0)
 		return (NO_ERROR);
 #	endif
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
 
 	for (i=0; i<numTrees; i++)
 		{
@@ -930,22 +966,30 @@ int AddTreeSamples (int from, int to)
 		for (j=0; j<chainParams.numRuns; j++)
 			{
 			if (numTrees == 1)
-				sprintf (temp, "%s.run%d.t", chainParams.chainFileName, j+1);
+				SaveSprintf(&tempStr, &tempStrSize, "%s.run%d.t", chainParams.chainFileName, j+1);
 			else
-				sprintf (temp, "%s.tree%d.run%d.t", chainParams.chainFileName, i+1, j+1);
+				SaveSprintf(&tempStr, &tempStrSize, "%s.tree%d.run%d.t", chainParams.chainFileName, i+1, j+1);
 
-			if ((fp = OpenBinaryFileR (temp)) == NULL)
+			if ((fp = OpenBinaryFileR (tempStr)) == NULL) 
+                                {
+			        free (tempStr);
 				return (ERROR);
+				}
+
 			longestLine = LongestLine (fp);
-			fclose (fp);
+			SafeFclose (&fp);
 
-			if ((fp = OpenTextFileR (temp)) == NULL)
+			if ((fp = OpenTextFileR (tempStr)) == NULL) 
+			        {
+				free (tempStr);
 				return (ERROR);
-			
+			        }
+
 			lineBuf = (char *) calloc (longestLine + 10, sizeof (char));
 			if (!lineBuf)
 				{
-				fclose (fp);
+				SafeFclose (&fp);
+                                free (tempStr);
 				return (ERROR);
 				}
 
@@ -955,8 +999,11 @@ int AddTreeSamples (int from, int to)
 			for (k=1; k<=to; k++)
 				{
 				do {
-					if (fgets (lineBuf, longestLine, fp) == NULL)
+					if (fgets (lineBuf, longestLine, fp) == NULL) 
+					        {
+					        free (tempStr);
 						return ERROR;
+                                                }
 					word = strtok (lineBuf, " ");
 					} while (strcmp (word, "tree") != 0);
 				if (k>=from)
@@ -966,22 +1013,25 @@ int AddTreeSamples (int from, int to)
 						s++;
 					if (RecreateTree (t, s) == ERROR)
 						{
-						fclose (fp);
+						SafeFclose (&fp);
 						free (lineBuf);
+                                                free (tempStr);
 						return ERROR;
 						}
 					if (AddTreeToPartitionCounters (t, i, j) == ERROR)
 						{
-						fclose (fp);
+						SafeFclose (&fp);
 						free (lineBuf);
+                                                free (tempStr);
 						return ERROR;
 						}
 					}
 				}
-			fclose (fp);
+			SafeFclose (&fp);
 			free (lineBuf);
 			} /* next run */
 		} /* next tree */
+	free (tempStr);
 	return (NO_ERROR);
 }
 
@@ -1021,6 +1071,7 @@ int AddTreeToPartitionCounters (Tree *tree, int treeId, int runId)
 /* AllocateTree: Allocate memory space for a tree (unrooted or rooted) */
 Tree *AllocateTree (int numTaxa, int isTreeRooted)
 {
+	int		i;
 	Tree	*t;
 	
 	t = (Tree *) calloc (1, sizeof (Tree));
@@ -1052,6 +1103,10 @@ Tree *AllocateTree (int numTaxa, int isTreeRooted)
 		return NULL;
 		}
 	t->intDownPass = t->allDownPass + t->nNodes;
+	
+	/* set memoryIndex */
+	for (i=0; i<t->nNodes; i++)
+		t->nodes[i].memoryIndex = i;
 
 	return t;
 }
@@ -1561,7 +1616,7 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 
 {
 
-	int				i, j, k, k1, nLongsNeeded, nextNode;
+	int				i, j, k, k1, nLongsNeeded, nextNode, nextActiveConstraint;
 	long int		*constraintPartition, *mask;
 	PolyNode		*pp, *qq, *rr, *ss, *tt;
 	   	
@@ -1575,14 +1630,15 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 	mask = constraintPartition + nLongsNeeded;
 
 	/* calculate mask (needed to take care of unused bits when flipping partitions) */
-	for (i=0; i<(nBitsInALong - (numLocalTaxa%nBitsInALong)); i++)
-		SetBit (i+numLocalTaxa, mask); 
+	for (i=0; i<numLocalTaxa; i++)
+		SetBit (i, mask); 
 
 	/* reset all nodes */
 	for (i=0; i<2*numLocalTaxa; i++)
 		{
 		pp = &pt->nodes[i];
 		pp->isDated = NO;
+		pp->calibration = NULL;
 		pp->age = -1.0;
 		pp->isLocked = NO;
 		pp->lockID = -1;
@@ -1636,11 +1692,12 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 	   approximately this is to use sequential addition, with probabilities in each step determined
 	   by the parsimony or compatibility score of the different possibilities. */ 
 	nextNode = numLocalTaxa + 1;
+	nextActiveConstraint = 0;
 	for (i=0; i<numDefinedConstraints; i++)
 		{
 		if (t->constraints[i] == NO)
 			continue;
-		
+
 		/* initialize bits in partition to add */
 		for (j=0; j<nLongsNeeded; j++)
 			constraintPartition[j] = 0;
@@ -1663,6 +1720,7 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 			{
 			MrBayesPrint ("%s   WARNING: Constraint %d is uninformative and will be disregarded\n", spacer, i);
 			t->constraints[i] = NO;
+			nextActiveConstraint++;	/* do not use this index */
 			continue;
 			}
 
@@ -1700,16 +1758,23 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 		tt = &pt->nodes[nextNode++];
 		tt->anc = pp;
 		tt->isLocked = YES;
-		tt->lockID = i;
-		if (constraintAges[i] > 0.0)
+		tt->lockID = nextActiveConstraint;
+		if (constraintCalibration[nextActiveConstraint].prior != unconstrained)
 			{
-			tt->age = constraintAges[i];
+			if (constraintCalibration[nextActiveConstraint].prior == fixed)
+				tt->age = constraintCalibration[i].age;
+			else if (constraintCalibration[nextActiveConstraint].prior == uniform)
+				tt->age = constraintCalibration[nextActiveConstraint].lower;
+			else if (constraintCalibration[nextActiveConstraint].prior == offsetExponential)
+				tt->age = constraintCalibration[nextActiveConstraint].offset;
 			tt->isDated = YES;
+			tt->calibration = &constraintCalibration[nextActiveConstraint];
 			}
 		for (j=0; j<nLongsNeeded; j++)
 			tt->partition[j] = constraintPartition[j];
 		pt->nIntNodes++;
 		pt->nNodes++;
+		nextActiveConstraint++;
 
 		/* sort descendant nodes in two connected groups: included and excluded */
 		/* if there is a descendant that overlaps (incompatible) then return error */
@@ -1740,7 +1805,7 @@ int BuildConstraintTree (Tree *t, PolyTree *pt)
 		pp->left = tt;
 		rr->sib = ss->sib = NULL;
 		}
-
+	
 	/* exit */
 	free (constraintPartition);
 	return NO_ERROR;
@@ -1838,18 +1903,17 @@ int    BuildStartTree (Tree *t, long int *seed)
 {
 
 	int				i, j, whichNde, n, *tempNums, numAvailTips, intNodeNum, whichElement, 
-					pId, pLftId=0, pRhtId=0, pAncId=0, nUser, stopLoop, tempOut=0, nLongsNeeded;
+					nLongsNeeded;
 	MrBFlt			sum, oldBls[5], newBls[5], tempLength, depth;
-	TreeNode		*p, *q, *up, *dn, *tempTree, **tempDP,
-					*tempRoot=NULL, *p1, *p2, *lft, *rht, *anc, *a, *b, *c;
+	TreeNode		*p, *q, *up, *dn, *a, *b, *c;
 	PolyTree		constraintTree;
+	Tree			*tempTree;
 	char			tempName[100];
 	long int		*bitsets;
 	   
 	/* set pointers allocated locally to NULL for correct exit on error */
 	tempNums = NULL;
 	tempTree = NULL;
-	tempDP = NULL;
 	constraintTree.nodes = NULL;
 	constraintTree.allDownPass = NULL;
 	constraintTree.intDownPass = NULL;
@@ -1879,6 +1943,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 		p->length = BRLENS_MIN;
 		p->nodeDepth = 0.0;
 		p->isDated = NO;
+		p->calibration = NULL;
 		p->age = -1.0;
 		p->isLocked = NO;
 		p->lockID = -1;
@@ -1928,6 +1993,14 @@ int    BuildStartTree (Tree *t, long int *seed)
 		if (CopyToTreeFromPolyTree (t, &constraintTree) == ERROR)
 			goto errorExit;
 
+#if defined (DEBUG_CONSTRAINTS)
+		if (CheckConstraints (t) == ERROR)
+			{
+			printf ("Error in constraints of starting tree\n");
+			getchar();
+			}
+#endif
+
 		/* set branch lengths */
 		if (t->isRooted == NO)
 			{
@@ -1940,8 +2013,8 @@ int    BuildStartTree (Tree *t, long int *seed)
 			}
 		else if (t->isCalibrated == YES)
 			{
-			/* calibrated tree */
-			if (InitCalibratedBrlens (t) == ERROR)
+			/* calibrated tree (second argument is minimum branch length in substitution units) */
+			if (InitCalibratedBrlens (t, 0.01) == ERROR)
 				{
 				MrBayesPrint ("%s   Failed to build calibrated starting tree\n", spacer);
 				goto errorExit;
@@ -2047,7 +2120,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 		GetDownPass (t);
 		
 		/* relabel tips and interior nodes */
-		tempNums = (int *)malloc((size_t) ((numLocalTaxa) * sizeof(int)));
+		tempNums = (int *)SafeMalloc((size_t) ((numLocalTaxa) * sizeof(int)));
 		if (!tempNums)
 			{
 			MrBayesPrint ("%s   Problem allocating tempNums (%d)\n", spacer, (numLocalTaxa-1) * sizeof(int));
@@ -2099,6 +2172,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 		free (tempNums);
 		
 		/* add taxon labels to tips of tree */
+		/* also add any calibrations of terminals if present */
 		for (i=0; i<t->nNodes; i++)
 			{
 			p = t->allDownPass[i];
@@ -2124,6 +2198,17 @@ int    BuildStartTree (Tree *t, long int *seed)
 						goto errorExit;
 						}
 					strcpy (p->label, tempName);
+					if (t->isCalibrated == YES && localTaxonCalibration[p->index]->prior != unconstrained)
+						{
+						p->isDated = YES;
+						p->calibration = localTaxonCalibration[p->index];
+						if (p->calibration->prior == fixed)
+							p->age = p->calibration->age;
+						else if (p->calibration->prior == uniform)
+							p->age = p->calibration->lower;
+						else /* if (p->calibration->prior == offsetExponential) */
+							p->age = p->calibration->offset;
+						}
 					}
 				}
 			}
@@ -2218,10 +2303,11 @@ int    BuildStartTree (Tree *t, long int *seed)
 					}
 				}
 
-			/* if some nodes are calibrated then we need to recalculate */
-			/* the branch lengths using a method consistent with calibrations */
+			/* if some nodes are calibrated then we need to recalculate
+			   the branch lengths using a method consistent with calibrations
+			   second argument to InitCalibratedBrlens is minimum branch length in expected substitutions */
 			if (t->isCalibrated == YES)
-				if (InitCalibratedBrlens (t) == ERROR)
+				if (InitCalibratedBrlens (t, 0.001) == ERROR)
 					{
 					MrBayesPrint ("%s   Failed to build calibrated starting tree\n", spacer);
 					goto errorExit;
@@ -2239,447 +2325,90 @@ int    BuildStartTree (Tree *t, long int *seed)
 			goto errorExit;
 			}
 
-		/* allocate some temporary space */
-		tempTree = (TreeNode *)malloc((size_t) (2 * numTaxa * sizeof(TreeNode)));
-		if (!tempTree)
+		/* If rooted tree is needed, we'd better start with a rooted tree */
+		if (t->isRooted == YES && userTree->isRooted == NO)
 			{
-			MrBayesPrint ("%s   Problem allocating tempTree (%d)\n", spacer, 2 * numTaxa * sizeof(Tree));
+			MrBayesPrint ("%s   User tree is unrooted but this analysis requires a rooted starting tree\n", spacer);
 			goto errorExit;
 			}
-		tempDP = (TreeNode **)malloc((size_t) (2 * numTaxa * sizeof(TreeNode *)));
-		if (!tempDP)
+		
+		/* Copy usertree into temporary space */
+		tempTree = AllocateTree (numTaxa, userTree->isRooted);
+		CopyToTreeFromTree (tempTree, userTree);
+
+		/* If unrooted tree is needed and usertree is rooted, we unroot it */
+		if (t->isRooted == NO && tempTree->isRooted == YES)
 			{
-			MrBayesPrint ("%s   Problem allocating tempDP (%d)\n", spacer, 2 * numTaxa * sizeof(Tree));
+			DerootTree (tempTree, outGroupNum);
+			}
+
+		/* Make sure calculation root is in right place if tree is unrooted */
+		if (tempTree->isRooted == NO && tempTree->root->index != outGroupNum)
+			{
+			MoveCalculationRoot (tempTree, outGroupNum);
+			}
+
+		/* Prune tree if some taxa are deleted from this analysis */
+		if (PruneTree (tempTree) == ERROR)
+			{
+			MrBayesPrint ("%s   Error in pruning user tree\n", spacer);
 			goto errorExit;
 			}
 			
-		/* set temporary space to NULL */
-		for (i=0; i<2*numTaxa; i++)
-			{
-			tempTree[i].left = NULL;
-			tempTree[i].right = NULL;
-			tempTree[i].anc = NULL;
-			tempTree[i].length = 0.0;
-			}
-			
-		/* copy user tree into temporary space */
-		for (i=0; i<2*numTaxa; i++)
-			{
-			p = userNodes + i;
-			if (p == NULL)
-				pId = -1;
-			else
-				{
-				pId = p->index;
-				if (p->left == NULL)
-					pLftId = -1;
-				else
-					pLftId = p->left->index;
-				if (p->right == NULL)
-					pRhtId = -1;
-				else
-					pRhtId = p->right->index;
-				if (p->anc == NULL)
-					pAncId = -1;
-				else
-					pAncId = p->anc->index;
-				}
-				
-			if (pId != -1)
-				{
-				q = tempTree + pId;
-				q->index = pId;
-				q->length = 0.0;
-				if (userBrlensDef == YES)
-					q->length = p->length;
-				if (p == userRoot)
-					tempRoot = q;
-				lft = rht = anc = NULL;
-				if (pLftId != -1)
-					{
-					lft = tempTree + pLftId;
-					q->left = lft;
-					}
-				if (pRhtId != -1)
-					{
-					rht = tempTree + pRhtId;
-					q->right = rht;
-					}
-				if (pAncId != -1)
-					{
-					anc = tempTree + pAncId;
-					q->anc = anc;
-					}
-				}
-			}
-			
-		/* get down pass of original user tree nodes */
-		nUser = 0;
-		GetUserDownPass (tempRoot, tempDP, &nUser);
-		
-		/* Change root of tree, if necessary. Note that when the user tree is read in, it
-		   is automatically rooted in a consistent manner. If the user tree is rooted,
-		   then the outgroup species is the first right node. If the user tree is unrooted,
-		   then the outgroup species points down. */
-		if (isUserTreeRooted == NO && t->isRooted == YES)
-			{
-			/* root the tree as the user tree was unrooted and we want it rooted */
-			/* first, lets get two empty nodes */
-			p1 = p2 = NULL;
-			for (i=0, n=0; i<2*numTaxa; i++)
-				{
-				p = tempTree + i;
-				if (p->left == NULL && p->right == NULL && p->anc == NULL)
-					{
-					if (n == 0)
-						p1 = p;
-					else if (n == 1)
-						p2 = p;
-					n++;
-					}
-				}
-			if (p1 == NULL || p2 == NULL)
-				{
-				MrBayesPrint ("%s   Could not find two empty nodes\n", spacer);
-				goto errorExit;
-				}
-			
-			/* now, bend the current root node around and root with an empty node */
-			p = tempRoot;
-			q = p->left;
-			q->anc = p->anc = p1;
-			p->left = p->right = NULL;
-			p1->anc = p2;
-			p1->left = q;
-			p1->right = p;
-			p2->left = p1;
-			tempRoot = p2;
-			q->length *= 0.5;
-			p->length = q->length;
-			tempRoot->length = p1->length = 0.0;
-			}
-		else if (isUserTreeRooted == YES && t->isRooted == NO)
-			{
-			p1 = tempRoot->left;
-			p = p1->left;
-			q = p1->right;
-			if (q->index != outGroupNum)
-				{
-				MrBayesPrint ("%s   User defined tree is improperly rooted\n", spacer);
-				goto errorExit;
-				}
-				
-			p->anc = q;
-			q->left = p;
-			p1->left = p1->right = p1->anc = q->anc = NULL;
-			p->length += q->length;
-			q->length = 0.0;
-			tempRoot = q;
-			}
-		
-		/* get down pass of modified user tree nodes */
-		nUser = 0;
-		GetUserDownPass (tempRoot, tempDP, &nUser);
+		/* Copy some essential information about the target tree we need
+		   to the modified user tree so that we do not overwrite this info later */
+		tempTree->isCalibrated = t->isCalibrated;
+		tempTree->checkConstraints = t->checkConstraints;
+		tempTree->constraints = t->constraints;
+		tempTree->nConstraints = t->nConstraints;
+		tempTree->nLocks = t->nLocks;
+		tempTree->nRelParts = t->nRelParts;
+		tempTree->relParts = t->relParts;
 
-		/* If we have an unrooted tree, make certain it is rooted at the correct node. Specifically,
-		   we need to make certain that the node pointing down is either the undeleted outgroup
-		   taxon (outGroupNum) or the first undeleted taxon. localOutGroup is the number of either
-		   the outgroup or the first undeleted taxon, if the outgroup was deleted. */
-		if (t->isRooted == NO)
-			{
-			/* Get the number of the local outgroup in terms of the old taxon numbers. */
-			for (i=0, n=0; i<numTaxa; i++)
-				{
-				if (n == localOutGroup && taxaInfo[i].isDeleted == NO)
-					{
-					tempOut = i;
-					break;
-					}
-				if (taxaInfo[i].isDeleted == NO)
-					n++;
-				}
+		/* Copy user tree into starting tree */
+		CopyToTreeFromTree (t, tempTree);
+		FreeTree (tempTree);
 
-			/* The tree is not rooted as we want it. We had better 
-			   reroot the tree at tempOut. */
-			if (tempRoot->index != tempOut)
-				{
-				/* Mark nodes from taxon tempOut to the root */
-				for (i=0; i<nUser; i++)
-					{
-					p = tempDP[i];
-					p->marked = NO;
-					if (p->index == tempOut)
-						p->marked = YES;
-					}
-				for (i=0; i<nUser; i++)
-					{
-					p = tempDP[i];
-					if (p->left != NULL && p->right != NULL && p->anc != NULL)
-						{
-						if (p->left->marked == YES || p->right->marked == YES)
-							p->marked = YES;
-						}
-					}
-				
-				/* find a few spare nodes */
-				p1 = p2 = NULL;
-				for (i=0, n=0; i<2*numTaxa; i++)
-					{
-					p = tempTree + i;
-					if (p->left == NULL && p->right == NULL && p->anc == NULL)
-						{
-						if (n == 0)
-							p1 = p;
-						else if (n == 1)
-							p2 = p;
-						n++;
-						}
-					}
-				if (p1 == NULL || p2 == NULL)
-					{
-					MrBayesPrint ("%s   Could not find two empty nodes\n", spacer);
-					goto errorExit;
-					}
-				
-				/* temporarily root tree */
-				a = tempRoot->left;
-				b = tempRoot;
-				b->left = b->right = NULL;
-				a->anc = b->anc = p1;
-				p1->left = a;
-				p1->right = b;
-				p1->anc = p2;
-				p2->left = p1;
-				p2->right = p2->anc = NULL;
-				tempRoot = p2;
-				a->length *= 0.5;
-				b->length = a->length;
-				
-				/* set p to the node left of the new root */
-				p = p1;
-							
-				/* now, rotate tree until tempOut is to the left of root */
-				stopLoop = NO;
-				do
-					{
-					if (p->left->marked == YES && p->right->marked == NO)
-						{
-						q = p->left;
-						c = p->right;
-						}
-					else if (p->left->marked == NO && p->right->marked == YES)
-						{
-						q = p->right;
-						c = p->left;
-						}
-					else 
-						{
-						MrBayesPrint ("%s   Could not find an unmarked node\n", spacer);
-						goto errorExit;
-						}
-					if (q->left == NULL && q->right == NULL)
-						stopLoop = YES;
-					else
-						{
-						if (q->left->marked == YES && q->right->marked == NO)
-							{
-							a = q->right;
-							b = q->left;
-							}
-						else if (q->left->marked == NO && q->right->marked == YES)
-							{
-							a = q->left;
-							b = q->right;
-							}
-						else 
-							{
-							MrBayesPrint ("%s   Could not find an unmarked node\n", spacer);
-							goto errorExit;
-							}
-						}
-					if (stopLoop == NO)
-						{
-						p->left = b;
-						b->anc = p;
-						p->right = q;
-						q->anc = p;
-						q->left = a;
-						q->right = c;
-						a->anc = c->anc = q;
-						q->marked = NO;	
-						c->length += q->length;
-						b->length *= 0.5;
-						q->length = b->length;
-						}
-					} while (stopLoop == NO);
-					
-				/* now, root the tree at tempOut */
-				a = p->left;
-				b = p->right;
-				a->left = b;
-				b->anc = a;
-				a->right = a->anc = NULL;
-				p1->left = p1->right = p1->anc = NULL;
-				p2->left = p2->right = p2->anc = NULL;
-				b->length += a->length;
-				a->length = 0.0;
-				tempRoot = a;
-						
-				/* get traversal sequence as the tree has changed */
-				nUser = 0;
-				GetUserDownPass (tempRoot, tempDP, &nUser);
-				}
-			}
-
-		/* Trim away some tips, if they are excluded. We don't have to worry about
-		   the rooting of the tree because if the tree is unrooted, a non-excluded
-		   taxon definitely points down. (That is the point of the exercise immediately
-		   above.) */
-		for (i=0; i<nUser; i++)
+		/* Add taxon calibrations if any */
+		if (t->isCalibrated == YES)
 			{
-			p = tempDP[i];
-			if (p->left == NULL && p->right == NULL && p->anc != NULL && taxaInfo[p->index].isDeleted == YES)
+			for (i=0; i<t->nNodes; i++)
 				{
-				q = p->anc;
-				if (q->left == p)
-					up = q->right;
-				else
-					up = q->left;
-				dn = q->anc;
-				if (dn->left == q)
-					dn->left = up;
-				else
-					dn->right = up;
-				up->anc = dn;
-				up->length += q->length;
-				p->left = p->right = p->anc = NULL;
-				q->left = q->right = q->anc = NULL;
-				}
-			}
-			
-		/* get traversal sequence (again!) as the tree might have changed */
-		nUser = 0;
-		GetUserDownPass (tempRoot, tempDP, &nUser);
-		
-		/* relabel tips */
-		for (i=0; i<nUser; i++)
-			{
-			p = tempDP[i];
-			if (p->left == NULL && p->right == NULL && p->anc != NULL)
-				{
-				for (j=0, n=0; j<numTaxa; j++)
-					{
-					if (p->index == j)
-						{
-						p->index = n;
-						break;
-						}
-					if (taxaInfo[j].isDeleted == NO)
-						n++;
-					}
-				}
-			else if (p->left != NULL && p->right == NULL && p->anc == NULL && t->isRooted == NO)
-				{
-				for (j=0, n=0; j<numTaxa; j++)
-					{
-					if (p->index == j)
-						{
-						p->index = n;
-						break;
-						}
-					if (taxaInfo[j].isDeleted == NO)
-						n++;
-					}
-				}
-			}
-
-		/* relabel interior nodes */
-		for (i=0, n=numLocalTaxa; i<nUser; i++)
-			{
-			p = tempDP[i];
-			if (p->left != NULL && p->right != NULL && p->anc != NULL)
-				p->index = n++;
-			else if (p->left != NULL && p->right == NULL && p->anc == NULL && t->isRooted == YES)
-				p->index = n++;
-			}
-			
-		/* at last! copy tree into nodes */
-		for (i=0; i<nUser; i++)
-			{
-			p = tempDP[i];
-			p1 = &t->nodes[p->index];
-			p1->index = p->index;
-			p1->length = p->length;
-			if (p == tempRoot)
-				{
-				t->root = p1;
-				}
-			}
-		for (i=0; i<nUser; i++)
-			{
-			p = tempDP[i];
-			p1 = &t->nodes[p->index];
-			if (p->left != NULL)
-				{
-				p1->left = &t->nodes[p->left->index];
-				}
-			if (p->right != NULL)
-				{
-				p1->right = &t->nodes[p->right->index];
-				}
-			if (p->anc != NULL)
-				{
-				p1->anc = &t->nodes[p->anc->index];
-				}
-			}
-			
-		/* free temporary nodes */
-		free (tempTree);
-		free (tempDP);
-
-		/* get the traversal sequence for the nodes */
-		GetDownPass (t);
-			
-		/* add taxon labels to tips of tree */
-		for (i=0; i<t->nNodes; i++)
-			{
-			p = t->allDownPass[i];
-			if (t->isRooted == NO)
-				{
-				if (p->left == NULL || p->right == NULL || p->anc == NULL)
-					{
-					if (GetNameFromString (localTaxonNames, tempName, p->index + 1) == ERROR)
-						{
-						MrBayesPrint ("%s   Error getting taxon names \n", spacer);
-						goto errorExit;
-						}
-					strcpy (p->label, tempName);
-					}
-				}
-			else
-				{
+				p = t->allDownPass[i];
 				if (p->left == NULL && p->right == NULL && p->anc != NULL)
 					{
-					if (GetNameFromString (localTaxonNames, tempName, p->index + 1) == ERROR)
+					if (localTaxonCalibration[p->index]->prior != unconstrained)
 						{
-						MrBayesPrint ("%s   Error getting taxon names \n", spacer);
-						goto errorExit;
+						p->isDated = YES;
+						p->calibration = localTaxonCalibration[p->index];
 						}
-					strcpy (p->label, tempName);
 					}
 				}
 			}
 			
-		/* perturb each user tree, if needed */
+		/* If constraints are defined, check that the starting tree fulfils them and set them
+		      (and calibrations associated with them) before perturbation */
+		if (t->checkConstraints == YES && CheckSetConstraints (t) == ERROR)
+			{
+			MrBayesPrint ("%s   User tree cannot be used as starting tree because it does not fulfil constraints\n", spacer);
+			goto errorExit;
+			}
+
+		/* Perturb each user tree, if needed */
 		if (chainParams.numStartPerts > 0)
 			{
+			if (t->nConstraints >= t->nIntNodes)
+				{
+				MrBayesPrint ("%s   User tree cannot be perturbed because all nodes are locked\n", spacer);
+				goto errorExit;
+				}
 			for (i=0; i<chainParams.numStartPerts; i++)
 				{
 				do
 					{
 					whichElement = (int)(RandomNumber(seed) * t->nIntNodes);
 					p = t->intDownPass[whichElement];
-					} while (p->anc->anc == NULL);
+					} while (p->anc->anc == NULL && p->isLocked == YES);
 				q = p->anc;
 				a  = p->left;
 				b  = p->right;
@@ -2750,7 +2479,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 			GetDownPass (t);
 			}
 			
-		/* branch lengths */
+		/* set branch lengths */
 		if (t->isRooted == NO)
 			{
 			if (userBrlensDef == YES)
@@ -2778,48 +2507,48 @@ int    BuildStartTree (Tree *t, long int *seed)
 				   We check that the user-defined branch lengths satisfy the clock.
 				   If they do, then everything is fine and we continue on our way.
 				   If they don't, then we initialize the branch lengths */
-				if (IsClockSatisfied(t,  0.00001) == NO)
+				if (t->isCalibrated == NO && IsClockSatisfied(t,  0.0001) == NO)
 					{
 					if (InitClockBrlens (t) == ERROR)
 						{
-						MrBayesPrint ("%s   There has been an error when initializing branch lengths\n", spacer);
+						MrBayesPrint ("%s   There has been an error when initializing clock branch lengths\n", spacer);
 						goto errorExit;
 						}
 					}
+				if (t->isCalibrated == YES && IsCalibratedClockSatisfied (t, 0.0001) == NO)
+					{
+					if (InitCalibratedBrlens (t, 0.001) == ERROR)
+						{
+						MrBayesPrint ("%s   There has been an error when initializing calibrated clock branch lengths\n", spacer);
+						goto errorExit;
+						}
+					}
+
 				}
 			else
 				{
 				/* We have a rooted tree and user branch lengths have not been defined.
 				   We need to initialize the branch lengths (such that the clock is
 				   satisfied). */
-				if (InitClockBrlens (t) == ERROR)
+				if (t->isCalibrated == NO && InitClockBrlens (t) == ERROR)
 					{
-					MrBayesPrint ("%s   There has been an error when initializing branch lengths\n", spacer);
+					MrBayesPrint ("%s   There has been an error when initializing clock branch lengths\n", spacer);
+					goto errorExit;
+					}
+				if (t->isCalibrated == YES && InitCalibratedBrlens (t, 0.001) == ERROR)
+					{
+					MrBayesPrint ("%s   There has been an error when initializing calibrated clock branch lengths\n", spacer);
 					goto errorExit;
 					}
 				}
 			}
-
-		}
-
-	/* if constraints are defined and the starting tree is a user tree, check that it fulfils constraints */
-	if (t->checkConstraints == YES && (!strcmp(chainParams.chainStartTree, "User")))
-		{
-		if (CheckSetConstraints (t) == ERROR)
-			{
-			MrBayesPrint ("%s   User tree cannot be used as starting tree because it does not fulfil constraints\n", spacer);
-			goto errorExit;
-			}
 		}
 
 	/* check constraints just in case */
-	if (t->checkConstraints == YES)
+	if (t->checkConstraints == YES && CheckConstraints(t) == ERROR)
 		{
-		if (CheckConstraints (t) == ERROR)
-			{
-			MrBayesPrint ("%s   Something wrong with constraints (a bug)\n", spacer);
-			goto errorExit;
-			}
+		MrBayesPrint ("%s   Something wrong with constraints (a bug)\n", spacer);
+		goto errorExit;
 		}
 
 	/* show tree */
@@ -2839,10 +2568,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 	errorExit:
 		if (tempNums)
 			free (tempNums);
-		if (tempTree)
-			free (tempTree);
-		if (tempDP)
-			free (tempDP);
+		FreeTree (tempTree);
 		if (bitsets)
 			free (bitsets);
 		if (constraintTree.allDownPass)
@@ -2868,7 +2594,7 @@ int    BuildStartTree (Tree *t, long int *seed)
 int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 
 {
-	int				c, i, j, nRates, pos;
+	int				c, i, j, nRates, posit;
 	long int		inHMM;
 	MrBFlt			logScaler, max, prob, *F,
 					*oldF, *tempF, fSpace[2][MAX_GAMMA_CATS];
@@ -2885,9 +2611,9 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 
 	/* find Markov trans probs */
 	F = GetParamSubVals (param,chain, state[chain]);
-	for (i=pos=0; i<nRates; i++)
+	for (i=posit=0; i<nRates; i++)
 		for (j=0; j<nRates; j++)
-			markovTi[0][i][j] = F[pos++];
+			markovTi[0][i][j] = F[posit++];
 	
 	/* precalculate Markov trans probs up to largest small jump */
 	/* but only if needed                                       */
@@ -2937,11 +2663,11 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 	/* fill in fi(0) */
 	max = 0.0;
 	m = &modelSettings[charInfo[c].partitionId[partitionNum-1] - 1];
-	pos = m->rateProbStart + (compCharPos[c] - m->compCharStart) * m->numGammaCats;
+	posit = m->rateProbStart + (compCharPos[c] - m->compCharStart) * m->numGammaCats;
 
 	for (i=0; i<nRates; i++)
 		{
-		F[i] = rP[pos++];
+		F[i] = rP[posit++];
 		if (F[i] > max)
 			max = F[i];
 		}
@@ -2969,7 +2695,7 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 
 		/* find the position of the rate probs */
 		m = &modelSettings[charInfo[c].partitionId[partitionNum-1] - 1];
-		pos = m->rateProbStart + (compCharPos[c] - m->compCharStart) * m->numGammaCats;
+		posit = m->rateProbStart + (compCharPos[c] - m->compCharStart) * m->numGammaCats;
 				
 		/* calculate the HMM forward probs fi(x) at site x in HMM */
 		if (siteJump[c] <= MAX_SMALL_JUMP)
@@ -2980,7 +2706,7 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 				prob = 0.0;
 				for (j=0; j<nRates; j++)
 					prob += markovTi[siteJump[c]-1][i][j] * oldF[j];
-				F[i] = rP[pos++] * prob;
+				F[i] = rP[posit++] * prob;
 				if (F[i] > max)
 					max = F[i];
 				}
@@ -2994,7 +2720,7 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 				prob = 0.0;
 				for (j=0; j<nRates; j++)
 					prob += markovTiN[i][j] * oldF[j];
-				F[i] = rP[pos++] * prob;
+				F[i] = rP[posit++] * prob;
 				if (F[i] > max)
 					max = F[i];
 				}
@@ -3007,7 +2733,7 @@ int CalcLike_Adgamma (int d, Param *param, int chain, MrBFlt *lnL)
 				prob = 0.0;
 				for (j=0; j<nRates; j++)
 					prob += (oldF[j] / freq);
-				F[i] = rP[pos++] * prob;
+				F[i] = rP[posit++] * prob;
 				if (F[i] > max)
 					max = F[i];
 				}
@@ -3327,7 +3053,7 @@ int CheckConstraints (Tree *t)
 
 {
 
-	int				a, i, j, k, nLongsNeeded;
+	int				a, b, i, j, k, nLongsNeeded;
 	long int		*constraintPartition, *mask, *bitsets;
 	TreeNode		*p=NULL;
 	   	
@@ -3353,9 +3079,9 @@ int CheckConstraints (Tree *t)
 	constraintPartition = bitsets + (t->nNodes * nLongsNeeded);
 	mask = bitsets + ((t->nNodes + 1) * nLongsNeeded);
 
-	/* calculate mask (needed to take care of unused bits when flipping partitions) */
-	for (i=0; i<(nBitsInALong - (numLocalTaxa%nBitsInALong)); i++) 
-	  SetBit (i+numLocalTaxa, mask); 
+	/* set mask (needed to reset unused bits when flipping partitions) */
+	for (i=0; i<numLocalTaxa; i++) 
+	  SetBit (i, mask); 
 	
 	/* set partition specifiers for terminals */
 	for (i=0; i<t->nNodes; i++)
@@ -3376,7 +3102,7 @@ int CheckConstraints (Tree *t)
 			}
 		}
 
-	for (a=0; a<t->nConstraints; a++)
+	for (a=b=0; a<numDefinedConstraints; a++)
 		{
 		if (t->constraints[a] == NO)
 			continue;
@@ -3401,7 +3127,7 @@ int CheckConstraints (Tree *t)
 		/* find the locked node */
 		for (i=j=0; i<t->nNodes; i++)
 			{
-			if (t->allDownPass[i]->isLocked == YES && t->allDownPass[i]->lockID == a)
+			if (t->allDownPass[i]->isLocked == YES && t->allDownPass[i]->lockID == b)
 				{
 				p = t->allDownPass[i];
 				j++;
@@ -3410,7 +3136,7 @@ int CheckConstraints (Tree *t)
 	
 		if (j != 1)
 			{
-			MrBayesPrint ("%s   Lock number %d is not set or set several places\n", spacer, a);
+			MrBayesPrint ("%s   Lock number %d is not set or set several places\n", spacer, b);
 			goto errorExit;
 			}
 
@@ -3419,11 +3145,12 @@ int CheckConstraints (Tree *t)
 			{
 			if (p->partition[i] != constraintPartition[i]) 
 				{
-				MrBayesPrint ("%s   Lock number %d is set for the wrong node\n", spacer, a);
+				MrBayesPrint ("%s   Lock number %d is set for the wrong node\n", spacer, b);
 				goto errorExit;
 				}
 			}
 
+		b++;	/* increment active constraint index */
 		}
 	
 	/* exit */
@@ -3452,9 +3179,17 @@ int CheckExpandedModels (void)
 					firstChar, lastChar, contiguousPart, badBreak, badExclusion,
 					nGone, nuc1, nuc2, nuc3, foundStopCodon, posNucs1[4], posNucs2[4], posNucs3[4],
 					oneGoodCodon, foundUnpaired, nPair, allCheckedOut;
-	char			tempStr[100];
+	char			*tempStr;
+	int             tempStrSize=100;
 	ModelParams		*mp;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* first, set charId to 0 for all characters */
 	for (i=0; i<numChar; i++)
 		charInfo[i].charId = 0;
@@ -3516,6 +3251,7 @@ int CheckExpandedModels (void)
 						MrBayesPrint ("%s   However, you only have %d characters in this  \n", spacer, numCharsInPart);
 						MrBayesPrint ("%s   partition \n", spacer);
 						}
+					free (tempStr);
 					return (ERROR);
 					}
 				
@@ -3532,6 +3268,7 @@ int CheckExpandedModels (void)
 					MrBayesPrint ("%s   a codon model be used for this partition. However, there\n", spacer);
 					MrBayesPrint ("%s   is another partition that is between some of the characters\n", spacer);
 					MrBayesPrint ("%s   in this partition. \n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 					
@@ -3551,6 +3288,7 @@ int CheckExpandedModels (void)
 					MrBayesPrint ("%s   You specified a databreak inside of a coding triplet.\n", spacer);
 					MrBayesPrint ("%s   This is a problem, as you imply that part of the codon\n", spacer);
 					MrBayesPrint ("%s   lies in one gene and the remainder in another gene. \n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 
@@ -3574,6 +3312,7 @@ int CheckExpandedModels (void)
 					MrBayesPrint ("%s   In excluding characters, you failed to remove all of the\n", spacer);
 					MrBayesPrint ("%s   sites of at least one codon. If you exclude sites, make \n", spacer);
 					MrBayesPrint ("%s   certain to exclude all of the sites in the codon(s). \n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				
@@ -3629,6 +3368,7 @@ int CheckExpandedModels (void)
 					{
 					MrBayesPrint ("%s   At least one stop codon was found. Stop codons are not\n", spacer);
 					MrBayesPrint ("%s   allowed under the codon models.  \n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				
@@ -3690,6 +3430,7 @@ int CheckExpandedModels (void)
 						MrBayesPrint ("%s   Found unpaired nucleotide sites in partition %d.\n", spacer, d+1);
 						MrBayesPrint ("%s   The doublet model requires that all sites are paired. \n", spacer);
 						}
+					free (tempStr);
 					return (ERROR);
 					}
 
@@ -3713,6 +3454,7 @@ int CheckExpandedModels (void)
 						else
 							{
 							MrBayesPrint ("%s   Weird doublet problem in partition %d.\n", spacer, d+1);
+							free (tempStr);
 							return (ERROR);
 							}
 						}
@@ -3733,7 +3475,7 @@ int CheckExpandedModels (void)
 			printf (" %d", charId[c]);
 	printf ("\n");
 #	endif
-		
+	free (tempStr);
 	return (NO_ERROR);
 	
 }
@@ -3751,7 +3493,7 @@ int CheckSetConstraints (Tree *t)
 
 {
 
-	int				a, i, j, k, nLongsNeeded, foundIt;
+	int				a, b, i, j, k, nLongsNeeded, foundIt, nextActiveConstraint;
 	long int		*constraintPartition, *mask, *bitsets;
 	TreeNode		*p;
 	   	
@@ -3773,9 +3515,9 @@ int CheckSetConstraints (Tree *t)
 	constraintPartition = bitsets + (t->nNodes * nLongsNeeded);
 	mask = bitsets + ((t->nNodes + 1) * nLongsNeeded);
 
-	/* calculate mask (needed to take care of unused bits when flipping partitions) */
-	for (i=0; i<(nBitsInALong - (numLocalTaxa%nBitsInALong)); i++)
-		SetBit (i+numLocalTaxa, mask); 
+	/* set mask (needed to take care of unused bits when flipping partitions) */
+	for (i=0; i<numLocalTaxa; i++)
+		SetBit (i, mask); 
 	
 	/* set partition specifiers for terminals */
 	for (i=0; i<t->nNodes; i++)
@@ -3793,10 +3535,11 @@ int CheckSetConstraints (Tree *t)
 			p->partition[j] = p->left->partition[j] | p->right->partition[j];
 		}
 
-	/* this was "a,t->nConstraints" I cannot believe that is correct.
-	   not sure if this is?*/
-	for (a=0; a<t->nConstraints; a++)
+	nextActiveConstraint = 0;
+	for (a=b=0; a<numDefinedConstraints; a++)
 		{
+		if (modelParams[t->relParts[0]].activeConstraints[a] == NO)
+			continue;
 
 		/* set bits in partition to add */
 		for (j=0; j<nLongsNeeded; j++)
@@ -3805,8 +3548,8 @@ int CheckSetConstraints (Tree *t)
 			{
 			if (taxaInfo[j].isDeleted == YES)
 				continue;
-			if (taxaInfo[j].constraints[0] == 1)
-				SetBit(k,constraintPartition);
+			if (taxaInfo[j].constraints[a] == 1)
+				SetBit(k, constraintPartition);
 			k++;
 			}
 
@@ -3815,8 +3558,9 @@ int CheckSetConstraints (Tree *t)
 			FlipBits(constraintPartition, nLongsNeeded, mask);
 
 		/* find the node that should be locked */
+		/* the last interior node cannot be meaningfully locked */
 		foundIt = NO;
-		for (i=0; i<t->nIntNodes; i++)
+		for (i=0; i<t->nIntNodes-1; i++)
 			{
 			p = t->intDownPass[i];
 			for (j=0; j<nLongsNeeded; j++)
@@ -3828,14 +3572,20 @@ int CheckSetConstraints (Tree *t)
 			if (j == nLongsNeeded)
 				{
 				foundIt = YES;
-				p->lockID = a;
+				p->lockID = b;
+				if (t->isCalibrated == YES)
+					{
+					p->isDated = YES;
+					p->calibration = &constraintCalibration[b];
+					}
+				b++;
 				break;
 				}				
 			}
 	
 		if (foundIt == NO)
 			{
-			MrBayesPrint ("%s   User tree breaks constraint %d\n", spacer, a);
+			MrBayesPrint ("%s   Tree breaks defined constraint with index %d\n", spacer, a);
 			goto errorExit;
 			}
 		}
@@ -3856,8 +3606,8 @@ int CheckTemperature (void)
 {
 
 	if (chainParams.userDefinedTemps == YES)
-		{ /*chainParams.userTemps[0] != 1.0*/
-		  if (fabs(chainParams.userTemps[0]-1.0)>ETA)
+	        {
+		  if(AreDoublesEqual(chainParams.userTemps[0], 1.0, ETA)==NO)
 			{
 			MrBayesPrint ("%s   The first user-defined temperature must be 1.0.\n", spacer);
 			return (ERROR);
@@ -3883,16 +3633,14 @@ void CloseMBPrintFiles (void)
 #		endif
 		k = n;
 
-		if (fpParm[k])
-			fclose (fpParm[k]);
-		fpParm[k] = NULL;
+		SafeFclose (&fpParm[k]);
 
 		for (i=0; i<numTrees; i++)
 			{
 			if (fpTree[k][i])
 				{
 				fprintf (fpTree[k][i], "end;\n");
-				fclose (fpTree[k][i]);
+				SafeFclose (&fpTree[k][i]);
 				}
 			fpTree[k][i] = NULL;
 			}
@@ -3902,7 +3650,7 @@ void CloseMBPrintFiles (void)
 			if (fpCal[k][i])
 				{
 				fprintf (fpCal[k][i], "end;\n");
-				fclose (fpCal[k][i]);
+				SafeFclose (&fpCal[k][i]);
 				}
 			fpCal[k][i] = NULL;
 			}
@@ -3917,11 +3665,7 @@ void CloseMBPrintFiles (void)
 #	endif
 
 	if (chainParams.numRuns > 1 && chainParams.mcmcDiagn == YES)
-		{
-		if (fpMcmc)
-			fclose (fpMcmc);
-		fpMcmc = NULL;
-		}
+		SafeFclose (&fpMcmc);
 		
 }
 
@@ -4008,7 +3752,7 @@ int CompressData (void)
 		MrBayesPrint ("%s   compColPos not free in CompressData\n", spacer);
 		goto errorExit;
 		}
-	compColPos = (int *)malloc((size_t) (numChar * sizeof(int)));
+	compColPos = (int *)SafeMalloc((size_t) (numChar * sizeof(int)));
 	if (!compColPos)
 		{
 		MrBayesPrint ("%s   Problem allocating compColPos (%d)\n", spacer, numChar * sizeof(int));
@@ -4023,7 +3767,7 @@ int CompressData (void)
 		MrBayesPrint ("%s   compCharPos not free in CompressData\n", spacer);
 		goto errorExit;
 		}
-	compCharPos = (int *)malloc((size_t) (numChar * sizeof(int)));
+	compCharPos = (int *)SafeMalloc((size_t) (numChar * sizeof(int)));
 	if (!compCharPos)
 		{
 		MrBayesPrint ("%s   Problem allocating compCharPos (%d)\n", spacer, numChar * sizeof(int));
@@ -4249,7 +3993,7 @@ int CompressData (void)
 		MrBayesPrint ("%s   origChar not free in CompressData\n", spacer);
 		goto errorExit;
 		}
-	origChar = (int *)malloc((size_t) (compMatrixRowSize * sizeof(int)));
+	origChar = (int *)SafeMalloc((size_t) (compMatrixRowSize * sizeof(int)));
 	if (!origChar)
 		{
 		MrBayesPrint ("%s   Problem allocating originalChar (%d)\n", spacer, numCompressedChars * sizeof(int));
@@ -4788,17 +4532,13 @@ int CondLikeDown_NY98 (TreeNode *p, int division, int chain)
 {
 
 	int				a, b, c, h, i, j, k, shortCut, *lState=NULL, *rState=NULL, nStates, nStatesSquared;
-	int                     nObsStates, preLikeJump; /* khs07062005 */
-
 	CLFlt			likeL, likeR, *pL, *pR, *tiPL, *tiPR, *clL, *clR, *clP;
 	ModelInfo		*m;
 	
 	/* find model settings for this division and nStates, nStatesSquared */
 	m = &modelSettings[division];
-	nObsStates = m->numStates; /* khs07062005: copied from CondLikeDown_Gen */
 	nStates = m->numModelStates;
 	nStatesSquared = nStates * nStates;
-	preLikeJump = nObsStates * nStates; /* khs07062005: copied from CondLikeDown_Gen*/
 
 	/* flip state of node so that we are not overwriting old cond likes */
 	FlipOneBit (division, &p->clSpace[0]);
@@ -4892,7 +4632,7 @@ int CondLikeDown_NY98 (TreeNode *p, int division, int chain)
 						*(clP++) = preLikeL[a++] * likeR;
 						}
 					clR += nStates;
-					a += preLikeJump; /* khs07062005, was a+=nStatesSquared;*/
+					a += nStatesSquared;
 					}
 				}
 			break;
@@ -4913,7 +4653,7 @@ int CondLikeDown_NY98 (TreeNode *p, int division, int chain)
 						*(clP++) = preLikeR[a++] * likeL;
 						}
 					clL += nStates;
-					a += preLikeJump; /* khs07062005, was a+=nStatesSquared;*/
+					a+=nStatesSquared;
 					}
 				}
 			break;
@@ -4926,8 +4666,8 @@ int CondLikeDown_NY98 (TreeNode *p, int division, int chain)
 					{
 					for (i=0; i<nStates; i++)
 						*(clP++) = preLikeL[a++]*preLikeR[b++];
-					a += preLikeJump; /* khs07062005, was a+=nStatesSquared;*/
-					b += preLikeJump; /* khs07062005, was a+=nStatesSquared;*/
+					a += nStatesSquared;
+					b += nStatesSquared;
 					}
 				}
 			break;
@@ -5633,17 +5373,14 @@ int CondLikeRoot_NY98 (TreeNode *p, int division, int chain)
 
 	int				a, b, c, h, i, j, k, shortCut, *lState=NULL, *rState=NULL, *aState=NULL,
 					nStates, nStatesSquared;
-	int                     nObsStates, preLikeJump; /* khs07062005 */
 	CLFlt			likeL, likeR, likeA, *clL, *clR, *clP, *clA, *pL, *pR, *pA,
 					*tiPL, *tiPR, *tiPA;
 	ModelInfo		*m;
 	
 	/* find model settings for this division and nStates, nStatesSquared */
 	m = &modelSettings[division];
-	nObsStates = m->numStates; /* khs07062005: copied from CondLikeRoot_Gen*/
 	nStates = m->numModelStates;
 	nStatesSquared = nStates * nStates;
-	preLikeJump = nObsStates * nStates; /* khs07062005: copied from CondLikeRoot_Gen*/
 
 	/* flip state of node so that we are not overwriting old cond likes */
 	FlipOneBit (division, &p->clSpace[0]);
@@ -5769,7 +5506,7 @@ int CondLikeRoot_NY98 (TreeNode *p, int division, int chain)
 					}
 				clL += nStates;
 				clR += nStates;
-				a += preLikeJump; /* khs07062005, was a+=nStates;*/
+				a += nStatesSquared;
 				}
 			}
 		break;
@@ -5791,8 +5528,8 @@ int CondLikeRoot_NY98 (TreeNode *p, int division, int chain)
 					*(clP++) = preLikeL[a++] * likeR * preLikeA[b++];
 					}
 				clR += nStates;
-				a += preLikeJump; /* khs07062005, was a+=nStates;*/
-				b += preLikeJump; /* khs07062005, was a+=nStates;*/
+				a += nStatesSquared;
+				b += nStatesSquared;
 				}
 			}
 		break;
@@ -5814,8 +5551,8 @@ int CondLikeRoot_NY98 (TreeNode *p, int division, int chain)
 					*(clP++) = likeL * preLikeR[a++] * preLikeA[b++];
 					}
 				clL += nStates;
-				a += preLikeJump; /* khs07062005, was a+=nStates;*/
-				b += preLikeJump; /* khs07062005, was a+=nStates;*/
+				a += nStatesSquared;
+				b += nStatesSquared;
 				}
 			}
 		break;
@@ -6252,6 +5989,45 @@ int     CondLikeUp_Std (TreeNode *p, int division, int chain)
 
 	return NO_ERROR;
 }
+
+
+
+
+
+void CopyTreeNodes (TreeNode *p, TreeNode *q)
+{
+	int j;
+	
+	p->memoryIndex			  = q->memoryIndex; 
+	p->index                  = q->index; 
+	p->scalerNode			  = q->scalerNode;			
+	p->upDateCl               = q->upDateCl	= NO;	/* reset update cond like flag  */
+	p->upDateTi				  = q->upDateTi = NO;	/* reset update trans prob flag */
+	for (j=0; j<MAX_NUM_DIV_LONGS; j++)
+		{
+		p->clSpace[j]         = q->clSpace[j];
+		p->tiSpace[j]         = q->tiSpace[j];
+		p->scalersSet[j]      = q->scalersSet[j]; 
+		}
+	p->marked                 = q->marked;
+	p->length                 = q->length;
+	p->nodeDepth              = q->nodeDepth;
+	p->x                      = q->x;
+	p->y                      = q->y;
+	p->index				  = q->index;
+	p->isDated				  = q->isDated;
+	p->calibration			  = q->calibration;
+	p->age					  = q->age;
+	p->isLocked				  = q->isLocked;
+	p->lockID				  = q->lockID;
+	strcpy (p->label, q->label);
+	p->d					  = q->d;
+	p->dL					  = q->dL;
+	p->mL					  = q->mL;
+	p->partition			  = q->partition;
+	p->uL					  = q->uL;
+}
+
 
 
 
@@ -6833,7 +6609,9 @@ int CopyToTreeFromPolyTree (Tree *to, PolyTree *from)
 		q->index                  = p->index; 
 		q->isLocked				  = p->isLocked;
 		q->lockID				  = p->lockID;
+		q->index				  = p->index;
 		q->isDated				  = p->isDated;
+		q->calibration			  = p->calibration;
 		q->age					  = p->age;
 		strcpy(q->label, p->label);
 		}
@@ -6862,6 +6640,7 @@ int CopyToTreeFromPolyTree (Tree *to, PolyTree *from)
 		q1->isLocked = NO;
 		q1->lockID = -1;
 		q1->isDated = NO;
+		q1->calibration = NULL;
 		q1->age = -1.0;
 		to->root = q1;
 		to->nNodes = from->nNodes + 1;
@@ -6933,7 +6712,9 @@ int CopyToTreeFromTree (Tree *to, Tree *from)
 		q->nodeDepth              = p->nodeDepth;
 		q->x                      = p->x;
 		q->y                      = p->y;
+		q->index				  = p->index;
 		q->isDated				  = p->isDated;
+		q->calibration			  = p->calibration;
 		q->age					  = p->age;
 		q->isLocked				  = p->isLocked;
 		q->lockID				  = p->lockID;
@@ -7017,7 +6798,9 @@ void CopyTrees (int chain)
 			q->nodeDepth              = p->nodeDepth;
 			q->x                      = p->x;
 			q->y                      = p->y;
+			q->index				  = p->index;
 			q->isDated				  = p->isDated;
+			q->calibration			  = p->calibration;
 			q->age					  = p->age;
 			q->isLocked				  = p->isLocked;
 			q->lockID				  = p->lockID;
@@ -7331,33 +7114,109 @@ void CatchInterrupt(int signum)
 
 
 
-int requestAbortRun(void) 
+/*-------------------------------------------------------------------------------------------
+|
+|   DerootTree: This routine will deroot a rooted tree and use the taxon with index outgroup 
+|      as the calculation root
+|
+---------------------------------------------------------------------------------------------*/
+int DerootTree (Tree *t, int outgroup)
 
 {
-	int	c;
-	int ret=0;
 
-	MrBayesPrint ("\n   Control C detected\n");
-	MrBayesPrint ("   Do you really want to stop the run (y/n)?");
-	do {
-		c = getchar();
-	} while (c == ' ');
-	if (c == 'y' || c == 'Y')
-		ret=1;
-	else 
-	{
-		MrBayesPrint ("   Mcmc run continued ...\n\n");
-		ret=0;
-		confirmAbortRun = FALSE;
-#	ifndef VISUAL
-	/* to be safe: some implementations reset the signal handler after a signal */
-	signal(SIGINT, CatchInterrupt);
-#	endif
-	}
-	do {
-		c = getchar();
-	} while (c != '\n' && c != '\r');
-	return ret;
+	int 			i;
+	TreeNode		temp, *p, *q, *r;
+
+	if (t->isRooted == NO || outgroup < 0 || outgroup > t->nNodes - t->nIntNodes - (t->isRooted == YES ? 1 : 0))
+		{
+		MrBayesPrint ("%s   Problem derooting tree\n", spacer);
+		return (ERROR);
+		}
+
+	/* mark the path to the calculation root */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->left == NULL && p->right == NULL)
+			{
+			if (p->index == outgroup)
+				p->marked = YES;
+			else
+				p->marked = NO;
+			}
+		else
+			{
+			if (p->left->marked == YES || p->right->marked == YES)
+				p->marked = YES;
+			else
+				p->marked = NO;
+			}
+		}
+
+	/* make sure the root and subroot are the two last nodes in memory */
+	/* (just in case) */
+	p = &t->nodes[t->nNodes-2];
+	q = t->root->left;
+	CopyTreeNodes (&temp, p);
+	CopyTreeNodes (p, q);
+	CopyTreeNodes (q, &temp);
+	
+	p = &t->nodes[t->nNodes-1];
+	q = t->root;
+	CopyTreeNodes (&temp, p);
+	CopyTreeNodes (p, q);
+	CopyTreeNodes (q, &temp);
+
+	/* remove the root branch and nodes */
+	p = t->root->left->left;
+	q = t->root->left->right;
+	p->anc = q;
+	q->anc = p;
+	p->length += q->length;
+	q->length = p->length;
+
+	/* rotate the tree to use the specified calculation root */
+	if (p->marked != YES)
+		{
+		r = p;
+		p = q;
+		q = r;
+		}
+	while (p->left != NULL && p->right != NULL)
+		{
+		if (p->left->marked == YES)
+			{
+			r = p->left;
+			p->anc = r;
+			p->left = q;
+			p->length = r->length;
+			q = p;
+			p = r;
+			}
+		else /* if (p->right->marked == YES) */
+			{
+			r = p->right;
+			p->anc = r;
+			p->right = q;
+			q = p;
+			p = r;
+			}
+		}
+	p->left = p->anc;
+	p->right = p->anc = NULL;
+	t->root = p;
+	p->length = 0.0;
+
+	/* set the new number of nodes */
+	t->isRooted = NO;
+	t->nNodes -= 2;
+	t->nIntNodes -= 2;
+
+	GetDownPass (t);
+
+	/* we don't bother reallocating the memory for the nodes */
+
+	return (NO_ERROR);
 }
 
 
@@ -7401,9 +7260,9 @@ int DoMcmc (void)
 			sprintf (plotParams.plotFileName, "%s.p", chainParams.chainFileName);
 
 		if (chainParams.numRuns > 1)
-			MrBayesPrint ("%s   Setting chain output file name to \"%s.<run<i>.p/run<i>.t>\"\n", spacer, chainParams.chainFileName);
+			MrBayesPrint ("%s   Setting chain output file names to \"%s.<run<i>.p/run<i>.t>\"\n", spacer, chainParams.chainFileName);
 		else
-			MrBayesPrint ("%s   Setting chain output file name to \"%s.<p/t>\"\n", spacer, chainParams.chainFileName);
+			MrBayesPrint ("%s   Setting chain output file names to \"%s.<p/t>\"\n", spacer, chainParams.chainFileName);
 
 		fileNameChanged = NO;
 		}
@@ -7502,9 +7361,6 @@ int DoMcmc (void)
 	numLocalChar = NumNonExcludedChar ();
 	MrBayesPrint ("%s   Number of characters = %d\n", spacer, numLocalChar);
 	
-	/* Set up move types. */
-	SetUpMoveTypes();
-		
 	/* Compress data and calculates some things needed for setting up params. */
 	if (CompressData() == ERROR)
 		goto errorExit;
@@ -7562,12 +7418,21 @@ int DoMcmc (void)
 		goto errorExit;
 	
 	/* Initialize space for SPR parsimony state sets for chain. */
-	if (InitSprParsSets () == ERROR)
-		goto errorExit;
+	/* NOTE: This must be enabled for the BiasedSPR move but is not needed elsewhere in the program */
+	/* if (InitSprParsSets () == ERROR)
+		goto errorExit;  */
 
 	/* Initialize space for parsimony state sets for chain (if needed). */
 	if (InitParsSets () == ERROR)
 		goto errorExit;
+
+	/* Reset sump printtofile from a previous sump run 
+	   See bug report: [ 1384746 ] UI behaviour is unexpected */
+	if (sumpParams.printToFile == YES) 
+                {
+		MrBayesPrint ("%s   Resetting sump PrintToFile parameter\n", spacer);
+	        sumpParams.printToFile = NO;
+		}
 
 	/*! setup a signal handler to catch interrupts, ignore failure */
 #ifdef VISUAL
@@ -7647,9 +7512,9 @@ int DoMcmcp (void)
 			sprintf (plotParams.plotFileName, "%s.p", chainParams.chainFileName);
 
 		if (chainParams.numRuns > 1)
-			MrBayesPrint ("%s   Setting chain output file name to \"%s.<run<i>.p/run<i>.t>\"\n", spacer, chainParams.chainFileName);
+			MrBayesPrint ("%s   Setting chain output file names to \"%s.<run<i>.p/run<i>.t>\"\n", spacer, chainParams.chainFileName);
 		else
-			MrBayesPrint ("%s   Setting chain output file name to \"%s.<p/t>\"\n", spacer, chainParams.chainFileName);
+			MrBayesPrint ("%s   Setting chain output file names to \"%s.<p/t>\"\n", spacer, chainParams.chainFileName);
 
 		fileNameChanged = NO;
 		}
@@ -7670,8 +7535,17 @@ int DoMcmcParm (char *parmName, char *tkn)
 
 	int			tempI;
 	MrBFlt		tempD;
-	char		tempStr[100];
+	char		*tempStr;
+	int         tempStrSize = 100;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+	*tempStr='\0';
+
 	if (defMatrix == NO)
 		{
 		MrBayesPrint ("%s   A character matrix must be defined first\n", spacer);
@@ -7696,8 +7570,11 @@ int DoMcmcParm (char *parmName, char *tkn)
 				MrBayesPrint ("%s   Setting chain seed to %ld\n", spacer, chainParams.chainSeed);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
-			else
+			else 
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Swapseed (global variable swapSeed) ***************************************************************/
 		else if (!strcmp(parmName, "Swapseed"))
@@ -7712,7 +7589,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set run ID */
 		/* this setting is provided for GRID use only, so that identical runs can be generated */
@@ -7728,7 +7608,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Ngen (numGen) ******************************************************************/
 		else if (!strcmp(parmName, "Ngen"))
@@ -7748,7 +7631,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Samplefreq (sampleFreq) ********************************************************/
 		else if (!strcmp(parmName, "Samplefreq"))
@@ -7761,6 +7647,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Sampling chain too infrequently\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				chainParams.sampleFreq = tempI;
@@ -7768,7 +7655,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Printfreq (printFreq) **********************************************************/
 		else if (!strcmp(parmName, "Printfreq"))
@@ -7781,6 +7671,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Printing to screen too infrequently\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.printFreq = tempI;
@@ -7788,7 +7679,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Printmax (printMax) **********************************************************/
 		else if (!strcmp(parmName, "Printmax"))
@@ -7808,7 +7702,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Printall (printAll) ********************************************************/
 		else if (!strcmp(parmName, "Printall"))
@@ -7827,6 +7724,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Printall\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				if (chainParams.allChains == YES)
@@ -7836,7 +7734,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Swapfreq (swapFreq) ************************************************************/
 		else if (!strcmp(parmName, "Swapfreq"))
@@ -7849,6 +7750,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Swapping states too infrequently\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.swapFreq = tempI;
@@ -7856,7 +7758,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Nswaps (numSwaps) ************************************************************/
 		else if (!strcmp(parmName, "Nswaps"))
@@ -7869,14 +7774,18 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   There must be at least one swap per swapping cycle\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
-				chainParams.swapFreq = tempI;
+				chainParams.numSwaps = tempI;
 				MrBayesPrint ("%s   Setting number of swaps per swapping cycle to %d\n", spacer, chainParams.numSwaps);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Allchains (allChains) ********************************************************/
 		else if (!strcmp(parmName, "Allchains"))
@@ -7895,6 +7804,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Allchains\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				if (chainParams.allChains == YES)
@@ -7904,7 +7814,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Allcomps (allComps) ************************************************************/
 		else if (!strcmp(parmName, "Allcomps"))
@@ -7923,6 +7836,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Allcomps\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				if (chainParams.allComps == YES)
@@ -7932,7 +7846,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Mcmcdiagn (mcmcDiagn) ********************************************************/
 		else if (!strcmp(parmName, "Mcmcdiagn"))
@@ -7951,6 +7868,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for mcmc diagnostics\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.saveBrlens == YES)
@@ -7960,7 +7878,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Diagnfreq (diagnFreq) ************************************************************/
 		else if (!strcmp(parmName, "Diagnfreq"))
@@ -7973,14 +7894,18 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Diagnosing MCMC behavior too infrequently\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.diagnFreq = tempI;
 				MrBayesPrint ("%s   Setting diagnosing frequency to %d\n", spacer, chainParams.diagnFreq);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
-			else
+			else 
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Minpartfreq (minPartFreq) ************************************************************/
 		else if (!strcmp(parmName, "Minpartfreq"))
@@ -7993,19 +7918,24 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempD < 0.01)
 					{
 					MrBayesPrint ("%s   Minimum partition frequency too low (< 0.01)\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				if (tempD > 0.8)
 					{
 					MrBayesPrint ("%s   Minimum partition frequency too high (> 0.8)\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				chainParams.minPartFreq = tempD;
 				MrBayesPrint ("%s   Setting minimum partition frequency to %.2f\n", spacer, chainParams.minPartFreq);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
-			else
+			else 
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Nruns (numRuns) ****************************************************************/
 		else if (!strcmp(parmName, "Nruns"))
@@ -8018,11 +7948,13 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Too few runs (minimum of 1 run)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (tempI > MAX_RUNS)
 					{
 					MrBayesPrint ("%s   Too many runs (maximum of %d runs)\n", spacer, MAX_RUNS);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.numRuns = tempI;
@@ -8031,7 +7963,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Nchains (numChains) ************************************************************/
 		else if (!strcmp(parmName, "Nchains"))
@@ -8044,11 +7979,13 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempI < 1)
 					{
 					MrBayesPrint ("%s   Too few chains (minimum of 1 chain)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (tempI > MAX_CHAINS)
 					{
 					MrBayesPrint ("%s   Too many chains (maximum of %d chains)\n", spacer, MAX_CHAINS);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.numChains = tempI;
@@ -8056,7 +7993,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Temp (chainTemp) ***************************************************************/
 		else if (!strcmp(parmName, "Temp"))
@@ -8094,6 +8034,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 					if (tempIndex >= MAX_CHAINS)
 						{
 						MrBayesPrint ("%s   Too many user-defined temperatures (%d maximum)\n", spacer, MAX_CHAINS);
+						free(tempStr);
 						return (ERROR);
 						}
 					sscanf (tkn, "%lf", &tempD);
@@ -8102,7 +8043,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 					}
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Reweight (weightScheme) ********************************************************/
 		else if (!strcmp(parmName, "Reweight"))
@@ -8117,7 +8061,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 			else if (expecting == Expecting(NUMBER))
 				{
 				if (whichReweightNum < 0 || whichReweightNum > 2)
+					{
+					free(tempStr);
 					return (ERROR);
+					}
 				sscanf (tkn, "%lf", &tempD);
 				chainParams.weightScheme[whichReweightNum] = tempD;
 				if (whichReweightNum < 2)
@@ -8127,6 +8074,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 						MrBayesPrint ("%s   The reweighting parameter must be between 0 and 100\n", spacer);
 						chainParams.weightScheme[0] = chainParams.weightScheme[1] = 0.0;
 						chainParams.weightScheme[2] = 1.0;
+						free(tempStr);
 						return (ERROR);
 						}
 					}
@@ -8137,6 +8085,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 						MrBayesPrint ("%s   The reweighting increment must be between 0 and 1\n", spacer);
 						chainParams.weightScheme[0] = chainParams.weightScheme[1] = 0.0;
 						chainParams.weightScheme[2] = 1.0;
+						free(tempStr);
 						return (ERROR);
 						}
 					}
@@ -8151,6 +8100,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 						MrBayesPrint ("%s   The sum of the reweighting parameters cannot exceed 100 %%\n", spacer);
 						chainParams.weightScheme[0] = chainParams.weightScheme[1] = 0.0;
 						chainParams.weightScheme[2] = 1.0;
+						free(tempStr);
 						return (ERROR);
 						}
 					expecting = Expecting(COMMA) | Expecting(RIGHTPAR);
@@ -8170,6 +8120,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 					MrBayesPrint ("%s   Cannot decrease weight of all characters\n", spacer);
 					chainParams.weightScheme[0] = chainParams.weightScheme[1] = 0.0;
 					chainParams.weightScheme[2] = 1.0;
+					free(tempStr);
 					return (ERROR);
 					}
 				MrBayesPrint ("%s   Setting reweighting parameter to (%1.2lf v, %1.2lf ^) increment = %1.2lf\n", 
@@ -8177,7 +8128,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Filename (chainFileName) *******************************************************/
 		else if (!strcmp(parmName, "Filename"))
@@ -8195,7 +8149,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Relburnin (relativeBurnin) ********************************************************/
 		else if (!strcmp(parmName, "Relburnin"))
@@ -8214,6 +8171,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Relburnin\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.relativeBurnin == YES)
@@ -8223,7 +8181,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free (tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Burnin (chainBurnIn) ***********************************************************/
 		else if (!strcmp(parmName, "Burnin"))
@@ -8238,7 +8199,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Burninfrac (burninFraction) ************************************************************/
 		else if (!strcmp(parmName, "Burninfrac"))
@@ -8251,19 +8215,24 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempD < 0.01)
 					{
 					MrBayesPrint ("%s   Burnin fraction too low (< 0.01)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (tempD > 0.50)
 					{
 					MrBayesPrint ("%s   Burnin fraction too high (> 0.50)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.burninFraction = tempD;
 				MrBayesPrint ("%s   Setting burnin fraction to %.2f\n", spacer, chainParams.burninFraction);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
-			else
+			else 
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Stoprule (stopRule) ********************************************************/
 		else if (!strcmp(parmName, "Stoprule"))
@@ -8282,6 +8251,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Stoprule\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.stopRule == YES)
@@ -8291,7 +8261,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Stopval (stopVal) ************************************************************/
 		else if (!strcmp(parmName, "Stopval"))
@@ -8304,19 +8277,24 @@ int DoMcmcParm (char *parmName, char *tkn)
 				if (tempD < 0.000001)
 					{
 					MrBayesPrint ("%s   Stop value too low (< 0.000001)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (tempD > 0.20)
 					{
 					MrBayesPrint ("%s   Stop value too high (> 0.20)\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				chainParams.stopVal = tempD;
 				MrBayesPrint ("%s   Setting burnin fraction to %.2f\n", spacer, chainParams.burninFraction);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
-			else
+			else 
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Startingtree (chainStartTree) **************************************************/
 		else if (!strcmp(parmName, "Startingtree"))
@@ -8330,13 +8308,17 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid starting tree argument\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				MrBayesPrint ("%s   Setting starting tree to \"%s\"\n", spacer, chainParams.chainStartTree);
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Nperts (numStartPerts) *********************************************************/
 		else if (!strcmp(parmName, "Nperts"))
@@ -8351,7 +8333,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Savebrlens (saveBrlens) ********************************************************/
 		else if (!strcmp(parmName, "Savebrlens"))
@@ -8370,6 +8355,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for saving branch lengths\n", spacer);
+					free (tempStr);
 					return (ERROR);
 					}
 				if (chainParams.saveBrlens == YES)
@@ -8379,7 +8365,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Redirect (redirect) ********************************************************/
 		else if (!strcmp(parmName, "Redirect"))
@@ -8398,6 +8387,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for redirecting output\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.saveBrlens == YES)
@@ -8407,7 +8397,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Data (runWithData) ************************************************************/
 		else if (!strcmp(parmName, "Data"))
@@ -8426,6 +8419,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Data\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.runWithData == NO)
@@ -8435,7 +8429,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Ordertaxa (chainParams.orderTaxa) *********************************************/
 		else if (!strcmp(parmName, "Ordertaxa"))
@@ -8454,6 +8451,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for ordertaxa\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (sumtParams.calcTrprobs == YES)
@@ -8463,7 +8461,10 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		/* set Swapadjacent (swapAdjacentOnly) **************************************************/
 		else if (!strcmp(parmName, "Swapadjacent"))
@@ -8482,6 +8483,7 @@ int DoMcmcParm (char *parmName, char *tkn)
 				else
 					{
 					MrBayesPrint ("%s   Invalid argument for Swapadjacent\n", spacer);
+					free(tempStr);
 					return (ERROR);
 					}
 				if (chainParams.swapAdjacentOnly == YES)
@@ -8491,12 +8493,18 @@ int DoMcmcParm (char *parmName, char *tkn)
 				expecting = Expecting(PARAMETER) | Expecting(SEMICOLON);
 				}
 			else
+				{
+				free(tempStr);
 				return (ERROR);
+				}
 			}
 		else
+			{
+			free(tempStr);
 			return (ERROR);
+			}
 		}
-
+	free(tempStr);
 	return (NO_ERROR);
 		
 }
@@ -8734,22 +8742,27 @@ int FillNormalParams (long int *seed)
 			p = &params[k];
 			if (p->nSympi > 0)
 				{
+				index = 0;
 				p->sympiBsIndex = sympiIndex + i;
 				p->sympinStates = sympiIndex + i + n;
 				p->sympiCType = sympiIndex + i + (2 * n);
 				for (j=0; j<p->nRelParts; j++)
-					{
+					{						
 					m = &modelSettings[p->relParts[j]];
 					for (c=0; c<m->numChars; c++)
 						{
 						if (m->nStates[c] > 2 && (m->cType[c] == UNORD || m->cType[c] == ORD))
 							{
-							p->sympinStates[c] = m->nStates[c];
-							p->sympiBsIndex[c] = m->bsIndex[c];
-							p->sympiCType[c] = m->cType[c];
+							p->sympinStates[index] = m->nStates[c];
+							p->sympiBsIndex[index] = m->bsIndex[c];
+							p->sympiCType[index] = m->cType[c];
+							index++;
 							}
 						}
 					}
+#ifdef DEBUG
+				assert(index==p->nSympi);
+#endif
 				i += p->nSympi;
 				}
 			}
@@ -9093,7 +9106,8 @@ int FillNormalParams (long int *seed)
 				if (p->paramId == SYMPI_FIX || p->paramId == SYMPI_UNI || p->paramId == SYMPI_EXP
 					|| p->paramId == SYMPI_FIX_MS || p->paramId == SYMPI_UNI_MS || p->paramId == SYMPI_EXP_MS)
 					{
-					for (i=index=0; i<p->nRelParts; i++)
+					index = 0;
+					for (i=0; i<p->nRelParts; i++)
 						if (modelSettings[p->relParts[i]].isTiNeeded[0] == YES)
 							break;
 					if (i < p->nRelParts)
@@ -9391,7 +9405,7 @@ int FillNumSitesOfPat (void)
 			}
 		
 		/* allocate memory */
-		increased = (int *)malloc((size_t) (2 * numCompressedChars * sizeof(int)));
+		increased = (int *)SafeMalloc((size_t) (2 * numCompressedChars * sizeof(int)));
 		if (!increased)
 			{
 			MrBayesPrint ("%s   Problem reallocating increased (%d)\n", spacer, numCompressedChars * chainParams.numChains * sizeof(int));
@@ -9492,8 +9506,16 @@ int FillRelPartsString (Param *p, char relPartString[100])
 {
 
 	int			i, n, filledString;
-	char		temp[10];
-	
+	char		*tempStr;
+	int             tempStrSize=50;
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	if (numCurrentDivisions == 1)
 		{
 		filledString = NO;
@@ -9512,15 +9534,21 @@ int FillRelPartsString (Param *p, char relPartString[100])
 			for (i=n=0; i<p->nRelParts; i++)
 				{
 				n++;
-				sprintf (temp, "%d", p->relParts[i] + 1);
-				strcat (relPartString, temp);
+				SaveSprintf(&tempStr, &tempStrSize, "%d", p->relParts[i] + 1);
+				if (tempStrSize > 100) 
+				        {
+					MrBayesPrint("%s   tempString is too long in FillRelPartsString (bug)\n");
+                                        free (tempStr);
+                                        return (ERROR);
+					}
+				strcat (relPartString, tempStr);
 				if (n < p->nRelParts)
 					strcat (relPartString, ",");
 				}
 			strcat (relPartString, "}");
 			}
 		}
-		
+	free (tempStr);
 	return (filledString);
 
 }
@@ -9577,10 +9605,11 @@ int FillTreeParams (long int *seed)
 		MrBayesPrint ("%s   Space for MCMC trees not free in FillTreeParams\n", spacer);
 		return ERROR;
 		}
-	mcmcTree = (Tree *) malloc (numTrees * 2 * numLocalChains * sizeof(Tree));
-	subParamPtrs = (Param **) malloc (numTrees * sizeof (Param *));		/* pointers from topology to brlens (trees) */
-	mcmcNodes = (TreeNode *) malloc (numTrees * 2 * numLocalChains * 2 * numLocalTaxa * sizeof (TreeNode));
-	mcmcNodePtrs = (TreeNode **) malloc (numTrees * 2 * numLocalChains * 3 * numLocalTaxa * sizeof (TreeNode *));
+	mcmcTree = (Tree *) SafeMalloc (numTrees * 2 * numLocalChains * sizeof(Tree));
+	/*memset(mcmcTree, 0, numTrees * 2 * numLocalChains * sizeof(Tree));*/
+	subParamPtrs = (Param **) SafeMalloc (numTrees * sizeof (Param *));		/* pointers from topology to brlens (trees) */
+	mcmcNodes = (TreeNode *) SafeMalloc (numTrees * 2 * numLocalChains * 2 * numLocalTaxa * sizeof (TreeNode));
+	mcmcNodePtrs = (TreeNode **) SafeMalloc (numTrees * 2 * numLocalChains * 3 * numLocalTaxa * sizeof (TreeNode *));
 	if (!mcmcTree || !subParamPtrs || !mcmcNodes || !mcmcNodePtrs)
 		{
 		MrBayesPrint ("%s   Problem allocating MCMC trees\n", spacer);
@@ -9922,10 +9951,10 @@ void FreeChainMemory (void)
 		free (localTaxonNames);
 		memAllocs[ALLOC_LOCTAXANAMES] = NO;
 		}
-	if (memAllocs[ALLOC_LOCTAXAAGES] == YES)
+	if (memAllocs[ALLOC_LOCALTAXONCALIBRATION] == YES)
 		{
-		free (localTaxonAges); 
-		memAllocs[ALLOC_LOCTAXAAGES] = NO;
+		free (localTaxonCalibration);
+		memAllocs[ALLOC_LOCALTAXONCALIBRATION] = NO;
 		}
 	if (memAllocs[ALLOC_PARSMATRIX] == YES)
 		{
@@ -10988,7 +11017,7 @@ int GetRandomEmbeddedSubtree (Tree *t, int nTerminals, long *seed, int *nEmbedde
 	nSubTrees = (int *) calloc (nTerminals * t->nNodes, sizeof(int));
 	if (!nSubTrees)
 		return (ERROR);
-	leaf = (TreeNode **) malloc (nLeaves * sizeof (TreeNode *));
+	leaf = (TreeNode **) SafeMalloc (nLeaves * sizeof (TreeNode *));
 	if (!leaf)
 		{
 		free (nSubTrees);
@@ -11353,16 +11382,23 @@ void GetStamp (void)
 {
 
 	int		i;
-	char	temp[10];
-	
-	strcpy (stamp, "");
+	char	*tempStr;
+	int     tempStrSize=50;
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		}
+
+	*stamp = '\0';
 	for (i=0; i<10; i++)
 		{
-		sprintf (temp, "%d", (int)(RandomNumber(&runIDSeed) * 10));
-		strcat (stamp, temp);
+		SaveSprintf(&tempStr, &tempStrSize, "%d", (int)(RandomNumber(&runIDSeed) * 10));
+		strcat (stamp, tempStr);
 		}
 	MrBayesPrint ("%s   MCMC stamp = %s\n", spacer, stamp);
-
+	free(tempStr);
 }
 
 
@@ -11503,8 +11539,8 @@ int InitChainCondLikes (void)
 #else
 	chainCondLikes = (CLFlt *) calloc (numLocalChains * oneMatSize, sizeof(CLFlt));
 #endif
-	chainCLPtrSpace = (CLFlt **) malloc (numLocalChains * nNodes * sizeof(CLFlt *));
-	condLikePtr = (CLFlt ***) malloc (numLocalChains * sizeof(CLFlt **));
+	chainCLPtrSpace = (CLFlt **) SafeMalloc (numLocalChains * nNodes * sizeof(CLFlt *));
+	condLikePtr = (CLFlt ***) SafeMalloc (numLocalChains * sizeof(CLFlt **));
 	if (!chainCondLikes || !chainCLPtrSpace || !condLikePtr)
 		{
 		if (chainCondLikes) 
@@ -11533,9 +11569,9 @@ int InitChainCondLikes (void)
 		return ERROR;
 		}
 	treeScalerSpace = (CLFlt *) calloc (2 * numLocalChains * numCompressedChars, sizeof(CLFlt));
-	treeScaler = (CLFlt **) malloc (numLocalChains * sizeof(CLFlt *));
+	treeScaler = (CLFlt **) SafeMalloc (numLocalChains * sizeof(CLFlt *));
 	nodeScalerSpace = (CLFlt *) calloc (2 * numLocalChains * nScalerNodes * numCompressedChars, sizeof(CLFlt));
-	nodeScaler = (CLFlt **) malloc (numLocalChains * sizeof(CLFlt *));
+	nodeScaler = (CLFlt **) SafeMalloc (numLocalChains * sizeof(CLFlt *));
 	if (!treeScalerSpace || !treeScaler || !nodeScalerSpace || !nodeScaler)
 		{
 		MrBayesPrint ("%s   The program ran out of memory while trying to allocate\n", spacer);
@@ -11769,9 +11805,13 @@ int InitChainCondLikes (void)
 #if defined SSE
 	tiProbSpace = (CLFlt *) ALIGNEDMALLOC (2 * numLocalChains * nNodes * tiProbRowSize * sizeof(CLFlt), 16);
 #else
-	tiProbSpace = (CLFlt *) malloc (2 * numLocalChains * nNodes * tiProbRowSize * sizeof(CLFlt));
+	tiProbSpace = (CLFlt *) SafeMalloc (2 * numLocalChains * nNodes * tiProbRowSize * sizeof(CLFlt));
+	
+	/* PAUL: initialization of ti data, otherwise (according to valgrind) uninitialized data is used in some of
+	 * the likelihood functions. This might be a bug! */
+	/*memset(tiProbSpace, 0, 2 * numLocalChains * nNodes * tiProbRowSize * sizeof(CLFlt));*/
 #endif
-	tiProbs = (CLFlt **) malloc (numLocalChains * sizeof(CLFlt *));
+	tiProbs = (CLFlt **) SafeMalloc (numLocalChains * sizeof(CLFlt *));
 	if (!tiProbSpace || !tiProbs)
 		{
 		MrBayesPrint ("%s   The program ran out of memory while trying to allocate\n", spacer);
@@ -11802,7 +11842,7 @@ int InitChainCondLikes (void)
 			MrBayesPrint ("%s   Space for preLikes not free in InitChainCondLikes\n", spacer);
 			return ERROR;
 			}
-		preLikeL = (CLFlt *) malloc (3 * n * sizeof(CLFlt));
+		preLikeL = (CLFlt *) SafeMalloc (3 * n * sizeof(CLFlt));
 		if (!preLikeL)
 			{
 			MrBayesPrint ("%s   Problem allocating preLikes\n", spacer);
@@ -11833,8 +11873,14 @@ int InitChainCondLikes (void)
 		}
 	if (cijkRowSize > 0)
 		{
-		cijkSpace = (MrBFlt *) malloc (2 * numLocalChains * cijkRowSize * sizeof(MrBFlt));
-		cijks = (MrBFlt **) malloc (numLocalChains * sizeof(MrBFlt *));
+		cijkSpace = (MrBFlt *) SafeMalloc (2 * numLocalChains * cijkRowSize * sizeof(MrBFlt));
+		/*fprintf(stderr,"Allocated 2*%d*%d*%d=%d bytes for eigenvalue vectors (%d/chain)\n",
+			numLocalChains,
+			cijkRowSize,
+			sizeof(MrBFlt),
+			2*numLocalChains*cijkRowSize*sizeof(MrBFlt),
+			2*cijkRowSize*sizeof(MrBFlt));*/
+		cijks = (MrBFlt **) SafeMalloc (numLocalChains * sizeof(MrBFlt *));
 		if (!cijkSpace || !cijks)
 			{
 			MrBayesPrint ("%s   The program ran out of memory while trying to allocate\n", spacer);
@@ -11883,8 +11929,8 @@ int InitChainCondLikes (void)
 			MrBayesPrint ("%s   Space for rate probs not free in InitChainCondLikes\n", spacer);
 			return ERROR;
 			}
-		rateProbSpace = (MrBFlt *) malloc (2 * numLocalChains * rateProbRowSize * sizeof(MrBFlt));
-		rateProbs = (MrBFlt **) malloc (numLocalChains * sizeof(MrBFlt *));
+		rateProbSpace = (MrBFlt *) SafeMalloc (2 * numLocalChains * rateProbRowSize * sizeof(MrBFlt));
+		rateProbs = (MrBFlt **) SafeMalloc (numLocalChains * sizeof(MrBFlt *));
 		if (!rateProbSpace || !rateProbs)
 			{
 			MrBayesPrint ("%s   Problem allocating rate probs\n", spacer);
@@ -11935,20 +11981,21 @@ int InitChainCondLikes (void)
 |
 |	InitCalibratedBrlens: This routine will build a clock tree
 |		consistent with calibration constraints on terminal
-|		taxa and/or constrained interior nodes.
-|		It is based on the assumption that BRLENSEPSILON is small
-|		enough that it can be disregarded.
+|		taxa and/or constrained interior nodes. The tree will
+|       be of depth 1.0 and have minimum branch length of minLength
+|       (measured in substitution units). The tree might be slightly
+|       deeper if necessary to solve conflicts between calibrations
+|       and minLength. If not possible to build such a tree, ERROR
+|       is returned.
 |
 --------------------------------------------------------------------*/
-int InitCalibratedBrlens (Tree *t)
+int InitCalibratedBrlens (Tree *t, MrBFlt minLength)
 
 {
 
 	int				i, recalibrate;
 	TreeNode		*p;
-	MrBFlt			totDepth, minLength;
-
-	minLength =  0.0001;	/* minimum branch length */
+	MrBFlt			totDepth;
 
 	if (t->isRooted == NO)
 		{
@@ -11964,14 +12011,19 @@ int InitCalibratedBrlens (Tree *t)
 			{
 			if (p->left == NULL && p->right == NULL)
 				{
-				if (localTaxonAges[p->index] < 0.0)
+				if (p->isDated == NO)
 					{
 					p->nodeDepth = 0.0;
 					p->age = -1.0;
 					}
 				else
 					{
-					p->nodeDepth = p->age = localTaxonAges[p->index];
+					if (localTaxonCalibration[p->index]->prior == fixed)
+						p->nodeDepth = p->age = localTaxonCalibration[p->index]->age;
+					else if (localTaxonCalibration[p->index]->prior == uniform)
+						p->nodeDepth = p->age = localTaxonCalibration[p->index]->lower;
+					else /* if (localTaxonCalibration[p->index]->prior == offsetExponential) */
+						p->nodeDepth = p->age = localTaxonCalibration[p->index]->offset;
 					}
 				}
 			else
@@ -11980,21 +12032,49 @@ int InitCalibratedBrlens (Tree *t)
 					p->nodeDepth = p->left->nodeDepth;
 				else
 					p->nodeDepth = p->right->nodeDepth;
-				if (p->age > 0.0)
+				if (p->isDated == YES)
 					{
-					if (p->age < p->nodeDepth)
+					if (p->calibration->prior == fixed)
 						{
-						MrBayesPrint ("%s   Calibration inconsistency\n", spacer);
-						return (ERROR);
+						if (p->calibration->age <= p->nodeDepth)
+							{
+							MrBayesPrint ("%s   Calibration inconsistency (check calibrated nodes)\n", spacer);
+							return (ERROR);
+							}
+						else
+							p->age = p->nodeDepth = p->calibration->age;
 						}
-					else
-						p->nodeDepth = p->age;
+					else if (p->calibration->prior == uniform)
+						{
+						if (p->calibration->upper <= p->nodeDepth)
+							{
+							MrBayesPrint ("%s   Calibration inconsistency (check calibrated nodes)\n", spacer);
+							return (ERROR);
+							}
+						else
+							{
+							if (p->calibration->lower < p->nodeDepth)
+								p->age = p->nodeDepth;
+							else
+								p->age = p->nodeDepth = p->calibration->lower;
+							}
+						}
+					else /* if (p->calibration.prior == offsetExponential) */
+						{
+						if (p->calibration->offset < p->nodeDepth)
+							p->age = p->nodeDepth;
+						else
+							p->age = p->nodeDepth = p->calibration->offset;
+						}
 					}
+				else
+					p->age = -1.0;
 				}
 			}
 		}
 	
-	/* scale tree so that it has depth 1.0 */
+	/* scale tree so that it has depth 1.0
+	   nodeDepth will now be in substitution units */
 	totDepth = t->root->left->nodeDepth;
 	for (i=0; i<t->nNodes; i++)
 		{
@@ -12004,23 +12084,22 @@ int InitCalibratedBrlens (Tree *t)
 		else
 			p->nodeDepth = 0.0;
 		}
+
 	/* calculate clock rate based on this total depth */
 	t->clockRate =  (1.0 / totDepth);
 			
 	/* adjust node depths so that a branch is at least of length minLength */
-	recalibrate = NO;
 	for (i=0; i<t->nIntNodes; i++)
 		{
 		p = t->intDownPass[i];
 		if (p->anc != NULL)
 			{
+			recalibrate = NO;
 			if (p->nodeDepth - p->left->nodeDepth < minLength)
 				{
 				p->nodeDepth = p->left->nodeDepth + minLength;
 				if (p->age > 0.0)
-					{
 					recalibrate = YES;
-					}
 				}
 			if (p->nodeDepth - p->right->nodeDepth < minLength)
 				{
@@ -12028,13 +12107,22 @@ int InitCalibratedBrlens (Tree *t)
 				if (p->age > 0.0)
 					recalibrate = YES;
 				}
+			if (recalibrate == YES)
+				{
+				/* try to recalibrate */
+				if (p->calibration->prior == fixed || (p->calibration->prior == uniform && (p->nodeDepth / t->clockRate) >= p->calibration->upper))
+					{
+					/* failed to recalibrate */
+					MrBayesPrint ("%s   Calibration inconsistency (check calibrated nodes)\n", spacer);
+					return (ERROR);
+					}
+				else /* successful recalibration */
+					p->age = p->nodeDepth / t->clockRate;
+				}
 			}
 		else
 			p->nodeDepth = 0.0;
 		}
-
-	if (recalibrate == YES)
-		return (ERROR);
 
 	/* calculate branch lengths */
 	for (i=0; i<t->nNodes; i++)
@@ -12043,16 +12131,17 @@ int InitCalibratedBrlens (Tree *t)
 		if (p->anc != NULL)
 			{
 			if (p->anc->anc != NULL)
-				{
 				p->length = p->anc->nodeDepth - p->nodeDepth;
-				if (p->length < BRLENS_MIN)
-					p->length = BRLENS_MIN;
-				}
 			else
 				p->length = 0.0;
 			}
 		}
-	
+
+#if 0	
+	ShowNodes (t->root, 0, YES);
+	getchar();
+#endif
+
 	return (NO_ERROR);
 	
 }
@@ -12329,10 +12418,10 @@ int InitParsSets (void)
 		return ERROR;
 		}
 	parsSets = (long *) calloc (numLocalChains * nIntNodes * nParsSets * 2, sizeof(long));
-	parsPtrSpace = (long **) malloc (numLocalChains * nNodes * sizeof(long *));
-	parsPtr = (long ***) malloc (numLocalChains * sizeof(long **));
+	parsPtrSpace = (long **) SafeMalloc (numLocalChains * nNodes * sizeof(long *));
+	parsPtr = (long ***) SafeMalloc (numLocalChains * sizeof(long **));
 	parsNodeLengthSpace = (CLFlt *) calloc (numLocalChains * parsNodeLenRowSize * 2, sizeof (CLFlt));
-	parsNodeLen = (CLFlt **) malloc (numLocalChains * sizeof(CLFlt *));
+	parsNodeLen = (CLFlt **) SafeMalloc (numLocalChains * sizeof(CLFlt *));
 	if (!parsSets || !parsPtrSpace || !parsPtr || !parsNodeLengthSpace || !parsNodeLen)
 		{
 		if (parsSets) 
@@ -12450,8 +12539,8 @@ int InitSprParsSets (void)
 		}
 	sprParsMatrix = (long *) calloc (sprParsMatrixRowSize * numLocalTaxa, sizeof(long));
 	sprParsSets = (long *) calloc (numLocalChains * nNodes * sprParsMatrixRowSize * 3, sizeof(long));
-	sprParsPtrSpace = (long **) malloc (numLocalChains * nNodes * sizeof(long *));
-	sprParsPtr = (long ***) malloc (numLocalChains * sizeof(long **));
+	sprParsPtrSpace = (long **) SafeMalloc (numLocalChains * nNodes * sizeof(long *));
+	sprParsPtr = (long ***) SafeMalloc (numLocalChains * sizeof(long **));
 	if (!sprParsMatrix || !sprParsSets || !sprParsPtrSpace || !sprParsPtr)
 		{
 		if (sprParsMatrix)
@@ -12843,6 +12932,43 @@ int InitTermCondLikes (void)
 
 
 
+void InitTreeNode (TreeNode *p)
+{
+	int		j;
+	
+	/* do not change memoryIndex; that is set once and for all when tree is allocated */
+	p->index                  = 0; 
+	p->scalerNode			  = NO;			
+	p->upDateCl               = NO;
+	p->upDateTi				  = NO;
+	for (j=0; j<MAX_NUM_DIV_LONGS; j++)
+		{
+		p->clSpace[j]         = 0;
+		p->tiSpace[j]         = 0;
+		p->scalersSet[j]      = 0; 
+		}
+	p->marked                 = NO;
+	p->length                 = 0.0;
+	p->nodeDepth              = 0.0;
+	p->x                      = 0;
+	p->y                      = 0;
+	p->index				  = 0;
+	p->isDated				  = NO;
+	p->calibration			  = NULL;
+	p->age					  = -1.0;
+	p->isLocked				  = NO;
+	p->lockID				  = -1;
+	strcpy (p->label, "");
+	p->d					  = 0.0;
+	p->dL					  = 0;
+	p->mL					  = 0;
+	p->uL					  = 0;
+	p->partition			  = NULL;
+}
+
+
+
+
 
 int IsBitSet (int i, long *bits)
 
@@ -12859,6 +12985,228 @@ int IsBitSet (int i, long *bits)
 	else
 		return (NO);
 		
+}
+
+
+
+
+
+/*-----------------------------------------------------------------------------
+| IsCalibratedClockSatisfied: This routine sets calibrated clock tree params
+|     and checks that user defined brlens satisfy the specified calibration(s)
+|     up to tolerance tol
+------------------------------------------------------------------------------*/
+int IsCalibratedClockSatisfied (Tree *t, MrBFlt tol)
+
+{
+
+	int				i, j, maxRateConstrained, minRateConstrained, isViolated;
+	MrBFlt			f, maxHeight, minRate=0, maxRate=0, ageToAdd, *x, *y;
+	TreeNode		*p, *q, *r, *s;
+
+	if (t->isRooted == NO)
+		return (NO);
+		
+	x = (MrBFlt *) calloc (2*t->nNodes, sizeof (MrBFlt));
+	if (x == NULL)
+		{
+		MrBayesPrint ("%s   Out of memory in IsCalibratedClockSatisfied\n", spacer);
+		free (x);
+		return (NO);
+		}
+	y = x + t->nNodes;
+
+	/* reset node depth and age, and set minimum (x) and maximum (y) age of each node */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->age = -1.0;
+		p->nodeDepth = -1.0;
+		if (p->isDated == YES)
+			{
+			if (p->calibration->prior == fixed)
+				x[p->index] = y[p->index] = p->calibration->age;
+			else if (p->calibration->prior == uniform)
+				{
+				x[p->index] = p->calibration->lower;
+				y[p->index] = p->calibration->upper;
+				}
+			else /* if (p->calibration->prior == offsetExponential) */
+				{	
+				x[p->index] = p->calibration->offset;
+				y[p->index] = -1.0;
+				}
+			}
+		else if (p->left == NULL && p->right == NULL)
+			x[p->index] = y[p->index] = 0.0;
+		else
+			{
+			x[p->index] = y[p->index] = -1.0;
+			}
+		}
+
+	/* calculate node heights in branch length units */
+	p = t->root->left;
+	p->nodeDepth = 0.0;
+	for (i=t->nNodes-3; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		p->nodeDepth = p->anc->nodeDepth + p->length;
+		}
+
+	/* find maximum height of tree */	
+	maxHeight = -1.0;
+	for (i=0; i<t->nNodes-1; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->left == NULL && p->right == NULL)
+			{
+			if (p->nodeDepth > maxHeight)
+				{
+				maxHeight = p->nodeDepth;
+				}
+			}
+		}
+	
+	/* calculate node depth from tip of tree */
+	for (i=0; i<t->nNodes-1; i++)
+		{
+		p = t->allDownPass[i];
+		p->nodeDepth = maxHeight - p->nodeDepth;
+		}
+		
+
+	/* check potentially constraining calibrations */
+	/* and find minum and maximum possible rate */
+	maxRateConstrained = NO;
+	minRateConstrained = NO;
+	isViolated = NO;
+	for (i=0; i<t->nNodes-1; i++)
+		{
+		p = t->allDownPass[i];
+		if (x[p->index] < 0.0 && y[p->index] < 0.0)
+			continue;
+		for (j=i+1; j<t->nNodes-1; j++)
+			{
+			q = t->allDownPass[j];
+			if (x[q->index] < 0.0 && y[q->index] < 0.0)
+				continue;
+			if (AreDoublesEqual (p->nodeDepth, q->nodeDepth, tol) == YES)
+				{
+				/* same depth so they must share a possible age */
+				if ((AreDoublesEqual (x[p->index], y[q->index], tol) == NO && x[p->index] > y[q->index])
+					|| (AreDoublesEqual (y[p->index], x[q->index], tol) == NO && y[p->index] < x[q->index]))
+					{
+					isViolated = YES;
+					break;
+					}
+				}
+			else
+				{
+				if (p->nodeDepth > q->nodeDepth)
+					{
+					r = p;
+					s = q;
+					}
+				else
+					{
+					r = q;
+					s = p;
+					}
+				if (x[r->index] >= 0.0 && y[s->index] >= 0.0)
+					{
+					f = (r->nodeDepth - s->nodeDepth) / (x[r->index] - y[s->index]);
+					if (f <= 0.0)
+						{
+						isViolated = YES;
+						break;
+						}
+					if (maxRateConstrained == NO)
+						{
+						maxRateConstrained = YES;
+						maxRate = f;
+						}
+					else if (f < maxRate)
+						maxRate = f;
+					}
+				if (y[r->index] >= 0.0 && x[s->index] >= 0.0)
+					{
+					f = (r->nodeDepth - s->nodeDepth) / (y[r->index] - x[s->index]);
+					if (f <= 0.0)
+						{
+						isViolated = YES;
+						break;
+						}
+					if (minRateConstrained == NO)
+						{
+						minRateConstrained = YES;
+						minRate = f;
+						}
+					else if (f > minRate)
+						minRate = f;
+					}
+				}
+			}
+		if (isViolated == YES)
+			break;
+		}
+
+	/* check if outright violation */
+	if (isViolated == YES)
+		{
+		MrBayesPrint ("%s   Branch lengths do not satisfy the calibration(s)\n", spacer);
+		free (x);
+		return (NO);
+		}
+	
+	/* check that minimum and maximum rates are consistent */
+	if (minRateConstrained == YES && maxRateConstrained == YES
+		&& AreDoublesEqual (minRate, maxRate, tol) == NO && minRate > maxRate)
+		{
+		MrBayesPrint ("%s   Branch lengths do not satisfy the calibration(s)\n", spacer);
+		free (x);
+		return (NO);
+		}
+
+	/* date all nodes based on a suitable rate */
+	if (minRateConstrained == YES)
+		t->clockRate = minRate;
+	else if (maxRateConstrained == YES)
+		t->clockRate = 0.5 * maxRate;
+	else
+		t->clockRate = 1.0;
+	for (i=0; i<t->nNodes-1; i++)
+		{
+		p = t->allDownPass[i];
+		p->age = p->nodeDepth / t->clockRate;
+		}
+
+	/* check if there is an age to add */
+	ageToAdd = 0.0;
+	for (i=0; i<t->nNodes-1; i++)
+		{
+		p = t->allDownPass[i];
+		if (x[p->index] > 0.0 && x[p->index] > p->age)
+			{
+			f = x[p->index] - p->age;
+			if (f > ageToAdd)
+				ageToAdd = f;
+			}
+		}
+	
+	/* add extra length if any */
+	if (AreDoublesEqual (ageToAdd, 0.0, 0.00000001) == NO)
+		{
+		for (i=0; i<t->nNodes-1; i++)
+			{
+			p = t->allDownPass[i];
+			p->age += ageToAdd;
+			}
+		}
+
+	free (x);
+	return (YES);
+	
 }
 
 
@@ -13174,7 +13522,12 @@ int Likelihood_Gen (TreeNode *p, int division, int chain, MrBFlt *lnL, int which
 			like = 0.0;
 			for (k=0; k<m->numGammaCats; k++)
 				for (j=0; j<nStates; j++)
+				  {
 					like += (*(clP++)) * bs[j];
+#ifdef DEBUG_OUTPUT
+					printf("char=%d cat=%d j=%d like %E\n",c, k,j,like);
+#endif
+				  }
 			like *= freq;
 
 			/* check against LIKE_EPSILON (values close to zero are problematic) */
@@ -13223,7 +13576,9 @@ int Likelihood_Gen (TreeNode *p, int division, int chain, MrBFlt *lnL, int which
 			/* check against LIKE_EPSILON (values close to zero are problematic) */
 			if (like < LIKE_EPSILON)
 				{
+#ifdef DEBUG_OUTPUT
 				printf ("lnScaler[%d] = %lf likeI = %lf\n", c, lnScaler[c], likeI);
+#endif
 				MrBayesPrint ("%s   WARNING: In LIKE_EPSILON - for division %d char %d has like = %1.30lf\n", spacer, division, c, like);
 				getchar();
 				return ERROR;
@@ -14476,7 +14831,7 @@ int LnBirthDeathPriorPr (Tree *t, MrBFlt *prob, MrBFlt sR, MrBFlt eR, MrBFlt sF)
 	TreeNode		*p;
 
 	/* allocate space for the scaled speciation times */
-	nt = (MrBFlt *)malloc((size_t) (t->nIntNodes) * sizeof(MrBFlt));
+	nt = (MrBFlt *)SafeMalloc((size_t) (t->nIntNodes) * sizeof(MrBFlt));
 	if (!nt)
 		{
 		printf ("\n   ERROR: Problem allocating nt\n");
@@ -14503,7 +14858,7 @@ int LnBirthDeathPriorPr (Tree *t, MrBFlt *prob, MrBFlt sR, MrBFlt eR, MrBFlt sF)
 	rootTime = 1.0;
 							
 	/* calculate probabilities of tree */
-	if (/*sR != eR*/ fabs(sR-eR)>ETA) /* != is _not_ a very good operator for floating points */
+	if (AreDoublesEqual(sR,eR,ETA)==NO)
 		{
 		(*prob) = (numLocalTaxa - 2.0) * log(sR);
 		for (i=0; i<nNodes; i++)
@@ -14583,7 +14938,7 @@ int LnCoalescencePriorPr (Tree *t, MrBFlt *prob, MrBFlt theta, MrBFlt growth)
 	TreeNode		*p;
 
 	/* allocate space for the coalescence times */
-	ct = (MrBFlt *)malloc((size_t) (t->nIntNodes) * sizeof(MrBFlt));
+	ct = (MrBFlt *)SafeMalloc((size_t) (t->nIntNodes) * sizeof(MrBFlt));
 	if (!ct)
 		{
 		printf ("\n   ERROR: Problem allocating ct\n");
@@ -14929,111 +15284,15 @@ int Move_Beta (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, Mr
 
 {
 
-	/* change symmetric Dirichlet variance using sliding window */
-
-	int			i, k, isValidB, isPriorExp;
-	MrBFlt		oldB, newB, window, minB, maxB, ran, priorExp=0.0, *bs;
-	ModelParams *mp;
-
-	/* get size of window, centered on current rate value */
-	window = mvp[0];
-
-	/* get model paramaters */
-	mp = &modelParams[param->relParts[0]];
-
-	/* get prior, minimum and maximum values for rate     */
-	if (!strcmp(mp->symPiPr,"Uniform"))
-		{
-		isPriorExp = NO;
-		minB = mp->symBetaUni[0];
-		maxB = mp->symBetaUni[1];
-		}
-	else
-		{
-		isPriorExp = YES;
-		priorExp = mp->symBetaExp;
-		minB = SYMPI_MIN;
-		maxB = SYMPI_MAX;
-		}
-
-	/* get old value of symDir */
-	oldB = *GetParamVals(param, chain, state[chain]);
-
-	/* change value */
-	ran = RandomNumber(seed);
-	newB = oldB + window * (ran - 0.5);
-
-	/* check validity */
-	isValidB = NO;
-	do
-		{
-		if (newB < minB)
-			newB = 2* minB - newB;
-		else if (newB > maxB)
-			newB = 2 * maxB - newB;
-		else
-			isValidB = YES;
-		} while (isValidB == NO);
-
-	/* set new value of symDir */
-	*GetParamVals(param, chain, state[chain]) = newB;
-
-	/* get proposal ratio */
-	*lnProposalRatio = 0.0;
-
-	/* get prior ratio */
-	if (isPriorExp == YES)
-		{
-		*lnPriorRatio = priorExp * (oldB - newB);
-		}
-	else
-		*lnPriorRatio = 0.0;
-
-	/* fill in the new betacat frequencies */
-	bs = GetParamSubVals(param, chain, state[chain]);
-	k = mp->numBetaCats;
-	BetaBreaks (newB, newB, bs, k);
-	k *= 2;
-	for (i=k-2; i>0; i-=2)
-		{
-		bs[i] = bs[i/2];
-		}
-	for (i=1; i<k; i+=2)
-		{
-		bs[i] = 1.0 - bs[i-1];
-		}
-		
-	/* Set update flags for all tree nodes. Note that the conditional
-	   likelihood update flags have been set for the relevant partitions
-	   before we even call the move function. */
-	for (i=0; i<param->nRelParts; i++)
-		TouchAllTreeNodes(GetTree(modelSettings[param->relParts[i]].brlens,chain,state[chain]));
-		
-	/* may need to hit update flag for cijks if we have multistate characters */
-	for (i=0; i<param->nRelParts; i++)
-		if (modelSettings[param->relParts[i]].nCijkParts > 1)
-			modelSettings[param->relParts[i]].upDateCijk[chain][state[chain]] = YES;
-
-	return (NO_ERROR);
-
-}
-
-
-
-
-
-int Move_Beta_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
-
-{
-
 	/* change symmetric Dirichlet variance using multiplier */
 
-	int			i, k, isValidB, isPriorExp;
-	MrBFlt		oldB, newB, minB, maxB, priorExp=0.0, *bs, ran, factor, tuning;
+	int			i, j, k, isValidB, isPriorExp, nStates;
+	MrBFlt		oldB, newB, minB, maxB, priorExp=0.0, *bs, ran, factor, tuning,
+				x, y;
 	ModelParams *mp;
 
 	/* get tuning parameter */
-	tuning = mvp[0];
+	tuning = mvp[0];	/* multiplier tuning parameter lambda */
 
 	/* get model paramaters */
 	mp = &modelParams[param->relParts[0]];
@@ -15101,6 +15360,27 @@ int Move_Beta_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, 
 		bs[i] = 1.0 - bs[i-1];
 		}
 		
+	/* if there are multistate characters, update prior probability of current pis */
+	bs += 2 * mp->numBetaCats;
+	for (i=0; i<param->nSympi; i++)
+		{
+		/* get number of states */
+		nStates = param->sympinStates[i];
+
+		/* get prior ratio update */
+		x = LnGamma(newB*nStates) - nStates*LnGamma(newB);
+		y = LnGamma(oldB*nStates) - nStates*LnGamma(oldB);
+		for (j=0; j<nStates; j++)
+			{
+			x += (newB-1.0)*log(bs[j]);
+			y += (oldB-1.0)*log(bs[j]);
+			}
+		(*lnPriorRatio) += x - y;
+
+		/* update indices */
+		bs += nStates;
+		}
+		
 	/* Set update flags for all tree nodes. Note that the conditional
 	   likelihood update flags have been set for the relevant partitions
 	   before we even call the move function. */
@@ -15109,8 +15389,10 @@ int Move_Beta_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, 
 		
 	/* may need to hit update flag for cijks if we have multistate characters */
 	for (i=0; i<param->nRelParts; i++)
+		{
 		if (modelSettings[param->relParts[i]].nCijkParts > 1)
 			modelSettings[param->relParts[i]].upDateCijk[chain][state[chain]] = YES;
+		}
 
 	return (NO_ERROR);
 
@@ -15142,14 +15424,14 @@ int Move_BiasedSpr (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, M
 	ModelParams *mp;
 
 	/* allocate some memory for this move */
-	subTree1DP = (TreeNode **)malloc(sizeof(TreeNode *) * 2 * 2 * numTaxa);
+	subTree1DP = (TreeNode **)SafeMalloc(sizeof(TreeNode *) * 2 * 2 * numTaxa);
 	if (!subTree1DP)
 		{
 		MrBayesPrint ("%s   ERROR: Could not allocate subTree1DP\n", spacer);
 		return (ERROR);
 		}
 	subTree2DP = subTree1DP + (2 * numTaxa);
-	pLengths = (MrBFlt *)malloc(sizeof(MrBFlt) * 2 * 2 * numTaxa);
+	pLengths = (MrBFlt *)SafeMalloc(sizeof(MrBFlt) * 2 * 2 * numTaxa);
 	if (!pLengths)
 		{
 		MrBayesPrint ("%s   ERROR: Could not allocate pLengths\n", spacer);
@@ -15813,16 +16095,16 @@ int Move_BrLen (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFl
 
 
 
-int Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+int Move_TreeHeight (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
 
 {
 
-	/* change clock rate (tree height) for calibrated tree using multiplier */
+	/* change tree height using multiplier */
 
-	int			i, isPriorExp, isValidWait;
-	MrBFlt		factor, tuning, minV, newLnPrior, oldLnPrior=0.0, theta=0.0, sR=0.0, eR=0.0, sF=0.0,
-				priorExp=0.0, minWait, maxWait, newWait, oldWait, treeFactor, growth=0.0,
-				x=0.0, y=0.0;
+	int			i, isPriorExp;
+	MrBFlt		factor, treeFactor, tuning, minV, maxV, newLnPrior, oldLnPrior=0.0, theta=0.0,
+		        sR=0.0, eR=0.0, sF=0.0, priorExp=0.0, minHeight, maxHeight, newHeight, oldHeight,
+				growth=0.0, alpha=0.0, beta=0.0, x=0.0, y=0.0;
 	TreeNode	*p;
 	ModelInfo	*m;
 	ModelParams *mp;
@@ -15836,21 +16118,27 @@ int Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, M
 	/* min brlen */
 	minV = BRLENS_MIN;
 
+	/* max brlen */
+	maxV = BRLENS_MAX;
+
+	/* get tree */
 	t = GetTree (param, chain, state[chain]);
 
-	/* prior on clock waiting time */
-	if (!strcmp(mp->calWaitPr,"Exponential"))
+	/* prior on tree height */
+	if (!strcmp(mp->treeHeightPr,"Exponential"))
 		{
 		isPriorExp = YES;
-		priorExp = mp->calWaitExp;
-		minWait = 0.00000000001;
-		maxWait = 10000000000000000.0;
+		priorExp = mp->treeHeightExp;
+		minHeight = 0.00000000001;
+		maxHeight = 10000000000000000.0;
 		}
 	else
 		{
 		isPriorExp = NO;
-		minWait = mp->calWaitUni[0];
-		maxWait = mp->calWaitUni[1];
+		alpha = mp->treeHeightGamma[0];
+		beta = mp->treeHeightGamma[1];
+		minHeight = 0.00000000001;
+		maxHeight = 10000000000000000.0;
 		}
 	
 	/* calculate prior ratio (part 1/2) */
@@ -15893,38 +16181,33 @@ int Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, M
 	/* determine multiplication factor */
 	factor = exp(tuning * (RandomNumber(seed) - 0.5));
 
-	/* multiply clock waiting time by this factor */
-	oldWait = 1.0 / t->clockRate;
-	newWait = oldWait * factor;
-
-	/* check that clock waiting time is within bounds */
-	isValidWait = NO;
-	do
+	/* reflect tree height */
+	oldHeight = t->root->left->nodeDepth;
+	newHeight = oldHeight * factor;
+	while (newHeight < minHeight || newHeight > maxHeight)
 		{
-		if (newWait < minWait)
-			newWait = 2* minWait - newWait;
-		else if (newWait > maxWait)
-			newWait = 2 * maxWait - newWait;
-		else
-			isValidWait = YES;
-		} while (isValidWait == NO);	
-	
-	/* store new waiting time as clock rate */
-	treeFactor = oldWait / newWait;
-	t->clockRate = 1.0 / newWait;
+		if (newHeight < minHeight)
+			newHeight = minHeight * minHeight / newHeight;
+		if (newHeight > maxHeight)
+			newHeight = maxHeight * maxHeight / newHeight;
+		}
+	treeFactor = newHeight / oldHeight;
 
-	/* multiply all branch lengths by this factor */
+	/* adjust clock rate (a book-keeping device for calibrated trees) */
+	if (t->isCalibrated == YES)
+		t->clockRate = t->clockRate / treeFactor;
+
+	/* multiply all branch lengths and node depths by this factor */
 	/* set update flags in the process */
 	for (i=0; i<t->nNodes; i++)
 		{
 		p = t->allDownPass[i];
 		if (p->anc != NULL)
 			{
+			p->nodeDepth *= treeFactor;
 			if (p->anc->anc != NULL)
 				{
 				p->length *= treeFactor;
-				if (p->length < BRLENS_MIN)
-					p->length = BRLENS_MIN;
 				p->upDateTi = YES;
 				}
 			if (p->left != NULL)
@@ -15932,26 +16215,30 @@ int Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, M
 			}
 		}
 
-	/* now set node depths in a safe manner */
+	/* now adjust node depths and branch lengths for rounding error */
 	for (i=0; i<t->nIntNodes; i++)
 		{
 		p = t->intDownPass[i];
 		x = p->left->nodeDepth + p->left->length;
 		y = p->right->nodeDepth + p->right->length;
-		if (x > y)
+		p->nodeDepth = (x + y) / 2.0;
+		p->right->length = p->nodeDepth - p->right->nodeDepth;
+		p->left->length  = p->nodeDepth - p->left->nodeDepth;
+		}
+
+	/* check that all branch lengths are within bounds */
+	for (i=0; i<t->nNodes-2; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->length < minV || p->length > maxV)
 			{
-			p->right->length += (x - y);
-			p->nodeDepth = x;
-			}
-		else
-			{
-			p->left->length += (y - x);
-			p->nodeDepth = y;
+			abortMove = YES;
+			return (NO_ERROR);
 			}
 		}
 
 	/* calculate proposal ratio */
-	(*lnProposalRatio) = log(newWait/oldWait);
+	(*lnProposalRatio) = log(newHeight/oldHeight);
 
 	/* calculate prior ratio (part 2/2) */
 	if (param->paramId == BRLENS_CLOCK_UNI || param->paramId == BRLENS_CCLOCK_UNI)
@@ -15980,12 +16267,27 @@ int Move_ClockRate (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, M
 		(*lnPriorRatio) = newLnPrior - oldLnPrior;
 		}
 
-	/* finally adjust for prior on clock ratio */
-	if (isPriorExp == YES)
-		(*lnPriorRatio) += priorExp * (oldWait - newWait);
+	/* finally adjust for prior on tree height unless coalescence prior */
+	if (param->paramId == BRLENS_CLOCK_COAL || param->paramId == BRLENS_CCLOCK_COAL)
+		{
+		/* tree height already accounted for */
+		}
+	else
+		{
+		if (isPriorExp == YES)
+			/* exponential prior on tree height */
+			(*lnPriorRatio) += priorExp * (oldHeight - newHeight);
+		else
+			/* gamma prior on tree height */
+			(*lnPriorRatio) += (beta - 1.0) * (log(newHeight) - log(oldHeight)) - alpha * (newHeight - oldHeight);
+		}
 
-	return (NO_ERROR);
-	
+#if defined (DEBUG_TREEHEIGHT)
+	printf ("Old height -- New height -- lnPriorRatio -- lnProposalRatio\n");
+	printf ("%f -- %f -- %f -- %f\n", oldHeight, newHeight, *lnPriorRatio, *lnProposalRatio);
+#endif		
+		
+	return (NO_ERROR);	
 }
 
 
@@ -16182,6 +16484,1084 @@ int Move_Extinction_M (Param *param, int chain, long int *seed, MrBFlt *lnPriorR
 
 
 
+int Move_ExtSPR1 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* change in root tree ? */
+	if (RandomNumber (seed) < 0.5)
+		moveInRoot = YES;
+	else
+		moveInRoot = NO;
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{	/* going up tree */
+				if (a->left == NULL || a->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (RandomNumber(seed) < 0.5)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{	/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (RandomNumber(seed)<0.5) 
+					{
+					directionUp = YES; /* switch direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						b = a;
+						a = a->right;
+						}
+					else 
+						{  
+						b = a;
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					}	
+				else 
+					{	/* continue down */
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+			{
+			if (c->left == NULL || c->isLocked == YES)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed) < 0.5) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_ExtSPR2 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* change in root tree ? */
+	if (RandomNumber (seed) < 0.5)
+		moveInRoot = YES;
+	else
+		moveInRoot = NO;
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{	/* going up tree */
+				if (a->left == NULL || a->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (RandomNumber(seed) < 0.5)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{	/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (RandomNumber(seed)<0.5) 
+					{
+					directionUp = YES; /* switch direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						b = a;
+						a = a->right;
+						}
+					else 
+						{  
+						b = a;
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					}	
+				else 
+					{	/* continue down */
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+			{
+			if (c->left == NULL || c->isLocked == YES)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed) < 0.5) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	if (moveInRoot == NO)
+		{
+		/* if no move in crown, then select randomly, otherwise always the moved branch */
+		if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+			p = brlenNode[0];
+		else
+			p = brlenNode[1];
+
+		/* modify branch length */
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);
+		}
+			
+	if (moveInRoot == YES)
+		{
+		/* if no move in root, then select randomly, otherwise always the moved branch */
+		if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+			p = brlenNode[4];
+		else
+			p = brlenNode[5];
+		
+		/* modify branch length but not if 'root' branch in rooted tree */
+		if (t->isRooted == NO || p->anc->anc != NULL)
+			{
+			m = p->length;
+			x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+			while (x < minV || x > maxV)
+				{
+				if (x < minV)
+					x = minV * minV / x;
+				else if (x > maxV)
+					x = maxV * maxV / x;
+				}
+			p->length = x;
+			p->upDateTi = YES;
+
+			/* update proposal and prior ratio based on length modification */
+			(*lnProposalRatio) += log (x / m);
+			if (isVPriorExp == YES)
+				(*lnPriorRatio) += brlensExp * (m - x);	
+			}
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
 int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
 
 {
@@ -16199,9 +17579,9 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 	   along the branch (below the maximum age of the node). */
 	
 	int			topologyHasChanged, isStartLocked=0, isStopLocked=0, nRootNodes, directionUp;
-	MrBFlt		delta, x, y, oldBrlen=0.0, newBrlen=0.0, tuning, extensionProb, oldLnPrior, newLnPrior;
-	MrBFlt		theta=0.0, growth=0.0, sR=0.0, eR=0.0, sF=0.0, minV;
-	TreeNode	*p, *a, *b, *u, *v;
+	MrBFlt		x, y, oldBrlen=0.0, newBrlen=0.0, extensionProb, oldLnPrior, newLnPrior,
+				theta=0.0, growth=0.0, sR=0.0, eR=0.0, sF=0.0, minV, maxV;
+	TreeNode	*p, *a, *b, *u, *v, *oldA;
 	Tree		*t;
 	ModelParams *mp;
 	ModelInfo	*m;
@@ -16210,9 +17590,8 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 	int			i;
 #endif
 
-	/* this parameter should be possible to set by user */
 	extensionProb = mvp[0];	/* extension probability */
-	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+
 	(*lnProposalRatio) = (*lnPriorRatio) = 0.0;
 	
 	/* get tree */
@@ -16221,6 +17600,9 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 	/* min branch length */
 	minV = BRLENS_MIN;
 	
+	/* max branch length */
+	maxV = BRLENS_MAX;
+
 #if defined (DEBUG_CONSTRAINTS)
 	CheckConstraints (t);
 #endif
@@ -16247,19 +17629,16 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 
 #	if defined (DEBUG_ExtSPRClock)
 	printf ("Before:\n");
-	ShowNodes (t->r, 2, YES);
+	ShowNodes (t->root, 2, YES);
 	getchar();
 #	endif
 	
 	/* calculate prior ratio (part 1/2) */
+	/* tree height is not changed */
 	if (param->subParams[0]->paramId == BRLENS_CLOCK_UNI ||
 		param->subParams[0]->paramId == BRLENS_CCLOCK_UNI)
 		{
-		/* uniformly distributed branch lengths */
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			oldLnPrior = log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			oldLnPrior = mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
+		oldLnPrior = 0.0;
 		}
 	else if (param->subParams[0]->paramId == BRLENS_CLOCK_COAL ||
 			 param->subParams[0]->paramId == BRLENS_CCLOCK_COAL)
@@ -16289,17 +17668,13 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
 			return ERROR;
 			}
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			oldLnPrior += log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			oldLnPrior += mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
 		}
 
 	/* pick a branch */
 	do
 		{
 		p = t->allDownPass[(int)(RandomNumber(seed)*(t->nNodes - 1))];
-		} while (p->anc->anc == NULL || p->anc->isDated == YES);
+		} while (p->anc->anc == NULL || p->anc->isDated == YES || p->anc->anc->anc == NULL);
 		
 	/* set up pointers for nodes around the picked branch */
 	v = p;
@@ -16309,170 +17684,137 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 	else
 		a = u->left;
 	b = u->anc;
+	oldA = a;
 
-	if (b->anc == NULL)
+	/* record branch length */
+	oldBrlen = a->length + u->length;
+
+	/* cut tree */
+	a->anc = b;
+	if (b->left == u)
+		b->left = a;
+	else
+		b->right = a;
+	a->length += u->length;
+	a->upDateTi = YES;
+
+	/* determine initial direction of move and whether the reverse move would be stopped by constraints */
+	isStartLocked = NO;
+	if (RandomNumber(seed) < 0.5)
 		{
-		/* close to root, do things differently */
-		if (u->left->length < u->right->length)
-			x = u->left->length;
-		else
-			x = u->right->length;
-
-		do {
-			y = exp ((RandomNumber (seed) - 0.5) * tuning) * x;
-		} while (y < minV);
-
-		/* adjust proposal and prior ratios */
-		(*lnProposalRatio) = (log(y) - log(x));
-		
-		/* adjust branch lengths */
-		delta = y - x;
-		v->length += delta;
-		a->length += delta;
-		u->nodeDepth += delta;
-
-		/* set tiprobs update flags */
-		v->upDateTi = YES;
-		a->upDateTi = YES;
+		directionUp = YES;
+		if (u->isLocked == YES)
+			isStartLocked = YES;
 		}
 	else
 		{
-		/* record branch length */
-		if (u->anc->anc == NULL)
-			oldBrlen = a->length;
-		else
-			oldBrlen = a->length + u->length;
-
-		/* cut tree */
-		a->anc = b;
-		if (b->left == u)
-			b->left = a;
-		else
-			b->right = a;
-		if (b->anc != NULL)
-			a->length += u->length;
-
-		/* determine initial direction of move and whether the reverse move would be stopped by constraints */
-		isStartLocked = NO;
-		if (RandomNumber(seed) < 0.5)
-			{
-			directionUp = YES;
-			if (b->anc == NULL || u->isLocked == YES)
-				isStartLocked = YES;
-			}
-		else
-			{
-			directionUp = NO;
-			if (a->left == NULL || a->isLocked == YES || a->nodeDepth < v->nodeDepth)
-				isStartLocked = YES;
-			}
-			
-		/* move around in root subtree */
-		for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
-			{
-			if (directionUp == YES) 
-				{	/* going up tree */
-				if (a->left == NULL || a->isLocked == YES || a->nodeDepth < (v->nodeDepth + 3*minV) ||
-					a->length < 3*minV)
-					break;		/* can't go further */
-				topologyHasChanged = YES;
-				b = a;
-				if (RandomNumber(seed) < 0.5)
-					a = a->left;
-				else
-					a = a->right;
-				if (u->isLocked == YES)
-					{
-					b->isLocked = YES;
-					u->isLocked = NO;
-					b->lockID = u->lockID;
-					u->lockID = 0;
-					}
-				}
-			else 
-				{	/* going down tree */
-				if (b->anc == NULL || u->isLocked == YES)
-					break;		/* can't go further */
-				topologyHasChanged = YES;
-				if (RandomNumber(seed)<0.5 || b->anc->anc == NULL || b->length < 3*minV) 
-					{
-					directionUp = YES; /* switch direction */
-					/* find sister of a */
-					if (b->left == a) 
-						{
-						a = b->right;
-						}
-					else 
-						{  
-						a = b->left;
-						}
-					/* as long as we are moving upwards
-	     			the cond likes to update will be
-					flagged by the last pass from u to the root */
-					}	
-				else 
-					{	/* continue down */
-					a = b;
-					b = b->anc;
-					a->upDateCl = YES; 
-					if (a->isLocked == YES)
-						{
-						u->isLocked = YES;
-						a->isLocked = NO;
-						u->lockID = a->lockID;
-						a->lockID = 0;
-						}
-					}
-				}
-			}
-			
-		/* determine whether the forward move was or would have been stopped by constraints */
-		isStopLocked = NO;
-		if (directionUp == NO)
-			{
-			if (b->anc == NULL || u->isLocked == YES)
-				isStopLocked = YES;
-			}
-		else
-			{
-			if (a->left == NULL || a->isLocked == YES || a->nodeDepth < v->nodeDepth)
-				isStopLocked = YES;
-			}
-
-		/* reattach u */
-		if (u->left == v)
-			u->right = a;
-		else
-			u->left = a;
-		a->anc = u;
-		u->anc = b;
-		if (b->left == a)
-			b->left = u;
-		else
-			b->right = u;
-
-		/* insert u randomly on branch below a */
-		if (a->nodeDepth > v->nodeDepth)
-			x = a->length;
-		else
-			x = (b->nodeDepth - v->nodeDepth);
-		newBrlen = x;
-
-		do {
-			y = RandomNumber (seed) * x;
-		} while (y < minV || (x - y) < minV);
-		
-		/* adjust lengths */
-		a->length -= y;
-		u->length = y;
-		u->nodeDepth = a->nodeDepth + a->length;
-		v->length = u->nodeDepth - v->nodeDepth;
-		
-		/* set tiprobs update flags */
-		a->upDateTi = YES;
-		u->upDateTi = YES;
-		v->upDateTi = YES;
+		directionUp = NO;
+		if (a->left == NULL || a->isLocked == YES || a->nodeDepth < v->nodeDepth)
+			isStartLocked = YES;
 		}
+		
+	/* move around in root subtree */
+	for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+		{
+		if (directionUp == YES) 
+			{	/* going up tree */
+			if (a->left == NULL || a->isLocked == YES || a->nodeDepth <= v->nodeDepth)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			b = a;
+			if (RandomNumber(seed) < 0.5)
+				a = a->left;
+			else
+				a = a->right;
+			if (u->isLocked == YES)
+				{
+				b->isLocked = YES;
+				u->isLocked = NO;
+				b->lockID = u->lockID;
+				u->lockID = 0;
+				}
+			}
+		else 
+			{	/* going down tree */
+			if (u->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed)<0.5 || b->anc->anc == NULL) 
+				{
+				directionUp = YES; /* switch direction */
+				/* find sister of a */
+				if (b->left == a) 
+					{
+					a = b->right;
+					}
+				else 
+					{  
+					a = b->left;
+					}
+				/* as long as we are moving upwards
+	     		the cond likes to update will be
+				flagged by the last pass from u to the root */
+				}	
+			else 
+				{	/* continue down */
+				a = b;
+				b = b->anc;
+				a->upDateCl = YES; 
+				if (a->isLocked == YES)
+					{
+					u->isLocked = YES;
+					a->isLocked = NO;
+					u->lockID = a->lockID;
+					a->lockID = 0;
+					}
+				}
+			}
+		}
+		
+	/* determine whether the forward move was or would have been stopped by constraints */
+	isStopLocked = NO;
+	if (directionUp == NO)
+		{
+		if (u->isLocked == YES)
+			isStopLocked = YES;
+		}
+	else
+		{
+		if (a->left == NULL || a->isLocked == YES || a->nodeDepth <= v->nodeDepth)
+			isStopLocked = YES;
+		}
+
+	/* reattach u */
+	if (u->left == v)
+		u->right = a;
+	else
+		u->left = a;
+	a->anc = u;
+	u->anc = b;
+	if (b->left == a)
+		b->left = u;
+	else
+		b->right = u;
+
+	/* insert u randomly on branch below a */
+	if (a->nodeDepth > v->nodeDepth)
+		x = a->length;
+	else
+		x = (b->nodeDepth - v->nodeDepth);
+	newBrlen = x;
+
+	y = RandomNumber (seed) * x;
+	
+	/* adjust lengths */
+	a->length -= y;
+	u->length = y;
+	u->nodeDepth = a->nodeDepth + a->length;
+	v->length = u->nodeDepth - v->nodeDepth;
+	
+	/* set tiprobs update flags */
+	a->upDateTi = YES;
+	u->upDateTi = YES;
+	v->upDateTi = YES;
 
 	/* set flags for update of cond likes from u and down to root */
 	p = u;
@@ -16486,6 +17828,18 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 	if (topologyHasChanged == YES)
 		{
 		GetDownPass (t);
+		}
+
+	/* check that all branch lengths are good */
+	if (a->length < minV || oldA->length < minV || u->length < minV || v->length < minV)
+		{
+		abortMove = YES;
+		return (NO_ERROR);
+		}
+	if (a->length > maxV || oldA->length > maxV || u->length > maxV || v->length > maxV)
+		{
+		abortMove = YES;
+		return (NO_ERROR);
 		}
 
 	/* adjust proposal ratio */
@@ -16503,11 +17857,7 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 		param->subParams[0]->paramId == BRLENS_CCLOCK_UNI)
 		{
 		/* uniformly distributed branch lengths */
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			newLnPrior = log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			newLnPrior = mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
-		(*lnPriorRatio) = newLnPrior - oldLnPrior;
+		(*lnPriorRatio) = 0.0;
 		}
 	else if (param->subParams[0]->paramId == BRLENS_CLOCK_COAL ||
 			 param->subParams[0]->paramId == BRLENS_CCLOCK_COAL)
@@ -16528,10 +17878,6 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
 			return ERROR;
 			}
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			newLnPrior += log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			newLnPrior += mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
 		(*lnPriorRatio) = newLnPrior - oldLnPrior;
 		}
 
@@ -16581,6 +17927,550 @@ int Move_ExtSPRClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRa
 
 
 
+int Move_ExtSS (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using Subtree Swapping (unrooted) 
+	   with extension probability.
+
+	   This move type picks two subtrees and swaps their position. Like the SPR and TBR,
+	   it is a superset of the NNI but there are some interesting differences. With the
+	   SPR and TBR, it is not possible to go between all five-tip trees in a single
+	   step. For instance, going from ((1,2),3,(4,5)) to ((1,5),3,(4,2)) requires two
+	   steps. The SS move can go between all pairs of five-tip trees in a single step.
+	   Some six-tip tree pairs will require two steps though.
+	   
+	   NB! This code is experimental. It will not deal with locked nodes (constraints).
+	   
+	   */
+	
+	int			i, numFree, topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *q, *a, *b, *c, *d, *u, *v;
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eSS\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+	/* unmark all tree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->marked = NO;
+		}
+
+	/* pick a branch */
+	do
+		{
+		p = t->allDownPass[(int)(RandomNumber(seed)*t->nNodes)];
+		} while (p->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	v = p;
+	u = p->anc;
+
+	/* check the possible move directions */
+	numFree = 0;
+	if (v->left != NULL && v->left->isLocked == NO)
+		numFree ++;
+	if (v->right != NULL && v->right->isLocked == NO)
+		numFree++;
+	if (u->anc != NULL && u->isLocked == NO)
+		numFree++;
+	if (u->left == v)
+		{
+		if (u->right != NULL && u->right->isLocked == NO)
+			numFree++;
+		}
+	else
+		{
+		if (u->left != NULL && u->left->isLocked == NO)
+			numFree++;
+		}
+
+	/* select one of them randomly */
+	i = (int) (RandomNumber (seed) * numFree) + 1;
+	numFree = 0;
+	a = b = c = d = p;
+	directionLeft = directionUp = moveInRoot = NO;
+	if (v->left != NULL && v->left->isLocked == NO)
+		{
+		numFree ++;
+		if (i == numFree)
+			{
+			moveInRoot = NO;
+			directionLeft = YES;
+			c = v->left;
+			d = v;
+			}
+		}
+	if (v->right != NULL && v->right->isLocked == NO)
+		{
+		numFree ++;
+		if (i == numFree)
+			{
+			moveInRoot = NO;
+			directionLeft = NO;
+			c = v->right;
+			d = v;
+			}
+		}
+	if (u->anc != NULL && u->isLocked == NO)
+		{
+		numFree ++;
+		if (i == numFree)
+			{
+			moveInRoot = YES;
+			directionUp = NO;
+			a = u->anc;
+			b = u;
+			}
+		}
+	if (u->left == v)
+		{
+		if (u->right != NULL && u->right->isLocked == NO)
+			{
+			numFree ++;
+			if (i == numFree)
+				{
+				moveInRoot = YES;
+				directionUp = YES;
+				a = u->right;
+				b = u;
+				}
+			}
+		}
+	else
+		{
+		if (u->left != NULL && u->left->isLocked == NO)
+			{
+			numFree ++;
+			if (i == numFree)
+				{
+				moveInRoot = YES;
+				directionUp = YES;
+				a = u->left;
+				b = u;
+				}
+			}
+		}
+
+#	if defined (DEBUG_ExtSS)
+	printf ("Before:\n");
+	ShowNodes (t->root, 2, NO);
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("directionUp = %d -- directionLeft = %d -- moveInRoot = %d\n", directionUp, directionLeft, moveInRoot);
+	getchar();
+#	endif
+	
+	/* move around and potentially swap in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{	/* going up tree */
+				if (a->left == NULL || a->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (RandomNumber(seed) < 0.5)
+					a = a->left;
+				else
+					a = a->right;
+
+				/* update branch length of b */
+				m = b->length;
+				y = m * exp (tuning * (RandomNumber(seed) - 0.5));
+				while (y < minV || y > maxV)
+					{
+					if (y < minV)
+						y = minV * minV / y;
+					else if (y > maxV)
+						y = maxV * maxV / y;
+					}
+				b->length = y;
+				b->upDateTi = YES;
+
+				/* update proposal and prior ratio based on length modification */
+				(*lnProposalRatio) += log (y / m);
+				if (isVPriorExp == YES)
+					(*lnPriorRatio) += brlensExp * (m - y);
+				}
+			else 
+				{	/* going down tree */
+				if (a->anc == NULL || b->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				b->marked = YES;
+
+				/* update branch length of b */
+				m = b->length;
+				y = m * exp (tuning * (RandomNumber(seed) - 0.5));
+				while (y < minV || y > maxV)
+					{
+					if (y < minV)
+						y = minV * minV / y;
+					else if (y > maxV)
+						y = maxV * maxV / y;
+					}
+				b->length = y;
+				b->upDateTi = YES;
+
+				if (RandomNumber(seed) < 0.5) 
+					{
+					directionUp = YES; /* switch direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						b = a;
+						a = a->right;
+						}
+					else 
+						{  
+						b = a;
+						a = a->left;
+						}
+					}	
+				else 
+					{	/* continue down */
+					b = a;
+					a = a->anc;
+					}
+				}
+			}
+		/* swap the root subtrees */
+		if (nRootNodes > 0)
+			{
+			if (directionUp == YES)
+				{
+				v->anc = b;
+				a->anc = u;
+				if (b->left == a)
+					b->left = v;
+				else if (b->right == a)
+					b->right = v;
+				if (u->left == v)
+					u->left = a;
+				else
+					u->right = a;
+				}
+			else
+				{
+				/* rotate the nodes from b to u*/
+				p = b;
+				q = a;
+				x = b->length;
+				while (p->left->marked == YES || p->right->marked == YES)
+					{					
+					if (p->left->marked == YES) 
+						{
+						/* rotate p anticlockwise - prepare pointers for move left */
+						p->anc = p->left;  /* the root will be in the direction we are heading */
+						p->left = p->right;
+						p->right = q;
+						}
+					else 
+						{
+						/* rotate c clockwise - prepare pointers for move right */
+						p->anc = p->right;	/* the root will be in the direction we are heading */
+						p->right = p->left;
+						p->left = q;  
+						}
+					/* OK - let's move!; p->anc points in the right direction
+					don't forget to move the branch lengths as well */
+					q = p;
+					p = p->anc;
+					q->length = p->length;
+					q->upDateTi = YES;
+					}
+				/* rotations finished, take care of u */
+				if (u->left == v)
+					u->left = u->anc;
+				else
+					u->right = u->anc;
+				u->length = x;
+				/* now swap the subtrees of u and b */
+				if (a->left == b)
+					a->left = u;
+				else
+					a->right = u;
+				u->anc = a;
+				v->anc = b;
+				v->length = x;
+				if (b->left == a)
+					b->left = v;
+				else
+					b->right = v;
+				}
+			}
+		}
+
+	/* move around and potentially swap in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		x = v->length;	/* save v length in case there is a move */
+		for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+			{
+			if (c->left == NULL || c->isLocked == YES)
+				break;	/* can't go further */
+
+			topologyHasChanged = YES;
+			
+			/* prepare d for move */
+			d->anc = c;
+			d->length = c->length;
+			d->upDateTi = YES;
+			d->upDateCl = YES;
+			if (d->isLocked == YES)
+				{
+				c->isLocked = YES;
+				d->isLocked = NO;
+				c->lockID = d->lockID;
+				d->lockID = -1;
+				}
+			
+			/* update branch length of d */
+			m = d->length;
+			y = m * exp (tuning * (RandomNumber(seed) - 0.5));
+			while (y < minV || y > maxV)
+				{
+				if (y < minV)
+					y = minV * minV / y;
+				else if (y > maxV)
+					y = maxV * maxV / y;
+				}
+			d->length = y;
+			d->upDateTi = YES;
+
+			/* update proposal and prior ratio based on length modification */
+			(*lnProposalRatio) += log (y / m);
+			if (isVPriorExp == YES)
+				(*lnPriorRatio) += brlensExp * (m - y);
+
+			/* go left or right with equal probability */
+			if (RandomNumber(seed) < 0.5) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;
+				}
+			/* OK - let's move!; c->anc points in the right direction */
+			d = c;
+			c = c->anc;
+			}
+
+		/* swap the crown subtrees */
+		if (nCrownNodes > 0)
+			{
+			d->anc = u;
+			d->length = x;
+			if (u->left == v)
+				u->left = d;
+			else
+				u->right = d;
+
+			c->anc = v;
+			if (directionLeft == YES)
+				v->left = c;
+			else
+				v->right = c;
+			}
+		}
+
+
+	/* modify branch lengths */
+	if (nCrownNodes > 0)
+		{
+		p = c;
+		q = d;
+		}
+	else if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			p = v;
+			q = a;
+			}
+		else
+			{
+			p = v;
+			q = u;
+			}
+		}
+	else
+		{
+		p = v;
+		if (RandomNumber(seed) < 0.5)
+			{
+			if (RandomNumber(seed) < 0.5)
+				q = u;
+			else
+				{
+				if (u->left == v)
+					q = u->right;
+				else
+					q = u->left;
+				}
+			}
+		else
+			{
+			if (RandomNumber(seed) < 0.5)
+				q = v->left;
+			else
+				q = v->right;
+			}
+		}
+
+	if (p != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);
+		}
+
+	if (q != NULL && q->anc != NULL)
+		{
+		m = q->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		q->length = x;
+		q->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	if (topologyHasChanged == YES)
+		{
+		/* set flags for update of cond likes from u and down to root */
+		p = u;
+		while (p->anc != NULL)
+			{
+			p->upDateCl = YES;
+			p = p->anc;
+			}
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_ExtSS)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",exp(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	printf ("directionUp = %d -- directionLeft = %d\n", directionUp, directionLeft);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
 int Move_ExtTBR (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
 
 {
@@ -16613,7 +18503,11 @@ int Move_ExtTBR (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, 
 	/* get tree */
 	t = GetTree (param, chain, state[chain]);
 #if defined DEBUG_CONSTRAINTS
-	CheckConstraints (t);
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
 #endif
 
 	/* get model params */
@@ -17025,7 +18919,2248 @@ int Move_ExtTBR (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, 
 #	endif
 
 #if defined DEBUG_CONSTRAINTS
-	CheckConstraints (t);
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_ExtTBR1 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* move around in root subtree */
+	for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+		{
+		if (directionUp == YES) 
+			{	/* going up tree */
+			if (a->left == NULL || a->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			b = a;
+			if (RandomNumber(seed) < 0.5)
+				a = a->left;
+			else
+				a = a->right;
+			if (u->isLocked == YES)
+				{
+				b->isLocked = YES;
+				u->isLocked = NO;
+				b->lockID = u->lockID;
+				u->lockID = 0;
+				}
+			}
+		else 
+			{	/* going down tree */
+			if (a->anc == NULL || u->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed)<0.5) 
+				{
+				directionUp = YES; /* switch direction */
+				/* find sister of a */
+				if (a->left == b) 
+					{
+					b = a;
+					a = a->right;
+					}
+				else 
+					{  
+					b = a;
+					a = a->left;
+					}
+				/* as long as we are moving upwards
+				the cond likes to update will be
+				flagged by the last pass from u to the root */
+				}	
+			else 
+				{	/* continue down */
+				b = a;
+				a = a->anc;
+				b->upDateCl = YES; 
+				if (b->isLocked == YES)
+					{
+					u->isLocked = YES;
+					b->isLocked = NO;
+					u->lockID = b->lockID;
+					b->lockID = 0;
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+		{
+		if (c->left == NULL || c->isLocked == YES)
+			break;	/* can't go further */
+		topologyHasChanged = YES;
+		if (RandomNumber(seed) < 0.5) 
+			{
+			/* rotate c anticlockwise - prepare pointers for move left */
+			c->anc = c->left;  /* the root will be in the direction we are heading */
+			c->left = c->right;
+			c->right = d;
+			}
+		else 
+			{
+			/* rotate c clockwise - prepare pointers for move right */
+			c->anc = c->right;	/* the root will be in the direction we are heading */
+			c->right = c->left;
+			c->left = d;  
+			}
+		/* OK - let's move!; c->anc points in the right direction
+		don't forget to move the branch lengths as well */
+		d = c;
+		c = c->anc;
+		d->length = c->length;
+		d->upDateCl = YES; 
+		d->upDateTi = YES;
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_ExtTBR2 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	memset(brlenNode, 0, sizeof(TreeNode *)*7);
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to be move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* move around in root subtree */
+	for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+		{
+		if (directionUp == YES) 
+			{	/* going up tree */
+			if (a->left == NULL || a->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			b = a;
+			if (RandomNumber(seed) < 0.5)
+				a = a->left;
+			else
+				a = a->right;
+			if (u->isLocked == YES)
+				{
+				b->isLocked = YES;
+				u->isLocked = NO;
+				b->lockID = u->lockID;
+				u->lockID = 0;
+				}
+			}
+		else 
+			{	/* going down tree */
+			if (a->anc == NULL || u->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed)<0.5) 
+				{
+				directionUp = YES; /* switch direction */
+				/* find sister of a */
+				if (a->left == b) 
+					{
+					b = a;
+					a = a->right;
+					}
+				else 
+					{  
+					b = a;
+					a = a->left;
+					}
+				/* as long as we are moving upwards
+				the cond likes to update will be
+				flagged by the last pass from u to the root */
+				}	
+			else 
+				{	/* continue down */
+				b = a;
+				a = a->anc;
+				b->upDateCl = YES; 
+				if (b->isLocked == YES)
+					{
+					u->isLocked = YES;
+					b->isLocked = NO;
+					u->lockID = b->lockID;
+					b->lockID = 0;
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+		{
+		if (c->left == NULL || c->isLocked == YES)
+			break;	/* can't go further */
+		topologyHasChanged = YES;
+		if (RandomNumber(seed) < 0.5) 
+			{
+			/* rotate c anticlockwise - prepare pointers for move left */
+			c->anc = c->left;  /* the root will be in the direction we are heading */
+			c->left = c->right;
+			c->right = d;
+			}
+		else 
+			{
+			/* rotate c clockwise - prepare pointers for move right */
+			c->anc = c->right;	/* the root will be in the direction we are heading */
+			c->right = c->left;
+			c->left = d;  
+			}
+		/* OK - let's move!; c->anc points in the right direction
+		don't forget to move the branch lengths as well */
+		d = c;
+		c = c->anc;
+		d->length = c->length;
+		d->upDateCl = YES; 
+		d->upDateTi = YES;
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0)
+		{
+		if (RandomNumber (seed) < 0.5)
+			p = brlenNode[0];
+		else
+			p = brlenNode[1];
+		}
+	else
+		{
+		/* swap starting branches */
+		if (RandomNumber (seed) < 0.5)
+			{
+			x = brlenNode[0]->length;
+			brlenNode[0]->length = brlenNode[1]->length;
+			brlenNode[1]->length = x;
+			brlenNode[0]->upDateTi = YES;
+			}
+		/* swap ending branches */
+		if (RandomNumber (seed) < 0.5)
+			{
+			x = brlenNode[1]->length;
+			brlenNode[1]->length = brlenNode[2]->length;
+			brlenNode[2]->length = x;
+			brlenNode[2]->upDateTi = YES;
+			brlenNode[1]->upDateTi = YES;
+			p = brlenNode[2];
+			}
+		else
+			p = brlenNode[1];
+		}
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0)
+		{
+		if (RandomNumber(seed) < 0.5)
+			p = brlenNode[4];
+		else
+			p = brlenNode[5];
+		}
+	else
+		{
+		/* swap starting branches */
+		if (RandomNumber(seed) < 0.5 && (t->isRooted == NO || brlenNode[4]->anc->anc != NULL))
+			{
+			x = brlenNode[4]->length;
+			brlenNode[4]->length = brlenNode[5]->length;
+			brlenNode[5]->length = x;
+			brlenNode[4]->upDateTi = YES;			
+			}
+		/* swap ending branches */
+		if (RandomNumber(seed) < 0.5 && (t->isRooted == NO || brlenNode[6]->anc->anc != NULL))
+			{
+			x = brlenNode[5]->length;
+			brlenNode[5]->length = brlenNode[6]->length;
+			brlenNode[5]->length = x;
+			brlenNode[5]->upDateTi = YES;
+			brlenNode[6]->upDateTi = YES;
+			p = brlenNode[6];
+			}
+		else
+			p = brlenNode[5];
+		}
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_ExtTBR3 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, i;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0, brlen[3];
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to be move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* move around in root subtree */
+	for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+		{
+		if (directionUp == YES) 
+			{	/* going up tree */
+			if (a->left == NULL || a->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			b = a;
+			if (RandomNumber(seed) < 0.5)
+				a = a->left;
+			else
+				a = a->right;
+			if (u->isLocked == YES)
+				{
+				b->isLocked = YES;
+				u->isLocked = NO;
+				b->lockID = u->lockID;
+				u->lockID = 0;
+				}
+			}
+		else 
+			{	/* going down tree */
+			if (a->anc == NULL || u->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed)<0.5) 
+				{
+				directionUp = YES; /* switch direction */
+				/* find sister of a */
+				if (a->left == b) 
+					{
+					b = a;
+					a = a->right;
+					}
+				else 
+					{  
+					b = a;
+					a = a->left;
+					}
+				/* as long as we are moving upwards
+				the cond likes to update will be
+				flagged by the last pass from u to the root */
+				}	
+			else 
+				{	/* continue down */
+				b = a;
+				a = a->anc;
+				b->upDateCl = YES; 
+				if (b->isLocked == YES)
+					{
+					u->isLocked = YES;
+					b->isLocked = NO;
+					u->lockID = b->lockID;
+					b->lockID = 0;
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+		{
+		if (c->left == NULL || c->isLocked == YES)
+			break;	/* can't go further */
+		topologyHasChanged = YES;
+		if (RandomNumber(seed) < 0.5) 
+			{
+			/* rotate c anticlockwise - prepare pointers for move left */
+			c->anc = c->left;  /* the root will be in the direction we are heading */
+			c->left = c->right;
+			c->right = d;
+			}
+		else 
+			{
+			/* rotate c clockwise - prepare pointers for move right */
+			c->anc = c->right;	/* the root will be in the direction we are heading */
+			c->right = c->left;
+			c->left = d;  
+			}
+		/* OK - let's move!; c->anc points in the right direction
+		don't forget to move the branch lengths as well */
+		d = c;
+		c = c->anc;
+		d->length = c->length;
+		d->upDateCl = YES; 
+		d->upDateTi = YES;
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move then just change a random brlen
+	   otherwise shuffle brlens randomly and change
+	   one random brlen */
+	if (nCrownNodes == 0)
+		{
+		if (RandomNumber (seed) < 0.5)
+			p = brlenNode[0];
+		else
+			p = brlenNode[1];
+		}
+	else
+		{
+		/* select branches randomly */
+		for (i=0; i<3; i++)
+			brlen[i] = brlenNode[i]->length;
+		x = RandomNumber (seed);
+		if (x < 1.0 / 3.0)
+			brlenNode[0]->length = brlen[0];
+		else if (x < 2.0 / 3.0)
+			{
+			brlenNode[0]->length = brlen[1];
+			brlen[1] = brlen[0];
+			}
+		else
+			{
+			brlenNode[0]->length = brlen[2];
+			brlen[2] = brlen[0];
+			}
+		x = RandomNumber(seed);
+		if (x < 0.5)
+			{
+			brlenNode[1]->length = brlen[1];
+			brlenNode[2]->length = brlen[2];
+			}
+		else
+			{
+			brlenNode[1]->length = brlen[2];
+			brlenNode[2]->length = brlen[1];
+			}
+		x = RandomNumber(seed);
+		if (x < 1.0 / 3.0)
+			p = brlenNode[0];
+		else if (x < 2.0 / 3.0)
+			p = brlenNode[1];
+		else
+			p = brlenNode[2];
+		brlenNode[0]->upDateTi = YES;
+		brlenNode[1]->upDateTi = YES;
+		brlenNode[2]->upDateTi = YES;
+		brlenNode[0]->anc->upDateCl = YES;
+		brlenNode[1]->anc->upDateCl = YES;
+		brlenNode[2]->anc->upDateCl = YES;
+		}
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0)
+		{
+		if (RandomNumber(seed) < 0.5)
+			p = brlenNode[4];
+		else
+			p = brlenNode[5];
+		}
+	else
+		{
+		/* select branches randomly */
+		for (i=0; i<3; i++)
+			brlen[i] = brlenNode[i+4]->length;
+		x = RandomNumber (seed);
+		if (x < 1.0 / 3.0)
+			brlenNode[4]->length = brlen[0];
+		else if (x < 2.0 / 3.0)
+			{
+			brlenNode[4]->length = brlen[1];
+			brlen[1] = brlen[0];
+			}
+		else
+			{
+			brlenNode[4]->length = brlen[2];
+			brlen[2] = brlen[0];
+			}
+		x = RandomNumber(seed);
+		if (x < 0.5)
+			{
+			brlenNode[5]->length = brlen[1];
+			brlenNode[6]->length = brlen[2];
+			}
+		else
+			{
+			brlenNode[5]->length = brlen[2];
+			brlenNode[6]->length = brlen[1];
+			}
+		x = RandomNumber(seed);
+		if (x < 1.0 / 3.0)
+			p = brlenNode[4];
+		else if (x < 2.0 / 3.0)
+			p = brlenNode[5];
+		else
+			p = brlenNode[6];
+		brlenNode[4]->upDateTi = YES;
+		brlenNode[5]->upDateTi = YES;
+		brlenNode[6]->upDateTi = YES;
+		brlenNode[4]->anc->upDateCl = YES;
+		brlenNode[5]->anc->upDateCl = YES;
+		brlenNode[6]->anc->upDateCl = YES;
+		}
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */ 
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+	
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_ExtTBR4 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, i, mark[7], j, numNodes;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0, brlen[7];
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7], *node[7];
+	Tree		*t;
+	ModelParams *mp;
+
+	memset(brlenNode, 0, sizeof(TreeNode *)*7);
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_ExtTBR)
+	printf ("Before:\n");
+	ShowNodes (t->r, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (RandomNumber(seed) < 0.5)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to be move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* adjust proposal ratio for backward move in root subtree
+	   if starting from interior, unconstrained branch
+	   double test needed to capture the case of no move */
+	if (directionUp == NO)
+		{
+		if (b->left != NULL && b->isLocked == NO &&
+			a->anc  != NULL && u->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+	else
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO)
+			(*lnProposalRatio) += log(1.0 - extensionProb);
+		}
+
+	/* adjust proposal ratio for backward move in crown subtree
+	   if starting from interior, unconstrained branch
+	   double test is needed to capture the case of no move */
+	if (c->left != NULL && c->isLocked == NO && 
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) += log(1.0 - extensionProb);
+
+	/* move around in root subtree */
+	for (nRootNodes=0; RandomNumber(seed)<extensionProb; nRootNodes++) 
+		{
+		if (directionUp == YES) 
+			{	/* going up tree */
+			if (a->left == NULL || a->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			b = a;
+			if (RandomNumber(seed) < 0.5)
+				a = a->left;
+			else
+				a = a->right;
+			if (u->isLocked == YES)
+				{
+				b->isLocked = YES;
+				u->isLocked = NO;
+				b->lockID = u->lockID;
+				u->lockID = 0;
+				}
+			}
+		else 
+			{	/* going down tree */
+			if (a->anc == NULL || u->isLocked == YES)
+				break;		/* can't go further */
+			topologyHasChanged = YES;
+			if (RandomNumber(seed)<0.5) 
+				{
+				directionUp = YES; /* switch direction */
+				/* find sister of a */
+				if (a->left == b) 
+					{
+					b = a;
+					a = a->right;
+					}
+				else 
+					{  
+					b = a;
+					a = a->left;
+					}
+				/* as long as we are moving upwards
+				the cond likes to update will be
+				flagged by the last pass from u to the root */
+				}	
+			else 
+				{	/* continue down */
+				b = a;
+				a = a->anc;
+				b->upDateCl = YES; 
+				if (b->isLocked == YES)
+					{
+					u->isLocked = YES;
+					b->isLocked = NO;
+					u->lockID = b->lockID;
+					b->lockID = 0;
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   test of both ends makes sure that no adjustment is made if no move was made */
+	if (directionUp == YES) 
+		{
+		if (a->left != NULL && a->isLocked == NO &&
+			b->anc  != NULL && b->isLocked == NO) 
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+	else 
+		{
+		if (a->anc  != NULL && u->isLocked == NO &&
+			b->left != NULL && b->isLocked == NO)
+			(*lnProposalRatio) -= log(1.0 - extensionProb);
+		}
+
+	/* move around in crown subtree */
+	for (nCrownNodes=0; RandomNumber(seed)<extensionProb; nCrownNodes++) 
+		{
+		if (c->left == NULL || c->isLocked == YES)
+			break;	/* can't go further */
+		topologyHasChanged = YES;
+		if (RandomNumber(seed) < 0.5) 
+			{
+			/* rotate c anticlockwise - prepare pointers for move left */
+			c->anc = c->left;  /* the root will be in the direction we are heading */
+			c->left = c->right;
+			c->right = d;
+			}
+		else 
+			{
+			/* rotate c clockwise - prepare pointers for move right */
+			c->anc = c->right;	/* the root will be in the direction we are heading */
+			c->right = c->left;
+			c->left = d;  
+			}
+		/* OK - let's move!; c->anc points in the right direction
+		don't forget to move the branch lengths as well */
+		d = c;
+		c = c->anc;
+		d->length = c->length;
+		d->upDateCl = YES; 
+		d->upDateTi = YES;
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* adjust proposal ratio for forward move if stop branch is interior & unconstrained
+	   double test makes sure that no adjustment is made if no move was made */
+	if (c->left != NULL && c->isLocked == NO &&
+		d->left != NULL && d->isLocked == NO)
+		(*lnProposalRatio) -= log(1.0 - extensionProb);
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first collect branches and branch lengths */
+	node[0] = brlenNode[0];
+	node[1] = brlenNode[1];
+	node[2] = brlenNode[3];
+	
+	numNodes = 3;
+	if (t->isRooted == NO || brlenNode[4]->anc->anc != NULL)
+		node[numNodes++] = brlenNode[4];
+	if (t->isRooted == NO || brlenNode[5]->anc->anc != NULL)
+		node[numNodes++] = brlenNode[5];
+
+	if (nCrownNodes > 0)
+		node[numNodes++] = brlenNode[2];
+
+	if (nRootNodes > 0 && (t->isRooted == NO || brlenNode[6]->anc->anc != NULL))
+		node[numNodes++] = brlenNode[6];
+	
+	for (i=0; i<numNodes; i++)
+		{
+		brlen[i] = node[i]->length;
+		}
+
+	/* shuffle all lengths */
+	for (i=0; i<numNodes; i++)
+		{
+		j = i + (int) (RandomNumber (seed) * (numNodes - i));
+		x = brlen[j];
+		brlen[j] = brlen[i];
+		brlen[i] = x;
+		}
+
+	/*	randomly modify some of them */
+	for (i=0; i<numNodes; i++)
+		mark[i] = 0;
+
+	for (i=0; i<3; i++)
+		{
+		do {
+			j = (int) (RandomNumber (seed) * numNodes);
+		} while (mark[j] == 1);
+
+		mark[j] = 1;
+
+		m = brlen[j];
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		brlen[j] = x;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);
+		}
+		
+	/* put branch lengths back */
+	for (i=0; i<numNodes; i++)
+		{
+		node[i]->length = brlen[i];
+		node[i]->upDateTi = YES;
+		node[i]->upDateCl = YES;
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+	
+#	if defined (DEBUG_FTBR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
 #endif
 
 	return (NO_ERROR);
@@ -17263,7 +21398,11 @@ int Move_Local (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, M
 	/* get tree */
 	t = GetTree (param, chain, state[chain]);
 #if defined DEBUG_CONSTRAINTS
-	CheckConstraints (t);
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to LOCAL\n");
+		getchar();
+		}
 #endif
 
 	/* get model params */
@@ -17384,7 +21523,7 @@ int Move_Local (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, M
 		/* find reinsertion point */
 		if (v->isLocked == YES)
 			{
-			newY = RandomNumber(seed) * newM - newX;
+			newY = RandomNumber(seed) * (newM - newX) + newX;
 			}
 		else
 			{
@@ -17526,7 +21665,11 @@ int Move_Local (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, M
 #	endif
 
 #if defined DEBUG_CONSTRAINTS
-	CheckConstraints(t);
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in output tree of LOCAL\n");
+		getchar();
+		}
 #endif
 
 	return (NO_ERROR);
@@ -17551,19 +21694,22 @@ int Move_Local (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, M
 |      Programmed by JH 2002-07-07
 |	   Modified by FR 2004-05-22 to handle locked and dated
 |			trees
+|      Modified by FR 2005-11-09 to take care of erroneous
+|           Hastings ratio. The fix results in a move that
+|           does not change tree height.
 |
 ----------------------------------------------------------------*/
 int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
 
 {
 	
-	int		topologyHasChanged, vIsRoot, aSister, bSister, cSister;
-	MrBFlt		x, y, tuning, minV, h1, h2, h3, h[3], hPrime[3], tempD, ran, distUv, distCv,
-			sR=0.0, eR=0.0, sF=0.0, oldLnPrior, newLnPrior, theta=0.0, growth=0.0;
-	TreeNode	*u, *v, *w=NULL, *a, *b, *c, *deepestChild, *p;
-	Tree		*t;
-	ModelParams	 *mp;
-	ModelInfo	*m;
+	int				topologyHasChanged, vIsRoot, aSister, bSister, cSister;
+	MrBFlt			x, y, tuning, minV, maxV, h1, h2, h3, h[3], tempD, ran, distUv, distCv,
+					sR=0.0, eR=0.0, sF=0.0, oldLnPrior, newLnPrior, theta=0.0, growth=0.0;
+	TreeNode		*u, *v, *w=NULL, *a, *b, *c, *deepestChild, *p;
+	Tree			*t;
+	ModelParams		*mp;
+	ModelInfo		*m;
 
 	/* tuning parameter ("lambda" in Larget and Simon, 1999) */
 	tuning = mvp[0];
@@ -17576,6 +21722,9 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 			
 	/* min brlen */
 	minV = BRLENS_MIN;
+
+	/* max brlen */
+	maxV = BRLENS_MAX;
 
 #if defined (DEBUG_LOCAL)
 	/* check branch lengths and node depths */
@@ -17593,14 +21742,13 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 #endif
 
 	/* calculate prior ratio (part 1/2) */
+	/* tree height is not changed by this move (in contrast to the original version of the move
+	   in Larget and Simon, 1999) so tree height can be ignored when calculating the prior */
 	if (param->subParams[0]->paramId == BRLENS_CLOCK_UNI ||
 		param->subParams[0]->paramId == BRLENS_CCLOCK_UNI)
 		{
 		/* uniformly distributed branch lengths */
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			oldLnPrior = log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			oldLnPrior = mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
+		oldLnPrior = 0.0;
 		}
 	else if (param->subParams[0]->paramId == BRLENS_CLOCK_COAL ||
 			 param->subParams[0]->paramId == BRLENS_CCLOCK_COAL)
@@ -17630,10 +21778,6 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
 			return (ERROR);
 			}
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			oldLnPrior += log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			oldLnPrior += mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
 		}
 
 	topologyHasChanged = NO;
@@ -17696,9 +21840,6 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 		h[2] = h[1];
 		h[1] = tempD;
 		}
-	hPrime[0] = h[0];
-	hPrime[1] = h[1];
-	hPrime[2] = h[2];
 		
 	/* Find the child node (a, b, or c) that is closest to the root (i.e., has smallest h_i; i=1,2,3). This
 	   part deals with the possibility that some of the nodes are at the same nodeDepth and randomly assigns
@@ -17788,29 +21929,12 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 			x = v->length + u->length;
 			if (x > h[0])
 				x = h[0];
-			do {
-				y = RandomNumber(seed) * x;
-			} while (y < minV || (x - y) < minV);
+			y = RandomNumber(seed) * x;
 			}
 		else
 			{
-			/* the upper limit of v's height is determined either by u-length + v->length or by c (h[0]) */
-			if (u->length > c->length)
-				{
-				do {
-					x = h[0] * exp(tuning * (RandomNumber(seed) - 0.5));
-				} while (x < minV);
-				v->nodeDepth = c->nodeDepth + x;
-				(*lnProposalRatio) = log(x / h[0]);
-				}
-			else
-				{
-				do {
-					x = u->length * exp(tuning * (RandomNumber(seed) - 0.5));
-				} while (x < minV);
-				v->nodeDepth = u->nodeDepth + x;
-				(*lnProposalRatio) = log(x / u->length);
-				}
+			/* v is root: we leave tree height unchanged so we cannot change anything */
+			x = u->length;
 			y = 0.0;
 			}
 		}
@@ -17825,22 +21949,16 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 			{
 			if (h1 > h2)
 				{
-				do {
-					x = y + RandomNumber(seed) * (h2 - y);
-				} while ((h2 - x) < minV || (x - y) < minV);
+				x = y + RandomNumber(seed) * (h2 - y);
 				}
 			else
 				{
-				do {
-					x = y + RandomNumber(seed) * (h1 - y);
-				} while ((h1 - x) < minV || (x - y) < minV);
+				x = y + RandomNumber(seed) * (h1 - y);
 				}
 			}
 		else
 			{
-			do {
-				x = y + RandomNumber(seed) * (h[1] - y);
-			} while ((h[1] - x) < minV || (x - y) < minV);
+			x = y + RandomNumber(seed) * (h[1] - y);
 			}
 		}
 	/* if we reach the statements down here, neither u nor v is dated */
@@ -17848,41 +21966,29 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 		{
 		if (h1 > h2)
 			{
-			do {
-				y = RandomNumber(seed) * h[0];
-				x = y + RandomNumber(seed) * (h2 - y);
-			} while (y < minV || (x - y) < minV || (h2 - x) < minV);
+			y = RandomNumber(seed) * h[0];
+			x = y + RandomNumber(seed) * (h2 - y);
 			}
 		else
 			{
-			do {
-				y = RandomNumber(seed) * h[0];
-				x = y + RandomNumber(seed) * (h1 - y);
-			} while (y < minV || (x - y) < minV || (h1 - x) < minV);
+			y = RandomNumber(seed) * h[0];
+			x = y + RandomNumber(seed) * (h1 - y);
 			}
 		}
 	else if (vIsRoot == NO)
 		{
 		/* this is the standard variant for nonroot v */
-		do {
-			x = RandomNumber(seed) * h[1];
-			y = RandomNumber(seed) * h[0];
-		} while (y < minV || x < minV || fabs(x - y) < minV || (h[0] - y) < minV || (h[1] - x) < minV);
+		x = RandomNumber(seed) * h[1];
+		y = RandomNumber(seed) * h[0];
 		}
 	else
 		{
 		/* this is the standard variant when v is the root */
-		do {
-			hPrime[0] = h[0] * exp(tuning * (RandomNumber(seed) - 0.5));
-		} while (hPrime[0] < minV);
-		hPrime[1] = h[1] + hPrime[0] - h[0];
-		hPrime[2] = h[2] + hPrime[0] - h[0];
-		v->nodeDepth = deepestChild->nodeDepth + hPrime[0]; /* adjust depth of the root node, if v is the root */
+		/* note that the change in tree height described in the Larget and Simon paper is not
+		   performed here, to simplify the calculation of the Hastings ratio */
+		/* this means that tree height must be changed by a separate proposal */
 		y = 0.0;
-		do {
-			x = RandomNumber(seed) * hPrime[1];
-		} while (x < minV || (hPrime[1] - x) < minV);
-		(*lnProposalRatio) += log(hPrime[0] / h[0]);
+		x = RandomNumber(seed) * h[1];
 		}	
 		
 	/* decide which topology we will construct (cSister is what we started with) */
@@ -17890,7 +21996,7 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 	/* if u is locked then we cannot change topology */
 	if (u->isLocked == YES)
 		cSister = YES;
-	else if (MaximumValue (x, y) < (hPrime[0] - minV))
+	else if (MaximumValue (x, y) < h[0])
 		{
 		ran = RandomNumber(seed);
 		if (ran < 0.33333333)
@@ -17964,20 +22070,37 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 		topologyHasChanged = YES;
 		}
 
-#if		0		/* check that the local produces good branchlengths */
-	if (a->length < 0.0 || b->length < 0.0 || c->length < 0.0 || u->length < 0.0 || v->length < 0.0) {
-		printf ("Error\n");
-		getchar();
-	}
-#endif
+	/* check that all branch lengths are good */
+	if (a->length < minV || b->length < minV || c->length < minV || u->length < minV || v->length < minV)
+		{
+		abortMove = YES;
+		return (NO_ERROR);
+		}
+	if (a->length > maxV || b->length > maxV || c->length > maxV || u->length > maxV || v->length > maxV)
+		{
+		abortMove = YES;
+		return (NO_ERROR);
+		}
 
 	/* calculate the proposal ratio due to asymmetric topology changes */
 	if (u->isLocked == NO)
 		{
-		if (distUv > distCv && MaximumValue (x, y) < hPrime[0])
-			(*lnProposalRatio) += log(3.0);
-		else if (distUv < distCv && MaximumValue (x, y) > hPrime[0])
-			(*lnProposalRatio) += log(1.0 / 3.0);
+		if (v->isDated == YES || vIsRoot == YES)
+			{
+			if (distUv > distCv && MaximumValue (x, y) < h[0])
+				(*lnProposalRatio) += log(3.0);
+			else if (distUv < distCv && MaximumValue (x, y) > h[0])
+				(*lnProposalRatio) += log(1.0 / 3.0);
+			}
+		else
+			{
+			/* note that Larget and Simon did not have the correct Hastings ratio
+			   for this case */
+			if (distUv > distCv && MaximumValue (x, y) < h[0])
+				(*lnProposalRatio) += log(3.0 / 2.0);
+			else if (distUv < distCv && MaximumValue (x, y) > h[0])
+				(*lnProposalRatio) += log(2.0 / 3.0);
+			}
 		}
 
 	/* set update of transition probs */
@@ -18002,11 +22125,7 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 		param->subParams[0]->paramId == BRLENS_CCLOCK_UNI)
 		{
 		/* uniformly distributed branch lengths */
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			newLnPrior = log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			newLnPrior = mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
-		(*lnPriorRatio) = newLnPrior - oldLnPrior;
+		(*lnPriorRatio) = 0.0;
 		}
 	else if (param->subParams[0]->paramId == BRLENS_CLOCK_COAL ||
 			 param->subParams[0]->paramId == BRLENS_CCLOCK_COAL)
@@ -18027,10 +22146,6 @@ int Move_LocalClock (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
 			return (ERROR);
 			}
-		if (!strcmp(mp->treeHeightPr, "Exponential"))
-			newLnPrior += log(mp->treeHeightExp) - mp->treeHeightExp * t->root->left->nodeDepth;
-		else
-			newLnPrior += mp->treeHeightGamma[1] * log(mp->treeHeightGamma[0]) - LnGamma(mp->treeHeightGamma[1]) + (mp->treeHeightGamma[1] - 1.0) * log(t->root->left->nodeDepth) - mp->treeHeightGamma[0] * t->root->left->nodeDepth;
 		(*lnPriorRatio) = newLnPrior - oldLnPrior;
 		}
 		
@@ -18428,6 +22543,220 @@ int Move_NodeSlider (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, 
 	/* update prior if exponential prior on branch lengths */
 	if (param->paramId == BRLENS_EXP)
 		(*lnPriorRatio) = brlensPrExp * (oldM - newM);
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+/*-----------------------------------------------------------------------------------
+|
+|	Move_NodeSliderClock: move the position of one node in clock tree
+|
+-------------------------------------------------------------------------------------*/
+
+int Move_NodeSliderClock (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+	MrBFlt			window, minV, minDepth, maxDepth, oldDepth, newDepth, oldLnPrior, newLnPrior, theta=0.0, growth=0.0, sR=0.0, eR=0.0, sF=0.0;
+	TreeNode		*p, *q;
+	ModelParams		*mp;
+	ModelInfo		*m;
+	Tree			*t;
+
+	window = mvp[0]; /* window size */
+
+	mp = &modelParams[param->relParts[0]];
+
+	/* min brlen */
+	minV = BRLENS_MIN;
+
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+
+	/* calculate prior ratio (part 1/2) */
+	if (param->paramId == BRLENS_CLOCK_UNI ||
+		param->paramId == BRLENS_CCLOCK_UNI)
+		{
+		/* uniformly distributed branch lengths */
+		(*lnPriorRatio) = 0.0;
+		}
+	else if (param->paramId == BRLENS_CLOCK_COAL ||
+			 param->paramId == BRLENS_CCLOCK_COAL)
+		{
+		/* coalescence prior */
+		m = &modelSettings[param->relParts[0]];
+		theta = *(GetParamVals (m->theta, chain, state[chain]));
+		if (!strcmp(mp->growthPr, "Fixed"))
+			growth = mp->growthFix;
+		else
+			growth = *(GetParamVals (m->growthRate, chain, state[chain]));
+		if (LnCoalescencePriorPr (t, &oldLnPrior, theta, growth) == ERROR)
+			{
+			MrBayesPrint ("%s   Problem calculating prior for coalescence process\n", spacer);
+			return (ERROR);
+			}
+		}
+	else
+		{
+		/* birth-death prior */
+		m = &modelSettings[param->relParts[0]];
+		sR = *(GetParamVals (m->speciationRates, chain, state[chain]));
+		eR = *(GetParamVals (m->extinctionRates, chain, state[chain]));
+		sF = mp->sampleProb;
+		if (LnBirthDeathPriorPr (t, &oldLnPrior, sR, eR, sF) == ERROR)
+			{
+			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
+			return (ERROR);
+			}
+		}
+
+	/* pick a node that can be changed in position */
+	do
+		{
+		p = t->allDownPass[(int)(RandomNumber(seed)*t->nNodes - 1)];
+		} while ((p->left == NULL && p->isDated == NO) || (p->isDated == YES && p->calibration->prior == fixed));
+
+#if defined (DEBUG_CSLIDER)
+	printf ("Before node slider (clock):\n");
+	printf ("Picked branch with index %d and depth %f\n", p->index, p->nodeDepth);
+	if (p->anc->anc == NULL)
+		printf ("Old clock rate: %f\n", t->clockRate);
+	ShowNodes (t->root, 0, t->isRooted);
+	getchar();
+#endif
+
+	/* determine lower and upper bound */
+	minDepth = 0.0;
+	maxDepth = TREEHEIGHT_MAX;
+	if (p->left != NULL)
+		{
+		if (p->left->nodeDepth > minDepth)
+			minDepth = p->left->nodeDepth + minV;
+		if (p->right->nodeDepth > minDepth)
+			minDepth = p->right->nodeDepth + minV;
+		}
+	if (p->anc->anc != NULL)
+		maxDepth = p->anc->nodeDepth - minV;
+	if (p->isDated == YES)
+		{
+		if (p->calibration->prior == uniform)
+			{
+			if (p->calibration->lower < maxDepth)
+				maxDepth = p->calibration->lower * t->clockRate;
+			if (p->calibration->upper > minDepth)
+				minDepth = p->calibration->upper * t->clockRate;
+			}
+		else /* if (p->calibration->prior == Offsetexponential) */
+			{
+			if (p->calibration->offset > minDepth)
+				minDepth = p->calibration->offset * t->clockRate;
+			}
+		}
+		
+	/* pick the new node depth */
+	oldDepth = p->nodeDepth;
+	p->nodeDepth += (RandomNumber (seed) - 0.5) * window;
+	
+	/* reflect the new node depth */
+	while (p->nodeDepth < minDepth || p->nodeDepth > maxDepth)
+		{
+		if (p->nodeDepth < minDepth)
+			p->nodeDepth = 2.0 * minDepth - p->nodeDepth;
+		if (p->nodeDepth > maxDepth)
+			p->nodeDepth = 2.0 * maxDepth - p->nodeDepth;
+		}
+	newDepth = p->nodeDepth;
+
+	/* determine new branch lengths around p and set update of transition probabilities */
+	if (p->left != NULL)
+		{
+		p->left->length = p->nodeDepth - p->left->nodeDepth;
+		p->left->upDateTi = YES;
+		p->right->length = p->nodeDepth - p->right->nodeDepth;
+		p->right->upDateTi = YES;
+		}
+	if (p->anc->anc != NULL)
+		{
+		p->length = p->anc->nodeDepth - p->nodeDepth;
+		p->upDateTi = YES;
+		}
+
+	/* set flags for update of cond likes from p and down to root */
+	q = p;
+	while (q->anc != NULL)
+		{
+		q->upDateCl = YES;
+		q = q->anc;
+		}
+
+	/* calculate proposal ratio */
+	if (p->anc->anc == NULL)
+		(*lnProposalRatio) = (t->nIntNodes - 1) * log (oldDepth / newDepth); 
+	else
+		(*lnProposalRatio) = 0.0;
+
+	/* calculate prior ratio (part 2/2) */
+	if (param->paramId == BRLENS_CLOCK_UNI || param->paramId == BRLENS_CCLOCK_UNI)
+		{
+		/* uniformly distributed branch lengths */
+		(*lnPriorRatio) = 0.0;
+		}
+	else if (param->paramId == BRLENS_CLOCK_COAL || param->paramId == BRLENS_CCLOCK_COAL)
+		{
+		/* coalescence prior */
+		if (LnCoalescencePriorPr (t, &newLnPrior, theta, growth) == ERROR)
+			{
+			MrBayesPrint ("%s   Problem calculating prior for coalescence process\n", spacer);
+			return (ERROR);
+			}
+		(*lnPriorRatio) = newLnPrior - oldLnPrior;
+		}
+	else
+		{
+		/* birth-death prior */
+		if (LnBirthDeathPriorPr (t, &newLnPrior, sR, eR, sF) == ERROR)
+			{
+			MrBayesPrint ("%s   Problem calculating prior for birth-death process\n", spacer);
+			return (ERROR);
+			}
+		(*lnPriorRatio) = newLnPrior - oldLnPrior;
+		}
+
+	/* adjust for prior on tree height unless coalescence prior */
+	if (p->anc->anc == NULL)
+		{
+		if (param->paramId == BRLENS_CLOCK_COAL || param->paramId == BRLENS_CCLOCK_COAL)
+			{
+			/* tree height already accounted for */
+			}
+		else
+			{
+			if (!strcmp(mp->treeHeightPr, "Exponential"))
+				/* exponential prior on tree height */
+				(*lnPriorRatio) += mp->treeHeightExp * (oldDepth - newDepth);
+			else
+				/* gamma prior on tree height */
+				(*lnPriorRatio) += (mp->treeHeightGamma[1] - 1.0) * (log(newDepth) - log(oldDepth)) - mp->treeHeightGamma[0] * (newDepth - oldDepth);
+			}
+		}
+
+	/* adjust for prior on node date if dated */
+	if (p->isDated == YES && p->calibration->prior == offsetExponential)
+		{
+		(*lnPriorRatio) += p->calibration->lambda * ((oldDepth - newDepth) * t->clockRate);
+		}
+
+#if defined (DEBUG_CSLIDER)
+	printf ("After node slider (clock):\n");
+	printf ("Old depth: %f -- New depth: %f -- LnPriorRatio %f -- LnProposalRatio %f\n",
+		oldDepth, newDepth, (*lnPriorRatio), (*lnProposalRatio));
+	ShowNodes (t->root, 0, t->isRooted);
+	getchar();
+#endif
 
 	return (NO_ERROR);
 	
@@ -19248,7 +23577,7 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 	MrBFlt		alphaPi, warp, minV, maxV, minP, maxP, brlensExp=0.0, newM, oldM, maxLen,
 				*brlensCur, *brlensNew, *parslensCur, *parslensNew,
 				curLength, newLength, lnJacobian, lnRandomRatio, alpha[2], prob[2],
-				minLenCur, minLenNew /*, f */;
+				minLenCur, minLenNew, f;
 	TreeNode	*p=NULL;
 	Tree		*t, *subtree, *subtree1, memTree[2];
 	ModelParams *mp;
@@ -19268,11 +23597,11 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 
 	/* Set alpha Pi for Dirichlet p generator */
 	alphaPi = mvp[0];
-	alphaPi = 0.1;
+	alphaPi = 0.05;
 	
 	/* Set the parsimony warp factor */
 	warp = mvp[1];
-	warp = 0.1;
+	warp = 0.2;
 	
 	/* Set the number of terminals (nSubTerminals, column 3) in erased tree */
 	/* Erased Nodes => Leaves => Terminals => Embedded trees => Embedded histories => New trees
@@ -19281,7 +23610,8 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 				  4 => 5      => 6         => 14             => 24 = 4!            => 105 = 1*3*5*7
 				  5 => 6      => 7         => 42             => 120 = 5!           => 945 = 1*3*5*7*9
 				  etc				*/	
-	nSubTerminals = 4;
+	nSubTerminals = (int) (RandomNumber (seed) * 4) + 4;
+	nSubTerminals = 7;
 
 	/* initialize log prior and log proposal probabilities */
 	*lnPriorRatio = *lnProposalRatio = 0.0;
@@ -19310,7 +23640,7 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 	maxP = 3.0 * ((1.0 / 4.0) - ((1.0 / 4.0) * exp (-4.0 * maxV / 3.0)));
 			
 	/* allocate some memory for this move */
-	brlensCur = (MrBFlt *) malloc (8 * nSubTerminals * sizeof (MrBFlt));
+	brlensCur = (MrBFlt *) SafeMalloc (8 * nSubTerminals * sizeof (MrBFlt));
 	if (!brlensCur)
 		{
 		MrBayesPrint ("%s   ERROR: Could not allocate brlensCur\n", spacer);
@@ -19426,13 +23756,8 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 	
 	/* Find the Markov branch lengths of the new subtree */
 	/* Calculate Jacobian and prob ratio for the Dirichlet random number generator */
-	/* Note: this code does not correct for the difference between the area under the tail regions of the beta
-	   caused by different alpha and beta values being associated with different probabilities outside of
-	   the minP and maxP region. However, this effect should be negligible unless maxLen and/or alphaPi are
-	   extremely small. */
 	lnJacobian = lnRandomRatio = 0.0;
 	minLenCur = minLenNew = 0.0;
-	/*
 	for (i=0; i<subtree1->nNodes-1; i++)
 		{
 		minLenCur += parslensCur[i];
@@ -19444,9 +23769,13 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 		f = newLength / minLenNew;
 		alpha[0] = parslensNew[i] * f * alphaPi + 1.0;
 		alpha[1] = (maxLen - parslensNew[i] * f) * alphaPi + 1.0;
-		do {
-			DirichletRandomVariable (alpha, prob, 2, seed);
-		} while (prob[0] >= maxP || prob[0] <= minP);
+		DirichletRandomVariable (alpha, prob, 2, seed);
+		if (prob[0] >= maxP || prob[0] <= minP)
+			{
+			abortMove = YES;
+			return NO_ERROR;
+			}
+
 		p->length = (-3.0 / 4.0) * log (1.0 - 4.0 * prob[0] / 3.0);
 		lnJacobian += (-4.0 * brlensCur[i] / 3.0) - log (1.0 - 4.0 * prob[0] / 3.0);
 		lnRandomRatio -= log (pow (prob[0], alpha[0] - 1.0) * pow (prob[1], alpha[1] - 1.0));
@@ -19457,8 +23786,6 @@ int Move_ParsEraser1 (Param *param, int chain, long *seed, MrBFlt *lnPriorRatio,
 		prob[1] = 1.0 - prob[0];
 		lnRandomRatio += log (pow (prob[0], alpha[0] - 1.0) * pow (prob[1], alpha[1] - 1.0));
 		}
-	*/
-	alpha[0] = alpha[1] = prob[0] = prob[1] = 1.0;
 
 	/* Store the new Markov branch lengths */
 	for (i=0; i<subtree1->nNodes-1; i++)
@@ -19585,6 +23912,2498 @@ int Move_Pinvar (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, 
 	
 	return (NO_ERROR);
 
+}
+
+
+
+
+
+int Move_RanSPR1 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			i, topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot, foundFirst;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7], *q;
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_RanSPR)
+	printf ("Before:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+
+	/* select another random branch */
+	if (RandomNumber (seed) > extensionProb)
+		q = p->left;
+	else
+		{
+		do
+			{
+			q = t->allDownPass[(int)(RandomNumber(seed)*(t->nNodes - 1))];
+			} while (q == p || q->anc == p || q == p->anc || q->anc == p->anc);
+		}
+	
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* mark crown subtree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->x = 0;
+		}
+	v->x = 1;
+
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->anc->x == 1)
+			p->x = 1;
+		}
+
+	/* find the subtree */
+	if (q->x == 1)
+		moveInRoot = NO;
+	else
+		moveInRoot = YES;
+
+	/* mark the path of the move */
+	for (i=0; i<t->nNodes; i++)
+		t->allDownPass[i]->marked = NO;
+
+	if (moveInRoot == NO)
+		{
+		p = q;
+		while (p != v)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		v->marked = YES;
+		}
+	else
+		{
+		p = q;
+		while (p != NULL)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		foundFirst = NO;
+		p = v;
+		while (p != NULL)
+			{
+			if (p->marked == NO)
+				p->marked = YES;
+			else if (foundFirst == YES)
+				p->marked = NO;
+			else
+				foundFirst = YES;
+			p = p->anc;
+			}
+		}
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (v->left->marked == YES)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (u->anc->marked == NO)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; a->marked == YES; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{
+				/* going up tree */
+				if (a->left == NULL)
+					break;
+				else if (a->left->marked == NO && a->right->marked == NO)
+					break;		/* don't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (a->left->marked == YES)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{
+				/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (a->anc->marked == NO) 
+					{
+					/* try switching direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						a = a->right;
+						}
+					else 
+						{  
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					if (a->marked == NO)
+						{
+						b = a->anc;
+						b->upDateCl = YES;
+						a = a->anc->anc;
+						break;			/* go back and one node down, unsuccessful attempt */
+						}
+					else
+						{
+						b = a->anc;
+						directionUp = YES;	/* successful attempt */
+						}
+					}	
+				else 
+					{	/* continue down */					
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; c->left != NULL; nCrownNodes++) 
+			{
+			if (c->left->marked == NO && c->right->marked == NO)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (c->left->marked == YES) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_RanSPR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d q: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index, q->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_RanSPR2 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			i, topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot, foundFirst;
+	MrBFlt		m, x, y, tuning, maxV, minV, extensionProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7], *q;
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	extensionProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_RanSPR)
+	printf ("Before:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* mark crown subtree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->left == NULL)
+			p->x = 1;
+		else if (p->right != NULL)
+			p->x = p->left->x + p->right->x;
+		p->marked = NO;
+		}
+	v->marked = YES;
+
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->anc->marked == YES)
+			p->marked = YES;
+		}
+
+	/* find the subtree */
+	if (v->x <= 2)
+		moveInRoot = YES;
+	else if (t->nNodes - t->nIntNodes - v->x <= 2)
+		moveInRoot = NO;
+	else if (RandomNumber(seed) < 0.5)
+		moveInRoot = NO;
+	else
+		moveInRoot = YES;
+
+	/* find the attachment point */
+	if (RandomNumber (seed) > extensionProb)
+		{
+		q = v->left;
+		moveInRoot = NO;
+		}
+	else
+		{
+		do
+			{
+			q = t->allDownPass[(int)(RandomNumber(seed)*(t->nNodes-1))];
+			} while (q == v || q->anc == v || q == v->anc || q->anc == v->anc ||
+				(moveInRoot == NO && q->marked == NO) || (moveInRoot == YES && q->marked == YES));
+		}
+	
+	/* mark the path of the move */
+	for (i=0; i<t->nNodes; i++)
+		t->allDownPass[i]->marked = NO;
+
+	if (moveInRoot == NO)
+		{
+		p = q;
+		while (p != v)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		v->marked = YES;
+		}
+	else
+		{
+		p = q;
+		while (p != NULL)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		foundFirst = NO;
+		p = v;
+		while (p != NULL)
+			{
+			if (p->marked == NO)
+				p->marked = YES;
+			else if (foundFirst == YES)
+				p->marked = NO;
+			else
+				foundFirst = YES;
+			p = p->anc;
+			}
+		}
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (v->left->marked == YES)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (u->anc->marked == NO)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; a->marked == YES; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{
+				/* going up tree */
+				if (a->left == NULL)
+					break;
+				else if (a->left->marked == NO && a->right->marked == NO)
+					break;		/* don't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (a->left->marked == YES)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{
+				/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (a->anc->marked == NO) 
+					{
+					/* try switching direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						a = a->right;
+						}
+					else 
+						{  
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					if (a->marked == NO)
+						{
+						b = a->anc;
+						b->upDateCl = YES;
+						a = a->anc->anc;
+						break;			/* go back and one node down, unsuccessful attempt */
+						}
+					else
+						{
+						b = a->anc;
+						directionUp = YES;	/* successful attempt */
+						}
+					}	
+				else 
+					{	/* continue down */					
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; c->left != NULL; nCrownNodes++) 
+			{
+			if (c->left->marked == NO && c->right->marked == NO)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (c->left->marked == YES) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+#	if defined (DEBUG_RanSPR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d q: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index, q->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_RanSPR3 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			i, topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot, foundFirst, windowDiameter, numWindowNodes, newNumWindowNodes;
+	MrBFlt		m, x, y, tuning, maxV, minV, moveProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7], *q, *windowNode[120];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	moveProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	windowDiameter = 4;		/* window diameter in number of nodes away from the cut branch */
+							/* set it to a value between 1 and 4 (above 4 requires more space in windowNode) */
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_RanSPR)
+	printf ("Before:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* mark distance of nodes from the node v */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->x = -1;
+		}
+	
+	v->x = 0;
+	u->x = 0;
+
+	/* downpass */
+	for (p=u; p->anc!= NULL; p=p->anc)
+		{
+		p->anc->x = p->x+1;
+		}
+		
+	/* uppass */
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->x < 0)
+			p->x = p->anc->x + 1;
+		}
+		
+	/* now collect nodes */
+	for (i=numWindowNodes=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->x >= 2 && p->x <= windowDiameter+1)
+			windowNode[numWindowNodes++] = p;
+		}
+	if (numWindowNodes > 120)
+		{
+		printf ("error\n");
+		ShowNodes (t->root, 0, t->isRooted);
+		for (i=0; i<t->nNodes; i++)
+			printf ("%d\t%d\n", t->allDownPass[i]->index, t->allDownPass[i]->x);
+		getchar();
+		}
+
+	/* find the attachment point */
+	if (RandomNumber (seed) > moveProb)
+		{
+		q = v->left;
+		moveInRoot = NO;
+		}
+	else
+		{
+		q = windowNode[(int)(RandomNumber(seed)*numWindowNodes)];
+		}
+	
+	/* mark crown subtree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->marked = NO;
+		}
+	v->marked = YES;
+
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->anc->marked == YES)
+			p->marked = YES;
+		}
+
+	/* find the subtree */
+	if (q->marked == YES)
+		moveInRoot = NO;
+	else
+		moveInRoot = YES;
+
+	/* mark the path of the move */
+	for (i=0; i<t->nNodes; i++)
+		t->allDownPass[i]->marked = NO;
+
+	if (moveInRoot == NO)
+		{
+		p = q;
+		while (p != v)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		v->marked = YES;
+		}
+	else
+		{
+		p = q;
+		while (p != NULL)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		foundFirst = NO;
+		p = v;
+		while (p != NULL)
+			{
+			if (p->marked == NO)
+				p->marked = YES;
+			else if (foundFirst == YES)
+				p->marked = NO;
+			else
+				foundFirst = YES;
+			p = p->anc;
+			}
+		}
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (v->left->marked == YES)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (u->anc->marked == NO)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; a->marked == YES; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{
+				/* going up tree */
+				if (a->left == NULL)
+					break;
+				else if (a->left->marked == NO && a->right->marked == NO)
+					break;		/* don't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (a->left->marked == YES)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{
+				/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (a->anc->marked == NO) 
+					{
+					/* try switching direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						a = a->right;
+						}
+					else 
+						{  
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					if (a->marked == NO)
+						{
+						b = a->anc;
+						b->upDateCl = YES;
+						a = a->anc->anc;
+						break;			/* go back and one node down, unsuccessful attempt */
+						}
+					else
+						{
+						b = a->anc;
+						directionUp = YES;	/* successful attempt */
+						}
+					}	
+				else 
+					{	/* continue down */					
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; c->left != NULL; nCrownNodes++) 
+			{
+			if (c->left->marked == NO && c->right->marked == NO)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (c->left->marked == YES) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+	/* calculate new number of nodes */
+	if (topologyHasChanged == YES)
+		{
+	    /* first, mark distance of nodes from the new position of node v */
+		for (i=0; i<t->nNodes; i++)
+			{
+			p = t->allDownPass[i];
+			p->x = -1;
+			}
+	
+		v->x = 0;
+		v->anc->x = 0;
+
+		/* downpass */
+		for (p=u; p->anc!= NULL; p=p->anc)
+			{
+			p->anc->x = p->x+1;
+			}
+		
+		/* uppass */
+		for (i=t->nNodes-2; i>=0; i--)
+			{
+			p = t->allDownPass[i];
+			if (p->x < 0)
+				p->x = p->anc->x + 1;
+			}
+		
+		/* now count nodes */
+		for (i=newNumWindowNodes=0; i<t->nNodes; i++)
+			{
+			p = t->allDownPass[i];
+			if (p->x >= 2 && p->x <= windowDiameter+1)
+				newNumWindowNodes++;
+			}
+
+		/* update proposal ratio */
+		(*lnProposalRatio) += log (newNumWindowNodes / numWindowNodes);
+		}
+
+#	if defined (DEBUG_RanSPR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d q: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index, q->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_RanSPR4 (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* Change branch lengths and topology (potentially) using TBR (unrooted) 
+	   with extension probability (rather than window). */
+
+	/* this move type picks a branch and two "danglies", modifies their length
+	   independently according to the method of Larget & Simon (1999: MBE); it then
+	   moves the danglies away from their original position one node at a time with
+	   a probability determined by the extensionProb parameter
+
+	   when the danglies are moved, their direction is changed
+	   this "reflection" is necessary to enable the back move
+
+	   This move type has been tested on all combinations of rooted and unrooted,
+	   constrained and unconstrained trees */
+	
+	int			i, topologyHasChanged, nCrownNodes, nRootNodes, directionLeft, directionUp, 
+				isVPriorExp, moveInRoot, foundFirst, windowDiameter, numWindowNodes, newNumWindowNodes;
+	MrBFlt		m, x, y, tuning, maxV, minV, moveProb, brlensExp=0.0;
+	TreeNode	*p, *a, *b, *c, *d, *u, *v, *brlenNode[7], *q, *windowNode[120];
+	Tree		*t;
+	ModelParams *mp;
+
+	/* these parameters should be possible to set by user */
+	moveProb = mvp[0];	/* extension probability */
+	tuning = mvp[1];        /* Larget & Simon's tuning parameter lambda */
+	windowDiameter = 4;		/* window diameter in number of nodes away from the cut branch */
+							/* set it to a value between 1 and 4 (above 4 requires more space in windowNode) */
+	/* get tree */
+	t = GetTree (param, chain, state[chain]);
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	/* get model params */
+	mp = &modelParams[param->relParts[0]];
+	
+	/* max and min brlen */
+	if (param->subParams[0]->paramId == BRLENS_UNI)
+		{
+		minV = mp->brlensUni[0] > BRLENS_MIN ? mp->brlensUni[0] : BRLENS_MIN;
+		maxV = mp->brlensUni[1];
+		isVPriorExp = NO;
+		}
+	else
+		{
+		minV = BRLENS_MIN;
+		maxV = BRLENS_MAX;
+		brlensExp = mp->brlensExp;
+		isVPriorExp = YES;
+		}
+
+	topologyHasChanged = NO;
+
+#	if defined (DEBUG_RanSPR)
+	printf ("Before:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+#	endif
+	
+	/* pick an internal branch */
+	do
+		{
+		p = t->intDownPass[(int)(RandomNumber(seed)*t->nIntNodes)];
+		} while (p->anc->anc == NULL);
+		
+	/* set up pointers for nodes around the picked branch */
+	/* cut the tree into crown, root and attachment part */
+	/* change the relevant lengths in the attachment part */
+	/* the lengths of a and v are automatically contained in the */
+	/* "attachment" part but the length of c has to be stored in x */
+	v = p;
+	u = p->anc;
+
+	/* store brlen node */
+	brlenNode[3] = v;
+
+	/* mark distance of nodes from the node v */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->x = -1;
+		}
+	
+	v->x = 0;
+	u->x = 0;
+
+	/* downpass */
+	for (p=u; p->anc!= NULL; p=p->anc)
+		{
+		p->anc->x = p->x+1;
+		}
+		
+	/* uppass */
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->x < 0)
+			p->x = p->anc->x + 1;
+		}
+		
+	/* mark crown part of tree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->marked = NO;
+		}
+	v->marked = YES;
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->anc->marked == YES)
+			p->marked = YES;
+		}
+
+	/* count number of root and crownnodes */
+	for (i=nRootNodes=nCrownNodes=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->x >= 2 && p->x <= windowDiameter+1)
+			{
+			if (p->marked == YES)
+				nCrownNodes++;
+			else
+				nRootNodes++;
+			}
+		}
+
+	/* choose subtree */
+	if (nCrownNodes == 0)
+		moveInRoot = YES;
+	else if (nRootNodes == 0)
+		moveInRoot = NO;
+	else if (RandomNumber (seed) < 0.5)
+		moveInRoot = YES;
+	else
+		moveInRoot = NO;
+	nRootNodes = nCrownNodes = 0;
+
+	/* now collect nodes */
+	for (i=numWindowNodes=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->x >= 2 && p->x <= windowDiameter+1 &&
+			((moveInRoot == YES && p->marked == NO) || (moveInRoot == NO && p->marked == YES)))
+			windowNode[numWindowNodes++] = p;
+		}
+	if (numWindowNodes > 120)
+		{
+		printf ("error\n");
+		ShowNodes (t->root, 0, t->isRooted);
+		for (i=0; i<t->nNodes; i++)
+			printf ("%d\t%d\n", t->allDownPass[i]->index, t->allDownPass[i]->x);
+		getchar();
+		}
+
+	/* find the attachment point */
+	if (RandomNumber (seed) > moveProb)
+		{
+		q = v->left;
+		moveInRoot = NO;
+		}
+	else
+		{
+		q = windowNode[(int)(RandomNumber(seed)*numWindowNodes)];
+		}
+	
+	/* mark crown subtree */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->marked = NO;
+		}
+	v->marked = YES;
+
+	for (i=t->nNodes-2; i>=0; i--)
+		{
+		p = t->allDownPass[i];
+		if (p->anc->marked == YES)
+			p->marked = YES;
+		}
+
+	/* mark the path of the move */
+	for (i=0; i<t->nNodes; i++)
+		t->allDownPass[i]->marked = NO;
+
+	if (moveInRoot == NO)
+		{
+		p = q;
+		while (p != v)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		v->marked = YES;
+		}
+	else
+		{
+		p = q;
+		while (p != NULL)
+			{
+			p->marked = YES;
+			p = p->anc;
+			}
+		foundFirst = NO;
+		p = v;
+		while (p != NULL)
+			{
+			if (p->marked == NO)
+				p->marked = YES;
+			else if (foundFirst == YES)
+				p->marked = NO;
+			else
+				foundFirst = YES;
+			p = p->anc;
+			}
+		}
+
+	/* set up pointers for crown part */
+	/* this also determines direction of move in crown part */
+	if (v->left->marked == YES)
+		{
+		c = v->left;
+		d = v->right;
+		directionLeft = YES;
+		}
+	else
+		{
+		c = v->right;
+		d = v->left;
+		directionLeft = NO;
+		}
+
+	/* store brlen nodes and brlen to move */
+	brlenNode[0] = d;
+	brlenNode[1] = c;
+	x = c->length;
+
+	/* cut and reconnect crown part */
+	c->anc = d;
+	d->anc = c;
+	
+	/* mark nodes in root part */
+	/* also determines direction of move in root part */
+	if (u->anc->marked == NO)
+		{
+		if (u->left == v)
+			a = u->right;
+		else
+			a = u->left;
+		b = u->anc;
+		directionUp = YES;
+		}
+	else
+		{
+		if (u->left == v)
+			b = u->right;
+		else
+			b = u->left;
+		a = u->anc;
+		directionUp = NO;
+		}
+
+	/* store brlen nodes */
+	if (directionUp == YES)
+		{
+		brlenNode[4] = u;
+		brlenNode[5] = a;
+		}
+	else
+		{
+		brlenNode[4] = b;
+		brlenNode[5] = u;
+		}
+
+	/* cut root part*/
+	/* store branch to move in u->length */
+	if (directionUp == NO) 
+		{
+		b->anc = a;
+		if (a->left == u)
+			a->left = b;
+		else
+			a->right = b;
+		}
+	else 
+		{
+		a->anc = b;
+		if (b->left == u)
+			b->left = a;
+		else
+			b->right = a;
+		y = a->length;
+		a->length = u->length;
+		u->length = y;
+		a->upDateTi = YES;
+		u->upDateTi = YES;
+		}
+
+	/* move around in root subtree */
+	nRootNodes = 0;
+	if (moveInRoot == YES)
+		{
+		for (nRootNodes=0; a->marked == YES; nRootNodes++) 
+			{
+			if (directionUp == YES) 
+				{
+				/* going up tree */
+				if (a->left == NULL)
+					break;
+				else if (a->left->marked == NO && a->right->marked == NO)
+					break;		/* don't go further */
+				topologyHasChanged = YES;
+				b = a;
+				if (a->left->marked == YES)
+					a = a->left;
+				else
+					a = a->right;
+				if (u->isLocked == YES)
+					{
+					b->isLocked = YES;
+					u->isLocked = NO;
+					b->lockID = u->lockID;
+					u->lockID = 0;
+					}
+				}
+			else 
+				{
+				/* going down tree */
+				if (a->anc == NULL || u->isLocked == YES)
+					break;		/* can't go further */
+				topologyHasChanged = YES;
+				if (a->anc->marked == NO) 
+					{
+					/* try switching direction */
+					/* find sister of a */
+					if (a->left == b) 
+						{
+						a = a->right;
+						}
+					else 
+						{  
+						a = a->left;
+						}
+					/* as long as we are moving upwards
+					the cond likes to update will be
+					flagged by the last pass from u to the root */
+					if (a->marked == NO)
+						{
+						b = a->anc;
+						b->upDateCl = YES;
+						a = a->anc->anc;
+						break;			/* go back and one node down, unsuccessful attempt */
+						}
+					else
+						{
+						b = a->anc;
+						directionUp = YES;	/* successful attempt */
+						}
+					}	
+				else 
+					{	/* continue down */					
+					b = a;
+					a = a->anc;
+					b->upDateCl = YES; 
+					if (b->isLocked == YES)
+						{
+						u->isLocked = YES;
+						b->isLocked = NO;
+						u->lockID = b->lockID;
+						b->lockID = 0;
+						}
+					}
+				}
+			}
+		}
+
+	/* store brlen nodes */
+	if (nRootNodes > 0)
+		{
+		if (directionUp == YES)
+			{
+			brlenNode[6] = a;
+			brlenNode[5] = u;
+			}
+		else
+			{
+			brlenNode[6] = u;
+			brlenNode[5] = b;
+			}
+		}
+
+	/* move around in crown subtree */
+	nCrownNodes = 0;
+	if (moveInRoot == NO)		
+		{
+		for (nCrownNodes=0; c->left != NULL; nCrownNodes++) 
+			{
+			if (c->left->marked == NO && c->right->marked == NO)
+				break;	/* can't go further */
+			topologyHasChanged = YES;
+			if (c->left->marked == YES) 
+				{
+				/* rotate c anticlockwise - prepare pointers for move left */
+				c->anc = c->left;  /* the root will be in the direction we are heading */
+				c->left = c->right;
+				c->right = d;
+				}
+			else 
+				{
+				/* rotate c clockwise - prepare pointers for move right */
+				c->anc = c->right;	/* the root will be in the direction we are heading */
+				c->right = c->left;
+				c->left = d;  
+				}
+			/* OK - let's move!; c->anc points in the right direction
+			don't forget to move the branch lengths as well */
+			d = c;
+			c = c->anc;
+			d->length = c->length;
+			d->upDateCl = YES; 
+			d->upDateTi = YES;
+			}
+		}
+
+	/* store brlen nodes */
+	if (nCrownNodes > 0)
+		{
+		brlenNode[2] = c;
+		brlenNode[1] = d;
+		}
+
+	/* combine the subtrees */
+	c->anc = v;
+	d->anc = v;
+	if (directionLeft == YES) 
+		{
+		v->left = c;
+		v->right = d;
+		}
+	else 
+		{
+		v->left = d;
+		v->right = c;
+		}
+
+	/* the dangling branch is inserted in reverted position
+	   such that the back move will be possible
+	   if we have moved around in crown subtree
+	   otherwise it is left in its original position */
+	if (nCrownNodes > 0)
+		{
+		d->length = x;
+		d->upDateTi = YES;
+		}
+	else
+		{
+		c->length = x;
+		}	
+
+	if (directionUp == YES) 
+		{
+		u->anc = b;
+		if (u->left == v)
+			u->right = a;
+		else 
+			u->left = a;
+		a->anc = u;
+		if (b->left == a)
+			b->left = u;
+		else
+			b->right = u;
+		/* the dangling branch is contained in u->length
+		   and will automatically be inserted in the right position
+		   to enable the back move regardless of whether it was
+		   initially directed upwards or downwards
+		   BUT if we haven't moved in root subtree, it is advantageous (necessary
+		   for rooted trees) to avoid switching branches, which occurs otherwise
+		   if directionUp == YES */
+		if (nRootNodes == 0) 
+			{
+			x = u->length;
+			u->length = a->length;
+			a->length = x;
+			a->upDateTi = NO;
+			u->upDateTi = NO;
+			}
+		}
+	else 
+		{
+		u->anc = a;
+		if (u->left == v)
+			u->right = b;
+		else 
+			u->left = b;
+		b->anc = u;
+		if (a->left == b)
+			a->left = u;
+		else
+			a->right = u;
+		/* the modified branch contained in u->length will have
+		   to be moved to b->length to enable back move
+		   BUT if we haven't moved, it is better to keep it in place
+		   (necessary for rooted trees) */
+		if (nRootNodes > 0) 
+			{
+			x = u->length;
+			u->length = b->length;
+			b->length = x;
+			b->upDateTi = YES;
+			u->upDateTi = YES;
+			}
+		}
+	
+	/* modify branch lengths */
+	/* first modify length of middle branch */
+	m = brlenNode[3]->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));		/* save the modified dangling branch for later use */
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	brlenNode[3]->length = x;
+	brlenNode[3]->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);
+
+	/* if no move in crown, then select randomly, otherwise always the moved branch */
+	if (nCrownNodes == 0 && RandomNumber (seed) < 0.5)
+		p = brlenNode[0];
+	else
+		p = brlenNode[1];
+
+	/* modify branch length */
+	m = p->length;
+	x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+	while (x < minV || x > maxV)
+		{
+		if (x < minV)
+			x = minV * minV / x;
+		else if (x > maxV)
+			x = maxV * maxV / x;
+		}
+	p->length = x;
+	p->upDateTi = YES;
+
+	/* update proposal and prior ratio based on length modification */
+	(*lnProposalRatio) += log (x / m);
+	if (isVPriorExp == YES)
+		(*lnPriorRatio) += brlensExp * (m - x);	
+		
+	/* if no move in root, then select randomly, otherwise always the moved branch */
+	if (nRootNodes == 0 && RandomNumber(seed) < 0.5)
+		p = brlenNode[4];
+	else
+		p = brlenNode[5];
+	
+	/* modify branch length but not if 'root' branch in rooted tree */
+	if (t->isRooted == NO || p->anc->anc != NULL)
+		{
+		m = p->length;
+		x = m * exp(tuning * (RandomNumber(seed) - 0.5));
+		while (x < minV || x > maxV)
+			{
+			if (x < minV)
+				x = minV * minV / x;
+			else if (x > maxV)
+				x = maxV * maxV / x;
+			}
+		p->length = x;
+		p->upDateTi = YES;
+
+		/* update proposal and prior ratio based on length modification */
+		(*lnProposalRatio) += log (x / m);
+		if (isVPriorExp == YES)
+			(*lnPriorRatio) += brlensExp * (m - x);	
+		}
+
+	/* set flags for update of cond likes from v and down to root */
+	p = v;
+	while (p->anc != NULL)
+		{
+		p->upDateCl = YES;
+		p = p->anc;
+		}
+
+	/* get down pass sequence if tree topology has changed */
+	if (topologyHasChanged == YES)
+		{
+		GetDownPass (t);
+		}
+
+	/* calculate new number of nodes */
+	if (topologyHasChanged == YES)
+		{
+	    /* first, mark distance of nodes from the new position of node v */
+		for (i=0; i<t->nNodes; i++)
+			{
+			p = t->allDownPass[i];
+			p->x = -1;
+			}
+	
+		v->x = 0;
+		v->anc->x = 0;
+
+		/* downpass */
+		for (p=u; p->anc!= NULL; p=p->anc)
+			{
+			p->anc->x = p->x+1;
+			}
+		
+		/* uppass */
+		for (i=t->nNodes-2; i>=0; i--)
+			{
+			p = t->allDownPass[i];
+			if (p->x < 0)
+				p->x = p->anc->x + 1;
+			}
+		
+		/* mark crown part of tree */
+		for (i=0; i<t->nNodes; i++)
+			{
+			p = t->allDownPass[i];
+			p->marked = NO;
+			}
+		v->marked = YES;
+		for (i=t->nNodes-2; i>=0; i--)
+			{
+			p = t->allDownPass[i];
+			if (p->anc->marked == YES)
+				p->marked = YES;
+			}
+
+		/* now count nodes */
+		for (i=newNumWindowNodes=0; i<t->nNodes; i++)
+			{
+			p = t->allDownPass[i];
+			if (p->x >= 2 && p->x <= windowDiameter+1 &&
+				((moveInRoot == YES && p->marked == NO) || (moveInRoot == NO && p->marked == YES)))
+				newNumWindowNodes++;
+			}
+
+		/* update proposal ratio */
+		(*lnProposalRatio) += log (newNumWindowNodes / numWindowNodes);
+		}
+
+#	if defined (DEBUG_RanSPR)
+	printf ("After:\n");
+	ShowNodes (t->root, 2, NO);
+	getchar();
+	printf ("Proposal ratio: %f\n",(*lnProposalRatio));
+	printf ("v: %d  u: %d  c: %d  d: %d  a: %d  b: %d q: %d\n",v->index, u->index, 
+		c->index, d->index, a->index, b->index, q->index);
+	printf ("No. nodes moved in root subtree: %d\n",nRootNodes);
+	printf ("No. nodes moved in crown subtree: %d\n",nCrownNodes);
+	printf ("Has topology changed? %d\n",topologyHasChanged);
+	getchar();
+#	endif
+
+#	if defined (TOPOLOGY_MOVE_STATS)
+	if (topologyHasChanged == YES)
+		gTopologyHasChanged = YES;
+	else
+		gTopologyHasChanged = NO;
+
+	gNodeMoves = nCrownNodes + nRootNodes;
+#	endif
+
+#if defined DEBUG_CONSTRAINTS
+	if (CheckConstraints (t) == ERROR)
+		{
+		printf ("Constraint error in input tree to eTBR\n");
+		getchar();
+		}
+#endif
+
+	return (NO_ERROR);
+	
 }
 
 
@@ -20661,12 +27480,11 @@ int Move_Statefreqs (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 
 	/* change pi */
 	int			i, nStates;
-	MrBFlt		dirichletParameters[64], *newPi, *oldPi, *priorPi, sum, alphaPi, x, y;
-
+	MrBFlt		dirichletParameters[64], *newPi, *oldPi, symDirAlphai, sum, alphaPi, x, y;
 
 	/* get the values we need */
 	nStates = param->nSubValues;
-	priorPi = GetParamVals(param, chain, state[chain]);
+	symDirAlphai = *GetParamVals(param, chain, state[chain]);
 	newPi = GetParamSubVals (param, chain, state[chain]);
 	oldPi = GetParamSubVals (param, chain, state[chain] ^ 1);
 	
@@ -20717,17 +27535,11 @@ int Move_Statefreqs (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 	(*lnProposalRatio) = x - y;
 
 	/* get prior ratio */
-	sum = 0.0;
+	y = x = 0.0;					/* the Gamma part of the prior is the same */
 	for (i=0; i<nStates; i++)
-		sum += priorPi[i];
-	x = LnGamma(sum);
+		x += (symDirAlphai-1.0)*log(newPi[i]);
 	for (i=0; i<nStates; i++)
-		x -= LnGamma(priorPi[i]);
-	y = x;
-	for (i=0; i<nStates; i++)
-		x += (priorPi[i]-1.0)*log(newPi[i]);
-	for (i=0; i<nStates; i++)
-		y += (priorPi[i]-1.0)*log(oldPi[i]);
+		y += (symDirAlphai-1.0)*log(oldPi[i]);
 	(*lnPriorRatio) = x - y;
 		
 	for (i=0; i<param->nRelParts; i++)
@@ -20737,6 +27549,99 @@ int Move_Statefreqs (Param *param, int chain, long int *seed, MrBFlt *lnPriorRat
 	   we don't take any hit, because we will never go into a general transition probability
 	   calculator. However, for many models we do want to update the cijk flag, as the transition
 	   probability matrices require diagonalizing the rate matrix. */
+	for (i=0; i<param->nRelParts; i++)
+		modelSettings[param->relParts[i]].upDateCijk[chain][state[chain]] = YES;
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
+int Move_StatefreqsSymDirMultistate (Param *param, int chain, long int *seed, MrBFlt *lnPriorRatio, MrBFlt *lnProposalRatio, MrBFlt *mvp)
+
+{
+
+	/* change state freqs of multistate characters */
+	/* ideally, we would let the likelihood calculator deal with only the affected character
+	   but we do not have the mechanism for doing that in the current version of mrbayes, so
+	   take the hit of updating all chars of the morph partition(s). */
+	int		i, nStates, charIndex;
+	MrBFlt	dirichletParameters[10], symDirAlphai, *newPi, *oldPi, sum, alphaPi, x, y;
+	Model	*mp;
+
+	/* tuning parameters */
+	alphaPi = mvp[0];
+
+	/* get model paramaters */
+	mp = &modelParams[param->relParts[0]];
+
+	/* select one character at random */
+	charIndex = (int) (RandomNumber (seed) * param->nSympi);
+	
+	/* get the values we need */
+	symDirAlphai = *GetParamVals(param, chain, state[chain]);
+	newPi = GetParamSubVals (param, chain, state[chain]);
+	oldPi = GetParamSubVals (param, chain, state[chain] ^ 1);
+	newPi += 2 * mp->numBetaCats;
+	oldPi += 2 * mp->numBetaCats;
+	for (i=0; i<charIndex; i++)
+		{
+		oldPi += param->sympinStates[i];
+		newPi += param->sympinStates[i];
+		}
+	nStates = param->sympinStates[charIndex];
+	
+	/* multiply old values with some large number to get new values close to the old ones */
+	for (i=0; i<nStates; i++)
+		dirichletParameters[i] = oldPi[i] * alphaPi;
+
+	DirichletRandomVariable (dirichletParameters, newPi, nStates, seed);
+
+	sum = 0.0;
+	for (i=0; i<nStates; i++)
+		{
+		if (newPi[i] < 0.0001)
+			newPi[i] = 0.0001;
+		sum += newPi[i];
+		}
+	for (i=0; i<nStates; i++)
+		newPi[i] /= sum;
+
+	/* get proposal ratio */
+	sum = 0.0;
+	for (i=0; i<nStates; i++)
+		sum += newPi[i]*alphaPi;
+	x = LnGamma(sum);
+	for (i=0; i<nStates; i++)
+		x -= LnGamma(newPi[i]*alphaPi);
+	for (i=0; i<nStates; i++)
+		x += (newPi[i]*alphaPi-1.0)*log(oldPi[i]);
+	sum = 0.0;
+	for (i=0; i<nStates; i++)
+		sum += oldPi[i]*alphaPi;
+	y = LnGamma(sum);
+	for (i=0; i<nStates; i++)
+		y -= LnGamma(oldPi[i]*alphaPi);
+	for (i=0; i<nStates; i++)
+		y += (oldPi[i]*alphaPi-1.0)*log(newPi[i]);
+	(*lnProposalRatio) = x - y;
+
+	/* get prior ratio */
+	y = x = 0.0;	/* the Gamma part of the prior is the same */
+	for (i=0; i<nStates; i++)
+		x += (symDirAlphai-1.0)*log(newPi[i]);
+	for (i=0; i<nStates; i++)
+		y += (symDirAlphai-1.0)*log(oldPi[i]);
+	(*lnPriorRatio) = x - y;
+		
+	for (i=0; i<param->nRelParts; i++)
+		TouchAllTreeNodes(GetTree(modelSettings[param->relParts[i]].brlens,chain,state[chain]));
+		
+	/* Set update flags for cijks for all affected partitions. Only cijks for the changed character 
+	   actually need to be updated but we can't do that in the current version of the program. */
 	for (i=0; i<param->nRelParts; i++)
 		modelSettings[param->relParts[i]].upDateCijk[chain][state[chain]] = YES;
 
@@ -21696,6 +28601,87 @@ int Move_UnrootedSlider (Param *param, int chain, long *seed, MrBFlt *lnPriorRat
 
 
 
+/*-------------------------------------------------------------------------------------------
+|
+|   MoveCalculationRoot: This routine will move the calculation root to the terminal with 
+|      index outgroup
+|
+---------------------------------------------------------------------------------------------*/
+int MoveCalculationRoot (Tree *t, int outgroup)
+
+{
+
+	int 			i;
+	TreeNode		*p, *q, *r;
+
+	if (t->isRooted == YES || outgroup < 0 || outgroup > t->nNodes - t->nIntNodes - (t->isRooted == YES ? 1 : 0))
+		{
+		MrBayesPrint ("%s   Problem moving calculation root\n", spacer);
+		return (ERROR);
+		}
+
+	if (t->root->index == outgroup)
+		return (NO_ERROR);    /* nothing to do */
+
+	/* mark the path to the new calculation root */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->left == NULL && p->right == NULL)
+			{
+			if (p->index == outgroup)
+				p->marked = YES;
+			else
+				p->marked = NO;
+			}
+		else
+			{
+			if (p->left->marked == YES || p->right->marked == YES)
+				p->marked = YES;
+			else
+				p->marked = NO;
+			}
+		}
+
+	/* rotate the tree to use the specified calculation root */
+	p = t->root->left;
+	q = t->root;
+	q->anc = p;
+	q->left = q->right = NULL;
+	while (p->left != NULL && p->right != NULL)
+		{
+		if (p->left->marked == YES)
+			{
+			r = p->left;
+			p->anc = r;
+			p->left = q;
+			p->length = r->length;
+			q = p;
+			p = r;
+			}
+		else /* if (p->right->marked == YES) */
+			{
+			r = p->right;
+			p->anc = r;
+			p->right = q;
+			q = p;
+			p = r;
+			}
+		}
+	p->left = p->anc;
+	p->right = p->anc = NULL;
+	t->root = p;
+	p->length = 0.0;
+
+	GetDownPass (t);
+
+	return (NO_ERROR);
+}
+
+
+
+
+
 void NodeToNodeDistances (Tree *t, TreeNode *fromNode)
 
 {
@@ -21807,7 +28793,7 @@ int NumNonExcludedTaxa (void)
 		MrBayesPrint ("%s   localTaxonNames not free in NumNonExcludedTaxa\n", spacer);
 		return (0);
 		}
-	localTaxonNames = (char *)malloc((size_t) (nt * 100 * sizeof(char)));
+	localTaxonNames = (char *)SafeMalloc((size_t) (nt * 100 * sizeof(char)));
 	if (!localTaxonNames)
 		{
 		MrBayesPrint ("%s   Problem allocating localTaxonNames (%d)\n", spacer, nt * 100 * sizeof(char));
@@ -21821,25 +28807,24 @@ int NumNonExcludedTaxa (void)
 		}
 	memAllocs[ALLOC_LOCTAXANAMES] = YES;
 
-	if (memAllocs[ALLOC_LOCTAXAAGES] == YES)
+	if (memAllocs[ALLOC_LOCALTAXONCALIBRATION] == YES)
 		{
-		MrBayesPrint ("%s   localTaxonAges not free in NumNonExcludedTaxa\n", spacer);
+		MrBayesPrint ("%s   localTaxonCalibration not free in NumNonExcludedTaxa\n", spacer);
 		return (0);
 		}
-	localTaxonAges = (MrBFlt *)malloc((size_t) (nt * sizeof(MrBFlt)));
-	if (!localTaxonAges)
+	localTaxonCalibration = (Calibration **)SafeMalloc((size_t) (nt * sizeof(Calibration *)));
+	if (!localTaxonCalibration)
 		{
-		MrBayesPrint ("%s   Problem allocating localTaxonAges (%d)\n", spacer, nt * sizeof(char));
+		MrBayesPrint ("%s   Problem allocating localTaxonCalibratioin (%d)\n", spacer, nt * sizeof(Calibration));
 		return (ERROR);
 		}
 	for (i=0; i<nt; i++)
 		{
-		localTaxonAges[i] = -1.0;
+		localTaxonCalibration[i] = NULL;
 		}
-	memAllocs[ALLOC_LOCTAXAAGES] = YES;
+	memAllocs[ALLOC_LOCALTAXONCALIBRATION] = YES;
 		
 	/* store names and ages of non-excluded taxa */
-	numCalibratedLocalTaxa = 0;
 	for (i=j=0; i<numTaxa; i++)
 		{
 		if (taxaInfo[i].isDeleted == NO)
@@ -21854,9 +28839,7 @@ int NumNonExcludedTaxa (void)
 				MrBayesPrint ("%s   Problem adding charset %s to list\n", spacer, tempName);
 				return (0);
 				}
-			localTaxonAges[j++] = taxaInfo[i].taxaAge;
-			if (taxaInfo[i].taxaAge > -0.00001)
-				numCalibratedLocalTaxa ++;
+			localTaxonCalibration[j++] = &taxaInfo[i].calibration;
 			}
 		}
 		
@@ -21919,20 +28902,26 @@ FILE *OpenNewMBPrintFile (char *fileName)
 	   to have the file over-written or appended. */
 	if (noWarn == YES)
 		{
-		/* overwrite file, if already present */		
+		/* overwrite or append file, if already present */		
 		if ((fp = fopen(fileName, "r")) != NULL)
 			{
-			MrBayesPrint ("%s   Overwriting file \"%s\"\n", spacer, fileName);
-			fclose (fp);
+			SafeFclose (&fp);
+			if (autoOverwrite == NO) 
+				{
+				MrBayesPrint ("%s   Appending to file \"%s\"\n", spacer, fileName); 
+				return (OpenTextFileA(fileName));
+				}
+			else 
+				MrBayesPrint ("%s   Overwriting file \"%s\"\n", spacer, fileName);		
 			}
-		return (OpenTextFileW(fileName));
-		}
+			return (OpenTextFileW(fileName));
+		}	
 	else
 		{
 		/* prompt user if file is already present */
 		if ((fp = fopen(fileName,"r")) != NULL)
 			{
-			fclose (fp);
+			SafeFclose (&fp);
 			MrBayesPrint ("\n");
 			MrBayesPrint ("%s   File \"%s\" already exists\n", spacer, fileName);
 			MrBayesPrint ("%s   Overwrite information in this file (yes/no): ", spacer);
@@ -22170,13 +29159,13 @@ int PreparePrintFiles (void)
 		for (i=0; i<numCalibratedTrees; i++)
 			{
 			if (numCalibratedTrees == 1 && chainParams.numRuns == 1)
-				sprintf (fileName, "%s.t", localFileName);
+				sprintf (fileName, "%s.cal", localFileName);
 			else if (numCalibratedTrees > 1 && chainParams.numRuns == 1)
-				sprintf (fileName, "%s.tree%d.t", localFileName, i+1);
+				sprintf (fileName, "%s.tree%d.cal", localFileName, i+1);
 			else if (numCalibratedTrees == 1 && chainParams.numRuns > 1)
-				sprintf (fileName, "%s.run%d.t", localFileName, n+1);
+				sprintf (fileName, "%s.run%d.cal", localFileName, n+1);
 			else
-				sprintf (fileName, "%s.tree%d.run%d.t", localFileName, i+1, n+1);
+				sprintf (fileName, "%s.tree%d.run%d.cal", localFileName, i+1, n+1);
 #			if defined (MPI_ENABLED)
 			if (proc_id == 0)
 #			endif
@@ -22215,9 +29204,17 @@ int PrintAncStates_Bin (TreeNode *p, int division, int chain)
 	int				c, i, k;
 	MrBFlt			*bs, freq;
 	CLFlt			*clFP, *cL, sum;
-	char			tempStr[200];
+	char			*tempStr;
+	int             tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings for this division */
 	m = &modelSettings[division];
 
@@ -22257,10 +29254,11 @@ int PrintAncStates_Bin (TreeNode *p, int division, int chain)
 			continue;
 		i = compCharPos[c] - m->compCharStart;
 		cL = ancStateCondLikes + (i*2);
-		sprintf (tempStr, "%f\t%f\t", cL[0], cL[1]);
+		SaveSprintf (&tempStr, &tempStrSize, "%f\t%f\t", cL[0], cL[1]);
 		if (AddToPrintString (tempStr) == ERROR) return (ERROR);
 		}
 
+	free (tempStr);
 	return NO_ERROR;	
 
 }
@@ -22281,9 +29279,17 @@ int PrintAncStates_Gen (TreeNode *p, int division, int chain)
 	int				c, i, k, nStates;
 	MrBFlt			*bs, freq;
 	CLFlt			*clFP, *cL, sum;
-	char			tempStr[200];
+	char			*tempStr;
+	int             tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings for this division */
 	m = &modelSettings[division];
 
@@ -22336,11 +29342,11 @@ int PrintAncStates_Gen (TreeNode *p, int division, int chain)
 		cL = ancStateCondLikes + (i*nStates);
 		for (i=0; i<nStates; i++)
 			{
-			sprintf (tempStr, "%f\t", cL[i]);
+			SaveSprintf (&tempStr, &tempStrSize, "%f\t", cL[i]);
 			if (AddToPrintString (tempStr) == ERROR) return (ERROR);
 			}
 		}
-
+	free (tempStr);
 	return NO_ERROR;	
 
 }
@@ -22361,9 +29367,17 @@ int PrintAncStates_NUC4 (TreeNode *p, int division, int chain)
 	int				c, i, k;
 	MrBFlt			*bs, freq;
 	CLFlt			*clFP, *cL, sum;
-	char			tempStr[200];
+	char			*tempStr;
+	int             tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings for this division */
 	m = &modelSettings[division];
 
@@ -22410,10 +29424,10 @@ int PrintAncStates_NUC4 (TreeNode *p, int division, int chain)
 			continue;
 		i = compCharPos[c] - m->compCharStart;
 		cL = ancStateCondLikes + (i*4);
-		sprintf (tempStr, "%f\t%f\t%f\t%f\t", cL[A], cL[C], cL[G], cL[T]);
+		SaveSprintf (&tempStr, &tempStrSize, "%f\t%f\t%f\t%f\t", cL[A], cL[C], cL[G], cL[T]);
 		if (AddToPrintString (tempStr) == ERROR) return ERROR;
 		}
-
+	free (tempStr);
 	return NO_ERROR;	
 
 }
@@ -22434,9 +29448,17 @@ int PrintAncStates_Std (TreeNode *p, int division, int chain)
 	int				c, i, j, k, nStates, nCats;
 	MrBFlt			*bs, freq;
 	CLFlt			*clFP, *cL, sum;
-	char			tempStr[200];
+	char			*tempStr;
+	int			    tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings for this division */
 	m = &modelSettings[division];
 
@@ -22503,11 +29525,11 @@ int PrintAncStates_Std (TreeNode *p, int division, int chain)
 
 		for (i=0; i<m->nStates[k]; i++)
 			{
-			sprintf (tempStr, "%f\t", cL[i]);
+			SaveSprintf (&tempStr, &tempStrSize, "%f\t", cL[i]);
 			if (AddToPrintString (tempStr) == ERROR) return (ERROR);
 			}
 		}
-
+	free (tempStr);
 	return NO_ERROR;	
 
 }
@@ -22520,11 +29542,19 @@ int PrintCalTree (int curGen, Tree *tree)
 {
 
 	int				i, counter;
-	char			tempNameStr[100], tempStr[200];
+	char			tempNameStr[100], *tempStr;
+	int             tempStrSize = 200;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* allocate the print string */
 	printStringSize = 200;
-	printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+	printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
 	if (!printString)
 		{
 		MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
@@ -22535,13 +29565,13 @@ int PrintCalTree (int curGen, Tree *tree)
 	if (curGen == 1)
 		{
 		/* print translation block information */
-		sprintf (tempStr, "#NEXUS\n");
+		SaveSprintf (&tempStr, &tempStrSize, "#NEXUS\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "[ID: %s]\n", stamp);
+		SaveSprintf (&tempStr, &tempStrSize, "[ID: %s]\n", stamp);
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "begin trees;\n");
+		SaveSprintf (&tempStr, &tempStrSize, "begin trees;\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "   translate\n");
+		SaveSprintf (&tempStr, &tempStrSize, "   translate\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
 		counter = 0;
 		for (i=0; i<numTaxa; i++)
@@ -22555,20 +29585,21 @@ int PrintCalTree (int curGen, Tree *tree)
 				return (ERROR);
 				}
 			if (counter == numLocalTaxa)
-				sprintf (tempStr, "      %2d %s;\n", counter, tempNameStr);
+				SaveSprintf (&tempStr, &tempStrSize, "      %2d %s;\n", counter, tempNameStr);
 			else
-				sprintf (tempStr, "      %2d %s,\n", counter, tempNameStr);
+				SaveSprintf (&tempStr, &tempStrSize, "      %2d %s,\n", counter, tempNameStr);
 			if (AddToPrintString (tempStr) == ERROR) return(ERROR);
 			}
 		}
 	
 	/* write calibrated (dated) tree */
-	sprintf (tempStr, "   tree rep.%d = ", curGen);
+	SaveSprintf (&tempStr, &tempStrSize, "   tree rep.%d = ", curGen);
 	if (AddToPrintString (tempStr) == ERROR) return(ERROR);
    	WriteCalTreeToFile (tree->root->left, tree->clockRate);
-   	sprintf (tempStr, ";\n");
+   	SaveSprintf (&tempStr, &tempStrSize, ";\n");
 	if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-   	   		
+   	   	
+	free (tempStr);
    	return (NO_ERROR);
 		
 }
@@ -23211,9 +30242,17 @@ int PrintSiteRates_Gen (TreeNode *p, int division, int chain)
 					*clInvar=NULL, *catRate, baseRate;
 	MrBFlt			s01, s10, probOn, probOff, *swr, covBF[40];
 	CLFlt			*lnScaler, *clP, *siteRates;
-	char			tempStr[200];
+	char			*tempStr;
+	int             tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings and nStates, pInvar, invar cond likes */
 	m = &modelSettings[division];
 	nStates = m->numModelStates;
@@ -23327,10 +30366,11 @@ int PrintSiteRates_Gen (TreeNode *p, int division, int chain)
 		if (charInfo[c].isExcluded == YES || charInfo[c].partitionId[partitionNum-1] != division+1)
 			continue;
 		j = compCharPos[c] - m->compCharStart;
-		sprintf (tempStr, "%f\t", siteRates[j]);
+		SaveSprintf (&tempStr, &tempStrSize, "%f\t", siteRates[j]);
 		if (AddToPrintString (tempStr) == ERROR) return (ERROR);
 		}
 
+	free (tempStr);
 	return NO_ERROR;
 	
 }
@@ -23351,9 +30391,17 @@ int PrintSiteRates_Std (TreeNode *p, int division, int chain)
 	int				c, j, k, nStates;
 	MrBFlt			siteLike, catLike, *bs, *catRate, baseRate;
 	CLFlt			*clP, *siteRates;
-	char			tempStr[200];
+	char			*tempStr;
+	int             tempStrSize = 200;
 	ModelInfo		*m;
 	
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	/* find model settings */
 	m = &modelSettings[division];
 
@@ -23395,10 +30443,11 @@ int PrintSiteRates_Std (TreeNode *p, int division, int chain)
 		if (charInfo[c].isExcluded == YES || charInfo[c].partitionId[partitionNum-1] != division+1)
 			continue;
 		j = compCharPos[c] - m->compCharStart;
-		sprintf (tempStr, "%f\t", siteRates[j]);
+		SaveSprintf (&tempStr, &tempStrSize, "%f\t", siteRates[j]);
 		if (AddToPrintString (tempStr) == ERROR) return (ERROR);
 		}
 
+	free (tempStr);
 	return NO_ERROR;
 
 }
@@ -23412,23 +30461,34 @@ int PrintStates (int curGen, int coldId)
 {
 
 	int				d, i, j, k, compressedCharPosition, *printedChar=NULL, origAlignmentChars[3];
-	char			partString[100], tempStr[800];
+	char			partString[100];
 	MrBFlt			*st, *sst, sum;
 	Param			*p;
 	ModelInfo		*m;
 	Tree			*tree;
 	TreeNode		*node;
 	ModelParams		*mp;
+	char                    *tempStr;
+	int                     tempStrSize;
 
 	/* allocate the print string */
-	printStringSize = 200;
-	printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+	printStringSize = tempStrSize = 200;
+	printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+
 	if (!printString)
 		{
 		MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
 		goto errorExit;
 		}
-	strcpy (printString, "");
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		goto errorExit;
+		}
+	
+	*printString = '\0';
+	*tempStr = '\0';
 
 	/* Allocate memory, temporarily, in case we have positive selection or infer site rates */
 	if (inferPosSel == YES)
@@ -23438,7 +30498,7 @@ int PrintStates (int curGen, int coldId)
 			MrBayesPrint ("%s   posSelProbs not free in PrintStates\n", spacer);
 			goto errorExit;
 			}
-		posSelProbs = (MrBFlt *)malloc((size_t) (numCompressedChars * sizeof(MrBFlt)));
+		posSelProbs = (MrBFlt *)SafeMalloc((size_t) (numCompressedChars * sizeof(MrBFlt)));
 		if (!posSelProbs)
 			{
 			MrBayesPrint ("%s   Problem allocating posSelProbs (%d)\n", spacer, numCompressedChars * sizeof(MrBFlt));
@@ -23450,7 +30510,7 @@ int PrintStates (int curGen, int coldId)
 		}
 	if (inferPosSel == YES || inferSiteRates == YES)
 		{
-		printedChar = (int *)malloc((size_t) (numChar * sizeof(int)));
+		printedChar = (int *)SafeMalloc((size_t) (numChar * sizeof(int)));
 		if (!printedChar)
 			{
 			MrBayesPrint ("%s   Problem allocating printedChar (%d)\n", spacer, numChar * sizeof(int));
@@ -23463,11 +30523,11 @@ int PrintStates (int curGen, int coldId)
 	/* Set up the header to the file. */
 	if (curGen == 1)
 		{
-		sprintf (tempStr, "[ID: %s]\n", stamp);
+		SaveSprintf (&tempStr, &tempStrSize, "[ID: %s]\n", stamp);
 		if (AddToPrintString (tempStr) == ERROR) goto errorExit;
-		sprintf (tempStr, "Gen\t");
+		SaveSprintf (&tempStr, &tempStrSize, "Gen\t");
 		if (AddToPrintString (tempStr) == ERROR) goto errorExit;
-		sprintf (tempStr, "LnL\t");
+		SaveSprintf (&tempStr, &tempStrSize, "LnL\t");
 		if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 
 		/* print tree lengths for all trees */
@@ -23478,9 +30538,9 @@ int PrintStates (int curGen, int coldId)
 			if (p->paramType == P_BRLENS)
 				{
 				if (FillRelPartsString(p, partString) == YES)
-					sprintf (tempStr, "TL%s\t", partString);
+					SaveSprintf (&tempStr, &tempStrSize, "TL%s\t", partString);
 				else
-					sprintf (tempStr, "TL\t");
+					SaveSprintf (&tempStr, &tempStrSize, "TL\t");
 				if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 				}
 			}
@@ -23495,9 +30555,9 @@ int PrintStates (int curGen, int coldId)
 				p->paramId == BRLENS_CCLOCK_BD)
 				{
 				if (FillRelPartsString(p, partString) == YES)
-					sprintf (tempStr, "calRate%s\t", partString);
+					SaveSprintf (&tempStr, &tempStrSize, "calRate%s\t", partString);
 				else
-					sprintf (tempStr, "calRate\t");
+					SaveSprintf (&tempStr, &tempStrSize, "calRate\t");
 				if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 				}
 			}
@@ -23508,7 +30568,7 @@ int PrintStates (int curGen, int coldId)
 			p = &params[i];
 			if (p->printParam == YES)
 				{
-				sprintf (tempStr, "%s\t", p->paramName);
+				SaveSprintf (&tempStr, &tempStrSize, "%s\t", p->paramName);
 				if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 				}
 			}
@@ -23531,7 +30591,7 @@ int PrintStates (int curGen, int coldId)
 					{
 					if (m->nCharsPerSite == 1)
 						{
-						sprintf (tempStr, "r(%d)\t", i+1);
+						SaveSprintf (&tempStr, &tempStrSize, "r(%d)\t", i+1);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					else
@@ -23550,14 +30610,14 @@ int PrintStates (int curGen, int coldId)
 							}
 						if (k != m->nCharsPerSite)
 							return (ERROR);
-						sprintf (tempStr, "r(%d,", origAlignmentChars[0]);
+						SaveSprintf (&tempStr, &tempStrSize, "r(%d,", origAlignmentChars[0]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						for (j=1; j<k-1; j++)
 							{
-							sprintf (tempStr, "%d,", origAlignmentChars[j]);
+							SaveSprintf (&tempStr, &tempStrSize, "%d,", origAlignmentChars[j]);
 							if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 							}
-						sprintf (tempStr, "%d)\t", origAlignmentChars[k-1]);
+						SaveSprintf (&tempStr, &tempStrSize, "%d)\t", origAlignmentChars[k-1]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23593,7 +30653,7 @@ int PrintStates (int curGen, int coldId)
 							printedChar[j] = YES;
 							}
 						}
-					sprintf (tempStr, "pr+(%d,%d,%d)\t", origAlignmentChars[0]+1, origAlignmentChars[1]+1, origAlignmentChars[2]+1);
+					SaveSprintf (&tempStr, &tempStrSize, "pr+(%d,%d,%d)\t", origAlignmentChars[0]+1, origAlignmentChars[1]+1, origAlignmentChars[2]+1);
 					if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 					}
 				}	
@@ -23619,9 +30679,9 @@ int PrintStates (int curGen, int coldId)
 							for (k=0; k<m->nStates[compCharPos[j] - m->compCharStart]; k++)
 								{
 								if (mp->numActiveConstraints > 1)
-									sprintf (tempStr, "p(%c){%d@%d}\t", m->StateCode(k), j+1, i+1);
+									SaveSprintf (&tempStr, &tempStrSize, "p(%c){%d@%d}\t", m->StateCode(k), j+1, i+1);
 								else
-									sprintf (tempStr, "p(%c){%d}\t", m->StateCode(k), j+1);
+									SaveSprintf (&tempStr, &tempStrSize, "p(%c){%d}\t", m->StateCode(k), j+1);
 								if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 								}
 							}
@@ -23630,9 +30690,9 @@ int PrintStates (int curGen, int coldId)
 							for (k=0; k<m->numStates; k++)
 								{
 								if (mp->numActiveConstraints > 1)
-									sprintf (tempStr, "p(%c){%d@%d}\t", m->StateCode(k), j+1, i+1);
+									SaveSprintf (&tempStr, &tempStrSize, "p(%c){%d@%d}\t", m->StateCode(k), j+1, i+1);
 								else
-									sprintf (tempStr, "p(%c){%d}\t", m->StateCode(k), j+1);
+									SaveSprintf (&tempStr, &tempStrSize, "p(%c){%d}\t", m->StateCode(k), j+1);
 								if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 								}
 							}
@@ -23641,14 +30701,14 @@ int PrintStates (int curGen, int coldId)
 				}
 			}
 			
-		sprintf (tempStr, "\n");
+		SaveSprintf (&tempStr, &tempStrSize, "\n");
 		if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 		}
 		
 	/* now print parameter values */
-	sprintf (tempStr, "%d\t", curGen);
+	SaveSprintf (&tempStr, &tempStrSize, "%d\t", curGen);
 	if (AddToPrintString (tempStr) == ERROR) goto errorExit;
-	sprintf (tempStr, "%1.3lf\t", curLnL[coldId]);
+	SaveSprintf (&tempStr, &tempStrSize, "%1.3lf\t", curLnL[coldId]);
 	if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 
 	/* print tree lengths for all trees */
@@ -23658,7 +30718,7 @@ int PrintStates (int curGen, int coldId)
 
 		if (p->paramType == P_BRLENS)
 			{
-			sprintf (tempStr, "%1.3lf\t", TreeLength(p, coldId));
+			SaveSprintf (&tempStr, &tempStrSize, "%1.3lf\t", TreeLength(p, coldId));
 			if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 			}
 		}
@@ -23673,7 +30733,7 @@ int PrintStates (int curGen, int coldId)
 			p->paramId == BRLENS_CCLOCK_BD)
 			{
 			tree = GetTree (p, coldId, state[coldId]);
-			sprintf (tempStr, "%lf\t", tree->clockRate);
+			SaveSprintf (&tempStr, &tempStrSize, "%lf\t", tree->clockRate);
 			if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 			}
 		}
@@ -23698,13 +30758,13 @@ int PrintStates (int curGen, int coldId)
 				   dirichlet prior that is specified in values, not subvalues. */
 				for (j=0; j<p->nSubValues; j++)
 					{
-					sprintf (tempStr, "%lf\t", sst[j]);
+					SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[j]);
 					if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 					}
 				}
 			else if (p->paramType == P_TRATIO && !strcmp(mp->tratioFormat,"Dirichlet"))
 				{
-				sprintf (tempStr, "%lf\t%lf\t", st[0] / (1.0 + st[0]), 1.0 / (1.0 + st[0]));
+				SaveSprintf (&tempStr, &tempStrSize, "%lf\t%lf\t", st[0] / (1.0 + st[0]), 1.0 / (1.0 + st[0]));
 				if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 				}
 			else if (p->paramType == P_REVMAT && !strcmp(mp->revmatFormat,"Ratio"))
@@ -23712,7 +30772,7 @@ int PrintStates (int curGen, int coldId)
 				sum = st[p->nValues-1];
 				for (j=0; j<p->nValues; j++)
 					{
-					sprintf (tempStr, "%lf\t", st[j] / sum);
+					SaveSprintf (&tempStr, &tempStrSize, "%lf\t", st[j] / sum);
 					if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 					}
 				}
@@ -23722,7 +30782,7 @@ int PrintStates (int curGen, int coldId)
 					{
 					for (j=0; j<p->nValues; j++)
 						{
-						sprintf (tempStr, "%lf\t", sst[j + p->nValues]);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[j + p->nValues]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23733,7 +30793,7 @@ int PrintStates (int curGen, int coldId)
 						sum += sst[j + p->nValues];
 					for (j=0; j<p->nValues; j++)
 						{
-						sprintf (tempStr, "%lf\t", sst[j + p->nValues] / sum);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[j + p->nValues] / sum);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23741,7 +30801,7 @@ int PrintStates (int curGen, int coldId)
 					{
 					for (j=0; j<p->nValues; j++)
 						{
-						sprintf (tempStr, "%lf\t", st[j]);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", st[j]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23750,7 +30810,7 @@ int PrintStates (int curGen, int coldId)
 				{
 				for (j=0; j<p->nValues; j++)
 					{
-					sprintf (tempStr, "%lf\t", st[j]);
+					SaveSprintf (&tempStr, &tempStrSize, "%lf\t", st[j]);
 					if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 					}
 				}
@@ -23761,12 +30821,12 @@ int PrintStates (int curGen, int coldId)
 					{
 					for (j=0; j<4; j++)
 						{
-						sprintf (tempStr, "%lf\t", sst[mp->numM10BetaCats + mp->numM10GammaCats + 4 + j]);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[mp->numM10BetaCats + mp->numM10GammaCats + 4 + j]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					for (j=0; j<2; j++)
 						{
-						sprintf (tempStr, "%lf\t", sst[mp->numM10BetaCats + mp->numM10GammaCats + j]);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[mp->numM10BetaCats + mp->numM10GammaCats + j]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23774,7 +30834,7 @@ int PrintStates (int curGen, int coldId)
 					{
 					for (j=0; j<3; j++)
 						{
-						sprintf (tempStr, "%lf\t", sst[j]);
+						SaveSprintf (&tempStr, &tempStrSize, "%lf\t", sst[j]);
 						if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 						}
 					}
@@ -23815,7 +30875,7 @@ int PrintStates (int curGen, int coldId)
 						printedChar[j] = YES;
 						}
 					}
-				sprintf (tempStr, "%lf\t", posSelProbs[compressedCharPosition]);
+				SaveSprintf (&tempStr, &tempStrSize, "%lf\t", posSelProbs[compressedCharPosition]);
 				if (AddToPrintString (tempStr) == ERROR) goto errorExit;
 				/*printf ("%4d -> (%3d,%3d,%3d) %1.25lf\n", i, origAlignmentChars[0]+1, origAlignmentChars[1]+1, origAlignmentChars[2]+1, posSelProbs[compressedCharPosition]);*/
 				}
@@ -23876,9 +30936,11 @@ int PrintStates (int curGen, int coldId)
 			}
 		}			
 
-	sprintf (tempStr, "\n");
+	SaveSprintf (&tempStr, &tempStrSize, "\n");
 	if (AddToPrintString (tempStr) == ERROR) goto errorExit;
-		
+	
+	free (tempStr);
+	
 	return (NO_ERROR);
 	
 	errorExit:
@@ -23887,6 +30949,7 @@ int PrintStates (int curGen, int coldId)
 		if (memAllocs[ALLOC_POSSELPROBS] == YES)
 			free (posSelProbs);
 		memAllocs[ALLOC_POSSELPROBS] = NO;
+                free (tempStr);
 		return (ERROR);
 	
 }
@@ -24049,7 +31112,7 @@ int PrintStatesToFiles (int curGen)
 						MrBayesPrint ("%s   Problem receiving printStringSize from proc_id = %d\n", spacer, procWithChain);
 						nErrors++;
 						}
-					printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+					printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
 					if (!printString)
 						{
 						MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
@@ -24164,7 +31227,7 @@ int PrintStatesToFiles (int curGen)
 							MrBayesPrint ("%s   Problem receiving printStringSize from proc_id = %d\n", spacer, procWithChain);
 							nErrors++;
 							}
-						printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+						printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
 						if (!printString)
 							{
 							MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
@@ -24262,7 +31325,7 @@ int PrintStatesToFiles (int curGen)
 								MrBayesPrint ("%s   Problem receiving printStringSize from proc_id = %d\n", spacer, procWithChain);
 								nErrors++;
 								}
-							printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+							printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
 							if (!printString)
 								{
 								MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
@@ -24344,7 +31407,8 @@ int PrintSwapInfo (void)
 {
 
 	int			i, j, n, maxNumExchanges, len, maxLen, reweightingChars=0;
-	char		temp[50];
+	char		*tempStr;
+	int             tempStrSize;
 
 	if (chainParams.numChains == 1)
 		return NO_ERROR;
@@ -24356,6 +31420,15 @@ int PrintSwapInfo (void)
 		return NO_ERROR;
 #	endif
 
+
+	tempStrSize = 100;
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	for (n=0; n<chainParams.numRuns; n++)
 		{
 		maxNumExchanges = 0;
@@ -24363,8 +31436,8 @@ int PrintSwapInfo (void)
 			for (j=0; j<chainParams.numChains; j++)
 				if (i > j && swapInfo[n][i][j] > maxNumExchanges)
 					maxNumExchanges = swapInfo[n][i][j];
-		sprintf (temp, "%d", maxNumExchanges);
-		maxLen = (int) strlen(temp);
+		SaveSprintf(&tempStr, &tempStrSize, "%d", maxNumExchanges);
+		maxLen = (int) strlen(tempStr);
 		if (maxLen < 4)
 			maxLen = 4;
 			
@@ -24380,8 +31453,8 @@ int PrintSwapInfo (void)
 		MrBayesPrint ("%s          ", spacer);
 		for (j=0; j<chainParams.numChains; j++)
 			{
-			sprintf (temp, "%d", j+1);
-			len = (int) strlen(temp);
+			SaveSprintf(&tempStr, &tempStrSize, "%d", j+1);
+			len = (int) strlen(tempStr);
 			MrBayesPrint ("%*c %d ", maxLen-len, ' ', j+1);
 			}
 		MrBayesPrint ("\n");
@@ -24408,8 +31481,8 @@ int PrintSwapInfo (void)
 						}
 					else
 						{
-						sprintf (temp, "%1.2lf", (MrBFlt)swapInfo[n][i][j]/swapInfo[n][j][i]);
-						len = (int) strlen(temp);
+						SaveSprintf(&tempStr, &tempStrSize, "%1.2lf", (MrBFlt)swapInfo[n][i][j]/swapInfo[n][j][i]);
+						len = (int) strlen(tempStr);
 						MrBayesPrint ("%*c%1.2lf ", maxLen-len+1, ' ', (MrBFlt)swapInfo[n][i][j]/swapInfo[n][j][i]);
 						}
 					}
@@ -24419,8 +31492,8 @@ int PrintSwapInfo (void)
 					}
 				else
 					{
-					sprintf (temp, "%d", swapInfo[n][i][j]);
-					len = (int) strlen(temp);
+					SaveSprintf(&tempStr, &tempStrSize, "%d", swapInfo[n][i][j]);
+					len = (int) strlen(tempStr);
 					MrBayesPrint ("%*c%d ", maxLen-len+1, ' ', swapInfo[n][i][j]);
 					}
 				}
@@ -24454,11 +31527,11 @@ int PrintSwapInfo (void)
 				}
 			else
 				{
-				sprintf (temp, "%d", (int)chainParams.weightScheme[0]);
-				len = (int) strlen(temp);
+				SaveSprintf(&tempStr, &tempStrSize, "%d", (int)chainParams.weightScheme[0]);
+				len = (int) strlen(tempStr);
 				MrBayesPrint ("%*c%d%% ", 3-len, ' ', (int)chainParams.weightScheme[0]);
-				sprintf (temp, "%d", (int)chainParams.weightScheme[1]);
-				len = (int) strlen(temp);
+				SaveSprintf(&tempStr, &tempStrSize, "%d", (int)chainParams.weightScheme[1]);
+				len = (int) strlen(tempStr);
 				MrBayesPrint ("%*c%d%% \n", 3-len, ' ', (int)chainParams.weightScheme[1]);
 				}
 			}
@@ -24478,6 +31551,7 @@ int PrintSwapInfo (void)
 	if (reweightingChars == YES)
 		MrBayesPrint ("%s   Reweighting increment = %1.2lf\n", spacer, chainParams.weightScheme[2]);
 		
+	free (tempStr);
 	return (NO_ERROR);
 		
 }
@@ -24606,7 +31680,8 @@ int PrintTopConvInfo (void)
 {
 
 	int			i, j, n, len, maxLen;
-	char		temp[50];
+	char		*tempStr;
+	int             tempStrSize;
 	MrBFlt		maxNumPartitions;
 	STATS		*stat;
 
@@ -24618,6 +31693,14 @@ int PrintTopConvInfo (void)
 		return (NO_ERROR);
 #	endif
 
+	tempStrSize = 100;
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 	for (n=0; n<numTrees; n++)
 		{
 		stat = &chainParams.stat[n];
@@ -24626,8 +31709,8 @@ int PrintTopConvInfo (void)
 			for (j=0; j<chainParams.numRuns; j++)
 				if (i > j && stat->pair[i][j] > maxNumPartitions)
 					maxNumPartitions = stat->pair[i][j];
-		sprintf (temp, "%d", (int) maxNumPartitions);
-		maxLen = (int) strlen(temp);
+		SaveSprintf(&tempStr, &tempStrSize, "%d", (int) maxNumPartitions);
+		maxLen = (int) strlen(tempStr);
 		if (maxLen < 5)
 			maxLen = 5;
 		
@@ -24645,8 +31728,8 @@ int PrintTopConvInfo (void)
 		MrBayesPrint ("%s          ", spacer);
 		for (j=0; j<chainParams.numRuns; j++)
 			{
-			sprintf (temp, "%d", j+1);
-			len = (int) strlen(temp);
+			SaveSprintf(&tempStr, &tempStrSize, "%d", j+1);
+			len = (int) strlen(tempStr);
 			MrBayesPrint ("%*c %d ", maxLen-len, ' ', j+1);
 			}
 		MrBayesPrint ("\n");
@@ -24667,8 +31750,8 @@ int PrintTopConvInfo (void)
 				{
 				if (i < j)
 					{
-					sprintf (temp, "%1.3lf", stat->pair[i][j]/stat->pair[j][i]);
-					len = (int) strlen(temp);
+					SaveSprintf(&tempStr, &tempStrSize, "%1.3lf", stat->pair[i][j]/stat->pair[j][i]);
+					len = (int) strlen(tempStr);
 					MrBayesPrint ("%*c%1.3lf ", maxLen-len+1, ' ', stat->pair[i][j]/stat->pair[j][i]);
 					}
 				else if (i == j)
@@ -24677,8 +31760,8 @@ int PrintTopConvInfo (void)
 					}
 				else
 					{
-					sprintf (temp, "%d", (int) stat->pair[i][j]);
-					len = (int) strlen(temp);
+					SaveSprintf(&tempStr, &tempStrSize, "%d", (int) stat->pair[i][j]);
+					len = (int) strlen(tempStr);
 					MrBayesPrint ("%*c%d ", maxLen-len+1, ' ', (int) stat->pair[i][j]);
 					}
 				}
@@ -24688,6 +31771,7 @@ int PrintTopConvInfo (void)
 		MrBayesPrint ("\n");
 		}
 
+	free (tempStr);
 	return (NO_ERROR);
 }
 
@@ -24759,21 +31843,13 @@ void PrintToScreen (int curGen, time_t endingT, time_t startingT)
 
 	if (curGen > 1)
 		{
-		timePerGen = (MrBFlt) (((float) endingT-startingT)/curGen);
+		timePerGen = (MrBFlt) ((MrBFlt)(endingT-startingT)/(MrBFlt)curGen);
 		nSecs = (int)((chainParams.numGen - curGen) * timePerGen);
 		nHours = (int)nSecs / 3600;
 		nSecs -= nHours * 3600;
 		nMins = nSecs / 60; 
 		nSecs -= nMins * 60;
-		MrBayesPrint ("-- %d:", nHours);
-		if (nMins > 9)
-			MrBayesPrint ("%d:", nMins);
-		else
-			MrBayesPrint ("0%d:", nMins);
-		if (nSecs > 9)
-			MrBayesPrint ("%d", nSecs);
-		else
-			MrBayesPrint ("0%d", nSecs);
+		MrBayesPrint ("-- %d:%0.2d:%0.2d", nHours, nMins, nSecs);
 		}
 	MrBayesPrint ("\n");
 	fflush (stdout);
@@ -24826,21 +31902,13 @@ void PrintToScreen (int curGen, time_t endingT, time_t startingT)
 		
 	if (curGen > 1)
 		{
-		timePerGen = (MrBFlt) (((float) endingT-startingT)/curGen);
+		timePerGen = (MrBFlt) ((MrBFlt)(endingT-startingT)/(MrBFlt)curGen);
 		nSecs = (int)((chainParams.numGen - curGen) * timePerGen);
 		nHours = (int)nSecs / 3600;
 		nSecs -= nHours * 3600;
 		nMins = nSecs / 60; 
 		nSecs -= nMins * 60;
-		MrBayesPrint ("-- %d:", nHours);
-		if (nMins > 9)
-			MrBayesPrint ("%d:", nMins);
-		else
-			MrBayesPrint ("0%d:", nMins);
-		if (nSecs > 9)
-			MrBayesPrint ("%d", nSecs);
-		else
-			MrBayesPrint ("0%d", nSecs);
+		MrBayesPrint ("-- %d:%0.2d:%0.2d", nHours, nMins, nSecs);
 		}
 	MrBayesPrint ("\n");
 	
@@ -24859,18 +31927,28 @@ int PrintTree (int curGen, Tree *tree)
 {
 
 	int				i, counter;
-	char			tempNameStr[100], tempStr[200];
+	char			tempNameStr[100], *tempStr;
 	TreeNode		*p=NULL, *q;
+	int                     tempStrSize;
 
 	/* allocate the print string */
 	printStringSize = 200;
-	printString = (char *)malloc((size_t) (printStringSize * sizeof(char)));
+	printString = (char *)SafeMalloc((size_t) (printStringSize * sizeof(char)));
 	if (!printString)
 		{
 		MrBayesPrint ("%s   Problem allocating printString (%d)\n", spacer, printStringSize * sizeof(char));
 		return (ERROR);
 		}
-	strcpy (printString, "");
+	*printString = '\0';
+
+	tempStrSize = 200;
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
+
 
 	/* order the taxa */
 	if (chainParams.orderTaxa == YES)
@@ -24905,13 +31983,13 @@ int PrintTree (int curGen, Tree *tree)
 	if (curGen == 1)
 		{
 		/* print #NEXUS and translation block information */
-		sprintf (tempStr, "#NEXUS\n");
+		SaveSprintf (&tempStr, &tempStrSize, "#NEXUS\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "[ID: %s]\n", stamp);
+		SaveSprintf (&tempStr, &tempStrSize, "[ID: %s]\n", stamp);
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "begin trees;\n");
+		SaveSprintf (&tempStr, &tempStrSize, "begin trees;\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-		sprintf (tempStr, "   translate\n");
+		SaveSprintf (&tempStr, &tempStrSize, "   translate\n");
 		if (AddToPrintString (tempStr) == ERROR) return(ERROR);
 		counter = 0;
 		for (i=0; i<numTaxa; i++)
@@ -24925,20 +32003,21 @@ int PrintTree (int curGen, Tree *tree)
 				return (ERROR);
 				}
 			if (counter == numLocalTaxa)
-				sprintf (tempStr, "      %2d %s;\n", counter, tempNameStr);
+				SaveSprintf (&tempStr, &tempStrSize, "      %2d %s;\n", counter, tempNameStr);
 			else
-				sprintf (tempStr, "      %2d %s,\n", counter, tempNameStr);
+				SaveSprintf (&tempStr, &tempStrSize, "      %2d %s,\n", counter, tempNameStr);
 			if (AddToPrintString (tempStr) == ERROR) return(ERROR);
 			}
 		}
 	
 	/* write the tree in Newick format */
-	sprintf (tempStr, "   tree rep.%d = ", curGen);
+	SaveSprintf (&tempStr, &tempStrSize, "   tree rep.%d = ", curGen);
 	if (AddToPrintString (tempStr) == ERROR) return(ERROR);
    	WriteTreeToFile (tree->root->left, chainParams.saveBrlens, tree->isRooted);
-   	sprintf (tempStr, ";\n");
+   	SaveSprintf (&tempStr, &tempStrSize, ";\n");
 	if (AddToPrintString (tempStr) == ERROR) return(ERROR);
-   		   		
+
+	free (tempStr); 
    	return (NO_ERROR);
 		
 }
@@ -25131,6 +32210,163 @@ int ProcessStdChars (void)
 		}
 
 	return NO_ERROR;
+	
+}
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------
+|
+|   PruneTree: This routine will prune a tree according to the currently included taxa. In the
+|      the process, indices will be updated to reflect the indices of the included taxa.
+|
+---------------------------------------------------------------------------------------------*/
+int PruneTree (Tree *t)
+
+{
+
+	int 			i, j, k, numDeleted, lastIndex;
+	TreeNode		*p = NULL, *q;
+
+	if (t->nNodes - t->nIntNodes - (t->isRooted == YES ? 1 : 0) != numTaxa)
+		{
+		MrBayesPrint ("%s   Tree to be pruned does not include all taxa\n", spacer);
+		return (ERROR);
+		}
+
+	if (taxaInfo[t->root->index].isDeleted == YES)
+		{
+		MrBayesPrint ("%s   Root cannot be pruned away\n", spacer);
+		return (ERROR);
+		}
+	
+	numDeleted = 0;
+	for (i=0; i<numTaxa; i++)
+		{
+		if (taxaInfo[i].isDeleted == YES)
+			numDeleted++;
+		}
+		
+	if (numDeleted == 0)
+		{
+		/* nothing to do */
+		return (NO_ERROR);
+		}
+	else if (t->nNodes - t->nIntNodes - (t->isRooted == YES ? 1 : 0) - numDeleted < 3)
+		{
+		MrBayesPrint ("%s   Pruned tree has less than three taxa in it\n", spacer);
+		return (ERROR);
+		}
+	
+	/* mark the terminals to delete according to the following:
+		x = 2 means delete node and both subtrees
+		x = 1 means delete the node and one subtree
+		x = 0 means keep the node  */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		p->x = 0;
+		}
+	for (i=0; i<t->nNodes; i++)
+		{
+		if (p->left == NULL && p->right == NULL)
+			{
+			if (taxaInfo[p->index].isDeleted == YES)
+				{
+				p->x = 2;
+				p->anc->x++;
+				}
+			}
+		else
+			{
+			if (p->left->x == 2)
+				p->x++;
+			if (p->right->x == 2)
+				p->x++;
+			}
+		}
+	
+	/* remove the marked nodes */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = t->allDownPass[i];
+		if (p->x == 2)
+			{
+			if (p->anc->left == p)
+				p->anc->left = NULL;
+			else
+				p->anc->right = NULL;
+			}
+		else if (p->x == 1)
+			{
+			if (p->left == NULL)
+				q = p->right;
+			else
+				q = p->left;
+			if (p->anc->left == p)
+				p->anc->left = q;
+			else
+				p->anc->right = q;
+			q->anc = p->anc;
+			}
+		}
+
+	/* put unused space in nodes array at the end (just in case) */
+	lastIndex = t->nNodes - 1;
+	for (i=0; i<lastIndex; i++)
+		{
+		p = &t->nodes[i];
+		if (p->x != 0)
+			{
+			CopyTreeNodes (p, &t->nodes[lastIndex--]);
+			}
+		}
+
+	/* correct number of nodes */
+	t->nNodes -= 2 * numDeleted;
+	t->nIntNodes -= 2 * numDeleted;
+	
+	/* find new root */
+	for (i=0; i<t->nNodes; i++)
+		{
+		p = &t->nodes[i];
+		if (p->anc == NULL)
+			{
+			t->root = p;
+			break;
+			}
+		}
+	
+	/* correct terminal indices */
+	for (i=j=0; i<numTaxa; i++)
+		{
+		if (taxaInfo[i].isDeleted == YES)
+			continue;
+		for (k=0; k<numTaxa - numDeleted; k++)
+			{
+			p = &t->nodes[k];
+			if (p->index == i)
+				{
+				p->index = j;
+				break;
+				}
+			}
+		j++;
+		}
+	
+	GetDownPass (t);
+	
+	/* new indices for internal nodes */
+	j = t->nNodes - t->nIntNodes - (t->isRooted == YES ? 1 : 0);
+	for (i=0; i<t->nNodes; i++)
+		{
+		if (p->left != NULL || p->right != NULL)
+			p->index = j++;
+		}
+
+	return (NO_ERROR);
 	
 }
 
@@ -25493,15 +32729,24 @@ int RemoveTreeSamples (int from, int to)
 {
 	int		i, j, k, longestLine;
 	long	lastBlock;
-	char	*word, *s, *lineBuf;
+	char	*word, *s, *lineBuf=0;
 	FILE	*fp;
 	Tree	*t;
-	char	temp[100];
+	char	*tempStr;
+	int     tempStrSize = 100;
 
 #	if defined (MPI_ENABLED)
 	if (proc_id != 0)
 		return (NO_ERROR);
 #	endif
+
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
 
 	for (i=0; i<numTrees; i++)
 		{
@@ -25513,24 +32758,34 @@ int RemoveTreeSamples (int from, int to)
 		for (j=0; j<chainParams.numRuns; j++)
 			{
 			if (numTrees == 1)
-				sprintf (temp, "%s.run%d.t", chainParams.chainFileName, j+1);
+				SaveSprintf(&tempStr, &tempStrSize, "%s.run%d.t", chainParams.chainFileName, j+1);
 			else
-				sprintf (temp, "%s.tree%d.run%d.t", chainParams.chainFileName, i+1, j+1);
+				SaveSprintf(&tempStr, &tempStrSize, "%s.tree%d.run%d.t", chainParams.chainFileName, i+1, j+1);
 
-			if ((fp = OpenBinaryFileR (temp)) == NULL)
+			if ((fp = OpenBinaryFileR (tempStr)) == NULL) 
+			        {
+			        free (tempStr);
+				if (lineBuf != NULL) 
+					free (lineBuf);
 				return (ERROR);
-
+			        }
 			longestLine = LongestLine (fp);
 
-			fclose (fp);
+			SafeFclose (&fp);
 
-			if ((fp = OpenTextFileR (temp)) == NULL)
+			if ((fp = OpenTextFileR (tempStr)) == NULL)
+			        {
+				free (tempStr);
+				if (lineBuf != NULL)
+					free (lineBuf);
 				return (ERROR);
+                                }
 			
 			lineBuf = (char *) calloc (longestLine + 1, sizeof (char));
 			if (!lineBuf)
 				{
-				fclose (fp);
+				SafeFclose (&fp);
+				free (tempStr);
 				return (ERROR);
 				}
 
@@ -25541,8 +32796,12 @@ int RemoveTreeSamples (int from, int to)
 			for (k=1; k<=to; k++)
 				{
 				do {
-					if (fgets (lineBuf, longestLine, fp) == NULL)
+					if (fgets (lineBuf, longestLine, fp) == NULL) 
+					        {
+					        free (tempStr);
+						free (lineBuf);
 						return ERROR;
+                                                }
 					word = strtok (lineBuf, " ");
 					} while (strcmp (word, "tree") != 0);
 				
@@ -25552,18 +32811,22 @@ int RemoveTreeSamples (int from, int to)
 						;
 					if (RecreateTree (t, s) == ERROR)
 						{
-						fclose (fp);
+						SafeFclose (&fp);
+                                                free (tempStr);
+						free (lineBuf);
 						return (ERROR);
 						};
 					if (RemoveTreeFromPartitionCounters (t, i, j) == ERROR)
 						{
-						fclose (fp);
+						SafeFclose (&fp);
+						free (tempStr);
+						free (lineBuf);
 						return (ERROR);
 						};
 					}
 				}
 
-			fclose (fp);
+			SafeFclose (&fp);
 			}
 		}
 
@@ -25572,6 +32835,9 @@ int RemoveTreeSamples (int from, int to)
 		{
 		partFreqTreeRoot[i] = CompactTree (partFreqTreeRoot[i]);
 		}
+
+	free (tempStr);
+	free (lineBuf);
 	return (NO_ERROR);
 }
 
@@ -25662,6 +32928,39 @@ int ReopenMBPrintFiles (void)
 
 
 
+int RequestAbortRun(void) 
+
+{
+	char	c;
+	int ret=0;
+
+	MrBayesPrint ("\n   Control C detected\n");
+	MrBayesPrint ("   Do you really want to stop the run (y/n)?");
+	do {
+		c = getchar();
+	} while (c == ' ');
+	if (c == 'y' || c == 'Y')
+		ret=1;
+	else 
+	{
+		MrBayesPrint ("   Mcmc run continued ...\n\n");
+		ret=0;
+		confirmAbortRun = FALSE;
+#	ifndef VISUAL
+	/* to be safe: some implementations reset the signal handler after a signal */
+	signal(SIGINT, CatchInterrupt);
+#	endif
+	}
+	do {
+		c = getchar();
+	} while (c != '\n' && c != '\r');
+	return ret;
+}
+
+
+
+
+
 /*-------------------------------------------------------------------
 |
 |	ResetScalers: reset scaler nodes of all trees of all chains
@@ -25716,6 +33015,70 @@ int ResetScalers (void)
 
 
 
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------
+|
+|   RootTree: This routine will root an unrooted tree next to the calculation root
+|
+---------------------------------------------------------------------------------------------*/
+int RootTree (Tree *t)
+
+{
+
+	TreeNode		*p, *q, *r;
+
+	if (t->isRooted == NO)
+		{
+		MrBayesPrint ("%s   Problem rooting tree\n", spacer);
+		return (ERROR);
+		}
+		
+	/* update node numbers */
+	t->nNodes += 2;
+	t->nIntNodes += 2;
+	t->isRooted = YES;
+
+	/* reallocate space for nodes to hold two more nodes */
+	t->nodes = (TreeNode *) realloc ((void *)t->nodes, (size_t) (t->nNodes * sizeof(MrBFlt)));
+
+	/* add the root branch */
+	p = t->root;
+	q = p->left;
+	r = &t->nodes[t->nNodes-2];
+	r->index = t->nNodes-2;
+	InitTreeNode (r);
+	r->length = 0.0;
+
+	r->left = p;
+	p->anc = r;
+	p->left = p->right = NULL;
+	p->length = q->length / 2.0;
+	q->length -= p->length;
+	
+	r->right = q;
+	q->anc = r;
+	
+	p = &t->nodes[t->nNodes-1];
+	InitTreeNode (p);
+	p->length = 0.0;
+
+	p->left = r;
+	p->anc = p->right = NULL;
+	
+	GetDownPass (t);
+
+	return (NO_ERROR);
+	
+}
+
+
+
+
+
 int RunChain (long int *seed)
 
 {
@@ -25728,7 +33091,7 @@ int RunChain (long int *seed)
 	clock_t		previousCPUTime, currentCPUTime;
 
 #				if defined (MPI_ENABLED)
-	int			ierror, sumErrors, barrierFreq;
+	int			ierror, sumErrors;
 	MrBFlt		best;
 	MPI_Status 	status;
 #				endif
@@ -25739,10 +33102,6 @@ int RunChain (long int *seed)
 	/* set nErrors to 0 */
 	nErrors = 0;
 	
-#	if defined (MPI_ENABLED)
-	barrierFreq = chainParams.printFreq;
-#	endif
-
 	if (numLocalTaxa < 4)
 		{
 		for (i=0; i<numTrees; i++)
@@ -25777,7 +33136,7 @@ int RunChain (long int *seed)
 		MrBayesPrint ("%s   curLnL is already allocated\n", spacer);
 		nErrors++;
 		}
-	else if ((curLnL = (MrBFlt *)malloc((size_t) (numLocalChains * sizeof(MrBFlt)))) == NULL)
+	else if ((curLnL = (MrBFlt *)SafeMalloc((size_t) (numLocalChains * sizeof(MrBFlt)))) == NULL)
 		{
 		MrBayesPrint ("%s   Problem allocating curLnL (%d)\n", spacer, numLocalChains * sizeof(MrBFlt));
 		nErrors++;
@@ -25807,7 +33166,7 @@ int RunChain (long int *seed)
 		MrBayesPrint ("%s   curLnPr is already allocated\n", spacer);
 		nErrors++;
 		}
-	else if ((curLnPr = (MrBFlt *)malloc((size_t) (numLocalChains * sizeof(MrBFlt)))) == NULL)
+	else if ((curLnPr = (MrBFlt *)SafeMalloc((size_t) (numLocalChains * sizeof(MrBFlt)))) == NULL)
 		{
 		MrBayesPrint ("%s   Problem allocating curLnPr (%d)\n", spacer, numLocalChains * sizeof(MrBFlt));
 		nErrors++;
@@ -25831,7 +33190,7 @@ int RunChain (long int *seed)
 		MrBayesPrint ("%s   chainId is already allocated\n", spacer);
 		nErrors++;
 		}
-	else if ((chainId = (int *)malloc((size_t) (numLocalChains * sizeof(int)))) == NULL)
+	else if ((chainId = (int *)SafeMalloc((size_t) (numLocalChains * sizeof(int)))) == NULL)
 		{
 		MrBayesPrint ("%s   Problem allocating chainId (%d)\n", spacer, numLocalChains * sizeof(int));
 		nErrors++;
@@ -26070,26 +33429,10 @@ int RunChain (long int *seed)
 
 		/*! AbortRun is set by the signal handler when it receives a CTRL-C */
 #if 		defined  (MPI_ENABLED)
-		if (confirmAbortRun == YES && requestAbortRun()==1)
+		if (confirmAbortRun == YES && RequestAbortRun() == 1)
 			nErrors++;
-		if (n % barrierFreq == 1)
-			{
-			MPI_Allreduce (&nErrors, &sumErrors, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-			if (sumErrors > 0)
-				{
-				if (confirmAbortRun == NO)
-					{
-					MrBayesPrint ("%s   RunChain error on at least one processor\n", spacer);
-						return ERROR;
-					}
-				else
-					{
-					return ABORT;
-					}
-				}
-			}
 #else
-		if (confirmAbortRun == YES && requestAbortRun()==1)
+		if (confirmAbortRun == YES && RequestAbortRun() == 1)
 			return ABORT;
 #endif
 		/* Refresh scalers every SCALER_REFRESH_FREQ generations.                */
@@ -26134,7 +33477,7 @@ int RunChain (long int *seed)
 			/*TouchAllPartitions();*/    /* for debugging copying shortcuts */
 
 			/* make move */
-			if ((theMove->moveFxn)(theMove->parm, chn, seed, &lnPriorRatio, &lnProposalRatio, theMove->proposalParam) == ERROR)
+			if ((theMove->moveFxn)(theMove->parm, chn, seed, &lnPriorRatio, &lnProposalRatio, theMove->tuningParam) == ERROR)
 				{
 				MrBayesPrint ("%s   Error in move %s\n", spacer, theMove->name);
 #				if defined (MPI_ENABLED)
@@ -26545,6 +33888,40 @@ int RunChain (long int *seed)
 		}
 
 	return (NO_ERROR);
+}
+
+
+
+
+
+#define TARGETLENDELTA (100)
+
+int SaveSprintf(char **target, int *targetLen, char *fmt, ...) {
+  va_list    argp;
+  int        len,retval;
+
+  va_start(argp, fmt);
+#ifdef VISUAL
+  len = _vsnprintf(NULL, 0, fmt, argp);
+#else
+  len = vsnprintf(NULL, 0, fmt, argp);
+#endif
+
+  va_end(argp);
+
+  if(len>*targetLen) 
+        {
+/* 	  fprintf(stderr, "* increasing buffer from %d to %d bytes\n", *targetLen, len+TARGETLENDELTA); */
+        *targetLen = len+TARGETLENDELTA; /* make it a little bigger */
+	    *target = realloc(*target, *targetLen);
+        }
+
+  va_start(argp,fmt);
+  retval=vsprintf(*target, fmt, argp);
+  va_end(argp);
+
+/*   fprintf(stderr, "* savesprintf /%s/\n",*target); */
+  return retval;
 }
 
 
@@ -27941,11 +35318,19 @@ int SetChainParams (void)
 {
 
 	int			isBaseRateNeeded, c, i, j, k, n, n1, n2, index, isPartTouched[MAX_NUM_DIVS],
-				numRelParts, nRelParts, areAllPartsParsimony, clockSwitch;
-	char		tempCodon[15], tempMult[15], temp[300], partString[100];
+				numRelParts, nRelParts, areAllPartsParsimony, clockSwitch, numCalibratedNodes;
+	char		tempCodon[15], tempMult[15], *tempStr, partString[100];
 	Param		*p;
 	ModelInfo	*m;
 	ModelParams *mp;
+	int             tempStrSize = 300;
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		{
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+		return (ERROR);
+		}
 
 #	if defined DEBUG_SETCHAINPARAMS
 	/* only for debugging */
@@ -27960,8 +35345,11 @@ int SetChainParams (void)
 	inferAncStates = NO;
 
 	/* set model info */
-	if (SetModelInfo() == ERROR)
+	if (SetModelInfo() == ERROR) 
+	        {
+		free (tempStr);
 		return (ERROR);
+                }
 
 	/* figure out number of parameters */
 	/* this relies on activeParams[j][i] being set to 1, 2, ..., numParams */
@@ -27992,10 +35380,11 @@ int SetChainParams (void)
 	if (memAllocs[ALLOC_PARAMS] == YES)
 		{
 		MrBayesPrint ("%s   params or relevantParts not free in SetChainParams\n", spacer);
+                free (tempStr);
 		return ERROR;
 		}
-	params = (Param *) malloc (numParams * sizeof(Param));
-	relevantParts = (int *) malloc (nRelParts * sizeof(int));
+	params = (Param *) SafeMalloc (numParams * sizeof(Param));
+	relevantParts = (int *) SafeMalloc (nRelParts * sizeof(int));
 	if (!params || !relevantParts)
 		{
 		MrBayesPrint ("%s   Problem allocating params and relevantParts\n", spacer);
@@ -28003,6 +35392,7 @@ int SetChainParams (void)
 			free (params);
 		if (relevantParts)
 			free (relevantParts);
+                free (tempStr);
 		return ERROR;
 		}
 	else
@@ -28133,8 +35523,8 @@ int SetChainParams (void)
 								sprintf (p->paramName, "r(%c<->%c)%s", StateCode_AA(n1), StateCode_AA(n2), partString);
 							else
 								{
-								sprintf (temp, "\tr(%c<->%c)", StateCode_AA(n1), StateCode_AA(n2));
-								strcat (p->paramName, temp);
+								SaveSprintf(&tempStr, &tempStrSize, "\tr(%c<->%c)", StateCode_AA(n1), StateCode_AA(n2));
+								strcat (p->paramName, tempStr);
 								strcat (p->paramName, partString);
 								}
 							}
@@ -28156,8 +35546,8 @@ int SetChainParams (void)
 								sprintf (p->paramName, "r(%c<->%c)", StateCode_AA(n1), StateCode_AA(n2));
 							else
 								{
-								sprintf (temp, "\tr(%c<->%c)", StateCode_AA(n1), StateCode_AA(n2));
-								strcat (p->paramName, temp);
+								SaveSprintf(&tempStr, &tempStrSize, "\tr(%c<->%c)", StateCode_AA(n1), StateCode_AA(n2));
+								strcat (p->paramName, tempStr);
 								strcat (p->paramName, partString);
 								}
 							}
@@ -28274,8 +35664,8 @@ int SetChainParams (void)
 					p->printParam = YES;
 				for (i=0; i<p->nValues; i++)
 					{
-					sprintf (temp, "\tomega(%d)", i+1);
-					strcat (p->paramName, temp);
+					SaveSprintf(&tempStr, &tempStrSize, "\tomega(%d)", i+1);
+					strcat (p->paramName, tempStr);
 					if (FillRelPartsString (p, partString) == YES)
 						strcat (p->paramName, partString);
 					}
@@ -28572,8 +35962,8 @@ int SetChainParams (void)
 						{
 						if (FillRelPartsString (p, partString) == YES)
 							{
-							sprintf (temp, "pi(A)%s\tpi(C)%s\tpi(G)%s\tpi(T)%s", partString, partString, partString, partString);
-							strcpy (p->paramName, temp);
+							SaveSprintf(&tempStr, &tempStrSize, "pi(A)%s\tpi(C)%s\tpi(G)%s\tpi(T)%s", partString, partString, partString, partString);
+							strcpy (p->paramName, tempStr);
 							}
 						else
 							strcpy (p->paramName, "pi(A)\tpi(C)\tpi(G)\tpi(T)");
@@ -28582,9 +35972,9 @@ int SetChainParams (void)
 						{
 						if (FillRelPartsString (p, partString) == YES)
 							{
-							sprintf (temp, "pi(AA)%s\tpi(AC)%s\tpi(AG)%s\tpi(AT)%s\tpi(CA)%s\tpi(CC)%s\tpi(CG)%s\tpi(CT)%s\tpi(GA)%s\tpi(GC)%s\tpi(GG)%s\tpi(GT)%s\tpi(TA)%s\tpi(TC)%s\tpi(TG)%s\tpi(TT)%s",
+							SaveSprintf(&tempStr, &tempStrSize, "pi(AA)%s\tpi(AC)%s\tpi(AG)%s\tpi(AT)%s\tpi(CA)%s\tpi(CC)%s\tpi(CG)%s\tpi(CT)%s\tpi(GA)%s\tpi(GC)%s\tpi(GG)%s\tpi(GT)%s\tpi(TA)%s\tpi(TC)%s\tpi(TG)%s\tpi(TT)%s",
 							partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString, partString);
-							strcpy (p->paramName, temp);
+							strcpy (p->paramName, tempStr);
 							}
 						else
 							strcpy (p->paramName, "pi(AA)\tpi(AC)\tpi(AG)\tpi(AT)\tpi(CA)\tpi(CC)\tpi(CG)\tpi(CT)\tpi(GA)\tpi(GC)\tpi(GG)\tpi(GT)\tpi(TA)\tpi(TC)\tpi(TG)\tpi(TT)");
@@ -28633,10 +36023,10 @@ int SetChainParams (void)
 					{
 					if (FillRelPartsString (p, partString) == YES)
 						{
-						sprintf (temp, "pi(Ala)%s\tpi(Arg)%s\tpi(Asn)%s\tpi(Asp)%s\tpi(Cys)%s\tpi(Gln)%s\tpi(Glu)%s\tpi(Gly)%s\tpi(His)%s\tpi(Ile)%s\tpi(Leu)%s\tpi(Lys)%s\tpi(Met)%s\tpi(Phe)%s\tpi(Pro)%s\tpi(Ser)%s\tpi(Thr)%s\tpi(Trp)%s\tpi(Tyr)%s\tpi(Val)%s",
+						SaveSprintf(&tempStr, &tempStrSize, "pi(Ala)%s\tpi(Arg)%s\tpi(Asn)%s\tpi(Asp)%s\tpi(Cys)%s\tpi(Gln)%s\tpi(Glu)%s\tpi(Gly)%s\tpi(His)%s\tpi(Ile)%s\tpi(Leu)%s\tpi(Lys)%s\tpi(Met)%s\tpi(Phe)%s\tpi(Pro)%s\tpi(Ser)%s\tpi(Thr)%s\tpi(Trp)%s\tpi(Tyr)%s\tpi(Val)%s",
 						partString, partString, partString, partString, partString, partString, partString, partString, partString, partString,
 						partString, partString, partString, partString, partString, partString, partString, partString, partString, partString);
-						strcpy (p->paramName, temp);
+						strcpy (p->paramName, tempStr);
 						}
 					else
 						strcpy (p->paramName, "pi(Ala)\tpi(Arg)\tpi(Asn)\tpi(Asp)\tpi(Cys)\tpi(Gln)\tpi(Glu)\tpi(Gly)\tpi(His)\tpi(Ile)\tpi(Leu)\tpi(Lys)\tpi(Met)\tpi(Phe)\tpi(Pro)\tpi(Ser)\tpi(Thr)\tpi(Trp)\tpi(Tyr)\tpi(Val)");
@@ -28645,8 +36035,8 @@ int SetChainParams (void)
 					{
 					if (FillRelPartsString (p, partString) == YES)
 						{
-						sprintf (temp, "pi(0)%s\tpi(1)%s", partString, partString);
-						strcpy (p->paramName, temp);
+						SaveSprintf(&tempStr, &tempStrSize, "pi(0)%s\tpi(1)%s", partString, partString);
+						strcpy (p->paramName, tempStr);
 						}
 					else
 						strcpy (p->paramName, "pi(0)\tpi(1)");
@@ -28867,12 +36257,31 @@ int SetChainParams (void)
 					areAllPartsParsimony = NO;
 				}
 
-			/* check if topology is calibrated, clock or unconstrained */
+			/* check if topology is clock or unconstrained */
 			clockSwitch = 0;
-			for (i=0; i<p->nRelParts; i++)
+			if (areAllPartsParsimony == NO)
 				{
-				if (!strcmp(modelParams[p->relParts[i]].brlensPr, "Clock"))
-					clockSwitch++;
+				for (i=0; i<p->nRelParts; i++)
+					{
+					if (!strcmp(modelParams[p->relParts[i]].brlensPr, "Clock"))
+						clockSwitch++;
+					}
+				}
+			
+			/* check if topology is also calibrated if it is clock-constrained */
+			numCalibratedNodes = 0;
+			if (clockSwitch > 0)
+				{
+				for (i=0; i<MAX_NUM_CONSTRAINTS; i++)
+					{
+					if (mp->activeConstraints[i] == YES && constraintCalibration[i].prior != unconstrained)
+						numCalibratedNodes++;
+					}
+				for (i=0; i<numTaxa; i++)
+					{
+					if (taxaInfo[i].isDeleted == NO && taxaInfo[i].calibration.prior != unconstrained)
+						numCalibratedNodes++;
+					}
 				}
 
 			/* find the parameter x prior type */
@@ -28898,14 +36307,14 @@ int SetChainParams (void)
 					p->paramId = TOPOLOGY_NCL_CONSTRAINED;
 				else if (!strcmp(mp->topologyPr, "Uniform") && clockSwitch >= 1)
 					{
-					if (numCalibratedLocalTaxa > 0)
+					if (numCalibratedNodes > 0)
 						p->paramId = TOPOLOGY_CCL_UNIFORM;
 					else
 						p->paramId = TOPOLOGY_CL_UNIFORM;
 					}
 				else if (!strcmp(mp->topologyPr,"Constraints") && clockSwitch >= 1)
 					{
-					if (numCalibratedLocalTaxa > 0)
+					if (numCalibratedNodes > 0)
 						p->paramId = TOPOLOGY_CCL_CONSTRAINED;
 					else
 						p->paramId = TOPOLOGY_CL_CONSTRAINED;
@@ -28928,6 +36337,22 @@ int SetChainParams (void)
 					modelSettings[i].brlens = p;
 					}
 
+			/* check if branch lengths are also calibrated if they are clock-constrained */
+			numCalibratedNodes = 0;
+			if (!strcmp(mp->brlensPr, "Clock") && modelSettings[p->relParts[0]].parsModelId == NO)
+				{
+				for (i=0; i<MAX_NUM_CONSTRAINTS; i++)
+					{
+					if (mp->activeConstraints[i] == YES && constraintCalibration[i].prior != unconstrained)
+						numCalibratedNodes++;
+					}
+				for (i=0; i<numTaxa; i++)
+					{
+					if (taxaInfo[i].isDeleted == NO && taxaInfo[i].calibration.prior != unconstrained)
+						numCalibratedNodes++;
+					}
+				}
+
 			/* find the parameter x prior type */
 			if (modelSettings[p->relParts[0]].parsModelId == YES)
 				p->paramId = BRLENS_PARSIMONY;
@@ -28935,7 +36360,7 @@ int SetChainParams (void)
 				{
 				if (!strcmp(mp->brlensPr, "Clock"))
 					{
-					if (numCalibratedLocalTaxa > 0)
+					if (numCalibratedNodes > 0)
 						{
 						if (!strcmp(mp->clockPr,"Uniform"))
 							p->paramId = BRLENS_CCLOCK_UNI;
@@ -29115,7 +36540,7 @@ int SetChainParams (void)
 			}
 
 		}
-		
+	free (tempStr);	
 	return (NO_ERROR);	
 }
 
@@ -29545,12 +36970,19 @@ int SetModelInfo (void)
 			}
 		else if (mp->dataType == STANDARD)
 			{
-			if (!(strcmp(mp->symPiPr,"Fixed") == 0 && AreDoublesEqual(mp->symBetaFix, -1.0, 0.00001) == YES))
+			if (strcmp(mp->symPiPr,"Fixed") == 0 && AreDoublesEqual(mp->symBetaFix, -1.0, 0.00001) == YES)
 				{
+				/* equal stationary state frequencies -- no cijks and eigenvalues needed */
+				m->nCijkParts = 0;
+				}
+			else /* if (strcmp(mp->symPiPr,"Fixed") != 0 || AreDoublesEqual(mp->symBetaFix, -1.0, 0.00001) == NO)) */
+				{
+				/* asymmetry between stationary state frequencies -- we need one cijk and eigenvalue
+				   set for each multistate character */
 				m->nCijkParts = 0;
 				for (c=0; c<m->numChars; c++)
 					{
-					if (m->nStates[c] > 3 && (m->cType[c] == UNORD || m->cType[c] == ORD))
+					if (m->nStates[c] > 2 && (m->cType[c] == UNORD || m->cType[c] == ORD))
 						{
 						ts = m->nStates[c];
 						m->nCijk += (ts * ts * ts) + (2 * ts);
@@ -29687,7 +37119,7 @@ int SetMoves (void)
 		MrBayesPrint ("%s   Space for moves is not free in SetMoves\n", spacer);
 		return ERROR;
 		}
-	moves = (MCMCMove *) malloc (numMoves * sizeof (MCMCMove));
+	moves = (MCMCMove *) SafeMalloc (numMoves * sizeof (MCMCMove));
 	if (!moves)
 		{
 		MrBayesPrint ("%s   Problem allocating moves\n", spacer);
@@ -29730,8 +37162,8 @@ int SetMoves (void)
 					moves[n].moveFxn = moveTypes[i].moveFxn;
 					for (j1=0; j1<chainParams.numRuns; j1++)
 						moves[n].nAccepted[j1] = moves[n].nTried[j1] = 0;
-					moves[n].proposalParam[0] = moveTypes[i].proposalParam[0];
-					moves[n].proposalParam[1] = moveTypes[i].proposalParam[1];
+					moves[n].tuningParam[0] = moveTypes[i].tuningParam[0];
+					moves[n].tuningParam[1] = moveTypes[i].tuningParam[1];
 					if (moveTypes[i].parsimonyBased == YES)
 						{
 						for (j1=0; j1<p->nRelParts; j1++)
@@ -29788,14 +37220,14 @@ int SetNucQMatrix (MrBFlt **a, int n, int whichChain, int division, MrBFlt rateM
 	   
 	   for nst=2 models or
 	   
-	      rateValues[0] = G <-> T rate
-	      rateValues[1] = C <-> T rate
-	      rateValues[2] = C <-> G rate
-	      rateValues[3] = A <-> T rate
-	      rateValues[4] = A <-> G rate
-	      rateValues[5] = A <-> C rate
+	      rateValues[0] = A <-> C rate
+	      rateValues[1] = A <-> G rate
+	      rateValues[2] = A <-> T rate
+	      rateValues[3] = C <-> G rate
+	      rateValues[4] = C <-> T rate
+	      rateValues[5] = G <-> T rate
 	      
-	   for nst=6 models. For GTR models, rateValues[0] = 1 (always). */
+	   for nst=6 models. */
 	bs = GetParamSubVals (m->stateFreq, whichChain, state[whichChain]);
 	if (m->nst == 2)
 		rateValues = GetParamVals(m->tRatio, whichChain, state[whichChain]);
@@ -30127,19 +37559,19 @@ int SetNucQMatrix (MrBFlt **a, int n, int whichChain, int division, MrBFlt rateM
 		   model, with these constraints:
 		   
 		  	a[i][j] = 0                      -> if i and j differ at 2 or 3 nucleotides
-		  	a[i][j] = rateValues[0] * bs[j]  -> if synonymous G <-> T change
-		  	a[i][j] = rateValues[1] * bs[j]  -> if synonymous C <-> T change
-		  	a[i][j] = rateValues[2] * bs[j]  -> if synonymous C <-> G change
-		  	a[i][j] = rateValues[3] * bs[j]  -> if synonymous A <-> T change
-		  	a[i][j] = rateValues[4] * bs[j]  -> if synonymous A <-> G change
-		  	a[i][j] = rateValues[5] * bs[j]  -> if synonymous A <-> C change
+		  	a[i][j] = rateValues[0] * bs[j]  -> if synonymous A <-> C change
+		  	a[i][j] = rateValues[1] * bs[j]  -> if synonymous A <-> G change
+		  	a[i][j] = rateValues[2] * bs[j]  -> if synonymous A <-> T change
+		  	a[i][j] = rateValues[3] * bs[j]  -> if synonymous C <-> G change
+		  	a[i][j] = rateValues[4] * bs[j]  -> if synonymous C <-> T change
+		  	a[i][j] = rateValues[5] * bs[j]  -> if synonymous G <-> T change
 		  	
-		  	a[i][j] = rateValues[0] * nonsyn * bs[j]  -> if nonsynonymous G <-> T change
-		  	a[i][j] = rateValues[1] * nonsyn * bs[j]  -> if nonsynonymous C <-> T change
-		  	a[i][j] = rateValues[2] * nonsyn * bs[j]  -> if nonsynonymous C <-> G change
-		  	a[i][j] = rateValues[3] * nonsyn * bs[j]  -> if nonsynonymous A <-> T change
-		  	a[i][j] = rateValues[4] * nonsyn * bs[j]  -> if nonsynonymous A <-> G change
-		  	a[i][j] = rateValues[5] * nonsyn * bs[j]  -> if nonsynonymous A <-> C change
+		  	a[i][j] = rateValues[0] * nonsyn * bs[j]  -> if nonsynonymous A <-> C change
+		  	a[i][j] = rateValues[1] * nonsyn * bs[j]  -> if nonsynonymous A <-> G change
+		  	a[i][j] = rateValues[2] * nonsyn * bs[j]  -> if nonsynonymous A <-> T change
+		  	a[i][j] = rateValues[3] * nonsyn * bs[j]  -> if nonsynonymous C <-> G change
+		  	a[i][j] = rateValues[4] * nonsyn * bs[j]  -> if nonsynonymous C <-> T change
+		  	a[i][j] = rateValues[5] * nonsyn * bs[j]  -> if nonsynonymous G <-> T change
 		  	
 		  Other models, such as the one used by Nielsen & Yang (1998) can be obtained
 		  from this model by restricing transitions and transversions to have the same rate.
@@ -30304,7 +37736,7 @@ int SetNucQMatrix (MrBFlt **a, int n, int whichChain, int division, MrBFlt rateM
 			}
 
 		/* rescale Q matrix */
-		if (inferPosSel == YES)
+		if (m->nucModelId == NUCMODEL_CODON && m->numOmegaCats > 1)
 			{
 			/* If we have a positive selection model with multiple categories, then
 			   we do not rescale the rate matrix until we have finished generating
@@ -30865,183 +38297,538 @@ void SetUpMoveTypes (void)
 
 {
 	
-	/* TO DO: register the move type here when new move functions are added           */
-	/* Remember to check that the number of move types does not exceed NUM_MOVE_TYPES */
-	/* defined in mb.h. Also, make certain that any changes here are mirrored in      */
-	/* the "props" move in command.h.                                                 */
+	/* Register the move type here when new move functions are added 
+	   Remember to check that the number of move types does not exceed NUM_MOVE_TYPES
+	   defined in mb.h.         */
 	int			i;
 	MoveType	*mt;
 
+	/* reset move types */
+	for (i=0; i<NUM_MOVE_TYPES; i++)
+		{
+		mt = &moveTypes[i];
+		mt->level = DEVELOPER;
+		mt->numTuningParams = 0;
+		mt->minimum[0] = mt->minimum[1] = -1000000000.0;
+		mt->maximum[0] = mt->maximum[1] =  1000000000.0;
+		mt->tuningParam[0] = mt->tuningParam[1] = 0.0;
+		mt->nApplicable = 0;
+		mt->name = mt->shortName = mt->nameTuning[0] = mt->nameTuning[1] = "";
+		mt->relProposalProb = 0.0;
+		mt->parsimonyBased = NO;
+		}
+
+	/* All moves are in alphabetic order of move function name. This list should match
+	   the list of move functions exactly (see function declarations at top of this file). */
+    
 	i = 0;
 
+	/* Move_Aamodel */
 	mt = &moveTypes[i++];
-	mt->name = "(omega) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = OMEGA_DIR;
+	mt->name = "(amino acid model) randomly";
+	mt->shortName = "uniform";
+	mt->applicableTo[0] = AAMODEL_MIX;
 	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Omega;
-	mt->relProposalProb = relProbs[0];
-	mt->proposalParam[0] = proParam[0][0]; /* sliding window size */
+	mt->moveFxn = &Move_Aamodel;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
-	mt = &moveTypes[i++];
-	mt->name = "(state frequencies) with Dirichlet proposal";
-	strcpy (mt->shortName, "Dirichlet");
-	mt->applicableTo[0] = PI_DIR;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Statefreqs;
-	mt->relProposalProb = relProbs[1];
-	mt->proposalParam[0] = proParam[1][0]; /* so-called "alphaPi" */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(symmetric Dirichlet/beta) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = SYMPI_UNI;
-	mt->applicableTo[1] = SYMPI_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Beta;
-	mt->relProposalProb = relProbs[2];
-	mt->proposalParam[0] = proParam[2][0]; /* dirichlet parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(prop. invar. sites) with beta proposal";
-	strcpy (mt->shortName, "beta");
-	mt->applicableTo[0] = PINVAR_UNI;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Pinvar;
-	mt->relProposalProb = relProbs[3];
-	mt->proposalParam[0] = proParam[3][0]; /* beta parameter size */
-	mt->parsimonyBased = NO;
-
+	/* Move_Adgamma */
 	mt = &moveTypes[i++];
 	mt->name = "(correlation of adgamma) with sliding window";
-	strcpy (mt->shortName, "slider");
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
 	mt->applicableTo[0] = CORREL_UNI;
 	mt->nApplicable = 1;
 	mt->moveFxn = &Move_Adgamma;
-	mt->relProposalProb = relProbs[4];
-	mt->proposalParam[0] = proParam[4][0]; /* sliding window size */
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.5;  /* window size */
+	mt->minimum[0] = 0.001;
+	mt->maximum[0] = 1.999;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_Beta */
 	mt = &moveTypes[i++];
-	mt->name = "(covarion switch rates) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = SWITCH_UNI;
-	mt->applicableTo[1] = SWITCH_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_SwitchRate;
-	mt->relProposalProb = relProbs[5];
-	mt->proposalParam[0] = proParam[5][0]; /* sliding window size */
+	mt->name = "(symmetric Dirichlet/Beta) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "multiplier";
+	mt->applicableTo[0] = SYMPI_UNI;
+	mt->applicableTo[1] = SYMPI_EXP;
+	mt->applicableTo[2] = SYMPI_UNI_MS;
+	mt->applicableTo[3] = SYMPI_EXP_MS;
+	mt->nApplicable = 4;
+	mt->moveFxn = &Move_Beta;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* so-called lambda */
+	mt->minimum[0] = 0.001;
+	mt->maximum[0] = 100.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_BiasedSpr */
+	/* Not yet correctly balanced */
 	mt = &moveTypes[i++];
-	mt->name = "(speciation rate) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = SPECRATE_UNI;
-	mt->applicableTo[1] = SPECRATE_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Speciation;
-	mt->relProposalProb = relProbs[6];
-	mt->proposalParam[0] = proParam[6][0]; /* sliding window size */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(extinction rate) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = EXTRATE_UNI;
-	mt->applicableTo[1] = EXTRATE_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Extinction;
-	mt->relProposalProb = relProbs[7];
-	mt->proposalParam[0] = proParam[7][0]; /* sliding window size */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(coalescence parameter) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = THETA_UNI;
-	mt->applicableTo[1] = THETA_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Theta;
-	mt->relProposalProb = relProbs[8];
-	mt->proposalParam[0] = proParam[8][0]; /* sliding window size */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with LOCAL";
-	strcpy (mt->shortName, "LOCAL");
+	mt->name = "(topology and branch lengths) with biased SPR";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->nameTuning[1] = "parsimony warp parameter";
+	mt->shortName = "bSPR";
 	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
-	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Local;
-	mt->relProposalProb = relProbs[9];
-	mt->proposalParam[0] = proParam[9][0]; /* "tuning" parameter */
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_BiasedSpr;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda */
+	mt->tuningParam[1] = 1.0;  /* warp */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
 
+	/* Move_BrLen */
 	mt = &moveTypes[i++];
 	mt->name = "(branch lengths) with multiplier";
-	strcpy (mt->shortName, "mult");
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
 	mt->applicableTo[0] = BRLENS_UNI;
 	mt->applicableTo[1] = BRLENS_EXP;
 	mt->nApplicable = 2;
 	mt->moveFxn = &Move_BrLen;
-	mt->relProposalProb = relProbs[10];
-	mt->proposalParam[0] = proParam[10][0]; /* "tuning" parameter */
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (2.0);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_Extinction */
+	mt = &moveTypes[i++];
+	mt->name = "(extinction rate) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = EXTRATE_UNI;
+	mt->applicableTo[1] = EXTRATE_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Extinction;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 100.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Extinction_M */
+	mt = &moveTypes[i++];
+	mt->name = "(extinction rate) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = EXTRATE_UNI;
+	mt->applicableTo[1] = EXTRATE_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Extinction_M;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_ExtSPR1 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with extending SPR1";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eSPR1";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtSPR1;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_ExtSPR2 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with extending SPR2";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eSPR2";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtSPR2;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_ExtSPRClock */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with extending SPR (clock)";
+	mt->nameTuning[0] = "extension probability";
+	mt->shortName = "ceSPR";
+	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
+	mt->applicableTo[2] = TOPOLOGY_CL_CONSTRAINED_HOMO;
+	mt->applicableTo[3] = TOPOLOGY_CCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 4;
+	mt->moveFxn = &Move_ExtSPRClock;
+	mt->relProposalProb = 10.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.7; /* extension probability */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_ExtSS */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with extending SS";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eSS";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtSS;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_ExtTBR */
 	mt = &moveTypes[i++];
 	mt->name = "(topology and branch lengths) with extending TBR";
-	strcpy (mt->shortName, "eTBR");
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eTBR";
 	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
 	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
 	mt->nApplicable = 2;
 	mt->moveFxn = &Move_ExtTBR;
-	mt->relProposalProb = relProbs[11];
-	mt->proposalParam[0] = proParam[11][0]; /* extension probability */
-	mt->proposalParam[1] = proParam[11][1]; /* "tuning" parameter    */
+	mt->relProposalProb = 15.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8;  /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99;
+	mt->minimum[1] = 0.00001;
+	mt->maximum[1] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_ExtTBR1 */
 	mt = &moveTypes[i++];
-	mt->name = "(omega 1) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = OMEGA_BUD;
-	mt->applicableTo[1] = OMEGA_BUF;
-	mt->applicableTo[2] = OMEGA_BED;
-	mt->applicableTo[3] = OMEGA_BEF;
-	mt->applicableTo[4] = OMEGA_BFD;
-	mt->applicableTo[5] = OMEGA_BFF;
-	mt->applicableTo[6] = OMEGA_ED;
-	mt->applicableTo[7] = OMEGA_EF;
-	mt->nApplicable = 8;
-	mt->moveFxn = &Move_OmegaPur;
-	mt->relProposalProb = relProbs[12];
-	mt->proposalParam[0] = proParam[12][0]; /* sliding window size */
+	mt->name = "(topology and branch lengths) with extending TBR1";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eTBR1";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtTBR1;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
 
+	/* Move_ExtTBR2 */
 	mt = &moveTypes[i++];
-	mt->name = "(omega 3) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = OMEGA_BUD;
-	mt->applicableTo[1] = OMEGA_BUF;
-	mt->applicableTo[2] = OMEGA_BED;
-	mt->applicableTo[3] = OMEGA_BEF;
-	mt->applicableTo[4] = OMEGA_FUD;
-	mt->applicableTo[5] = OMEGA_FUF;
-	mt->applicableTo[6] = OMEGA_FED;
-	mt->applicableTo[7] = OMEGA_FEF;
-	mt->applicableTo[8] = OMEGA_ED;
-	mt->applicableTo[9] = OMEGA_EF;
-	mt->nApplicable = 10;
-	mt->moveFxn = &Move_OmegaPos;
-	mt->relProposalProb = relProbs[13];
-	mt->proposalParam[0] = proParam[13][0]; /* sliding window size */
+	mt->name = "(topology and branch lengths) with extending TBR2";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eTBR2";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtTBR2;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
 
+	/* Move_ExtTBR3 */
 	mt = &moveTypes[i++];
-	mt->name = "(omega cat. freqs.) with Dirichlet proposal";
-	strcpy (mt->shortName, "Dirichlet");
+	mt->name = "(topology and branch lengths) with extending TBR3";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eTBR3";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtTBR3;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_ExtTBR4 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with extending TBR4";
+	mt->nameTuning[0] = "extension probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "eTBR4";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_ExtTBR4;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* extension probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_GammaShape_M */
+	mt = &moveTypes[i++];
+	mt->name = "(gamma shape) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = SHAPE_UNI;
+	mt->applicableTo[1] = SHAPE_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_GammaShape_M;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Growth */
+	mt = &moveTypes[i++];
+	mt->name = "(population growth) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = GROWTH_UNI;
+	mt->applicableTo[1] = GROWTH_EXP;
+	mt->applicableTo[2] = GROWTH_NORMAL;
+	mt->nApplicable = 3;
+	mt->moveFxn = &Move_Growth;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 5.0;  /* window size */
+	mt->minimum[0] = -10000.0;
+	mt->maximum[0] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Local */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with LOCAL";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "LOCAL";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Local;
+	mt->relProposalProb = 5.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_LocalClock */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with clock-constrained LOCAL*";
+	mt->shortName = "cLOCAL";
+	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
+	mt->applicableTo[2] = TOPOLOGY_CL_CONSTRAINED_HOMO;
+	mt->applicableTo[3] = TOPOLOGY_CCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 4;
+	mt->moveFxn = &Move_LocalClock;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_NNI */
+	mt = &moveTypes[i++];
+	mt->name = "(parsimony topology) with NNI";
+	mt->shortName = "pNNI";
+	mt->applicableTo[0] = TOPOLOGY_PARSIMONY_UNIFORM;
+	mt->applicableTo[1] = TOPOLOGY_PARSIMONY_CONSTRAINED;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_NNI;
+	mt->relProposalProb = 10.0;
+	mt->numTuningParams = 0;
+	mt->parsimonyBased = NO;	/* no extra parsimony scores are needed */
+	mt->level = STANDARD_USER;
+
+	/* Move_NNI_Hetero */
+	/* this move is in principle also applicable to TOPOLOGY_NCL_UNIFORM_HOMO */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with NNI (heterogen.)";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "hNNI";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HETERO;
+	/* mt->applicableTo[1] = TOPOLOGY_NCL_UNIFORM_HOMO; */
+	mt->nApplicable = 1; /* 2; */
+	mt->moveFxn = &Move_NNI_Hetero;
+	mt->relProposalProb = 15.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.6);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_NodeSlider */
+	mt = &moveTypes[i++];
+	mt->name = "(branch lengths) with nodeslider";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "nslider";
+	mt->applicableTo[0] = BRLENS_UNI;
+	mt->applicableTo[1] = BRLENS_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_NodeSlider;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_NodeSliderClock */
+	mt = &moveTypes[i++];
+	mt->name = "(branch lengths) with node slider (clock)";
+	mt->nameTuning[0] = "window size";
+	mt->shortName = "cslider";
+	mt->applicableTo[0] = BRLENS_CCLOCK_UNI;
+	mt->applicableTo[1] = BRLENS_CCLOCK_COAL;
+	mt->applicableTo[2] = BRLENS_CCLOCK_BD;
+	mt->applicableTo[3] = BRLENS_CLOCK_UNI;
+	mt->applicableTo[4] = BRLENS_CLOCK_COAL;
+	mt->applicableTo[5] = BRLENS_CLOCK_BD;
+	mt->nApplicable = 6;
+	mt->moveFxn = &Move_NodeSliderClock;
+	mt->relProposalProb = 7.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.05; /* window size */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Omega */
+	mt = &moveTypes[i++];
+	mt->name = "(omega) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = OMEGA_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Omega;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0; /* sliding window size */
+	mt->minimum[0] = 0.0;
+	mt->maximum[0] = 100.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Omega_M */
+	mt = &moveTypes[i++];
+	mt->name = "(omega) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = OMEGA_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Omega_M;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_OmegaBeta_M */
+	mt = &moveTypes[i++];
+	mt->name = "(M10 beta distribution) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = OMEGA_10UUB;
+	mt->applicableTo[1] = OMEGA_10UUF;
+	mt->applicableTo[2] = OMEGA_10UEB;
+	mt->applicableTo[3] = OMEGA_10UEF;
+	mt->applicableTo[4] = OMEGA_10UFB;
+	mt->applicableTo[5] = OMEGA_10UFF;
+	mt->applicableTo[6] = OMEGA_10EUB;
+	mt->applicableTo[7] = OMEGA_10EUF;
+	mt->applicableTo[8] = OMEGA_10EEB;
+	mt->applicableTo[9] = OMEGA_10EEF;
+	mt->applicableTo[10] = OMEGA_10EFB;
+	mt->applicableTo[11] = OMEGA_10EFF;
+	mt->nApplicable = 12;
+	mt->moveFxn = &Move_OmegaBeta_M;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_OmegaCat */
+	mt = &moveTypes[i++];
+	mt->name = "(omega cat. freqs.) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "Dirichlet";
 	mt->applicableTo[0] = OMEGA_BUD;
 	mt->applicableTo[1] = OMEGA_BED;
 	mt->applicableTo[2] = OMEGA_BFD;
@@ -31061,224 +38848,19 @@ void SetUpMoveTypes (void)
 	mt->applicableTo[16] = OMEGA_10FFB;
 	mt->nApplicable = 17;
 	mt->moveFxn = &Move_OmegaCat;
-	mt->relProposalProb = relProbs[14];
-	mt->proposalParam[0] = proParam[14][0]; /* Dirichlet parameter */
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.5;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 100.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_OmegaGamma_M */
 	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with clock-constrained LOCAL";
-	strcpy (mt->shortName, "cLOCAL");
-	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
-	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
-	mt->applicableTo[2] = TOPOLOGY_CL_CONSTRAINED_HOMO;
-	mt->applicableTo[3] = TOPOLOGY_CCL_CONSTRAINED_HOMO;
-	mt->nApplicable = 4;
-	mt->moveFxn = &Move_LocalClock;
-	mt->relProposalProb = relProbs[15];
-	mt->proposalParam[0] = proParam[15][0]; /* "tuning" parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with clock-constrained SPR";
-	strcpy (mt->shortName, "cSPR");
-	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
-	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_SPRClock;
-	mt->relProposalProb = relProbs[16];
-	mt->proposalParam[0] = proParam[16][0]; /* "tuning" parameter    */
-	mt->proposalParam[1] = proParam[16][1]; /* exponential parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(amino acid model) randomly";
-	strcpy (mt->shortName, "uniform");
-	mt->applicableTo[0] = AAMODEL_MIX;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Aamodel;
-	mt->relProposalProb = relProbs[17];
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with NNI";
-	strcpy (mt->shortName, "pNNI");
-	mt->applicableTo[0] = TOPOLOGY_PARSIMONY_UNIFORM;
-	mt->applicableTo[1] = TOPOLOGY_PARSIMONY_CONSTRAINED;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_NNI;
-	mt->relProposalProb = relProbs[18];
-	mt->proposalParam[0] = 0.0;
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(omega) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = OMEGA_DIR;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Omega_M;
-	mt->relProposalProb = relProbs[19];
-	mt->proposalParam[0] = proParam[19][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(symmetric Dirichlet/beta) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = SYMPI_UNI;
-	mt->applicableTo[1] = SYMPI_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Beta_M;
-	mt->relProposalProb = relProbs[20];
-	mt->proposalParam[0] = proParam[20][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(gamma shape) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = SHAPE_UNI;
-	mt->applicableTo[1] = SHAPE_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_GammaShape_M;
-	mt->relProposalProb = relProbs[21];
-	mt->proposalParam[0] = proParam[21][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(covarion switch rates) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = SWITCH_UNI;
-	mt->applicableTo[1] = SWITCH_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_SwitchRate_M;
-	mt->relProposalProb = relProbs[22];
-	mt->proposalParam[0] = proParam[22][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	i++;
-	
-	mt = &moveTypes[i++];
-	mt->name = "(speciation rate) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = SPECRATE_UNI;
-	mt->applicableTo[1] = SPECRATE_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Speciation_M;
-	mt->relProposalProb = relProbs[23];
-	mt->proposalParam[0] = proParam[23][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(extinction rate) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = EXTRATE_UNI;
-	mt->applicableTo[1] = EXTRATE_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_Extinction_M;
-	mt->relProposalProb = relProbs[24];
-	mt->proposalParam[0] = proParam[24][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(clock rate) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = BRLENS_CCLOCK_UNI;
-	mt->applicableTo[1] = BRLENS_CCLOCK_COAL;
-	mt->applicableTo[2] = BRLENS_CCLOCK_BD;
-	mt->nApplicable = 3;
-	mt->moveFxn = &Move_ClockRate;
-	mt->relProposalProb = relProbs[25];
-	mt->proposalParam[0] = proParam[25][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	/* the following move is in principle also applicable to TOPOLOGY_NCL_UNIFORM_HOMO */
-	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with NNI";
-	strcpy (mt->shortName, "hNNI");
-	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HETERO;
-	/* mt->applicableTo[1] = TOPOLOGY_NCL_UNIFORM_HOMO; */
-	mt->nApplicable = 1; /* 2; */
-	mt->moveFxn = &Move_NNI_Hetero;
-	mt->relProposalProb = relProbs[26];
-	mt->proposalParam[0] = proParam[26][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(branch lengths) with nodeslider";
-	strcpy (mt->shortName, "nslider");
-	mt->applicableTo[0] = BRLENS_UNI;
-	mt->applicableTo[1] = BRLENS_EXP;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_NodeSlider;
-	mt->relProposalProb = relProbs[27];
-	mt->proposalParam[0] = proParam[27][0]; /* tuning parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(coalescence growth parameter) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = GROWTH_UNI;
-	mt->applicableTo[1] = GROWTH_EXP;
-	mt->applicableTo[2] = GROWTH_NORMAL;
-	mt->nApplicable = 3;
-	mt->moveFxn = &Move_Growth;
-	mt->relProposalProb = relProbs[28];
-	mt->proposalParam[0] = proParam[28][0]; /* sliding window size */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(omega 2) with sliding window";
-	strcpy (mt->shortName, "slider");
-	mt->applicableTo[0] = OMEGA_ED;
-	mt->applicableTo[1] = OMEGA_EF;
-	mt->nApplicable = 2;
-	mt->moveFxn = &Move_OmegaNeu;
-	mt->relProposalProb = relProbs[29];
-	mt->proposalParam[0] = proParam[29][0]; /* sliding window size */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(tratio) with Dirichlet proposal";
-	strcpy (mt->shortName, "Dirichlet");
-	mt->applicableTo[0] = TRATIO_DIR;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Tratio_Dir;
-	mt->relProposalProb = relProbs[30];		
-	mt->proposalParam[0] = proParam[30][0]; /* alphaPi parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(revmat) with Dirichlet proposal";
-	strcpy (mt->shortName, "Dirichlet");
-	mt->applicableTo[0] = REVMAT_DIR;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_Revmat_Dir;
-	mt->relProposalProb = relProbs[31];
-	mt->proposalParam[0] = proParam[31][0]; /* alphaPi parameter */
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(omega beta params.) with multiplier";
-	strcpy (mt->shortName, "mult");
-	mt->applicableTo[0] = OMEGA_10UUB;
-	mt->applicableTo[1] = OMEGA_10UUF;
-	mt->applicableTo[2] = OMEGA_10UEB;
-	mt->applicableTo[3] = OMEGA_10UEF;
-	mt->applicableTo[4] = OMEGA_10UFB;
-	mt->applicableTo[5] = OMEGA_10UFF;
-	mt->applicableTo[6] = OMEGA_10EUB;
-	mt->applicableTo[7] = OMEGA_10EUF;
-	mt->applicableTo[8] = OMEGA_10EEB;
-	mt->applicableTo[9] = OMEGA_10EEF;
-	mt->applicableTo[10] = OMEGA_10EFB;
-	mt->applicableTo[11] = OMEGA_10EFF;
-	mt->nApplicable = 12;
-	mt->moveFxn = &Move_OmegaBeta_M;
-	mt->relProposalProb = relProbs[32];
-	mt->proposalParam[0] = proParam[32][0]; 
-	mt->parsimonyBased = NO;
-
-	mt = &moveTypes[i++];
-	mt->name = "(omega gamma params.) with multiplier";
-	strcpy (mt->shortName, "Dirichlet");
+	mt->name = "(M10 gamma distribution) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "Dirichlet";
 	mt->applicableTo[0] = OMEGA_10UUB;
 	mt->applicableTo[1] = OMEGA_10UUF;
 	mt->applicableTo[2] = OMEGA_10UEB;
@@ -31293,66 +38875,429 @@ void SetUpMoveTypes (void)
 	mt->applicableTo[11] = OMEGA_10FEF;
 	mt->nApplicable = 12;
 	mt->moveFxn = &Move_OmegaGamma_M;
-	mt->relProposalProb = relProbs[33];
-	mt->proposalParam[0] = proParam[33][0]; 
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_OmegaNeu */
 	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with branch slider";
-	strcpy (mt->shortName, "bslider");
-	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_UnrootedSlider;
-	mt->relProposalProb = relProbs[34];
-	mt->proposalParam[0] = proParam[34][0]; /* "tuning" parameter */
-	mt->proposalParam[1] = proParam[34][1]; /* exponential parameter */
+	mt->name = "(omega 2) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = OMEGA_ED;
+	mt->applicableTo[1] = OMEGA_EF;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_OmegaNeu;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.5;  /* window size */
+	mt->minimum[0] = 0.001;
+	mt->maximum[0] = 1000.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_OmegaPos */
 	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with biased SPR";
-	strcpy (mt->shortName, "bSPR");
-	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_BiasedSpr;
-	mt->relProposalProb = relProbs[35];
-	mt->proposalParam[0] = proParam[35][0]; /* "tuning" parameter */
-	mt->proposalParam[1] = proParam[35][1]; /* warp parameter */
+	mt->name = "(omega 3/+) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = OMEGA_BUD;
+	mt->applicableTo[1] = OMEGA_BUF;
+	mt->applicableTo[2] = OMEGA_BED;
+	mt->applicableTo[3] = OMEGA_BEF;
+	mt->applicableTo[4] = OMEGA_FUD;
+	mt->applicableTo[5] = OMEGA_FUF;
+	mt->applicableTo[6] = OMEGA_FED;
+	mt->applicableTo[7] = OMEGA_FEF;
+	mt->applicableTo[8] = OMEGA_ED;
+	mt->applicableTo[9] = OMEGA_EF;
+	mt->nApplicable = 10;
+	mt->moveFxn = &Move_OmegaPos;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 100.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
+	/* Move_OmegaPur */
 	mt = &moveTypes[i++];
-	mt->name = "(rate multiplier) with Dirichlet proposal";
-	strcpy (mt->shortName, "Dirichlet");
-	mt->applicableTo[0] = RATEMULT_DIR;
-	mt->nApplicable = 1;
-	mt->moveFxn = &Move_RateMult_Dir;
-	mt->relProposalProb = relProbs[36];
-	mt->proposalParam[0] = proParam[36][0]; /* alphaPi parameter */
+	mt->name = "(omega 1/-) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = OMEGA_BUD;
+	mt->applicableTo[1] = OMEGA_BUF;
+	mt->applicableTo[2] = OMEGA_BED;
+	mt->applicableTo[3] = OMEGA_BEF;
+	mt->applicableTo[4] = OMEGA_BFD;
+	mt->applicableTo[5] = OMEGA_BFF;
+	mt->applicableTo[6] = OMEGA_ED;
+	mt->applicableTo[7] = OMEGA_EF;
+	mt->nApplicable = 8;
+	mt->moveFxn = &Move_OmegaPur;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.1;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 1.0;
 	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
 
-	mt = &moveTypes[i++];
-	mt->name = "(topology and branch lengths) with extending SPR (clock)";
-	strcpy (mt->shortName, "ceSPR");
-	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
-	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
-	mt->applicableTo[2] = TOPOLOGY_CL_CONSTRAINED_HOMO;
-	mt->applicableTo[3] = TOPOLOGY_CCL_CONSTRAINED_HOMO;
-	mt->nApplicable = 4;
-	mt->moveFxn = &Move_ExtSPRClock;
-	mt->relProposalProb = relProbs[37];
-	mt->proposalParam[0] = proParam[37][0]; /* tuning parameter (lambda)*/
-	mt->proposalParam[1] = proParam[37][1]; /* extension probability */
-	mt->parsimonyBased = NO;
-
+	/* Move_ParsEraser1 */
 	mt = &moveTypes[i++];
 	mt->name = "(topology and branch lengths) with parsimony eraser 1";
-	strcpy (mt->shortName, "pEraser1");
+	mt->nameTuning[0] = "Dirichlet parameter (alphaPi)";
+	mt->nameTuning[1] = "parsimony warp factor";
+	mt->shortName = "pEraser1";
 	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
 	mt->nApplicable = 1;
 	mt->moveFxn = &Move_ParsEraser1;
-	mt->relProposalProb = relProbs[38];
-	mt->proposalParam[0] = proParam[38][0]; /* alphaPi */
-	mt->proposalParam[1] = proParam[38][1]; /* parsimony warp factor */
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.5; /* alphaPi */
+	mt->tuningParam[1] = 0.1; /* warp */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000.0;
+	mt->minimum[1] = 0.00001;
+	mt->maximum[1] = 0.99999;
 	mt->parsimonyBased = YES;
+	mt->level = DEVELOPER;
+
+	/* Move_Pinvar */
+	mt = &moveTypes[i++];
+	mt->name = "(prop. invar. sites) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = PINVAR_UNI;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Pinvar;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 0.1;  /* window size */
+	mt->minimum[0] = 0.001;
+	mt->maximum[0] = 0.999;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_RanSPR1 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with random SPR1";
+	mt->nameTuning[0] = "move probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "rSPR1";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_RanSPR1;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* move probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_RanSPR2 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with random SPR2";
+	mt->nameTuning[0] = "move probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "rSPR2";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_RanSPR2;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* move probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_RanSPR3 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with random SPR3";
+	mt->nameTuning[0] = "move probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "rSPR3";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_RanSPR3;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* move probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_RanSPR4 */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with random SPR4";
+	mt->nameTuning[0] = "move probability";
+	mt->nameTuning[1] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "rSPR4";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_NCL_CONSTRAINED_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_RanSPR4;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 0.8; /* move probability */
+	mt->tuningParam[1] = 2.0 * log (1.6); /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 0.99999;
+	mt->minimum[1] = 0.00000001;
+	mt->maximum[1] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_RateMult_Dir */
+	mt = &moveTypes[i++];
+	mt->name = "(rate multiplier) with Dirichlet proposal";
+	mt->nameTuning[0] = "Dirichlet parameter";
+	mt->shortName = "Dirichlet";
+	mt->applicableTo[0] = RATEMULT_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_RateMult_Dir;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 500.0; /* alphaPi */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Revmat_Dir */
+	mt = &moveTypes[i++];
+	mt->name = "(revmat) with Dirichlet proposal";
+	mt->nameTuning[0] = "Dirichlet parameter";
+	mt->shortName = "Dirichlet";
+	mt->applicableTo[0] = REVMAT_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Revmat_Dir;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 500.0;  /* alphaPi */
+	mt->minimum[0] = 0.0001;
+	mt->maximum[0] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Speciation */
+	mt = &moveTypes[i++];
+	mt->name = "(speciation rate) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = SPECRATE_UNI;
+	mt->applicableTo[1] = SPECRATE_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Speciation;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 100.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Speciation_M */
+	mt = &moveTypes[i++];
+	mt->name = "(speciation rate) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = SPECRATE_UNI;
+	mt->applicableTo[1] = SPECRATE_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Speciation_M;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_SPRClock */
+	/* not correctly balanced yet */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with clock-constrained SPR";
+	mt->nameTuning[0] = "Dirichlet parameter";
+	mt->nameTuning[1] = "exponential parameter";
+	mt->shortName = "cSPR";
+	mt->applicableTo[0] = TOPOLOGY_CL_UNIFORM_HOMO;
+	mt->applicableTo[1] = TOPOLOGY_CCL_UNIFORM_HOMO;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_SPRClock;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 10.0;  /* alphaPi */
+	mt->tuningParam[1] = 10.0;  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000.0;
+	mt->minimum[1] = 0.00001;
+	mt->maximum[1] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
+
+	/* Move_Statefreqs */
+	mt = &moveTypes[i++];
+	mt->name = "(state frequencies) with Dirichlet proposal";
+	mt->nameTuning[0] = "Dirichlet parameter";
+	mt->shortName = "Dirichlet";
+	mt->applicableTo[0] = PI_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Statefreqs;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 300.0; /* so-called "alphaPi" */
+	mt->minimum[0] = 0.001;
+	mt->maximum[0] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_StatefreqsSymDirMultistate */
+	mt = &moveTypes[i++];
+	mt->name = "(symDir multistatefreqs) with Dirichlet proposal";
+	mt->nameTuning[0] = "Dirichlet parameter (alphaPi)";
+	mt->shortName = "Dirichlet";
+	mt->applicableTo[0] = SYMPI_FIX_MS;
+	mt->applicableTo[1] = SYMPI_UNI_MS;
+	mt->applicableTo[2] = SYMPI_EXP_MS;
+	mt->nApplicable = 3;
+	mt->moveFxn = &Move_StatefreqsSymDirMultistate;
+	mt->relProposalProb = 5.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 50.0; /* alphaPi */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_SwitchRate */
+	mt = &moveTypes[i++];
+	mt->name = "(covarion switch rates) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = SWITCH_UNI;
+	mt->applicableTo[1] = SWITCH_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_SwitchRate;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 1000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_SwitchRate_M */
+	mt = &moveTypes[i++];
+	mt->name = "(covarion switch rate) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = SWITCH_UNI;
+	mt->applicableTo[1] = SWITCH_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_SwitchRate_M;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.5);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Theta */
+	mt = &moveTypes[i++];
+	mt->name = "(coalescence parameter) with sliding window";
+	mt->nameTuning[0] = "sliding window size";
+	mt->shortName = "slider";
+	mt->applicableTo[0] = THETA_UNI;
+	mt->applicableTo[1] = THETA_EXP;
+	mt->nApplicable = 2;
+	mt->moveFxn = &Move_Theta;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 1.0;  /* window size */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 100.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_Tratio_Dir */
+	mt = &moveTypes[i++];
+	mt->name = "(tratio) with Dirichlet proposal";
+	mt->nameTuning[0] = "beta parameter";
+	mt->shortName = "Dirichlet";
+	mt->applicableTo[0] = TRATIO_DIR;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_Tratio_Dir;
+	mt->relProposalProb = 1.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 50.0;  /* alphaPi */
+	mt->minimum[0] = 0.0001;
+	mt->maximum[0] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_TreeHeight */
+	mt = &moveTypes[i++];
+	mt->name = "(tree height) with multiplier";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda)";
+	mt->shortName = "mult";
+	mt->applicableTo[0] = BRLENS_CCLOCK_UNI;
+	mt->applicableTo[1] = BRLENS_CCLOCK_COAL;
+	mt->applicableTo[2] = BRLENS_CCLOCK_BD;
+	mt->applicableTo[3] = BRLENS_CLOCK_UNI;
+	mt->applicableTo[4] = BRLENS_CLOCK_COAL;
+	mt->applicableTo[5] = BRLENS_CLOCK_BD;
+	mt->nApplicable = 6;
+	mt->moveFxn = &Move_TreeHeight;
+	mt->relProposalProb = 7.0;
+	mt->numTuningParams = 1;
+	mt->tuningParam[0] = 2.0 * log (1.05);  /* lambda */
+	mt->minimum[0] = 0.00001;
+	mt->maximum[0] = 10000000.0;
+	mt->parsimonyBased = NO;
+	mt->level = STANDARD_USER;
+
+	/* Move_UnrootedSlider */
+	/* Non-clock version of the SPRclock; this move is not correctly balanced yet */
+	mt = &moveTypes[i++];
+	mt->name = "(topology and branch lengths) with branch slider";
+	mt->nameTuning[0] = "multiplier tuning parameter (lambda_m)";
+	mt->nameTuning[1] = "exponential parameter (lambda_e)";
+	mt->shortName = "bslider";
+	mt->applicableTo[0] = TOPOLOGY_NCL_UNIFORM_HOMO;
+	mt->nApplicable = 1;
+	mt->moveFxn = &Move_UnrootedSlider;
+	mt->relProposalProb = 0.0;
+	mt->numTuningParams = 2;
+	mt->tuningParam[0] = 2.0 * log (1.1);  /* lambda multiplier*/
+	mt->tuningParam[1] = 10.0;  /* lambda exponential */
+	mt->minimum[0] = 0.00000001;
+	mt->maximum[0] = 10000000.0;
+	mt->minimum[1] = 0.00001;
+	mt->maximum[1] = 10000.0;
+	mt->parsimonyBased = NO;
+	mt->level = DEVELOPER;
 
 	numMoveTypes = i;
 	
@@ -31684,9 +39629,63 @@ int ShowMCMCTree (Tree *t)
 		MrBayesPrint ("   %s %s\n", treeLine, labelLine);
 		}
 	
+#if defined (DEBUG_CONSTRAINTS)
+	for (i=0; i<t->nNodes; i++)
+		printf ("%d -- %s\n", t->allDownPass[i]->index + 1, t->allDownPass[i]->isLocked == YES ? "locked" : "free");
+#endif
+
 	return (NO_ERROR);
 	   
 }
+
+
+
+
+
+#if defined (DEBUG_CONSTRAINTS)
+int ShowPolyNodes (PolyTree *pt)
+
+{
+
+	int 			i;
+	PolyNode		*p;
+
+	/* this is the tree, on a node-by-node basis */
+	printf ("root = %d\n", pt->root->index);
+	for (i=0; i<2*numTaxa; i++)
+		{
+		p = &pt->nodes[i];
+		if (!(p->left == NULL && p->sib == NULL && p->anc == NULL))
+			{
+			printf ("%4d -- %2d ", i, p->index);
+			if (p->sib != NULL)
+				printf ("(%2d ", p->sib->index);
+			else
+				printf ("(-- ");
+				
+			if (p->left != NULL)
+				printf ("%2d ", p->left->index);
+			else
+				printf ("-- ");
+
+			if (p->anc != NULL)
+				printf ("%2d)", p->anc->index);
+			else
+				printf ("--)");
+			
+			if (p->isLocked == YES)
+				printf ("-- locked  -- ");
+
+			if (p->left == NULL && p->anc != NULL)
+				printf ("  %s (%d)\n", p->label, p->x);
+			else
+				printf (" (%d)\n", p->x);
+			}
+		}
+
+	return NO_ERROR;
+}
+#endif
 
 
 
@@ -31856,7 +39855,7 @@ PFNODE *Talloc (void)
 {
 	PFNODE	*temp;
 
-	temp = (PFNODE *) malloc (sizeof(PFNODE));
+	temp = (PFNODE *) SafeMalloc (sizeof(PFNODE));
 	if (temp == NULL)
 		return NULL;
 
@@ -31929,14 +39928,13 @@ int TiProbs_Fels (TreeNode *p, int division, int chain)
 {
 
 	int			i, j, k, index;
-	MrBFlt		a, t, u, x, z, beta, bigPi_j[4], pij, bigPij,
+	MrBFlt		t, u, x, z, beta, bigPi_j[4], pij, bigPij,
 				*catRate, baseRate, theRate, *pis;
 	CLFlt		*tiP;
 	ModelInfo	*m;
 #	if defined SSE
 	float		temp[16];
 #	endif
-	a = 0.0;
 
 	m = &modelSettings[division];
 
@@ -31969,7 +39967,7 @@ int TiProbs_Fels (TreeNode *p, int division, int chain)
 	/* fill in values */
 	for (k=index=0; k<m->numGammaCats; k++)
 		{
-		t =  pow(0.05, a) * pow (p->length, 1 - a) * baseRate * catRate[k];
+		t =  p->length * baseRate * catRate[k];
 
 		/* calculate probabilities */
 		for (i=0; i<4; i++)
@@ -32572,7 +40570,7 @@ int TiProbs_Std (TreeNode *p, int division, int chain)
 
 {
 	
-	int			b, c, i, j, k, n, s, nStates, index, index2;
+	int			b, c, i, j, k, n, s, nStates, index=0, index2;
 	MrBFlt		v, eV1, eV2, eV3, eV4, eV5, *catRate,
 				baseRate, theRate, pi, f1, f2, f3, f4, f5, f6, f7, root, EigValexp[10],
 				*eigenValues, *cijk, sum, *bs, mu;
@@ -32892,7 +40890,7 @@ int TiProbs_Std (TreeNode *p, int division, int chain)
 				cijk = eigenValues + (2 * n);
 
 				/* fill in values */
-				for (k=index=0; k<m->numGammaCats; k++)
+				for (k=0; k<m->numGammaCats; k++)
 					{
 					v =  p->length * baseRate * catRate[k];
 					
@@ -33075,7 +41073,7 @@ int UpDateCijk (int whichPart, int whichChain)
 			if (m->nucModelId == NUCMODEL_CODON)                                                    /* we have a NY98 model     */
 				{
 				rateOmegaValues = GetParamVals(m->omega, whichChain, state[whichChain]);
-				if (inferPosSel == YES)
+				if (m->numOmegaCats > 1)
 					omegaCatFreq = GetParamSubVals (m->omega, whichChain, state[whichChain]);
 				}
 			else if (m->nCijkParts > 1 && m->nucModelId == NUCMODEL_4BY4 && m->numModelStates == 8) /* we have a covarion model */
@@ -33204,12 +41202,12 @@ int UpDateCijk (int whichPart, int whichChain)
 						if (SetProteinQMatrix (q[k], n, whichChain, whichPart, rateOmegaValues[k]) == ERROR)
 							goto errorExit;
 						}
-					if (inferPosSel == YES)
+					if (m->nucModelId == NUCMODEL_CODON && m->numOmegaCats > 1)
 						posScaler += omegaCatFreq[k] * (rS + rA);
 					}
 					
 				/* Then rescale the rate matrices, if this is a positive selection model: */
-				if (inferPosSel == YES)
+				if (m->nucModelId == NUCMODEL_CODON && m->numOmegaCats > 1)
 					{
 					posScaler = 1.0 / posScaler;
 					for (k=0; k<m->nCijkParts; k++)
@@ -33276,37 +41274,44 @@ void WriteCalTreeToFile (TreeNode *p, MrBFlt clockRate)
 
 {
 
-	char			tempStr[200];
+	char			*tempStr;
+	int                      tempStrSize;
+
+	tempStrSize = 100;
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
 
 	if (p != NULL)
 		{
 		
 		if (p->left == NULL && p->right == NULL)
 			{
-			sprintf (tempStr, "%d:%lf", p->index + 1, p->nodeDepth/clockRate);
+			SaveSprintf (&tempStr, &tempStrSize, "%d:%lf", p->index + 1, p->nodeDepth/clockRate);
 			AddToPrintString (tempStr);
 			}
 		else
 			{
 			if (p->anc != NULL)
 				{
-				sprintf (tempStr, "(");
+				SaveSprintf (&tempStr, &tempStrSize, "(");
 				AddToPrintString (tempStr);
 				}
 			WriteCalTreeToFile (p->left,  clockRate);
-			sprintf (tempStr, ",");
+			SaveSprintf (&tempStr, &tempStrSize, ",");
 			AddToPrintString (tempStr);
 			WriteCalTreeToFile (p->right, clockRate);	
 			if (p->anc != NULL)
 				{
 				if (p->anc->anc != 0)
-					sprintf (tempStr, "):%lf", p->nodeDepth/clockRate);
+					SaveSprintf (&tempStr, &tempStrSize, "):%lf", p->nodeDepth/clockRate);
 				else
-					sprintf (tempStr, ")");
+					SaveSprintf (&tempStr, &tempStrSize, ")");
 				AddToPrintString (tempStr);
 				}
 			}
 		}
+	free(tempStr);
 }
 
 
@@ -33317,28 +41322,33 @@ void WriteTreeToFile (TreeNode *p, int showBrlens, int isRooted)
 
 {
 
-	char			tempStr[200];
-	
+	char			*tempStr;
+	int                      tempStrSize = 200;
+
+	tempStr = (char *) SafeMalloc((size_t) (tempStrSize * sizeof(char)));
+	if (!tempStr)
+		MrBayesPrint ("%s   Problem allocating tempString (%d)\n", spacer, tempStrSize * sizeof(char));
+
 	if (p != NULL)
 		{
 		
 		if (p->left == NULL && p->right == NULL)
 			{
 			if (showBrlens == YES)
-				sprintf (tempStr, "%d:%lf", p->index + 1, p->length);
+				SaveSprintf (&tempStr, &tempStrSize, "%d:%lf", p->index + 1, p->length);
 			else
-				sprintf (tempStr, "%d", p->index + 1);
+				SaveSprintf (&tempStr, &tempStrSize, "%d", p->index + 1);
 			AddToPrintString (tempStr);
 			}
 		else
 			{
 			if (p->anc != NULL)
 				{
-				sprintf (tempStr, "(");
+				SaveSprintf (&tempStr, &tempStrSize, "(");
 				AddToPrintString (tempStr);
 				}
 			WriteTreeToFile (p->left,  showBrlens, isRooted);
-			sprintf (tempStr, ",");
+			SaveSprintf (&tempStr, &tempStrSize, ",");
 			AddToPrintString (tempStr);
 			WriteTreeToFile (p->right, showBrlens, isRooted);	
 			if (p->anc != NULL)
@@ -33346,21 +41356,20 @@ void WriteTreeToFile (TreeNode *p, int showBrlens, int isRooted)
 				if (p->anc->anc == NULL && isRooted == NO)
 					{
 					if (showBrlens == YES)
-						sprintf (tempStr, ",%d:%lf", p->anc->index + 1, p->length);
+						SaveSprintf (&tempStr, &tempStrSize, ",%d:%lf", p->anc->index + 1, p->length);
 					else
-						sprintf (tempStr, ",%d", p->anc->index + 1);
+						SaveSprintf (&tempStr, &tempStrSize, ",%d", p->anc->index + 1);
 					AddToPrintString (tempStr);
 					}
 				
 				if (showBrlens == YES && p->anc->anc != NULL)
-					sprintf (tempStr, "):%lf", p->length);
+					SaveSprintf (&tempStr, &tempStrSize, "):%lf", p->length);
 				else
-					sprintf (tempStr, ")");
+					SaveSprintf (&tempStr, &tempStrSize, ")");
 				AddToPrintString (tempStr);
 					
 				}
 			}
 		}
+	free (tempStr);
 }
-
-

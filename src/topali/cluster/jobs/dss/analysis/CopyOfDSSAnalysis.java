@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.cluster.jobs.dss;
+package topali.cluster.jobs.dss.analysis;
 
 import java.io.*;
 
@@ -12,7 +12,7 @@ import topali.cluster.*;
 import topali.data.*;
 import topali.fileio.Castor;
 
-class DSSAnalysis extends AnalysisThread
+public class CopyOfDSSAnalysis extends AnalysisThread
 {
 	private SequenceSet ss;
 
@@ -29,11 +29,11 @@ class DSSAnalysis extends AnalysisThread
 	// If running on the cluster, the subjob will be started within its own JVM
 	public static void main(String[] args)
 	{
-		new DSSAnalysis(new File(args[0])).run();
+		new CopyOfDSSAnalysis(new File(args[0])).run();
 	}
 
 	// If running locally, the job will be started via a normal constructor call
-	DSSAnalysis(File runDir)
+	public CopyOfDSSAnalysis(File runDir)
 	{
 		super(runDir);
 	}

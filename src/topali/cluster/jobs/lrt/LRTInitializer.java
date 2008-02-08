@@ -13,11 +13,12 @@ import pal.substmodel.SubstitutionModel;
 import pal.tree.*;
 import topali.analyses.TreeUtilities;
 import topali.cluster.*;
+import topali.cluster.jobs.lrt.analysis.*;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
 
-public class RunLRT extends Thread
+public class LRTInitializer extends Thread
 {
 	private SequenceSet ss;
 
@@ -26,7 +27,7 @@ public class RunLRT extends Thread
 	// Directory where the job's data will be stored
 	private File jobDir;
 
-	public RunLRT(File jobDir, SequenceSet ss, LRTResult result)
+	public LRTInitializer(File jobDir, SequenceSet ss, LRTResult result)
 	{
 		this.jobDir = jobDir;
 		this.ss = ss;

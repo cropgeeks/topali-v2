@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -194,21 +194,21 @@ int DoSump (void)
 				goto errorExit;
 				}
 			DEBUG("allocating s size: %u\n",longestLineLength*sizeof(char));
-			s = (char *)malloc((size_t) (longestLineLength * sizeof(char)));
+			s = (char *)SafeMalloc((size_t) (longestLineLength * sizeof(char)));
 			if (!s)
 				{
 				MrBayesPrint ("%s   Problem allocating string for reading sump file\n", spacer);
 				goto errorExit;
 				}
 			DEBUG("allocating headerLine size: %u\n",longestLineLength*sizeof(char));
-			headerLine = (char *)malloc((size_t) ((longestLineLength)* sizeof(char)));
+			headerLine = (char *)SafeMalloc((size_t) ((longestLineLength)* sizeof(char)));
 			if (!headerLine)
 				{
 				MrBayesPrint ("%s   Problem allocating headerLine for reading sump file\n", spacer);
 				goto errorExit;
 				}
 			DEBUG("allocating headerNames size: %u\n",(longestLineLength+40) * sizeof(char));
-			headerNames = (char *)malloc((size_t) ((longestLineLength+40) * sizeof(char)));
+			headerNames = (char *)SafeMalloc((size_t) ((longestLineLength+40) * sizeof(char)));
 			if (!headerNames)
 				{
 				MrBayesPrint ("%s   Problem allocating headerNames for reading sump file\n", spacer);
@@ -261,7 +261,7 @@ int DoSump (void)
 			}
 
 		/* close binary file */
-		fclose (fp);fp=NULL;
+		SafeFclose (&fp);
 	
 		/* open text file */
 		if (sumpParams.numRuns == 1)
@@ -473,7 +473,7 @@ int DoSump (void)
 				MrBayesPrint ("%s   Sump string is already allocated\n", spacer);
 				goto errorExit;
 				}
-			parameterValues = (MrBFlt *)malloc((size_t) (sumpParams.numRuns * numRows * numColumns * sizeof(MrBFlt)));
+			parameterValues = (MrBFlt *)SafeMalloc((size_t) (sumpParams.numRuns * numRows * numColumns * sizeof(MrBFlt)));
 			if (!parameterValues)
 				{
 				MrBayesPrint ("%s   Problem allocating parameterValues\n", spacer);
@@ -613,7 +613,7 @@ int DoSump (void)
 					}
 				}
 			}
-		fclose (fp);fp=NULL;
+		SafeFclose (&fp);
 		}	/* next file */
 			
 		
@@ -690,7 +690,7 @@ int DoSump (void)
 				if (sumpParams.numRuns == 1)
 					{
 					MrBayesPrint ("\n");
-					MrBayesPrint ("%s   Estimated marginal likelihoods for run sampled in file \"%s\":\n", spacer, sumpParams.sumpFileName);
+					MrBayesPrint ("%s   Estimated marginal likelihoods for run sampled in file \"%s.p\":\n", spacer, sumpParams.sumpFileName);
 					MrBayesPrint ("%s      (Use the harmonic mean for Bayes factor comparisons of models)\n\n", spacer, sumpParams.sumpFileName);
 					MrBayesPrint ("%s   Arithmetic mean   Harmonic mean\n", spacer);
 					MrBayesPrint ("%s   --------------------------------\n", spacer);
@@ -903,10 +903,8 @@ int DoSump (void)
 		free (parameterValues);
 		memAllocs[ALLOC_SUMPINFO] = NO;
 		}
-	if (fp)
-		fclose (fp);
-	if (fpOut)
-		fclose (fpOut);
+	SafeFclose (&fp);
+	SafeFclose (&fpOut);
 	expecting = Expecting(COMMAND);
 	
 #	if defined (MPI_ENABLED)
@@ -938,10 +936,8 @@ int DoSump (void)
 			free (parameterValues);
 			memAllocs[ALLOC_SUMPINFO] = NO;
 			}
-		if (fp != NULL)
-			fclose (fp);
-		if (fpOut != NULL)
-			fclose (fpOut);
+		SafeFclose (&fp);
+		SafeFclose (&fpOut);
 		strcpy (spacer, "");
 		strcpy (sumpToken, "Sump");
 		i = 0;
@@ -1871,6 +1867,10 @@ int PrintParamTable (FILE *fp, MrBFlt *parmVals, int nRows, int nCols, int nRuns
 	int		i, j, len, longestHeader;
 	char	temp[100];
 	MrBFlt	lower, upper, median, mean, var, sqrt_R=0.0;
+	/* PAUL 20051206 We need to keep the original values from parmVals otherwise a second call
+	 * to this function will give an incorrect PSRF. This is the case with 
+	 * printtofile=yes. This might be a bug in the PotentialScaleReduction function? */
+	MrBFlt  *parmVals2;	
 	
 	/* calculate longest header */
 	longestHeader = 9;	/* length of 'parameter' */
@@ -1918,14 +1918,25 @@ int PrintParamTable (FILE *fp, MrBFlt *parmVals, int nRows, int nCols, int nRuns
 		if (nRuns > 1)
 			sqrt_R = PotentialScaleReduction (parmVals, nRows, nCols, nRuns, i);
 
-		if (SortColumn (parmVals, nRuns*nRows, nCols, i) == ERROR)
+		parmVals2 = (MrBFlt *)SafeMalloc((size_t) (nRuns * numRows * numColumns * sizeof(MrBFlt)));
+        if (!parmVals2)
+            {
+            MrBayesPrint ("%s   Problem allocating parameterValues\n", spacer);
+            return ERROR;
+            }
+        memcpy(parmVals2, parmVals, (nRuns * numRows * numColumns * sizeof(MrBFlt)));
+		if (SortColumn (parmVals2, nRuns*nRows, nCols, i) == ERROR) 
+		    {
+		    free(parmVals2);
 			return ERROR;
-
-		MeanVariance (parmVals, nRuns*nRows, nCols, i, &mean, &var);
-		lower = parmVals[((int)(nRuns * nRows * 0.025) * nCols + i)];
-		upper = parmVals[((int)(nRuns * nRows * 0.975) * nCols + i)];
-		median = parmVals[((int)(nRuns * nRows * 0.500) * nCols + i)];
-
+		    }
+		    
+		MeanVariance (parmVals2, nRuns*nRows, nCols, i, &mean, &var);
+		lower = parmVals2[((int)(nRuns * nRows * 0.025) * nCols + i)];
+		upper = parmVals2[((int)(nRuns * nRows * 0.975) * nCols + i)];
+		median = parmVals2[((int)(nRuns * nRows * 0.500) * nCols + i)];
+		free(parmVals2);
+		
 		MrBayesPrintf (fp, "%s   %-*s ", spacer, longestHeader, temp);
 		MrBayesPrintf (fp, "%12.6lf  %12.6lf  %12.6lf  %12.6lf  %12.6lf", mean, var, lower, upper, median);
 		if (nRuns > 1)
@@ -2177,7 +2188,7 @@ int SortColumn (MrBFlt *paramValues, int nRows, int nCols, int column)
 	MrBFlt		*tempParamValues;
 	
 	/* allocate information for sorting */
-	tempParamValues = (MrBFlt *)malloc((size_t) (nRows * sizeof(MrBFlt)));
+	tempParamValues = (MrBFlt *)SafeMalloc((size_t) (nRows * sizeof(MrBFlt)));
 	if (!tempParamValues)
 		{
 		MrBayesPrint ("%s   Problem allocating tempParamValues\n", spacer);
@@ -2215,7 +2226,7 @@ int SortParameters (MrBFlt *paramValues)
 	MrBFlt		*tempParamValues;
 	
 	/* allocate information for sorting */
-	tempParamValues = (MrBFlt *)malloc((size_t) (numRows * sizeof(MrBFlt)));
+	tempParamValues = (MrBFlt *)SafeMalloc((size_t) (numRows * sizeof(MrBFlt)));
 	if (!tempParamValues)
 		{
 		MrBayesPrint ("%s   Problem allocating tempParamValues\n", spacer);

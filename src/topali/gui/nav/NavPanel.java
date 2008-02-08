@@ -26,6 +26,7 @@ import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.gui.tree.TreePane;
+import topali.i18n.Text;
 
 public class NavPanel extends JPanel implements TreeSelectionListener,
 		PropertyChangeListener

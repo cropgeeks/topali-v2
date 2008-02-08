@@ -247,10 +247,10 @@ public class DNAModel extends Model
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(super.toString());
-		sb.append("subRateGroups: "+Utils.arrayToString(subRateGroups, ',')+"\n");
-		sb.append("baseFreqGroups: "+Utils.arrayToString(baseFreqGroups, ',')+"\n");
-		sb.append("subRates: "+Utils.arrayToString(subRates, ',')+"\n");
-		sb.append("aaFreqs: "+Utils.arrayToString(baseFreqs, ',')+"\n");
+		sb.append("Substitution Rate Groups: "+Utils.arrayToString(subRateGroups, ',')+"\n");
+		sb.append("Base Frequency Groups: "+Utils.arrayToString(baseFreqGroups, ',')+"\n");
+		sb.append("Substitution Rates: "+Utils.arrayToString(subRates, ',')+"\n");
+		sb.append("Base Frequencies: "+Utils.arrayToString(baseFreqs, ',')+"\n");
 		return sb.toString();
 	}
 }

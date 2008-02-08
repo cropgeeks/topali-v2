@@ -1,6 +1,9 @@
 #if !defined(UNIX_VERSION) && !defined(WIN_VERSION) && !defined(MAC_VERSION)
-#undef MAC_VERSION
+#ifdef __MWERKS__
+#define MAC_VERSION
+#else
 #define WIN_VERSION
+#endif
 #endif
 
 /* definition of UNIX_VERSION, WIN_VERSION or MAC_VERSION is now set in the
@@ -39,16 +42,18 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 #else
 #define DEBUG(a,b) 
 #endif
+extern void *SafeMalloc(size_t);
+extern int SafeFclose(FILE **);
 
 /* For comparing floating points: two values are the same if the absolute difference is less then 
    this value. 
 */
 #ifndef ETA
-#define ETA (1E-20)
+#define ETA (1E-30)
 #endif
 
 #if defined (MPI_ENABLED)
-#	if defined (MAC_VERSION)
+#	if defined (__MWERKS__) & defined (MAC_VERSION)
 #		include "macmpi.h"
 #	else
 #		include "mpi.h"
@@ -57,7 +62,12 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 
 #undef ASYMMETRY
 
-#define	VERSION_NUMBER			"3.1.1"
+#define RELEASE
+#ifdef RELEASE
+#define	VERSION_NUMBER			"3.1.2"
+#else
+#define VERSION_NUMBER                  "3.1.2-cvs"
+#endif
 
 #undef NO_ERROR
 #undef ERROR
@@ -83,6 +93,9 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 
 #define NONINTERACTIVE			0
 #define INTERACTIVE				1
+
+#define STANDARD_USER           1
+#define DEVELOPER               3
 
 #define	DIFFERENT				0
 #define	SAME					1
@@ -157,13 +170,14 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 #define RIGHTCURL				26
 
 #define	MAX_Q_RATE				100.0f
-#define	MIN_SHAPE_PARAM			0.04999999f
-#define	MAX_SHAPE_PARAM			50.0f
+#define	MIN_SHAPE_PARAM			0.0001f
+#define	MAX_SHAPE_PARAM			200.0f
 #define	MAX_SITE_RATE			10.0f
 #define	MAX_GAMMA_CATS			20
 #define	MAX_GAMMA_CATS_SQUARED	400
 #define	BRLENS_MIN				0.000001f
 #define	BRLENS_MAX				100.0f
+#define TREEHEIGHT_MAX			100000.0f
 #define KAPPA_MIN				0.01f
 #define	KAPPA_MAX				1000.0f
 #define	GROWTH_MIN				-1000000.0f
@@ -175,6 +189,8 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 #define ALPHA_MIN				0.0001f
 #define ALPHA_MAX				10000.0f
 #define DIR_MIN					0.000001f
+#define MIN_OFFSET_EXP_LAMBDA   0.000001f
+#define MAX_OFFSET_EXP_LAMBDA   100000.0f
 
 #define NEG_INFINITY			-1000000.0f
 
@@ -252,7 +268,7 @@ typedef float CLFlt;		/* single-precision float used for cond likes (CLFlt) to i
 #define	ALLOC_POSSELPROBS		 66
 #define ALLOC_PARSSETS			 67
 #define	ALLOC_PBF				 68
-#define ALLOC_LOCTAXAAGES		 69
+#define ALLOC_LOCALTAXONCALIBRATION		 69
 #define	ALLOC_FULLCOMPTREEINFO	 70
 #define	ALLOC_TOPO_DISTANCES	 71
 #define	ALLOC_SPR_PARSSETS		 72
@@ -312,6 +328,26 @@ typedef struct
 	MrBFlt			**pair;
 	} STATS;
 
+enum CALPRIOR
+	{
+	unconstrained,
+	fixed,
+	offsetExponential,
+	uniform
+	};
+
+typedef struct calibration
+	{
+	char			name[30];
+	enum CALPRIOR   prior;
+	MrBFlt			upper;
+	MrBFlt			lower;
+	MrBFlt			offset;
+	MrBFlt			lambda;
+	MrBFlt			age;
+	}
+	Calibration;
+	
 /* NOTE: Any variable added here must also be copied in CopyTrees */
 typedef struct node
 	{
@@ -322,6 +358,7 @@ typedef struct node
 	long int 		*partition;
 	char			label[100];
 	MrBFlt			length, nodeDepth, d, age;
+	Calibration		*calibration;
 	}
 	TreeNode;
 
@@ -353,6 +390,7 @@ typedef struct pNode
 	MrBFlt			length, support, f, age;
 	char			label[100];
 	long int		*partition;
+	Calibration		*calibration;
 	}
 	PolyNode;
 
@@ -516,10 +554,15 @@ typedef struct
 	int			nApplicable;		/* number of relevant params					*/
 	int			applicableTo[40];	/* pointer to ID of relevant params				*/
 	char		*name;				/* name of the move type						*/
-	char		shortName[10];		/* abbreviated name of the move type            */
+	char		*nameTuning[2];		/* name of tuning params                        */
+	char		*shortName;         /* abbreviated name of the move type            */
 	MrBFlt		relProposalProb;	/* this holds the set proposal probability      */
-	MrBFlt		proposalParam[2];	/* parameters for the proposal mechanism        */
+	int         numTuningParams;    /* number of tuning parameters                  */
+	MrBFlt		tuningParam[2];	    /* tuning parameters for the proposal           */
+	MrBFlt		minimum[2];         /* minimum values for tuning params             */
+	MrBFlt		maximum[2];         /* maximum values for tuning params             */
 	int         parsimonyBased;     /* this move is based on parsimony (YES/NO)     */
+	int         level;              /* user level of this move                      */
 	} MoveType;
 
 
@@ -541,7 +584,7 @@ typedef struct
 	MrBFlt		cumProposalProb;	/* the cumulative proposal probability			*/
 	int			*nAccepted;			/* number of accepted moves						*/
 	int			*nTried;			/* number of tried moves						*/
-	MrBFlt		proposalParam[2];	/* parameters for the proposal mechanism        */
+	MrBFlt		tuningParam[2];     /* tuning parameters for the move               */
 	} MCMCMove;
 
 typedef int (*LikeDownFxn)(TreeNode *, int, int);
@@ -926,17 +969,6 @@ typedef struct charinfo
 	int informative;
 	} CharInfo;
 	
-typedef struct
-	{
-	char		parameterName[2][200]; /* name of parameter                             */
-	MrBFlt		proposalRate;          /* proposal rate                                 */
-	MrBFlt		proposalParams[3];     /* proposal parameter info                       */
-	MrBFlt		minimum[3];            /* minimum values for params                     */
-	MrBFlt		maximum[3];            /* minimum values for params                     */
-	int			numProposalParams;     /* the number of prop. params                    */
-	int			userLevel;			   /* what type of user can access the proposal?    */
-	} PropInfo;
-
 typedef struct 
 	{
 	int			isExcluded;            /* is the character excluded                     */
@@ -955,7 +987,7 @@ typedef struct
 typedef struct 
 	{
 	int			isDeleted;             /* is the taxon deleted                          */
-	MrBFlt		taxaAge;               /* the age of the taxon                          */
+	Calibration	calibration;           /* the age of the taxon                          */
 	int			charCount;             /* count holder                                  */
 	int			taxaSet[MAX_NUM_TAXASETS]; /* holds defined taxon sets                  */
 	int			constraints[MAX_NUM_CONSTRAINTS];/* the constraints                     */

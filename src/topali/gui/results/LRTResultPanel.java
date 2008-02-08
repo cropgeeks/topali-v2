@@ -28,8 +28,7 @@ public class LRTResultPanel extends ResultPanel {
 	try {
 	    double[][] graphData = (double[][]) Utils.castArray(result.data,
 		    double.class);
-	    graph = new GraphPanel(data, result, graphData, -1,
-		    GraphPanel.RIGHT);
+	    graph = new GraphPanel(data, result, graphData, -1, null);
 
 	    GradientPanel gp = new GradientPanel("Likelihood Ratio Test (LRT)");
 	    gp.setStyle(GradientPanel.OFFICE2003);
@@ -53,10 +52,11 @@ public class LRTResultPanel extends ResultPanel {
 	str += "\n\nRuntime: " + ((result.endTime - result.startTime) / 1000)
 		+ " seconds";
 
-	str += "\n\nWindow size:    " + result.window;
-	str += "\nStep size:      " + result.step;
-	str += "\nMethod:         " + result.method;
-	str += "\nThreshold runs: " + (result.runs - 1);
+	str += "\n\nWindow size:      " + result.window;
+	str += "\nStep size:        " + result.step;
+	str += "\nVar. window size: " + (result.type==LRTResult.TYPE_VARIABLE ? "true" : "false");
+	str += "\nMethod:           " + result.method;
+	str += "\nThreshold runs:   " + (result.runs - 1);
 	str += "\n\nSelected sequences:";
 
 	for (String seq : result.selectedSeqs)
@@ -67,7 +67,7 @@ public class LRTResultPanel extends ResultPanel {
 
     @Override
     public Printable[] getPrintables() {
-	return new Printable[] { graph };
+	return new Printable[] { graph.getPrintable() };
     }
 
     @Override

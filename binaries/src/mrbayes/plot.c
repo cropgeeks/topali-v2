@@ -1,5 +1,5 @@
 /*
- *  MrBayes 3.1.1
+ *  MrBayes 3.1.2
  *
  *  copyright 2002-2005
  *
@@ -123,19 +123,19 @@ int DoPlot (void)
 		MrBayesPrint ("%s   Plot string is already allocated\n", spacer);
 		goto errorExit;
 		}
-	s = (char *)malloc((size_t) (longestLineLength * sizeof(char)));
+	s = (char *)SafeMalloc((size_t) (longestLineLength * sizeof(char)));
 	if (!s)
 		{
 		MrBayesPrint ("%s   Problem allocating string for reading plot file\n", spacer);
 		goto errorExit;
 		}
-	headerLine = (char *)malloc((size_t) (longestLineLength * sizeof(char)));
+	headerLine = (char *)SafeMalloc((size_t) (longestLineLength * sizeof(char)));
 	if (!headerLine)
 		{
 		MrBayesPrint ("%s   Problem allocating headerLine for reading plot file\n", spacer);
 		goto errorExit;
 		}
-	headerNames = (char *)malloc((size_t) ((longestLineLength+40) * sizeof(char)));
+	headerNames = (char *)SafeMalloc((size_t) ((longestLineLength+40) * sizeof(char)));
 	if (!headerNames)
 		{
 		MrBayesPrint ("%s   Problem allocating headerNames for reading plot file\n", spacer);
@@ -147,7 +147,7 @@ int DoPlot (void)
 	memAllocs[ALLOC_SUMPSTRING] = YES;
 		
 	/* close binary file */
-	fclose (fp);
+	SafeFclose (&fp);
 	
 	/* open text file */
 	if ((fp = OpenTextFileR(plotParams.plotFileName)) == NULL)
@@ -315,7 +315,7 @@ int DoPlot (void)
 		MrBayesPrint ("%s   Plot string is already allocated\n", spacer);
 		goto errorExit;
 		}
-	parameterValues = (MrBFlt *)malloc((size_t) (numRows * numColumns * sizeof(MrBFlt)));
+	parameterValues = (MrBFlt *)SafeMalloc((size_t) (numRows * numColumns * sizeof(MrBFlt)));
 	if (!parameterValues)
 		{
 		MrBayesPrint ("%s   Problem allocating parameterValues\n", spacer);
@@ -567,8 +567,7 @@ int DoPlot (void)
 		free (parameterValues);
 		memAllocs[ALLOC_SUMPINFO] = NO;
 		}
-	if (fp)
-		fclose (fp);
+	SafeFclose (&fp);
 	expecting = Expecting(COMMAND);
 	
 #	if defined (MPI_ENABLED)
@@ -594,8 +593,7 @@ int DoPlot (void)
 			free (parameterValues);
 			memAllocs[ALLOC_SUMPINFO] = NO;
 			}
-		if (fp != NULL)
-			fclose (fp);
+		SafeFclose (&fp);
 		strcpy (spacer, "");
 		strcpy (plotToken, "Plot");
 		i = 0;

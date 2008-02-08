@@ -19,27 +19,16 @@ import javax.swing.JTable.PrintMode;
 
 import org.apache.log4j.Logger;
 
+import scri.commons.gui.MsgBox;
 import topali.gui.*;
 import topali.mod.Filters;
-import scri.commons.gui.MsgBox;
 
 /**
  * Panel for displaying a table
  */
-public class TablePanel extends JPanel 
+public class TablePanel extends DataVisPanel 
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
-	//Toolbar positions
-	public static final int NO = 0;
-
-	public static final int TOP = 1;
-
-	public static final int LEFT = 2;
-
-	public static final int BOTTOM = 3;
-
-	public static final int RIGHT = 4;
 
 	int toolbarPos;
 
@@ -56,12 +45,11 @@ public class TablePanel extends JPanel
 	 * @param columnNames
 	 * @param toolbarPos Position where the toolbar should be placed
 	 */
-	public TablePanel(Vector<Vector<Object>> rowData, Vector<String> columnNames,
-			int toolbarPos)
+	public TablePanel(Vector<Vector<Object>> rowData, Vector<String> columnNames, String name)
 	{
+	    super(name);
 		this.rowData = rowData;
 		this.columnNames = columnNames;
-		this.toolbarPos = toolbarPos;
 
 		CustomTable table = new CustomTable(rowData, columnNames);
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
@@ -70,26 +58,6 @@ public class TablePanel extends JPanel
 		this.setLayout(new BorderLayout());
 		this.scroll = new JScrollPane(table);
 		this.add(scroll, BorderLayout.CENTER);
-		
-		switch (toolbarPos)
-		{
-		case TOP:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.NORTH);
-			break;
-		case RIGHT:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.EAST);
-			break;
-		case BOTTOM:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.SOUTH);
-			break;
-		case LEFT:
-			this.toolbar = createToolbar();
-			this.add(this.toolbar, BorderLayout.WEST);
-			break;
-		}
 	}
 
 	/**
@@ -115,24 +83,6 @@ public class TablePanel extends JPanel
 	public JTable accessTable()
 	{
 		return table;
-	}
-
-	private JToolBar createToolbar()
-	{
-		int pos = (this.toolbarPos == LEFT || this.toolbarPos == RIGHT) ? SwingConstants.VERTICAL
-				: SwingConstants.HORIZONTAL;
-		JToolBar tb = new JToolBar(pos);
-
-		tb.setFloatable(false);
-		tb.setBorderPainted(false);
-		tb.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-
-		JButton bExport = new JButton(getExportAction());
-		bExport.setIcon(Icons.EXPORT);
-		bExport.setToolTipText("Export as CSV");
-		tb.add(bExport);
-
-		return tb;
 	}
 
 	private Action getExportAction()
@@ -179,7 +129,7 @@ public class TablePanel extends JPanel
 							out.close();
 						}
 						else if(Prefs.gui_filter_table == PNG) {
-							ImageIO.write(table.getPNGImage(), "png", file);
+							ImageIO.write(table.getBufferedImage(), "png", file);
 							updateUI();
 						}
 
@@ -197,18 +147,23 @@ public class TablePanel extends JPanel
 		};
 		return aExport;
 	}
-
-//	/**
-//	 * @see java.awt.print.Printable
-//	 */
-//	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-//			throws PrinterException
-//	{
-//		return table.getPrintable(PrintMode.FIT_WIDTH, null, null).print(graphics, pageFormat, pageIndex);
-//	}
 	
+	@Override
 	public Printable getPrintable() {
 		return table.getPrintable(PrintMode.FIT_WIDTH, null, null);
+	}
+
+	@Override
+	public Object getExportable(int format) {
+	    switch(format) {
+	    case FORMAT_TXT:
+	    case FORMAT_CSV:
+		return table.getCSV();
+	    case FORMAT_IMAGE:
+		return table.getBufferedImage();
+	    default:
+		return null;
+	    }
 	}
 
 }

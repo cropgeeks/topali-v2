@@ -15,6 +15,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import topali.gui.*;
+import topali.i18n.Text;
 import scri.commons.gui.MsgBox;
 
 public class PrinterDialog extends JDialog
