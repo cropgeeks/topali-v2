@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import topali.data.models.Model;
 
-public class ModelDiagram extends JPanel implements Printable
+public class ModelDiagram extends JPanel
 {
 	
     /**
@@ -20,14 +20,7 @@ public class ModelDiagram extends JPanel implements Printable
      */
 	public void setModel(Model m) {
             
-        }
-
-    @Override
-    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-	    throws PrinterException {
-	return Printable.NO_SUCH_PAGE;
-    }
-	
+        }	
 	
 }
 

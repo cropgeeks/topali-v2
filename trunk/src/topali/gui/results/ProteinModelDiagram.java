@@ -217,35 +217,6 @@ public class ProteinModelDiagram extends ModelDiagram
 		g2d.setFont(oldFont);
 	}
 	
-	@Override
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-		throws PrinterException {
-	    if(pageIndex>0)
-		return Printable.NO_SUCH_PAGE;
-	    JPanel p = new JPanel(new BorderLayout());
-	    p.setBackground(Color.WHITE);
-	    p.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	    ProteinModelDiagram tmp = new ProteinModelDiagram(this.model);
-	    tmp.setBackground(Color.WHITE);
-	    p.add(tmp, BorderLayout.CENTER);
-	    p.setSize(200,240);
-	    p.doLayout();
-	    p.paint(graphics);
-	    return Printable.PAGE_EXISTS;
-	}
-	
-//	@Override
-//	public Dimension getPreferredSize()
-//	{
-//		return getMinimumSize();
-//	}
-//	
-//	@Override
-//	public Dimension getMinimumSize()
-//	{
-//		return new Dimension(basicWidth, basicHeight);
-//	}
-	
 	public static void main(String[] args) {
 		ProteinModel mod = (ProteinModel)ModelManager.getInstance().generateModel("mtart", true, true);
 		

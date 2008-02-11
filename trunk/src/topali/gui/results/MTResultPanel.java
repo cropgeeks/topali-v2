@@ -45,7 +45,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		tp.accessTable().setRowSorter(sorter);
 		p1.add(tp, BorderLayout.CENTER);
 		
-		infoPanel = new ModelInfoPanel(data,this, "model");
+		infoPanel = new ModelInfoPanel(data,this);
 		p1.add(infoPanel, BorderLayout.SOUTH);
 		
 		addContent(p1, false);
@@ -246,7 +246,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	@Override
 	public Printable[] getPrintables()
 	{
-		return new Printable[] {tp.getPrintable(), infoPanel.getPrintable()};
+		return new Printable[] {tp.getPrintable()};
 	}
 
 	@Override

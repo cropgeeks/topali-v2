@@ -34,7 +34,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	public DisplayCanvas displayCanvas;
 	HeaderCanvas headerCanvas;
 	MyPopupMenuAdapter popupAdapt;
-	Scroller scroller;
 	
 	Font font;
 	FontMetrics fm;
@@ -84,9 +83,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		sp.setRowHeaderView(seqlistPanel);
 		sp.setColumnHeaderView(headerCanvas);
 		sp.getViewport().setBackground(Color.white);
-		
-		scroller = new Scroller();
-		scroller.start();
 		
 		setLayout(new BorderLayout());
 		add(sp, BorderLayout.CENTER);
@@ -248,6 +244,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	 */
 	private void updateStatusBar(int seq, int seqRange, int nuc, int nucRange)
 	{
+	    if(seq<0 || (seq+seqRange)>ss.getSize() || nuc<0 || (nuc+nucRange)>ss.getLength())
+		return;
+	    
 		try
 		{
 			if (seq == -1 || nuc == -1)
@@ -288,48 +287,17 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 	}
 	
-	/**
-	 * Start the scroller (direction and speed depends on mouse coordinates)
-	 * 
-	 * @param mouse
-	 */
-	private void scroll(Point mouse)
-	{
+	private void scroll(Point mouse) {
 		Rectangle vSize = sp.getViewport().getViewRect();
 		Point vPos = sp.getViewport().getViewPosition();
 		int x1 = (int) vPos.getX();
 		int y1 = (int) vPos.getY();
 		int x2 = (int) (x1 + vSize.getWidth());
 		int y2 = (int) (y1 + vSize.getHeight());
-
-		boolean scroll = false;
-
-		// if there's a need for scrolling, notify the scroller
-		if (mouse.getX() < x1)
-		{
-			scroller.left = (int) (x1 - mouse.getX());
-			scroll = true;
-		}
-		if (mouse.getX() > x2)
-		{
-			scroller.right = (int) (mouse.getX() - x2);
-			scroll = true;
-		}
-		if (mouse.getY() < y1)
-		{
-			scroller.up = (int) (y1 - mouse.getY());
-			scroll = true;
-		}
-		if (mouse.getY() > y2)
-		{
-			scroller.down = (int) (mouse.getY() - y2);
-			scroll = true;
-		}
-
-		scroller.setRunning(scroll);
-		synchronized (scroller)
-		{
-			scroller.notify();
+		
+		if(mouse.getX()<x1 || mouse.getX()>x2 || mouse.getY()<y1 || mouse.getY()>y2) {
+		    Rectangle scrollTo = new Rectangle((int)mouse.getX()-5, (int)mouse.getY()-5, 10, 10);
+		    displayCanvas.scrollRectToVisible(scrollTo);
 		}
 	}
 	
@@ -1142,94 +1110,5 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			}
 		}
 		
-	}
-	
-	/**
-	 * Scrolls the canvas. Set up, right, down and/or left (the value determines
-	 * the scrolling speed) and set running=true.
-	 */
-	class Scroller extends Thread
-	{
-		public int up = 0;
-
-		public int right = 0;
-
-		public int down = 0;
-
-		public int left = 0;
-
-		boolean running = false;
-
-		public Scroller()
-		{
-		}
-
-		@Override
-		public void run()
-		{
-			while (true)
-			{
-				while (running)
-				{
-					int value;
-					if (up > 0)
-					{
-						value = vBar.getValue();
-						if (value <= up)
-							this.running = false;
-						vBar.setValue(value - up);
-					}
-					if (right > 0)
-					{
-						value = hBar.getValue();
-						if (value > (canW - right))
-							this.running = false;
-						hBar.setValue(value + right);
-					}
-					if (down > 0)
-					{
-						value = vBar.getValue();
-						if (value > (canH - down))
-							this.running = false;
-						vBar.setValue(value + down);
-					}
-					if (left > 0)
-					{
-						value = hBar.getValue();
-						if (value <= left)
-							this.running = false;
-						hBar.setValue(value - left);
-					}
-
-					try
-					{
-						Thread.sleep(10);
-					} catch (InterruptedException e)
-					{
-						log.warn(e);
-					}
-				}
-				this.up = 0;
-				this.right = 0;
-				this.down = 0;
-				this.left = 0;
-
-				synchronized (this)
-				{
-					try
-					{
-						wait();
-					} catch (InterruptedException e)
-					{
-					}
-				}
-			}
-
-		}
-
-		public void setRunning(boolean b)
-		{
-			this.running = b;
-		}
 	}
 }

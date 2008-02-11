@@ -157,6 +157,7 @@ public class TablePanel extends DataVisPanel
 	public Object getExportable(int format) {
 	    switch(format) {
 	    case FORMAT_TXT:
+		return table.toString();
 	    case FORMAT_CSV:
 		return table.getCSV();
 	    case FORMAT_IMAGE:

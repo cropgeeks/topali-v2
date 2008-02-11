@@ -384,36 +384,6 @@ public class DNAModelDiagram extends ModelDiagram
 		default: return c14;
 		}
 	}
-	
-	
-//	@Override
-//	public Dimension getPreferredSize()
-//	{
-//		return getMinimumSize();
-//	}
-//	
-//	@Override
-//	public Dimension getMinimumSize()
-//	{
-//		return new Dimension(basicWidth, basicHeight);
-//	}
-	
-	@Override
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-		throws PrinterException {
-	    if(pageIndex>0)
-		return Printable.NO_SUCH_PAGE;
-	    JPanel p = new JPanel(new BorderLayout());
-	    p.setBackground(Color.WHITE);
-	    p.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	    DNAModelDiagram tmp = new DNAModelDiagram(this.model);
-	    tmp.setBackground(Color.WHITE);
-	    p.add(tmp, BorderLayout.CENTER);
-	    p.setSize(200,240);
-	    p.doLayout();
-	    p.paint(graphics);
-	    return Printable.PAGE_EXISTS;
-	}
 
 	public static void main(String[] args) {
 		DNAModel mod = (DNAModel)ModelManager.getInstance().generateModel("gtr", true, true);
