@@ -24,7 +24,7 @@ public class Text
 //		GuiFile = ResourceBundle.getBundle("res.text.gui_file", SysPrefs.locale);
 //		GuiTree = ResourceBundle.getBundle("res.text.gui_tree", SysPrefs.locale);
 		//I18N = ResourceBundle.getBundle("res.text.i18n", Locale.getDefault());
-	    I18N = ResourceBundle.getBundle("topali.i18n.i18n", Locale.getDefault());
+	    I18N = ResourceBundle.getBundle("res.text.i18n", Locale.getDefault());
 	}
 
 	public static String format(String text, Object... args)
