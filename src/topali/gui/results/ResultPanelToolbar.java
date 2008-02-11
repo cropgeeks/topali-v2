@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.*;
+import topali.i18n.Text;
 import topali.mod.Filters;
 import scri.commons.gui.MsgBox;
 import sun.net.www.content.image.jpeg;
@@ -83,7 +84,7 @@ public class ResultPanelToolbar extends JToolBar {
 	aExport = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Export Data");
+		fc.setDialogTitle(Text.getString("Export_Data"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 		fc.setSelectedFile(new File(result.guiName.replaceAll("\\s+",
 			"_")));
@@ -114,6 +115,11 @@ public class ResultPanelToolbar extends JToolBar {
 				if(exportable==null)
 				    continue;
 				
+				if(file.exists()) {
+				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    	continue;
+				}
+				
 				BufferedWriter out = new BufferedWriter(
 					new FileWriter(file));
 				out
@@ -131,6 +137,12 @@ public class ResultPanelToolbar extends JToolBar {
 				    ext = TXT;
 				    continue;
 				}
+				
+				if(file.exists()) {
+				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    	continue;
+				}
+				
 				BufferedWriter out = new BufferedWriter(
 					new FileWriter(file));
 				out
@@ -148,6 +160,12 @@ public class ResultPanelToolbar extends JToolBar {
 				    ext = TXT;
 				    continue;
 				}
+				
+				if(file.exists()) {
+				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    	continue;
+				}
+				
 				ImageIO
 					.write((BufferedImage)exportable ,
 						"png", file);
@@ -160,7 +178,7 @@ public class ResultPanelToolbar extends JToolBar {
 			if(filenames.length()>0)
 			    MsgBox.msg("Data successfully saved to: \n"+filenames.toString(), MsgBox.INF);
 
-		    } catch (IOException e1) {
+		    } catch (Exception e1) {
 			log.warn("Data export failed.", e1);
 			MsgBox.msg(
 				"There was an unexpected error while saving data:\n "
@@ -175,7 +193,7 @@ public class ResultPanelToolbar extends JToolBar {
 		Icons.ANALYSIS_INFO, aInfo);
 	bReselect = (JButton) WinMainToolBar.getButton(false, null, "dss05",
 		Icons.RESELECT, aReselect);
-	bExport = (JButton) WinMainToolBar.getButton(false, null, "dss01",
+	bExport = (JButton) WinMainToolBar.getButton(false, null, "export",
 		Icons.EXPORT, aExport);
 
 	add(bInfo);

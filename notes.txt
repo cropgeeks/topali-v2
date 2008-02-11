@@ -2,13 +2,10 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Replaced MrBayes 3.1.1 with 3.1.2 (due to a bug in 3.1.1)
-- Had to move i18n stuff into src directory (otherwise NetBeans complains)
-- Implemented variable window sizes in DSS and LRT
-- If job entry gets removed (cancelled), the error info panel now also gets cleared.
-- Resultpanels: Again just one right-aligned toolbar (no separated toolbars for each graph etc. anymore)
-- Fixed: Printpreview just showed first page for multipage Printables
-- ModelDiagrams are now also exportable/printable (but still some problem with printing)
+- Removed exportability/printability of Modeldiagram again (it was just not working properly)
+- Tables and Graphs are now also exportable as txt file.
+- Made AlignmentPanel scrolling more easy (removed extra Scroller thread)
+
 
 TODO:
 - Optimising RaxML parameters (that means running jobs prior to the actual analysis!)

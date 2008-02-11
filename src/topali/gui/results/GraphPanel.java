@@ -24,6 +24,7 @@ import org.jfree.data.xy.*;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
+import topali.var.ASCIIGraph;
 import topali.var.utils.Utils;
 
 /**
@@ -31,13 +32,7 @@ import topali.var.utils.Utils;
  */
 public class GraphPanel extends DataVisPanel
 {
-	 Logger log = Logger.getLogger(this.getClass());
-	
-	public static final int NO = 0;
-	public static final int TOP = 1;
-	public static final int LEFT = 2;
-	public static final int BOTTOM = 3;
-	public static final int RIGHT = 4;
+	Logger log = Logger.getLogger(this.getClass());
 	
 	AlignmentData aData;
 
@@ -223,6 +218,8 @@ public class GraphPanel extends DataVisPanel
 	public Object getExportable(int format) {
 	    switch(format) {
 	    case FORMAT_TXT:
+		ASCIIGraph as = new ASCIIGraph(data, threshold, 50, 120);
+		return as.plot();
 	    case FORMAT_CSV:
 		StringBuffer sb = new StringBuffer();
 		sb.append("Nucleotide, Score\n");

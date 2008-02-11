@@ -27,7 +27,7 @@ import topali.var.utils.Utils;
  * 
  * @author dlindn
  */
-public class ModelInfoPanel extends DataVisPanel implements MouseListener {
+public class ModelInfoPanel extends JPanel implements MouseListener {
 
     MTResultPanel mtpanel;
     AlignmentData data;
@@ -38,8 +38,7 @@ public class ModelInfoPanel extends DataVisPanel implements MouseListener {
     Hashtable<String, JFrame> treeFrames = new Hashtable<String, JFrame>();
 
     /** Creates new form ModelInfoPanel */
-    public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel, String name) {
-	super(name);
+    public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel) {
 	this.data = data;
 	this.mtpanel = mtpanel;
 	initComponents();
@@ -235,39 +234,6 @@ public class ModelInfoPanel extends DataVisPanel implements MouseListener {
 		treeCanvas.setTree(mptree);
 	    }
 	}
-    }
-
-    @Override
-    public Object getExportable(int format) {
-	switch (format) {
-	case FORMAT_TXT:
-	    return model.toString();
-	case FORMAT_IMAGE:
-	    BufferedImage bi = new BufferedImage(200,
-		    240, BufferedImage.TYPE_INT_BGR);
-	    Graphics2D g2d = bi.createGraphics();
-	    JPanel p = new JPanel(new BorderLayout());
-	    p.setBackground(Color.WHITE);
-	    p.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	    ModelDiagram tmp = data.getSequenceSet().isDNA() ? new DNAModelDiagram(
-		    (DNAModel) model)
-		    : new ProteinModelDiagram((ProteinModel) model);
-	    tmp.setBackground(Color.WHITE);
-	    p.add(tmp, BorderLayout.CENTER);
-	    p.setSize(200,240);
-	    p.doLayout();
-	    g2d.setBackground(Color.WHITE);
-	    p.paint(g2d);
-	    updateUI();
-	    return bi;
-	default:
-	    return null;
-	}
-    }
-
-    @Override
-    public Printable getPrintable() {
-	return modelDiagram;
     }
 
     /**

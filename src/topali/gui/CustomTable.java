@@ -147,7 +147,65 @@ public class CustomTable extends JTable
 
 		return sb.toString();
 	}
+	
+	public String toString() {
+	    int nCol = getModel().getColumnCount();
+	    int nRow = getModel().getRowCount();
+	    int maxWidth = 0;
+	    
+	    for(int i=0; i<nCol; i++) {
+		String tmp = getModel().getColumnName(i);
+		tmp = tmp.replaceAll("\\<\\D+.*\\>", "");
+		if(tmp.length()>maxWidth)
+		    maxWidth = tmp.length();
+	    }
+	    for(int i=0; i<nCol; i++) {
+		for(int j=0; j<nRow; j++) {
+		    String tmp = getModel().getValueAt(j, i).toString();
+		    tmp = tmp.replaceAll("\\<\\D+.*\\>", "");
+		    if(tmp.length()>maxWidth)
+			maxWidth = tmp.length();
+		}
+	    }
+	    
+	    StringBuffer sb = new StringBuffer();
+	    String rowSep = generateString('-', (maxWidth+1)*nCol+1);
+	    sb.append(rowSep+"\n");
+	    sb.append('|');
+	    for(int i=0; i<nCol; i++) {
+		String tmp = getModel().getColumnName(i);
+		tmp = tmp.replaceAll("\\<\\D+.*\\>", "");
+		tmp = fillup(tmp, ' ', maxWidth);
+		sb.append(tmp+"|");
+	    }
+	    sb.append("\n"+rowSep+"\n");
+	    for(int i=0; i<nRow; i++) {
+		sb.append('|');
+		for(int j=0; j<nCol; j++) {
+		    String tmp = getModel().getValueAt(i, j).toString();
+		    tmp = tmp.replaceAll("\\<\\D+.*\\>", "");
+		    tmp = fillup(tmp, ' ', maxWidth);
+		    sb.append(tmp+"|");
+		}
+		sb.append("\n"+rowSep+"\n");
+	    }
+	    return sb.toString();
+	}
 
+	private String generateString(char c, int length) {
+	    StringBuffer sb = new StringBuffer(length);
+	    for(int i=0; i<length; i++)
+		sb.append(c);
+	    return sb.toString();
+	}
+	
+	private String fillup(String s, char c, int length) {
+	    while(s.length()<length) {
+		s += c;
+	    }
+	    return s;
+	}
+	
 	class MyTablemodel extends DefaultTableModel
 	{
 
