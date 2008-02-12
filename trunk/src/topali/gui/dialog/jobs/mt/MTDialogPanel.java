@@ -13,6 +13,7 @@ import javax.swing.DefaultComboBoxModel;
 import topali.data.ModelTestResult;
 import topali.data.models.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 
 /**
  *
@@ -120,14 +121,13 @@ public class MTDialogPanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         sampleSize = new javax.swing.JComboBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jLabel1.setText(bundle.getString("Models")); // NOI18N
+        jLabel1.setText(Text.get("Models")); // NOI18N
 
         models.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "PhyML", "MrBayes" }));
 
-        jLabel2.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel2.setText(Text.get("Gamma")); // NOI18N
 
-        jLabel3.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel3.setText(Text.get("Invariant_Sites")); // NOI18N
 
         gamma.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         gamma.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -135,9 +135,9 @@ public class MTDialogPanel extends javax.swing.JPanel {
         inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jLabel4.setText(bundle.getString("AIC2/BIC_Calculation")); // NOI18N
+        jLabel4.setText(Text.get("AIC2/BIC_Calculation")); // NOI18N
 
-        jLabel5.setText(bundle.getString("Sample_Size")); // NOI18N
+        jLabel5.setText(Text.get("Sample_Size")); // NOI18N
 
         sampleSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequence Length", "Alignment Size" }));
 

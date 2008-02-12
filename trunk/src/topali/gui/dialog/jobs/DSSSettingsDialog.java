@@ -35,7 +35,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 	public DSSSettingsDialog(WinMain winMain, AlignmentData data,
 			DSSResult iResult)
 	{
-		super(winMain, Text.I18N.getString("DSSSettingsDialog.gui01"), true);
+		super(winMain, Text.get("DSSSettingsDialog.gui01"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -74,9 +74,9 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		basicPanel = new BasicPanel();
 
 		tabs.removeAll();
-		tabs.addTab(Text.I18N.getString("DSSSettingsDialog.gui04"),
+		tabs.addTab(Text.get("DSSSettingsDialog.gui04"),
 				basicPanel);
-		tabs.addTab(Text.I18N.getString("DSSSettingsDialog.gui05"),
+		tabs.addTab(Text.get("DSSSettingsDialog.gui05"),
 				advancedPanel);
 	}
 
@@ -159,8 +159,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(Text.I18N
-				.getString("DSSSettingsDialog.gui06"), 1);
+		int res = MsgBox.yesno(Text.get("DSSSettingsDialog.gui06"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -185,7 +184,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(Text.I18N.getString("DSSSettingsDialog.gui11"));
+			JLabel info1 = new JLabel(Text.get("DSSSettingsDialog.gui11"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
 			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
 		}

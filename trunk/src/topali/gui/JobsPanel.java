@@ -39,8 +39,7 @@ public class JobsPanel extends JPanel {
 
 		JScrollPane sp = new JScrollPane(jp);
 
-		GradientPanel gp = new GradientPanel(Text.I18N
-				.getString("JobsPanel.gui01"));
+		GradientPanel gp = new GradientPanel(Text.get("JobsPanel.gui01"));
 		gp.setStyle(GradientPanel.OFFICE2003);
 
 		JPanel headerPanel = new JPanel(new BorderLayout());
@@ -162,13 +161,13 @@ public class JobsPanel extends JPanel {
 		// int percent = (int) (progress / model.size());
 
 		// "[n] job" or "[n] jobs"
-		String js = Text.I18N.getString("JobsPanel.gui04");
+		String js = Text.get("JobsPanel.gui04");
 		if (lCount + rCount == 1)
-			js = Text.I18N.getString("JobsPanel.gui03");
+			js = Text.get("JobsPanel.gui03");
 		// Format the message
 		Object[] args =
 		{ jobs.size(), js, lCount, rCount };
-		String msg = Text.format(Text.I18N.getString("JobsPanel.gui02"), args);
+		String msg = Text.get("JobsPanel.gui02", args);
 
 //		if (jobs.size() > 0)
 //			msg += " - " + (int) progress + "%";

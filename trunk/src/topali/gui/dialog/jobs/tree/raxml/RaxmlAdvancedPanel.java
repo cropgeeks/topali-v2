@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 
 /**
  *
@@ -129,18 +130,17 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
         empfreqLabel = new javax.swing.JLabel();
         empfreq = new javax.swing.JCheckBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jLabel3.setText(bundle.getString("Bootstrap")); // NOI18N
+        jLabel3.setText(Text.get("Bootstrap")); // NOI18N
 
-        jLabel1.setText(bundle.getString("Model")); // NOI18N
+        jLabel1.setText(Text.get("Model")); // NOI18N
 
         model.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel2.setText(bundle.getString("Rate_Heterogenity")); // NOI18N
+        jLabel2.setText(Text.get("Rate_Heterogenity")); // NOI18N
 
         ratehet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CAT", "MIX", "GAMMA" }));
 
-        empfreqLabel.setText(bundle.getString("Emp._Frequencies")); // NOI18N
+        empfreqLabel.setText(Text.get("Emp._Frequencies")); // NOI18N
 
         empfreq.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         empfreq.setMargin(new java.awt.Insets(0, 0, 0, 0));

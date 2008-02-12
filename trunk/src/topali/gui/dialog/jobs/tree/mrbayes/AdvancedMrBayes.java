@@ -13,6 +13,7 @@ import javax.swing.*;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 /**
@@ -154,12 +155,11 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         gamma = new javax.swing.JCheckBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("General_Settings"))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("General_Settings"))); // NOI18N
 
-        jLabel5.setText(bundle.getString("Sample_Frequency")); // NOI18N
+        jLabel5.setText(Text.get("Sample_Frequency")); // NOI18N
 
-        jLabel6.setText(bundle.getString("Burnin_(in_%)")); // NOI18N
+        jLabel6.setText(Text.get("Burnin_(in_%)")); // NOI18N
 
         samFreq.setToolTipText("Sample frequency");
 
@@ -167,9 +167,9 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 
         burnin.setToolTipText("Length of burnin period (relative to number of samples generated)");
 
-        jLabel4.setText(bundle.getString("nGenerations")); // NOI18N
+        jLabel4.setText(Text.get("nGenerations")); // NOI18N
 
-        jLabel7.setText(bundle.getString("nRuns")); // NOI18N
+        jLabel7.setText(Text.get("nRuns")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -212,20 +212,20 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Model_Settings"))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings"))); // NOI18N
 
-        jLabel1.setText(bundle.getString("Substitution_Model")); // NOI18N
+        jLabel1.setText(Text.get("Substitution_Model")); // NOI18N
 
         subModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         subModel.setToolTipText("Substitution model to use");
 
-        jLabel2.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel2.setText(Text.get("Invariant_Sites")); // NOI18N
 
         inv.setToolTipText("Allow invariant sites");
         inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jLabel3.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel3.setText(Text.get("Gamma")); // NOI18N
 
         gamma.setToolTipText("Use gamma distribution");
         gamma.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));

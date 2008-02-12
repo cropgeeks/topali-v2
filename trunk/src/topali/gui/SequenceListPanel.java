@@ -52,8 +52,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			@Override
 			public void mouseMoved(MouseEvent e)
 			{
-				WinMainStatusBar.setText(Text.format(Text.I18N
-						.getString("SequenceListPanel.gui05"), list
+				WinMainStatusBar.setText(Text.get("SequenceListPanel.gui05", list
 						.getSelectedIndices().length, model.getSize()));
 			}
 		});
@@ -206,19 +205,19 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		// Output message
 		String str;
 		if (indices.length == 1)
-			str = Text.format(Text.I18N.getString("SequenceListPanel.gui01"),
+			str = Text.get("SequenceListPanel.gui01",
 					indices.length)
 					+ " ";
 		else
-			str = Text.format(Text.I18N.getString("SequenceListPanel.gui02"),
+			str = Text.get("SequenceListPanel.gui02",
 					indices.length)
 					+ " ";
 
 		if (duplicateCount == 1)
-			str += Text.format(Text.I18N.getString("SequenceListPanel.gui03"),
+			str += Text.get("SequenceListPanel.gui03",
 					duplicateCount);
 		else
-			str += Text.format(Text.I18N.getString("SequenceListPanel.gui04"),
+			str += Text.get("SequenceListPanel.gui04",
 					duplicateCount);
 
 		MsgBox.msg(str, MsgBox.INF);
@@ -314,7 +313,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		MyPopupMenuAdapter()
 		{
 			// Create the "Select" submenu
-			JMenu menu = new JMenu(Text.I18N.getString("menuAlgnSelect"));
+			JMenu menu = new JMenu(Text.get("menuAlgnSelect"));
 
 			JMenuItem m1 = getItem(aAlgnSelectAll, KeyEvent.VK_A,
 					KeyEvent.VK_A, InputEvent.CTRL_MASK);
@@ -340,7 +339,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 					disPanel.highlight(-1, -1, true);
 				}
 			});
-			addPart.setText(Text.I18N.getString("aAlgnAddPartition"));
+			addPart.setText(Text.get("aAlgnAddPartition"));
 			addPart.setMnemonic(KeyEvent.VK_P);
 
 			JMenuItem addCodReg = new JMenuItem();
@@ -356,10 +355,10 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 //					disPanel.holdMouseHighlight = false;
 				}
 			});
-			addCodReg.setText(Text.I18N.getString("aAlgnAddCDS"));
+			addCodReg.setText(Text.get("aAlgnAddCDS"));
 			addCodReg.setMnemonic(KeyEvent.VK_C);
 
-			annotate = new JMenu(Text.I18N.getString("menuAlgnAnnotate"));
+			annotate = new JMenu(Text.get("menuAlgnAnnotate"));
 			annotate.add(addPart);
 			annotate.add(addCodReg);
 

@@ -13,6 +13,7 @@ import javax.swing.*;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 /**
@@ -129,21 +130,20 @@ public class AdvancedPhyML extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         bootstraps = new javax.swing.JSpinner();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Model_Settings"))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings"))); // NOI18N
 
-        jLabel8.setText(bundle.getString("Substitution_Model")); // NOI18N
+        jLabel8.setText(Text.get("Substitution_Model")); // NOI18N
 
         subModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         subModel.setToolTipText("null");
 
-        jLabel9.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel9.setText(Text.get("Invariant_Sites")); // NOI18N
 
         inv.setToolTipText("null");
         inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jLabel10.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel10.setText(Text.get("Gamma")); // NOI18N
 
         gamma.setToolTipText("null");
         gamma.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -186,7 +186,7 @@ public class AdvancedPhyML extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel6.setText(bundle.getString("Bootstrap_Runs")); // NOI18N
+        jLabel6.setText(Text.get("Bootstrap_Runs")); // NOI18N
 
         bootstraps.setToolTipText("null");
 

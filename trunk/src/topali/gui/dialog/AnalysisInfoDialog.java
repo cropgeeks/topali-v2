@@ -40,10 +40,10 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 	private JPanel createControls()
 	{
-		bClose = new JButton(Text.I18N.getString("close"));
+		bClose = new JButton(Text.get("close"));
 		bClose.addActionListener(this);
 
-		bClipboard = new JButton(Text.I18N.getString("clipboard_1"));
+		bClipboard = new JButton(Text.get("clipboard_1"));
 		bClipboard.addActionListener(this);
 		
 		bSubmit = new JButton("Resubmit Job");
@@ -82,7 +82,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 		else if (e.getSource() == bClipboard) {
 			Utils.copyToClipboard(text.getText());
-			MsgBox.msg(Text.I18N.getString("clipboard_2"), MsgBox.INF);
+			MsgBox.msg(Text.get("clipboard_2"), MsgBox.INF);
 		}
 		
 		else if (e.getSource() == bSubmit)

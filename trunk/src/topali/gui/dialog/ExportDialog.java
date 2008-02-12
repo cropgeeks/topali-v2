@@ -65,8 +65,7 @@ public class ExportDialog extends JDialog implements ActionListener
 
 		pack();
 
-		setTitle(Text.format(Text.I18N.getString("ExportDialog.gui01"),
-				data.name));
+		setTitle(Text.get("ExportDialog.gui01",data.name));
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
@@ -77,8 +76,8 @@ public class ExportDialog extends JDialog implements ActionListener
 		int allCount = ss.getSize();
 		int selCount = ss.getSelectedSequences().length;
 
-		String tAllSeq = Text.format(Text.I18N.getString("ExportDialog.1"), allCount);
-		String tSelSeq = Text.format(Text.I18N.getString("ExportDialog.2"), selCount, allCount);
+		String tAllSeq = Text.get("ExportDialog.1", allCount);
+		String tSelSeq = Text.get("ExportDialog.2", selCount, allCount);
 		rAllSeq = new JRadioButton(tAllSeq, Prefs.gui_export_allseqs);
 		rAllSeq.setMnemonic(KeyEvent.VK_A);
 		rSelSeq = new JRadioButton(tSelSeq, !Prefs.gui_export_allseqs);
@@ -94,12 +93,12 @@ public class ExportDialog extends JDialog implements ActionListener
 		}
 
 		JPanel p1 = new JPanel(new GridLayout(2, 1, 0, 0));
-		p1.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("Sequence_selection")));
+		p1.setBorder(BorderFactory.createTitledBorder(Text.get("Sequence_selection")));
 		p1.add(rAllSeq);
 		p1.add(rSelSeq);
 
-		String tAllPar = Text.format(Text.I18N.getString("ExportDialog.3"), ss.getLength());
-		String tSelPar = Text.format(Text.I18N.getString("ExportDialog.4"), countConcatenatedLength());
+		String tAllPar = Text.get("ExportDialog.3", ss.getLength());
+		String tSelPar = Text.get("ExportDialog.4", countConcatenatedLength());
 		rAllPar = new JRadioButton(tAllPar, true);
 		rAllPar.setMnemonic(KeyEvent.VK_F);
 		rSelPar = new JRadioButton(tSelPar);
@@ -116,18 +115,18 @@ public class ExportDialog extends JDialog implements ActionListener
 			rSelPar.setSelected(true);
 
 		JPanel p2 = new JPanel(new GridLayout(2, 1, 0, 0));
-		p2.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("Alignment_length")));
+		p2.setBorder(BorderFactory.createTitledBorder(Text.get("Alignment_length")));
 		p2.add(rAllPar);
 		p2.add(rSelPar);
 
-		rDisk = new JRadioButton(Text.I18N.getString("ExportDialog.5"),
+		rDisk = new JRadioButton(Text.get("ExportDialog.5"),
 				Prefs.gui_export_todisk);
 		rDisk.setMnemonic(KeyEvent.VK_D);
 		rProject = new JRadioButton(
-			Text.I18N.getString("ExportDialog.6"),
+			Text.get("ExportDialog.6"),
 				!Prefs.gui_export_todisk);
 		rProject.setMnemonic(KeyEvent.VK_N);
-		rCodonPos = new JRadioButton(Text.I18N.getString("ExportDialog.7"));
+		rCodonPos = new JRadioButton(Text.get("ExportDialog.7"));
 		rCodonPos.setMnemonic(KeyEvent.VK_C);
 		rCodonPos.setEnabled(ss.isCodons());
 		ButtonGroup group3 = new ButtonGroup();
@@ -136,7 +135,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		group3.add(rCodonPos);
 		
 		JPanel p3 = new JPanel(new GridLayout(3, 1, 0, 0));
-		p3.setBorder(BorderFactory.createTitledBorder(Text.I18N.getString("ExportDialog.8")));
+		p3.setBorder(BorderFactory.createTitledBorder(Text.get("ExportDialog.8")));
 		p3.add(rDisk);
 		p3.add(rProject);
 		p3.add(rCodonPos);
@@ -151,8 +150,8 @@ public class ExportDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.I18N.getString("ok"));
-		bCancel = new JButton(Text.I18N.getString("cancel"));
+		bOK = new JButton(Text.get("ok"));
+		bCancel = new JButton(Text.get("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "export_alignment");
 	}
@@ -239,13 +238,13 @@ public class ExportDialog extends JDialog implements ActionListener
 			try
 			{
 				toExport.save(filename, Prefs.gui_filter_algn, false);
-				MsgBox.msg(Text.format(Text.I18N.getString("ExportDialog.9"), filename),
+				MsgBox.msg(Text.get("ExportDialog.9", filename),
 						MsgBox.INF);
 				return true;
 			} catch (Exception e)
 			{
 				log.warn("Export failed.\n",e);
-				MsgBox.msg(Text.format(Text.I18N.getString("ExportDialog.10"), filename)+"\n"
+				MsgBox.msg(Text.get("ExportDialog.10", filename)+"\n"
 						+ e, MsgBox.ERR);
 				return false;
 			}
@@ -279,7 +278,7 @@ public class ExportDialog extends JDialog implements ActionListener
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = Text.format(Text.I18N.getString("ExportDialog.11"), file);
+				String msg = Text.get("ExportDialog.11", file);
 				int response = MsgBox.yesnocan(msg, 1);
 
 				if (response == JOptionPane.NO_OPTION)

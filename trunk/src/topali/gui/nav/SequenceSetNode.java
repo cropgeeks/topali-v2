@@ -25,8 +25,7 @@ public class SequenceSetNode extends INode
 		super(data);
 
 		// Format the nodeName: Alignment (seqs x length)
-		nodeName = Text.format(Text.I18N.getString("SequenceSetNode.gui01"),
-				"" + ss.getSize(), "" + ss.getLength());
+		nodeName = Text.get("SequenceSetNode.gui01","" + ss.getSize(), "" + ss.getLength());
 
 		alignmentPanel = new AlignmentPanel(data);
 	}

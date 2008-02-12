@@ -33,14 +33,14 @@ public class PrinterDialog extends JDialog
 
 	public PrinterDialog(Printable[] toPrint)
 	{
-		super(TOPALi.winMain, Text.I18N.getString("PrinterDialog.gui01"), true);
+		super(TOPALi.winMain, Text.get("PrinterDialog.gui01"), true);
 
 		this.toPrint = toPrint;
 
 		JLabel icon = new JLabel(Icons.PRINT);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 
-		label = new JLabel(Text.I18N.getString("PrinterDialog.gui02"));
+		label = new JLabel(Text.get("PrinterDialog.gui02"));
 		label.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
 		add(label);
 		add(icon, BorderLayout.WEST);
@@ -74,7 +74,7 @@ public class PrinterDialog extends JDialog
 		{
 			public void run()
 			{
-				label.setText(Text.I18N.getString("PrinterDialog.gui03"));
+				label.setText(Text.get("PrinterDialog.gui03"));
 
 				pack();
 				setLocationRelativeTo(TOPALi.winMain);
@@ -109,8 +109,7 @@ public class PrinterDialog extends JDialog
 				} catch (Exception e)
 				{
 					log.warn("Printing failed.\n",e);
-					MsgBox.msg(Text.format(Text.I18N
-							.getString("PrinterDialog.err01"), e), MsgBox.ERR);
+					MsgBox.msg(Text.get("PrinterDialog.err01", e), MsgBox.ERR);
 				}
 			}
 

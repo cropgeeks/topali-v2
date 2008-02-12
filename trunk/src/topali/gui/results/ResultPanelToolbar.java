@@ -84,7 +84,7 @@ public class ResultPanelToolbar extends JToolBar {
 	aExport = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle(Text.getString("Export_Data"));
+		fc.setDialogTitle(Text.get("Export_Data"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 		fc.setSelectedFile(new File(result.guiName.replaceAll("\\s+",
 			"_")));
@@ -107,19 +107,19 @@ public class ResultPanelToolbar extends JToolBar {
 			int ext = Prefs.gui_filter_table;
 			for (int i=0; i<resPanel.getDataPanels().size(); i++) {
 			    DataVisPanel p = resPanel.getDataPanels().get(i);
-
+			
 			    if (ext == TXT) {
 				String filename = (p.getFriendlyName()!=null) ? basefilename+"_"+p.getFriendlyName() : basefilename;
 				File file = new File(Prefs.gui_dir, filename+".txt");
 				Object exportable = p.getExportable(DataVisPanel.FORMAT_TXT);
 				if(exportable==null)
 				    continue;
-
+				
 				if(file.exists()) {
-				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    if(MsgBox.yesno(Text.get("Project.msg01", file.getPath()), 1)!=JOptionPane.YES_OPTION)
 				    	continue;
 				}
-
+				
 				BufferedWriter out = new BufferedWriter(
 					new FileWriter(file));
 				out
@@ -137,12 +137,12 @@ public class ResultPanelToolbar extends JToolBar {
 				    ext = TXT;
 				    continue;
 				}
-
+				
 				if(file.exists()) {
-				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    if(MsgBox.yesno(Text.get("Project.msg01", file.getPath()), 1)!=JOptionPane.YES_OPTION)
 				    	continue;
 				}
-
+				
 				BufferedWriter out = new BufferedWriter(
 					new FileWriter(file));
 				out
@@ -151,7 +151,7 @@ public class ResultPanelToolbar extends JToolBar {
 				out.close();
 				filenames.append(file.getPath() + "\n");
 			    } else if (ext == PNG) {
-				String filename = (p.getFriendlyName()!=null) ? basefilename+"_"+p.getFriendlyName() : basefilename;
+				String filename = (p.getFriendlyName()!=null) ? basefilename+"_"+p.getFriendlyName() : basefilename; 
 				File file = new File(Prefs.gui_dir, filename+".png");
 				Object exportable = p.getExportable(DataVisPanel.FORMAT_IMAGE);
 				if(exportable==null) {
@@ -160,18 +160,18 @@ public class ResultPanelToolbar extends JToolBar {
 				    ext = TXT;
 				    continue;
 				}
-
+				
 				if(file.exists()) {
-				    if(MsgBox.yesno(Text.format(Text.getString("Project.msg01"), file.getPath()), 1)!=JOptionPane.YES_OPTION)
+				    if(MsgBox.yesno(Text.get("Project.msg01", file.getPath()), 1)!=JOptionPane.YES_OPTION)
 				    	continue;
 				}
-
+				
 				ImageIO
 					.write((BufferedImage)exportable ,
 						"png", file);
 				filenames.append(file.getPath() + "\n");
 			    }
-
+			    
 			    ext = Prefs.gui_filter_table;
 			}
 

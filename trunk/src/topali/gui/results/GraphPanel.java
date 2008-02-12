@@ -525,7 +525,7 @@ public class GraphPanel extends DataVisPanel
 							.getActiveRegionE(), PartitionAnnotations.class);
 				}
 			});
-			addPart.setText(Text.I18N.getString("aAlgnAddPartition"));
+			addPart.setText(Text.get("aAlgnAddPartition"));
 			addPart.setMnemonic(KeyEvent.VK_P);
 
 			JMenuItem addCodReg = new JMenuItem();
@@ -537,10 +537,10 @@ public class GraphPanel extends DataVisPanel
 							.getActiveRegionE(), CDSAnnotations.class);
 				}
 			});
-			addCodReg.setText(Text.I18N.getString("aAlgnAddCDS"));
+			addCodReg.setText(Text.get("aAlgnAddCDS"));
 			addCodReg.setMnemonic(KeyEvent.VK_C);
 
-			annotate = new JMenu(Text.I18N.getString("menuAlgnAnnotate"));
+			annotate = new JMenu(Text.get("menuAlgnAnnotate"));
 			annotate.setIcon(Icons.ADD_PARTITION);
 			annotate.add(addPart);
 			annotate.add(addCodReg);

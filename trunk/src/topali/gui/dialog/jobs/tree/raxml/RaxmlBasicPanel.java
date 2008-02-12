@@ -6,6 +6,8 @@
 
 package topali.gui.dialog.jobs.tree.raxml;
 
+import topali.i18n.Text;
+
 /**
  *
  * @author  dlindn
@@ -31,13 +33,12 @@ public class RaxmlBasicPanel extends javax.swing.JPanel {
         bCodonpos = new javax.swing.JRadioButton();
 
         buttonGroup1.add(bOnemodel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        bOnemodel.setText(bundle.getString("One_Model")); // NOI18N
+        bOnemodel.setText(Text.get("One_Model")); // NOI18N
         bOnemodel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         bOnemodel.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         buttonGroup1.add(bCodonpos);
-        bCodonpos.setText(bundle.getString("Codon_position_Models")); // NOI18N
+        bCodonpos.setText(Text.get("Codon_position_Models")); // NOI18N
         bCodonpos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         bCodonpos.setMargin(new java.awt.Insets(0, 0, 0, 0));
 

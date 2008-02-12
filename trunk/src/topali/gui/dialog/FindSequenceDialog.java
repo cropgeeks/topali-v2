@@ -30,7 +30,7 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 
 	public FindSequenceDialog(WinMain winMain, AlignmentPanel panel)
 	{
-		super(winMain, Text.I18N.getString("FindSequenceDialog.gui01"), true);
+		super(winMain, Text.get("FindSequenceDialog.gui01"), true);
 
 		this.panel = panel;
 		ss = panel.getSequenceSet();
@@ -50,24 +50,18 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 	private JPanel getControls()
 	{
 		seqName = new JTextField(Prefs.gui_find_name, 40);
-		seqName.setToolTipText(Text.I18N
-				.getString("FindSequenceDialog.gui07"));
+		seqName.setToolTipText(Text.get("FindSequenceDialog.gui07"));
 		seqName.selectAll();
 
-		highlight = new JCheckBox(Text.I18N
-				.getString("FindSequenceDialog.gui02"),
+		highlight = new JCheckBox(Text.get("FindSequenceDialog.gui02"),
 				Prefs.gui_find_highlight);
-		highlight.setToolTipText(Text.I18N
-				.getString("FindSequenceDialog.gui05"));
+		highlight.setToolTipText(Text.get("FindSequenceDialog.gui05"));
 		highlight.setMnemonic(KeyEvent.VK_S);
-		matchCase = new JCheckBox(Text.I18N
-				.getString("FindSequenceDialog.gui03"), Prefs.gui_find_case);
-		matchCase.setToolTipText(Text.I18N
-				.getString("FindSequenceDialog.gui06"));
+		matchCase = new JCheckBox(Text.get("FindSequenceDialog.gui03"), Prefs.gui_find_case);
+		matchCase.setToolTipText(Text.get("FindSequenceDialog.gui06"));
 		matchCase.setMnemonic(KeyEvent.VK_M);
 
-		JLabel label = new JLabel(Text.I18N
-				.getString("FindSequenceDialog.gui04"));
+		JLabel label = new JLabel(Text.get("FindSequenceDialog.gui04"));
 		label.setDisplayedMnemonic(KeyEvent.VK_F);
 		label.setLabelFor(seqName);
 
@@ -82,8 +76,8 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.I18N.getString("ok"));
-		bCancel = new JButton(Text.I18N.getString("cancel"));
+		bOK = new JButton(Text.get("ok"));
+		bCancel = new JButton(Text.get("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "find_sequence");
 	}
@@ -97,7 +91,7 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 		{
 			if (seqName.getText().length() == 0)
 			{
-				MsgBox.msg(Text.I18N.getString("FindSequenceDialog.gui08"),
+				MsgBox.msg(Text.get("FindSequenceDialog.gui08"),
 						MsgBox.ERR);
 				return;
 			}
@@ -112,8 +106,7 @@ public class FindSequenceDialog extends JDialog implements ActionListener
 
 		if (index == -1)
 		{
-			String msg = Text.format(Text.I18N
-					.getString("FindSequenceDialog.gui09"), seqName.getText());
+			String msg = Text.get("FindSequenceDialog.gui09", seqName.getText());
 			MsgBox.msg(msg, MsgBox.INF);
 
 			return;

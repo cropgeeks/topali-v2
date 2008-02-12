@@ -25,7 +25,7 @@ public class ResultsNodeFolder extends INode
 	@Override
 	public String toString()
 	{
-		return Text.I18N.getString("ResultsNode.gui01");
+		return Text.get("ResultsNode.gui01");
 	}
 
 	@Override

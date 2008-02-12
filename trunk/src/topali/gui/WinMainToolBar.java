@@ -113,12 +113,12 @@ public class WinMainToolBar extends JToolBar
 			button = new JButton(a);
 
 		if (title != null)
-			button.setText(Text.I18N.getString("WinMainToolBar." + title));
+			button.setText(Text.get("WinMainToolBar." + title));
 		else
 			button.setText("");
 
 		if (tt != null)
-			button.setToolTipText(Text.I18N.getString("WinMainToolBar." + tt));
+			button.setToolTipText(Text.get("WinMainToolBar." + tt));
 
 		if (SysPrefs.isWindows)
 			button.setBorderPainted(false);

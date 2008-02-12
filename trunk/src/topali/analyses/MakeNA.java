@@ -143,7 +143,7 @@ public class MakeNA
 			dna.checkValidity();
 		} catch (AlignmentLoadException e)
 		{
-			String msg = Text.I18N.getString("ImportDataSetDialog.err0"
+			String msg = Text.get("ImportDataSetDialog.err0"
 					+ e.getReason());
 			log.warn(msg);
 			if(showMessages)
@@ -152,7 +152,7 @@ public class MakeNA
 		}
 
 		if (SequenceSetUtils.verifySequenceNames(dna) == false) {
-			String msg = Text.I18N.getString("ImportDataSetDialog.err05");
+			String msg = Text.get("ImportDataSetDialog.err05");
 			log.warn(msg);
 			if(showMessages)
 				MsgBox.msg(msg,

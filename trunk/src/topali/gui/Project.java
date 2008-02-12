@@ -116,7 +116,7 @@ public class Project extends DataObject
 		// Create the dialog
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
-		fc.setDialogTitle(Text.I18N.getString("Project.gui01"));
+		fc.setDialogTitle(Text.get("Project.gui01"));
 
 		Filters.setFilters(fc, TOP, TOP);
 
@@ -192,7 +192,7 @@ public class Project extends DataObject
 				}
 			}
 			
-			String str = Text.I18N.getString("LoadMonitorDialog.gui06");
+			String str = Text.get("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
 			Unmarshaller unmarshaller = Castor.getUnmarshaller();
@@ -205,8 +205,7 @@ public class Project extends DataObject
 			
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.I18N.getString("Project.err01"),
-					filename, e), MsgBox.ERR);
+			MsgBox.msg(Text.get("Project.err01",filename, e), MsgBox.ERR);
 
 			log.warn("Error opening file\n",e);
 			return null;
@@ -291,8 +290,7 @@ public class Project extends DataObject
 			log.info("XML/Zip Write: "+ (System.currentTimeMillis() - s));
 		} catch (Exception e)
 		{
-			MsgBox.msg(Text.format(Text.I18N.getString("Project.err02"),
-					p.filename, e.getMessage()), MsgBox.ERR);
+			MsgBox.msg(Text.get("Project.err02", p.filename, e.getMessage()), MsgBox.ERR);
 
 			log.warn("Error saving file\n",e);
 			return false;
@@ -304,7 +302,7 @@ public class Project extends DataObject
 	private boolean saveAs()
 	{
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle(Text.I18N.getString("Project.gui02"));
+		fc.setDialogTitle(Text.get("Project.gui02"));
 		fc.setAcceptAllFileFilterUsed(false);
 		// If the project has never been saved it won't have a filename object
 		if (filename != null)
@@ -322,8 +320,7 @@ public class Project extends DataObject
 			// Confirm overwrite
 			if (file.exists())
 			{
-				String msg = Text.format(Text.I18N.getString("Project.msg01"),
-						file);
+				String msg = Text.get("Project.msg01", file);
 				int response = MsgBox.yesnocan(msg, 1);
 
 				if (response == JOptionPane.NO_OPTION)
