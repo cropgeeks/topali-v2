@@ -51,22 +51,22 @@ class SlidePanel extends JPanel
 		((JSpinner.NumberEditor) winSpin.getEditor())
 				.getTextField()
 				.setToolTipText(
-						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("SlidePanel.1"));
+						Text.get("SlidePanel.1"));
 		((JSpinner.NumberEditor) stepSpin.getEditor())
 				.getTextField()
 				.setToolTipText(
-						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("SlidePanel.2"));
+					Text.get("SlidePanel.2"));
 
-		label1 = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("SlidePanel.3"));
+		label1 = new JLabel(Text.get("SlidePanel.3"));
 		label1.setDisplayedMnemonic(KeyEvent.VK_S);
 		label1.setLabelFor(((JSpinner.NumberEditor) stepSpin.getEditor())
 				.getTextField());
-		label2 = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("SlidePanel.4"));
+		label2 = new JLabel(Text.get("SlidePanel.4"));
 		label2.setDisplayedMnemonic(KeyEvent.VK_W);
 		label2.setLabelFor(((JSpinner.NumberEditor) winSpin.getEditor())
 				.getTextField());
 		
-		label3 = new JLabel(Text.getString("variable_window_size"));
+		label3 = new JLabel(Text.get("variable_window_size"));
 
 		DoeLayout layout = new DoeLayout();
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));

@@ -63,7 +63,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 	public MovieDialog(WinMain winMain, SequenceSet ss)
 	{
-		super(winMain, Text.I18N.getString("MovieDialog.gui01"), true);
+		super(winMain, Text.get("MovieDialog.gui01"), true);
 		this.ss = ss;
 
 		// Create the controls
@@ -112,19 +112,16 @@ public class MovieDialog extends JDialog implements ActionListener,
 				.createEmptyBorder(5, 0, 5, 0), BorderFactory
 				.createLoweredBevelBorder()));
 
-		checkCurrent = new JCheckBox(Text.I18N
-				.getString("MovieDialog.gui02"), Prefs.gui_movie_current);
+		checkCurrent = new JCheckBox(Text.get("MovieDialog.gui02"), Prefs.gui_movie_current);
 		checkCurrent.addActionListener(this);
 		checkCurrent.setMnemonic(KeyEvent.VK_O);
 		checkCurrent
-				.setToolTipText(Text.I18N.getString("MovieDialog.gui03"));
+				.setToolTipText(Text.get("MovieDialog.gui03"));
 
-		checkCircular = new JCheckBox(Text.I18N
-				.getString("MovieDialog.gui04"), Prefs.gui_movie_circular);
+		checkCircular = new JCheckBox(Text.get("MovieDialog.gui04"), Prefs.gui_movie_circular);
 		checkCircular.addActionListener(this);
 		checkCircular.setMnemonic(KeyEvent.VK_C);
-		checkCircular.setToolTipText(Text.I18N
-				.getString("MovieDialog.gui05"));
+		checkCircular.setToolTipText(Text.get("MovieDialog.gui05"));
 
 		sliderLabel = new JLabel("", SwingConstants.CENTER);
 
@@ -149,13 +146,13 @@ public class MovieDialog extends JDialog implements ActionListener,
 		bStop.setEnabled(false);
 		bSBack.setEnabled(false);
 
-		bClose = new JButton(Text.I18N.getString("close"));
+		bClose = new JButton(Text.get("close"));
 		bClose.addActionListener(this);
 
 		bHelp = TOPALiHelp.getHelpButton("movie_dialog");
 
 		slider = new JSlider(1, frames);
-		slider.setToolTipText(Text.I18N.getString("MovieDialog.gui06"));
+		slider.setToolTipText(Text.get("MovieDialog.gui06"));
 		slider.addChangeListener(this);
 		slider.setValue(1);
 
@@ -292,8 +289,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 		Object[] args =
 		{ slider.getValue(), frames, sNuc, eNuc };
-		sliderLabel.setText(Text.format(Text.I18N
-				.getString("MovieDialog.gui07"), args));
+		sliderLabel.setText(Text.get("MovieDialog.gui07", args));
 	}
 
 	void createTree(int start, int end)
@@ -447,7 +443,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 		WindowCanvas()
 		{
 			setBackground(Prefs.gui_graph_background.darker().darker());
-			setToolTipText(Text.I18N.getString("MovieDialog.gui08"));
+			setToolTipText(Text.get("MovieDialog.gui08"));
 		}
 
 		@Override
@@ -495,23 +491,23 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 			((JSpinner.NumberEditor) winSpin.getEditor())
 					.getTextField()
-					.setToolTipText(Text.I18N.getString("MovieDialog.gui12"));
+					.setToolTipText(Text.get("MovieDialog.gui12"));
 			((JSpinner.NumberEditor) stepSpin.getEditor())
 					.getTextField()
-					.setToolTipText(Text.I18N.getString("MovieDialog.gui13"));
+					.setToolTipText(Text.get("MovieDialog.gui13"));
 			((JSpinner.NumberEditor) delaySpin.getEditor())
 					.getTextField()
-					.setToolTipText(Text.I18N.getString("MovieDialog.gui14"));
+					.setToolTipText(Text.get("MovieDialog.gui14"));
 
-			label1 = new JLabel(Text.I18N.getString("MovieDialog.gui09"));
+			label1 = new JLabel(Text.get("MovieDialog.gui09"));
 			label1.setDisplayedMnemonic(KeyEvent.VK_S);
 			label1.setLabelFor(((JSpinner.NumberEditor) stepSpin.getEditor())
 					.getTextField());
-			label2 = new JLabel(Text.I18N.getString("MovieDialog.gui10"));
+			label2 = new JLabel(Text.get("MovieDialog.gui10"));
 			label2.setDisplayedMnemonic(KeyEvent.VK_W);
 			label2.setLabelFor(((JSpinner.NumberEditor) winSpin.getEditor())
 					.getTextField());
-			label3 = new JLabel(Text.I18N.getString("MovieDialog.gui11"));
+			label3 = new JLabel(Text.get("MovieDialog.gui11"));
 			label3.setDisplayedMnemonic(KeyEvent.VK_D);
 			label3.setLabelFor(((JSpinner.NumberEditor) delaySpin.getEditor())
 					.getTextField());

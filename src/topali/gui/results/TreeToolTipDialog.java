@@ -83,7 +83,7 @@ public class TreeToolTipDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bClose = new JButton(Text.I18N.getString("close"));
+		bClose = new JButton(Text.get("close"));
 		bClose.addActionListener(this);
 		bHelp = TOPALiHelp.getHelpButton("tree_tooltips");
 

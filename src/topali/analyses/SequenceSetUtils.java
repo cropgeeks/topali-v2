@@ -93,8 +93,8 @@ public class SequenceSetUtils
 		{
 			// Prompt for the new sequence name
 			newname = (String) JOptionPane.showInputDialog(TOPALi.winMain,
-					Text.I18N.getString("SequenceSetUtils.gui01"),
-					Text.I18N.getString("SequenceSetUtils.gui02"),
+					Text.get("SequenceSetUtils.gui01"),
+					Text.get("SequenceSetUtils.gui02"),
 					JOptionPane.PLAIN_MESSAGE, null, null, selected.getName());
 
 			if (newname == null)
@@ -107,7 +107,7 @@ public class SequenceSetUtils
 			String verified = verifyName(newname, index + 1);
 			if (verified.equals(newname) == false)
 			{
-				MsgBox.msg(Text.I18N.getString("SequenceSetUtils.err01"),
+				MsgBox.msg(Text.get("SequenceSetUtils.err01"),
 						MsgBox.ERR);
 				continue;
 			}
@@ -118,8 +118,7 @@ public class SequenceSetUtils
 			{
 				if (seq != selected && seq.getName().equals(newname))
 				{
-					String msg = Text.format(Text.I18N
-							.getString("SequenceSetUtils.err02"), newname);
+					String msg = Text.get("SequenceSetUtils.err02", newname);
 					MsgBox.msg(msg, MsgBox.ERR);
 
 					ok = false;
@@ -173,7 +172,7 @@ public class SequenceSetUtils
 		if (ss.getSize() > 50)
 		{
 			// Ask the user
-			String msg = Text.I18N.getString("SequenceSetUtils.msg01");
+			String msg = Text.get("SequenceSetUtils.msg01");
 			int option = MsgBox.yesno(msg, 0);
 
 			// And return all the indices...
@@ -250,7 +249,7 @@ public class SequenceSetUtils
 	{
 		if (ss.getSelectedSequences().length < 4)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg05");
+			String msg = Text.get("SequenceSetUtils.msg05");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -258,7 +257,7 @@ public class SequenceSetUtils
 
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -271,7 +270,7 @@ public class SequenceSetUtils
 	{
 		if (ss.getSelectedSequences().length != 4)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg03");
+			String msg = Text.get("SequenceSetUtils.msg03");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -279,7 +278,7 @@ public class SequenceSetUtils
 
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -292,7 +291,7 @@ public class SequenceSetUtils
 	{
 		if (ss.getSelectedSequences().length < 3)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg02");
+			String msg = Text.get("SequenceSetUtils.msg02");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -300,7 +299,7 @@ public class SequenceSetUtils
 		
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -313,7 +312,7 @@ public class SequenceSetUtils
 	{
 		if (ss.getSelectedSequences().length < 3)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg06");
+			String msg = Text.get("SequenceSetUtils.msg06");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -321,7 +320,7 @@ public class SequenceSetUtils
 		
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -334,7 +333,7 @@ public class SequenceSetUtils
 	{
 		if (ss.getSelectedSequences().length < 3)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg08");
+			String msg = Text.get("SequenceSetUtils.msg08");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -342,7 +341,7 @@ public class SequenceSetUtils
 
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
@@ -355,7 +354,7 @@ public class SequenceSetUtils
 	{
 		if (ss.isDNA() == false)
 		{
-			String msg = Text.I18N.getString("SequenceSetUtils.msg04");
+			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;

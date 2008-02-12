@@ -34,7 +34,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 	public LRTSettingsDialog(WinMain winMain, AlignmentData data,
 			LRTResult iResult)
 	{
-		super(winMain, Text.I18N.getString("LRTSettingsDialog.gui01"), true);
+		super(winMain, Text.get("LRTSettingsDialog.gui01"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -72,9 +72,9 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		basicPanel = new BasicPanel();
 
 		tabs.removeAll();
-		tabs.addTab(Text.I18N.getString("LRTSettingsDialog.gui04"),
+		tabs.addTab(Text.get("LRTSettingsDialog.gui04"),
 				basicPanel);
-		tabs.addTab(Text.I18N.getString("LRTSettingsDialog.gui05"),
+		tabs.addTab(Text.get("LRTSettingsDialog.gui05"),
 				advancedPanel);
 	}
 
@@ -145,8 +145,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(Text.I18N
-				.getString("default_settings_warning"), 1);
+		int res = MsgBox.yesno(Text.get("default_settings_warning"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -171,7 +170,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(Text.I18N.getString("LRTSettingsDialog.gui11"));
+			JLabel info1 = new JLabel(Text.get("LRTSettingsDialog.gui11"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
 			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
 		}
@@ -204,8 +203,8 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 			((JSpinner.NumberEditor) cRuns.getEditor())
 					.getTextField()
 					.setToolTipText(
-							java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui12"));
-			lRuns = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui13"));
+							Text.get("LRTSettingsDialog.gui12"));
+			lRuns = new JLabel(Text.get("LRTSettingsDialog.gui13"));
 
 			// Substitution model
 			String[] v4 =
@@ -213,16 +212,16 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 			cModel = new JComboBox(v4);
 			cModel.setSelectedIndex(Prefs.lrt_method - 1);
 			cModel
-					.setToolTipText(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui14"));
-			lModel = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui15"));
+					.setToolTipText(Text.get("LRTSettingsDialog.gui14"));
+			lModel = new JLabel(Text.get("LRTSettingsDialog.gui15"));
 
 			gapsModel = new SpinnerNumberModel(Prefs.lrt_gap_threshold, 0d, 1d, 0.1d);
 			cGaps = new JSpinner(gapsModel);
 			((JSpinner.NumberEditor) cGaps.getEditor())
 					.getTextField()
 					.setToolTipText(
-							java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui16"));
-			lGaps = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("LRTSettingsDialog.gui17"));
+							Text.get("LRTSettingsDialog.gui16"));
+			lGaps = new JLabel(Text.get("LRTSettingsDialog.gui17"));
 			
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());

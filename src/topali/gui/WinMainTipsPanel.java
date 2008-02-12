@@ -152,12 +152,10 @@ public class WinMainTipsPanel extends JPanel implements ActionListener
 	{
 		TipsGradientPanel()
 		{
-			super(Text.I18N.getString("WinMainTipsPanel.gui01"));
+			super(Text.get("WinMainTipsPanel.gui01"));
 
-			bBack = getButton(Icons.BACK1, Icons.BACK2, Text.I18N
-					.getString("WinMainTipsPanel.gui02"));
-			bNext = getButton(Icons.NEXT1, Icons.NEXT2, Text.I18N
-					.getString("WinMainTipsPanel.gui03"));
+			bBack = getButton(Icons.BACK1, Icons.BACK2, Text.get("WinMainTipsPanel.gui02"));
+			bNext = getButton(Icons.NEXT1, Icons.NEXT2, Text.get("WinMainTipsPanel.gui03"));
 
 			setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 			add(bBack);

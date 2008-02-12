@@ -39,7 +39,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 	public HMMSettingsDialog(WinMain winMain, AlignmentData data,
 			HMMResult iResult)
 	{
-		super(winMain, java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.2"), true);
+		super(winMain, Text.get("HMMSettingsDialog.2"), true);
 		this.data = data;
 
 		if (iResult != null)
@@ -79,10 +79,10 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		runPanel = new RunPanel();
 
 		tabs.removeAll();
-		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Basic"), basicPanel);
-		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.3"), mosaicPanel);
-		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Model_Settings"), modelPanel);
-		tabs.addTab(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("Run_Settings"), runPanel);
+		tabs.addTab(Text.get("Basic"), basicPanel);
+		tabs.addTab(Text.get("HMMSettingsDialog.3"), mosaicPanel);
+		tabs.addTab(Text.get("Model_Settings"), modelPanel);
+		tabs.addTab(Text.get("Run_Settings"), runPanel);
 	}
 
 	public HMMResult getHMMResult()
@@ -186,7 +186,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 	private void defaultClicked()
 	{
-		int res = MsgBox.yesno(Text.I18N.getString("default_settings_warning"), 1);
+		int res = MsgBox.yesno(Text.get("default_settings_warning"), 1);
 		if (res != JOptionPane.YES_OPTION)
 			return;
 
@@ -206,7 +206,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			DoeLayout layout = new DoeLayout();
 			add(layout.getPanel(), BorderLayout.NORTH);
 
-			JLabel info1 = new JLabel(Text.getString("HMMSettingsDialog.1"));
+			JLabel info1 = new JLabel(Text.get("HMMSettingsDialog.1"));
 			
 			layout.add(info1, 0, 0, 1, 5, new Insets(5, 5, 2, 5));
 
@@ -237,7 +237,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			cModel = new JComboBox(v1);
 			cModel.setSelectedItem(Prefs.hmm_model);
 			cModel.addActionListener(this);
-			lModel = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.7"));
+			lModel = new JLabel(Text.get("HMMSettingsDialog.7"));
 
 			// Initial
 			String[] v2 =
@@ -245,33 +245,33 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			cInitial = new JComboBox(v2);
 			cInitial.setSelectedItem(Prefs.hmm_initial);
 			cInitial.addActionListener(this);
-			lInitial = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.4"));
+			lInitial = new JLabel(Text.get("HMMSettingsDialog.4"));
 
 			cFreqEst1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_1));
 			cFreqEst2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_2));
 			cFreqEst3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_3));
 			cFreqEst4 = new JTextField(Utils.d4.format(Prefs.hmm_freq_est_4));
-			lFreqEst = new JLabel("    "+ java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.5"));
+			lFreqEst = new JLabel("    "+ Text.get("HMMSettingsDialog.5"));
 
 			// Transition
 			cTransition = new JComboBox(v2);
 			cTransition.setSelectedItem(Prefs.hmm_transition);
 			cTransition.addActionListener(this);
-			lTransition = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.6"));
+			lTransition = new JLabel(Text.get("HMMSettingsDialog.6"));
 
 			cTransRatio = new JTextField(Utils.d4
 					.format(Prefs.hmm_transition_ratio));
-			lTransRatio = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.8"));
+			lTransRatio = new JLabel("    "+Text.get("HMMSettingsDialog.8"));
 
 			// Frequencies
 			cFreq1 = new JTextField(Utils.d4.format(Prefs.hmm_freq_1));
 			cFreq2 = new JTextField(Utils.d4.format(Prefs.hmm_freq_2));
 			cFreq3 = new JTextField(Utils.d4.format(Prefs.hmm_freq_3));
-			lFreq = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.9"));
+			lFreq = new JLabel(Text.get("HMMSettingsDialog.9"));
 
 			// Difficulty
 			cDifficulty = new JTextField(Utils.d4.format(Prefs.hmm_difficulty));
-			lDifficulty = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.10"));
+			lDifficulty = new JLabel(Text.get("HMMSettingsDialog.10"));
 
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
@@ -391,7 +391,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.11"),
+				return error(Text.get("HMMSettingsDialog.11"),
 						cFreqEst1);
 			}
 
@@ -406,7 +406,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.12"),
+						Text.get("HMMSettingsDialog.12"),
 						cTransRatio);
 			}
 
@@ -433,7 +433,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 				Prefs.hmm_freq_3 = Prefs.hmm_freq_3 / sum;
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.13"),
+				return error(Text.get("HMMSettingsDialog.13"),
 						cFreq1);
 			}
 
@@ -446,7 +446,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.14"),
+						Text.get("HMMSettingsDialog.14"),
 						cDifficulty);
 			}
 
@@ -455,7 +455,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 		private boolean error(String msg, Component control)
 		{
-			String str = java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.15") + msg;
+			String str = Text.get("HMMSettingsDialog.15") + msg;
 
 			MsgBox.msg(str, MsgBox.ERR);
 			control.requestFocus();
@@ -479,26 +479,26 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 			// Burn
 			cBurn = new JTextField("" + Prefs.hmm_burn);
-			lBurn = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.16"));
+			lBurn = new JLabel(Text.get("HMMSettingsDialog.16"));
 
 			// Sample
 			cSample = new JTextField("" + Prefs.hmm_points * Prefs.hmm_thinning);
 			cSample.setEnabled(false);
 			lSample = new JLabel(
-					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.17"));
+					Text.get("HMMSettingsDialog.17"));
 			lSample.setEnabled(false);
 
 			// Points
 			cPoints = new JTextField("" + Prefs.hmm_points);
-			lPoints = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.18"));
+			lPoints = new JLabel("    "+Text.get("HMMSettingsDialog.18"));
 
 			// Thinning
 			cThinning = new JTextField("" + Prefs.hmm_thinning);
-			lThinning = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.19"));
+			lThinning = new JLabel("    "+Text.get("HMMSettingsDialog.19"));
 
 			// Tuning intervale
 			cTune = new JTextField("" + Prefs.hmm_tuning);
-			lTune = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.20"));
+			lTune = new JLabel(Text.get("HMMSettingsDialog.20"));
 
 			// Lambda
 			String[] v1 =
@@ -506,30 +506,30 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			cLambda = new JComboBox(v1);
 			cLambda.setSelectedItem(Prefs.hmm_lambda);
 			cLambda.addActionListener(this);
-			lLambda = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.21"));
+			lLambda = new JLabel(Text.get("HMMSettingsDialog.21"));
 
 			// Annealing
 			String[] v2 =
 			{ "PAR", "PROB", "NONE" };
 			cAnneal = new JComboBox(v2);
 			cAnneal.setSelectedItem(Prefs.hmm_annealing);
-			lAnneal = new JLabel("    "+java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.22"));
+			lAnneal = new JLabel("    "+Text.get("HMMSettingsDialog.22"));
 
 			// Stationary frequencies
 			cStation = new JComboBox(v1);
 			cStation.setSelectedItem(Prefs.hmm_station);
 			lStation = new JLabel(
-					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.23"));
+					Text.get("HMMSettingsDialog.23"));
 
 			// Transition-transversion ratio
 			cUpdate = new JComboBox(v1);
 			cUpdate.setSelectedItem(Prefs.hmm_update);
 			lUpdate = new JLabel(
-					java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.24"));
+					Text.get("HMMSettingsDialog.24"));
 
 			// Branch length
 			cBranch = new JTextField(Utils.d4.format(Prefs.hmm_branch));
-			lBranch = new JLabel(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.25"));
+			lBranch = new JLabel(Text.get("HMMSettingsDialog.25"));
 
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
@@ -645,7 +645,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.26"),
+				return error(Text.get("HMMSettingsDialog.26"),
 						cBurn);
 			}
 
@@ -657,7 +657,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			} catch (Exception e)
 			{
 				return error(
-						java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.27"),
+						Text.get("HMMSettingsDialog.27"),
 						cPoints);
 			}
 
@@ -668,7 +668,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.28"),
+				return error(Text.get("HMMSettingsDialog.28"),
 						cThinning);
 			}
 
@@ -679,7 +679,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.29"),
+				return error(Text.get("HMMSettingsDialog.29"),
 						cTune);
 			}
 
@@ -696,7 +696,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 					throw new Exception();
 			} catch (Exception e)
 			{
-				return error(java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.30"), cTune);
+				return error(Text.get("HMMSettingsDialog.30"), cTune);
 			}
 
 			return true;
@@ -704,7 +704,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 
 		private boolean error(String msg, Component control)
 		{
-			String str = java.util.ResourceBundle.getBundle("topali/i18n/i18n").getString("HMMSettingsDialog.31") + msg;
+			String str = Text.get("HMMSettingsDialog.31") + msg;
 
 			MsgBox.msg(str, MsgBox.ERR);
 			control.requestFocus();

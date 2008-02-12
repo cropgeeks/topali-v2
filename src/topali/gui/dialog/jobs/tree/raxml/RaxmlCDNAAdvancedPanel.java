@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 
 /**
  *
@@ -96,10 +97,9 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         ratehet = new javax.swing.JComboBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_1"))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_1"))); // NOI18N
 
-        jLabel1.setText(bundle.getString("Model")); // NOI18N
+        jLabel1.setText(Text.get("Model")); // NOI18N
 
         model1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         model1.setEnabled(false);
@@ -124,12 +124,12 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_2"))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_2"))); // NOI18N
 
         model2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         model2.setEnabled(false);
 
-        jLabel2.setText(bundle.getString("Model")); // NOI18N
+        jLabel2.setText(Text.get("Model")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,12 +151,12 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_3"))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_3"))); // NOI18N
 
         model3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         model3.setEnabled(false);
 
-        jLabel3.setText(bundle.getString("Model")); // NOI18N
+        jLabel3.setText(Text.get("Model")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -178,9 +178,9 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel4.setText(bundle.getString("Bootstrap")); // NOI18N
+        jLabel4.setText(Text.get("Bootstrap")); // NOI18N
 
-        jLabel5.setText(bundle.getString("Rate_Heterogenity")); // NOI18N
+        jLabel5.setText(Text.get("Rate_Heterogenity")); // NOI18N
 
         ratehet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CAT", "MIX", "GAMMA" }));
 

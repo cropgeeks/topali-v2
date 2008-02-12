@@ -9,6 +9,7 @@ package topali.gui.dialog.jobs.tree.quicktree;
 import javax.swing.SpinnerNumberModel;
 
 import topali.gui.Prefs;
+import topali.i18n.Text;
 
 /**
  *
@@ -44,19 +45,18 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         bs = new javax.swing.JSpinner();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Model_Settings"))); // NOI18N
+        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings"))); // NOI18N
 
-        tstvlabel.setText(bundle.getString("Transition/Transversion_Ratio")); // NOI18N
+        tstvlabel.setText(Text.get("Transition/Transversion_Ratio")); // NOI18N
         tstvlabel.setEnabled(false);
 
-        tstvlabel2.setText(bundle.getString("ts/tv")); // NOI18N
+        tstvlabel2.setText(Text.get("ts/tv")); // NOI18N
         tstvlabel2.setEnabled(false);
 
-        alphalabel.setText(bundle.getString("Rate_Heterogenity")); // NOI18N
+        alphalabel.setText(Text.get("Rate_Heterogenity")); // NOI18N
         alphalabel.setEnabled(false);
 
-        alphalabel2.setText(bundle.getString("alpha")); // NOI18N
+        alphalabel2.setText(Text.get("alpha")); // NOI18N
         alphalabel2.setEnabled(false);
 
         tstv.setEnabled(false);
@@ -68,7 +68,7 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         alpha.setModel(mod1);
 
         estimate.setSelected(true);
-        estimate.setText(bundle.getString("Estimate")); // NOI18N
+        estimate.setText(Text.get("Estimate")); // NOI18N
         estimate.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         estimate.setMargin(new java.awt.Insets(0, 0, 0, 0));
         estimate.addActionListener(new java.awt.event.ActionListener() {
@@ -128,11 +128,11 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Program_settings"))); // NOI18N
+        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Program_settings"))); // NOI18N
 
-        jLabel5.setText(bundle.getString("Bootstrap_Runs")); // NOI18N
+        jLabel5.setText(Text.get("Bootstrap_Runs")); // NOI18N
 
-        jLabel6.setText(bundle.getString("Bootstraps")); // NOI18N
+        jLabel6.setText(Text.get("Bootstraps")); // NOI18N
 
         SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);
         bs.setModel(mod2);

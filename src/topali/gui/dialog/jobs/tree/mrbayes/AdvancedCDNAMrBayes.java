@@ -13,6 +13,7 @@ import javax.swing.*;
 import topali.data.*;
 import topali.data.models.*;
 import topali.gui.Prefs;
+import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 /**
@@ -408,14 +409,13 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("topali/i18n/i18n"); // NOI18N
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_1"))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_1"))); // NOI18N
 
-        jLabel2.setText(bundle.getString("Substitution_Model")); // NOI18N
+        jLabel2.setText(Text.get("Substitution_Model")); // NOI18N
 
-        jLabel3.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel3.setText(Text.get("Gamma")); // NOI18N
 
-        jLabel4.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel4.setText(Text.get("Invariant_Sites")); // NOI18N
 
         p1mod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -461,13 +461,13 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_2"))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_2"))); // NOI18N
 
-        jLabel6.setText(bundle.getString("Substitution_Model")); // NOI18N
+        jLabel6.setText(Text.get("Substitution_Model")); // NOI18N
 
-        jLabel7.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel7.setText(Text.get("Gamma")); // NOI18N
 
-        jLabel8.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel8.setText(Text.get("Invariant_Sites")); // NOI18N
 
         p2mod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -514,13 +514,13 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Codon_Position_3"))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Codon_Position_3"))); // NOI18N
 
-        jLabel10.setText(bundle.getString("Substitution_Model")); // NOI18N
+        jLabel10.setText(Text.get("Substitution_Model")); // NOI18N
 
-        jLabel11.setText(bundle.getString("Gamma")); // NOI18N
+        jLabel11.setText(Text.get("Gamma")); // NOI18N
 
-        jLabel12.setText(bundle.getString("Invariant_Sites")); // NOI18N
+        jLabel12.setText(Text.get("Invariant_Sites")); // NOI18N
 
         p3mod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -566,11 +566,11 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("General_Settings"))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("General_Settings"))); // NOI18N
 
-        jLabel13.setText(bundle.getString("Sample_Frequency")); // NOI18N
+        jLabel13.setText(Text.get("Sample_Frequency")); // NOI18N
 
-        jLabel14.setText(bundle.getString("Burnin_(in_%)")); // NOI18N
+        jLabel14.setText(Text.get("Burnin_(in_%)")); // NOI18N
 
         samFreq.setToolTipText("Sample frequency");
 
@@ -578,9 +578,9 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
 
         burnin.setToolTipText("Length of burnin period (relative to number of samples generated)");
 
-        jLabel15.setText(bundle.getString("nGenerations")); // NOI18N
+        jLabel15.setText(Text.get("nGenerations")); // NOI18N
 
-        jLabel16.setText(bundle.getString("nRuns")); // NOI18N
+        jLabel16.setText(Text.get("nRuns")); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -622,15 +622,15 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("Parameter_Linking_across_Codon_Positions"))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Parameter_Linking_across_Codon_Positions"))); // NOI18N
 
-        jLabel1.setText(bundle.getString("Base_comp.")); // NOI18N
+        jLabel1.setText(Text.get("Base_comp.")); // NOI18N
 
-        jLabel5.setText(bundle.getString("GTR/SYM_rates")); // NOI18N
+        jLabel5.setText(Text.get("GTR/SYM_rates")); // NOI18N
 
-        jLabel9.setText(bundle.getString("pINV")); // NOI18N
+        jLabel9.setText(Text.get("pINV")); // NOI18N
 
-        jLabel17.setText(bundle.getString("alpha_(Gamma_dist.)")); // NOI18N
+        jLabel17.setText(Text.get("alpha_(Gamma_dist.)")); // NOI18N
 
         jLabel18.setText("P3");
 
@@ -674,7 +674,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
         shape3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         shape3.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jLabel21.setText(bundle.getString("HKY/K80_Ts/Tv")); // NOI18N
+        jLabel21.setText(Text.get("HKY/K80_Ts/Tv")); // NOI18N
 
         tratio1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tratio1.setMargin(new java.awt.Insets(0, 0, 0, 0));

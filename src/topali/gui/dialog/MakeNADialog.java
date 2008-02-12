@@ -85,8 +85,8 @@ public class MakeNADialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.I18N.getString("ok"));
-		bCancel = new JButton(Text.I18N.getString("cancel"));
+		bOK = new JButton(Text.get("ok"));
+		bCancel = new JButton(Text.get("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "makena");
 	}
@@ -143,7 +143,7 @@ public class MakeNADialog extends JDialog implements ActionListener
 		} catch (AlignmentLoadException e)
 		{
 			log.warn(e);
-			MsgBox.msg(Text.I18N.getString("ImportDataSetDialog.err0"
+			MsgBox.msg(Text.get("ImportDataSetDialog.err0"
 					+ e.getReason()), MsgBox.ERR);
 		}
 	}

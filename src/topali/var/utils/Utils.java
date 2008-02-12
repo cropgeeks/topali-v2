@@ -67,11 +67,11 @@ public class Utils {
 
     public static JPanel getButtonPanel(JButton bRun, JButton bCancel,
 	    JButton bDefault, JButton bHelp, JDialog parent, String help) {
-	bRun.setText(Text.getString("run"));
+	bRun.setText(Text.get("run"));
 	bRun.addActionListener((ActionListener) parent);
-	bCancel.setText(Text.getString("cancel"));
+	bCancel.setText(Text.get("cancel"));
 	bCancel.addActionListener((ActionListener) parent);
-	bDefault.setText(Text.getString("defaults"));
+	bDefault.setText(Text.get("defaults"));
 	bDefault.addActionListener((ActionListener) parent);
 	if (help != null)
 	    bHelp = TOPALiHelp.getHelpButton(help);

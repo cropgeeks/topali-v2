@@ -90,7 +90,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		setIconImage(Icons.APP_FRAME.getImage());
-		setTitle(Text.I18N.getString("title"));
+		setTitle(Text.get("title"));
 
 		if (Prefs.gui_maximized)
 			setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -142,9 +142,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		{
 			if (WinMainMenuBar.aFileSave.isEnabled())
 			{
-				String msg = Text.I18N.getString("shutdown.1");
+				String msg = Text.get("shutdown.1");
 				if (jobsPanel.hasJobs())
-					msg = Text.I18N.getString("shutdown.2");
+					msg = Text.get("shutdown.2");
 
 				int res = MsgBox.yesnocan(msg, 0);
 
@@ -427,11 +427,11 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		if (jobsPanel.hasJobs(data))
 		{
-			MsgBox.msg(Text.I18N.getString("WinMain.msg03"), MsgBox.WAR);
+			MsgBox.msg(Text.get("WinMain.msg03"), MsgBox.WAR);
 			return;
 		}
 
-		String msg = Text.I18N.getString("WinMain.msg02");
+		String msg = Text.get("WinMain.msg02");
 		if (MsgBox.yesno(msg, 1) == JOptionPane.YES_OPTION)
 		{
 			// Then remove it from both the project and the navigation panel
@@ -827,7 +827,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	void menuAnlsRemove()
 	{
-		String msg = Text.I18N.getString("WinMain.msg04");
+		String msg = Text.get("WinMain.msg04");
 		if (MsgBox.yesno(msg, 1) == JOptionPane.YES_OPTION)
 		{
 			// Find out which alignment the result is being removed from
@@ -1036,7 +1036,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		project = new Project();
 		project.addChangeListener(this);
 
-		setTitle(Text.I18N.getString("title"));
+		setTitle(Text.get("title"));
 		menubar.setProjectOpenedState();
 		navPanel.clear();
 

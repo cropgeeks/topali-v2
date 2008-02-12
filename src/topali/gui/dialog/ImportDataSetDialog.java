@@ -40,7 +40,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 	public ImportDataSetDialog(WinMain winMain)
 	{
-		super(winMain, Text.I18N.getString("ImportDataSetDialog.gui01"),
+		super(winMain, Text.get("ImportDataSetDialog.gui01"),
 				true);
 		this.winMain = winMain;
 
@@ -55,7 +55,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		JLabel icon = new JLabel(Icons.UNKNOWN);
 		icon.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
-		JLabel label1 = new JLabel(Text.I18N.getString("ImportDataSetDialog.gui02"));
+		JLabel label1 = new JLabel(Text.get("ImportDataSetDialog.gui02"));
 		JPanel p1 = new JPanel(new GridLayout(1, 1, 0, 2));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
 		p1.add(label1);
@@ -71,7 +71,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 	public void promptForAlignment()
 	{
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle(Text.I18N.getString("ImportDataSetDialog.gui01"));
+		fc.setDialogTitle(Text.get("ImportDataSetDialog.gui01"));
 		fc.setCurrentDirectory(new File(Prefs.gui_dir));
 
 		Filters.setFilters(fc, -1, FAS, PHY_S, PHY_I, ALN, MSF, NEX, NEX_B);
@@ -124,7 +124,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 				ss = new SequenceSet(alignment);
 
 			if (SequenceSetUtils.verifySequenceNames(ss) == false)
-				MsgBox.msg(Text.I18N.getString("ImportDataSetDialog.err05"),
+				MsgBox.msg(Text.get("ImportDataSetDialog.err05"),
 						MsgBox.WAR);
 
 			data = new AlignmentData(name, ss);
@@ -135,7 +135,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 			log.warn("Import failed.\n",e);
 			int code = e.getReason();
 			
-			String text = Text.I18N.getString("ImportDataSetDialog.err0" + code);
+			String text = Text.get("ImportDataSetDialog.err0" + code);
 			if(e.getInfo()!=null)
 				text += "\n["+e.getInfo()+"]";
 			MsgBox.msg(text, MsgBox.ERR);

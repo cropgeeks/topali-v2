@@ -24,7 +24,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	public ImportOptionsDialog(WinMain winMain)
 	{
-		super(winMain, java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.1"), true);
+		super(winMain, Text.get("import_alignment.1"), true);
 
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
@@ -42,23 +42,20 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 	{
 		DblClickListener dblListener = new DblClickListener();
 
-		rImport = new JRadioButton(
-				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.2"));
+		rImport = new JRadioButton(Text.get("import_alignment.2"));
 		rImport.setMnemonic(KeyEvent.VK_E);
 		rImport.addMouseListener(dblListener);
-		rCDNA = new JRadioButton(
-				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.3"));
+		rCDNA = new JRadioButton(Text.get("import_alignment.3"));
 		rCDNA.setMnemonic(KeyEvent.VK_C);
 		rCDNA.addMouseListener(dblListener);
-		rAlign = new JRadioButton(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.4"));
+		rAlign = new JRadioButton(Text.get("import_alignment.4"));
 		rAlign.setMnemonic(KeyEvent.VK_P);
 		rAlign.setEnabled(false);
-		rMulti = new JRadioButton(
-				java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.5"));
+		rMulti = new JRadioButton(Text.get("import_alignment.5"));
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
 
-		rExSeq = new JRadioButton(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.6"));
+		rExSeq = new JRadioButton(Text.get("import_alignment.6"));
 		rExSeq.setMnemonic(KeyEvent.VK_T);
 		rExSeq.addMouseListener(dblListener);
 
@@ -90,7 +87,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 		JPanel p1 = new JPanel(new GridLayout(5, 1));
 		p1.setBorder(BorderFactory
-				.createTitledBorder(java.util.ResourceBundle.getBundle("res/text/i18n").getString("import_alignment.7")));
+				.createTitledBorder(Text.get("import_alignment.7")));
 		p1.add(rImport);
 		p1.add(rCDNA);
 		p1.add(rAlign);
@@ -106,8 +103,8 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	private JPanel getButtons()
 	{
-		bOK = new JButton(Text.I18N.getString("ok"));
-		bCancel = new JButton(Text.I18N.getString("cancel"));
+		bOK = new JButton(Text.get("ok"));
+		bCancel = new JButton(Text.get("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "import_alignment");
 	}

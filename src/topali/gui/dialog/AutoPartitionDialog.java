@@ -63,8 +63,8 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 
 	private JPanel getButtonPanel()
 	{
-		bOK = new JButton(Text.I18N.getString("ok"));
-		bCancel = new JButton(Text.I18N.getString("cancel"));
+		bOK = new JButton(Text.get("ok"));
+		bCancel = new JButton(Text.get("cancel"));
 
 		return Utils.getButtonPanel(this, bOK, bCancel, "auto_partition");
 	}
@@ -187,10 +187,9 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 		int num = anno.countRegions();
 
 		if (num == 1)
-			MsgBox.msg(Text.I18N.getString("AutoPartitionDialog.msg01"),
+			MsgBox.msg(Text.get("AutoPartitionDialog.msg01"),
 					MsgBox.INF);
 		else
-			MsgBox.msg(Text.format(Text.I18N
-					.getString("AutoPartitionDialog.msg02"), num), MsgBox.INF);
+			MsgBox.msg(Text.get("AutoPartitionDialog.msg02", num), MsgBox.INF);
 	}
 }

@@ -95,7 +95,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		blankPanel = new JPanel(new BorderLayout());
 		blankPanel.setBackground(Color.white);
 		blankPanel.add(new JLabel(
-				Text.I18N.getString("welcome_text"),
+				Text.get("welcome_text"),
 				SwingConstants.CENTER));
 		splits.setRightComponent(blankPanel);
 		splits.setDividerLocation(Prefs.gui_splits_loc);
@@ -130,7 +130,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 	{
 		while (root.getChildCount() > 0)
 			model.removeNodeFromParent((MutableTreeNode) root.getChildAt(0));
-		titlePanel.setTitle(Text.I18N.getString("NavPanel.gui01"));
+		titlePanel.setTitle(Text.get("NavPanel.gui01"));
 
 		int location = splits.getDividerLocation();
 		splits.setRightComponent(blankPanel);
@@ -148,11 +148,11 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 
 	private void setPanelTitle()
 	{
-		String str = Text.I18N.getString("NavPanel.gui01");
+		String str = "NavPanel.gui01";
 		if (root.getChildCount() > 0)
-			str = Text.I18N.getString("NavPanel.gui02");
+			str = "NavPanel.gui02";
 
-		titlePanel.setTitle(Text.format(str, root.getChildCount()));
+		titlePanel.setTitle(Text.get(str, root.getChildCount()));
 	}
 
 	// Clears and updates the tree to display a recently opened Project file
@@ -165,8 +165,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		isLoadingProject = true;
 		for (AlignmentData data : datasets)
 		{
-			String str = Text.format(Text.I18N
-					.getString("LoadMonitorDialog.gui05"), data.name);
+			String str = Text.get("LoadMonitorDialog.gui05", data.name);
 			LoadMonitorDialog.setLabel(str);
 
 			addAlignmentFolder(data);
