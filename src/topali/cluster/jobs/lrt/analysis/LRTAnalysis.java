@@ -7,12 +7,9 @@ package topali.cluster.jobs.lrt.analysis;
 
 import java.io.*;
 import java.util.*;
-
 import org.apache.log4j.Logger;
-
 import pal.alignment.SimpleAlignment;
 import topali.cluster.*;
-import topali.cluster.jobs.dss.analysis.DSS;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.var.utils.Utils;

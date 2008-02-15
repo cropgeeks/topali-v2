@@ -43,7 +43,7 @@ public class MTDialog extends JDialog implements ActionListener
 	private void init() {
 		this.setLayout(new BorderLayout());
 
-		panel = new MTDialogPanel(this.res, ss.isDNA());
+		panel = new MTDialogPanel(this.res, ss.getParams().isDNA());
 		add(panel, BorderLayout.CENTER);
 
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "modelselection");

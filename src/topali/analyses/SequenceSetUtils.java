@@ -143,7 +143,7 @@ public class SequenceSetUtils
 		
 		SequenceSetParams params = ss.getParams();
 		
-		if(ss.isDNA()) {
+		if(params.isDNA()) {
 			params.setAlpha(pest.getAlpha());
 			params.setKappa(pest.getKappa());
 			params.setAvgDist(pest.getAvgDistance());
@@ -255,7 +255,7 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -276,7 +276,7 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -297,7 +297,7 @@ public class SequenceSetUtils
 			return false;
 		}
 		
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -318,7 +318,7 @@ public class SequenceSetUtils
 			return false;
 		}
 		
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -339,7 +339,7 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -352,7 +352,7 @@ public class SequenceSetUtils
 	
 	public static boolean canRunCodonW(SequenceSet ss)
 	{
-		if (ss.isDNA() == false)
+		if (ss.getParams().isDNA() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);

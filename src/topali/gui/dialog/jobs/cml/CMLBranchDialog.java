@@ -75,7 +75,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 //		this.tree = this.tree.replaceAll(";", "");
 //		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
 		
-		TreeCreatorThread tc = new TreeCreatorThread(alignment, data.getSequenceSet().isDNA(), false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, data.getSequenceSet().getParams().isDNA(), false);
 		Tree tree = tc.getTree();
 		this.tree = tree.toString();
 		this.tree = this.tree.replaceAll(";", "");

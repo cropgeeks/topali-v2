@@ -104,7 +104,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		result.bpArray = mosaicPanel.getBreakpointArray();
 		result.isRemote = makeRemote;
 
-		if (data.getSequenceSet().hasParametersEstimated() == false)
+		if (data.getSequenceSet().getParams().isNeedCalculation())
 			SequenceSetUtils.estimateParameters(data.getSequenceSet());
 		
 		result.hmm_model = Prefs.hmm_model;

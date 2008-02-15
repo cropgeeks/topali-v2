@@ -24,10 +24,6 @@ public class RegionDialog extends JDialog implements ActionListener,
 		ListSelectionListener, ItemListener
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
-	// Holds all currently supported RegionAnnotation classes
-	private final Class<?>[] supportedAnnotations = new Class[]
-	{ PartitionAnnotations.class, CDSAnnotations.class };
 
 	private WinMain winMain;
 
@@ -35,6 +31,11 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	private RegionAnnotations annotations;
 
+	// Holds all currently supported RegionAnnotation classes
+	private final Class<?>[] supportedAnnotations = new Class[]
+	{ PartitionAnnotations.class, CDSAnnotations.class };
+
+	
 	// GUI stuff
 	private TreePreviewPanel treePanel = new TreePreviewPanel();
 

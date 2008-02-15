@@ -9,6 +9,7 @@ import java.io.*;
 
 import topali.cluster.*;
 import topali.data.*;
+import topali.gui.dialog.jobs.CodonWDialog;
 
 public class CodonWProcess extends StoppableProcess
 {
@@ -54,16 +55,16 @@ public class CodonWProcess extends StoppableProcess
 	}
 	
 	private int getGeneticCode(String code) {
-		if(code.equals(SequenceSetParams.GENETICCODE_UNIVERSAL)) {
+		if(code.equals(CodonWDialog.GENETICCODE_UNIVERSAL)) {
 			return 0;
 		}
-		else if(code.equals(SequenceSetParams.GENETICCODE_CILIATES)) {
+		else if(code.equals(CodonWDialog.GENETICCODE_CILIATES)) {
 			return 5;
 		}
-		else if(code.equals(SequenceSetParams.GENETICCODE_VERTMT)) {
+		else if(code.equals(CodonWDialog.GENETICCODE_VERTMT)) {
 			return 1;
 		}
-		else if(code.equals(SequenceSetParams.GENETICCODE_YEAST)) {
+		else if(code.equals(CodonWDialog.GENETICCODE_YEAST)) {
 			return 2;
 		}
 		

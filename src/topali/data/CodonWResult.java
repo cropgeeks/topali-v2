@@ -5,11 +5,13 @@
 
 package topali.data;
 
+import topali.gui.dialog.jobs.CodonWDialog;
+
 
 public class CodonWResult extends AlignmentResult
 {
 	public String codonwPath;
-	public String geneticCode = SequenceSetParams.GENETICCODE_UNIVERSAL;
+	public String geneticCode = CodonWDialog.GENETICCODE_UNIVERSAL;
 	public String result;
 	
 	public CodonWResult() {

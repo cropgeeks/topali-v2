@@ -6,16 +6,15 @@
 package topali.analyses;
 
 import org.apache.log4j.Logger;
-
 import pal.alignment.*;
 import pal.distance.AlignmentDistanceMatrix;
 import pal.misc.Identifier;
 import pal.substmodel.*;
 import pal.tree.*;
-import topali.gui.*;
+import scri.commons.gui.MsgBox;
+import topali.gui.TOPALi;
 import topali.i18n.Text;
 import topali.var.threads.*;
-import scri.commons.gui.MsgBox;
 
 public class TreeCreatorThread extends DesktopThread
 {

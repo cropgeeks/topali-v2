@@ -14,6 +14,7 @@ public abstract class DataVisPanel extends JPanel {
     public static final int FORMAT_CSV = 0;
     public static final int FORMAT_TXT = 1;
     public static final int FORMAT_IMAGE = 2;
+    public static final int FORMAT_SVG = 3;
     
     String friendlyName;
     

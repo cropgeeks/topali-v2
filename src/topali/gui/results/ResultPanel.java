@@ -7,10 +7,8 @@ package topali.gui.results;
 
 import java.awt.*;
 import java.awt.print.Printable;
-import java.util.*;
-
+import java.util.LinkedList;
 import javax.swing.*;
-
 import topali.data.*;
 import topali.gui.Icons;
 

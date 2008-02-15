@@ -8,6 +8,7 @@ package topali.data;
 import java.beans.*;
 import java.io.File;
 import java.util.LinkedList;
+import topali.data.annotations.AnnotationList;
 
 /* Represents an Alignment and the results/analyses run upon it. */
 public class AlignmentData extends DataObject
@@ -32,6 +33,8 @@ public class AlignmentData extends DataObject
 
 	// A set of alignment annotations (partitions, coding regions, etc)
 	private TOPALiAnnotations topaliAnnotations = new TOPALiAnnotations();
+	
+	//private AnnotationList annotations = new AnnotationList();
 
 	// For marking the current selected Region.
 	private int activeRegionS, activeRegionE;
@@ -53,7 +56,7 @@ public class AlignmentData extends DataObject
 		activeRegionS = 1;
 		activeRegionE = sequenceSet.getLength();
 
-		topaliAnnotations = new TOPALiAnnotations();
+		//topaliAnnotations = new TOPALiAnnotations();
 	}
 
 	public SequenceSet getSequenceSet()
@@ -97,6 +100,14 @@ public class AlignmentData extends DataObject
 	{
 		return topaliAnnotations;
 	}
+
+//	public AnnotationList getAnnotations() {
+//		return annotations;
+//	}
+//
+//	public void setAnnotations(AnnotationList annotations) {
+//		this.annotations = annotations;
+//	}
 
 	public LinkedList<AnalysisResult> getResults()
 	{
@@ -151,7 +162,7 @@ public class AlignmentData extends DataObject
 
 		stat.length = ss.getLength();
 		stat.size = ss.getSize();
-		stat.isDna = ss.isDNA();
+		stat.isDna = ss.getParams().isDNA();
 		stat.fileSize = new File(path).length();
 
 		refs.add(stat);

@@ -122,7 +122,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	
     	Model defModel = ss.getParams().getModel();
     	if(Utils.indexof(models, defModel.getName())==-1) {
-			if(ss.isDNA())
+			if(ss.getParams().isDNA())
 				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel.isGamma(), defModel.isInv());
 			else
 				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel.isGamma(), defModel.isInv());

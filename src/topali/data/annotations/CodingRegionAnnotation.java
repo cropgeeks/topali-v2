@@ -9,7 +9,6 @@ public class CodingRegionAnnotation extends Annotation
 {
 
 	public CodingRegionAnnotation() {
-		super("Coding Regions");
 	}
 	
 	public CodingRegionAnnotation(int pos, int length) {

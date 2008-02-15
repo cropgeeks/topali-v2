@@ -142,7 +142,7 @@ class FileMSF extends FileGeneric
 
 		// Header
 		out.write(" MSF: " + ss.getLength() + " Type: ");
-		if (ss.isDNA())
+		if (ss.getParams().isDNA())
 			out.write("N ");
 		else
 			out.write("P ");

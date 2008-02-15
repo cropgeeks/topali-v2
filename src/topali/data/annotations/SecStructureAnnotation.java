@@ -5,17 +5,17 @@
 
 package topali.data.annotations;
 
-
-public class PartitionAnnotation extends Annotation
+public class SecStructureAnnotation extends Annotation
 {
 
-	public PartitionAnnotation() {
+	char sign = '-';
+	
+	public SecStructureAnnotation() {
 		super();
 	}
 	
-	public PartitionAnnotation(int pos, int length) {
+	public SecStructureAnnotation(int pos, int length, char sign) {
 		super(pos, length);
+		this.sign = sign;
 	}
-	
-	
 }

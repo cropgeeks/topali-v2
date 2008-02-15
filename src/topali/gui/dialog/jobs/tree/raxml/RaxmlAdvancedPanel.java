@@ -32,7 +32,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     }
     
     public void initPrevResult(RaxmlResult res) {
-    	if(data.getSequenceSet().isDNA()) {
+    	if(data.getSequenceSet().getParams().isDNA()) {
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
     		model.setModel(mod);
     		model.setEnabled(false);
@@ -54,7 +54,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     }
     
     private void initValues() {
-    	if(data.getSequenceSet().isDNA()) {
+    	if(data.getSequenceSet().getParams().isDNA()) {
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
     		model.setModel(mod);
     		model.setEnabled(false);
@@ -91,7 +91,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     	bs.setValue(Prefs.rax_bootstrap_default);
     	ratehet.setSelectedItem(Prefs.rax_ratehet_default);
     	empfreq.setSelected(Prefs.rax_empfreq_default);
-    	if(!data.getSequenceSet().isDNA()) 
+    	if(!data.getSequenceSet().getParams().isDNA()) 
     		model.setSelectedItem(Prefs.rax_protmodel_default);
     }
     
@@ -101,13 +101,13 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     	res.empFreq = empfreq.isSelected();
     	res.rateHet = (String)ratehet.getSelectedItem();
     	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
-    	RaxPartition p1 = new RaxPartition("1-"+length, "partition", (String)model.getSelectedItem(), data.getSequenceSet().isDNA());
+    	RaxPartition p1 = new RaxPartition("1-"+length, "partition", (String)model.getSelectedItem(), data.getSequenceSet().getParams().isDNA());
     	res.partitions.add(p1);
     	
     	Prefs.rax_bootstrap = res.bootstrap;
     	Prefs.rax_empfreq = res.empFreq;
     	Prefs.rax_ratehet = res.rateHet;
-    	if(!data.getSequenceSet().isDNA())
+    	if(!data.getSequenceSet().getParams().isDNA())
     		Prefs.rax_protmodel = (String)model.getSelectedItem();
     	
     	return res;

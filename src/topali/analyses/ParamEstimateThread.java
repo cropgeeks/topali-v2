@@ -6,13 +6,12 @@
 package topali.analyses;
 
 import org.apache.log4j.Logger;
-
 import pal.alignment.*;
 import pal.distance.AlignmentDistanceMatrix;
 import pal.eval.LikelihoodValue;
 import pal.substmodel.SubstitutionModel;
 import pal.tree.NeighborJoiningTree;
-import topali.gui.*;
+import topali.gui.TOPALi;
 import topali.i18n.Text;
 import topali.var.threads.*;
 

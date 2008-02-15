@@ -7,12 +7,8 @@ package topali.gui.results;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.print.*;
-
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
-
 import topali.data.models.*;
 
 public class DNAModelDiagram extends ModelDiagram

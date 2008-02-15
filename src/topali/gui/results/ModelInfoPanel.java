@@ -8,15 +8,10 @@ package topali.gui.results;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.awt.print.Printable;
 import java.util.*;
 import java.util.List;
-
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
-
 import topali.analyses.TreeRootingThread;
 import topali.data.AlignmentData;
 import topali.data.models.*;
@@ -262,7 +257,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 	treeCanvas = new topali.gui.results.TreeCanvas();
 	jPanel6 = new javax.swing.JPanel();
 	modelDiagram = new topali.gui.results.ModelDiagram();
-	if (data.getSequenceSet().isDNA()) {
+	if (data.getSequenceSet().getParams().isDNA()) {
 	    this.modelDiagram = new DNAModelDiagram();
 	} else {
 	    this.modelDiagram = new ProteinModelDiagram();
@@ -746,7 +741,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 		JPanel p = new JPanel(new BorderLayout());
 		p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		ModelDiagram dia = data.getSequenceSet().isDNA() ? new DNAModelDiagram(
+		ModelDiagram dia = data.getSequenceSet().getParams().isDNA() ? new DNAModelDiagram(
 			(DNAModel) model)
 			: new ProteinModelDiagram((ProteinModel) model);
 		p.add(dia, BorderLayout.CENTER);

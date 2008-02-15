@@ -8,16 +8,14 @@ package topali.gui.dialog;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
 import javax.swing.*;
-
 import pal.alignment.SimpleAlignment;
+import scri.commons.gui.MsgBox;
 import topali.analyses.SequenceSetUtils;
 import topali.data.*;
-import topali.gui.*;
+import topali.gui.TOPALiHelp;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
-import scri.commons.gui.MsgBox;
 
 public class SummaryDialog extends JDialog implements ActionListener, Runnable
 {
@@ -144,10 +142,10 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			summaryInfo += Text.get("SummaryDialog.gui05");
 
 		// Additional DNA-specific information
-		if (ss.isDNA())
+		if (ss.getParams().isDNA())
 		{
 			// Do we need to estimate parameters?
-			if (ss.hasParametersEstimated() == false)
+			if (ss.getParams().isNeedCalculation())
 				SequenceSetUtils.estimateParameters(ss);
 
 			int[] values = getDNACharCount();

@@ -5,17 +5,15 @@
 
 package topali.data.annotations;
 
+public class LocusAnnotation extends Annotation {
 
-public class PartitionAnnotation extends Annotation
-{
-
-	public PartitionAnnotation() {
+	public LocusAnnotation() {
 		super();
 	}
-	
-	public PartitionAnnotation(int pos, int length) {
+
+	public LocusAnnotation(int pos, int length) {
 		super(pos, length);
 	}
-	
+
 	
 }

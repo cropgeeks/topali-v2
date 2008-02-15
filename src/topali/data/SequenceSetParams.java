@@ -9,14 +9,6 @@ import topali.data.models.*;
 
 public class SequenceSetParams 
 {
-	public static final String GENETICCODE_UNIVERSAL = "Universal";
-	public static final String GENETICCODE_VERTMT = "Vertebrate Mitochondrial DNA";
-	public static final String GENETICCODE_MYCOPLASMA = "Mycoplasma";
-	public static final String GENETICCODE_YEAST = "Yeast";
-	public static final String GENETICCODE_CILIATES = "Ciliates";
-	public static final String GENETICCODE_METMT = "Metazoan Mitochondrial DNA";
-	
-	public static final String[] availCodes = new String[] {GENETICCODE_UNIVERSAL, GENETICCODE_CILIATES, GENETICCODE_METMT, GENETICCODE_VERTMT, GENETICCODE_YEAST};
 	
 	// Transition/transvertion ratio for this alignment
 	private double tRatio = -1;
@@ -37,10 +29,6 @@ public class SequenceSetParams
 	
 	private boolean isAligned = true;
 	
-	private String codonUsage = null;
-	
-	private String geneticCode = GENETICCODE_UNIVERSAL;
-	
 	private Model model = null;
 	
 	private boolean needCalculation = true;
@@ -51,8 +39,6 @@ public class SequenceSetParams
 
 	public SequenceSetParams(SequenceSetParams para) {
 		this();
-		this.codonUsage = para.codonUsage;
-		this.geneticCode = para.geneticCode;
 		this.isAligned = para.isAligned;
 		this.isDNA = para.isDNA;
 		this.model = (para.model instanceof DNAModel) ? new DNAModel((DNAModel)para.model) : new ProteinModel((ProteinModel)para.model);
@@ -78,16 +64,6 @@ public class SequenceSetParams
 		this.avgDist = avgDist;
 	}
 
-	public String getCodonUsage()
-	{
-		return codonUsage;
-	}
-
-	public void setCodonUsage(String codonUsage)
-	{
-		this.codonUsage = codonUsage;
-	}
-
 	public double[] getFreqs()
 	{
 		return freqs;
@@ -96,16 +72,6 @@ public class SequenceSetParams
 	public void setFreqs(double[] freqs)
 	{
 		this.freqs = freqs;
-	}
-
-	public String getGeneticCode()
-	{
-		return geneticCode;
-	}
-
-	public void setGeneticCode(String geneticCode)
-	{
-		this.geneticCode = geneticCode;
 	}
 
 	public boolean isAligned()

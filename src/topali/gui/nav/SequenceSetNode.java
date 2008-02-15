@@ -74,7 +74,7 @@ public class SequenceSetNode extends INode
 		aAlgnFindSeq.setEnabled(true);
 		aAlgnGoTo.setEnabled(true);
 
-		boolean dna = data.getSequenceSet().isDNA();
+		boolean dna = data.getSequenceSet().getParams().isDNA();
 		aAnlsRunPDM.setEnabled(dna);
 		aAnlsRunPDM2.setEnabled(dna);
 		aAnlsRunHMM.setEnabled(dna);

@@ -254,7 +254,7 @@ class FileNexus extends FileGeneric
 		out.write("begin characters;" + nl);
 		out.write("  dimensions nchar=" + (end - start + 1) + ";" + nl);
 		out.write("  format" + nl + "    interleave" + nl);
-		if (ss.isDNA())
+		if (ss.getParams().isDNA())
 		{
 			out.write("    datatype=DNA" + nl);
 			out.write("    symbols=\"A C G T U\"" + nl);

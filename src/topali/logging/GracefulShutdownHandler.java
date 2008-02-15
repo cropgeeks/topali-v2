@@ -8,14 +8,9 @@ package topali.logging;
 import java.awt.*;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
-
 import javax.swing.*;
-
 import org.apache.log4j.*;
 import org.apache.log4j.spi.LoggingEvent;
-
-import com.sun.crypto.provider.JceKeyStore;
-
 import topali.gui.*;
 
 public class GracefulShutdownHandler extends AppenderSkeleton implements

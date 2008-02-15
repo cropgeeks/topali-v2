@@ -607,12 +607,12 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			return;
 		}
 		
-		QuickTreeDialog dlg = new QuickTreeDialog(this, data.getSequenceSet().isDNA());
+		QuickTreeDialog dlg = new QuickTreeDialog(this, data.getSequenceSet().getParams().isDNA());
 		dlg.setVisible(true);
 		if(dlg.bs==-1)
 			return;
 		
-		if(dlg.estimate && !data.getSequenceSet().hasParametersEstimated()) {
+		if(dlg.estimate && data.getSequenceSet().getParams().isNeedCalculation()) {
 		    SequenceSetUtils.estimateParameters(data.getSequenceSet());
 		}
 		
@@ -637,7 +637,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		double alpha = dlg.estimate ? data.getSequenceSet().getParams().getAlpha() : dlg.alpha;
 		
 		if(dlg.bs>0) {
-			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().isDNA(), dlg.bs);
+			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().getParams().isDNA(), dlg.bs);
 			bg.setParameters(tstv, alpha);
 			palTree = bg.getTree();
 		}
@@ -725,7 +725,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		}
 		res.seqNameMapping = seqNames;
 
-		if (!data.getSequenceSet().isDNA())
+		if (!data.getSequenceSet().getParams().isDNA())
 		{
 			SequenceSetParams p = data.getSequenceSet().getParams();
 			if (p.getModel().is("cprev"))

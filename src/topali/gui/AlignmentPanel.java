@@ -16,6 +16,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import topali.data.*;
+import topali.gui.AlignmentPanel.DisplayCanvas.BufferThread;
 import topali.gui.SequenceListPanel.MyPopupMenuAdapter;
 import topali.var.threads.*;
 
@@ -306,7 +307,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	 */
 	public Color getColor(char c)
 	{
-		if (ss.isDNA())
+		if (ss.getParams().isDNA())
 		{
 			// DNA COLOUR CODING
 			switch (c)
@@ -478,6 +479,8 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		BufferedImage gap;
 		BufferedImage unknown;
 		
+		BufferThread bufferThread = null;
+		
 		DisplayCanvas()
 		{
 			setBackground(Color.white);
@@ -564,7 +567,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			if(c=='-') 
 				return gap;
 			
-			if (ss.isDNA())
+			if (ss.getParams().isDNA())
 			{
 				int index = -1;
 				
@@ -659,18 +662,12 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 		
 		private void createBuffer() {
-			BufferThread th = new BufferThread();
-			DefaultWaitDialog dlg = new DefaultWaitDialog(TOPALi.winMain, "Please wait...", "Creating alignment display buffer.", th);
-			dlg.setLocationRelativeTo(TOPALi.winMain);
-			dlg.setVisible(true);
-			
-			try
-			{
-				th.join();
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
+			if(bufferThread!=null) {
+				bufferThread.kill = true;
+				bufferThread.interrupt();
 			}
+			bufferThread = new BufferThread(this);
+			bufferThread.start();
 		}
 		
 		/**
@@ -858,11 +855,30 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				popupAdapt.enableSelectHighlighted(false);
 		}
 		
-		class BufferThread extends DesktopThread {
+		class BufferThread extends Thread {
 
+			public boolean kill;
+
+			private DisplayCanvas canvas;
+			
+			public BufferThread(DisplayCanvas canvas) {
+				this.canvas = canvas;
+			}
+			
 			@Override
 			public void run()
 			{
+			
+				try {
+						Thread.sleep(2000);
+						if(kill)
+							return;
+				}
+				catch (InterruptedException e1) {
+					if(kill)
+						return;
+				}
+				
 				long start = System.currentTimeMillis();
 				
 				init();
@@ -888,13 +904,15 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				String logMsg = "Using max. "+(maxBufferSize/1024/1024)+" mb for alignment display buffer. " +
 						"("+(imgSize/1024/1024)+" mb needed)";
 				log.info(logMsg);
+				
+				BufferedImage tmpBuffer = null;
 				if(imgSize<maxBufferSize) {
 					try {
-						imgBuffer = new BufferedImage(canW, canH, imgBufferType);
+						tmpBuffer = new BufferedImage(canW, canH, imgBufferType);
 					}
 					catch (Throwable e) {
 						log.warn("Image Buffer still too big, switched back to direct painting.");
-						imgBuffer = null;
+						tmpBuffer = null;
 						return;
 					}
 				}
@@ -904,7 +922,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					return;
 				}
 				
-				Graphics g = imgBuffer.createGraphics();
+				Graphics g = tmpBuffer.createGraphics();
 				
 				g.setFont(font);
 
@@ -915,7 +933,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					// Extract the text to display in this section
 					char str[] = ss.getSequence(seq).getBuffer().toString().toCharArray();
 
-					for (int i = 0, x = 0; i < str.length && !stop; i++, x += charW)
+					for (int i = 0, x = 0; i < str.length; i++, x += charW)
 					{
 						BufferedImage img = getMiniImg(str[i]);
 						g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
@@ -923,15 +941,11 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				}
 				
 				g.dispose();
+				imgBuffer = tmpBuffer;
+				
+				canvas.bufferThread = null;
 				
 				log.info("Alignment display buffer created ("+(System.currentTimeMillis()-start)+" ms)");
-				
-				updateObservers(DesktopThread.THREAD_FINISHED);
-			}
-
-			@Override
-			public void kill() {
-			   stop = false;
 			}
 		}
 	}

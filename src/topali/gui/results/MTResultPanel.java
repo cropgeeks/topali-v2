@@ -86,7 +86,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		Model bestHLRT2 = null;
 		Model bestHLRT3 = null;
 		Model bestHLRT4 = null;
-		if(data.getSequenceSet().isDNA()) {
+		if(data.getSequenceSet().getParams().isDNA()) {
 			if(result.type.equals(ModelTestResult.TYPE_PHYML)) {
 				best5SHLRT = ModelUtils.perform5HTHLRT(result.models, 0.01);
 			}
@@ -129,7 +129,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			
 			String col1 = Utils.d2.format((m.getLnl()*(-1)));
 			//col1 += " ("+getDistance(bestLRT.getIGName(), m.getIGName(), result)+")";
-			if(data.getSequenceSet().isDNA()) {
+			if(data.getSequenceSet().getParams().isDNA()) {
 				String tt = "Best Model according to ";
 				int bestModel = 0;
 				if(best5SHLRT!=null && best5SHLRT.matches(m)) {
