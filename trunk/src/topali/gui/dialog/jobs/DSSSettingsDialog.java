@@ -100,7 +100,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.isRemote = makeRemote;
 
 		// Do we need to estimate parameters?
-		if (ss.hasParametersEstimated() == false)
+		if (ss.getParams().isNeedCalculation())
 			SequenceSetUtils.estimateParameters(ss);
 
 		result.window = Prefs.dss_window;

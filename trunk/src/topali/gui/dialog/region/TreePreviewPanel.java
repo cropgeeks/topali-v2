@@ -113,7 +113,7 @@ public class TreePreviewPanel extends JPanel implements ActionListener
 				long s = System.currentTimeMillis();
 				SimpleAlignment alignment = ss.getAlignment(indices, start,
 						end, false);
-				TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.isDNA(), false);
+				TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getParams().isDNA(), false);
 				
 				tree = tc.getTree();
 				

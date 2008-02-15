@@ -18,6 +18,14 @@ import topali.var.utils.Utils;
 public class CodonWDialog extends JDialog implements ActionListener
 {
 
+	public static final String GENETICCODE_UNIVERSAL = "Universal";
+	public static final String GENETICCODE_VERTMT = "Vertebrate Mitochondrial DNA";
+	public static final String GENETICCODE_MYCOPLASMA = "Mycoplasma";
+	public static final String GENETICCODE_YEAST = "Yeast";
+	public static final String GENETICCODE_CILIATES = "Ciliates";
+	public static final String GENETICCODE_METMT = "Metazoan Mitochondrial DNA";
+	public static final String[] availCodes = new String[] {GENETICCODE_UNIVERSAL, GENETICCODE_CILIATES, GENETICCODE_METMT, GENETICCODE_VERTMT, GENETICCODE_YEAST};
+	
 	AlignmentData data;
 	SequenceSet ss;
 	//JButton bOK, bCancel;
@@ -32,7 +40,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 		init();
 
 		if(res!=null) {
-			setSelectedCode(res.geneticCode);
+			setSelectedCode();
 		}
 
 		pack();
@@ -41,9 +49,8 @@ public class CodonWDialog extends JDialog implements ActionListener
 
 	private void init() {
 		JPanel p1 = new JPanel();
-		cbCode = new JComboBox(SequenceSetParams.availCodes);
-		String code = ss.getParams().getGeneticCode();
-		setSelectedCode(code);
+		cbCode = new JComboBox(availCodes);
+		setSelectedCode();
 
 		p1.add(new JLabel("Genetic Code: "));
 		p1.add(cbCode);
@@ -57,18 +64,13 @@ public class CodonWDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bCancel);
 	}
 
-	private void setSelectedCode(String code) {
-		for(int i=0; i<SequenceSetParams.availCodes.length; i++)
-			if(SequenceSetParams.availCodes[i].equals(code)) {
-				cbCode.setSelectedIndex(i);
-				break;
-			}
+	private void setSelectedCode() {
+		cbCode.setSelectedIndex(0);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource().equals(bRun)) {
-			ss.getParams().setGeneticCode((String)cbCode.getSelectedItem());
 			boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
 
 			result = new CodonWResult();
@@ -96,7 +98,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 			this.setVisible(false);
 		}
 		else if(e.getSource().equals(bDefault)) {
-			setSelectedCode(SequenceSetParams.GENETICCODE_UNIVERSAL);
+			setSelectedCode();
 		}
 	}
 

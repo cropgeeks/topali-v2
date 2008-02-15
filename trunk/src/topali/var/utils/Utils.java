@@ -14,12 +14,8 @@ import java.net.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
-
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
-
-import scri.commons.gui.MsgBox;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;

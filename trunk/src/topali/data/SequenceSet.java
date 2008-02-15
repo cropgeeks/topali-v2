@@ -141,17 +141,6 @@ public class SequenceSet extends DataObject
 		this.overview = overview;
 	}
 
-	/* Returns whether this alignment is DNA (true) or Protein (false). */
-	public boolean isDNA()
-	{
-		return params.isDNA();
-	}
-
-	public void setIsDNA(boolean isDNA)
-	{
-		this.params.setDNA(isDNA);
-	}
-
 	/* Returns the array of selected sequences information. */
 	public int[] getSelectedSequences()
 	{
@@ -222,12 +211,6 @@ public class SequenceSet extends DataObject
 		return "";
 	}
 
-	/* Returns true if this alignment has had its parameters estimated. */
-	public boolean hasParametersEstimated()
-	{
-		return !params.isNeedCalculation();
-	}
-
 	public SequenceSetParams getParams()
 	{
 		return params;
@@ -236,17 +219,6 @@ public class SequenceSet extends DataObject
 	public void setParams(SequenceSetParams params)
 	{
 		this.params = params;
-	}
-
-	
-	public String getCodonUsage()
-	{
-		return params.getCodonUsage();
-	}
-
-	public void setCodonUsage(String codonUsage)
-	{
-		this.params.setCodonUsage(codonUsage);
 	}
 
 	/* Returns the current index of the Sequence with the given name. */
@@ -565,7 +537,7 @@ public class SequenceSet extends DataObject
 	}
 	
 	public boolean isCodons() {
-		if(!isDNA())
+		if(!params.isDNA())
 			return false;
 		
 		if(sequences.size()>0)

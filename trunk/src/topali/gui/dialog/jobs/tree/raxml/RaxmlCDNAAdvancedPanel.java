@@ -61,11 +61,11 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
     	res.bootstrap = (Integer)bs.getValue();
     	res.rateHet = (String)ratehet.getSelectedItem();
     	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
-    	RaxPartition p1 = new RaxPartition("1-"+length+"\\3", "partition1", "GTR", data.getSequenceSet().isDNA());
+    	RaxPartition p1 = new RaxPartition("1-"+length+"\\3", "partition1", "GTR", data.getSequenceSet().getParams().isDNA());
     	res.partitions.add(p1);
-    	RaxPartition p2 = new RaxPartition("2-"+length+"\\3", "partition2", "GTR", data.getSequenceSet().isDNA());
+    	RaxPartition p2 = new RaxPartition("2-"+length+"\\3", "partition2", "GTR", data.getSequenceSet().getParams().isDNA());
     	res.partitions.add(p2);
-    	RaxPartition p3 = new RaxPartition("3-"+length+"\\3", "partition3", "GTR", data.getSequenceSet().isDNA());
+    	RaxPartition p3 = new RaxPartition("3-"+length+"\\3", "partition3", "GTR", data.getSequenceSet().getParams().isDNA());
     	res.partitions.add(p3);
     	
     	Prefs.rax_bootstrap = res.bootstrap;

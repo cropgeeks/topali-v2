@@ -32,7 +32,7 @@ class FileNexusMB extends FileNexus
 		out.write("  dimensions ntax=" + index.length + " nchar="
 				+ (end - start + 1) + ";" + nl);
 		out.write("  format" + nl + "    interleave" + nl);
-		if (ss.isDNA())
+		if (ss.getParams().isDNA())
 		{
 			out.write("    datatype=DNA" + nl);
 		} else

@@ -40,7 +40,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
     public void initValues() {
 		SequenceSetParams params = ss.getParams();
 		
-		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.isDNA());
+		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.getParams().isDNA());
 		String[] models = new String[mlist.size()];
 		for(int i=0; i<mlist.size(); i++)
 			models[i] = mlist.get(i).getName();
@@ -50,7 +50,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 
 		Model m = params.getModel();
 		if(Utils.indexof(models, m.getName())==-1) {
-			if(ss.isDNA())
+			if(ss.getParams().isDNA())
 				m = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, m.isGamma(), m.isInv());
 			else
 				m = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, m.isGamma(), m.isInv());
@@ -76,7 +76,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
     
     public void setDefaults() {
     	String model;
-    	if(ss.isDNA())
+    	if(ss.getParams().isDNA())
     		model = Prefs.mb_default_dnamodel;
     	else
     		model = Prefs.mb_default_proteinmodel;

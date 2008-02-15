@@ -2,20 +2,10 @@ Current state of affairs
 -----------------------
 
 Last modifications:
-- Removed exportability/printability of Modeldiagram again (it was just not working properly)
-- Tables and Graphs are now also exportable as txt file.
-- Made AlignmentPanel scrolling more easy (removed extra Scroller thread)
 
 
 TODO:
-- Optimising RaxML parameters (that means running jobs prior to the actual analysis!)
-- Full LRT test for selected windows
-- Automatically determine window size for LRT and DSS
-- Webservices for 3rd parties
-- Release for UoD cluster
-- Investigate SVG support?
-- Bug: Dundee cluster filesystem timeout problems
-- FRANK: come up with additional "TOPALi Tips"
+
 
 Suggestions:
 - Topali trees: Sequence coloring (by species) (Diego Miranda, dm435@cam.ac.uk)

@@ -6,22 +6,18 @@
 package topali.gui.tree;
 
 import static topali.mod.Filters.*;
-
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
-
 import pal.tree.*;
+import scri.commons.gui.MsgBox;
 import topali.data.SequenceCluster;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.mod.Filters;
-import scri.commons.gui.MsgBox;
 
 class TreePanelUtils
 {
@@ -59,6 +55,8 @@ class TreePanelUtils
 
 			if (Prefs.gui_filter_tree == PNG)
 				savePNG(file, panel);
+//			else if(Prefs.gui_filter_tree == SVG)
+//				saveSVG(file, panel);
 			else if (Prefs.gui_filter_tree == TRE)
 				saveTRE(file, panel);
 			else if (Prefs.gui_filter_tree == CLU)
@@ -80,6 +78,35 @@ class TreePanelUtils
 			log.warn(e);
 		}
 	}
+	
+//	static void saveSVG(File file, TreePanel panel)
+//	{
+//		try
+//		{
+//			// Get a DOMImplementation.
+//	        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+//
+//	        // Create an instance of org.w3c.dom.Document.
+//	        String svgNS = "http://www.w3.org/2000/svg";
+//	        Document document = domImpl.createDocument(svgNS, "svg", null);
+//	        
+//	        // Create an instance of the SVG Generator.
+//	        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+//	        
+//	        panel.canvas.paint(svgGenerator);
+//	        
+//	        Writer out = new FileWriter(file);
+//	        svgGenerator.stream(out, true);
+//	        out.flush();
+//	        out.close();
+//
+//			MsgBox.msg(Text.get("TreePanelUtils.msg02", file), MsgBox.INF);
+//		} catch (Exception e)
+//		{
+//			MsgBox.msg(Text.get("TreePanelUtils.err01", e), MsgBox.ERR);
+//			log.warn(e);
+//		}
+//	}
 
 	static void saveTRE(File file, TreePanel panel)
 	{

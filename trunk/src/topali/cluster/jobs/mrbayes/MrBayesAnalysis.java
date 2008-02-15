@@ -71,7 +71,7 @@ public class MrBayesAnalysis extends AnalysisThread
 	{
 		MBCmdBuilder cmd = new MBCmdBuilder();
 		cmd.burnin = result.burnin;
-		cmd.dna = ss.isDNA();
+		cmd.dna = ss.getParams().isDNA();
 		cmd.ngen = result.nGen;
 		cmd.nruns = result.nRuns;
 		cmd.sampleFreq = result.sampleFreq;

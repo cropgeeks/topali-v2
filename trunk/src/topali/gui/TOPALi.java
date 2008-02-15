@@ -8,14 +8,11 @@ package topali.gui;
 import java.applet.Applet;
 import java.awt.Frame;
 import java.awt.event.*;
-import java.io.*;
+import java.io.File;
 import java.net.*;
 import java.util.*;
-
 import javax.swing.*;
-
 import org.apache.log4j.*;
-
 import scri.commons.multicore.TokenManager;
 import topali.cluster.LocalJobs;
 import topali.i18n.Text;
@@ -30,7 +27,7 @@ public class TOPALi extends Applet implements Application
 	public static final boolean debugClient = true;
 	public static final boolean debugJobs = false;
 	
-	public static final String VERSION = "2.19";
+	public static final String VERSION = "2.20";
 
 	private final String prefsFile = ".topali2-new.xml";
 

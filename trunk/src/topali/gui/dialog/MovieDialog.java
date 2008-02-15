@@ -310,7 +310,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 		// Create a PAL alignment that can be used to create this tree
 		SimpleAlignment alignment = ss.getAlignment(indices, start, end, false);
-		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.isDNA(), false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getParams().isDNA(), false);
 		
 		tree = tc.getTree();
 		// tree = tc.createTree(TreeCreator.JC_NJ);

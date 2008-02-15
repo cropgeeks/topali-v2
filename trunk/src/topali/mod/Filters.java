@@ -39,6 +39,8 @@ public class Filters extends FileFilter
 	public static final int CLU = 15;
 	
 	public static final int TXT = 16;
+	
+	public static final int SVG = 17;
 
 	private Hashtable<String, Object> filters = new Hashtable<String, Object>();
 
@@ -64,6 +66,11 @@ public class Filters extends FileFilter
 			filter.setDescription("Portable Network Graphics Image Files");
 			break;
 
+		case SVG:
+			filter.addExtension("svg", SVG);
+			filter.setDescription("Scalable Vector Graphics Image Files");
+			break;
+			
 		case TRE:
 			filter.addExtension("tre", TRE);
 			filter.setDescription("New Hampshire Tree Files");

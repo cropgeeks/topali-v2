@@ -51,8 +51,6 @@
 			set-method="setDNA" />
 		<field name="isAligned" type="boolean" get-method="isAligned"
 			set-method="setAligned" />
-		<field name="codonUsage" type="string" />
-		<field name="geneticCode" type="string" />
 		<field name="model" type="topali.data.models.Model" />
 		<field name="needCalculation" type="boolean"
 			get-method="isNeedCalculation" set-method="setNeedCalculation" />

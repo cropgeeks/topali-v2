@@ -5,11 +5,7 @@
 
 package topali.gui.results;
 
-import java.awt.Graphics;
-import java.awt.print.*;
-
 import javax.swing.JPanel;
-
 import topali.data.models.Model;
 
 public class ModelDiagram extends JPanel

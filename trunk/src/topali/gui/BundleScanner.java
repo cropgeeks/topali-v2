@@ -1,7 +1,7 @@
 package topali.gui;
 
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
 
 public class BundleScanner
 {
