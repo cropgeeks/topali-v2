@@ -26,73 +26,73 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	Logger log = Logger.getLogger(this.getClass());
 
 	final int imgBufferType = BufferedImage.TYPE_USHORT_555_RGB;
-	
+
 	JScrollPane sp;
 	JScrollBar hBar, vBar;
 	JViewport view;
-	
+
 	public SequenceListPanel seqlistPanel;
 	public DisplayCanvas displayCanvas;
 	HeaderCanvas headerCanvas;
 	MyPopupMenuAdapter popupAdapt;
-	
+
 	Font font;
 	FontMetrics fm;
 	int charW, charH, charDec;
-	
+
 	BufferedImage imgBuffer = null;
 	boolean useBuffer = true;
-	
+
 	//alignment canvas size
 	int canW = 0;
 	int canH = 0;
-	
+
 	//current view (alignment positions)
 	int nucStart = 0;
 	int seqStart = 0;
 	int nucEnd = 0;
 	int seqEnd = 0;
-	
+
 	//current view (pixels)
 	int viewX = 0;
 	int viewY = 0;
 	int viewW = 0;
 	int viewH = 0;
-	
+
 	AlignmentData data;
 	SequenceSet ss;
-	
+
 	public AlignmentPanel(AlignmentData data)
 	{
 		this.data = data;
-		this.data.addChangeListener(this);	
+		this.data.addChangeListener(this);
 		this.ss = this.data.getSequenceSet();
-		
+
 		sp = new JScrollPane();
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
 		hBar.addAdjustmentListener(this);
 		vBar.addAdjustmentListener(this);
 		view = sp.getViewport();
-		
+
 		headerCanvas = new HeaderCanvas();
 		headerCanvas.setBackground(Color.WHITE);
 		displayCanvas = new DisplayCanvas();
 		seqlistPanel = new SequenceListPanel(this, ss);
-		
+
 		sp.setViewportView(displayCanvas);
 		sp.setRowHeaderView(seqlistPanel);
 		sp.setColumnHeaderView(headerCanvas);
 		sp.getViewport().setBackground(Color.white);
-		
+
 		setLayout(new BorderLayout());
 		add(sp, BorderLayout.CENTER);
-		
+
 		setBackground(Color.WHITE);
-		
+
 		refreshAndRepaint();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#refreshAndRepaint()
 	 */
@@ -105,30 +105,30 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		charW = fm.charWidth('G');
 		charH = fm.getHeight();
 		charDec = fm.getMaxDescent();
-		
+
 		hBar.setUnitIncrement(charW);
 		vBar.setUnitIncrement(charH);
 		vBar.setBlockIncrement(charH);
 
 		canW = ss.getSequence(0).getLength() * charW + (charW - 1);
 		canH = ss.getSize() * charH;
-		
+
 		if(useBuffer) {
 			displayCanvas.createBuffer();
 		}
 		else
 			imgBuffer = null;
-		
+
 		headerCanvas.recalculate();
 		sp.setColumnHeaderView(headerCanvas);
-		
+
 		seqlistPanel.refreshAndRepaint();
 		sp.setRowHeaderView(seqlistPanel);
-		
+
 		displayCanvas.refreshAndRepaint();
 		sp.setViewportView(displayCanvas);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#getSequenceSet()
 	 */
@@ -144,7 +144,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	{
 		return data;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#findSequence(int, boolean)
 	 */
@@ -152,7 +152,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	{
 		seqlistPanel.findSequence(sp, index, select);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#updateOverviewDialog()
 	 */
@@ -161,7 +161,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		WinMain.ovDialog.setPanelPosition(nucStart, nucEnd-nucStart,
 				seqStart, seqEnd-seqStart);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#jumpToPosition(int, int, boolean, boolean)
 	 */
@@ -201,7 +201,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			sp.getVerticalScrollBar().setValue(y);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#highlight(int, int, boolean)
 	 */
@@ -234,10 +234,10 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			this.repaint();
 		}
 	}
-	
+
 	/**
 	 * Update status bar to match current mouse highlight/selection
-	 * 
+	 *
 	 * @param seq
 	 * @param seqRange
 	 * @param nuc
@@ -247,7 +247,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	{
 	    if(seq<0 || (seq+seqRange)>ss.getSize() || nuc<0 || (nuc+nucRange)>ss.getLength())
 		return;
-	    
+
 		try
 		{
 			if (seq == -1 || nuc == -1)
@@ -283,11 +283,11 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			}
 		} catch (RuntimeException e)
 		{
-			// TODO: Check what's actually going wrong here. 
+			// TODO: Check what's actually going wrong here.
 			log.info("TODO: Check what's actually going wrong here.", e);
 		}
 	}
-	
+
 	private void scroll(Point mouse) {
 		Rectangle vSize = sp.getViewport().getViewRect();
 		Point vPos = sp.getViewport().getViewPosition();
@@ -295,13 +295,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		int y1 = (int) vPos.getY();
 		int x2 = (int) (x1 + vSize.getWidth());
 		int y2 = (int) (y1 + vSize.getHeight());
-		
+
 		if(mouse.getX()<x1 || mouse.getX()>x2 || mouse.getY()<y1 || mouse.getY()>y2) {
 		    Rectangle scrollTo = new Rectangle((int)mouse.getX()-5, (int)mouse.getY()-5, 10, 10);
 		    displayCanvas.scrollRectToVisible(scrollTo);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#getColor(char)
 	 */
@@ -368,13 +368,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 		}
 	}
-		
+
 	void setPopupMenu(MyPopupMenuAdapter popup)
 	{
 		this.popupAdapt = popup;
 		displayCanvas.addMouseListener(this.popupAdapt);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see topali.gui.IAlignmentPanel#propertyChange(java.beans.PropertyChangeEvent)
 	 */
@@ -392,25 +392,25 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	{
 		Dimension viewSize = view.getExtentSize();
 		Point viewPoint = view.getViewPosition();
-		
+
 		viewX = (int)viewPoint.getX();
 		viewY = (int)viewPoint.getY();
 		viewW = (int)viewSize.getWidth();
 		viewH = (int)viewSize.getHeight();
-		
+
 		nucStart = (viewX / charW);
 		seqStart = (viewY / charH);
 		nucEnd = nucStart + (viewW/charW);
 		if(nucEnd>=ss.getLength())
 			nucEnd = ss.getLength()-1;
 		seqEnd = seqStart + (viewH/charH);
-		if(seqEnd>=ss.getSize()) 
+		if(seqEnd>=ss.getSize())
 			seqEnd = ss.getSize()-1;
-		
+
 		//System.out.println(nucStart+","+nucEnd+" "+seqStart+","+seqEnd);
-		
+
 		sp.setViewportView(displayCanvas);
-		
+
 		updateOverviewDialog();
 		repaint();
 	}
@@ -428,7 +428,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			y1 = charH / 2 + 2;
 			y2 = 2 * y1 + 2;
 		}
-		
+
 		@Override
 		public Dimension getPreferredSize()
 		{
@@ -438,7 +438,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		// Paints Clustal *** information and column numbers
 		@Override
 		public void paintComponent(Graphics g)
-		{	
+		{
 			super.paintComponent(g);
 
 			g.setFont(font);
@@ -467,29 +467,29 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		}
 	}
 
-	
+
 	class DisplayCanvas extends JPanel
 	{
 		DiplayCanvasMouseListener mouse;
-		
+
 		Color mouseHLColor;
-		
+
 		BufferedImage[] nucs;
 		BufferedImage[] aas;
 		BufferedImage gap;
 		BufferedImage unknown;
-		
+
 		BufferThread bufferThread = null;
-		
+
 		DisplayCanvas()
 		{
 			setBackground(Color.white);
 			setOpaque(false);
-			
+
 			mouse = new DiplayCanvasMouseListener(this);
 			this.addMouseListener(mouse);
 			this.addMouseMotionListener(mouse);
-			
+
 			mouseHLColor = new Color(Prefs.gui_seq_highlight
 					.getRed(), Prefs.gui_seq_highlight.getGreen(),
 					Prefs.gui_seq_highlight.getBlue(), 130);
@@ -498,16 +498,16 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 		private void init() {
 			nucs = new BufferedImage[4];
 			aas = new BufferedImage[20];
-			
+
 			gap = createMiniImg('-');
-			
+
 			unknown = createMiniImg('?');
-			
+
 			nucs[0] = createMiniImg('A');
 			nucs[1] = createMiniImg('C');
 			nucs[2] = createMiniImg('G');
 			nucs[3] = createMiniImg('T');
-			
+
 			aas[0] = createMiniImg('A');
 			aas[1] = createMiniImg('R');
 			aas[2] = createMiniImg('N');
@@ -529,7 +529,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			aas[18] = createMiniImg('Y');
 			aas[19] = createMiniImg('V');
 		}
-		
+
 		private BufferedImage createMiniImg(char c) {
 			BufferedImage img = new BufferedImage(charW, charH, imgBufferType);
 			Graphics2D g = img.createGraphics();
@@ -541,36 +541,36 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			Color txtCol = Color.BLACK;
 			Color col1 = getColor(c);
 			Color col2 = col1.darker();
-			
+
 			int x = 0;
 			int y = 0;
-			
+
 			if(Prefs.gui_seq_show_colors)
 				g.setPaint(new GradientPaint(x, (y+charH), col2, (x+charW), y, col1));
 			else
 				g.setColor(Color.WHITE);
-			
+
 			g.fillRect(x, y, charW, charH);
-			
+
 			if(Prefs.gui_seq_show_text) {
 				g.setColor(txtCol);
 				g.drawString(""+c, x, y+charH-charDec);
 			}
-			
+
 			g.dispose();
-			
+
 			return img;
 		}
-		
-		private BufferedImage getMiniImg(char c) 
+
+		private BufferedImage getMiniImg(char c)
 		{
-			if(c=='-') 
+			if(c=='-')
 				return gap;
-			
+
 			if (ss.getParams().isDNA())
 			{
 				int index = -1;
-				
+
 				switch (c)
 				{
 				case 'A':
@@ -585,13 +585,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				default:
 					return unknown;
 				}
-				
+
 				return nucs[index];
-				
+
 			} else
 			{
 				int index = -1;
-				
+
 				switch (c)
 				{
 				case 'A':
@@ -634,15 +634,15 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					index = 18; break;
 				case 'V':
 					index = 19; break;
-					
+
 				default:
 					return unknown;
 				}
-				
+
 				return aas[index];
 			}
 		}
-		
+
 		@Override
 		public Dimension getSize()
 		{
@@ -660,7 +660,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			init();
 			repaint();
 		}
-		
+
 		private void createBuffer() {
 			if(bufferThread!=null) {
 				bufferThread.kill = true;
@@ -669,28 +669,28 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			bufferThread = new BufferThread(this);
 			bufferThread.start();
 		}
-		
+
 		/**
 		 * This will shade the sequences, which are not selected,
 		 * and if a partition is selected, the area outside the selected partition.
 		 * @param g
 		 */
 		private void paintMask(Graphics g) {
-			
+
 			//Partition highlighting
 			int cS = data.getActiveRegionS();
 			int cE = data.getActiveRegionE();
 			int height = (seqEnd*charH - seqStart*charH + charH);
 			if(height>viewH)
 				height = viewH;
-			
+
 			for(int nuc = nucStart, x = (nucStart*charW); nuc <= nucEnd; nuc++, x += charW) {
 				if((nuc+1)<cS || (nuc+1)>cE) {
 					g.setColor(new Color(0,0,0,150));
-					g.fillRect(x, viewY, charW, height);	
+					g.fillRect(x, viewY, charW, height);
 				}
 			}
-			
+
 			//Sequence highlighting
 			JList seqList = seqlistPanel.getList();
 			if(Prefs.gui_seq_dim && seqList.getSelectedIndices().length<seqList.getModel().getSize()) {
@@ -701,7 +701,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				{
 					boolean drawDim = !seqlistPanel.getList().isSelectedIndex(seq)
 					&& Prefs.gui_seq_dim;
-					
+
 					if(drawDim) {
 						g.setColor(new Color(0,0,0,150));
 						g.fillRect(viewX, y, width, charH);
@@ -709,38 +709,38 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				}
 			}
 		}
-		
+
 		@Override
 		public void paintComponent(Graphics g)
-		{	
+		{
 			super.paintComponent(g);
 			if(imgBuffer!=null)
 				bufferPaint(g);
 			else
 				directPaint(g);
-			
+
 			paintMask(g);
 			mouseOverHighlight(g);
 		}
-		
-		private void bufferPaint(Graphics g) {	
+
+		private void bufferPaint(Graphics g) {
 			int x = charW * nucStart;
 			int y = charH * seqStart;
 			int w = (nucEnd-nucStart+1)*charW;
 			int h = (seqEnd-seqStart+1)*charH;
-			
+
 			//for some reason we need an intermediate buffer here,
 			//otherwise image could get smeared.
 			BufferedImage tmp = new BufferedImage(w, h, imgBufferType);
 			Graphics gtmp = tmp.createGraphics();
 			gtmp.drawImage(imgBuffer, 0, 0, w, h, x, y, x+w, y+h, null);
 			gtmp.dispose();
-			
+
 			g.drawImage(tmp, x, y, x+w, y+h, 0, 0, w, h, null);
 		}
-		
+
 		private void directPaint(Graphics g)
-		{	
+		{
 			g.setFont(font);
 
 			for (int seq = seqStart, y = (seqStart*charH); seq <= seqEnd; seq++, y += charH)
@@ -749,13 +749,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				char str[] = ss.getSequence(seq).getBuffer().substring(nucStart, nucEnd).toCharArray();
 
 				for (int i = 0, x = (nucStart*charW); i < str.length; i++, x += charW)
-				{				
+				{
 					BufferedImage img = getMiniImg(str[i]);
 					g.drawImage(img, x, y, charW, charH, null);
 				}
 			}
 		}
-		
+
 		/**
 		 * Draws the mouseover highlight into the graphics
 		 * @param g
@@ -766,16 +766,16 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				//so do nothing
 				return;
 			}
-			
+
 			g.setColor(mouseHLColor);
-			
-			if(Prefs.gui_show_horizontal_highlight) {	
-				
+
+			if(Prefs.gui_show_horizontal_highlight) {
+
 				int x = viewX;
 				int y;
 				int w = (nucEnd - nucStart+1)*charW;
 				int h;
-				
+
 				if(mouse.nucPosS>-1 && mouse.seqPosS>-1) {
 					int seqPos;
 					int dist;
@@ -796,13 +796,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				}
 				g.fillRect(x, y, w, h);
 			}
-			
+
 			if(Prefs.gui_show_vertical_highlight) {
 				int x;
 				int y = viewY;
 				int w;
 				int h = (seqEnd-seqStart+1)*charH;
-				
+
 				if(mouse.nucPosS>-1 && mouse.seqPosS>-1) {
 					int nucPos;
 					int dist;
@@ -817,12 +817,12 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					x = nucPos * charW;
 					w = dist * charW + charW;
 				}
-				
+
 				else {
 					x = mouse.curNucPos * charW;
 					w = charW;
 				}
-				
+
 				g.fillRect(x, y, w, h);
 			}
 
@@ -835,7 +835,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				int nucDist = mouse.nucPosS-mouse.nucPosE;
 				if(nucDist<0)
 					nucDist *= -1;
-				
+
 				updateStatusBar(seq, seqDist, nuc+1, nucDist);
 				highlight(seq, nuc+1, true);
 			}
@@ -843,32 +843,32 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				updateStatusBar(mouse.curSeqPos, -1, mouse.curNucPos+1, -1);
 				highlight(mouse.curSeqPos, mouse.curNucPos+1, true);
 			}
-			
+
 			if(mouse.nucPosS!=mouse.nucPosE)
 				popupAdapt.enableAnnotate(true);
 			else
 				popupAdapt.enableAnnotate(false);
-			
+
 			if(mouse.seqPosS!=mouse.seqPosE)
 				popupAdapt.enableSelectHighlighted(true);
 			else
 				popupAdapt.enableSelectHighlighted(false);
 		}
-		
+
 		class BufferThread extends Thread {
 
 			public boolean kill;
 
 			private DisplayCanvas canvas;
-			
+
 			public BufferThread(DisplayCanvas canvas) {
 				this.canvas = canvas;
 			}
-			
+
 			@Override
 			public void run()
 			{
-			
+
 				try {
 						Thread.sleep(2000);
 						if(kill)
@@ -878,17 +878,17 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					if(kill)
 						return;
 				}
-				
+
 				long start = System.currentTimeMillis();
-				
+
 				init();
-				
+
 				if(imgBuffer!=null) {
 					imgBuffer = null;
 					System.runFinalization();
 					System.gc();
 				}
-				
+
 				//Use a maximum of 50% of the free heap space for buffering:
 				MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
 				long freeMem = membean.getHeapMemoryUsage().getMax()-membean.getHeapMemoryUsage().getUsed();
@@ -904,7 +904,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				String logMsg = "Using max. "+(maxBufferSize/1024/1024)+" mb for alignment display buffer. " +
 						"("+(imgSize/1024/1024)+" mb needed)";
 				log.info(logMsg);
-				
+
 				BufferedImage tmpBuffer = null;
 				if(imgSize<maxBufferSize) {
 					try {
@@ -921,9 +921,9 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 					imgBuffer = null;
 					return;
 				}
-				
+
 				Graphics g = tmpBuffer.createGraphics();
-				
+
 				g.setFont(font);
 
 				//Draw alignment
@@ -939,46 +939,46 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 						g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 					}
 				}
-				
+
 				g.dispose();
 				imgBuffer = tmpBuffer;
-				
+
 				canvas.bufferThread = null;
-				
+
 				log.info("Alignment display buffer created ("+(System.currentTimeMillis()-start)+" ms)");
 			}
 		}
 	}
-	
+
 	class DiplayCanvasMouseListener implements MouseListener, MouseMotionListener {
 
 		//current mouse pos
 		int curNucPos = -1;
 		int curSeqPos = -1;
-		
+
 		//mouse selection (-1 if there is no area selected)
 		int nucPosS = -1;
 		int nucPosE = -1;
 		int seqPosS = -1;
 		int seqPosE = -1;
-		
-		//Positions of the last click events 
+
+		//Positions of the last click events
 		Point rightClick = null;
 		Point leftClick = null;
-		
+
 		//if mouse is dragged this value always holds the previous mouse position
 		//(needed to "stop" the mouse, if an edge of the alignment display is reached)
 		Point oldDragValue;
-		
+
 		//Used to "stop" mouse dragging, if an edge of the alignment display is reached
 		//(the robot actually justs sets the mouse cursor back to the previous value)
 		Robot robot;
-		
+
 		DisplayCanvas canvas;
-		
+
 		public DiplayCanvasMouseListener(DisplayCanvas canvas) {
 			this.canvas = canvas;
-			
+
 			try
 			{
 				robot = new Robot();
@@ -987,80 +987,87 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				log.warn("Robot creation failed", e);
 			}
 		}
-		
+
 		@Override
 		public void mouseDragged(MouseEvent e)
-		{	
-			
+		{
+
 			if(rightClick!=null) {
-				int dx = rightClick.x-e.getPoint().x;
+
+				int diffX = oldDragValue.x - e.getPoint().x;
+				int diffY = oldDragValue.y - e.getPoint().y;
+
+				hBar.setValue(hBar.getValue() + diffX);
+				vBar.setValue(vBar.getValue() + diffY);
+
+/*				int dx = rightClick.x-e.getPoint().x;
 				int dy = rightClick.y-e.getPoint().y;
 				int newX = hBar.getValue()+dx;
 				int newY = vBar.getValue()+dy;
-				
+
 				Point loc = e.getLocationOnScreen();
-				
+
 				if(newX<0 || newX>hBar.getMaximum()-hBar.getVisibleAmount())  {
 					robot.mouseMove(oldDragValue.x, e.getLocationOnScreen().y);
 					loc.setLocation(oldDragValue.x, loc.y);
 				}
 				else
 					hBar.setValue(newX);
-				
-				if(newY<0 || newY>vBar.getMaximum()-vBar.getVisibleAmount()) { 
+
+				if(newY<0 || newY>vBar.getMaximum()-vBar.getVisibleAmount()) {
 					robot.mouseMove(e.getLocationOnScreen().x, oldDragValue.y);
 					loc.setLocation(loc.x, oldDragValue.y);
 				}
 				else
 					vBar.setValue(newY);
-				
+*/
 				popupAdapt.setEnabled(false);
-				
-				oldDragValue = loc;
+
+//				oldDragValue = loc;
 			}
-			
+
 			if(leftClick!=null) {
 				int x = e.getPoint().x;
 				int y = e.getPoint().y;
 				nucPosE = (x/charW);
 				seqPosE = (y/charH);
-				
+
 				if(nucPosE>nucEnd)
 					nucPosE = nucEnd;
 				if(seqPosE>seqEnd)
 					seqPosE = seqEnd;
-				
+
 				scroll(e.getPoint());
 			}
-			
+
 			mouseMoved(e);
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e)
-		{	
+		{
 			int x = e.getPoint().x;
 			int y = e.getPoint().y;
-			
+
 			curNucPos = (x/charW);
 			curSeqPos = (y/charH);
-			
+
 			if(curNucPos>nucEnd)
 				curNucPos = -1;
 			if(curSeqPos>seqEnd)
 				curSeqPos = -1;
-			
+
 			canvas.repaint();
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e)
-		{	
+		{
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e)
-		{	
+		{
 			if(Prefs.gui_show_horizontal_highlight || Prefs.gui_show_vertical_highlight) {
 				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			}
@@ -1068,24 +1075,24 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 
 		@Override
 		public void mouseExited(MouseEvent e)
-		{	
+		{
 			curNucPos = -1;
 			curSeqPos = -1;
 			canvas.repaint();
-			
+
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e)
-		{	
+		{
 			if(e.getButton()==MouseEvent.BUTTON3) {
 				rightClick = e.getPoint();
-				oldDragValue = e.getLocationOnScreen();
+				oldDragValue = e.getPoint(); //e.getLocationOnScreen();
 				canvas.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				popupAdapt.setEnabled(true);
 			}
-			
+
 			if(e.getButton()==MouseEvent.BUTTON1) {
 				leftClick = e.getPoint();
 				int x = e.getPoint().x;
@@ -1094,13 +1101,13 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				seqPosS = (y/charH);
 				nucPosE = -1;
 				seqPosE = -1;
-				
+
 				if(nucPosS>ss.getLength() || seqPosS>ss.getSize()) {
 					nucPosS = -1;
 					seqPosS = -1;
 					leftClick = null;
 				}
-					
+
 			}
 		}
 
@@ -1110,11 +1117,12 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 			if(e.getButton()==MouseEvent.BUTTON3) {
 				rightClick = null;
 				canvas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				oldDragValue = null;
 			}
-			
+
 			if(e.getButton()==MouseEvent.BUTTON1) {
 				leftClick = null;
-				
+
 				if(nucPosE==-1 && seqPosE==-1) {
 					//user made just left mouse click without dragging,
 					//so remove highlight area
@@ -1123,6 +1131,6 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 				}
 			}
 		}
-		
+
 	}
 }
