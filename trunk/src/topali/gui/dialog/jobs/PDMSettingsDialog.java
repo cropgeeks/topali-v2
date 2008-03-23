@@ -64,7 +64,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "pdm_settings");
 		add(bp, BorderLayout.SOUTH);
-		
+
 		getRootPane().setDefaultButton(bRun);
 		Utils.addCloseHandler(this, bCancel);
 
@@ -131,7 +131,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
-		
+
 		int runNum = data.getTracker().getPdmRunCount() + 1;
 		data.getTracker().setPdmRunCount(runNum);
 		result.guiName = "PDM " + runNum;
@@ -221,8 +221,10 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 			add(layout.getPanel(), BorderLayout.NORTH);
 
 			JLabel info1 = new JLabel(Text.get("PDMSettingsDialog.1"));
-			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(new JLabel(" "), 0, 1, 1, 1, new Insets(0, 0, 0, 0));
+			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(new JLabel(" "), 0, 3, 1, 1, new Insets(5, 5, 5, 5));
 		}
 
 		void saveSettings()

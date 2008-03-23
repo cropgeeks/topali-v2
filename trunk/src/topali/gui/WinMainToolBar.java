@@ -14,6 +14,8 @@ import topali.gui.nav.NavPanel;
 import topali.i18n.Text;
 import topali.var.SysPrefs;
 
+import scri.commons.gui.*;
+
 public class WinMainToolBar extends JToolBar
 {
 	private JButton bFileNewProject;
@@ -35,7 +37,7 @@ public class WinMainToolBar extends JToolBar
 	private JButton bAlgnMoveDown;
 
 	public JButton bVamsas;
-	
+
 	private JButton bHelpDisplay;
 
 	// private JButton bVamExport;
@@ -66,7 +68,7 @@ public class WinMainToolBar extends JToolBar
 				WinMainMenuBar.aFilePrint);
 
 		bVamsas = (JButton)getButton(false, null, "gui20", Icons.VAMSASOFF, WinMainMenuBar.aVamsasButton);
-		
+
 		bHelpDisplay = (JButton) getButton(false, null, "gui14", Icons.HELP16,
 				null);
 		bHelpDisplay.addActionListener(new ActionListener()
@@ -81,23 +83,40 @@ public class WinMainToolBar extends JToolBar
 		add(new JLabel(" "));
 
 		add(bFileNewProject);
+		addSeparator(false);
 		add(bFileOpenProject);
-		addSeparator();
+		addSeparator(true);
 		add(bFileSave);
+		addSeparator(false);
 		add(bFilePrint);
-		addSeparator();
+		addSeparator(true);
 		add(bFileImportDataSet);
-		addSeparator();
+		addSeparator(true);
 		add(bAlgnFindSeq);
+		addSeparator(false);
 		add(bAlgnDisplaySummary);
+		addSeparator(false);
 		add(bAlgnMoveUp);
+		addSeparator(false);
 		add(bAlgnMoveDown);
-		addSeparator();
+		addSeparator(true);
 		add(bVamsas);
-		addSeparator();
+		addSeparator(true);
 		add(bHelpDisplay);
 
 		add(new JLabel(" "));
+	}
+
+	private void addSeparator(boolean separator)
+	{
+		if (SystemUtils.isMacOS())
+		{
+			add(new JLabel(" "));
+			if (separator)
+				add(new JLabel(" "));
+		}
+		else if (separator)
+			addSeparator();
 	}
 
 	// Utility method to help create the buttons. Sets their text, tooltip, and
@@ -120,16 +139,14 @@ public class WinMainToolBar extends JToolBar
 		if (tt != null)
 			button.setToolTipText(Text.get("WinMainToolBar." + tt));
 
-		if (SysPrefs.isWindows)
-			button.setBorderPainted(false);
-
-		button.setMargin(new Insets(1, 1, 1, 1));
+		if (SystemUtils.isMacOS() == false)
+			button.setMargin(new Insets(1, 1, 1, 1));
 		button.setIcon(icon);
 		// button.setFocusPainted(false);
 
 		return button;
 	}
-	
+
 	public void vamsasEnabled(boolean b) {
 		if(b)
 			bVamsas.setIcon(Icons.VAMSASON);
