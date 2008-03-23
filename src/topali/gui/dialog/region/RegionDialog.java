@@ -18,6 +18,7 @@ import topali.data.RegionAnnotations.Region;
 import topali.gui.*;
 import topali.gui.dialog.ExportDialog;
 import topali.var.utils.Utils;
+import topali.i18n.Text;
 import scri.commons.gui.MsgBox;
 
 public class RegionDialog extends JDialog implements ActionListener,
@@ -35,7 +36,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 	private final Class<?>[] supportedAnnotations = new Class[]
 	{ PartitionAnnotations.class, CDSAnnotations.class };
 
-	
+
 	// GUI stuff
 	private TreePreviewPanel treePanel = new TreePreviewPanel();
 
@@ -60,6 +61,8 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	public RegionDialog(WinMain winMain)
 	{
+		super(winMain, Text.get("RegionDialog.title"), false);
+
 		this.winMain = winMain;
 		buildGui();
 
@@ -182,7 +185,7 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	/**
 	 * Get the label of certain RegionAnnotation class
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */

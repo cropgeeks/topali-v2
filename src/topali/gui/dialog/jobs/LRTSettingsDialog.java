@@ -106,7 +106,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
 		result.gapThreshold = Prefs.lrt_gap_threshold;
-		
+
 		int runNum = data.getTracker().getLrtRunCount() + 1;
 		data.getTracker().setLrtRunCount(runNum);
 		result.guiName = "LRT " + runNum;
@@ -172,7 +172,9 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 			JLabel info1 = new JLabel(Text.get("LRTSettingsDialog.gui11"));
 			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(new JLabel(" "), 0, 1, 1, 1, new Insets(0, 0, 0, 0));
+			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(new JLabel(" "), 0, 3, 1, 1, new Insets(5, 5, 5, 5));
 		}
 
 		void saveSettings()
@@ -222,7 +224,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 					.setToolTipText(
 							Text.get("LRTSettingsDialog.gui16"));
 			lGaps = new JLabel(Text.get("LRTSettingsDialog.gui17"));
-			
+
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
 			setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
@@ -233,7 +235,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 			layout.add(lModel, 0, 2, 0, 1, new Insets(5, 10, 5, 5));
 			layout.add(cModel, 1, 2, 1, 1, new Insets(5, 5, 5, 10));
-			
+
 			layout.add(lGaps, 0, 3, 0, 1, new Insets(5, 10, 5, 5));
 			layout.add(cGaps, 1, 3, 1, 1, new Insets(5, 5, 5, 10));
 		}

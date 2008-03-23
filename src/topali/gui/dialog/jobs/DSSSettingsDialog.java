@@ -54,7 +54,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		});
 
 		add(tabs, BorderLayout.CENTER);
-		
+
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "dss_settings");
 		add(bp, BorderLayout.SOUTH);
 
@@ -115,9 +115,9 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.avgDist = topali.cluster.jobs.dss.analysis.DSS.getAverageDistance(ss);
 		result.tRatio = ss.getParams().getTRatio();
 		result.alpha = ss.getParams().getAlpha();
-		
+
 		result.gapThreshold = Prefs.dss_gap_threshold;
-		
+
 		int runNum = data.getTracker().getDssRunCount() + 1;
 		data.getTracker().setDssRunCount(runNum);
 		result.guiName = "DSS " + runNum;
@@ -135,7 +135,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		Prefs.dss_method = iResult.method;
 		Prefs.dss_power = iResult.power;
 		Prefs.dss_pass_count = iResult.passCount;
-		
+
 		Prefs.dss_gap_threshold = iResult.gapThreshold;
 	}
 
@@ -185,8 +185,9 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 			add(layout.getPanel(), BorderLayout.NORTH);
 
 			JLabel info1 = new JLabel(Text.get("DSSSettingsDialog.gui11"));
-			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 2, 5));
-			layout.add(slidePanel, 0, 1, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(info1, 0, 0, 1, 1, new Insets(5, 5, 0, 5));
+			layout.add(new JLabel(" "), 0, 1, 1, 1, new Insets(0, 0, 0, 0));
+			layout.add(slidePanel, 0, 2, 1, 1, new Insets(5, 5, 0, 5));
 		}
 
 		void saveSettings()
@@ -273,7 +274,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 			gapsModel = new SpinnerNumberModel(Prefs.dss_gap_threshold, 0d, 1d, 0.1d);
 			cGaps = new JSpinner(gapsModel);
 			cGaps.setToolTipText("Sequences exceeding this threshold (per window), will be ignored.");
-			
+
 			DoeLayout layout = new DoeLayout();
 			setViewportView(layout.getPanel());
 			setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
@@ -296,7 +297,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 			layout.add(lPass, 0, 5, 0, 1, new Insets(5, 10, 10, 5));
 			layout.add(cPass, 1, 5, 1, 1, new Insets(5, 5, 10, 10));
-			
+
 			layout.add(lGaps, 0, 6, 0, 1, new Insets(5, 10, 10, 5));
 			layout.add(cGaps, 1, 6, 1, 1, new Insets(5, 5, 10, 10));
 		}

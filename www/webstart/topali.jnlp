@@ -20,6 +20,7 @@
 		<jar href="log4j-1.2.8.jar"/>
 		<jar href="looks-2.0.2.jar"/>
 		<jar href="office-2.0.jar"/>
+		<jar href="osxadapter.jar"/>
 		<jar href="pal.jar"/>
 		<jar href="saaj.jar"/>
 		<jar href="scri-commons.jar"/>

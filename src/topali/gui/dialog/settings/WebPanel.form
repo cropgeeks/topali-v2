@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.3" maxVersion="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
@@ -62,8 +64,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="brokerURL" alignment="1" pref="258" max="32767" attributes="1"/>
-                      <Component id="directURL" alignment="1" pref="258" max="32767" attributes="1"/>
+                      <Component id="brokerURL" alignment="1" pref="322" max="32767" attributes="1"/>
+                      <Component id="directURL" alignment="1" pref="322" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -97,6 +99,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
+            <Property name="displayedMnemonic" type="int" value="106"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="secSpin"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Check job progress every:"/>
           </Properties>
         </Component>
@@ -116,6 +122,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="radioBroker">
           <Properties>
+            <Property name="mnemonic" type="int" value="114"/>
             <Property name="text" type="java.lang.String" value="Use resource broker:"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -129,6 +136,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="radioDirect">
           <Properties>
+            <Property name="mnemonic" type="int" value="100"/>
             <Property name="text" type="java.lang.String" value="Use direct connection:"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -233,6 +241,7 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="useProxy">
           <Properties>
+            <Property name="mnemonic" type="int" value="117"/>
             <Property name="text" type="java.lang.String" value="Use a proxy server for all web connections (requires restart):"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -246,6 +255,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="serverLabel">
           <Properties>
+            <Property name="displayedMnemonic" type="int" value="115"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="proxyName"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Server name:"/>
           </Properties>
         </Component>
@@ -253,6 +266,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="portLabel">
           <Properties>
+            <Property name="displayedMnemonic" type="int" value="112"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="portSpin"/>
+            </Property>
             <Property name="text" type="java.lang.String" value=" Port:"/>
           </Properties>
         </Component>
@@ -265,6 +282,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="checkUpdates">
           <Properties>
+            <Property name="mnemonic" type="int" value="99"/>
             <Property name="text" type="java.lang.String" value="Check for updated versions of TOPALi at program startup"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -280,11 +298,19 @@
         </Component>
         <Component class="javax.swing.JLabel" name="userLabel">
           <Properties>
+            <Property name="displayedMnemonic" type="int" value="110"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="userText"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Username:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="passLabel">
           <Properties>
+            <Property name="displayedMnemonic" type="int" value="119"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="passText"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Password:"/>
           </Properties>
         </Component>

@@ -14,6 +14,7 @@ import java.util.*;
 import javax.swing.*;
 import org.apache.log4j.*;
 import scri.commons.multicore.TokenManager;
+import scri.commons.gui.*;
 import topali.cluster.LocalJobs;
 import topali.i18n.Text;
 import topali.logging.GracefulShutdownHandler;
@@ -21,12 +22,14 @@ import topali.mod.*;
 import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
+import apple.dts.samplecode.osxadapter.*;
+
 public class TOPALi extends Applet implements Application
 {
 	//enables/disables extensive logging
 	public static final boolean debugClient = true;
 	public static final boolean debugJobs = false;
-	
+
 	public static final String VERSION = "2.20";
 
 	private final String prefsFile = ".topali2-new.xml";
@@ -34,15 +37,15 @@ public class TOPALi extends Applet implements Application
 	 static Logger root;
 	 static Logger log;
 
-	static {
+	static void initstuff() {
 		PropertyConfigurator.configure(TOPALi.class.getResource("/res/client.log4j.properties"));
-		
+
 		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
 		    .setProperty("org.exolab.castor.parser", "org.xml.sax.helpers.XMLReaderAdapter");
 
 		org.exolab.castor.util.LocalConfiguration.getInstance().getProperties()
 		    .setProperty("org.exolab.castor.xml.serializer.factory", "org.exolab.castor.xml.XercesJDK5XMLSerializerFactory");
-		  
+
 		root = Logger.getRootLogger();
 		log = Logger.getLogger(TOPALi.class);
 	}
@@ -57,7 +60,11 @@ public class TOPALi extends Applet implements Application
 
 	public static void main(String[] args)
 	{
-	    
+		// OS X: This has to be set before anything else
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "TOPALi v2");
+
+		initstuff();
+
 		root.info("TOPALi V. "+VERSION);
 		root.info("Default Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));
@@ -80,8 +87,6 @@ public class TOPALi extends Applet implements Application
 		Icons.loadIcons();
 
 		new TOPALi(initialProject);
-
-
 	}
 
 	@Override
@@ -100,41 +105,6 @@ public class TOPALi extends Applet implements Application
 
 	private TOPALi(final File initialProject)
 	{
-		//If there is a GracefulShutdownHandler, tell it about TOPALi
-		//and also use it as UncaughtExceptionHandler
-		Enumeration<?> en = root.getAllAppenders();
-		while(en.hasMoreElements()) {
-			Object o = en.nextElement();
-			if(o instanceof GracefulShutdownHandler) {
-				GracefulShutdownHandler sh = (GracefulShutdownHandler)o;
-				sh.setApplication(this);
-				Thread.setDefaultUncaughtExceptionHandler(sh);
-			}
-		}
-		
-		if(debugClient) {
-			//MemoryMonitor memmon = new MemoryMonitor(MemoryMonitor.UNIT_MEGABYTES, 10);
-			//memmon.start();
-		}
-
-		showSplash();
-
-		// Load the preferences
-		prefs.loadPreferences(new File(System.getProperty("user.home"),
-				prefsFile), Prefs.class);
-		
-		if(!Prefs.locale.equals("default")) {
-		    String loc = Prefs.locale;
-		    log.info("Set Locale to "+loc);
-			Locale.setDefault(new Locale(loc));
-		}
-		
-		doEncryption(true);
-		
-
-		setProxy();
-		LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);
-
 		try
 		{
 			if (SysPrefs.isWindows)
@@ -150,9 +120,12 @@ public class TOPALi extends Applet implements Application
 				UIManager.put("OptionPane.warningIcon", Icons.WIN_WARN);
 				UIManager.put("OptionPane.questionIcon", Icons.WIN_QUESTION);
 
-			} else if (SysPrefs.isMacOSX)
-				UIManager.setLookAndFeel(UIManager
-						.getSystemLookAndFeelClassName());
+			}
+			else if (SystemUtils.isMacOS())
+			{
+				handleOSXStupidities();
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}
 			else
 				UIManager
 						.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
@@ -160,6 +133,42 @@ public class TOPALi extends Applet implements Application
 		{
 			log.warn("Cannot set Look and Feel", e);
 		}
+
+		//If there is a GracefulShutdownHandler, tell it about TOPALi
+		//and also use it as UncaughtExceptionHandler
+		Enumeration<?> en = root.getAllAppenders();
+		while(en.hasMoreElements()) {
+			Object o = en.nextElement();
+			if(o instanceof GracefulShutdownHandler) {
+				GracefulShutdownHandler sh = (GracefulShutdownHandler)o;
+				sh.setApplication(this);
+				Thread.setDefaultUncaughtExceptionHandler(sh);
+			}
+		}
+
+		if(debugClient) {
+			//MemoryMonitor memmon = new MemoryMonitor(MemoryMonitor.UNIT_MEGABYTES, 10);
+			//memmon.start();
+		}
+
+//		showSplash();
+
+		// Load the preferences
+		prefs.loadPreferences(new File(System.getProperty("user.home"),
+				prefsFile), Prefs.class);
+
+		if(!Prefs.locale.equals("default")) {
+		    String loc = Prefs.locale;
+		    log.info("Set Locale to "+loc);
+			Locale.setDefault(new Locale(loc));
+		}
+
+		doEncryption(true);
+
+
+		setProxy();
+		LocalJobs.manager = new TokenManager(Prefs.gui_max_cpus);
+
 
 		// Create and initialise the main window
 		winMain = new WinMain();
@@ -175,7 +184,7 @@ public class TOPALi extends Applet implements Application
 			@Override
 			public void windowOpened(WindowEvent e)
 			{
-				hideSplash();
+//				hideSplash();
 
 				// If this is the first time TOPALi has been loaded, show help
 				if (Prefs.gui_first_run)
@@ -194,9 +203,17 @@ public class TOPALi extends Applet implements Application
 				if (Prefs.web_check_startup)
 					winMain.menuHelpUpdate(false);
 			}
+
+			public void windowIconified(WindowEvent e) {
+				WinMainMenuBar.mWndTOPALi.setSelected(false);
+			}
+
+			public void windowDeiconified(WindowEvent e) {
+				WinMainMenuBar.mWndTOPALi.setSelected(true);
+			}
 		});
 
-		new scri.commons.gui.MsgBox(winMain, Text.get("title"));
+		scri.commons.gui.MsgBox.initialize(winMain, Text.get("title"));
 		winMain.setVisible(true);
 	}
 
@@ -270,7 +287,7 @@ public class TOPALi extends Applet implements Application
 			JOptionPane.showMessageDialog(null, msg, "Error opening eMail client", JOptionPane.ERROR_MESSAGE);
 		    }
 		}
-		
+
 		// And exit
 		if (isApplet == false)
 			System.exit(0);
@@ -335,5 +352,71 @@ public class TOPALi extends Applet implements Application
 		{
 			log.warn("En/Decryption failed", e);
 		}
+	}
+
+
+	// --------------------------------------------------
+	// Methods required for better native support on OS X
+
+	private void handleOSXStupidities()
+	{
+		try
+		{
+			// Register handlers to deal with the System menu about/quit options
+			OSXAdapter.setAboutHandler(this,
+				getClass().getDeclaredMethod("aboutOSX", (Class[])null));
+			OSXAdapter.setQuitHandler(this,
+				getClass().getDeclaredMethod("shutdownOSX", (Class[])null));
+			OSXAdapter.setPreferencesHandler(this,
+				getClass().getDeclaredMethod("preferencesOSX", (Class[])null));
+
+			// Dock the menu bar at the top of the screen
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+		catch (Exception e) { System.out.println(e); }
+	}
+
+	/** "About Flapjack" on the OS X system menu. */
+	public void aboutOSX()
+	{
+		winMain.menuHelpAbout();
+	}
+
+	/** Called by a forced CMD-Q quit from the OS. Return false to cancel. */
+	public boolean shutdownOSX()
+	{
+		if (winMain.okToContinue() == false)
+			return false;
+
+		shutdown(null);
+		return true;
+	}
+
+	public void preferencesOSX()
+	{
+		winMain.menuAnlsSettings();
+	}
+
+	static void osxMinimize()
+	{
+		winMain.setExtendedState(Frame.ICONIFIED);
+	}
+
+	static void osxZoom()
+	{
+		if (winMain.getExtendedState() == Frame.NORMAL)
+			winMain.setExtendedState(Frame.MAXIMIZED_BOTH);
+		else
+			winMain.setExtendedState(Frame.NORMAL);
+	}
+
+	static void osxTOPALi()
+	{
+		if (Prefs.gui_maximized)
+			winMain.setExtendedState(Frame.MAXIMIZED_BOTH);
+		else
+			winMain.setExtendedState(Frame.NORMAL);
+
+		WinMainMenuBar.mWndTOPALi.setSelected(true);
 	}
 }

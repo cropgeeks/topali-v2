@@ -64,6 +64,8 @@ class CachePanel extends JPanel implements ActionListener
 
 		JLabel cpuLabel = new JLabel("Maximum number of CPUs/Cores to use "
 				+ "for local jobs: ");
+		cpuLabel.setDisplayedMnemonic(KeyEvent.VK_M);
+		cpuLabel.setLabelFor(cpuSpin);
 		p2.add(cpuLabel);
 		p2.add(cpuSpin);
 
