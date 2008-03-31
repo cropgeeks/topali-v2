@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.codonw.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 
 public class CodonWLocalJob extends AnalysisJob
 {
@@ -34,7 +33,7 @@ public class CodonWLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -51,13 +50,13 @@ public class CodonWLocalJob extends AnalysisJob
 		}
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new CodonWMonitor(jobDir).getPercentageComplete();
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new CodonWMonitor(jobDir).getResult();
@@ -66,7 +65,7 @@ public class CodonWLocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -76,7 +75,7 @@ public class CodonWLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

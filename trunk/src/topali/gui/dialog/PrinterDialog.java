@@ -47,7 +47,7 @@ public class PrinterDialog extends JDialog
 
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowOpened(WindowEvent e)
 			{
 				new Printer().start();
@@ -92,7 +92,7 @@ public class PrinterDialog extends JDialog
 
 	class Printer extends Thread
 	{
-		@Override
+		
 		public void run()
 		{
 			if (job.printDialog(aset))

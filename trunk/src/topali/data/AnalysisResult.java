@@ -51,7 +51,7 @@ public class AnalysisResult extends DataObject
 	}
 
 
-	@Override
+	
 	public String toString()
 	{
 		return guiName;

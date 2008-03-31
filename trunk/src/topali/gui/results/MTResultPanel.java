@@ -7,14 +7,15 @@ package topali.gui.results;
 
 import java.awt.*;
 import java.awt.print.Printable;
+import java.lang.reflect.*;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.TableModel;
 
 import topali.data.*;
-import topali.data.models.Model;
+import topali.data.models.*;
 import topali.gui.*;
 import topali.var.utils.*;
 
@@ -24,8 +25,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	GradientPanel gp;
 	TablePanel tp;
 	ModelInfoPanel infoPanel;
-	
-	int select = -1;
+
 	Model selModel = null;
 	
 	public MTResultPanel(AlignmentData data, ModelTestResult result) {
@@ -36,25 +36,44 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		gp.setStyle(GradientPanel.OFFICE2003);
 		p1.add(gp, BorderLayout.NORTH);
 		
+		if(SysPrefs.javaVersion<6) {
+			result.sortModels(ModelComparator.BIC);
+		}
+		
 		tp = getTablePanel(result);
 		tp.accessTable().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tp.accessTable().getSelectionModel().addListSelectionListener(this);
-		TableRowSorter sorter = new TableRowSorter(tp.accessTable().getModel());
-		for(int i=0; i<tp.accessTable().getColumnCount(); i++)
-			sorter.setComparator(i, new SimpleComparator());
-		tp.accessTable().setRowSorter(sorter);
-		p1.add(tp, BorderLayout.CENTER);
+		tp.accessTable().getSelectionModel().addListSelectionListener(this);	
 		
-		infoPanel = new ModelInfoPanel(data,this);
-		p1.add(infoPanel, BorderLayout.SOUTH);
-		
-		addContent(p1, false);
-	
-		if(select>=0) {
-			tp.accessTable().getSelectionModel().setSelectionInterval(select, select);
+		try {
+			if(SysPrefs.javaVersion>5) {
+				//even if this code is never called if java < 6, I can't use TableRowSorter directly
+				//(strange: But I can use RadialGradientPaint in DNA- and ProteinModelDiagramm)
+				Class clazz = Class.forName("javax.swing.table.TableRowSorter");
+				Constructor construct = clazz.getConstructor(TableModel.class);
+				Method setComparator = clazz.getMethod("setComparator", int.class, Comparator.class);
+				Method toggleSortOrder = clazz.getMethod("toggleSortOrder", int.class);
+				Method setRowSorter = Class.forName("javax.swing.JTable").getMethod("setRowSorter", Class.forName("javax.swing.RowSorter"));
+				Object sorter = construct.newInstance(tp.accessTable().getModel());
+				for(int i=0; i<tp.accessTable().getColumnCount(); i++)
+					setComparator.invoke(sorter, i, new SimpleComparator());
+				setRowSorter.invoke(tp.accessTable(), sorter);
+				toggleSortOrder.invoke(sorter, 5);
+			}
+			
+			p1.add(tp, BorderLayout.CENTER);
+			
+			infoPanel = new ModelInfoPanel(data,this);
+			p1.add(infoPanel, BorderLayout.SOUTH);
+			
+			addContent(p1, false);
+
+			//pre-select the first entry
+			tp.accessTable().getSelectionModel().setSelectionInterval(0, 0);
 			valueChanged(null);
-			modelSetTo(data.getSequenceSet().getParams().getModel());
-			sorter.toggleSortOrder(5);
+			modelSetTo(data.getSequenceSet().getProps().getModel());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -86,7 +105,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		Model bestHLRT2 = null;
 		Model bestHLRT3 = null;
 		Model bestHLRT4 = null;
-		if(data.getSequenceSet().getParams().isDNA()) {
+		if(data.getSequenceSet().getProps().isNucleotides()) {
 			if(result.type.equals(ModelTestResult.TYPE_PHYML)) {
 				best5SHLRT = ModelUtils.perform5HTHLRT(result.models, 0.01);
 			}
@@ -129,7 +148,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			
 			String col1 = Utils.d2.format((m.getLnl()*(-1)));
 			//col1 += " ("+getDistance(bestLRT.getIGName(), m.getIGName(), result)+")";
-			if(data.getSequenceSet().getParams().isDNA()) {
+			if(data.getSequenceSet().getProps().isNucleotides()) {
 				String tt = "Best Model according to ";
 				int bestModel = 0;
 				if(best5SHLRT!=null && best5SHLRT.matches(m)) {
@@ -183,8 +202,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				Color c = new Color(240,240,100);
 				col4 += "<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">";
 				col4 +="<tooltip=\"Best Model\">";
-				select = i;
-				data.getSequenceSet().getParams().setModel(m);
+				data.getSequenceSet().getProps().setModel(m);
 			}
 			
 			row.add(name);
@@ -215,7 +233,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		return -1;
 	}
 	
-	@Override
+	
 	public String getAnalysisInfo()
 	{
 		ModelTestResult result = (ModelTestResult)this.result;
@@ -243,20 +261,20 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		return sb.toString();
 	} 
 
-	@Override
+	
 	public Printable[] getPrintables()
 	{
 		return new Printable[] {tp.getPrintable()};
 	}
 
-	@Override
+	
 	public void setThreshold(double t)
 	{
 		//no threshold to set
 	}
 	
 	
-	@Override
+	
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if(e==null || e.getValueIsAdjusting())

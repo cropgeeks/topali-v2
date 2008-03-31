@@ -13,6 +13,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import topali.data.Prefs;
 import topali.var.LinkLabel;
 import scri.commons.gui.MsgBox;
 
@@ -29,7 +30,7 @@ class UpdateChecker extends Thread
 		start();
 	}
 
-	@Override
+	
 	public void run()
 	{
 		String tmp = TOPALi.VERSION.replaceAll("\\.", "");

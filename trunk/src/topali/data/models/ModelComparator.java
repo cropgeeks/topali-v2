@@ -24,7 +24,7 @@ public class ModelComparator implements Comparator<Model>
 		this.mode = mode;
 	}
 
-	@Override
+	
 	public int compare(Model o1, Model o2)
 	{
 		switch(mode) {

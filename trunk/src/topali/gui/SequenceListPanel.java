@@ -14,9 +14,9 @@ import java.beans.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.i18n.Text;
+import topali.var.utils.SequenceSetUtils;
 import scri.commons.gui.MsgBox;
 
 public class SequenceListPanel extends JPanel implements ListSelectionListener, PropertyChangeListener
@@ -49,7 +49,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		// Add some mouse handlers
 		list.addMouseMotionListener(new MouseMotionAdapter()
 		{
-			@Override
+			
 			public void mouseMoved(MouseEvent e)
 			{
 				WinMainStatusBar.setText(Text.get("SequenceListPanel.gui05", list
@@ -58,7 +58,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		});
 		list.addMouseListener(new MouseAdapter()
 		{
-			@Override
+			
 			public void mouseExited(MouseEvent e)
 			{
 				WinMainStatusBar.setText("");
@@ -228,12 +228,12 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		WinMainMenuBar.aAlgnMoveUp.setEnabled(false);
 		WinMainMenuBar.aAlgnMoveDown.setEnabled(false);
 		WinMainMenuBar.aAlgnMoveTop.setEnabled(false);
-		WinMainMenuBar.aAlgnRename.setEnabled(false);
+		WinMainMenuBar.aAlgnRenameSeq.setEnabled(false);
 
 		int[] indices = list.getSelectedIndices();
 
 		if (indices.length == 1)
-			WinMainMenuBar.aAlgnRename.setEnabled(true);
+			WinMainMenuBar.aAlgnRenameSeq.setEnabled(true);
 
 		if (indices.length > 0)
 		{
@@ -261,7 +261,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		disPanel.repaint();
 
 		if (Prefs.gui_preview_current)
-			WinMain.rDialog.updateTreePreview(false);
+			//WinMain.rDialog.updateTreePreview(false);
 
 		ProjectState.setDataChanged();
 	}
@@ -316,7 +316,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			JMenu menu = new JMenu(Text.get("menuAlgnSelect"));
 
 			JMenuItem m1 = getItem(aAlgnSelectAll, KeyEvent.VK_A,
-					KeyEvent.VK_A, InputEvent.CTRL_MASK);
+					KeyEvent.VK_A, WinMainMenuBar.menuShortcut);
 			JMenuItem m2 = getItem(aAlgnSelectNone, KeyEvent.VK_N, 0, 0);
 			JMenuItem m3 = getItem(aAlgnSelectUnique, KeyEvent.VK_U, 0, 0);
 			JMenuItem m4 = getItem(aAlgnSelectInvert, KeyEvent.VK_I, 0, 0);
@@ -335,7 +335,8 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					WinMain.rDialog.addRegion(disPanel.displayCanvas.mouse.nucPosS+1, disPanel.displayCanvas.mouse.nucPosE+1, PartitionAnnotations.class);
+					//WinMain.rDialog.addRegion(disPanel.displayCanvas.mouse.nucPosS+1, disPanel.displayCanvas.mouse.nucPosE+1, PartitionAnnotations.class);
+					WinMain.annoDialog.addPartition(disPanel.displayCanvas.mouse.nucPosS+1, disPanel.displayCanvas.mouse.nucPosE+1);
 					disPanel.highlight(-1, -1, true);
 				}
 			});
@@ -371,7 +372,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F,
 					InputEvent.CTRL_MASK, 0, false);
-			add(aAlgnRename, KeyEvent.VK_R, 0, 0, 0, false);
+			add(aAlgnRenameSeq, KeyEvent.VK_R, 0, 0, 0, false);
 			add(aAlgnGoTo, KeyEvent.VK_G, 0, 0, 0, false);
 			add(aViewDisplaySettings, KeyEvent.VK_D, KeyEvent.VK_F5, 0, 0, true);
 		}
@@ -388,7 +389,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			addPart.setEnabled(b);
 		}
 
-		@Override
+		
 		protected void handlePopup(int x, int y)
 		{
 

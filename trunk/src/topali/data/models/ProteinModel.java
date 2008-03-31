@@ -47,13 +47,13 @@ public class ProteinModel extends Model
 		this.rankingScore = rankScore;
 	}
 
-	@Override
+	
 	public int getFreeParameters()
 	{
 		return 0;
 	}
 
-	@Override
+	
 	public int getRankingScore()
 	{
 		return rankingScore;
@@ -123,7 +123,7 @@ public class ProteinModel extends Model
 			aaFreqs[i] = Double.parseDouble(tmp[i]);
 	}
 	
-	@Override
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(super.toString());

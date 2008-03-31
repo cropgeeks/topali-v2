@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
 
 /**
  * Contains misc methods that don't really fit in anywhere else (but are likely
@@ -144,40 +143,41 @@ public class Utils {
 	    return null;
 	}
     }
-
-    /**
-     * Opens the desktop's default browser with a certain URL
-     * @param url
-     * @return False if this is not supported by the OS
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    public static boolean openBrowser(String url) throws URISyntaxException,
-	    IOException {
-	URI uri = new URI(url);
-	if (Desktop.isDesktopSupported()) {
-	    Desktop desktop = Desktop.getDesktop();
-	    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-		desktop.browse(uri);
-		return true;
-	    }
-	}
-	return false;
-    }
     
-    public static boolean openMailclient(String address, String subject, String message) throws URISyntaxException, IOException {
-	if (Desktop.isDesktopSupported()) {
-	    Desktop desktop = Desktop.getDesktop();
-	    if(desktop.isSupported(Desktop.Action.MAIL)) {
-		subject = URLEncoder.encode(subject, "utf8");
-		message = URLEncoder.encode(message, "utf8");
-		URI uri = new URI("mailto:"+address+"?SUBJECT="+subject+"&BODY="+message);
-		desktop.mail(uri);
-		return true;
-	    }
-	}
-	return false;
-    }
+//	Commented out because doesn't work with Java < 1.6
+//    /**
+//     * Opens the desktop's default browser with a certain URL
+//     * @param url
+//     * @return False if this is not supported by the OS
+//     * @throws URISyntaxException
+//     * @throws IOException
+//     */
+//    public static boolean openBrowser(String url) throws URISyntaxException,
+//	    IOException {
+//	URI uri = new URI(url);
+//	if (Desktop.isDesktopSupported()) {
+//	    Desktop desktop = Desktop.getDesktop();
+//	    if (desktop.isSupported(Desktop.Action.BROWSE)) {
+//		desktop.browse(uri);
+//		return true;
+//	    }
+//	}
+//	return false;
+//    }
+//    
+//    public static boolean openMailclient(String address, String subject, String message) throws URISyntaxException, IOException {
+//	if (Desktop.isDesktopSupported()) {
+//	    Desktop desktop = Desktop.getDesktop();
+//	    if(desktop.isSupported(Desktop.Action.MAIL)) {
+//		subject = URLEncoder.encode(subject, "utf8");
+//		message = URLEncoder.encode(message, "utf8");
+//		URI uri = new URI("mailto:"+address+"?SUBJECT="+subject+"&BODY="+message);
+//		desktop.mail(uri);
+//		return true;
+//	    }
+//	}
+//	return false;
+//    }
 
     public static String getLocalPath() {
 	if (SysPrefs.isWindows)
@@ -345,4 +345,11 @@ public class Utils {
 	return index;
     }
 
+    public static Object[] listToArray(List<?> list) {
+    	Object[] array = new Object[list.size()];
+    	for(int i=0; i<list.size(); i++) {
+    		array[i] = list.get(i);
+    	}
+    	return array;
+    }
 }

@@ -35,7 +35,7 @@ public class LoadMonitorDialog extends JDialog implements Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowOpened(WindowEvent e)
 			{
 				doLoad();

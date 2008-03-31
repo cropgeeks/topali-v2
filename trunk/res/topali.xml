@@ -41,19 +41,18 @@
 		<field name="sequences" type="string" collection="collection" />
 	</class>
 
-	<class name="topali.data.SequenceSetParams">
+	<class name="topali.data.SequenceSetProperties">
+		<field name="type" type="int" />
 		<field name="tRatio" type="double" />
 		<field name="alpha" type="double" />
 		<field name="kappa" type="double" />
 		<field name="avgDist" type="double" />
 		<field name="freqs" type="double" collection="array" />
-		<field name="isDNA" type="boolean" get-method="isDNA"
-			set-method="setDNA" />
 		<field name="isAligned" type="boolean" get-method="isAligned"
-			set-method="setAligned" />
+			set-method="isAligned" />
 		<field name="model" type="topali.data.models.Model" />
-		<field name="needCalculation" type="boolean"
-			get-method="isNeedCalculation" set-method="setNeedCalculation" />
+		<field name="needsCalculation" type="boolean"
+			get-method="needsCalculation" set-method="needsCalculation" />
 	</class>
 
 	<class name="topali.data.SequenceSet">
@@ -62,7 +61,7 @@
 		</field>
 
 		<field name="overview" type="string" />
-		<field name="params" type="topali.data.SequenceSetParams" />
+		<field name="props" type="topali.data.SequenceSetProperties" />
 		<field name="selectedSequences" type="int" collection="array" />
 		<field name="sequences" type="topali.data.Sequence"
 			collection="vector" />
@@ -70,7 +69,7 @@
 
 	<class name="topali.data.AlignmentData"
 		extends="topali.data.DataObject">
-		<field name="name" type="string" direct="true">
+		<field name="name" type="string">
 			<bind-xml node="attribute" />
 		</field>
 		<field name="isReferenceList" type="boolean"
@@ -91,10 +90,7 @@
 		<field name="results" type="topali.data.AnalysisResult"
 			collection="collection" />
 		<field name="tracker" type="topali.data.ResultsTracker" />
-		<!--<field name="partitionInfo" type="topali.data.PartitionInfo"/>-->
-		<field name="topaliAnnotations"
-			type="topali.data.TOPALiAnnotations" />
-
+		<field name="annotations" type="topali.data.annotations.AnnotationList" />
 	</class>
 	
 	<class name="topali.data.ResultsTracker">
@@ -203,53 +199,42 @@
 	<!--                                                ANNOTATION                                -->
 	<!--                                                **********                                -->
 	
-	<class name="topali.data.AnnotationElement">
-		<field name="position" type="int" direct="true">
+	<class name="topali.data.annotations.AnnotationList" extends="java.util.ArrayList">
+		<field name="annotations" type="topali.data.annotations.Annotation" collection="arraylist"/>
+	</class>
+	
+	<class name="topali.data.annotations.Annotation" extends="topali.data.DataObject">
+		<field name="start" type="int">
 			<bind-xml node="attribute" />
 		</field>
-		<field name="value" type="float" direct="true">
+		<field name="end" type="int">
 			<bind-xml node="attribute" />
 		</field>
-		<field name="displayCharacter" type="string" direct="true">
+		<field name="comment" type="string" />
+		<field name="linkId" type="int">
 			<bind-xml node="attribute" />
 		</field>
-		<field name="secondaryStructure" type="string" direct="true">
+		<field name="seqType" type="int">
 			<bind-xml node="attribute" />
 		</field>
-		<field name="description" type="string" direct="true">
+	</class>
+
+	<class name="topali.data.annotations.PartitionAnnotation" extends="topali.data.annotations.Annotation">
+		<field name="model" type="topali.data.models.Model"/>
+	</class>
+	
+	<class name="topali.data.annotations.CodingRegionAnnotation" extends="topali.data.annotations.Annotation">
+		<field name="modC1" type="topali.data.models.Model"/>
+		<field name="modC2" type="topali.data.models.Model"/>
+		<field name="modC3" type="topali.data.models.Model"/>
+	</class>
+	
+	<class name="topali.data.annotations.SecStructureAnnotation" extends="topali.data.annotations.Annotation">
+		<field name="type" type="char" >
 			<bind-xml node="attribute" />
 		</field>
 	</class>
 	
-	<class name="topali.data.TOPALiAnnotations">
-		<field name="annotations"
-			type="topali.data.AlignmentAnnotations" collection="collection" />
-	</class>
-
-	<class name="topali.data.AlignmentAnnotations">
-		<field name="label" type="string">
-			<bind-xml node="attribute" />
-		</field>
-		<field name="description" type="string">
-			<bind-xml node="attribute" />
-		</field>
-
-		<field name="annotations" type="topali.data.AnnotationElement"
-			collection="vector" />
-	</class>
-
-	<class name="topali.data.RegionAnnotations"
-		extends="topali.data.AlignmentAnnotations">
-
-	</class>
-
-	<class name="topali.data.PartitionAnnotations"
-		extends="topali.data.RegionAnnotations">
-		<field name="alignmentLength" type="int">
-			<bind-xml node="attribute" />
-		</field>
-	</class>
-
 	<!--                                             RESULTS                                     -->
 	<!-- 							                 *******                                     -->
 

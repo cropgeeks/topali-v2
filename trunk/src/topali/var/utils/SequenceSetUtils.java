@@ -3,7 +3,7 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.analyses;
+package topali.var.utils;
 
 import java.util.*;
 
@@ -11,7 +11,10 @@ import javax.swing.JOptionPane;
 
 import pal.alignment.SimpleAlignment;
 import scri.commons.gui.MsgBox;
+//import sun.print.resources.serviceui;
+import topali.analyses.ParamEstimateThread;
 import topali.data.*;
+import topali.data.annotations.Annotation;
 import topali.gui.*;
 import topali.i18n.Text;
 
@@ -22,7 +25,95 @@ import topali.i18n.Text;
 public class SequenceSetUtils
 {
 	private static Random random = new Random();
-	
+
+	private static Hashtable<String, String> geneticCode;
+	static {
+		geneticCode = new Hashtable<String, String>();
+		geneticCode.put("GCU", "A");
+		geneticCode.put("GCC", "A");
+		geneticCode.put("GCA", "A");
+		geneticCode.put("GCG", "A");
+
+		geneticCode.put("CGU", "R");
+		geneticCode.put("CGC", "R");
+		geneticCode.put("CGA", "R");
+		geneticCode.put("CGG", "R");
+		geneticCode.put("AGA", "R");
+		geneticCode.put("AGG", "R");
+
+		geneticCode.put("AAU", "N");
+		geneticCode.put("AAC", "N");
+
+		geneticCode.put("GAU", "D");
+		geneticCode.put("GAC", "D");
+
+		geneticCode.put("UGU", "C");
+		geneticCode.put("UGC", "C");
+
+		geneticCode.put("CAA", "Q");
+		geneticCode.put("CAG", "Q");
+
+		geneticCode.put("CAA", "Q");
+		geneticCode.put("CAG", "Q");
+
+		geneticCode.put("GAA", "E");
+		geneticCode.put("GAG", "E");
+
+		geneticCode.put("GGU", "G");
+		geneticCode.put("GGC", "G");
+		geneticCode.put("GGA", "G");
+		geneticCode.put("GGG", "G");
+
+		geneticCode.put("CAU", "H");
+		geneticCode.put("CAC", "H");
+
+		geneticCode.put("AUU", "I");
+		geneticCode.put("AUC", "I");
+		geneticCode.put("AUA", "I");
+
+		geneticCode.put("UUA", "L");
+		geneticCode.put("UUG", "L");
+		geneticCode.put("CUU", "L");
+		geneticCode.put("CUC", "L");
+		geneticCode.put("CUA", "L");
+		geneticCode.put("CUG", "L");
+
+		geneticCode.put("AAA", "K");
+		geneticCode.put("AAG", "K");
+
+		geneticCode.put("AUG", "M");
+
+		geneticCode.put("UUU", "F");
+		geneticCode.put("UUC", "F");
+
+		geneticCode.put("CCU", "P");
+		geneticCode.put("CCC", "P");
+		geneticCode.put("CCA", "P");
+		geneticCode.put("CCG", "P");
+
+		geneticCode.put("UCU", "S");
+		geneticCode.put("UCC", "S");
+		geneticCode.put("UCA", "S");
+		geneticCode.put("UCG", "S");
+		geneticCode.put("AGU", "S");
+		geneticCode.put("AGC", "S");
+
+		geneticCode.put("ACU", "T");
+		geneticCode.put("ACC", "T");
+		geneticCode.put("ACA", "T");
+		geneticCode.put("ACG", "T");
+
+		geneticCode.put("UGG", "W");
+
+		geneticCode.put("UAU", "Y");
+		geneticCode.put("UAC", "Y");
+
+		geneticCode.put("GUU", "V");
+		geneticCode.put("GUC", "V");
+		geneticCode.put("GUA", "V");
+		geneticCode.put("GUG", "V");
+	}
+
 	/*
 	 * Counts how many duplicate sequences were found when running
 	 * getUniqueSequences()
@@ -137,23 +228,23 @@ public class SequenceSetUtils
 
 		SimpleAlignment alignment = ss.getAlignment(indices, 1, ss.getLength(),
 			true);
-		
+
 		ParamEstimateThread pest = new ParamEstimateThread(alignment);
 		pest.go();
-		
-		SequenceSetParams params = ss.getParams();
-		
-		if(params.isDNA()) {
+
+		SequenceSetProperties params = ss.getProps();
+
+		if(params.isNucleotides()) {
 			params.setAlpha(pest.getAlpha());
 			params.setKappa(pest.getKappa());
 			params.setAvgDist(pest.getAvgDistance());
 			params.setFreqs(pest.getFreqs());
 			params.setTRatio(pest.getRatio());
 		}
-		
+
 		if(!pest.wasCancelled())
-		    params.setNeedCalculation(false);
-		
+		    params.needsCalculation(false);
+
 		//WinMainMenuBar.aFileSave.setEnabled(true);
 		//WinMainMenuBar.aVamCommit.setEnabled(true);
 		ProjectState.setDataChanged();
@@ -255,7 +346,7 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.getParams().isDNA() == false)
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -276,7 +367,7 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.getParams().isDNA() == false)
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -296,8 +387,8 @@ public class SequenceSetUtils
 
 			return false;
 		}
-		
-		if (ss.getParams().isDNA() == false)
+
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -317,8 +408,8 @@ public class SequenceSetUtils
 
 			return false;
 		}
-		
-		if (ss.getParams().isDNA() == false)
+
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
@@ -328,7 +419,7 @@ public class SequenceSetUtils
 
 		return true;
 	}
-	
+
 	public static boolean canRunCodeML(SequenceSet ss)
 	{
 		if (ss.getSelectedSequences().length < 3)
@@ -339,30 +430,30 @@ public class SequenceSetUtils
 			return false;
 		}
 
-		if (ss.getParams().isDNA() == false)
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public static boolean canRunCodonW(SequenceSet ss)
 	{
-		if (ss.getParams().isDNA() == false)
+		if (ss.getProps().isNucleotides() == false)
 		{
 			String msg = Text.get("SequenceSetUtils.msg04");
 			MsgBox.msg(msg, MsgBox.ERR);
 
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	// Creates and returns a new SequenceSet using the existing SequenceSet from
 	// the alignment data. This method will *only* use sequences and partitions
 	// that have been selected by the user
@@ -401,7 +492,39 @@ public class SequenceSetUtils
 
 		return ssNew;
 	}
-	
+
+	public static SequenceSet getConcatenatedSequenceSet(AlignmentData data, int[] seqs, List<Annotation> annos)
+	{
+		SequenceSet ssOld = data.getSequenceSet();
+		SequenceSet ssNew = new SequenceSet();
+
+		// For each sequence we want to add...
+		for (int seqIndex : seqs)
+		{
+			// Create (and add) the sequence to the set
+			Sequence seqOld = ssOld.getSequence(seqIndex);
+			Sequence seqNew = new Sequence(seqOld.getName());
+
+			// Concatenate and add each partition to the sequence's data
+			StringBuffer buffer = seqNew.getBuffer();
+
+			// We either want to concatenate together the regions...
+			if (annos!=null && annos.size() > 0)
+			{
+				for(Annotation anno: annos) {
+					buffer.append(seqOld.getPartition(anno.getStart(), anno.getEnd()));
+				}
+			}
+			// Or just make a new alignment that contains the same as before
+			else
+				buffer.append(seqOld.getSequence());
+
+			ssNew.addSequence(seqNew);
+		}
+
+		return ssNew;
+	}
+
 	public static SequenceSet getCodonPosSequenceSet(AlignmentData data, int codonPos, int[] seqs) {
 		SequenceSet ssOld = data.getSequenceSet();
 		SequenceSet ssNew = new SequenceSet();
@@ -418,9 +541,88 @@ public class SequenceSetUtils
 			}
 			ssNew.addSequence(seqNew);
 		}
-		
+
 		return ssNew;
 	}
+
+	public static int determineSeqType(SequenceSet ss) {
+		return determineSeqType(ss, 0, ss.getLength()-1);
+	}
+
+	public static int determineSeqType(SequenceSet ss, int start, int end) {
+		int a=0, c=0, g=0, t=0, u=0, n=0, aa=0;
+		int count = 0;
+
+		Vector<Sequence> sequences = ss.getSequences();
+		for (Sequence seq : sequences)
+		{
+			StringBuffer buffer = seq.getBuffer();
+
+			for (int ch = start; ch <= end; ch++)
+			{
+				count++;
+
+				switch (buffer.charAt(ch))
+				{
+				case 'A':
+					a++;
+					break;
+				case 'C':
+					c++;
+					break;
+				case 'G':
+					g++;
+					break;
+				case 'T':
+					t++;
+					break;
+				case 'U':
+					u++;
+					break;
+				case 'N':
+					n++;
+					break;
+
+				case 'R':
+				case 'D':
+				case 'E':
+				case 'Q':
+				case 'H':
+				case 'I':
+				case 'L':
+				case 'K':
+				case 'M':
+				case 'F':
+				case 'P':
+				case 'S':
+				case 'W':
+				case 'Y':
+				case 'V':
+					aa++;
+					break;
+
+				default:
+					count--;
+					break;
+				}
+			}
+		}
+
+		boolean rna = (u>0) && (((double)(a+c+g+t+u+n)/(double)count)>0.9);
+		boolean dna = (u==0) && (((double)(a+c+g+t+u+n)/(double)count)>0.9);
+		boolean protein = ((double)(aa+n)/(double)count)>0.5;
+
+		if(rna && !dna && !protein)
+			return SequenceSetProperties.TYPE_RNA;
+		if(dna && !rna && !protein)
+			return SequenceSetProperties.TYPE_DNA;
+		if(protein && !rna && !dna)
+			return SequenceSetProperties.TYPE_PROTEIN;
+
+		else
+			return SequenceSetProperties.TYPE_UNKNOWN;
+	}
+
 	/*
 	 * Simple algorithm to decide if the alignment is DNA or protein. Basically,
 	 * if 85% of the data (not including '-' or '?') is ACGT U or N then the
@@ -477,29 +679,29 @@ public class SequenceSetUtils
 		else
 			return false;
 	}
-	
+
 	public static SequenceSet getBootstrappedSequenceSet(SequenceSet ss, int blockSize, boolean shuffleSeqOrder) {
 		int nSeqs = ss.getSize();
 		int nNucs = ss.getLength();
 		int nBlocks = nNucs/blockSize;
-		
+
 		char[][] bs = new char[nSeqs][nNucs];
-		
+
 		for(int i=0; i<nBlocks; i++) {
 			int rand = SequenceSetUtils.random.nextInt(nBlocks);
-			
+
 			for(int j=0; j<blockSize; j++) {
 				int nucPos = i*blockSize+j;
 				int randNucPos = rand*blockSize+j;
-				
+
 				for(int seqPos=0; seqPos<nSeqs; seqPos++) {
 					Sequence seq = ss.getSequence(seqPos);
 					bs[seqPos][nucPos] = seq.getSequence().charAt(randNucPos);
 				}
-				
+
 			}
 		}
-		
+
 		SequenceSet result = new SequenceSet(ss);
 		result.reset();
 		for(int i=0; i<nSeqs; i++) {
@@ -510,11 +712,11 @@ public class SequenceSetUtils
 			newSeq.setSequence(new String(bs[i]));
 			result.addSequence(newSeq, false);
 		}
-		
+
 		if(shuffleSeqOrder) {
 			SequenceSet shuffled = new SequenceSet(ss);
 			shuffled.reset();
-			
+
 			while(result.getSequences().size()>0) {
 				int size = result.getSequences().size();
 				int rand = SequenceSetUtils.random.nextInt(size);
@@ -522,10 +724,50 @@ public class SequenceSetUtils
 				result.getSequences().remove(rand);
 				shuffled.addSequence(seq, false);
 			}
-			
+
 			return shuffled;
 		}
-		
+
 		return result;
+	}
+
+	public static Sequence translate(Sequence seq, List<Annotation> annos) {
+		Sequence trans = new Sequence(seq.getName());
+		StringBuffer transBuffer = trans.getBuffer();
+		String seqString = seq.getPartition(annos);
+		for(int i=0; i<seqString.length(); i+=3) {
+			String codon = seqString.substring(i, (i+3));
+			codon = codon.replaceAll("T", "U");
+			if(codon.equals("---"))
+				transBuffer.append('-');
+			else {
+				String aa = geneticCode.get(codon);
+				if(aa!=null)
+					transBuffer.append(aa);
+				else
+					transBuffer.append("?");
+			}
+		}
+		return trans;
+	}
+
+	public static SequenceSet translate(SequenceSet ss, List<Annotation> annos, boolean justSel) {
+		SequenceSet trans = new SequenceSet();
+		if(justSel) {
+			int[] selSeqs = ss.getSelectedSequences();
+			for(int i=0; i<selSeqs.length; i++) {
+				Sequence transSeq = translate(ss.getSequence(selSeqs[i]), annos);
+				if(transSeq!=null)
+					trans.addSequence(transSeq);
+			}
+		}
+		else {
+			for(Sequence seq : ss.getSequences()) {
+				Sequence transSeq = translate(seq, annos);
+				if(transSeq!=null)
+					trans.addSequence(transSeq);
+			}
+		}
+		return trans;
 	}
 }

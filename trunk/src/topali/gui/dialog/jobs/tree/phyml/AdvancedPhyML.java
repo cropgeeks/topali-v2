@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.data.models.*;
-import topali.gui.Prefs;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
 
@@ -37,9 +36,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
     }
     
     private void initValues() {
-    	SequenceSetParams params = ss.getParams();
+    	SequenceSetProperties params = ss.getProps();
 		
-		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.getParams().isDNA());
+		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.getProps().isNucleotides());
 		String[] models = new String[mlist.size()];
 		for(int i=0; i<mlist.size(); i++)
 				models[i] = mlist.get(i).getName();
@@ -49,7 +48,7 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		
 		Model m = params.getModel();
 		if(Utils.indexof(models, m.getName())==-1) {
-			if(ss.getParams().isDNA())
+			if(ss.getProps().isNucleotides())
 				m = ModelManager.getInstance().generateModel(Prefs.phyml_dnamodel_default, m.isGamma(), m.isInv());
 			else
 				m = ModelManager.getInstance().generateModel(Prefs.phyml_proteinmodel_default, m.isGamma(), m.isInv());
@@ -65,9 +64,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
     }
     
     public void setDefaults() {
-		SequenceSetParams params = ss.getParams();
+		SequenceSetProperties params = ss.getProps();
 		
-		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.getParams().isDNA());
+		List<Model> mlist = ModelManager.getInstance().listPhymlModels(ss.getProps().isNucleotides());
 		String[] models = new String[mlist.size()];
 		for(int i=0; i<mlist.size(); i++)
 				models[i] = mlist.get(i).getName();
@@ -77,7 +76,7 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		
 		Model m = params.getModel();
 		if(Utils.indexof(models, m.getName())==-1) {
-			if(ss.getParams().isDNA())
+			if(ss.getProps().isNucleotides())
 				m = ModelManager.getInstance().generateModel(Prefs.phyml_dnamodel_default, m.isGamma(), m.isInv());
 			else
 				m = ModelManager.getInstance().generateModel(Prefs.phyml_proteinmodel_default, m.isGamma(), m.isInv());
@@ -102,9 +101,9 @@ public class AdvancedPhyML extends javax.swing.JPanel {
 		boolean g = gamma.isSelected();
 		boolean i = inv.isSelected();
 		
-		ss.getParams().setModel(ModelManager.getInstance().generateModel(name, g, i));
+		ss.getProps().setModel(ModelManager.getInstance().generateModel(name, g, i));
 		
-		result.model = ss.getParams().getModel();
+		result.model = ss.getProps().getModel();
 		result.bootstrap = (Integer)bootstraps.getValue();
 		
 		Prefs.phyml_bootstrap = result.bootstrap;
@@ -130,91 +129,91 @@ public class AdvancedPhyML extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         bootstraps = new javax.swing.JSpinner();
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings"))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings")));
 
-        jLabel8.setText(Text.get("Substitution_Model")); // NOI18N
+        jLabel8.setText(Text.get("Substitution_Model"));
 
         subModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         subModel.setToolTipText("null");
 
-        jLabel9.setText(Text.get("Invariant_Sites")); // NOI18N
+        jLabel9.setText(Text.get("Invariant_Sites"));
 
         inv.setToolTipText("null");
         inv.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         inv.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jLabel10.setText(Text.get("Gamma")); // NOI18N
+        jLabel10.setText(Text.get("Gamma"));
 
         gamma.setToolTipText("null");
         gamma.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         gamma.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel8))
-                .addGap(44, 44, 44)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inv)
-                    .addComponent(gamma)
-                    .addComponent(subModel, 0, 236, Short.MAX_VALUE))
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel9)
+                    .add(jLabel10)
+                    .add(jLabel8))
+                .add(44, 44, 44)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(inv)
+                    .add(gamma)
+                    .add(subModel, 0, 277, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(subModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inv)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gamma))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .add(0, 0, 0)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(subModel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(inv)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(gamma))
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(jLabel8)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel9)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel10)))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel6.setText(Text.get("Bootstrap_Runs")); // NOI18N
+        jLabel6.setText(Text.get("Bootstrap_Runs"));
 
         bootstraps.setToolTipText("null");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel6)
-                .addGap(57, 57, 57)
-                .addComponent(bootstraps, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                .addGap(26, 26, 26))
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(29, 29, 29)
+                .add(jLabel6)
+                .add(57, 57, 57)
+                .add(bootstraps, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                .add(26, 26, 26))
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(bootstraps, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel6)
+                    .add(bootstraps, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

@@ -7,7 +7,7 @@ package topali.data;
 
 import java.util.*;
 
-import topali.data.models.Model;
+import topali.data.models.*;
 
 public class ModelTestResult extends AlignmentResult 
 {
@@ -38,5 +38,9 @@ public class ModelTestResult extends AlignmentResult
 	public ModelTestResult(int id) {
 		super(id);
 		isResubmittable = true;
+	}
+	
+	public void sortModels(int mode) {
+		Collections.sort(models, new ModelComparator(mode));
 	}
 }

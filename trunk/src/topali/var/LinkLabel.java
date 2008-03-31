@@ -29,27 +29,27 @@ public class LinkLabel extends JLabel implements MouseListener
 
 	public void mouseClicked(MouseEvent e)
 	{
-		try
-		{
-			boolean success = Utils.openBrowser(url);
-			if(!success) {
-				JOptionPane.showMessageDialog(TOPALi.winMain, "Sorry, the Java Desktop API is not yet supported on your system.", "Error", JOptionPane.ERROR_MESSAGE);
-				log.warn("Java Desktop API not supported on this system.");
-			}
-		} catch (Exception e1)
-		{
-			log.warn("Opening browser for "+url+" failed!", e1);
-		}
+//		try
+//		{
+//			boolean success = Utils.openBrowser(url);
+//			if(!success) {
+//				JOptionPane.showMessageDialog(TOPALi.winMain, "Sorry, the Java Desktop API is not yet supported on your system.", "Error", JOptionPane.ERROR_MESSAGE);
+//				log.warn("Java Desktop API not supported on this system.");
+//			}
+//		} catch (Exception e1)
+//		{
+//			log.warn("Opening browser for "+url+" failed!", e1);
+//		}
 	}
 
 	public void mouseEntered(MouseEvent e)
 	{
-		setCursor(new Cursor(Cursor.HAND_CURSOR));
+		//setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e)
 	{
-		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		//setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mousePressed(MouseEvent e)

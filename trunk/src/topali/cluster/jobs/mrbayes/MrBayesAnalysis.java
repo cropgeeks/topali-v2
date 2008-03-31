@@ -33,7 +33,7 @@ public class MrBayesAnalysis extends AnalysisThread
 		super(runDir);
 	}
 
-	@Override
+	
 	public void runAnalysis() throws Exception
 	{
 		// Read the MBTreeResult
@@ -71,7 +71,7 @@ public class MrBayesAnalysis extends AnalysisThread
 	{
 		MBCmdBuilder cmd = new MBCmdBuilder();
 		cmd.burnin = result.burnin;
-		cmd.dna = ss.getParams().isDNA();
+		cmd.dna = ss.getProps().isNucleotides();
 		cmd.ngen = result.nGen;
 		cmd.nruns = result.nRuns;
 		cmd.sampleFreq = result.sampleFreq;

@@ -25,7 +25,6 @@ import topali.fileio.*;
 import topali.gui.dialog.LoadMonitorDialog;
 import topali.i18n.Text;
 import topali.mod.Filters;
-import topali.var.SysPrefs;
 import scri.commons.gui.MsgBox;
 
 public class Project extends DataObject 
@@ -67,6 +66,7 @@ public class Project extends DataObject
 	void removeDataSet(AlignmentData data)
 	{
 		datasets.remove(data);
+		
 		for(PropertyChangeListener l : changeListeners) {
 			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", data, null));
 		}
@@ -75,7 +75,7 @@ public class Project extends DataObject
 	public AlignmentData containsDatasetBySeqs(AlignmentData data) {
 		AlignmentData match = null;
 		for(AlignmentData data2 : datasets) {
-			if(data.name.equals(data2.name) && data.getSequenceSet().getSize()==data2.getSequenceSet().getSize()) {
+			if(data.getName().equals(data2.getName()) && data.getSequenceSet().getSize()==data2.getSequenceSet().getSize()) {
 				SequenceSet ss = data.getSequenceSet();
 				SequenceSet ss2 = data2.getSequenceSet();
 				boolean seqMatch = true;

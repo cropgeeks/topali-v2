@@ -6,6 +6,8 @@
 package topali.data;
 
 import java.beans.*;
+import java.util.List;
+import topali.data.annotations.Annotation;
 
 // Class representing a single sequence.
 public class Sequence extends DataObject 
@@ -64,7 +66,7 @@ public class Sequence extends DataObject
 			l.propertyChange(new PropertyChangeEvent(this, "sequence", oldValue, sequence));
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return name;
@@ -100,6 +102,17 @@ public class Sequence extends DataObject
 		return sequence.substring(start - 1, end);
 	}
 
+	public String getPartition(List<Annotation> annos) {
+		if(annos==null || annos.size()==0)
+			return sequence.toString();
+		
+		StringBuffer result = new StringBuffer();
+		for(Annotation anno : annos) {
+			result.append(sequence.substring(anno.getStart()-1, anno.getEnd()));
+		}
+		return result.toString();
+	}
+	
 	public boolean isEqualTo(Sequence seq)
 	{
 		if (sequence.toString().equals(seq.getBuffer().toString()))

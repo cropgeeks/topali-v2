@@ -30,7 +30,7 @@ public class FastMLAnalysis extends AnalysisThread
 		super(runDir);
 	}
 	
-	@Override
+	
 	public void runAnalysis() throws Exception
 	{
 		result = (FastMLResult) Castor

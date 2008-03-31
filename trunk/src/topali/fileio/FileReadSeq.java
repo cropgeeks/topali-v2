@@ -11,8 +11,7 @@ import org.apache.log4j.Logger;
 
 import scri.commons.bioinf.ReadSeq;
 import scri.commons.gui.MsgBox;
-import topali.data.SequenceSet;
-import topali.var.SysPrefs;
+import topali.data.*;
 
 // Unlike the other classes, this one just pretends to be a file-format handler,
 // delegating the actual work to the ReadSeq util class (web/cgi service)
@@ -25,7 +24,7 @@ class FileReadSeq extends FileGeneric
 		ss = s;
 	}
 
-	@Override
+	
 	public boolean readFile(File file)
 	{
 		File outFile = new File(SysPrefs.tmpDir, "tmpAlignment");
@@ -53,7 +52,7 @@ class FileReadSeq extends FileGeneric
 		return success;
 	}
 
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

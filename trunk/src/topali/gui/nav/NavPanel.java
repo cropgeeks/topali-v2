@@ -165,7 +165,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 		isLoadingProject = true;
 		for (AlignmentData data : datasets)
 		{
-			String str = Text.get("LoadMonitorDialog.gui05", data.name);
+			String str = Text.get("LoadMonitorDialog.gui05", data.getName());
 			LoadMonitorDialog.setLabel(str);
 
 			addAlignmentFolder(data);
@@ -211,6 +211,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 	{
 		DefaultMutableTreeNode node = getSelectedNavNode();
 		model.removeNodeFromParent(node);
+		seqNodes.remove(node);
 
 		int location = splits.getDividerLocation();
 		splits.setRightComponent(blankPanel);
@@ -477,8 +478,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 			iNode.setMenus();
 
 			// And update everything based upon it
-			WinMain.rDialog.setAlignmentData(data);
 			WinMain.ovDialog.setAlignmentPanel(getCurrentAlignmentPanel(data));
+			WinMain.annoDialog.setData(data);
 			WinMainTipsPanel.setDisplayedTips(iNode.getTipsKey());
 		} else
 			splits.setRightComponent(blankPanel);
@@ -590,7 +591,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
-		@Override
+		
 		protected void handlePopup(int x, int y)
 		{
 
@@ -622,6 +623,8 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				// For "dataset" nodes
 				if (obj instanceof DataSetNodeFolder)
 				{
+					add(aAlgnRename, KeyEvent.VK_N, 0, 0, 0,
+							true);
 					add(aAlgnRemove, Icons.REMOVE16, KeyEvent.VK_R, 0, 0, 0,
 							true);
 				}
@@ -653,6 +656,11 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 				removeResultsNode((AlignmentData) evt.getSource(),
 						(AnalysisResult) evt.getOldValue());
 			}
+		}
+		
+		else if(evt.getPropertyName().equals("name")) {
+			//AlignmentData name changed
+			repaint();
 		}
 
 	}

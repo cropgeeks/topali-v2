@@ -11,11 +11,10 @@ import java.util.*;
 import javax.swing.*;
 import pal.alignment.SimpleAlignment;
 import scri.commons.gui.MsgBox;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.TOPALiHelp;
 import topali.i18n.Text;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 
 public class SummaryDialog extends JDialog implements ActionListener, Runnable
 {
@@ -43,7 +42,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowOpened(WindowEvent e)
 			{
 				startThread();
@@ -125,7 +124,7 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 				.getAllSequences()));
 
 		Object[] str = new Object[6];
-		str[0] = data.name;
+		str[0] = data.getName();
 		str[1] = "" + alignment.getLength();
 		str[2] = "" + alignment.getIdCount();
 		str[3] = alignment.getDataType().getDescription();
@@ -142,10 +141,10 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			summaryInfo += Text.get("SummaryDialog.gui05");
 
 		// Additional DNA-specific information
-		if (ss.getParams().isDNA())
+		if (ss.getProps().isNucleotides())
 		{
 			// Do we need to estimate parameters?
-			if (ss.getParams().isNeedCalculation())
+			if (ss.getProps().needsCalculation())
 				SequenceSetUtils.estimateParameters(ss);
 
 			int[] values = getDNACharCount();
@@ -155,10 +154,10 @@ public class SummaryDialog extends JDialog implements ActionListener, Runnable
 			for (int i = 0; i < values.length; i++)
 				str[i] = values[i] / total * 100;
 
-			str[5] = ss.getParams().getAvgDist();
-			str[6] = ss.getParams().getTRatio();
-			str[7] = ss.getParams().getAlpha();
-			str[8] = ss.getParams().getKappa();
+			str[5] = ss.getProps().getAvgDist();
+			str[6] = ss.getProps().getTRatio();
+			str[7] = ss.getProps().getAlpha();
+			str[8] = ss.getProps().getKappa();
 
 			summaryInfo += Text.get("SummaryDialog.gui06", str);
 		}

@@ -279,7 +279,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		return sb.toString();
 	}
 
-	@Override
+	
 	public String getAnalysisInfo()
 	{
 		CodeMLResult res = (CodeMLResult) result;
@@ -317,13 +317,13 @@ public class CMLBranchResultPanel extends ResultPanel
 		return sb.toString();
 	}
 
-	@Override
+	
 	public void setThreshold(double t)
 	{
 		// There is no threshold to set
 	}
 
-	@Override
+	
 	public Printable[] getPrintables()
 	{
 		Printable[] p = new Printable[2];

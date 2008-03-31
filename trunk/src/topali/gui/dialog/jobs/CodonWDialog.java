@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class CodonWDialog extends JDialog implements ActionListener
@@ -87,7 +86,7 @@ public class CodonWDialog extends JDialog implements ActionListener
 			int runNum = data.getTracker().getCwRunCount() + 1;
 			data.getTracker().setCwRunCount(runNum);
 			result.guiName = "CodonW " + runNum;
-			result.jobName = "CodonW on " + data.name
+			result.jobName = "CodonW on " + data.getName()
 					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";
 

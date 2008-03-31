@@ -21,179 +21,179 @@ import topali.gui.*;
 import topali.i18n.Text;
 import scri.commons.gui.MsgBox;
 
-public class TreePreviewPanel extends JPanel implements ActionListener
-{
-	 Logger log = Logger.getLogger(this.getClass());
-	
-	// Current alignment data and partition info
-	private SequenceSet ss;
-
-	private boolean drawPreview = true;
-
-	private boolean slowWarningShown = false;
-
-	// The actual tree (PAL object)
-	private Tree tree;
-
-	// Object used to paint the tree
-	private TreePainter painter;
-
-	private RegionDialog dialog;
-
-	private JCheckBox checkCurrent = null;
-
-	private TreeCanvas canvas = new TreeCanvas();
-
-	public TreePreviewPanel()
-	{
-		checkCurrent = new JCheckBox(Text.get("TreePreviewPanel.gui01"), Prefs.gui_preview_current);
-		checkCurrent.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 5));
-		checkCurrent.addActionListener(this);
-		checkCurrent.setMnemonic(KeyEvent.VK_O);
-		checkCurrent.setToolTipText(Text.get("TreePreviewPanel.gui02"));
-
-		setLayout(new BorderLayout(5, 5));
-		add(checkCurrent, BorderLayout.NORTH);
-		add(canvas, BorderLayout.CENTER);
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == checkCurrent)
-		{
-			Prefs.gui_preview_current = checkCurrent.isSelected();
-			dialog.updateTreePreview(false);
-		}
-	}
-
-	public void clearTree()
-	{
-		painter = null;
-		canvas.repaint();
-	}
-
-	public void setAlignmentData(AlignmentData data)
-	{
-		if (data == null)
-			clearTree();
-		else
-		{
-			ss = data.getSequenceSet();
-		}
-	}
-
-	public void createTree(final int start, final int end)
-	{
-		if (drawPreview == false)
-		{
-			repaint();
-			return;
-		}
-
-		Runnable r = new Runnable()
-		{
-			public void run()
-			{
-
-				// Work out which sequences to use
-				int[] indices = null;
-				if (Prefs.gui_preview_current)
-					indices = ss.getSelectedSequences();
-				else
-					indices = ss.getAllSequences();
-
-				// Can only draw trees with at least 3 sequences
-				if (indices.length < 3)
-				{
-					clearTree();
-					return;
-				}
-
-				// Create a PAL alignment that can be used to create this tree
-				long s = System.currentTimeMillis();
-				SimpleAlignment alignment = ss.getAlignment(indices, start,
-						end, false);
-				TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getParams().isDNA(), false);
-				
-				tree = tc.getTree();
-				
-				long e = System.currentTimeMillis();
-				log.info("Tree creation " + (e - s) + "ms");
-
-				if (tree != null)
-				{
-					painter = new TreePainterNormal(tree, "", false);
-					painter.setPenWidth(1);
-				} else
-					painter = null;
-
-				canvas.repaint();
-
-				// If the time taken to generate the tree is greater than 1.25
-				// seconds
-				if ((e - s) >= 1250 && slowWarningShown == false)
-				{
-					String msg = Text.get("TreePreviewPanel.msg01");
-
-					// Offer to disable generating tree previews for this
-					// alignment
-					if (MsgBox.yesno(msg, 0) == JOptionPane.YES_OPTION)
-					{
-						drawPreview = false;
-						repaint();
-					}
-
-					slowWarningShown = true;
-				}
-
-			}
-		};
-
-		// We could use "new Thread(r).start()" to run this, but it's actually
-		// better to hang the GUI - otherwise the user could return to another
-		// alignment before the tree is displayed - real PITA if that happens
-		SwingUtilities.invokeLater(r);
-	}
-
-	class TreeCanvas extends JPanel
-	{
-		TreeCanvas()
-		{
-			setBackground(Color.white);
-			setBorder(BorderFactory.createLineBorder(Icons.blueBorder));
-			setToolTipText(Text.get("TreePreviewPanel.gui03"));
-
-			// Mouse listener to catch double-click events
-			addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					if (e.getClickCount() == 2)
-					{
-						drawPreview = !drawPreview;
-						dialog.updateTreePreview(false);
-					}
-				}
-			});
-		}
-
-		@Override
-		public void paintComponent(Graphics g)
-		{
-			super.paintComponent(g);
-
-			if (painter != null)
-			{
-				if (Prefs.gui_tree_unique_cols)
-				{
-					painter.setColouriser(ss
-							.getNameColouriser(Prefs.gui_color_seed));
-					painter.setUsingColor(false);
-				}
-
-				painter.paint(g, getSize().width, getSize().height);
-			}
-		}
-	}
-}
+//public class TreePreviewPanel extends JPanel implements ActionListener
+//{
+//	 Logger log = Logger.getLogger(this.getClass());
+//	
+//	// Current alignment data and partition info
+//	private SequenceSet ss;
+//
+//	private boolean drawPreview = true;
+//
+//	private boolean slowWarningShown = false;
+//
+//	// The actual tree (PAL object)
+//	private Tree tree;
+//
+//	// Object used to paint the tree
+//	private TreePainter painter;
+//
+//	private RegionDialog dialog;
+//
+//	private JCheckBox checkCurrent = null;
+//
+//	private TreeCanvas canvas = new TreeCanvas();
+//
+//	public TreePreviewPanel()
+//	{
+//		checkCurrent = new JCheckBox(Text.get("TreePreviewPanel.gui01"), Prefs.gui_preview_current);
+//		checkCurrent.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 5));
+//		checkCurrent.addActionListener(this);
+//		checkCurrent.setMnemonic(KeyEvent.VK_O);
+//		checkCurrent.setToolTipText(Text.get("TreePreviewPanel.gui02"));
+//
+//		setLayout(new BorderLayout(5, 5));
+//		add(checkCurrent, BorderLayout.NORTH);
+//		add(canvas, BorderLayout.CENTER);
+//	}
+//
+//	public void actionPerformed(ActionEvent e)
+//	{
+//		if (e.getSource() == checkCurrent)
+//		{
+//			Prefs.gui_preview_current = checkCurrent.isSelected();
+//			dialog.updateTreePreview(false);
+//		}
+//	}
+//
+//	public void clearTree()
+//	{
+//		painter = null;
+//		canvas.repaint();
+//	}
+//
+//	public void setAlignmentData(AlignmentData data)
+//	{
+//		if (data == null)
+//			clearTree();
+//		else
+//		{
+//			ss = data.getSequenceSet();
+//		}
+//	}
+//
+//	public void createTree(final int start, final int end)
+//	{
+//		if (drawPreview == false)
+//		{
+//			repaint();
+//			return;
+//		}
+//
+//		Runnable r = new Runnable()
+//		{
+//			public void run()
+//			{
+//
+//				// Work out which sequences to use
+//				int[] indices = null;
+//				if (Prefs.gui_preview_current)
+//					indices = ss.getSelectedSequences();
+//				else
+//					indices = ss.getAllSequences();
+//
+//				// Can only draw trees with at least 3 sequences
+//				if (indices.length < 3)
+//				{
+//					clearTree();
+//					return;
+//				}
+//
+//				// Create a PAL alignment that can be used to create this tree
+//				long s = System.currentTimeMillis();
+//				SimpleAlignment alignment = ss.getAlignment(indices, start,
+//						end, false);
+//				TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getProps().isNucleotides(), false);
+//				
+//				tree = tc.getTree();
+//				
+//				long e = System.currentTimeMillis();
+//				log.info("Tree creation " + (e - s) + "ms");
+//
+//				if (tree != null)
+//				{
+//					painter = new TreePainterNormal(tree, "", false);
+//					painter.setPenWidth(1);
+//				} else
+//					painter = null;
+//
+//				canvas.repaint();
+//
+//				// If the time taken to generate the tree is greater than 1.25
+//				// seconds
+//				if ((e - s) >= 1250 && slowWarningShown == false)
+//				{
+//					String msg = Text.get("TreePreviewPanel.msg01");
+//
+//					// Offer to disable generating tree previews for this
+//					// alignment
+//					if (MsgBox.yesno(msg, 0) == JOptionPane.YES_OPTION)
+//					{
+//						drawPreview = false;
+//						repaint();
+//					}
+//
+//					slowWarningShown = true;
+//				}
+//
+//			}
+//		};
+//
+//		// We could use "new Thread(r).start()" to run this, but it's actually
+//		// better to hang the GUI - otherwise the user could return to another
+//		// alignment before the tree is displayed - real PITA if that happens
+//		SwingUtilities.invokeLater(r);
+//	}
+//
+//	class TreeCanvas extends JPanel
+//	{
+//		TreeCanvas()
+//		{
+//			setBackground(Color.white);
+//			setBorder(BorderFactory.createLineBorder(Icons.blueBorder));
+//			setToolTipText(Text.get("TreePreviewPanel.gui03"));
+//
+//			// Mouse listener to catch double-click events
+//			addMouseListener(new MouseAdapter()
+//			{
+//				
+//				public void mouseClicked(MouseEvent e)
+//				{
+//					if (e.getClickCount() == 2)
+//					{
+//						drawPreview = !drawPreview;
+//						dialog.updateTreePreview(false);
+//					}
+//				}
+//			});
+//		}
+//
+//		
+//		public void paintComponent(Graphics g)
+//		{
+//			super.paintComponent(g);
+//
+//			if (painter != null)
+//			{
+//				if (Prefs.gui_tree_unique_cols)
+//				{
+//					painter.setColouriser(ss
+//							.getNameColouriser(Prefs.gui_color_seed));
+//					painter.setUsingColor(false);
+//				}
+//
+//				painter.paint(g, getSize().width, getSize().height);
+//			}
+//		}
+//	}
+//}

@@ -2,6 +2,7 @@ package topali.gui;
 
 import java.io.BufferedInputStream;
 import java.net.*;
+import topali.data.Prefs;
 
 /**
  * Simple util class to send HTTP get requests back to our server for logging

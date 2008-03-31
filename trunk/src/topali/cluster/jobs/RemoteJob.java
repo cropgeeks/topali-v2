@@ -11,7 +11,7 @@ import org.apache.axis.client.*;
 import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
-import topali.data.AnalysisResult;
+import topali.data.*;
 import topali.gui.*;
 
 public abstract class RemoteJob extends AnalysisJob
@@ -101,7 +101,7 @@ public abstract class RemoteJob extends AnalysisJob
 		return call;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		call = getCall();
@@ -113,7 +113,7 @@ public abstract class RemoteJob extends AnalysisJob
 		Tracker.log("COMPLETED", result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob() throws Exception
 	{
 		call = getCall();

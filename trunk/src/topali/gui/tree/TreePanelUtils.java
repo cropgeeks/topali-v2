@@ -14,7 +14,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 import pal.tree.*;
 import scri.commons.gui.MsgBox;
-import topali.data.SequenceCluster;
+import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.mod.Filters;

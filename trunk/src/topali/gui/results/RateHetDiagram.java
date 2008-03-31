@@ -43,7 +43,7 @@ public class RateHetDiagram extends JPanel
 		this.model = model;
 	}
 	
-	@Override
+	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
@@ -122,13 +122,13 @@ public class RateHetDiagram extends JPanel
 		return y;
 	}
 	
-	@Override
+	
 	public Dimension getPreferredSize()
 	{
 		return getMinimumSize();
 	}
 	
-	@Override
+	
 	public Dimension getMinimumSize()
 	{
 		return new Dimension(basicWidth, basicHeight);

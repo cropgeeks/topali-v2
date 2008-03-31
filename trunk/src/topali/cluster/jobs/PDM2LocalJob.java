@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.pdm2.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 
 public class PDM2LocalJob extends AnalysisJob
 {
@@ -33,7 +32,7 @@ public class PDM2LocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -52,13 +51,13 @@ public class PDM2LocalJob extends AnalysisJob
 		}
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new PDMMonitor(jobDir).getPercentageComplete();
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new PDMMonitor(jobDir).getResult();
@@ -67,7 +66,7 @@ public class PDM2LocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -77,7 +76,7 @@ public class PDM2LocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

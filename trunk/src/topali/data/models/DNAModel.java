@@ -231,19 +231,19 @@ public class DNAModel extends Model
 		return Utils.arrayToString(baseFreqs, ',');
 	}
 	
-	@Override
+	
 	public int getFreeParameters() {
 		int result = getNBaseFreqGroups() + getNSubRateGroups();
 		return result - 2;
 	}
 
-	@Override
+	
 	public int getRankingScore()
 	{
 		return getFreeParameters();
 	}
 	
-	@Override
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(super.toString());

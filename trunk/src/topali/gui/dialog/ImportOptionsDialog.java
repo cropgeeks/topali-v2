@@ -10,22 +10,27 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import topali.data.Prefs;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
 
 public class ImportOptionsDialog extends JDialog implements ActionListener
 {
-	private JRadioButton rImport, rCDNA, rAlign, rMulti, rExSeq;
+	private JRadioButton rImport, rCDNA, rAlign, rMulti, rJoin, rExSeq;
 
 	private JButton bOK, bCancel;
 
 	private boolean isOK = false;
 
+	private WinMain winMain;
+	
 	public ImportOptionsDialog(WinMain winMain)
 	{
 		super(winMain, Text.get("import_alignment.1"), true);
 
+		this.winMain = winMain;
+		
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
 		getRootPane().setDefaultButton(bOK);
@@ -54,7 +59,18 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		rMulti = new JRadioButton(Text.get("import_alignment.5"));
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
-
+		
+		rJoin = new JRadioButton(Text.get("import_alignment.8"));
+		rJoin.setMnemonic(KeyEvent.VK_J);
+		rJoin.addMouseListener(dblListener);
+		if(winMain.getProject()!=null && winMain.getProject().getDatasets().size()>1)
+			rJoin.setEnabled(true);
+		else {
+			rJoin.setEnabled(false);
+			if(rJoin.isSelected())
+				rImport.setSelected(true);
+		}
+		
 		rExSeq = new JRadioButton(Text.get("import_alignment.6"));
 		rExSeq.setMnemonic(KeyEvent.VK_T);
 		rExSeq.addMouseListener(dblListener);
@@ -76,6 +92,9 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		case 4:
 			rExSeq.setSelected(true);
 			break;
+		case 5:
+			rJoin.setSelected(true);
+			break;
 		}
 
 		ButtonGroup group = new ButtonGroup();
@@ -83,15 +102,17 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		group.add(rCDNA);
 		group.add(rAlign);
 		group.add(rMulti);
+		group.add(rJoin);
 		group.add(rExSeq);
 
-		JPanel p1 = new JPanel(new GridLayout(5, 1));
+		JPanel p1 = new JPanel(new GridLayout(6, 1));
 		p1.setBorder(BorderFactory
 				.createTitledBorder(Text.get("import_alignment.7")));
 		p1.add(rImport);
 		p1.add(rCDNA);
 		p1.add(rAlign);
 		p1.add(rMulti);
+		p1.add(rJoin);
 		p1.add(rExSeq);
 
 		JPanel p2 = new JPanel(new BorderLayout());
@@ -126,6 +147,8 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 				Prefs.gui_import_method = 3;
 			else if (rExSeq.isSelected())
 				Prefs.gui_import_method = 4;
+			else if(rJoin.isSelected())
+				Prefs.gui_import_method = 5;
 			isOK = true;
 			setVisible(false);
 		}
@@ -138,7 +161,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	private class DblClickListener extends MouseAdapter
 	{
-		@Override
+		
 		public void mouseClicked(MouseEvent e)
 		{
 			if (e.getClickCount() != 2)

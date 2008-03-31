@@ -276,7 +276,7 @@ public class TrackingLogParser
 			}
 		}
 
-		@Override
+		
 		public int compareTo(User o)
 		{
 			if(o.jobs>this.jobs)
@@ -297,7 +297,7 @@ public class TrackingLogParser
 			
 		}
 
-		@Override
+		
 		public int compareTo(Location o)
 		{
 			if(o.count>this.count)

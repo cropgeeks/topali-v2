@@ -11,12 +11,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 
 public class DSSSettingsDialog extends JDialog implements ActionListener
 {
@@ -100,7 +98,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.isRemote = makeRemote;
 
 		// Do we need to estimate parameters?
-		if (ss.getParams().isNeedCalculation())
+		if (ss.getProps().needsCalculation())
 			SequenceSetUtils.estimateParameters(ss);
 
 		result.window = Prefs.dss_window;
@@ -113,15 +111,15 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.power = Prefs.dss_power;
 		result.passCount = Prefs.dss_pass_count;
 		result.avgDist = topali.cluster.jobs.dss.analysis.DSS.getAverageDistance(ss);
-		result.tRatio = ss.getParams().getTRatio();
-		result.alpha = ss.getParams().getAlpha();
+		result.tRatio = ss.getProps().getTRatio();
+		result.alpha = ss.getProps().getAlpha();
 
 		result.gapThreshold = Prefs.dss_gap_threshold;
 
 		int runNum = data.getTracker().getDssRunCount() + 1;
 		data.getTracker().setDssRunCount(runNum);
 		result.guiName = "DSS " + runNum;
-		result.jobName = "DSS Analysis " + runNum + " on " + data.name + " ("
+		result.jobName = "DSS Analysis " + runNum + " on " + data.getName() + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 	}

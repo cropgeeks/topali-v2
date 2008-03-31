@@ -18,6 +18,7 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.xy.*;
 import topali.data.*;
+import topali.data.annotations.PartitionAnnotation;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.ASCIIGraph;
@@ -106,12 +107,12 @@ public class GraphPanel extends DataVisPanel {
 			return this.chartPanel.getNucleotideFromPoint(xPos);
 	}
 
-	@Override
+	
 	public Dimension getPreferredSize() {
 		return chartPanel.getPreferredSize();
 	}
 
-	@Override
+	
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		if (!enabled)
@@ -190,12 +191,12 @@ public class GraphPanel extends DataVisPanel {
 		yAxis.setUpperBound(max);
 	}
 
-	@Override
+	
 	public Printable getPrintable() {
 		return (Printable) chartPanel;
 	}
 
-	@Override
+	
 	public Object getExportable(int format) {
 		switch (format) {
 			case FORMAT_TXT:
@@ -258,12 +259,12 @@ public class GraphPanel extends DataVisPanel {
 			// this.setDisplayToolTips(true);
 		}
 
-		@Override
+		
 		public JToolTip createToolTip() {
 			return tooltip;
 		}
 
-		@Override
+		
 		public String getToolTipText(MouseEvent e) {
 			int x = e.getX(), y = e.getY();
 
@@ -292,7 +293,7 @@ public class GraphPanel extends DataVisPanel {
 			WinMainStatusBar.setText(msg);
 		}
 
-		@Override
+		
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getX(), y = e.getY();
 
@@ -309,7 +310,7 @@ public class GraphPanel extends DataVisPanel {
 			this.getParent().dispatchEvent(e2);
 		}
 
-		@Override
+		
 		public void mouseDragged(MouseEvent e) {
 			if (e.isMetaDown() == false && !e.isPopupTrigger()) {
 				int x = e.getX(), y = e.getY();
@@ -319,7 +320,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		@Override
+		
 		public void mousePressed(MouseEvent e) {
 			// Do nothing if the click is outside of the canvas area
 			if (getCanvasArea().contains(e.getX(), e.getY()) == false)
@@ -331,7 +332,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		@Override
+		
 		public void mouseClicked(MouseEvent e) {
 			if (e.isMetaDown() == false && !e.isPopupTrigger()) {
 				aData.setActiveRegion(-1, -1);
@@ -339,7 +340,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		@Override
+		
 		public void mouseExited(MouseEvent e) {
 			WinMainStatusBar.setText("");
 		}
@@ -373,7 +374,7 @@ public class GraphPanel extends DataVisPanel {
 
 		// alpha
 
-		@Override
+		
 		public void paintComponent(Graphics graphics) {
 			/*
 			 * int nS = pAnnotations.getCurrentStart(); int nE =
@@ -465,32 +466,22 @@ public class GraphPanel extends DataVisPanel {
 			JMenuItem addPart = new JMenuItem();
 			addPart.setAction(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					WinMain.rDialog.addRegion(aData.getActiveRegionS(), aData.getActiveRegionE(), PartitionAnnotations.class);
+					aData.getAnnotations().add(new PartitionAnnotation(aData.getActiveRegionS(), aData.getActiveRegionE()));
 				}
 			});
 			addPart.setText(Text.get("aAlgnAddPartition"));
 			addPart.setMnemonic(KeyEvent.VK_P);
 
-			JMenuItem addCodReg = new JMenuItem();
-			addCodReg.setAction(new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					WinMain.rDialog.addRegion(aData.getActiveRegionS(), aData.getActiveRegionE(), CDSAnnotations.class);
-				}
-			});
-			addCodReg.setText(Text.get("aAlgnAddCDS"));
-			addCodReg.setMnemonic(KeyEvent.VK_C);
-
 			annotate = new JMenu(Text.get("menuAlgnAnnotate"));
 			annotate.setIcon(Icons.ADD_PARTITION);
 			annotate.add(addPart);
-			annotate.add(addCodReg);
 			p.add(annotate);
 
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0, false);
 			add(aAnlsQuickTree, Icons.CREATE_TREE, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK, 9, true);
 		}
 
-		@Override
+		
 		protected void handlePopup(int x, int y) {
 
 		}

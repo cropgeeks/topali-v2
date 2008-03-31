@@ -34,7 +34,7 @@ public class PartitionAnnotations extends RegionAnnotations
 		this.alignmentLength = alignmentLength;
 	}
 
-	@Override
+	
 	protected AnnotationElement create(int position)
 	{
 		return new AnnotationElement(AnnotationElement.PARTITION, position);

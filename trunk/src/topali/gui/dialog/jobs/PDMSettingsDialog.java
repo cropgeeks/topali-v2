@@ -11,12 +11,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 
 public class PDMSettingsDialog extends JDialog implements ActionListener
 {
@@ -99,7 +97,7 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		result.isRemote = makeRemote;
 
 		// Do we need to estimate parameters?
-		if (ss.getParams().isNeedCalculation())
+		if (ss.getProps().needsCalculation())
 			SequenceSetUtils.estimateParameters(ss);
 
 		result.pdm_window = Prefs.pdm_window;
@@ -126,16 +124,16 @@ public class PDMSettingsDialog extends JDialog implements ActionListener
 		result.pdm_theta_tune = Prefs.pdm_theta_tune;
 		result.pdm_beta_tune = Prefs.pdm_beta_tune;
 
-		result.frequencies = ss.getParams().getFreqs();
-		result.kappa = ss.getParams().getKappa();
+		result.frequencies = ss.getProps().getFreqs();
+		result.kappa = ss.getProps().getKappa();
 
-		result.tRatio = ss.getParams().getTRatio();
-		result.alpha = ss.getParams().getAlpha();
+		result.tRatio = ss.getProps().getTRatio();
+		result.alpha = ss.getProps().getAlpha();
 
 		int runNum = data.getTracker().getPdmRunCount() + 1;
 		data.getTracker().setPdmRunCount(runNum);
 		result.guiName = "PDM " + runNum;
-		result.jobName = "PDM Analysis " + runNum + " on " + data.name + " ("
+		result.jobName = "PDM Analysis " + runNum + " on " + data.getName() + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 	}

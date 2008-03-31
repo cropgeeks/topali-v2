@@ -30,25 +30,25 @@ public class SequenceSetNode extends INode
 		alignmentPanel = new AlignmentPanel(data);
 	}
 
-	@Override
+	
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_ALN;
 	}
 
-	@Override
+	
 	public String getHelpKey()
 	{
 		return "view_alignment";
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return nodeName;
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return alignmentPanel;
@@ -60,7 +60,7 @@ public class SequenceSetNode extends INode
 		return alignmentPanel;
 	}
 
-	@Override
+	
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
@@ -74,7 +74,7 @@ public class SequenceSetNode extends INode
 		aAlgnFindSeq.setEnabled(true);
 		aAlgnGoTo.setEnabled(true);
 
-		boolean dna = data.getSequenceSet().getParams().isDNA();
+		boolean dna = data.getSequenceSet().getProps().isNucleotides();
 		aAnlsRunPDM.setEnabled(dna);
 		aAnlsRunPDM2.setEnabled(dna);
 		aAnlsRunHMM.setEnabled(dna);

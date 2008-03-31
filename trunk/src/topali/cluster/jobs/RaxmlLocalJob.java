@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.raxml.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class RaxmlLocalJob extends AnalysisJob
@@ -40,13 +39,13 @@ public class RaxmlLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 	
-	@Override
+	
 	public void ws_cancelJob() throws Exception
 	{
 		LocalJobs.cancelJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -56,7 +55,7 @@ public class RaxmlLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		if(monitor==null)
@@ -67,7 +66,7 @@ public class RaxmlLocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		if(monitor==null)
@@ -76,7 +75,7 @@ public class RaxmlLocalJob extends AnalysisJob
 		return monitor.getPercentageComplete();
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try

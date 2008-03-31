@@ -17,8 +17,9 @@ import pal.alignment.*;
 import pal.datatype.*;
 import pal.gui.NameColouriser;
 import pal.misc.Identifier;
-import topali.analyses.SequenceSetUtils;
+import topali.data.annotations.Annotation;
 import topali.fileio.*;
+import topali.var.utils.SequenceSetUtils;
 
 // Class representing a set of sequences (an alignment).
 public class SequenceSet extends DataObject
@@ -35,14 +36,14 @@ public class SequenceSet extends DataObject
 	private int[] selectedSeqs = new int[0];
 
 	// Various parameters related to this alignment that must be computed
-	private SequenceSetParams params = null;
+	private SequenceSetProperties props = null;
 	
 	// Runtime only objects (ie, not saved to XML)
 	private NameColouriser nameColouriser;
 
 	public SequenceSet()
 	{
-		params = new SequenceSetParams();
+		props = new SequenceSetProperties();
 	}
 
 	public SequenceSet(SequenceSet ss) {
@@ -50,7 +51,7 @@ public class SequenceSet extends DataObject
 		this.length=ss.length;
 		this.overview=ss.overview;
 		this.selectedSeqs=ss.selectedSeqs.clone();
-		this.params = new SequenceSetParams(ss.params);
+		this.props = new SequenceSetProperties(ss.props);
 		for(int i=0; i<ss.sequences.size(); i++) {
 			addSequence(new Sequence(ss.getSequence(i)));
 		}
@@ -99,7 +100,6 @@ public class SequenceSet extends DataObject
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
-		this.params.setAligned(isAligned);
 		checkValidity();
 	}
 
@@ -183,6 +183,14 @@ public class SequenceSet extends DataObject
 		return sequences.get(index);
 	}
 
+	public Sequence getSequence(String name) {
+		for(Sequence seq: sequences) {
+			if(seq.getName().equals(name))
+				return seq;
+		}
+		return null;
+	}
+	
 	/* Returns the number of sequences in this alignment. */
 	public int getSize()
 	{
@@ -211,14 +219,14 @@ public class SequenceSet extends DataObject
 		return "";
 	}
 
-	public SequenceSetParams getParams()
+	public SequenceSetProperties getProps()
 	{
-		return params;
+		return props;
 	}
 
-	public void setParams(SequenceSetParams params)
+	public void setProps(SequenceSetProperties params)
 	{
-		this.params = params;
+		this.props = params;
 	}
 
 	/* Returns the current index of the Sequence with the given name. */
@@ -275,7 +283,7 @@ public class SequenceSet extends DataObject
 
 		// 3) Is it a proper alignment, (are all sequences of the same length?)
 		// (ignore check if we're not expecting an alignment)
-		if (params.isAligned())
+		if (props.isAligned())
 		{
 			int size = sequences.get(0).getLength();
 			for (Sequence seq : sequences)
@@ -308,9 +316,9 @@ public class SequenceSet extends DataObject
 		length = (sequences.get(0)).getLength();
 
 		// if (resetSelection)
-		params.setDNA(SequenceSetUtils.isSequenceDNA(this)); 
+		props.setType(SequenceSetUtils.determineSeqType(this));
 
-		if (params.isAligned())
+		if (props.isAligned())
 			calculateOverview();
 
 		/*
@@ -391,7 +399,30 @@ public class SequenceSet extends DataObject
 			seqs[i] = getSequence(indices[i]).getPartition(start, end);
 
 		// Create a PAL alignment
-		if (params.isDNA())
+		if (props.isNucleotides())
+			return new SimpleAlignment(ids, seqs, new Nucleotides());
+		else
+			return new SimpleAlignment(ids, seqs, new AminoAcids());
+	}
+	
+	public SimpleAlignment getAlignment(int[] indices, Annotation anno,
+			boolean useSafeNames)
+	{
+		// Determine names
+		Identifier[] ids = new Identifier[indices.length];
+		for (int i = 0; i < indices.length; i++)
+			if (useSafeNames)
+				ids[i] = new Identifier(getSequence(indices[i]).safeName);
+			else
+				ids[i] = new Identifier(getSequence(indices[i]).getName());
+
+		// Determine data
+		String[] seqs = new String[indices.length];
+		for (int i = 0; i < indices.length; i++)
+			seqs[i] = getSequence(indices[i]).getPartition(anno.getStart(), anno.getEnd());
+
+		// Create a PAL alignment
+		if (anno.getSeqType()==SequenceSetProperties.TYPE_DNA || anno.getSeqType()==SequenceSetProperties.TYPE_RNA)
 			return new SimpleAlignment(ids, seqs, new Nucleotides());
 		else
 			return new SimpleAlignment(ids, seqs, new AminoAcids());
@@ -537,7 +568,7 @@ public class SequenceSet extends DataObject
 	}
 	
 	public boolean isCodons() {
-		if(!params.isDNA())
+		if(!props.isNucleotides())
 			return false;
 		
 		if(sequences.size()>0)
@@ -562,7 +593,7 @@ public class SequenceSet extends DataObject
 		}
 	}
 	
-	@Override
+	
 	public void addChangeListener(PropertyChangeListener listener)
 	{
 		super.addChangeListener(listener);
@@ -570,7 +601,7 @@ public class SequenceSet extends DataObject
 			s.addChangeListener(listener);
 	}
 
-	@Override
+	
 	public int hashCode()
 	{
 		final int prime = 31;
@@ -581,7 +612,7 @@ public class SequenceSet extends DataObject
 		return result;
 	}
 	
-	@Override
+	
 	public boolean equals(Object obj)
 	{
 		if (this == obj)

@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.dss.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 
 public class DSSLocalJob extends AnalysisJob
 {
@@ -33,7 +32,7 @@ public class DSSLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -50,13 +49,13 @@ public class DSSLocalJob extends AnalysisJob
 		}
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new DSSMonitor(jobDir).getPercentageComplete();
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new DSSMonitor(jobDir).getResult();
@@ -65,7 +64,7 @@ public class DSSLocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -75,7 +74,7 @@ public class DSSLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

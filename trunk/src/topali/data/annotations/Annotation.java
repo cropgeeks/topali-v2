@@ -5,52 +5,96 @@
 
 package topali.data.annotations;
 
-import java.util.List;
+import topali.data.*;
 
-public abstract class Annotation implements Comparable<Annotation>
-{
-	static List<Class<Annotation>> availableAnnotationTypes = null;
-	
-	int pos = -1;
-	int length = -1;
-	String comment = "";
+
+public abstract class Annotation extends DataObject implements Comparable<Annotation>
+{	
+	int start = -1;
+	int end = -1;
+	String comment = null;
+
+	int seqType = SequenceSetProperties.TYPE_UNKNOWN;
+	int linkId = -1;
 
 	public Annotation() {
 	}
 	
-	public Annotation(int pos, int length) {
-		this.pos = pos;
-		this.length = length;
+	public Annotation(int id) {
+		super(id);
 	}
 	
-	public int getPos()
+	public Annotation(int start, int end) {
+		this.start = start;
+		this.end = end;
+	}
+	
+	public Annotation(Annotation anno) {
+		this.start = anno.getStart();
+		this.end = anno.getEnd();
+		this.comment = anno.getComment();
+		this.seqType = anno.getSeqType();
+		this.linkId = anno.getLinkId();
+	}
+	
+	public int getStart()
 	{
-		return pos;
+		return start;
 	}
 
-	public void setPos(int pos)
+	public void setStart(int start)
 	{
-		this.pos = pos;
+		this.start = start;
 	}
 
-	public int getLength()
+	public int getEnd()
 	{
-		return length;
+		return end;
 	}
 
-	public void setLength(int length)
+	public void setEnd(int end)
 	{
-		this.length = length;
+		this.end = end;
 	}
 
-	@Override
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public int getLinkId() {
+		return linkId;
+	}
+
+	public void setLinkId(int linkId) {
+		this.linkId = linkId;
+	}
+	
+	public int getSeqType() {
+		return seqType;
+	}
+
+	public void setSeqType(int seqType) {
+		this.seqType = seqType;
+	}
+
 	public int compareTo(Annotation o)
 	{
-		if(o.pos>this.pos)
-			return 1;
-		else if(o.pos<this.pos)
+		if(o.start>this.start)
 			return -1;
+		else if(o.start<this.start)
+			return 1;
 		else
 			return 0;
 	}
+
+	
+	public String toString() {
+		return start+" - "+end;
+	}
+	
+	
 }

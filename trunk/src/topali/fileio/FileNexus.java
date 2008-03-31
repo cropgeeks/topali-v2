@@ -32,7 +32,7 @@ class FileNexus extends FileGeneric
 		ss = s;
 	}
 
-	@Override
+	
 	public boolean readFile(File file)
 	{
 		try
@@ -206,7 +206,7 @@ class FileNexus extends FileGeneric
 			return seqs.get(index);
 	}
 
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{
@@ -254,7 +254,7 @@ class FileNexus extends FileGeneric
 		out.write("begin characters;" + nl);
 		out.write("  dimensions nchar=" + (end - start + 1) + ";" + nl);
 		out.write("  format" + nl + "    interleave" + nl);
-		if (ss.getParams().isDNA())
+		if (ss.getProps().isNucleotides())
 		{
 			out.write("    datatype=DNA" + nl);
 			out.write("    symbols=\"A C G T U\"" + nl);

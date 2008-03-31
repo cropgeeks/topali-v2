@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 import topali.cluster.JobStatus;
 import topali.cluster.jobs.AnalysisJob;
-import topali.data.AnalysisResult;
+import topali.data.*;
 import scri.commons.gui.MsgBox;
 
 public class JobsThread extends Thread
@@ -31,7 +31,7 @@ public class JobsThread extends Thread
 		timerThread.start();
 	}
 
-	@Override
+	
 	public void run()
 	{
 		while (true)
@@ -207,7 +207,7 @@ public class JobsThread extends Thread
 
 	class TimerThread extends Thread
 	{
-		@Override
+		
 		public void run()
 		{
 			while (true)

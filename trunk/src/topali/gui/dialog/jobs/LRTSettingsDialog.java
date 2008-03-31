@@ -10,11 +10,10 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 import scri.commons.gui.*;
 
 public class LRTSettingsDialog extends JDialog implements ActionListener
@@ -93,7 +92,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.isRemote = makeRemote;
 
 		// Do we need to estimate parameters?
-		if (ss.getParams().isNeedCalculation())
+		if (ss.getProps().needsCalculation())
 			SequenceSetUtils.estimateParameters(ss);
 
 		result.window = Prefs.lrt_window;
@@ -103,14 +102,14 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.runs = Prefs.lrt_runs + 1;
 
 		result.method = Prefs.lrt_method;
-		result.tRatio = ss.getParams().getTRatio();
-		result.alpha = ss.getParams().getAlpha();
+		result.tRatio = ss.getProps().getTRatio();
+		result.alpha = ss.getProps().getAlpha();
 		result.gapThreshold = Prefs.lrt_gap_threshold;
 
 		int runNum = data.getTracker().getLrtRunCount() + 1;
 		data.getTracker().setLrtRunCount(runNum);
 		result.guiName = "LRT " + runNum;
-		result.jobName = "LRT Analysis " + runNum + " on " + data.name + " ("
+		result.jobName = "LRT Analysis " + runNum + " on " + data.getName() + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 	}

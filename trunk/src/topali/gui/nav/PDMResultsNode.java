@@ -24,25 +24,25 @@ public class PDMResultsNode extends ResultsNode
 		panel = new PDMResultPanel(data, result);
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return result.guiName;
 	}
 
-	@Override
+	
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_NONE;
 	}
 
-	@Override
+	
 	public String getHelpKey()
 	{
 		return "pdm_method";
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return panel;

@@ -46,7 +46,7 @@ public class SequenceCluster
 		return sequences.get(0);
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		String eol = System.getProperty("line.separator");

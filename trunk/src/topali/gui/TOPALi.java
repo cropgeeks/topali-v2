@@ -16,10 +16,10 @@ import org.apache.log4j.*;
 import scri.commons.multicore.TokenManager;
 import scri.commons.gui.*;
 import topali.cluster.LocalJobs;
+import topali.data.*;
 import topali.i18n.Text;
 import topali.logging.GracefulShutdownHandler;
 import topali.mod.*;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 import apple.dts.samplecode.osxadapter.*;
@@ -265,7 +265,6 @@ public class TOPALi extends Applet implements Application
 		Prefs.gui_win_height = winMain.getHeight();
 		Prefs.gui_splits_loc = WinMain.splits.getDividerLocation();
 		WinMain.ovDialog.exit();
-		WinMain.rDialog.exit();
 
 		// Save the preferences
 		doEncryption(false);
@@ -275,17 +274,17 @@ public class TOPALi extends Applet implements Application
 		// Utils.emptyScratch();
 
 		if(errorLog!=null) {
-		    try {
-			Utils.openMailclient("help@topali.org", "TOPALi Bug Report", errorLog);
-		    } catch (Exception e) {
-			e.printStackTrace();
-			Utils.copyToClipboard(errorLog);
-			String msg = "Could not launch eMail client...\n" +
-					"The error information has been copied to the clipboard.\n" +
-					"Please send an eMail manually to help@topali.org,\n" +
-					"pasting in your clipboard content. Thank you!";
-			JOptionPane.showMessageDialog(null, msg, "Error opening eMail client", JOptionPane.ERROR_MESSAGE);
-		    }
+//		    try {
+//			Utils.openMailclient("help@topali.org", "TOPALi Bug Report", errorLog);
+//		    } catch (Exception e) {
+//			e.printStackTrace();
+//			Utils.copyToClipboard(errorLog);
+//			String msg = "Could not launch eMail client...\n" +
+//					"The error information has been copied to the clipboard.\n" +
+//					"Please send an eMail manually to help@topali.org,\n" +
+//					"pasting in your clipboard content. Thank you!";
+//			JOptionPane.showMessageDialog(null, msg, "Error opening eMail client", JOptionPane.ERROR_MESSAGE);
+//		    }
 		}
 
 		// And exit

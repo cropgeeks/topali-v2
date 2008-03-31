@@ -44,7 +44,7 @@ public class LRTResultPanel extends ResultPanel {
 	}
     }
 
-    @Override
+    
     public String getAnalysisInfo() {
 	LRTResult result = (LRTResult) this.result;
 	String str = new String(result.guiName);
@@ -65,12 +65,12 @@ public class LRTResultPanel extends ResultPanel {
 	return str;
     }
 
-    @Override
+    
     public Printable[] getPrintables() {
 	return new Printable[] { graph.getPrintable() };
     }
 
-    @Override
+    
     public void setThreshold(double t) {
 	LRTResult res = (LRTResult) this.result;
 	if (res.thresholds == null)

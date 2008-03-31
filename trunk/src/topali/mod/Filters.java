@@ -236,7 +236,7 @@ public class Filters extends FileFilter
 	 * @see #getExtension
 	 * @see FileFilter#accepts
 	 */
-	@Override
+	
 	public boolean accept(File f)
 	{
 		if (f != null)
@@ -308,7 +308,7 @@ public class Filters extends FileFilter
 	 * @see isExtensionListInDescription
 	 * @see FileFilter#getDescription
 	 */
-	@Override
+	
 	public String getDescription()
 	{
 		if (fullDescription == null)

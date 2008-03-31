@@ -26,7 +26,7 @@ public abstract class ResultsNode extends INode implements IPrintable
 		return result;
 	}
 
-	@Override
+	
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);

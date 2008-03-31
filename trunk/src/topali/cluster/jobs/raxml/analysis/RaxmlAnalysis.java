@@ -24,7 +24,7 @@ public class RaxmlAnalysis extends AnalysisThread
 		new RaxmlAnalysis(new File(args[0])).run();
 	}
 	
-	@Override
+	
 	public void runAnalysis() throws Exception
 	{
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");

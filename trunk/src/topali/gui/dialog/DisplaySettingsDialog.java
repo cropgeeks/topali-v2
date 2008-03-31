@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import topali.data.Prefs;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
@@ -229,7 +230,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		list.addMouseListener(new MouseAdapter()
 		{
-			@Override
+			
 			public void mouseClicked(MouseEvent e)
 			{
 				changeColor();
@@ -238,7 +239,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		list.addKeyListener(new KeyAdapter()
 		{
-			@Override
+			
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -433,7 +434,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 			return this;
 		}
 
-		@Override
+		
 		public Insets getInsets(Insets i)
 		{
 			return new Insets(0, 3, 0, 0);
@@ -522,7 +523,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 				return old;
 		}
 
-		@Override
+		
 		public String toString()
 		{
 			return name;

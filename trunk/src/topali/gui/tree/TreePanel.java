@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import pal.gui.*;
 import pal.tree.Tree;
 import topali.data.*;
-import topali.gui.Prefs;
 import topali.var.utils.Utils;
 
 class TreePanel extends JPanel
@@ -197,7 +196,7 @@ class TreePanel extends JPanel
 					painter.getPreferredSize().height + 50);
 		}
 
-		@Override
+		
 		public Dimension getPreferredSize()
 		{
 			if (tree.isSizedToFit)
@@ -206,7 +205,7 @@ class TreePanel extends JPanel
 				return dimension;
 		}
 
-		@Override
+		
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

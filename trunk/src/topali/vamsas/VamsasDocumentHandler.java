@@ -69,7 +69,7 @@ public class VamsasDocumentHandler
 				int option = JOptionPane
 						.showConfirmDialog(
 								null,
-								"Found DNA with a corresponding protein alignment\n("+cdnas.name+").\n\nCreate a protein guided DNA alignment?",
+								"Found DNA with a corresponding protein alignment\n("+cdnas.getName()+").\n\nCreate a protein guided DNA alignment?",
 								"Guided alignment", JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE);
 				if (option == JOptionPane.YES_OPTION) {
@@ -129,7 +129,7 @@ public class VamsasDocumentHandler
 				alignName = prop.getContent();
 				break;
 			}
-		tAlign.name = alignName;
+		tAlign.setName(alignName);
 
 		SequenceSet ss = new SequenceSet();
 		ss.setOverview("");
@@ -144,7 +144,7 @@ public class VamsasDocumentHandler
 			ss.checkValidity();
 		} catch (AlignmentLoadException e)
 		{
-			log.warn("Alignment '" + tAlign.name + "' is not aligned!", e);
+			log.warn("Alignment '" + tAlign.getName() + "' is not aligned!", e);
 			return null;
 		}
 		
@@ -232,7 +232,7 @@ public class VamsasDocumentHandler
 			Property title = new Property();
 			title.setName("title");
 			title.setType("string");
-			title.setContent(currentTAlignment.name);
+			title.setContent(currentTAlignment.getName());
 			currentVAlignment.addProperty(title);
 			currentVAlignment.addProperty(createTIDProp(currentTAlignment));
 			for (Sequence seq : currentTAlignment.getSequenceSet()
@@ -292,7 +292,7 @@ public class VamsasDocumentHandler
 				vdsSeq.setSequence(seq.getSequence().replaceAll("\\W", ""));
 				vdsSeq.setStart(1);
 				vdsSeq.setEnd(vdsSeq.getSequence().length());
-				if (currentTAlignment.getSequenceSet().getParams().isDNA())
+				if (currentTAlignment.getSequenceSet().getProps().isNucleotides())
 					vdsSeq.setDictionary(SymbolDictionary.STANDARD_NA);
 				else
 					vdsSeq.setDictionary(SymbolDictionary.STANDARD_AA);

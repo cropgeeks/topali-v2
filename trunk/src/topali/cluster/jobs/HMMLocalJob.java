@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.hmm.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 
 public class HMMLocalJob extends AnalysisJob
 {
@@ -33,7 +32,7 @@ public class HMMLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -51,13 +50,13 @@ public class HMMLocalJob extends AnalysisJob
 		}
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		return new CollateHMM(jobDir).getPercentageComplete();
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = new CollateHMM(jobDir).getResult();
@@ -66,7 +65,7 @@ public class HMMLocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -76,7 +75,7 @@ public class HMMLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

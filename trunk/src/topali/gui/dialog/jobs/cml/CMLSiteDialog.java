@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.WinMain;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class CMLSiteDialog extends JDialog implements ActionListener
@@ -54,7 +53,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bCancel);
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel)
@@ -79,7 +78,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 			int runNum = data.getTracker().getCodeMLRunCount() + 1;
 			data.getTracker().setCodeMLRunCount(runNum);
 			res.guiName = "PAML Sites " + runNum;
-			res.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.name
+			res.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.getName()
 					+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";
 

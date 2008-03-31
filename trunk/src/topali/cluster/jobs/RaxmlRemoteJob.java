@@ -31,7 +31,7 @@ public class RaxmlRemoteJob extends RemoteJob
 			result.startTime = System.currentTimeMillis();
 	}
 	
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();
@@ -45,7 +45,7 @@ public class RaxmlRemoteJob extends RemoteJob
 		return result;
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
@@ -59,7 +59,7 @@ public class RaxmlRemoteJob extends RemoteJob
 		return status;
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		determineClusterURL("-parallel");

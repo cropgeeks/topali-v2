@@ -49,7 +49,7 @@ public class TreeCanvas extends JPanel
 		}
 	}
 	
-	@Override
+	
 	public void paint(Graphics g)
 	{
 		super.paintComponent(g);

@@ -29,7 +29,7 @@ public class PhymlAnalysis extends AnalysisThread
 		super(runDir);
 	}
 	
-	@Override
+	
 	public void runAnalysis() throws Exception
 	{
 		File resultFile = new File(runDir, "submit.xml");
@@ -46,7 +46,7 @@ public class PhymlAnalysis extends AnalysisThread
 	}
 	
 	private String treeInfo() {
-		SequenceSetParams para = ss.getParams();
+		SequenceSetProperties para = ss.getProps();
 		
 		StringBuffer sb = new StringBuffer();
 		 sb.append("Sub. Model: "+para.getModel().getName()+"\n");

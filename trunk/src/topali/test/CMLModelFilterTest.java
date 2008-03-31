@@ -18,7 +18,7 @@ public class CMLModelFilterTest extends TestCase
 	
 	Vector<CMLModel> expected;
 	
-	@Override
+	
 	protected void setUp() throws Exception
 	{
 		result = new CodeMLResult();

@@ -38,7 +38,7 @@ public class ProgressBarWaitDialog extends WaitDialog implements DesktopThreadOb
 		pack();
 	}
 
-	@Override
+	
 	public void update(Object obj)
 	{
 		if(obj instanceof Integer) {

@@ -10,9 +10,9 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import topali.data.SysPrefs;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class TreeToolTipDialog extends JDialog implements ActionListener

@@ -24,7 +24,7 @@ public class ModelTestAnalysis extends AnalysisThread
 		new ModelTestAnalysis(new File(args[0])).run();
 	}
 	
-	@Override
+	
 	public void runAnalysis() throws Exception
 	{
 		File resultFile = new File(runDir.getParentFile(), "submit.xml");

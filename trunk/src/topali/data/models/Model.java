@@ -209,7 +209,7 @@ public abstract class Model extends DataObject implements Comparable<Model>
 		return (mod.getName().equals(this.getName()) && mod.isGamma()==this.isGamma() && mod.isInv()==this.isInv());
 	}
 	
-	@Override
+	
 	public int compareTo(Model o)
 	{
 		if(o.getRankingScore()>this.getRankingScore())
@@ -220,7 +220,7 @@ public abstract class Model extends DataObject implements Comparable<Model>
 			return 0;
 	}
 	
-	@Override
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getName()+" (");
