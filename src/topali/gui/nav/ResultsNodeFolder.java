@@ -22,20 +22,20 @@ public class ResultsNodeFolder extends INode
 		super(data);
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return Text.get("ResultsNode.gui01");
 	}
 
-	@Override
+	
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
 
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		int count = 0;

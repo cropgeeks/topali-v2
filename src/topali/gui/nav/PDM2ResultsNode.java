@@ -22,25 +22,25 @@ public class PDM2ResultsNode extends ResultsNode
 		//panel = new PDM2ResultsPanel(data, result);
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return result.guiName;
 	}
 
-	@Override
+	
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_NONE;
 	}
 
-	@Override
+	
 	public String getHelpKey()
 	{
 		return "pdm2_method";
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return panel;

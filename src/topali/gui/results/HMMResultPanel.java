@@ -84,7 +84,7 @@ public class HMMResultPanel extends ResultPanel {
 	}
     }
 
-    @Override
+    
     public String getAnalysisInfo() {
 	HMMResult result = (HMMResult) this.result;
 
@@ -126,12 +126,12 @@ public class HMMResultPanel extends ResultPanel {
 	return str;
     }
 
-    @Override
+    
     public Printable[] getPrintables() {
 	return new Printable[] { graph1.getPrintable(), graph2.getPrintable(), graph3.getPrintable() };
     }
 
-    @Override
+    
     public void setThreshold(double t) {
 	((AlignmentResult) result).threshold = t;
 	graph1.setThreshold(t);

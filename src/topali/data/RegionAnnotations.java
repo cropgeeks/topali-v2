@@ -160,7 +160,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 			this.e = e;
 		}
 
-		@Override
+		
 		public String toString()
 		{
 			return "Nucleotide " + s + " to Nucleotide " + e;
@@ -196,7 +196,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 			this.e = e;
 		}
 
-		@Override
+		
 		public int hashCode()
 		{
 			final int PRIME = 31;
@@ -206,7 +206,7 @@ public abstract class RegionAnnotations extends AlignmentAnnotations implements
 			return result;
 		}
 
-		@Override
+		
 		public boolean equals(Object obj)
 		{
 			if (this == obj)

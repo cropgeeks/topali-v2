@@ -30,7 +30,7 @@ public abstract class AnalysisThread extends TokenThread
 
 	// The run wraps the main runAnalysis() method, catching any exceptions and
 	// writing an error file to the runDir for this task
-	@Override
+	
 	public void run()
 	{
 		try

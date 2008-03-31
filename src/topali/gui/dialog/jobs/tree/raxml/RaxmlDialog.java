@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.*;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class RaxmlDialog extends JDialog implements ActionListener
@@ -112,7 +111,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		return this.result;
 	}
 	
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource()==basic.bCodonpos && basic.bCodonpos.isSelected()) {

@@ -11,7 +11,6 @@ import topali.cluster.*;
 import topali.cluster.jobs.modeltest.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class ModelTestLocalJob extends AnalysisJob
@@ -48,13 +47,13 @@ public class ModelTestLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 	
-	@Override
+	
 	public void ws_cancelJob() throws Exception
 	{
 		LocalJobs.cancelJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -64,7 +63,7 @@ public class ModelTestLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		if(mon==null)
@@ -75,7 +74,7 @@ public class ModelTestLocalJob extends AnalysisJob
 		return result;
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		if(mon==null)
@@ -84,7 +83,7 @@ public class ModelTestLocalJob extends AnalysisJob
 		return mon.getPercentageComplete();
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try

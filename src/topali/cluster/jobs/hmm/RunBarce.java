@@ -23,7 +23,7 @@ class RunBarce extends StoppableProcess
 		runCancelMonitor();
 	}
 
-	@Override
+	
 	public void run() throws Exception
 	{
 		HMMResult hmmResult = (HMMResult) result;
@@ -159,7 +159,7 @@ class RunBarce extends StoppableProcess
 			super(in, showOutput);
 		}
 
-		@Override
+		
 		public void run()
 		{
 			File pctDir = new File(jobDir, "percent");

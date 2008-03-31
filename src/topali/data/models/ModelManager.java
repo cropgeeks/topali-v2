@@ -147,6 +147,10 @@ public class ModelManager
 		return m;
 	}
 	
+	public Model copy(Model model) {
+		return generateModel(model.name, model.isGamma(), model.isInv());
+	}
+	
 	/**
 	 * Get the closest related model to a certain model
 	 * @param m

@@ -17,7 +17,7 @@ class FileFasta extends FileGeneric
 		ss = s;
 	}
 
-	@Override
+	
 	public boolean readFile(File file)
 	{
 		try
@@ -66,7 +66,7 @@ class FileFasta extends FileGeneric
 		return success;
 	}
 	
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

@@ -30,7 +30,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 		instance = this;
 	}
 
-	@Override
+	
 	protected void append(LoggingEvent arg0)
 	{
 		String mes = this.layout.format(arg0);
@@ -74,11 +74,11 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(l, BorderLayout.NORTH);
 		p.add(new JScrollPane(ta), BorderLayout.CENTER);
-		JCheckBox mail = null;
+		//JCheckBox mail = null;
 		if (shutdown) {
 		    JPanel p2 = new JPanel(new BorderLayout());
-		    mail = new JCheckBox("Send eMail to the developers");
-		    p2.add(mail, BorderLayout.NORTH);
+		    //mail = new JCheckBox("Send eMail to the developers");
+		    //p2.add(mail, BorderLayout.NORTH);
 		    p2.add(new JLabel("<html><br>Save changes and shutdown application?</html>"),
 					BorderLayout.SOUTH);
 		    p.add(p2, BorderLayout.SOUTH);
@@ -92,9 +92,9 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 			if (x == JOptionPane.YES_OPTION)
 			{
 				if (application != null) {
-				    if(mail.isSelected())
-					application.shutdown("TOPALi v2 ("+TOPALi.VERSION+") Bug Report:\n\n"+sb.toString());
-				    else
+				    //if(mail.isSelected())
+					//application.shutdown("TOPALi v2 ("+TOPALi.VERSION+") Bug Report:\n\n"+sb.toString());
+				    //else
 					application.shutdown(null);
 				}
 				else

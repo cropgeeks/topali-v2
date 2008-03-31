@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import topali.data.*;
 import topali.gui.WinMain;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class PhymlDialog extends JDialog implements ActionListener
@@ -78,7 +77,7 @@ public class PhymlDialog extends JDialog implements ActionListener
 		setVisible(false);
 	}
 	
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		

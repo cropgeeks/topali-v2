@@ -12,7 +12,8 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import topali.var.utils.Utils;
+import topali.data.SysPrefs;
+import topali.var.utils.*;
 
 public class TextPanel extends DataVisPanel
 {
@@ -49,7 +50,7 @@ public class TextPanel extends DataVisPanel
 		this.text.setText(text);
 	}
 
-	@Override
+	
 	public Object getExportable(int format) {
 	    if(format==FORMAT_TXT) {
 		return text.getText();
@@ -57,9 +58,12 @@ public class TextPanel extends DataVisPanel
 	    return null;
 	}
 
-	@Override
+	
 	public Printable getPrintable() {
-	    return text.getPrintable(null, null);
+		if(SysPrefs.javaVersion<6)
+			return new PrintWrapper(text);
+		else
+			return text.getPrintable(null, null);
 	}
 	
 	

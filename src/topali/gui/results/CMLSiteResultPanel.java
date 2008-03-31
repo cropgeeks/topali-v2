@@ -238,7 +238,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		return data;
 	}
 
-	@Override
+	
 	public String getAnalysisInfo()
 	{
 		CodeMLResult result = (CodeMLResult) this.result;
@@ -266,7 +266,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		return sb.toString();
 	}
 
-	@Override
+	
 	public void setThreshold(double t)
 	{
 		((AlignmentResult)this.result).threshold = t;
@@ -275,7 +275,7 @@ public class CMLSiteResultPanel extends ResultPanel implements
 		table.setData(data);
 	}
 
-	@Override
+	
 	public Printable[] getPrintables()
 	{
 		Printable[] p = new Printable[2];

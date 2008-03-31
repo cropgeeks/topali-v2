@@ -69,7 +69,7 @@ public class SubstitutionModel  {
 		 * @author info.vancauwenberge.tostring plugin
 	
 		 */
-		@Override
+		
 		public String toString() {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("SubstitutionModel[");

@@ -42,7 +42,7 @@ class OverviewGenerator extends Thread
 		return image;
 	}
 
-	@Override
+	
 	public void run()
 	{
 		image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_INDEXED);

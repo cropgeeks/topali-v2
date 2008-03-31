@@ -20,9 +20,20 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 		p = new JPopupMenu();
 	}
 
-	@Override
+	
 	public void mouseReleased(MouseEvent e)
 	{
+		//this is for windows
+		if (e.isPopupTrigger() && enabled)
+		{
+			handlePopup(e.getX(), e.getY());
+			p.show(e.getComponent(), e.getX(), e.getY());
+		}
+	}
+
+	
+	public void mousePressed(MouseEvent e) {
+		//and this for linux
 		if (e.isPopupTrigger() && enabled)
 		{
 			handlePopup(e.getX(), e.getY());

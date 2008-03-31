@@ -21,13 +21,13 @@ public class CodonWResultsNode extends ResultsNode
 		panel = new CodonWResultPanel(data, result);
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return result.guiName;
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return panel;

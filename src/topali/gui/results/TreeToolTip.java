@@ -14,7 +14,6 @@ import pal.gui.TreePainterNormal;
 import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
 import topali.data.*;
-import topali.gui.Prefs;
 
 public class TreeToolTip extends JToolTip
 {
@@ -35,7 +34,7 @@ public class TreeToolTip extends JToolTip
 		this.seqNames = seqNames;
 	}
 
-	@Override
+	
 	public Dimension getPreferredSize()
 	{
 		if (painter != null)
@@ -57,7 +56,7 @@ public class TreeToolTip extends JToolTip
 		int[] indices = ss.getIndicesFromNames(seqNames);
 		SimpleAlignment alignment = ss.getAlignment(indices, n1, n2, false);
 
-		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getParams().isDNA(), false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getProps().isNucleotides(), false);
 
 		Tree tree = tc.getTree();
 		if (tree != null)
@@ -70,7 +69,7 @@ public class TreeToolTip extends JToolTip
 		}
 	}
 
-	@Override
+	
 	public void paintComponent(Graphics g)
 	{
 		if (painter != null)

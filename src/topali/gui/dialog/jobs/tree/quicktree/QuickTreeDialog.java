@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.gui.Prefs;
+import topali.data.Prefs;
 import topali.var.utils.Utils;
 
 public class QuickTreeDialog extends JDialog implements ActionListener
@@ -47,7 +47,7 @@ public class QuickTreeDialog extends JDialog implements ActionListener
 		this.setLocationRelativeTo(owner);
 	}
 	
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel) {

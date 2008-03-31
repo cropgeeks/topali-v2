@@ -14,7 +14,7 @@ import topali.data.annotations.AnnotationList;
 public class AlignmentData extends DataObject
 {
 	// The alignment's name
-	public String name;
+	private String name;
 
 	// And the data for it
 	private SequenceSet sequenceSet;
@@ -32,11 +32,10 @@ public class AlignmentData extends DataObject
 	private ResultsTracker tracker = new ResultsTracker();
 
 	// A set of alignment annotations (partitions, coding regions, etc)
-	private TOPALiAnnotations topaliAnnotations = new TOPALiAnnotations();
-	
-	//private AnnotationList annotations = new AnnotationList();
+	private AnnotationList annotations = new AnnotationList();
 
 	// For marking the current selected Region.
+	
 	private int activeRegionS, activeRegionE;
 
 	public AlignmentData()
@@ -57,6 +56,18 @@ public class AlignmentData extends DataObject
 		activeRegionE = sequenceSet.getLength();
 
 		//topaliAnnotations = new TOPALiAnnotations();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		String oldName = this.name;
+		this.name = name;
+		
+		for(PropertyChangeListener l : changeListeners) 
+			l.propertyChange(new PropertyChangeEvent(this, "name", oldName, name));
 	}
 
 	public SequenceSet getSequenceSet()
@@ -91,23 +102,13 @@ public class AlignmentData extends DataObject
 		this.isReferenceList = isReferenceList;
 	}
 
-	public void setTopaliAnnotations(TOPALiAnnotations topaliAnnotations)
-	{
-		this.topaliAnnotations = topaliAnnotations;
+	public AnnotationList getAnnotations() {
+		return annotations;
 	}
 
-	public TOPALiAnnotations getTopaliAnnotations()
-	{
-		return topaliAnnotations;
+	public void setAnnotations(AnnotationList annotations) {
+		this.annotations = annotations;
 	}
-
-//	public AnnotationList getAnnotations() {
-//		return annotations;
-//	}
-//
-//	public void setAnnotations(AnnotationList annotations) {
-//		this.annotations = annotations;
-//	}
 
 	public LinkedList<AnalysisResult> getResults()
 	{
@@ -162,7 +163,7 @@ public class AlignmentData extends DataObject
 
 		stat.length = ss.getLength();
 		stat.size = ss.getSize();
-		stat.isDna = ss.getParams().isDNA();
+		stat.isDna = ss.getProps().isNucleotides();
 		stat.fileSize = new File(path).length();
 
 		refs.add(stat);
@@ -226,7 +227,7 @@ public class AlignmentData extends DataObject
 		return pos;
 	}
 	
-	@Override
+	
 	public int hashCode()
 	{
 		final int prime = 31;
@@ -237,7 +238,7 @@ public class AlignmentData extends DataObject
 		return result;
 	}
 
-	@Override
+	
 	public boolean equals(Object obj)
 	{
 		if (this == obj)

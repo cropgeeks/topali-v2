@@ -70,7 +70,7 @@ public class ATV extends Thread
 		showBranchLengths = b;
 	}
 
-	@Override
+	
 	public void run()
 	{
 		final LaunchDialog dlg = new LaunchDialog();

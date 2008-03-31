@@ -220,14 +220,14 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	// Have to override this, to prevent JobsPanel's BoxLayout from scaling this
 	// Component to it's
 	// maximum size.
-	@Override
+	
 	public Dimension getMaximumSize()
 	{
 		return new Dimension(super.getMaximumSize().width,
 				getPreferredSize().height);
 	}
 
-	@Override
+	
 	public Dimension getMinimumSize()
 	{
 		return new Dimension(super.getMaximumSize().width,

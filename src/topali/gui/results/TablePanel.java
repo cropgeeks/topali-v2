@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.JTable.PrintMode;
 import org.apache.log4j.Logger;
 import scri.commons.gui.MsgBox;
+import topali.data.Prefs;
 import topali.gui.*;
 import topali.mod.Filters;
 
@@ -125,12 +126,12 @@ public class TablePanel extends DataVisPanel {
 		return aExport;
 	}
 
-	@Override
+	
 	public Printable getPrintable() {
 		return table.getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 
-	@Override
+	
 	public Object getExportable(int format) {
 		switch (format) {
 			case FORMAT_TXT:

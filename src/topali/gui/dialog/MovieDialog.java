@@ -15,7 +15,7 @@ import pal.alignment.SimpleAlignment;
 import pal.gui.*;
 import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
@@ -74,7 +74,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 		Utils.addCloseHandler(this, bClose);
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowClosing(WindowEvent e)
 			{
 				onClose();
@@ -310,7 +310,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 
 		// Create a PAL alignment that can be used to create this tree
 		SimpleAlignment alignment = ss.getAlignment(indices, start, end, false);
-		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getParams().isDNA(), false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, ss.getProps().isNucleotides(), false);
 		
 		tree = tc.getTree();
 		// tree = tc.createTree(TreeCreator.JC_NJ);
@@ -415,7 +415,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 			setPreferredSize(new Dimension(400, 300));
 		}
 
-		@Override
+		
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -446,7 +446,7 @@ public class MovieDialog extends JDialog implements ActionListener,
 			setToolTipText(Text.get("MovieDialog.gui08"));
 		}
 
-		@Override
+		
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

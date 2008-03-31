@@ -7,8 +7,15 @@ package topali.data;
 
 import topali.data.models.*;
 
-public class SequenceSetParams 
+public class SequenceSetProperties 
 {
+	public static final int TYPE_DNA = 1;
+	public static final int TYPE_RNA = 2;
+	public static final int TYPE_PROTEIN = 4;
+	public static final int TYPE_UNKNOWN = 8;
+	
+	// Sequence type
+	private int type = TYPE_UNKNOWN;
 	
 	// Transition/transvertion ratio for this alignment
 	private double tRatio = -1;
@@ -24,26 +31,40 @@ public class SequenceSetParams
 
 	// Nucleotide frequencies
 	private double[] freqs = new double[0];
-
-	private boolean isDNA = true;
 	
-	private boolean isAligned = true;
+	private boolean isAligned = false;
 	
 	private Model model = null;
 	
-	private boolean needCalculation = true;
+	private boolean needsCalculation = true;
 	
-	public SequenceSetParams()
+	public SequenceSetProperties()
 	{
 	}
 
-	public SequenceSetParams(SequenceSetParams para) {
+	public SequenceSetProperties(SequenceSetProperties para) {
 		this();
+		this.type = para.type;
 		this.isAligned = para.isAligned;
-		this.isDNA = para.isDNA;
 		this.model = (para.model instanceof DNAModel) ? new DNAModel((DNAModel)para.model) : new ProteinModel((ProteinModel)para.model);
 	}
 	
+	public boolean isNucleotides() {
+		return (type==TYPE_DNA || type==TYPE_RNA || type==(TYPE_DNA+TYPE_RNA));
+	}
+	
+	public boolean isProtein() {
+		return type==TYPE_PROTEIN;
+	}
+	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	public double getAlpha()
 	{
 		return alpha;
@@ -79,23 +100,9 @@ public class SequenceSetParams
 		return isAligned;
 	}
 
-	public void setAligned(boolean isAligned)
+	public void isAligned(boolean isAligned)
 	{
 		this.isAligned = isAligned;
-	}
-
-	public boolean isDNA()
-	{
-		return isDNA;
-	}
-
-	public void setDNA(boolean isDNA)
-	{
-		this.isDNA = isDNA;
-		if(model==null) {
-			ModelManager mm = ModelManager.getInstance();
-			model = isDNA ? mm.generateModel("HKY", true, false) : mm.generateModel("WAG", true, false);
-		}
 	}
 
 	public double getKappa()
@@ -111,9 +118,13 @@ public class SequenceSetParams
 	public Model getModel()
 	{
 	    if(model==null) {
-		//Fix for loading old project files (there model might be null due to a bug in an old version)
-		ModelManager mm = ModelManager.getInstance();
-		model = isDNA ? mm.generateModel("HKY", true, false) : mm.generateModel("WAG", true, false);
+	    	ModelManager mm = ModelManager.getInstance();
+	    	if(type==SequenceSetProperties.TYPE_DNA)
+	    		this.model = mm.generateModel("HKY", true, false);
+	    	else if(type==SequenceSetProperties.TYPE_RNA)
+	    		this.model = mm.generateModel("HKY", true, false);
+	    	else if(type==SequenceSetProperties.TYPE_PROTEIN)
+	    		this.model = mm.generateModel("WAG", true, false);
 	    }
 	    
 	    return model;
@@ -134,14 +145,14 @@ public class SequenceSetParams
 		tRatio = ratio;
 	}
 
-	public boolean isNeedCalculation()
+	public boolean needsCalculation()
 	{
-		return needCalculation;
+		return needsCalculation;
 	}
 
-	public void setNeedCalculation(boolean needCalculation)
+	public void needsCalculation(boolean needsCalculation)
 	{
-		this.needCalculation = needCalculation;
+		this.needsCalculation = needsCalculation;
 	}
 
 	

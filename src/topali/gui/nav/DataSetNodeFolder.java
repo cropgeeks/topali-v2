@@ -20,13 +20,13 @@ class DataSetNodeFolder extends INode
 		super(data);
 	}
 
-	@Override
+	
 	public String toString()
 	{
-		return data.name;
+		return data.getName();
 	}
 
-	@Override
+	
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
@@ -34,12 +34,12 @@ class DataSetNodeFolder extends INode
 		aAlgnRemove.setEnabled(true);
 	}
 
-	@Override
+	
 	public JPanel getPanel()
 	{
 		JPanel p = new JPanel(new BorderLayout());
 		p.setBackground(Color.white);
-		p.add(new JLabel(data.name, SwingConstants.CENTER));
+		p.add(new JLabel(data.getName(), SwingConstants.CENTER));
 		return p;
 	}
 }

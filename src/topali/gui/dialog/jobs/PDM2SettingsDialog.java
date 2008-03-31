@@ -13,7 +13,6 @@ import javax.swing.*;
 import scri.commons.gui.*;
 import topali.data.*;
 import topali.gui.*;
-import topali.var.SysPrefs;
 import topali.var.utils.Utils;
 
 public class PDM2SettingsDialog extends JDialog implements ActionListener

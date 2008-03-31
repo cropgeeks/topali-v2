@@ -15,7 +15,6 @@ import pal.tree.Tree;
 import topali.analyses.TreeCreatorThread;
 import topali.data.*;
 import topali.gui.WinMain;
-import topali.var.SysPrefs;
 import topali.var.utils.*;
 
 public class CMLBranchDialog extends JDialog implements ActionListener
@@ -75,14 +74,14 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 //		this.tree = this.tree.replaceAll(";", "");
 //		this.tree = NHTreeUtils.removeBranchLengths(this.tree);
 		
-		TreeCreatorThread tc = new TreeCreatorThread(alignment, data.getSequenceSet().getParams().isDNA(), false);
+		TreeCreatorThread tc = new TreeCreatorThread(alignment, data.getSequenceSet().getProps().isNucleotides(), false);
 		Tree tree = tc.getTree();
 		this.tree = tree.toString();
 		this.tree = this.tree.replaceAll(";", "");
 		this.tree = TreeUtils.removeBranchLengths(this.tree);
 	}
 	
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel) {
@@ -102,7 +101,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		}
 	}
 	
-	@Override
+	
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		if(!b) {
@@ -142,7 +141,7 @@ public class CMLBranchDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getCodeMLRunCount() + 1;
 		data.getTracker().setCodeMLRunCount(runNum);
 		result.guiName = "PAML Branch " + runNum;
-		result.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.name
+		result.jobName = "PAML/CodeML Analysis " + runNum + " on " + data.getName()
 				+ " (" + ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 

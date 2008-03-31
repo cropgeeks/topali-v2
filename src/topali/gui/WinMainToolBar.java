@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import topali.gui.nav.NavPanel;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
+import topali.data.*;
 
 import scri.commons.gui.*;
 

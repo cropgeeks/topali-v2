@@ -16,12 +16,12 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import pal.alignment.Alignment;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.mod.Filters;
+import topali.var.utils.SequenceSetUtils;
 import scri.commons.gui.MsgBox;
 
 public class ImportDataSetDialog extends JDialog implements Runnable
@@ -46,7 +46,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowOpened(WindowEvent e)
 			{
 				doLoad();

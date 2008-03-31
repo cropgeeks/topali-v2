@@ -11,12 +11,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
-import topali.var.SysPrefs;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 
 public class HMMSettingsDialog extends JDialog implements ActionListener
 {
@@ -58,7 +56,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		});
 
 		getContentPane().add(tabs, BorderLayout.CENTER);
-		
+
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "hmm_settings");
 		getContentPane().add(bp, BorderLayout.SOUTH);
 
@@ -104,9 +102,9 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		result.bpArray = mosaicPanel.getBreakpointArray();
 		result.isRemote = makeRemote;
 
-		if (data.getSequenceSet().getParams().isNeedCalculation())
+		if (data.getSequenceSet().getProps().needsCalculation())
 			SequenceSetUtils.estimateParameters(data.getSequenceSet());
-		
+
 		result.hmm_model = Prefs.hmm_model;
 		result.hmm_initial = Prefs.hmm_initial;
 		result.hmm_freq_est_1 = Prefs.hmm_freq_est_1;
@@ -129,11 +127,11 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		result.hmm_station = Prefs.hmm_station;
 		result.hmm_update = Prefs.hmm_update;
 		result.hmm_branch = Prefs.hmm_branch;
-		
+
 		int runNum = data.getTracker().getHmmRunCount() + 1;
 		data.getTracker().setHmmRunCount(runNum);
 		result.guiName = "HMM " + runNum;
-		result.jobName = "HMM Analysis " + runNum + " on " + data.name + " ("
+		result.jobName = "HMM Analysis " + runNum + " on " + data.getName() + " ("
 				+ data.getSequenceSet().getSelectedSequences().length + "/" + data.getSequenceSet().getSize()
 				+ " sequences)";
 	}
@@ -207,7 +205,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 			add(layout.getPanel(), BorderLayout.NORTH);
 
 			JLabel info1 = new JLabel(Text.get("HMMSettingsDialog.1"));
-			
+
 			layout.add(info1, 0, 0, 1, 5, new Insets(5, 5, 2, 5));
 
 			layout.add(new JLabel(" "), 0, 1, 1, 4, new Insets(5, 5, 5, 5));
@@ -230,7 +228,7 @@ public class HMMSettingsDialog extends JDialog implements ActionListener
 		ModelPanel()
 		{
 			setPreferredSize(new Dimension(50, 50));
-                        
+
 			// Model
 			String[] v1 =
 			{ "F84+gaps", "JC+gaps", "K2P+gaps", "F81+gaps" };

@@ -10,7 +10,7 @@ import java.awt.*;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import topali.gui.Prefs;
+import topali.data.Prefs;
 import topali.var.utils.Utils;
 
 class HistogramPanel extends JPanel
@@ -37,11 +37,11 @@ class HistogramPanel extends JPanel
 			repaint();
 	}
 
-	@Override
+	
 	public Dimension getPreferredSize()
 		{ return new Dimension(150, 35); }
 
-	@Override
+	
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);

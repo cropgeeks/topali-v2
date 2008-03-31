@@ -5,7 +5,7 @@
 
 package topali.gui;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
 
@@ -13,6 +13,8 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
+import topali.data.Prefs;
+import topali.gui.dialog.ExportDialog;
 import topali.i18n.Text;
 import topali.logging.GracefulShutdownHandler;
 
@@ -23,7 +25,7 @@ public class WinMainMenuBar extends JMenuBar
 	 Logger log = Logger.getLogger(this.getClass());
 
 	private WinMain winMain;
-	private int menuShortcut;
+	public static int menuShortcut;
 
 	JMenu mFile, mFileRecent;
 
@@ -83,7 +85,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	public static AbstractAction aAlgnFindSeq, aAlgnSelectAll, aAlgnSelectNone,
 			aAlgnSelectUnique, aAlgnSelectInvert, aAlgnSelectHighlighted,
-			aAlgnRename, aAlgnMoveUp, aAlgnMoveDown, aAlgnMoveTop, aAlgnRemove,
+			aAlgnRenameSeq, aAlgnMoveUp, aAlgnMoveDown, aAlgnMoveTop, aAlgnRemove, aAlgnRename,
 			aAlgnDisplaySummary, aAlgnGoTo, aAlgnPhyloView, aAlgnShowPDialog, aAlgnShowOvDialog;
 
 	//Recombination
@@ -197,7 +199,7 @@ public class WinMainMenuBar extends JMenuBar
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				WinMain.rDialog.doExport();
+				new ExportDialog(TOPALi.winMain, TOPALi.winMain.navPanel.getCurrentAlignmentData(), null);
 			}
 		};
 
@@ -329,7 +331,15 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
-		aAlgnRename = new AbstractAction(Text.get("aAlgnRename"))
+		aAlgnRenameSeq = new AbstractAction(Text.get("aAlgnRename"))
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAlgnRenameSeq();
+			}
+		};
+
+		aAlgnRename = new AbstractAction("Rename")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -724,7 +734,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAlgnMoveTop.setDisplayedMnemonicIndex(18);
 		mAlgnFindSeq = getItem(aAlgnFindSeq, KeyEvent.VK_F, KeyEvent.VK_F,
 				menuShortcut, getIcon(Icons.FIND16));
-		mAlgnRename = getItem(aAlgnRename, KeyEvent.VK_R, 0, 0);
+		mAlgnRename = getItem(aAlgnRenameSeq, KeyEvent.VK_R, 0, 0);
 		mAlgnRemove = getItem(aAlgnRemove, KeyEvent.VK_M, 0, 0, getIcon(Icons.REMOVE16));
 		mAlgnGoTo = getItem(aAlgnGoTo, KeyEvent.VK_G, 0, 0);
 		mAlgnShowPDialog = getItem(aAlgnShowPDialog, KeyEvent.VK_A,
@@ -997,7 +1007,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAlgnMoveDown.setEnabled(false);
 		aAlgnMoveTop.setEnabled(false);
 		aAlgnFindSeq.setEnabled(false);
-		aAlgnRename.setEnabled(false);
+		aAlgnRenameSeq.setEnabled(false);
 		aAlgnRemove.setEnabled(false);
 		aAlgnGoTo.setEnabled(false);
 

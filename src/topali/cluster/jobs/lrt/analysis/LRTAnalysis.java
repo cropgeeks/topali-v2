@@ -41,7 +41,7 @@ public class LRTAnalysis extends AnalysisThread {
 	super(runDir);
     }
 
-    @Override
+    
 	public void runAnalysis() throws Exception
 	{
 		// Read the LRTResult

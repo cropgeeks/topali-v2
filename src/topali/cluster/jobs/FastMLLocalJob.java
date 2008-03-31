@@ -14,7 +14,6 @@ import topali.cluster.jobs.fastml.RunFastML;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.gui.TOPALi;
-import topali.var.SysPrefs;
 
 public class FastMLLocalJob extends AnalysisJob
 {
@@ -38,7 +37,7 @@ public class FastMLLocalJob extends AnalysisJob
 		LocalJobs.addJob(result.jobId);
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		try
@@ -55,7 +54,7 @@ public class FastMLLocalJob extends AnalysisJob
 		}
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		if (new File(jobDir, "error.txt").exists())
@@ -70,14 +69,14 @@ public class FastMLLocalJob extends AnalysisJob
 			return new JobStatus(0, 0, "_status");
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		result = (FastMLResult) Castor.unmarshall(new File(jobDir, "result.xml"));
 		return result;
 	}
 
-	@Override
+	
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -87,7 +86,7 @@ public class FastMLLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	@Override
+	
 	public void ws_cancelJob()
 	{
 		LocalJobs.cancelJob(result.jobId);

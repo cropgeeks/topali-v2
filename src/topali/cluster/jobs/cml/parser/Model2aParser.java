@@ -18,7 +18,7 @@ public class Model2aParser extends CMLResultParser
 		super(model);
 	}
 	
-	@Override
+	
 	public void parse(String resultFile, String rstFile)
 	{
 		try

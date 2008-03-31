@@ -45,7 +45,7 @@ public class DSSResultPanel extends ResultPanel {
 	}
     }
 
-    @Override
+    
     public void setThreshold(double threshold) {
 	DSSResult res = (DSSResult) result;
 	if (res.thresholds == null)
@@ -59,7 +59,7 @@ public class DSSResultPanel extends ResultPanel {
 	graph.setThreshold(thres);
     }
 
-    @Override
+    
     public String getAnalysisInfo() {
 	DSSResult result = (DSSResult) this.result;
 
@@ -83,7 +83,7 @@ public class DSSResultPanel extends ResultPanel {
 	return str;
     }
 
-    @Override
+    
     public Printable[] getPrintables() {
 	return new Printable[] { graph.getPrintable() };
     }

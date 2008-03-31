@@ -8,7 +8,7 @@ package topali.gui.dialog.jobs.tree.quicktree;
 
 import javax.swing.SpinnerNumberModel;
 
-import topali.gui.Prefs;
+import topali.data.Prefs;
 import topali.i18n.Text;
 
 /**
@@ -45,18 +45,18 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         bs = new javax.swing.JSpinner();
 
-        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings"))); // NOI18N
+        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings")));
 
-        tstvlabel.setText(Text.get("Transition/Transversion_Ratio")); // NOI18N
+        tstvlabel.setText(Text.get("Transition/Transversion_Ratio"));
         tstvlabel.setEnabled(false);
 
-        tstvlabel2.setText(Text.get("ts/tv")); // NOI18N
+        tstvlabel2.setText(Text.get("ts/tv"));
         tstvlabel2.setEnabled(false);
 
-        alphalabel.setText(Text.get("Rate_Heterogenity")); // NOI18N
+        alphalabel.setText(Text.get("Rate_Heterogenity"));
         alphalabel.setEnabled(false);
 
-        alphalabel2.setText(Text.get("alpha")); // NOI18N
+        alphalabel2.setText(Text.get("alpha"));
         alphalabel2.setEnabled(false);
 
         tstv.setEnabled(false);
@@ -68,7 +68,7 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         alpha.setModel(mod1);
 
         estimate.setSelected(true);
-        estimate.setText(Text.get("Estimate")); // NOI18N
+        estimate.setText(Text.get("Estimate"));
         estimate.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         estimate.setMargin(new java.awt.Insets(0, 0, 0, 0));
         estimate.addActionListener(new java.awt.event.ActionListener() {
@@ -83,103 +83,103 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
         alphalabel3.setText("="); // NOI18N
         alphalabel3.setEnabled(false);
 
-        javax.swing.GroupLayout modelpanelLayout = new javax.swing.GroupLayout(modelpanel);
+        org.jdesktop.layout.GroupLayout modelpanelLayout = new org.jdesktop.layout.GroupLayout(modelpanel);
         modelpanel.setLayout(modelpanelLayout);
         modelpanelLayout.setHorizontalGroup(
-            modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(modelpanelLayout.createSequentialGroup()
+            modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(modelpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(estimate)
-                    .addComponent(tstvlabel, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(alphalabel, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, modelpanelLayout.createSequentialGroup()
-                        .addComponent(tstvlabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tstvlabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                        .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, modelpanelLayout.createSequentialGroup()
-                        .addComponent(alphalabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(alphalabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addComponent(alpha, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(estimate)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, tstvlabel)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, alphalabel)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, modelpanelLayout.createSequentialGroup()
+                        .add(tstvlabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(tstvlabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 35, Short.MAX_VALUE)
+                        .add(tstv, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, modelpanelLayout.createSequentialGroup()
+                        .add(alphalabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(alphalabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 35, Short.MAX_VALUE)
+                        .add(alpha, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         modelpanelLayout.setVerticalGroup(
-            modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(modelpanelLayout.createSequentialGroup()
-                .addComponent(estimate)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tstvlabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tstvlabel2)
-                    .addComponent(tstvlabel3)
-                    .addComponent(tstv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(alphalabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(modelpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(alphalabel2)
-                    .addComponent(alphalabel3)
-                    .addComponent(alpha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(modelpanelLayout.createSequentialGroup()
+                .add(estimate)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(tstvlabel)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(tstvlabel2)
+                    .add(tstvlabel3)
+                    .add(tstv, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(alphalabel)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(alphalabel2)
+                    .add(alphalabel3)
+                    .add(alpha, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Program_settings"))); // NOI18N
+        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Program_settings")));
 
-        jLabel5.setText(Text.get("Bootstrap_Runs")); // NOI18N
+        jLabel5.setText(Text.get("Bootstrap_Runs"));
 
-        jLabel6.setText(Text.get("Bootstraps")); // NOI18N
+        jLabel6.setText(Text.get("Bootstraps"));
 
         SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);
         bs.setModel(mod2);
 
-        javax.swing.GroupLayout runpanelLayout = new javax.swing.GroupLayout(runpanel);
+        org.jdesktop.layout.GroupLayout runpanelLayout = new org.jdesktop.layout.GroupLayout(runpanel);
         runpanel.setLayout(runpanelLayout);
         runpanelLayout.setHorizontalGroup(
-            runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(runpanelLayout.createSequentialGroup()
-                .addGroup(runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addGroup(runpanelLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(runpanelLayout.createSequentialGroup()
+                .add(runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel5)
+                    .add(runpanelLayout.createSequentialGroup()
+                        .add(jLabel6)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 61, Short.MAX_VALUE)
+                        .add(bs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 263, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         runpanelLayout.setVerticalGroup(
-            runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(runpanelLayout.createSequentialGroup()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(runpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(runpanelLayout.createSequentialGroup()
+                .add(jLabel5)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel6)
+                    .add(bs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(modelpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(runpanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(modelpanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(runpanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(modelpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(runpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(modelpanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(runpanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -43,7 +43,7 @@ public class MTDialog extends JDialog implements ActionListener
 	private void init() {
 		this.setLayout(new BorderLayout());
 
-		panel = new MTDialogPanel(this.res, ss.getParams().isDNA());
+		panel = new MTDialogPanel(this.res, ss.getProps().isNucleotides());
 		add(panel, BorderLayout.CENTER);
 
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "modelselection");
@@ -54,7 +54,7 @@ public class MTDialog extends JDialog implements ActionListener
 	}
 
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource().equals(bRun)) {
@@ -73,7 +73,7 @@ public class MTDialog extends JDialog implements ActionListener
 			int runNum = data.getTracker().getMtRunCount() + 1;
 			data.getTracker().setMtRunCount(runNum);
 			this.res.guiName = "Model Selection " + runNum;
-			this.res.jobName = "Model Selection on " + data.name + " ("
+			this.res.jobName = "Model Selection on " + data.getName() + " ("
 					+ ss.getSelectedSequences().length + "/" + ss.getSize()
 					+ " sequences)";
 			this.setVisible(false);

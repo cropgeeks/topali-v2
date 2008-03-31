@@ -20,7 +20,7 @@ class FileMSF extends FileGeneric
 		ss = s;
 	}
 
-	@Override
+	
 	public boolean readFile(File file)
 	{
 		try
@@ -129,7 +129,7 @@ class FileMSF extends FileGeneric
 			return seqs.get(index);
 	}
 
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{
@@ -142,7 +142,7 @@ class FileMSF extends FileGeneric
 
 		// Header
 		out.write(" MSF: " + ss.getLength() + " Type: ");
-		if (ss.getParams().isDNA())
+		if (ss.getProps().isNucleotides())
 			out.write("N ");
 		else
 			out.write("P ");

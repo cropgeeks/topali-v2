@@ -21,7 +21,7 @@ class FileClustal extends FileGeneric
 		ss = s;
 	}
 
-	@Override
+	
 	public boolean readFile(File file)
 	{
 		try
@@ -111,7 +111,7 @@ class FileClustal extends FileGeneric
 			return seqs.get(index);
 	}
 
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{

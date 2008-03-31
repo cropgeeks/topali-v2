@@ -16,7 +16,7 @@ class FileNexusMB extends FileNexus
 		super(ss);
 	}
 
-	@Override
+	
 	public void writeFile(File file, int[] index, int start, int end,
 			boolean useSafeNames) throws IOException
 	{
@@ -32,7 +32,7 @@ class FileNexusMB extends FileNexus
 		out.write("  dimensions ntax=" + index.length + " nchar="
 				+ (end - start + 1) + ";" + nl);
 		out.write("  format" + nl + "    interleave" + nl);
-		if (ss.getParams().isDNA())
+		if (ss.getProps().isNucleotides())
 		{
 			out.write("    datatype=DNA" + nl);
 		} else

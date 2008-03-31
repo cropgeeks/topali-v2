@@ -7,12 +7,14 @@ package topali.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 import javax.swing.*;
 
 import topali.analyses.*;
 import topali.cluster.JobStatus;
 import topali.data.*;
+import topali.data.annotations.*;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.utils.Utils;
@@ -176,20 +178,19 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 
 	private void cleanup()
 	{
-		WinMain.rDialog.refreshList();
-		//WinMainMenuBar.aFileSave.setEnabled(true);
-		//WinMainMenuBar.aVamCommit.setEnabled(true);
 		ProjectState.setDataChanged();
 
-		PartitionAnnotations anno = (PartitionAnnotations) data
-				.getTopaliAnnotations().getAnnotations(
-						PartitionAnnotations.class);
-		int num = anno.countRegions();
-
+		List<Annotation> list = data.getAnnotations().getAnnotations(PartitionAnnotation.class);
+		int num = list.size();
+		
 		if (num == 1)
 			MsgBox.msg(Text.get("AutoPartitionDialog.msg01"),
 					MsgBox.INF);
 		else
 			MsgBox.msg(Text.get("AutoPartitionDialog.msg02", num), MsgBox.INF);
+		
+		WinMain.annoDialog.refresh();
+		WinMain.annoDialog.setLocationRelativeTo(TOPALi.winMain);
+		WinMain.annoDialog.setVisible(true);
 	}
 }

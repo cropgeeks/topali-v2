@@ -10,18 +10,20 @@ import static topali.mod.Filters.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
 import pal.alignment.Alignment;
-import topali.analyses.SequenceSetUtils;
 import topali.data.*;
+import topali.data.annotations.Annotation;
+import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.mod.Filters;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 import scri.commons.gui.*;
 
 public class ExportDialog extends JDialog implements ActionListener
@@ -31,33 +33,29 @@ public class ExportDialog extends JDialog implements ActionListener
 	private WinMain winMain;
 
 	private AlignmentData data;
-
-	private RegionAnnotations annotations;
-
+	
 	private SequenceSet ss;
 
-	// Selected partition indexes (at the time this dialog was opened)
-	private int[] regions = null;
-
+	private List<Annotation> annos;
+	
 	private JButton bOK, bCancel;
 
 	private JRadioButton rAllSeq, rSelSeq;
 
 	private JRadioButton rAllPar, rSelPar;
 
-	private JRadioButton rDisk, rProject, rCodonPos;
+	private JRadioButton rDisk, rProject, rTranslate;
 
 	public ExportDialog(WinMain winMain, AlignmentData data,
-			RegionAnnotations annotations, int[] regions)
+			List<Annotation> annos)
 	{
 		super(winMain, "", true);
 
 		this.winMain = winMain;
 		this.data = data;
-		this.regions = regions;
-		this.annotations = annotations;
 		ss = data.getSequenceSet();
-
+		this.annos = annos;
+		
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
 		getRootPane().setDefaultButton(bOK);
@@ -65,7 +63,7 @@ public class ExportDialog extends JDialog implements ActionListener
 
 		pack();
 
-		setTitle(Text.get("ExportDialog.gui01",data.name));
+		setTitle(Text.get("ExportDialog.gui01",data.getName()));
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
@@ -80,8 +78,10 @@ public class ExportDialog extends JDialog implements ActionListener
 		String tSelSeq = Text.get("ExportDialog.2", selCount, allCount);
 		rAllSeq = new JRadioButton(tAllSeq, Prefs.gui_export_allseqs);
 		rAllSeq.setMnemonic(KeyEvent.VK_A);
+		rAllSeq.addActionListener(this);
 		rSelSeq = new JRadioButton(tSelSeq, !Prefs.gui_export_allseqs);
 		rSelSeq.setMnemonic(KeyEvent.VK_C);
+		rSelSeq.addActionListener(this);
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(rAllSeq);
 		group1.add(rSelSeq);
@@ -101,17 +101,19 @@ public class ExportDialog extends JDialog implements ActionListener
 		String tSelPar = Text.get("ExportDialog.4", countConcatenatedLength());
 		rAllPar = new JRadioButton(tAllPar, true);
 		rAllPar.setMnemonic(KeyEvent.VK_F);
+		rAllPar.addActionListener(this);
 		rSelPar = new JRadioButton(tSelPar);
 		rSelPar.setMnemonic(KeyEvent.VK_S);
+		rSelPar.addActionListener(this);
 
-		if (regions.length == 0)
+		if (annos==null || annos.size() == 0)
 			rSelPar.setEnabled(false);
 
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(rAllPar);
 		group2.add(rSelPar);
 
-		if (Prefs.gui_export_pars == 2 && regions.length > 0)
+		if (Prefs.gui_export_pars == 2 && (annos!=null && annos.size() > 0))
 			rSelPar.setSelected(true);
 
 		JPanel p2 = new JPanel(new GridLayout(2, 1, 0, 0));
@@ -122,23 +124,26 @@ public class ExportDialog extends JDialog implements ActionListener
 		rDisk = new JRadioButton(Text.get("ExportDialog.5"),
 				Prefs.gui_export_todisk);
 		rDisk.setMnemonic(KeyEvent.VK_D);
+		rDisk.addActionListener(this);
 		rProject = new JRadioButton(
 			Text.get("ExportDialog.6"),
 				!Prefs.gui_export_todisk);
 		rProject.setMnemonic(KeyEvent.VK_N);
-		rCodonPos = new JRadioButton(Text.get("ExportDialog.7"));
-		rCodonPos.setMnemonic(KeyEvent.VK_C);
-		rCodonPos.setEnabled(ss.isCodons());
+		rProject.addActionListener(this);
+		rTranslate = new JRadioButton(Text.get("ExportDialog.7"));
+		rTranslate.setMnemonic(KeyEvent.VK_C);
+		rTranslate.addActionListener(this);
+		checkRTranslate();
 		ButtonGroup group3 = new ButtonGroup();
 		group3.add(rDisk);
 		group3.add(rProject);
-		group3.add(rCodonPos);
+		group3.add(rTranslate);
 		
 		JPanel p3 = new JPanel(new GridLayout(3, 1, 0, 0));
 		p3.setBorder(BorderFactory.createTitledBorder(Text.get("ExportDialog.8")));
 		p3.add(rDisk);
 		p3.add(rProject);
-		p3.add(rCodonPos);
+		p3.add(rTranslate);
 
 		DoeLayout layout = new DoeLayout();
 		layout.add(p1, 0, 0, 1, 1, new Insets(10, 10, 0, 10));
@@ -148,6 +153,21 @@ public class ExportDialog extends JDialog implements ActionListener
 		return layout.getPanel();
 	}
 
+	private void checkRTranslate() {
+		if(rAllPar.isSelected()) {
+			if(ss.getProps().isNucleotides() && ss.getLength()%3==0)
+				rTranslate.setEnabled(true);
+			else
+				rTranslate.setEnabled(false);
+		}
+		else if(rSelPar.isSelected()) {
+			if(ss.getProps().isNucleotides() && countConcatenatedLength()%3==0)
+				rTranslate.setEnabled(true);
+			else
+				rTranslate.setEnabled(false);
+		}
+	}
+	
 	private JPanel getButtons()
 	{
 		bOK = new JButton(Text.get("ok"));
@@ -175,6 +195,13 @@ public class ExportDialog extends JDialog implements ActionListener
 			if (export())
 				setVisible(false);
 		}
+		
+		else if(e.getSource()==rAllPar) {
+			checkRTranslate();
+		}
+		else if(e.getSource()==rSelPar) {
+			checkRTranslate();
+		}
 	}
 
 	// (Tries) to calculate what total length a new alignment would have if it
@@ -183,11 +210,12 @@ public class ExportDialog extends JDialog implements ActionListener
 	{
 		int concatLength = 0;
 
-		for (int r : regions)
-		{
-			RegionAnnotations.Region region = annotations.get(r);
-			concatLength += (region.getE() - region.getS()) + 1;
+		if(annos!=null) {
+			for(Annotation anno : annos) {
+				concatLength += anno.getEnd()-anno.getStart()+1;
+			}
 		}
+		
 		return concatLength;
 	}
 
@@ -198,34 +226,34 @@ public class ExportDialog extends JDialog implements ActionListener
 		if (Prefs.gui_export_allseqs == false)
 			seqs = ss.getSelectedSequences();
 
-		if(rCodonPos.isSelected()) {
-			SequenceSet ss1 = SequenceSetUtils.getCodonPosSequenceSet(data, 1, seqs);
-			SequenceSet ss2 = SequenceSetUtils.getCodonPosSequenceSet(data, 2, seqs);
-			SequenceSet ss3 = SequenceSetUtils.getCodonPosSequenceSet(data, 3, seqs);
-			
-			Alignment alignment = ss1.getAlignment(false);
-			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p1",
-					alignment);
-			
-			Alignment alignment2 = ss2.getAlignment(false);
-			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p2",
-					alignment2);
-			
-			Alignment alignment3 = ss3.getAlignment(false);
-			new ImportDataSetDialog(winMain).cloneAlignment(data.name+"_p3",
-					alignment3);
-			
-			return true;
+		if(rTranslate.isSelected()) {
+			AlignmentData trans = new AlignmentData();
+			trans.setName(data.getName()+"_translated");
+			SequenceSet transs;
+			if(rSelPar.isSelected())
+				transs = SequenceSetUtils.translate(ss, annos, rSelSeq.isSelected());
+			else
+				transs = SequenceSetUtils.translate(ss, null, rSelSeq.isSelected());
+			try {
+				transs.checkValidity();
+				trans.setSequenceSet(transs);			
+				winMain.addNewAlignmentData(trans);
+				return true;
+			}
+			catch (AlignmentLoadException e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
 
 		// We recreate the alignment so it only contains the sequences and
 		// regions that
 		// correspond to the user's selection
 		SequenceSet toExport = SequenceSetUtils.getConcatenatedSequenceSet(
-				data, annotations, seqs, regions);
+				data, seqs, annos);
 
 		// Work out a new name for the alignment
-		String name = data.name + " (" + toExport.getSize() + "x"
+		String name = data.getName() + " (" + toExport.getSize() + "x"
 				+ (toExport.getLength()) + ")";
 		
 		// Save to disk...
@@ -253,7 +281,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		else
 		{
 			Alignment alignment = toExport.getAlignment(false);
-			new ImportDataSetDialog(winMain).cloneAlignment(data.name,
+			new ImportDataSetDialog(winMain).cloneAlignment(data.getName(),
 					alignment);
 		}
 

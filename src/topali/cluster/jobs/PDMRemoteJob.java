@@ -31,7 +31,7 @@ public class PDMRemoteJob extends RemoteJob
 			result.startTime = System.currentTimeMillis();
 	}
 
-	@Override
+	
 	public String ws_submitJob() throws Exception
 	{
 		determineClusterURL("-parallel");
@@ -52,7 +52,7 @@ public class PDMRemoteJob extends RemoteJob
 		return result.jobId;
 	}
 
-	@Override
+	
 	public JobStatus ws_getProgress() throws Exception
 	{
 		call = getCall();
@@ -66,7 +66,7 @@ public class PDMRemoteJob extends RemoteJob
 		return status;
 	}
 
-	@Override
+	
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		call = getCall();

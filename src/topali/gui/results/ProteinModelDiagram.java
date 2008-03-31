@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import javax.swing.*;
 import org.apache.log4j.Logger;
+import topali.data.SysPrefs;
 import topali.data.models.*;
 
 public class ProteinModelDiagram extends ModelDiagram
@@ -43,7 +44,7 @@ public class ProteinModelDiagram extends ModelDiagram
 		setModel(model);
 	}
 
-	@Override
+	
 	public void setModel(Model model) {
 		this.model = (ProteinModel)model;
 		maxRate = 0;
@@ -65,7 +66,7 @@ public class ProteinModelDiagram extends ModelDiagram
 		}
 	}
 	
-	@Override
+	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
@@ -173,7 +174,10 @@ public class ProteinModelDiagram extends ModelDiagram
 						drawPoint(g2d, xs, ys);
 				}
 				else {
-					g2d.setPaint(new RadialGradientPaint(new Point(xs+(r/2), ys-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c0}));
+					if(SysPrefs.javaVersion<6)
+						g2d.setPaint(new GradientPaint((float)xs, (float)ys, c0, (float)(xs+r), (float)(ys-r), Color.WHITE, false));
+					else
+						g2d.setPaint(new RadialGradientPaint(new Point(xs+(r/2), ys-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c0}));
 					fillCircle(g2d, xs, ys, r);
 				}
 				xs += cw;

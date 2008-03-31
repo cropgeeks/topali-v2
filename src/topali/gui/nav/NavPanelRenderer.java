@@ -85,7 +85,7 @@ class NavPanelRenderer extends JLabel implements TreeCellRenderer
 		return this;
 	}
 
-	@Override
+	
 	public void paintComponent(Graphics g)
 	{
 		Icon icon = getIcon();

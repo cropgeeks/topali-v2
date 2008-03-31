@@ -84,7 +84,7 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener,
 	}
     }
 
-    @Override
+    
     public String getAnalysisInfo() {
 	PDMResult result = (PDMResult) this.result;
 	String str = new String(result.guiName);
@@ -124,12 +124,12 @@ public class PDMResultPanel extends ResultPanel implements MouseMotionListener,
 	return str;
     }
 
-    @Override
+    
     public Printable[] getPrintables() {
 	return new Printable[] { graph1.getPrintable(), graph2.getPrintable() };
     }
 
-    @Override
+    
     public void setThreshold(double t) {
 	((AlignmentResult) result).threshold = t;
 	PDMResult res = (PDMResult) result;

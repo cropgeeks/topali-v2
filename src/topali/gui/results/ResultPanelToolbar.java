@@ -14,8 +14,11 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 import scri.commons.gui.MsgBox;
 import topali.data.*;
+import topali.data.annotations.PartitionAnnotation;
+import topali.data.models.*;
 import topali.gui.*;
 import topali.gui.dialog.*;
+import topali.gui.dialog.annotation.AnnotationDialog;
 import topali.i18n.Text;
 import topali.mod.Filters;
 
@@ -225,10 +228,17 @@ public class ResultPanelToolbar extends JToolBar {
 
 		aAddPart = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				WinMain.rDialog.addCurrentRegion(PartitionAnnotations.class);
-				// WinMainMenuBar.aFileSave.setEnabled(true);
-				// WinMainMenuBar.aVamCommit.setEnabled(true);
+				PartitionAnnotation anno = new PartitionAnnotation(data.getActiveRegionS(), data.getActiveRegionE());
+				Model modss = data.getSequenceSet().getProps().getModel();
+				Model modanno = ModelManager.getInstance().generateModel(modss.getName(), modss.isGamma(), modss.isInv());
+				anno.setModel(modanno);
+				data.getAnnotations().add(anno);
 				ProjectState.setDataChanged();
+				
+				WinMain.annoDialog.refresh();
+				WinMain.annoDialog.setSelected(anno);
+				WinMain.annoDialog.setLocationRelativeTo(TOPALi.winMain);
+				WinMain.annoDialog.setVisible(true);
 			}
 		};
 

@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.gui.Prefs;
+import topali.data.Prefs;
 import scri.commons.gui.MsgBox;
 
 class WebPanel extends javax.swing.JPanel implements ActionListener

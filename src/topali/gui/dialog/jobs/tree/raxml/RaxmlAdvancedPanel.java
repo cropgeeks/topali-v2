@@ -9,7 +9,6 @@ package topali.gui.dialog.jobs.tree.raxml;
 import javax.swing.*;
 
 import topali.data.*;
-import topali.gui.Prefs;
 import topali.i18n.Text;
 
 /**
@@ -32,7 +31,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     }
     
     public void initPrevResult(RaxmlResult res) {
-    	if(data.getSequenceSet().getParams().isDNA()) {
+    	if(data.getSequenceSet().getProps().isNucleotides()) {
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
     		model.setModel(mod);
     		model.setEnabled(false);
@@ -54,7 +53,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     }
     
     private void initValues() {
-    	if(data.getSequenceSet().getParams().isDNA()) {
+    	if(data.getSequenceSet().getProps().isNucleotides()) {
     		DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {"GTR"});
     		model.setModel(mod);
     		model.setEnabled(false);
@@ -67,9 +66,9 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     		model.setModel(mod);
     		
     		String defModel = Prefs.rax_protmodel;
-    		if(data.getSequenceSet().getParams().getModel()!=null) {
+    		if(data.getSequenceSet().getProps().getModel()!=null) {
     			for(String s : models) {
-    				if(data.getSequenceSet().getParams().getModel().is(s)) {
+    				if(data.getSequenceSet().getProps().getModel().is(s)) {
     					defModel = s;
     					break;
     				}
@@ -91,7 +90,7 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     	bs.setValue(Prefs.rax_bootstrap_default);
     	ratehet.setSelectedItem(Prefs.rax_ratehet_default);
     	empfreq.setSelected(Prefs.rax_empfreq_default);
-    	if(!data.getSequenceSet().getParams().isDNA()) 
+    	if(!data.getSequenceSet().getProps().isNucleotides()) 
     		model.setSelectedItem(Prefs.rax_protmodel_default);
     }
     
@@ -101,13 +100,13 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
     	res.empFreq = empfreq.isSelected();
     	res.rateHet = (String)ratehet.getSelectedItem();
     	int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
-    	RaxPartition p1 = new RaxPartition("1-"+length, "partition", (String)model.getSelectedItem(), data.getSequenceSet().getParams().isDNA());
+    	RaxPartition p1 = new RaxPartition("1-"+length, "partition", (String)model.getSelectedItem(), data.getSequenceSet().getProps().isNucleotides());
     	res.partitions.add(p1);
     	
     	Prefs.rax_bootstrap = res.bootstrap;
     	Prefs.rax_empfreq = res.empFreq;
     	Prefs.rax_ratehet = res.rateHet;
-    	if(!data.getSequenceSet().getParams().isDNA())
+    	if(!data.getSequenceSet().getProps().isNucleotides())
     		Prefs.rax_protmodel = (String)model.getSelectedItem();
     	
     	return res;
@@ -130,60 +129,60 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
         empfreqLabel = new javax.swing.JLabel();
         empfreq = new javax.swing.JCheckBox();
 
-        jLabel3.setText(Text.get("Bootstrap")); // NOI18N
+        jLabel3.setText(Text.get("Bootstrap"));
 
-        jLabel1.setText(Text.get("Model")); // NOI18N
+        jLabel1.setText(Text.get("Model"));
 
         model.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel2.setText(Text.get("Rate_Heterogenity")); // NOI18N
+        jLabel2.setText(Text.get("Rate_Heterogenity"));
 
         ratehet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CAT", "MIX", "GAMMA" }));
 
-        empfreqLabel.setText(Text.get("Emp._Frequencies")); // NOI18N
+        empfreqLabel.setText(Text.get("Emp._Frequencies"));
 
         empfreq.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         empfreq.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(empfreqLabel)
-                    .addComponent(jLabel3))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bs, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addComponent(ratehet, javax.swing.GroupLayout.Alignment.LEADING, 0, 145, Short.MAX_VALUE)
-                    .addComponent(model, javax.swing.GroupLayout.Alignment.LEADING, 0, 145, Short.MAX_VALUE)
-                    .addComponent(empfreq, javax.swing.GroupLayout.Alignment.LEADING))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel2)
+                    .add(jLabel1)
+                    .add(empfreqLabel)
+                    .add(jLabel3))
+                .add(20, 20, 20)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, ratehet, 0, 187, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, model, 0, 187, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, empfreq))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(model, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(ratehet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(empfreqLabel)
-                    .addComponent(empfreq))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(bs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(model, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(ratehet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(empfreqLabel)
+                    .add(empfreq))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(bs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

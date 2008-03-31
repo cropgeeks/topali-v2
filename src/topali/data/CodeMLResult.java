@@ -78,7 +78,7 @@ public class CodeMLResult extends AlignmentResult
 	 * @return a <code>String</code> representation 
 	 * of this object.
 	 */
-	@Override
+	
 	public String toString()
 	{
 	    final String TAB = "    ";

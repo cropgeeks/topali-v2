@@ -44,7 +44,7 @@ public class DSSAnalysis extends AnalysisThread {
 	super(runDir);
     }
 
-    @Override
+    
     public void runAnalysis() throws Exception {
 	// Read the DSSResult
 	File jobDir = runDir.getParentFile();

@@ -14,8 +14,7 @@ import javax.swing.*;
 import scri.commons.gui.MsgBox;
 import scri.commons.multicore.TokenManager;
 import topali.cluster.*;
-import topali.gui.Prefs;
-import topali.var.SysPrefs;
+import topali.data.*;
 import topali.var.utils.Utils;
 
 class CachePanel extends JPanel implements ActionListener

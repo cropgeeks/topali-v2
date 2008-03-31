@@ -33,7 +33,7 @@ public class CodonWResultPanel extends ResultPanel
 		addContent(p1, false);
 	}
 
-	@Override
+	
 	public String getAnalysisInfo()
 	{
 		CodonWResult res = (CodonWResult)result;
@@ -58,13 +58,13 @@ public class CodonWResultPanel extends ResultPanel
 		return sb.toString();
 	}
 
-	@Override
+	
 	public Printable[] getPrintables()
 	{
 		return new Printable[] {panel.getPrintable()};
 	}
 
-	@Override
+	
 	public void setThreshold(double t)
 	{
 		//no threshold to set

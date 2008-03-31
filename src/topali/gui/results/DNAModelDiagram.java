@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import javax.swing.*;
 import org.apache.log4j.Logger;
+import topali.data.SysPrefs;
 import topali.data.models.*;
 
 public class DNAModelDiagram extends ModelDiagram
@@ -51,7 +52,7 @@ public class DNAModelDiagram extends ModelDiagram
 		setModel(model);
 	}
 
-	@Override
+	
 	public void setModel(Model model) {
 		this.model = (DNAModel)model;
 		
@@ -76,7 +77,7 @@ public class DNAModelDiagram extends ModelDiagram
 		}
 	}
 	
-	@Override
+	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
@@ -187,7 +188,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[3][1];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
+			if(SysPrefs.javaVersion<6) 
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, col, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			col = (subRateGroups[1]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[1]);
@@ -196,7 +200,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[3][2];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
+			if(SysPrefs.javaVersion<6)
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, col, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			col = (subRateGroups[2]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[2]);
@@ -205,7 +212,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[3][3];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
+			if(SysPrefs.javaVersion<6)
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, col, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			col = (subRateGroups[3]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[3]);
@@ -214,7 +224,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[4][2];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
+			if(SysPrefs.javaVersion<6)
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, col, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			col = (subRateGroups[4]==subRateGroups[5]) ? fixedColor : getSubRateColor(subRateGroups[4]);
@@ -223,7 +236,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[4][3];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
+			if(SysPrefs.javaVersion<6)
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, col, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, col}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			//g2d.setColor(c5);
@@ -231,7 +247,10 @@ public class DNAModelDiagram extends ModelDiagram
 			if(r==0)
 				r = 1;
 			p = mp[5][3];
-			g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c5}));
+			if(SysPrefs.javaVersion<6)
+				g2d.setPaint(new GradientPaint((float)p.x, (float)p.y, c5, (float)(p.x+r), (float)(p.y-r), Color.WHITE, false));
+			else
+				g2d.setPaint(new RadialGradientPaint(new Point(p.x+(r/2), p.y-(r/2)), (r), new float[]{0.0f, 1f}, new Color[] {Color.WHITE, c5}));
 			fillCircle(g2d, p.x, p.y, r);
 			
 			//draw base freq histograms

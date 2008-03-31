@@ -48,7 +48,7 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 
 		addWindowListener(new WindowAdapter()
 		{
-			@Override
+			
 			public void windowOpened(WindowEvent e)
 			{
 				Runnable r = new Runnable()
@@ -152,7 +152,7 @@ public class ImportFileSetsDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource() == bClose)
 		{
-			data.name = "DataSet";
+			data.setName("DataSet");
 			data.setIsReferenceList(true);
 			winMain.addNewAlignmentData(data);
 

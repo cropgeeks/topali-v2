@@ -13,11 +13,9 @@ import java.beans.*;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-
+import java.util.List;
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
-
 import pal.alignment.Alignment;
 import pal.tree.Tree;
 import scri.commons.file.FileUtils;
@@ -26,6 +24,7 @@ import topali.analyses.*;
 import topali.cluster.LocalJobs;
 import topali.data.*;
 import topali.gui.dialog.*;
+import topali.gui.dialog.annotation.AnnotationDialog;
 import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
@@ -34,13 +33,11 @@ import topali.gui.dialog.jobs.tree.mrbayes.MrBayesDialog;
 import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.quicktree.QuickTreeDialog;
 import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
-import topali.gui.dialog.region.RegionDialog;
 import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
 import topali.i18n.Text;
 import topali.mod.PrintPreview;
 import topali.vamsas.VamsasManager;
-import topali.var.SysPrefs;
 import topali.var.utils.*;
 
 public class WinMain extends JFrame implements PropertyChangeListener
@@ -54,7 +51,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public VamsasManager vamsas = null;
 
 	public static VamsasEvents vEvents = null;
-
+	
 	// GUI controls...
 	private WinMainMenuBar menubar;
 
@@ -70,8 +67,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public static JSplitPane splits;
 
 	public static JobsPanel jobsPanel;
-
-	public static RegionDialog rDialog;
+	
+	public static AnnotationDialog annoDialog;
 
 	public static OverviewDialog ovDialog;
 
@@ -114,8 +111,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		tips = new WinMainTipsPanel();
 		jobsPanel = new JobsPanel();
-		rDialog = new RegionDialog(this);
 		ovDialog = new OverviewDialog(this);
+		annoDialog = new AnnotationDialog(this, false);
 
 		splits = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splits.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
@@ -233,7 +230,15 @@ public class WinMain extends JFrame implements PropertyChangeListener
 					log.warn("Couldn't find example dataset");
 					MsgBox.msg("Couldn't load example dataset.\n  " + e, MsgBox.ERR);
 				}
+				break;
 			}
+			case 5:
+				List<AlignmentData> data = project.getDatasets();
+				JoinAlignmentsDialog dlg = new JoinAlignmentsDialog(this, true, data);
+				dlg.pack();
+				dlg.setLocationRelativeTo(this);
+				dlg.setVisible(true);
+				break;
 			}
 		}
 	}
@@ -400,7 +405,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		new GoToNucDialog(this, navPanel.getCurrentAlignmentPanel(null));
 	}
 
-	void menuAlgnRename()
+	void menuAlgnRenameSeq()
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
@@ -415,9 +420,25 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		}
 	}
 
+	void menuAlgnRename() {
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		
+		String newname = (String) JOptionPane.showInputDialog(TOPALi.winMain,
+				"Please enter new name:",
+				"Modify name",
+				JOptionPane.PLAIN_MESSAGE, null, null, data.getName());
+
+		if (newname!=null && newname.length()>0) {
+			data.setName(newname);
+		}
+	}
+	
 	void menuAlgnShowPartitionDialog()
 	{
-		rDialog.setVisible(true);
+		//rDialog.setVisible(true);
+		WinMain.annoDialog.refresh();
+		WinMain.annoDialog.setLocationRelativeTo(this);
+		WinMain.annoDialog.setVisible(true);
 	}
 
 	/* Removes an alignment from the current project. */
@@ -484,7 +505,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		int runNum = data.getTracker().getPdm2RunCount() + 1;
 		data.getTracker().setPdm2RunCount(runNum);
 		result.guiName = "PDM2 Result " + runNum;
-		result.jobName = "PDM2 Analysis " + runNum + " on " + data.name + " ("
+		result.jobName = "PDM2 Analysis " + runNum + " on " + data.getName() + " ("
 				+ ss.getSelectedSequences().length + "/" + ss.getSize()
 				+ " sequences)";
 
@@ -607,12 +628,12 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			return;
 		}
 		
-		QuickTreeDialog dlg = new QuickTreeDialog(this, data.getSequenceSet().getParams().isDNA());
+		QuickTreeDialog dlg = new QuickTreeDialog(this, data.getSequenceSet().getProps().isNucleotides());
 		dlg.setVisible(true);
 		if(dlg.bs==-1)
 			return;
 		
-		if(dlg.estimate && data.getSequenceSet().getParams().isNeedCalculation()) {
+		if(dlg.estimate && data.getSequenceSet().getProps().needsCalculation()) {
 		    SequenceSetUtils.estimateParameters(data.getSequenceSet());
 		}
 		
@@ -622,22 +643,22 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		tr.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
-		if(data.getSequenceSet().getParams().isDNA())
+		if(data.getSequenceSet().getProps().isNucleotides())
 			tr.guiName = "#"+runNum+" F84+G Tree";
 		else
 			tr.guiName = "#"+runNum+" WAG+G Tree";
 		tr.jobName = "Tree Estimation";
 		
 		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
-		TreeCreatorThread creator = new TreeCreatorThread(alignment, data.getSequenceSet().getParams().isDNA(), true);
+		TreeCreatorThread creator = new TreeCreatorThread(alignment, data.getSequenceSet().getProps().isNucleotides(), true);
 		creator.setParameters(dlg.tstv, dlg.alpha);
 		Tree palTree = creator.getTree();
 				
-		double tstv = dlg.estimate ? data.getSequenceSet().getParams().getTRatio() : dlg.tstv;
-		double alpha = dlg.estimate ? data.getSequenceSet().getParams().getAlpha() : dlg.alpha;
+		double tstv = dlg.estimate ? data.getSequenceSet().getProps().getTRatio() : dlg.tstv;
+		double alpha = dlg.estimate ? data.getSequenceSet().getProps().getAlpha() : dlg.alpha;
 		
 		if(dlg.bs>0) {
-			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().getParams().isDNA(), dlg.bs);
+			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().getProps().isNucleotides(), dlg.bs);
 			bg.setParameters(tstv, alpha);
 			palTree = bg.getTree();
 		}
@@ -649,7 +670,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			tr.startTime = creator.getStartTime();
 			tr.endTime = creator.getEndTime();
 			tr.status = topali.cluster.JobStatus.COMPLETED;
-			String model = data.getSequenceSet().getParams().isDNA() ? "F84 (ts/tv="+Utils.d2.format(tstv)+")"
+			String model = data.getSequenceSet().getProps().isNucleotides() ? "F84 (ts/tv="+Utils.d2.format(tstv)+")"
 					: "WAG";
 			tr.info = "Sub. Model: "
 					+ model
@@ -725,9 +746,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		}
 		res.seqNameMapping = seqNames;
 
-		if (!data.getSequenceSet().getParams().isDNA())
+		if (!data.getSequenceSet().getProps().isNucleotides())
 		{
-			SequenceSetParams p = data.getSequenceSet().getParams();
+			SequenceSetProperties p = data.getSequenceSet().getProps();
 			if (p.getModel().is("cprev"))
 				res.model = FastMLResult.MODEL_AA_CPREV;
 			else if (p.getModel().is("day"))
@@ -744,9 +765,9 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		} else
 			res.model = FastMLResult.MODEL_DNA_JC;
 
-		res.gamma = data.getSequenceSet().getParams().getModel().isGamma();
+		res.gamma = data.getSequenceSet().getProps().getModel().isGamma();
 
-		res.alignment.name = data.name + " (+ancestral seq. using FastML)";
+		res.alignment.setName(data.getName() + " (+ancestral seq. using FastML)");
 		submitJob(data, res);
 	}
 
@@ -816,7 +837,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		WinMainMenuBar.setMenusForNavChange();
 		navPanel.clearSelection();
-		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 
 		int location = splits.getDividerLocation();
@@ -1040,7 +1060,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		menubar.setProjectOpenedState();
 		navPanel.clear();
 
-		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 	}
 
@@ -1069,7 +1088,6 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			if (evt.getOldValue() != null && evt.getNewValue() == null)
 			{
 				navPanel.removeSelectedNode();
-				rDialog.setAlignmentData(null);
 				ovDialog.setAlignmentPanel(null);
 			}
 		}

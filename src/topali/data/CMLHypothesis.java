@@ -54,7 +54,7 @@ public class CMLHypothesis
 		return sb.toString();
 	}
 	
-	@Override
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<tree>"+tree+"</tree>\n");

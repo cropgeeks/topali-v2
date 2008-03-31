@@ -7,12 +7,12 @@ package topali.cluster.jobs.raxml;
 
 import java.io.File;
 
-import topali.analyses.SequenceSetUtils;
 import topali.cluster.*;
 import topali.cluster.jobs.raxml.analysis.RaxmlAnalysis;
 import topali.data.*;
 import topali.fileio.Castor;
 import topali.mod.Filters;
+import topali.var.utils.SequenceSetUtils;
 
 public class RaxmlInitializer extends Thread
 {
@@ -30,7 +30,7 @@ public class RaxmlInitializer extends Thread
 		this.result = result;
 	}
 	
-	@Override
+	
 	public void run()
 	{
 		try

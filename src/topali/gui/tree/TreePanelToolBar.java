@@ -15,7 +15,6 @@ import topali.analyses.TreeRootingThread;
 import topali.data.*;
 import topali.gui.*;
 import topali.gui.dialog.AnalysisInfoDialog;
-import topali.var.SysPrefs;
 import topali.var.utils.*;
 
 class TreePanelToolBar extends JToolBar implements ActionListener

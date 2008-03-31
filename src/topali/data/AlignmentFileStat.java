@@ -28,7 +28,7 @@ public class AlignmentFileStat
 		this.filename = filename;
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return new File(filename).getName();

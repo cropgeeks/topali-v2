@@ -22,7 +22,7 @@ public class MTResultsNode extends ResultsNode
 		panel = new MTResultPanel(data, result);
 	}
 	
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return panel;
@@ -38,7 +38,7 @@ public class MTResultsNode extends ResultsNode
 		return true; 
 	}
 
-	@Override
+	
 	public String toString()
 	{
 		return result.guiName;

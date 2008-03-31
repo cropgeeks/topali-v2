@@ -6,11 +6,12 @@
 package topali.gui;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.*;
 
 /**
@@ -28,7 +29,7 @@ public class CustomTable extends JTable
 		this.setModel(new MyTablemodel(rowData, columnNames));
 		init();
 	}
-
+	
 	/**
 	 * If the table should be editable or not.
 	 * @param b 
@@ -44,7 +45,7 @@ public class CustomTable extends JTable
 		this.headerToolTips = tt;
 		
 		JTableHeader th = new JTableHeader(columnModel) {
-            @Override
+            
 	    public String getToolTipText(MouseEvent e) {
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
@@ -209,17 +210,12 @@ public class CustomTable extends JTable
 	class MyTablemodel extends DefaultTableModel
 	{
 
-		public MyTablemodel(Object[][] data, Object[] columnNames)
-		{
-			super(data, columnNames);
-		}
-
 		public MyTablemodel(Vector<Vector<Object>> data, Vector<String> columnNames)
 		{
 			super(data, columnNames);
 		}
 
-		@Override
+		
 		public boolean isCellEditable(int row, int column)
 		{
 			return editable;
@@ -319,13 +315,13 @@ public class CustomTable extends JTable
 			setWrapStyleWord(true);
 		}
 		
-		@Override
+		
 		public Dimension getPreferredScrollableViewportSize()
 		{
 			return getPreferredSize();
 		}
 
-		@Override
+		
 		public Dimension getMinimumSize()
 		{
 			return getPreferredSize();
@@ -333,4 +329,5 @@ public class CustomTable extends JTable
 		
 		
 	}
+	
 }

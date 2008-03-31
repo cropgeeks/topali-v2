@@ -32,19 +32,19 @@ public class CodeMLResultsNode extends ResultsNode
 		return ((CodeMLResult)result).type.equals(CodeMLResult.TYPE_SITEMODEL);
 	}
 	
-	@Override
+	
 	public String toString()
 	{
 		return result.guiName;
 	}
 
-	@Override
+	
 	public String getHelpKey()
 	{
 		return "cml_method";
 	}
 
-	@Override
+	
 	public JComponent getPanel()
 	{
 		return panel;

@@ -14,7 +14,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import topali.analyses.MakeNA;
-import topali.data.AlignmentData;
+import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.gui.*;
 import topali.i18n.Text;

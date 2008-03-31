@@ -25,7 +25,7 @@ public class MrBayesProcess extends StoppableProcess implements ProcessOutputPar
 		runCancelMonitor();
 	}
 
-	@Override
+	
 	public void run() throws Exception
 	{
 		pctDir = new File(wrkDir, "percent");

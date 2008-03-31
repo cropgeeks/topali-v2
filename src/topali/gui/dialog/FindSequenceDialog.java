@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import topali.data.SequenceSet;
+import topali.data.*;
 import topali.gui.*;
 import topali.i18n.Text;
 import topali.var.utils.Utils;

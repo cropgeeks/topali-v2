@@ -3,13 +3,12 @@
 // This package may be distributed under the
 // terms of the GNU General Public License (GPL)
 
-package topali.gui;
+package topali.data;
 
 import java.awt.Color;
 import java.util.Random;
 
 import scri.commons.gui.XMLPreferences;
-import topali.data.ModelTestResult;
 import topali.mod.Filters;
 
 public class Prefs extends XMLPreferences
