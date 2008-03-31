@@ -2,9 +2,25 @@ Current state of affairs
 -----------------------
 
 Last modifications:
+- Implemented a new Annotation framework
+- Alignments can be joined together (ImportDialog)
+- Alignments can be renamed
+- DNA can be translated to Protein
 
 
 TODO:
+- Multiple Loci support
+- Generalize selection of sequences of groups
+- Release for UoD cluster
+- Raxml: Optimise parameters; check new Raxml version
+- SOWH test
+- Molecular clock test
+- Implement Wolfgang's new HMM method
+- Automatically determine window sizes for LRT and DSS
+- Make webservices available for third parties (first: simple tree webservice using mrbayes(?))
+- Modify methods to also work with SNP data
+- Translation option int the export menu
+- Editing functions (like in Topali v 1)
 
 
 Suggestions:
@@ -13,6 +29,7 @@ Suggestions:
 - Time limit on public queue: different limit for single and parallel jobs?
 
 Known Bugs
+- "Remove Alignment" doesn't clear the alignment overview
 - RaxML process sometimes doesn't stop (seems to happen on quite short alignments)
 - PhyML: Sequences with nearly zero branchlengths often cause zero bootstrap support. (bug in PhyML)
 
