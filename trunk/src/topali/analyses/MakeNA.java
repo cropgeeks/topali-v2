@@ -13,6 +13,7 @@ import topali.data.*;
 import topali.fileio.AlignmentLoadException;
 import topali.i18n.Text;
 import topali.var.AssociationMap;
+import topali.var.utils.SequenceSetUtils;
 import scri.commons.gui.MsgBox;
 
 public class MakeNA

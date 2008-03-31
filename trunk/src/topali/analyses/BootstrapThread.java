@@ -52,14 +52,14 @@ public class BootstrapThread extends DesktopThread implements TreeGenerator
 		return bsTree;
 	}
 	
-	@Override
+	
 	public void kill()
 	{
 		stop = true;
 	}
 
 
-	@Override
+	
 	public void run()
 	{
 		try
