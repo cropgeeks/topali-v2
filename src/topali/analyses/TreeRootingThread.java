@@ -43,7 +43,7 @@ public class TreeRootingThread extends DesktopThread
 	}
 	
 	String allChildren;
-	@Override
+	
 	public void run()
 	{
 		try
@@ -129,7 +129,7 @@ public class TreeRootingThread extends DesktopThread
 	
 	class NodeListComparator implements Comparator<Node> {
 
-		@Override
+		
 		public int compare(Node o1, Node o2)
 		{
 			return o1.getIdentifier().getName().compareTo(o2.getIdentifier().getName());

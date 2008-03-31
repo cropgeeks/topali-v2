@@ -6,11 +6,13 @@
 package topali.analyses;
 
 import topali.data.*;
+import topali.data.annotations.*;
+import topali.data.models.*;
 
 public class PartitionMaker
 {
-	private PartitionAnnotations pAnnotations;
-
+	AlignmentData data;
+	
 	private int alignmentLength;
 
 	private boolean discard = false;
@@ -19,9 +21,9 @@ public class PartitionMaker
 
 	public PartitionMaker(AlignmentData data)
 	{
-		pAnnotations = (PartitionAnnotations) data.getTopaliAnnotations()
-				.getAnnotations(PartitionAnnotations.class);
-		pAnnotations.deleteAll();
+		this.data =data;
+		
+		data.getAnnotations().removeAll(PartitionAnnotation.class);
 
 		alignmentLength = data.getSequenceSet().getLength();
 	}
@@ -89,9 +91,14 @@ public class PartitionMaker
 		if (discard && length < minLength)
 		{
 			// Do nothing
-		} else
+		} else {
 			// partitions.add(new Partition(start, end));
-			pAnnotations.addRegion(start, end);
+			PartitionAnnotation anno = new PartitionAnnotation(start, end);
+			Model modss = data.getSequenceSet().getProps().getModel();
+			Model modanno = ModelManager.getInstance().generateModel(modss.getName(), modss.isGamma(), modss.isInv());
+			anno.setModel(modanno);
+			data.getAnnotations().add(anno);
+		}
 	}
 
 	public void autoPartitionHMM(float[][] data1, float[][] data2,

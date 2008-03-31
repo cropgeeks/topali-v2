@@ -81,7 +81,7 @@ public class ParamEstimateThread extends DesktopThread
 	    return stop;
 	}
 	
-	@Override
+	
 	public void run()
 	{
 		sitePattern = new SitePattern(alignment);
@@ -117,7 +117,7 @@ public class ParamEstimateThread extends DesktopThread
 		updateObservers(DesktopThread.THREAD_FINISHED);
 	}
 	
-	@Override
+	
 	public void kill() {
 	    stop = true;
 	}
