@@ -31,7 +31,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	protected Color bgColor = (Color) UIManager.get("list.background");
 
 	boolean isSelected = false;
-	
+
 	public JobsPanelEntry(AnalysisJob job)
 	{
 		this.job = job;
@@ -142,7 +142,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 			String txt = "waiting to run...";
 			int q = Integer.parseInt(qCount);
 			if (q >= 0)
-				txt = q + (q==1 ? " job " : " jobs ") + "ahead of you...";
+				txt = "(up to " + q + (q==1 ? " job " : " jobs ") + "ahead of you)";
 
 			statusLabel.setText("Queued - " + txt);
 			WinMainStatusBar.setStatusIcon(GRE);
@@ -210,7 +210,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	public void setSelected(boolean selected)
 	{
 	    this.isSelected = selected;
-	    
+
 		if (selected)
 			jobLabel.setFont(jobLabel.getFont().deriveFont(Font.BOLD));
 		else
@@ -220,14 +220,14 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 	// Have to override this, to prevent JobsPanel's BoxLayout from scaling this
 	// Component to it's
 	// maximum size.
-	
+
 	public Dimension getMaximumSize()
 	{
 		return new Dimension(super.getMaximumSize().width,
 				getPreferredSize().height);
 	}
 
-	
+
 	public Dimension getMinimumSize()
 	{
 		return new Dimension(super.getMaximumSize().width,
@@ -236,7 +236,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 
 	public void mouseClicked(MouseEvent e)
 	{
-	    
+
 		if (e.getSource().equals(cancelLabel))
 		{
 			String msg = job.getResult().jobName
@@ -254,7 +254,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 				cancelLabel.removeMouseListener(this);
 			}
 		}
-		
+
 
 	}
 

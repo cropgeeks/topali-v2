@@ -125,8 +125,7 @@ public class WinMainMenuBar extends JMenuBar
 		createAlgnMenu();
 		createAnlsMenu();
 		createVamsasMenu();
-		if (SystemUtils.isMacOS())
-			createWndMenu();
+		createWndMenu();
 		createHelpMenu();
 
 		setBorderPainted(false);
@@ -648,7 +647,7 @@ public class WinMainMenuBar extends JMenuBar
 		mFileSave = getItem(aFileSave, KeyEvent.VK_S, KeyEvent.VK_S,
 				menuShortcut, getIcon(Icons.SAVE16));
 		mFileSaveAs = getItem(aFileSaveAs, KeyEvent.VK_A, 0, 0, getIcon(Icons.SAVEAS16));
-		mFileSaveAs.setDisplayedMnemonicIndex(5);
+		mFileSaveAs.setDisplayedMnemonicIndex(13);
 		mFileImportDataSet = getItem(aFileImportDataSet, KeyEvent.VK_I, 0, 0,
 				getIcon(Icons.IMPORT16));
 		mFileExportDataSet = getItem(aFileExportDataSet, KeyEvent.VK_E, 0, 0);
@@ -693,6 +692,7 @@ public class WinMainMenuBar extends JMenuBar
 				Prefs.gui_statusbar_visible);
 		mViewTipsPanel = getItem(aViewTipsPanel, KeyEvent.VK_P,
 				Prefs.gui_tips_visible);
+		mViewTipsPanel.setDisplayedMnemonicIndex(5);
 		mViewDisplaySettings = getItem(aViewDisplaySettings, KeyEvent.VK_D,
 				KeyEvent.VK_F5, 0);
 
@@ -776,7 +776,7 @@ public class WinMainMenuBar extends JMenuBar
 
 		//Recombination
 		mAnlsRunPDM = getItem(aAnlsRunPDM, KeyEvent.VK_P, 0, 0);
-		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_P, 0, 0);
+		mAnlsRunPDM2 = getItem(aAnlsRunPDM2, KeyEvent.VK_2, 0, 0);
 		mAnlsRunDSS = getItem(aAnlsRunDSS, KeyEvent.VK_D, 0, 0);
 		mAnlsRunHMM = getItem(aAnlsRunHMM, KeyEvent.VK_H, 0, 0);
 		mAnlsRunLRT = getItem(aAnlsRunLRT, KeyEvent.VK_L, 0, 0);
@@ -788,12 +788,15 @@ public class WinMainMenuBar extends JMenuBar
 		//Phylogeny
 		mAnlsRunMT = getItem(aAnlsRunMT, KeyEvent.VK_M, 0, 0);
 		mAnlsQuickTree = getItem(aAnlsQuickTree, KeyEvent.VK_Q, 0, 0);
-		mAnlsMrBayes = getItem(aAnlsMrBayes, 0, 0, 0);
-		mAnlsPhyml = getItem(aAnlsPhyml, 0, 0, 0);
-		mAnlsRaxml = getItem(aAnlsRaxml, 0, 0, 0);
+		mAnlsMrBayes = getItem(aAnlsMrBayes, KeyEvent.VK_M, 0, 0);
+		mAnlsPhyml = getItem(aAnlsPhyml, KeyEvent.VK_P, 0, 0);
+		mAnlsRaxml = getItem(aAnlsRaxml, KeyEvent.VK_R, 0, 0);
 		mAnlsNJ = new JMenu(Text.get("mNJ"));
+		mAnlsNJ.setMnemonic(KeyEvent.VK_N);
 		mAnlsBayes = new JMenu(Text.get("mBayes"));
+		mAnlsBayes.setMnemonic(KeyEvent.VK_B);
 		mAnlsML = new JMenu(Text.get("mML"));
+		mAnlsML.setMnemonic(KeyEvent.VK_L);
 
 		//Misc
 		mAnlsRunCW = getItem(aAnlsRunCW, KeyEvent.VK_C, 0, 0);
@@ -802,11 +805,12 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsShowJobs = getItem(aAnlsShowJobs, KeyEvent.VK_J, KeyEvent.VK_J,
 				menuShortcut);
 		mAnlsRename = getItem(aAnlsRename, KeyEvent.VK_N, 0, 0);
-		mAnlsRemove = getItem(aAnlsRemove, KeyEvent.VK_R, 0, 0, getIcon(Icons.REMOVE16));
+		mAnlsRemove = getItem(aAnlsRemove, KeyEvent.VK_M, 0, 0, getIcon(Icons.REMOVE16));
 		mAnlsSettings = getItem(aAnlsSettings, KeyEvent.VK_S, 0, 0,
 				getIcon(Icons.SETTINGS));
 
 		JMenu h1 = new JMenu(Text.get("mRecomb"));
+		h1.setMnemonic(KeyEvent.VK_R);
 		h1.setIcon(getIcon(Icons.RECOMBINATION));
 		mAnls.add(h1);
 		h1.add(mAnlsRunPDM);
@@ -815,12 +819,14 @@ public class WinMainMenuBar extends JMenuBar
 		h1.add(mAnlsRunLRT);
 //		mAnls.addSeparator();
 		JMenu h2 = new JMenu(Text.get("mSelection"));
+		h2.setMnemonic(KeyEvent.VK_L);
 		h2.setIcon(getIcon(Icons.POSSELECTION));
 		mAnls.add(h2);
 		h2.add(mAnlsRunCodeMLSite);
 		h2.add(mAnlsRunCodeMLBranch);
 //		mAnls.addSeparator();
 		JMenu h3 = new JMenu(Text.get("mPhylo"));
+		h3.setMnemonic(KeyEvent.VK_P);
 		h3.setIcon(getIcon(Icons.TREE));
 		mAnls.add(h3);
 		h3.add(mAnlsRunMT);
@@ -834,6 +840,7 @@ public class WinMainMenuBar extends JMenuBar
 		//mAnls.add(mAnlsCreateTree);
 //		mAnls.addSeparator();
 		JMenu h4 = new JMenu(Text.get("mCodon"));
+		h4.setMnemonic(KeyEvent.VK_C);
 		h4.setIcon(getIcon(Icons.CODINGREGIONS));
 		mAnls.add(h4);
 		h4.add(mAnlsRunCW);
@@ -856,7 +863,7 @@ public class WinMainMenuBar extends JMenuBar
 		mVamsas.setMnemonic(KeyEvent.VK_S);
 
 		mVamSelectSession = getItem(aVamSelectSession, KeyEvent.VK_S, 0, 0);
-		mVamCommit = getItem(aVamCommit, KeyEvent.VK_U, 0, 0, getIcon(Icons.MIDPOINT_ROOT));
+		mVamCommit = getItem(aVamCommit, KeyEvent.VK_C, 0, 0, getIcon(Icons.MIDPOINT_ROOT));
 		//mVamImport = getItem(aVamImport, KeyEvent.VK_I, 0, 0, Icons.IMPORT16);
 		//mVamExport = getItem(aVamExport, KeyEvent.VK_E, 0, 0, Icons.EXPORT);
 
@@ -883,7 +890,8 @@ public class WinMainMenuBar extends JMenuBar
 		mWnd.addSeparator();
 		mWnd.add(mWndTOPALi);
 
-		add(mWnd);
+		if (SystemUtils.isMacOS())
+			add(mWnd);
 	}
 
 	private void createHelpMenu()

@@ -32,7 +32,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 	private JScrollPane sp;
 
 	private JComboBox language;
-	
+
 	// Controls used by other settings
 	private SpinnerNumberModel fontModel, colorModel;
 
@@ -186,9 +186,9 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		else if (e.getSource() == close) {
 			setVisible(false);
-			
+
 			String oldLocale = Prefs.locale;
-			
+
 			if(language.getSelectedItem().equals(Text.get("automatic"))) {
 			    Prefs.locale = "default";
 			}
@@ -198,7 +198,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 			else if(language.getSelectedItem().equals(Text.get("german"))) {
 			    Prefs.locale = "de";
 			}
-			
+
 			if(!Prefs.locale.equals(oldLocale)) {
 			    MsgBox.msg(Text.get("locale_changed"), JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -230,7 +230,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		list.addMouseListener(new MouseAdapter()
 		{
-			
+
 			public void mouseClicked(MouseEvent e)
 			{
 				changeColor();
@@ -239,7 +239,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		list.addKeyListener(new KeyAdapter()
 		{
-			
+
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -278,7 +278,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		    selIndex = 2;
 		}
 	    language.setSelectedIndex(selIndex);
-	    
+
 		fontModel = new SpinnerNumberModel(Prefs.gui_seq_font_size, 1, 50, 1);
 		fontSpin = new JSpinner(fontModel);
 		fontSpin.addChangeListener(this);
@@ -302,7 +302,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		antialias.addActionListener(this);
 		antialias.setMnemonic(KeyEvent.VK_A);
 		antialias.setToolTipText("Anti-aliasing smoothens the alignment display.");
-		
+
 		boldFont = new JCheckBox(Text.get("DisplaySettingsDialog.gui25"));
 		boldFont.addActionListener(this);
 		boldFont.setMnemonic(KeyEvent.VK_B);
@@ -320,10 +320,12 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		showHorzHighlight = new JCheckBox(Text.get("DisplaySettingsDialog.gui44"));
 		showHorzHighlight.addActionListener(this);
+		showHorzHighlight.setMnemonic(KeyEvent.VK_H);
 		showHorzHighlight.setToolTipText(Text.get("DisplaySettingsDialog.gui46"));
 
 		showVertHighlight = new JCheckBox(Text.get("DisplaySettingsDialog.gui43"));
 		showVertHighlight.addActionListener(this);
+		showVertHighlight.setMnemonic(KeyEvent.VK_V);
 		showVertHighlight.setToolTipText(Text.get("DisplaySettingsDialog.gui45"));
 
 		smooth = new JCheckBox(Text.get("DisplaySettingsDialog.gui29"));
@@ -338,7 +340,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		tooltip = new JCheckBox(Text.get("DisplaySettingsDialog.gui33"));
 		tooltip.addActionListener(this);
-		tooltip.setMnemonic(KeyEvent.VK_A);
+		tooltip.setMnemonic(KeyEvent.VK_P);
 		tooltip.setToolTipText(Text.get("DisplaySettingsDialog.gui34"));
 
 		tree = new JCheckBox(Text.get("DisplaySettingsDialog.gui35"));
@@ -347,7 +349,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		tree.setToolTipText(Text.get("DisplaySettingsDialog.gui36"));
 
 		JLabel label1 = new JLabel(Text.get("language"));
-		
+
 		JLabel label2 = new JLabel(Text.get("DisplaySettingsDialog.gui37"));
 		label2.setDisplayedMnemonic('F');
 		label2.setLabelFor(((JSpinner.NumberEditor) fontSpin.getEditor())
@@ -361,10 +363,10 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		layout.add(label1, 0, 0, 1, 1, new Insets(5, 5, 5, 5));
 		layout.add(language, 1, 0, 1, 1, new Insets(5, 5, 5, 5));
-		
+
 		layout.add(label2, 0, 1, 1, 1, new Insets(5, 5, 5, 5));
 		layout.add(fontSpin, 1, 1, 1, 1, new Insets(5, 5, 5, 5));
-		
+
 		layout.add(label3, 0, 2, 1, 1, new Insets(5, 5, 5, 5));
 		layout.add(colorSpin, 1, 2, 0, 1, new Insets(5, 5, 5, 5));
 
@@ -434,7 +436,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 			return this;
 		}
 
-		
+
 		public Insets getInsets(Insets i)
 		{
 			return new Insets(0, 3, 0, 0);
@@ -523,7 +525,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 				return old;
 		}
 
-		
+
 		public String toString()
 		{
 			return name;

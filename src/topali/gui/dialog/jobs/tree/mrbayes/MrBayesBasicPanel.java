@@ -32,11 +32,13 @@ public class MrBayesBasicPanel extends javax.swing.JPanel {
         bCodonpos = new javax.swing.JRadioButton();
 
         buttonGroup1.add(bOnemodel);
+        bOnemodel.setMnemonic('o');
         bOnemodel.setText(Text.get("One_Model"));
         bOnemodel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         bOnemodel.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         buttonGroup1.add(bCodonpos);
+        bCodonpos.setMnemonic('c');
         bCodonpos.setText(Text.get("Codon_position_Models"));
         bCodonpos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         bCodonpos.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -50,7 +52,7 @@ public class MrBayesBasicPanel extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(bOnemodel)
                     .add(bCodonpos))
-                .addContainerGap(315, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -59,7 +61,7 @@ public class MrBayesBasicPanel extends javax.swing.JPanel {
                 .add(bOnemodel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(bCodonpos)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

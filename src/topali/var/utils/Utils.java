@@ -43,46 +43,65 @@ public class Utils {
     }
 
     public static JPanel getButtonPanel(ActionListener al, JButton bOK,
-	    JButton bCancel, String helpString) {
-	bOK.addActionListener(al);
-	bCancel.addActionListener(al);
-	JButton bHelp = TOPALiHelp.getHelpButton(helpString);
+	    JButton bCancel, String helpString)
+	{
+		bOK.addActionListener(al);
+		checkButton(bOK);
 
-	JPanel p1 = new JPanel(new GridLayout(1, 3, 5, 5));
-	p1.add(bOK);
-	p1.add(bCancel);
-	p1.add(bHelp);
+		bCancel.addActionListener(al);
+		checkButton(bCancel);
 
-	JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-	p2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	p2.add(p1);
+		JButton bHelp = TOPALiHelp.getHelpButton(helpString);
+		checkButton(bHelp);
 
-	return p2;
+		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		p1.add(bOK);
+		p1.add(bCancel);
+		p1.add(bHelp);
+
+		return p1;
     }
 
     public static JPanel getButtonPanel(JButton bRun, JButton bCancel,
-	    JButton bDefault, JButton bHelp, JDialog parent, String help) {
-	bRun.setText(Text.get("run"));
-	bRun.addActionListener((ActionListener) parent);
-	bCancel.setText(Text.get("cancel"));
-	bCancel.addActionListener((ActionListener) parent);
-	bDefault.setText(Text.get("defaults"));
-	bDefault.addActionListener((ActionListener) parent);
-	if (help != null)
-	    bHelp = TOPALiHelp.getHelpButton(help);
+	    JButton bDefault, JButton bHelp, JDialog parent, String help)
+	{
+		bRun.setText(Text.get("run"));
+		bRun.addActionListener((ActionListener) parent);
+		checkButton(bRun);
 
-	addCloseHandler(parent, bCancel);
+		bCancel.setText(Text.get("cancel"));
+		bCancel.addActionListener((ActionListener) parent);
+		checkButton(bCancel);
 
-	JPanel p1 = new JPanel(new GridLayout(1, 4, 5, 5));
-	// JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-	p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	p1.add(bRun);
-	p1.add(bDefault);
-	p1.add(bCancel);
-	p1.add(bHelp);
-	JPanel p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-	p2.add(p1);
-	return p2;
+		bDefault.setText(Text.get("defaults"));
+		bDefault.addActionListener((ActionListener) parent);
+		checkButton(bDefault);
+
+		if (help != null)
+		{
+			bHelp = TOPALiHelp.getHelpButton(help);
+			checkButton(bHelp);
+		}
+
+		addCloseHandler(parent, bCancel);
+
+		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+		p1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		p1.add(bRun);
+		p1.add(bDefault);
+		p1.add(bCancel);
+		p1.add(bHelp);
+
+		return p1;
+    }
+
+    private static void checkButton(JButton button)
+    {
+    	Dimension d = button.getPreferredSize();
+
+		if (d.width < 75)
+			button.setPreferredSize(new Dimension(75, d.height));
     }
 
     /**
@@ -143,7 +162,7 @@ public class Utils {
 	    return null;
 	}
     }
-    
+
 //	Commented out because doesn't work with Java < 1.6
 //    /**
 //     * Opens the desktop's default browser with a certain URL
@@ -164,7 +183,7 @@ public class Utils {
 //	}
 //	return false;
 //    }
-//    
+//
 //    public static boolean openMailclient(String address, String subject, String message) throws URISyntaxException, IOException {
 //	if (Desktop.isDesktopSupported()) {
 //	    Desktop desktop = Desktop.getDesktop();
@@ -251,8 +270,8 @@ public class Utils {
      * Copies an array into a new array of a certain type (dstClass) (usefull
      * for "casting" arrays, e.g. a float to double array, etc.) Also works with
      * multidimensional arrays
-     * 
-     * Notes: 
+     *
+     * Notes:
      * 1)
      * You can't directly cast a String[][]... into a primitive array
      * (e.g. int[][]...). First cast String[][]... to Integer[][]..., then cast
@@ -260,7 +279,7 @@ public class Utils {
      * 2)
      * If you want to cast ClassA[][]... to ClassB[][]... ClassB must have a
      * constructor of the form ClassB(ClassA obj)
-     * 
+     *
      * @param array
      * @param dstClass
      * @return

@@ -1,4 +1,4 @@
-#$ -l fq=true
+#$ -l fqp=true
 
 #$ -N TPi-MT
 #$ -cwd

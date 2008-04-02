@@ -183,10 +183,10 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
                     .add(jLabel7))
                 .add(30, 30, 30)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, burnin, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, samFreq, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, nGen, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                    .add(nRuns, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, burnin, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, samFreq, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, nGen, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .add(nRuns, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -244,7 +244,7 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(gamma)
                     .add(inv)
-                    .add(subModel, 0, 209, Short.MAX_VALUE))
+                    .add(subModel, 0, 167, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
