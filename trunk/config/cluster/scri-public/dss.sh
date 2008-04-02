@@ -1,4 +1,4 @@
-#$ -l public=true
+#$ -l pqp=true
 
 #$ -N TPi-DSS
 #$ -cwd

@@ -1,4 +1,4 @@
-#$ -l public=true
+#$ -l pqs=true
 
 #$ -N TPi-MB
 #$ -cwd

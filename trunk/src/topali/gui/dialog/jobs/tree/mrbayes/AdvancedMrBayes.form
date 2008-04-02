@@ -62,10 +62,10 @@
                   </Group>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="burnin" alignment="1" pref="211" max="32767" attributes="2"/>
-                      <Component id="samFreq" alignment="1" pref="211" max="32767" attributes="2"/>
-                      <Component id="nGen" alignment="1" pref="211" max="32767" attributes="2"/>
-                      <Component id="nRuns" alignment="0" pref="211" max="32767" attributes="2"/>
+                      <Component id="burnin" alignment="1" pref="169" max="32767" attributes="2"/>
+                      <Component id="samFreq" alignment="1" pref="169" max="32767" attributes="2"/>
+                      <Component id="nGen" alignment="1" pref="169" max="32767" attributes="2"/>
+                      <Component id="nRuns" alignment="0" pref="169" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -172,7 +172,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="gamma" min="-2" max="-2" attributes="0"/>
                       <Component id="inv" min="-2" max="-2" attributes="0"/>
-                      <Component id="subModel" alignment="0" pref="209" max="32767" attributes="2"/>
+                      <Component id="subModel" alignment="0" pref="167" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
