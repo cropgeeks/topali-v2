@@ -1102,8 +1102,11 @@ if (wizardContext != null) {
       <variables />
     </macos>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="4" />
+    <mediaSet refId="22" />
+    <mediaSet refId="26" />
+    <mediaSet refId="36" />
   </buildIds>
 </install4j>
 
