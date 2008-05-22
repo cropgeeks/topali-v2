@@ -17,99 +17,99 @@ import uk.ac.vamsas.client.simpleclient.SimpleClientFactory;
 public class VamsasManager
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	public static final String newSession = "NewSession";
-	public static final ClientHandle client = new ClientHandle("topali", TOPALi.VERSION);
+	public static final ClientHandle client = new ClientHandle("topali", Install4j.VERSION);
 	public static final UserHandle user = new UserHandle(System.getProperty("user.name"), "");
-	
+
 	public Project project;
 	public IClient vclient;
 	private VamsasEventHandler eventHandler;
 	private IPickManager pickManager;
 	public VamsasMsgHandler msgHandler;
-	
+
 	public ObjectMapper mapper;
-	
+
 	public VamsasManager(Project project) {
 		this.project = project;
 		this.mapper = new ObjectMapper();
 	}
-	
+
 	public String[] getAvailableSessions() throws Exception {
 		IClientFactory clientfactory = new SimpleClientFactory();
 		String[] sessions = clientfactory.getCurrentSessions();
 		return sessions;
 	}
-	
+
 	public void connect(String session) throws Exception {
 		log.info("Connecting to vamsas session: "+session);
 		initVamsas(session);
 	}
-	
+
 	public void disconnect() {
 		log.info("Disconnecting from vamsas session.");
 		//vclient.finalizeClient();
 	}
-	
+
 	public void read() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		
+
 		Project vProject = VAMSASUtils.loadProject(cDoc);
 		if(vProject!=null) {
 			this.project.merge(vProject);
 		}
-		
+
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this, cDoc);
 		docHandler.read();
-		
+
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
-		
+
 		msgHandler = new VamsasMsgHandler(pickManager, this);
 	}
-	
+
 	public void write() throws IOException {
 		IClientDocument cDoc = vclient.getClientDocument();
-		
+
 		VamsasDocumentHandler docHandler = new VamsasDocumentHandler(this, cDoc);
 		docHandler.write();
-		
-		VAMSASUtils.storeProject(this.project, cDoc); 
-		
+
+		VAMSASUtils.storeProject(this.project, cDoc);
+
 		cDoc.setVamsasRoots(cDoc.getVamsasRoots());
 		vclient.updateDocument(cDoc);
 		cDoc = null;
-		
+
 		msgHandler = new VamsasMsgHandler(pickManager, this);
 	}
-	
+
 	private void initVamsas(String session) throws Exception {
-		
+
 		IClientFactory clientfactory = new SimpleClientFactory();
-		
+
 		// Get an Iclient with session data
 		if (session != null) {
-			if(session.equals(VamsasManager.newSession)) 
+			if(session.equals(VamsasManager.newSession))
 				vclient = clientfactory.getNewSessionIClient(VamsasManager.client, VamsasManager.user);
 			else
 				vclient = clientfactory.getIClient(VamsasManager.client, VamsasManager.user, session);
 		}
 		else
 			vclient = clientfactory.getIClient(VamsasManager.client, VamsasManager.user);
-		
+
 		// Create the Handler
 		eventHandler = new VamsasEventHandler();
 		eventHandler.connect(this);
-		
+
 		//Join the session
 		vclient.joinSession();
-		
+
 		pickManager = vclient.getPickManager();
 		if(pickManager==null)
 			log.warn("No PickManager available. Inter-Application messaging disabled.");
 	}
-	
+
 	protected IClient getVClient() {
 		return vclient;
 	}

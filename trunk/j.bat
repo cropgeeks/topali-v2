@@ -10,6 +10,7 @@ set topali=%topali%;%lib%\commons-discovery-0.2.jar
 set topali=%topali%;%lib%\commons-httpclient-3.0.jar
 set topali=%topali%;%lib%\commons-logging-1.0.4.jar
 set topali=%topali%;%lib%\forester.jar
+set topali=%topali%;%lib%\i4jruntime.jar
 set topali=%topali%;%lib%\jaxrpc.jar
 set topali=%topali%;%lib%\jcommon-1.0.0.jar
 set topali=%topali%;%lib%\jfreechart-1.0.1.jar

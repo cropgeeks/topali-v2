@@ -13,8 +13,6 @@ import topali.mod.Filters;
 
 public class Prefs extends XMLPreferences
 {
-    public static String locale;
-    
 	public static String gui_recent0;
 	public static String gui_recent1;
 	public static String gui_recent2;
@@ -64,7 +62,7 @@ public class Prefs extends XMLPreferences
 	public static int gui_max_cpus = Runtime.getRuntime().availableProcessors();
 	public static boolean gui_show_horizontal_highlight = false;
 	public static boolean gui_show_vertical_highlight = false;
-	
+
 	// Display-initialized variables
 	public static boolean gui_seq_tooltip;
 	public static int gui_seq_font_size;
@@ -148,7 +146,7 @@ public class Prefs extends XMLPreferences
 	public static int dss_power, dss_method, dss_pass_count;
 	public static double dss_gap_threshold;
 	public static boolean dss_varwindow;
-	
+
 	// LRT analysis run settings
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 	public static double lrt_gap_threshold;
@@ -163,7 +161,7 @@ public class Prefs extends XMLPreferences
 	public static double qt_tstv_default;
 	public static double qt_alpha_default;
 	public static boolean qt_estimate_default;
-	
+
 	// Mr Bayes run settings
 	public static int mb_type;
 	public static int mb_runs;
@@ -178,13 +176,13 @@ public class Prefs extends XMLPreferences
 	public static int mb_gens_default;
 	public static int mb_samplefreq_default;
 	public static int mb_burnin_default;
-	
+
 	// Phyml run settings
 	public static int phyml_bootstrap;
 	public static int phyml_bootstrap_default;
 	public static String phyml_dnamodel_default;
 	public static String phyml_proteinmodel_default;
-	
+
 	//Raxml run settigns
 	public static int rax_type;
 	public static String rax_ratehet;
@@ -195,13 +193,13 @@ public class Prefs extends XMLPreferences
 	public static int rax_bootstrap_default;
 	public static boolean rax_empfreq_default;
 	public static String rax_protmodel_default;
-	
+
 	// Model selection run settings
 	public static String ms_models;
 	public static boolean ms_gamma;
 	public static boolean ms_inv;
 	public static String ms_samplesize;
-	
+
 	// Vamsas/web settings
 	public static String web_direct_url;
 	public static String web_broker_url;
@@ -222,7 +220,7 @@ public class Prefs extends XMLPreferences
 		Random rnd = new Random();
 		for (int i = 0; i < 32; i++)
 			appId += rnd.nextInt(10);
-		
+
 		setDisplayDefaults();
 		setPDMDefaults();
 		setPDM2Defaults();
@@ -239,7 +237,6 @@ public class Prefs extends XMLPreferences
 
 	public static void setDisplayDefaults()
 	{
-	    	locale = "default";
 		gui_seq_tooltip = false;
 		gui_seq_font_size = 12;
 		gui_seq_font_bold = false;
@@ -265,8 +262,8 @@ public class Prefs extends XMLPreferences
 		gui_graph_threshold = new Color(0, 255, 64);
 		gui_graph_background = new Color(255, 255, 255);
 		gui_graph_color = new Color(0, 0, 130);
-		gui_show_horizontal_highlight = true;
-		gui_show_vertical_highlight = true;
+		gui_show_horizontal_highlight = false;
+		gui_show_vertical_highlight = false;
 	}
 
 	public static void setPDM2Defaults()
@@ -358,7 +355,7 @@ public class Prefs extends XMLPreferences
 		qt_alpha_default = 4.0;
 		qt_estimate_default = true;
 	}
-	
+
 	public static void setMBDefaults() {
 		mb_type = 0;
 		mb_runs = 2;
@@ -374,7 +371,7 @@ public class Prefs extends XMLPreferences
 		mb_samplefreq_default = 10;
 		mb_burnin_default = 25;
 	}
-	
+
 	public static void setRaxDefaults() {
 		rax_type = 0;
 		rax_bootstrap = 100;
@@ -386,21 +383,21 @@ public class Prefs extends XMLPreferences
 		rax_ratehet_default = "MIX";
 		rax_protmodel_default = "WAG";
 	}
-	
+
 	public static void setPhymlDefaults() {
 		phyml_bootstrap = 0;
 		phyml_bootstrap_default = 0;
 		phyml_dnamodel_default = "HKY";
 		phyml_proteinmodel_default = "WAG";
 	}
-	
+
 	public static void setMSDefaults() {
 		ms_models = ModelTestResult.TYPE_PHYML;
 		ms_gamma = true;
 		ms_inv = true;
 		ms_samplesize = ModelTestResult.SAMPLE_SEQLENGTH;
 	}
-	
+
 	public static void setWebDefaults()
 	{
 		web_direct_url = "http://www.topali.org/topali";

@@ -30,9 +30,7 @@ public class TOPALi extends Applet implements Application
 	public static final boolean debugClient = true;
 	public static final boolean debugJobs = false;
 
-	public static final String VERSION = "2.20";
-
-	private final String prefsFile = ".topali2-new.xml";
+	private final String prefsFile = ".topali-2.5.xml";
 
 	 static Logger root;
 	 static Logger log;
@@ -61,11 +59,13 @@ public class TOPALi extends Applet implements Application
 	public static void main(String[] args)
 	{
 		// OS X: This has to be set before anything else
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "TOPALi v2");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "TOPALi v2.5");
 
 		initstuff();
 
-		root.info("TOPALi V. "+VERSION);
+		Install4j.doStartUpCheck();
+
+		root.info("TOPALi V. "+Install4j.VERSION);
 		root.info("Default Locale is " + Locale.getDefault());
 		root.info("Running Java " + System.getProperty("java.version"));
 
@@ -157,11 +157,6 @@ public class TOPALi extends Applet implements Application
 		prefs.loadPreferences(new File(System.getProperty("user.home"),
 				prefsFile), Prefs.class);
 
-		if(!Prefs.locale.equals("default")) {
-		    String loc = Prefs.locale;
-		    log.info("Set Locale to "+loc);
-			Locale.setDefault(new Locale(loc));
-		}
 
 		doEncryption(true);
 

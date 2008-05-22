@@ -186,22 +186,6 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		else if (e.getSource() == close) {
 			setVisible(false);
-
-			String oldLocale = Prefs.locale;
-
-			if(language.getSelectedItem().equals(Text.get("automatic"))) {
-			    Prefs.locale = "default";
-			}
-			else if(language.getSelectedItem().equals(Text.get("english"))) {
-			    Prefs.locale = "en";
-			}
-			else if(language.getSelectedItem().equals(Text.get("german"))) {
-			    Prefs.locale = "de";
-			}
-
-			if(!Prefs.locale.equals(oldLocale)) {
-			    MsgBox.msg(Text.get("locale_changed"), JOptionPane.INFORMATION_MESSAGE);
-			}
 		}
 
 		else
@@ -265,20 +249,6 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 	private JPanel getFontControls()
 	{
-	    String[] langs = new String[] {Text.get("automatic"), Text.get("english"), Text.get("german")};
-	    language = new JComboBox(langs);
-	    int selIndex = 0;
-	    if(Prefs.locale.equals("default")) {
-		    selIndex = 0;
-		}
-		else if(Prefs.locale.equals("en")) {
-		    selIndex = 1;
-		}
-		else if(Prefs.locale.equals("de")) {
-		    selIndex = 2;
-		}
-	    language.setSelectedIndex(selIndex);
-
 		fontModel = new SpinnerNumberModel(Prefs.gui_seq_font_size, 1, 50, 1);
 		fontSpin = new JSpinner(fontModel);
 		fontSpin.addChangeListener(this);
@@ -330,7 +300,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		smooth = new JCheckBox(Text.get("DisplaySettingsDialog.gui29"));
 		smooth.addActionListener(this);
-		smooth.setMnemonic(KeyEvent.VK_S);
+		smooth.setMnemonic(KeyEvent.VK_G);
 		smooth.setToolTipText(Text.get("DisplaySettingsDialog.gui30"));
 
 		line = new JCheckBox(Text.get("DisplaySettingsDialog.gui31"));
@@ -361,8 +331,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 
 		DoeLayout layout = new DoeLayout();
 
-		layout.add(label1, 0, 0, 1, 1, new Insets(5, 5, 5, 5));
-		layout.add(language, 1, 0, 1, 1, new Insets(5, 5, 5, 5));
+//		layout.add(label1, 0, 0, 1, 1, new Insets(5, 5, 5, 5));
+//		layout.add(language, 1, 0, 1, 1, new Insets(5, 5, 5, 5));
 
 		layout.add(label2, 0, 1, 1, 1, new Insets(5, 5, 5, 5));
 		layout.add(fontSpin, 1, 1, 1, 1, new Insets(5, 5, 5, 5));
@@ -371,7 +341,7 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		layout.add(colorSpin, 1, 2, 0, 1, new Insets(5, 5, 5, 5));
 
 		layout.add(showText, 0, 3, 1, 2, new Insets(5, 1, 0, 5));
-		layout.add(antialias, 0, 4, 1, 2, new Insets(5, 1, 0, 5));
+		layout.add(antialias, 0, 4, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(showCols, 0, 5, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(dimSeqs, 0, 6, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(boldFont, 0, 7, 1, 2, new Insets(0, 1, 0, 5));
@@ -379,8 +349,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		//layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(tooltip, 0, 9, 1, 2, new Insets(0, 1, 0, 5));
 		// layout.add(tree, 0, 10, 1, 2, new Insets(0, 1, 5, 5));
-		layout.add(showVertHighlight, 0, 10, 1, 2, new Insets(0, 1, 0, 5));
-		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
+//		layout.add(showVertHighlight, 0, 10, 1, 2, new Insets(0, 1, 0, 5));
+//		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
 
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.setBorder(BorderFactory.createTitledBorder(Text.get("DisplaySettingsDialog.gui39")));

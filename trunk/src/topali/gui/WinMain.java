@@ -51,7 +51,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public VamsasManager vamsas = null;
 
 	public static VamsasEvents vEvents = null;
-	
+
 	// GUI controls...
 	private WinMainMenuBar menubar;
 
@@ -67,7 +67,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public static JSplitPane splits;
 
 	public static JobsPanel jobsPanel;
-	
+
 	public static AnnotationDialog annoDialog;
 
 	public static OverviewDialog ovDialog;
@@ -422,7 +422,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	void menuAlgnRename() {
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		
+
 		String newname = (String) JOptionPane.showInputDialog(TOPALi.winMain,
 				"Please enter new name:",
 				"Modify name",
@@ -432,7 +432,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			data.setName(newname);
 		}
 	}
-	
+
 	void menuAlgnShowPartitionDialog()
 	{
 		//rDialog.setVisible(true);
@@ -601,19 +601,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		CMLBranchDialog dlg = new CMLBranchDialog(this, data,result);
 		dlg.setVisible(true);
 	}
-	
+
 	public void menuAnlsRunMT(ModelTestResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
 //		ModelTestDialog dlg = new ModelTestDialog(data, result);
 //		dlg.setVisible(true);
-		
+
 		MTDialog dlg = new MTDialog(this, data, result);
 		dlg.setVisible(true);
-		
+
 		ModelTestResult res = dlg.getResult();
-		
+
 		if(res!=null)
 			submitJob(data, res);
 	}
@@ -627,16 +627,16 @@ public class WinMain extends JFrame implements PropertyChangeListener
 					+ "a phylogenetic tree.", MsgBox.ERR);
 			return;
 		}
-		
+
 		QuickTreeDialog dlg = new QuickTreeDialog(this, data.getSequenceSet().getProps().isNucleotides());
 		dlg.setVisible(true);
 		if(dlg.bs==-1)
 			return;
-		
+
 		if(dlg.estimate && data.getSequenceSet().getProps().needsCalculation()) {
 		    SequenceSetUtils.estimateParameters(data.getSequenceSet());
 		}
-		
+
 		TreeResult tr = new TreeResult();
 		tr.setPartitionStart(data.getActiveRegionS());
 		tr.setPartitionEnd(data.getActiveRegionE());
@@ -648,21 +648,21 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		else
 			tr.guiName = "#"+runNum+" WAG+G Tree";
 		tr.jobName = "Tree Estimation";
-		
+
 		Alignment alignment = data.getSequenceSet().getAlignment(indices, data.getActiveRegionS(), data.getActiveRegionE(), true);
 		TreeCreatorThread creator = new TreeCreatorThread(alignment, data.getSequenceSet().getProps().isNucleotides(), true);
 		creator.setParameters(dlg.tstv, dlg.alpha);
 		Tree palTree = creator.getTree();
-				
+
 		double tstv = dlg.estimate ? data.getSequenceSet().getProps().getTRatio() : dlg.tstv;
 		double alpha = dlg.estimate ? data.getSequenceSet().getProps().getAlpha() : dlg.alpha;
-		
+
 		if(dlg.bs>0) {
 			BootstrapThread bg = new BootstrapThread(palTree, alignment, data.getSequenceSet().getProps().isNucleotides(), dlg.bs);
 			bg.setParameters(tstv, alpha);
 			palTree = bg.getTree();
 		}
-		
+
 		if (palTree != null)
 		{
 			//tr.setTreeStr(palTree.toString());
@@ -678,19 +678,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 							"Bootstrap: "+dlg.bs;
 			data.addResult(tr);
 			ProjectState.setDataChanged();
-			
+
 			 TreePane treePane = navPanel.getCurrentTreePane(data, true);
 			 treePane.displayTree(data.getSequenceSet(), tr);
 		}
 	}
-	
+
 	public void menuAnlsMrBayes(TreeResult result) {
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		MrBayesDialog dlg = new MrBayesDialog(this, data, result);
 		dlg.setVisible(true);
-		
+
 		MBTreeResult res = dlg.getResult();
-		
+
 		if(res!=null)
 			submitJob(data, res);
 	}
@@ -699,20 +699,20 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		PhymlDialog dlg = new PhymlDialog(this, data, result);
 		dlg.setVisible(true);
-		
+
 		PhymlResult res = dlg.getResult();
-		
+
 		if(res!=null)
 			submitJob(data, res);
 	}
-	
+
 	public void menuAnlsRaxml(TreeResult result) {
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		RaxmlDialog dlg = new RaxmlDialog(this, data, result);
 		dlg.setVisible(true);
-		
+
 		RaxmlResult res = dlg.getResult();
-		
+
 		if(res!=null)
 			submitJob(data, res);
 	}
@@ -1004,12 +1004,20 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	void menuHelpUpdate(boolean useGUI)
 	{
-		new UpdateChecker(useGUI);
+		Install4j.checkForUpdate(false);
 	}
 
 	void menuHelpAbout()
 	{
-		UpdateChecker.helpAbout();
+		String msg = "<html><b>TOPALi v2.5 </b> ("+Install4j.VERSION+")<br><br>"
+				+ "Copyright &copy 2003-2007 Biomathematics & Statistics Scotland<br><br>"
+				+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
+				+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"
+				+ "This software is licensed. Please see accompanying "
+				+ "license file for details.<br><br>"
+				+ "My TOPALi ID: " + Prefs.appId + "</html>";
+
+		scri.commons.gui.MsgBox.msg(msg, scri.commons.gui.MsgBox.INF);
 	}
 
 	void menuHelpTestMethod()

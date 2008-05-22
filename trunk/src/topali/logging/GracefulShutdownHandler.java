@@ -30,7 +30,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 		instance = this;
 	}
 
-	
+
 	protected void append(LoggingEvent arg0)
 	{
 		String mes = this.layout.format(arg0);
@@ -93,7 +93,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 			{
 				if (application != null) {
 				    //if(mail.isSelected())
-					//application.shutdown("TOPALi v2 ("+TOPALi.VERSION+") Bug Report:\n\n"+sb.toString());
+					//application.shutdown("TOPALi v2.5 ("+TOPALi.VERSION+") Bug Report:\n\n"+sb.toString());
 				    //else
 					application.shutdown(null);
 				}
@@ -123,7 +123,7 @@ public class GracefulShutdownHandler extends AppenderSkeleton implements
 	{
 		if(e instanceof ThreadDeath)
 			return;
-		
+
 		Logger.getRootLogger().fatal(
 				"An uncaught Exception has been thrown in Thread "
 						+ t.getName() + "!", e);
