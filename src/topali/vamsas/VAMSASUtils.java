@@ -23,19 +23,19 @@ import uk.ac.vamsas.objects.utils.trees.*;
 
 public class VAMSASUtils
 {
-	
+
 	static   Logger log = Logger.getLogger(VAMSASUtils.class);
-	
-	public static boolean storeProject(Project project, IClientDocument cDoc) {	
-		
+
+	public static boolean storeProject(Project project, IClientDocument cDoc) {
+
 		IClientAppdata data = cDoc.getClientAppdata();
 		if(data==null) {
 			log.warn("Could not get a IClientAppdata.");
 			return false;
 		}
-		
+
 		StringWriter out = new StringWriter();
-		
+
 		try
 		{
 			Marshaller m = new Marshaller(out);
@@ -49,11 +49,11 @@ public class VAMSASUtils
 		{
 			log.warn("Marshalling failed.", e);
 			return false;
-		} 
-		
+		}
+
 		return true;
 	}
-	
+
 	public static Project loadProject(IClientDocument cDoc) {
 		IClientAppdata data = cDoc.getClientAppdata();
 		if(data==null) {
@@ -65,7 +65,7 @@ public class VAMSASUtils
 			log.info("No stored project found in VAMSAS document.");
 			return null;
 		}
-		
+
 		AppDataInputStream is = data.getClientInputStream();
 		Vector<Byte> tmp = new Vector<Byte>();
 		while(true) {
@@ -77,11 +77,11 @@ public class VAMSASUtils
 				break;
 			}
 		}
-		
+
 		byte[] bytes = new byte[tmp.size()];
 		for(int i=0; i<tmp.size(); i++)
 			bytes[i] = tmp.get(i).byteValue();
-		
+
 		InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(bytes));
 		Unmarshaller u = new Unmarshaller();
 		try
@@ -96,7 +96,7 @@ public class VAMSASUtils
 			return null;
 		}
 	}
-	
+
 	public static Tree createVamsasTree(TreeResult res, AlignmentData align, ObjectMapper map) {
 		try
 		{
@@ -120,14 +120,14 @@ public class VAMSASUtils
 					}
 				}
 			}
-			
+
 			Treenode[] treenodes = nwfile.makeTreeNodes();
-			
+
 			Newick nw = new Newick();
 			nw.setContent(nwfile.print());
 			vTree.addNewick(nw);
 			vTree.setTreenode(treenodes);
-			
+
 			Provenance prov = new Provenance();
 			Entry ent = new Entry();
 			Input inp = new Input();
@@ -138,14 +138,14 @@ public class VAMSASUtils
 			inp.addSeg(seg);
 			inp.setName("partition");
 			ent.addInput(inp);
-			
+
 			if(tree instanceof PhymlResult) {
 				Param par = new Param();
 				par.setType("string");
 				par.setName("application");
 				par.setContent("PhyML");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("method");
@@ -158,65 +158,65 @@ public class VAMSASUtils
 				par.setName("application");
 				par.setContent("MrBayes");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("version");
 				par.setContent(MrBayesAnalysis.VERSION);
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("method");
 				par.setContent("bayes");
 				ent.addParam(par);
 			}
-			
+
 			else {
 				Param par = new Param();
 				par.setType("string");
 				par.setName("application");
 				par.setContent("TOPALi");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("version");
-				par.setContent(TOPALi.VERSION);
+				par.setContent(Install4j.VERSION);
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("method");
 				par.setContent("neighbour joining");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("string");
 				par.setName("model");
 				par.setContent("F84");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("int");
 				par.setName("tstv");
 				par.setContent("2");
 				ent.addParam(par);
-				
+
 				par = new Param();
 				par.setType("int");
 				par.setName("categories");
 				par.setContent("4");
 				ent.addParam(par);
 			}
-			
+
 			ent.setApp(VamsasManager.client.getClientUrn());
 			ent.setUser(VamsasManager.user.getFullName());
 			ent.setAction("created");
 			ent.setDate(new Date());
 			prov.addEntry(ent);
 			vTree.setProvenance(prov);
-			
+
 			return vTree;
 		} catch (Exception e)
 		{
@@ -227,11 +227,11 @@ public class VAMSASUtils
 	}
 
 	public static LinkedList<AlignmentAnnotation> createAlignmentAnnotation(AnalysisResult res, AlignmentData align) {
-		
+
 		LinkedList<AlignmentAnnotation> annotations = new LinkedList<AlignmentAnnotation>();
-		
+
 		AlignmentAnnotation vAnno;
-		
+
 		if (res instanceof DSSResult)
 		{
 			DSSResult dss = (DSSResult) res;
@@ -260,7 +260,7 @@ public class VAMSASUtils
 			addGraph(vAnno, hmm.data1);
 			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
-			
+
 			vAnno = getRawAlignmentAnnotation(align);
 			vAnno.setType("HMMResult");
 			vAnno.setDescription(hmm.guiName + " (Topology 2)");
@@ -272,7 +272,7 @@ public class VAMSASUtils
 			addGraph(vAnno, hmm.data2);
 			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
-			
+
 			vAnno = getRawAlignmentAnnotation(align);
 			vAnno.setType("HMMResult");
 			vAnno.setDescription(hmm.guiName + " (Topology 3)");
@@ -312,7 +312,7 @@ public class VAMSASUtils
 			addGraph(vAnno, pdm.glbData);
 			vAnno.addProperty(createTIDProp(res));
 			annotations.add(vAnno);
-			
+
 			vAnno = getRawAlignmentAnnotation(align);
 			vAnno.setType("PDMResult");
 			vAnno.setDescription(pdm.guiName + " (Local)");
@@ -345,10 +345,10 @@ public class VAMSASUtils
 				}
 			}
 		}
-		
+
 		return annotations;
 	}
-		
+
 	private static AlignmentAnnotation getRawAlignmentAnnotation(AlignmentData align) {
 		AlignmentAnnotation vAnno = new AlignmentAnnotation();
 		int start = 1;
@@ -369,7 +369,7 @@ public class VAMSASUtils
 		vAnno.setProvenance(prov);
 		return vAnno;
 	}
-	
+
 	private static void addGraph(AlignmentAnnotation anno, float[][] data)
 	{
 		for (float[] element : data)
@@ -385,7 +385,7 @@ public class VAMSASUtils
 			anno.addAnnotationElement(el);
 		}
 	}
-	
+
 	private static Property createTIDProp(DataObject tObj) {
 		Property tid = new Property();
 		tid.setName("topaliID");

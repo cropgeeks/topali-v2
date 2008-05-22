@@ -27,12 +27,12 @@ import topali.i18n.Text;
 import topali.mod.Filters;
 import scri.commons.gui.MsgBox;
 
-public class Project extends DataObject 
+public class Project extends DataObject
 {
 	 static Logger log = Logger.getLogger(Project.class);
-	 
+
 	 public String appversion;
-	 
+
 	// Temporary object used to track the (most recent) file this project was
 	// opened from
 	public File filename;
@@ -46,7 +46,7 @@ public class Project extends DataObject
 
 	public Project()
 	{
-		appversion = TOPALi.VERSION;
+		appversion = Install4j.VERSION;
 	}
 
 	public LinkedList<AlignmentData> getDatasets()
@@ -62,11 +62,11 @@ public class Project extends DataObject
 			data.addChangeListener(l);
 		}
 	}
-	
+
 	void removeDataSet(AlignmentData data)
 	{
 		datasets.remove(data);
-		
+
 		for(PropertyChangeListener l : changeListeners) {
 			l.propertyChange(new PropertyChangeEvent(this, "alignmentData", data, null));
 		}
@@ -95,7 +95,7 @@ public class Project extends DataObject
 		}
 		return match;
 	}
-	
+
 	public int[] getTreePath()
 	{
 		return treePath;
@@ -105,7 +105,7 @@ public class Project extends DataObject
 	{
 		this.treePath = treePath;
 	}
-	
+
 	// Calls load() to load the given project from disk, or opens a FileDialog
 	// to prompt for the project name if filename is null
 	public static Project open(String filename)
@@ -136,7 +136,7 @@ public class Project extends DataObject
 		try
 		{
 			byte[] xml = readZipFileEntry(filename, "project.xml");
-			
+
 			//Check with which version we're dealing with:
 			//if there is no appVersion attribute it's 2.17
 			String appVersion = "2.17";
@@ -157,8 +157,8 @@ public class Project extends DataObject
 				}
 			}
 			reader.close();
-			
-			if(!appVersion.equals(TOPALi.VERSION)) {
+
+			if(!appVersion.equals(Install4j.VERSION)) {
 				String notes = "";
 				if(appVersion.equals("2.17")) {
 					URL tmpUrl = Project.class.getResource("/res/xslt/2.17-2.18.xsl");
@@ -175,14 +175,14 @@ public class Project extends DataObject
 					xslin.close();
 					appVersion = "2.18";
 				}
-				
+
 				if(appVersion.equals("2.18")) {
 				  //2.19 is just a bug fix release, data structure didn't change
 					appVersion = "2.19";
 				}
-				
+
 				// ... do further tranformations in future (2.18-2.19, 2.19-...)
-				
+
 				if(!notes.equals("")) {
 					String msg = "This project was created with an older TOPALi version.\n" +
 							"TOPALi will try to import it, but it is possible that not all\n" +
@@ -191,7 +191,7 @@ public class Project extends DataObject
 					MsgBox.msg(msg, MsgBox.INF);
 				}
 			}
-			
+
 			String str = Text.get("LoadMonitorDialog.gui06");
 			LoadMonitorDialog.setLabel(str);
 
@@ -199,10 +199,10 @@ public class Project extends DataObject
 			ByteArrayInputStream bis = new ByteArrayInputStream(xml);
 			Project p = (Project) unmarshaller.unmarshal(new InputSource(bis));
 			bis.close();
-			
+
 			p.filename = filename;
 			return p;
-			
+
 		} catch (Exception e)
 		{
 			MsgBox.msg(Text.get("Project.err01",filename, e), MsgBox.ERR);
@@ -216,7 +216,7 @@ public class Project extends DataObject
 		ZipFile zip = new ZipFile(zipFile);
 		ZipEntry e = zip.getEntry(entry);
 		InputStream zin = zip.getInputStream(e);
-		
+
 		byte[] data = null;
 		ArrayList<Byte> buffer = new ArrayList<Byte>();
 		int c = -1;
@@ -225,41 +225,41 @@ public class Project extends DataObject
 		}
 		zin.close();
 		zip.close();
-		
+
 		data = new byte[buffer.size()];
 		for(int i=0; i<buffer.size(); i++)
 			data[i] = buffer.get(i);
-		
+
 		//Convert to String and back to bytes, to remove possible invalid characters
 		String st = new String(data, "UTF-8");
 		st = st.replaceAll("\uFFFD", "_"); //replace invalid char with _
 		return st.getBytes("UTF-8");
 	}
-	
+
 	private static String getTranformationNotes(File xsltFile) throws Exception {
 		BufferedReader in = new BufferedReader(new FileReader(xsltFile));
 		String line = null;
 		boolean start = false;
 		StringBuffer sb = new StringBuffer();
 		while((line=in.readLine())!=null) {
-			if(line.matches(".*Notes:.*")) { 
+			if(line.matches(".*Notes:.*")) {
 				start = true;
 				continue;
 			}
-			if(line.matches(".*\\-\\-\\>.*") && start) 
+			if(line.matches(".*\\-\\-\\>.*") && start)
 				break;
-			
+
 			if(start) {
 				sb.append(line+"\n");
 			}
 		}
 		in.close();
-		
+
 		return sb.toString();
 	}
-	
+
 	static boolean save(Project p, boolean saveAs)
-	{	
+	{
 		if (p.filename == null)
 			saveAs = true;
 		if (saveAs && p.saveAs() == false)
@@ -268,7 +268,7 @@ public class Project extends DataObject
 		try
 		{
 			long s = System.currentTimeMillis();
- 
+
 			// Open an output stream to the zip...
 			ZipOutputStream zOut = new ZipOutputStream(
 					new BufferedOutputStream(new FileOutputStream(p.filename)));
@@ -340,7 +340,7 @@ public class Project extends DataObject
 
 		return false;
 	}
-	
+
 	public void merge(Project proj) {
 		for(AlignmentData data : proj.getDatasets()) {
 			boolean found = false;
@@ -354,5 +354,5 @@ public class Project extends DataObject
 				addDataSet(data);
 		}
 	}
-	
+
 }
