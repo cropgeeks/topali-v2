@@ -127,8 +127,7 @@ public class TOPALi extends Applet implements Application
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			}
 			else
-				UIManager
-						.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e)
 		{
 			log.warn("Cannot set Look and Feel", e);
@@ -193,10 +192,6 @@ public class TOPALi extends Applet implements Application
 				// Do we want to open an initial project?
 				if (initialProject != null)
 					winMain.menuFileOpenProject(initialProject.getPath());
-
-				// Fire off an update check thread
-				if (Prefs.web_check_startup)
-					winMain.menuHelpUpdate(false);
 			}
 
 			public void windowIconified(WindowEvent e) {

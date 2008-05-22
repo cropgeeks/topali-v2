@@ -49,7 +49,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		// Add some mouse handlers
 		list.addMouseMotionListener(new MouseMotionAdapter()
 		{
-			
+
 			public void mouseMoved(MouseEvent e)
 			{
 				WinMainStatusBar.setText(Text.get("SequenceListPanel.gui05", list
@@ -58,7 +58,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		});
 		list.addMouseListener(new MouseAdapter()
 		{
-			
+
 			public void mouseExited(MouseEvent e)
 			{
 				WinMainStatusBar.setText("");
@@ -118,9 +118,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 	{
 		int[] indices = list.getSelectedIndices();
 		ss.moveSequences(indices, up, top);
-		
+
 		disPanel.refreshAndRepaint();
-		
+
 		if (top)
 		{
 			int[] newIndices = new int[indices.length];
@@ -371,7 +371,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			p.add(addPart);
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F,
-					InputEvent.CTRL_MASK, 0, false);
+					WinMainMenuBar.menuShortcut, 0, false);
 			add(aAlgnRenameSeq, KeyEvent.VK_R, 0, 0, 0, false);
 			add(aAlgnGoTo, KeyEvent.VK_G, 0, 0, 0, false);
 			add(aViewDisplaySettings, KeyEvent.VK_D, KeyEvent.VK_F5, 0, 0, true);
@@ -389,7 +389,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			addPart.setEnabled(b);
 		}
 
-		
+
 		protected void handlePopup(int x, int y)
 		{
 

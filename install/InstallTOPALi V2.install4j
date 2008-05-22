@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.1" transformSequenceNumber="2">
-  <directoryPresets config=".." />
+  <directoryPresets config="../res/icons" />
   <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.topali.org" version="2.5.08.05.22" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -33,7 +33,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="TOPALi" id="3" external="false" excludeFromMenu="false" menuName="TOPALi v2.5" icnsFile="" pngIcon16File="../res/icons/app_frame.png" pngIcon32File="../res/icons/app_frame.png" macServiceDependencies="" swtApp="false" fileset="">
+    <launcher name="TOPALi" id="3" external="false" excludeFromMenu="false" menuName="TOPALi v2.5" icnsFile="../res/icons/topali.icns" pngIcon16File="../res/icons/app_frame.png" pngIcon32File="../res/icons/app_frame.png" macServiceDependencies="" swtApp="false" fileset="">
       <executable name="topali" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
