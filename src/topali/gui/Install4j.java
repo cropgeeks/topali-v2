@@ -10,6 +10,8 @@ import java.io.*;
 import com.install4j.api.launcher.*;
 import com.install4j.api.update.*;
 
+import topali.data.Prefs;
+
 /**
  * Utility class that performs install4j updater actions on behalf of Flapjack.
  */
@@ -26,6 +28,9 @@ public class Install4j
 	static void doStartUpCheck()
 	{
 		getVersion();
+
+		if (Prefs.web_check_startup == false)
+			return;
 
 		try
 		{
