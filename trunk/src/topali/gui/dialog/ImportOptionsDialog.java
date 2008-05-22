@@ -24,13 +24,13 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 	private boolean isOK = false;
 
 	private WinMain winMain;
-	
+
 	public ImportOptionsDialog(WinMain winMain)
 	{
 		super(winMain, Text.get("import_alignment.1"), true);
 
 		this.winMain = winMain;
-		
+
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
 		getRootPane().setDefaultButton(bOK);
@@ -59,7 +59,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		rMulti = new JRadioButton(Text.get("import_alignment.5"));
 		rMulti.setMnemonic(KeyEvent.VK_F);
 		rMulti.addMouseListener(dblListener);
-		
+
 		rJoin = new JRadioButton(Text.get("import_alignment.8"));
 		rJoin.setMnemonic(KeyEvent.VK_J);
 		rJoin.addMouseListener(dblListener);
@@ -70,7 +70,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 			if(rJoin.isSelected())
 				rImport.setSelected(true);
 		}
-		
+
 		rExSeq = new JRadioButton(Text.get("import_alignment.6"));
 		rExSeq.setMnemonic(KeyEvent.VK_T);
 		rExSeq.addMouseListener(dblListener);
@@ -106,8 +106,9 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 		group.add(rExSeq);
 
 		JPanel p1 = new JPanel(new GridLayout(6, 1));
-		p1.setBorder(BorderFactory
-				.createTitledBorder(Text.get("import_alignment.7")));
+		p1.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createTitledBorder(Text.get("import_alignment.7")),
+			BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		p1.add(rImport);
 		p1.add(rCDNA);
 		p1.add(rAlign);
@@ -161,7 +162,7 @@ public class ImportOptionsDialog extends JDialog implements ActionListener
 
 	private class DblClickListener extends MouseAdapter
 	{
-		
+
 		public void mouseClicked(MouseEvent e)
 		{
 			if (e.getClickCount() != 2)
