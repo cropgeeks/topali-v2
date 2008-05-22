@@ -62,20 +62,28 @@
 			<manifest>
 				<attribute name="Main-Class" value="topali.gui.TOPALi"/>
 				<attribute name="Class-Path"
-					value="res axis.jar commons-codec-1.3.jar castor-1.1-cycle-xml.jar commons-discovery-0.2.jar commons-httpclient-3.0.jar commons-logging-1.0.4.jar forester.jar jaxrpc.jar jcommon-1.0.0.jar jfreechart-1.0.1.jar jh.jar log4j-1.2.8.jar looks-2.0.2.jar office-2.0.jar osxadapter.jar pal.jar saaj.jar scri-commons.jar swing-layout-1.0.jar vamsas-client.jar"/>
+					value="res
+						axis.jar
+						commons-codec-1.3.jar
+						castor-1.1-cycle-xml.jar
+						commons-discovery-0.2.jar
+						commons-httpclient-3.0.jar
+						commons-logging-1.0.4.jar
+						forester.jar
+						jaxrpc.jar
+						jcommon-1.0.0.jar
+						jfreechart-1.0.1.jar
+						jh.jar
+						log4j-1.2.8.jar
+						office-2.0.jar
+						osxadapter.jar
+						pal.jar
+						saaj.jar
+						scri-commons.jar
+						swing-layout-1.0.3.jar
+						vamsas-client.jar"/>
 			</manifest>
 		</jar>
-	</target>
-
-	<!-- keytool -selfcert -genkey -alias topali -validity 1825 -->
-	<!-- jarsigner -storepass keystore topali.jar topali -->
-	<target name="sign">
-		<signjar alias="topali" storepass="keystore">
-			<fileset dir="${lib}">
-				<!--<include name="**/*.jar"/>-->
-				<include name="**/topali.jar"/>
-			</fileset>
-		</signjar>
 	</target>
 
 	<target name="templates">
@@ -139,6 +147,20 @@
 
 	<target name="clean">
 		<delete dir="${build.root}"/>
+	</target>
+	
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="C:\Java\Apps\install4j\bin\ant.jar"/>
+		
+		<delete>
+			<fileset dir="install" includes="**/*.exe"/>
+			<fileset dir="install" includes="**/*.sh"/>
+			<fileset dir="install" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="install/InstallTOPALi V2.install4j" release="${version}"/>
 	</target>
 
 </project>

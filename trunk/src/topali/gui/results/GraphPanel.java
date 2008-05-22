@@ -44,7 +44,7 @@ public class GraphPanel extends DataVisPanel {
 
 	/**
 	 * Panel for displaying a graph
-	 * @param aData	
+	 * @param aData
 	 * @param aResult
 	 * @param data
 	 * @param fixedYBound Use a fixed max y
@@ -107,12 +107,12 @@ public class GraphPanel extends DataVisPanel {
 			return this.chartPanel.getNucleotideFromPoint(xPos);
 	}
 
-	
+
 	public Dimension getPreferredSize() {
 		return chartPanel.getPreferredSize();
 	}
 
-	
+
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		if (!enabled)
@@ -191,12 +191,12 @@ public class GraphPanel extends DataVisPanel {
 		yAxis.setUpperBound(max);
 	}
 
-	
+
 	public Printable getPrintable() {
 		return (Printable) chartPanel;
 	}
 
-	
+
 	public Object getExportable(int format) {
 		switch (format) {
 			case FORMAT_TXT:
@@ -259,12 +259,12 @@ public class GraphPanel extends DataVisPanel {
 			// this.setDisplayToolTips(true);
 		}
 
-		
+
 		public JToolTip createToolTip() {
 			return tooltip;
 		}
 
-		
+
 		public String getToolTipText(MouseEvent e) {
 			int x = e.getX(), y = e.getY();
 
@@ -293,7 +293,7 @@ public class GraphPanel extends DataVisPanel {
 			WinMainStatusBar.setText(msg);
 		}
 
-		
+
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getX(), y = e.getY();
 
@@ -310,7 +310,7 @@ public class GraphPanel extends DataVisPanel {
 			this.getParent().dispatchEvent(e2);
 		}
 
-		
+
 		public void mouseDragged(MouseEvent e) {
 			if (e.isMetaDown() == false && !e.isPopupTrigger()) {
 				int x = e.getX(), y = e.getY();
@@ -320,7 +320,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		
+
 		public void mousePressed(MouseEvent e) {
 			// Do nothing if the click is outside of the canvas area
 			if (getCanvasArea().contains(e.getX(), e.getY()) == false)
@@ -332,7 +332,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		
+
 		public void mouseClicked(MouseEvent e) {
 			if (e.isMetaDown() == false && !e.isPopupTrigger()) {
 				aData.setActiveRegion(-1, -1);
@@ -340,7 +340,7 @@ public class GraphPanel extends DataVisPanel {
 			}
 		}
 
-		
+
 		public void mouseExited(MouseEvent e) {
 			WinMainStatusBar.setText("");
 		}
@@ -374,15 +374,15 @@ public class GraphPanel extends DataVisPanel {
 
 		// alpha
 
-		
+
 		public void paintComponent(Graphics graphics) {
 			/*
 			 * int nS = pAnnotations.getCurrentStart(); int nE =
 			 * pAnnotations.getCurrentEnd();
-			 * 
+			 *
 			 * IntervalMarker iMarker = new IntervalMarker(nS, nE);
 			 * iMarker.setPaint(new Color(200, 200, 200));
-			 * 
+			 *
 			 * plot.clearDomainMarkers(); plot.addDomainMarker(iMarker,
 			 * Layer.BACKGROUND);
 			 */
@@ -478,10 +478,10 @@ public class GraphPanel extends DataVisPanel {
 			p.add(annotate);
 
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0, false);
-			add(aAnlsQuickTree, Icons.CREATE_TREE, KeyEvent.VK_T, KeyEvent.VK_T, InputEvent.CTRL_MASK, 9, true);
+			add(aAnlsQuickTree, Icons.CREATE_TREE, KeyEvent.VK_T, KeyEvent.VK_T, WinMainMenuBar.menuShortcut, 9, true);
 		}
 
-		
+
 		protected void handlePopup(int x, int y) {
 
 		}

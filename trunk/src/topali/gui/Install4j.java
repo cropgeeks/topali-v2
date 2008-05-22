@@ -17,7 +17,7 @@ public class Install4j
 {
 	private static String URL = "http://www.topali.org/installers/updates.xml";
 
-	public static String VERSION = "TEST VERSION";
+	public static String VERSION = "DEVELOPMENT BUILD";
 
 	/**
 	 * install4j update check. This will only work when running under the full
@@ -30,7 +30,6 @@ public class Install4j
 		try
 		{
 			UpdateScheduleRegistry.setUpdateSchedule(UpdateSchedule.ON_EVERY_START);
-
 			if (UpdateScheduleRegistry.checkAndReset() == false)
 				return;
 
@@ -39,7 +38,7 @@ public class Install4j
 			if (ud.getPossibleUpdateEntry() != null)
 				checkForUpdate(true);
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (Exception e) {}
 	}
 
 	/**

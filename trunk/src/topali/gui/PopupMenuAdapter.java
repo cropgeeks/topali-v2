@@ -20,7 +20,7 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 		p = new JPopupMenu();
 	}
 
-	
+
 	public void mouseReleased(MouseEvent e)
 	{
 		//this is for windows
@@ -31,7 +31,7 @@ public abstract class PopupMenuAdapter extends MouseAdapter
 		}
 	}
 
-	
+
 	public void mousePressed(MouseEvent e) {
 		//and this for linux
 		if (e.isPopupTrigger() && enabled)
