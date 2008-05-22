@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Difference of Sums of Squares</title
+</title>
+
+<body>
+
+<h1>Difference of Sums of Squares</h1>
+
+<p>DSS uses fast approximate distance-based phylogenetic methods and
+can be used with large alignments. The method slides a fixed-size
+window (eg, 500bp wide) along the alignment, comparing the left-hand
+window (W<sub>L</sub>) with the right-hand window (W<sub>R</sub>). In W<sub>L</sub>,
+the matrix of pairwise genetic distances among the sequences is
+calculated, and a phylogenetic tree is then estimated by minimizing the
+sums-of-squares SS<sub>L</sub> between the observed distances and the
+distances based on the tree. A distance matrix is then calculated for W<sub>R</sub>,
+and the W<sub>L </sub>topology is fitted to it, yielding a second
+sum-of-squares value (SS<sub>R</sub>), When the W<sub>R
+</sub>topology has changed due to recombination, the W<sub>L</sub>
+topology will be a poor fit to the W<sub>R</sub> distance matrix.</p>
+
+<p>Putative recombination breakpoints can then be observed by plotting
+the difference between SS<sub>L</sub> and SS<sub>R</sub> (DSS
+statistic) against the window centre. The influence of <i>mean</i>
+rate heterogeneity is removed from the analysis, but the DSS statistic
+will still be inflated when branch lengths change non-uniformly among
+branches as we move along the alignment. Recent improvements allow the
+statistical significance of DSS peaks to be estimated with parametric
+bootstrapping.</p>
+
+<p>More information on the DSS method is available in:</p>
+<ul>
+  <li>McGuire G and Wright F (2000) <i>TOPAL 2.0: Improved Detection
+of Mosaic Sequences within Multiple Alignments</i>, Bioinformatics, 16
+(2), 130-134.</li>
+</ul>
+</p>
+
+
+</body>
+</html>

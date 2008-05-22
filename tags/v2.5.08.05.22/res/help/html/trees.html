@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+
+<body>
+
+<h2>Exporting Trees</h2>
+You can export a tree as PNG graphics file or as text file in New Hampshire format.<br>
+If you have defined certain <a href="trees.html#group_clusters">Group Clusters</a>, you can also export this information into a text file.
+
+<h2>Change Tree Style</h2>
+There are three ways to display the tree:
+<ul>
+<li>Phenogram: The usual left to right tree</li>
+<li>Circular: Nodes are arranged in a circular way</li>
+<li>New Hampshire: Shows the tree in the New Hampshire text format</li>
+</ul>
+Apart from that, you can also display the tree in its' own window (independet from the TOPALi window) by
+clicking on the <b>Toogle Tree Display</b> button. If you close this external window, the tree will be
+displayed in the TOPALi window again.
+
+
+<h2>Bootstrap Values</h2>
+Especially on a big tree you might not want to display each single bootstrap value. <br>
+Therefore you can remove bootstrap values below a certain threshold. You also have the option
+to replace the remaining bootstrap values with another character. <br>
+The existing tree will not be replaced, a new tree with the removed/replaced bootstrap values will
+be added to your alignment.
+
+<h2>Rooting</h2>
+Some tree estimation methods will produce a typical top-left to bottom-right tree, which is sometimes 
+a bit hard to read. By clicking on the <b>Reroot</b> button you can midpoint these trees. <br>
+The existing tree will not be replaced, a new midpoint rooted tree will be added to your alignment.
+
+<h2><a name="group_clusters"/>Group Clusters</h2>
+By using the <b>Group Cluster</b> button you can set a certain clustering threshold.<br>
+TOPALi will then create different groups according to this threshold. And you have the choice
+to automatically select the first sequence of each of the groups. This is very usefull for
+pruning down big alignments.
+
+<h2>Launch Jobs</h2>
+If you have estimated a bayesian or maximum likelihood tree, you can directly launch the ancestral
+sequence estimation from the tree.
+
+<br>
+<br>
+
+</body>
+</html>
