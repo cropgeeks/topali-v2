@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment name="defaultClientConfig"
+            xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
+            xmlns:handler="http://xml.apache.org/axis/wsdd/providers/handler">
+
+ <globalConfiguration>
+   <parameter name="disablePrettyXML" value="true"/>
+   <parameter name="dotNetSoapEncFix" value="true"/>
+   <parameter name="enableNamespacePrefixOptimization" value="false"/>
+   <requestFlow>
+     <handler type="java:org.apache.axis.handlers.JWSHandler">
+        <parameter name="scope" value="session"/>
+     </handler>
+     <handler type="java:org.apache.axis.handlers.JWSHandler">
+        <parameter name="scope" value="request"/>
+        <parameter name="extension" value=".jwr"/>
+     </handler>
+     <!-- uncomment this if you want the SOAP monitor -->
+     <!--
+     <handler type="java:org.apache.axis.handlers.SOAPMonitorHandler"/>
+     -->
+   </requestFlow>
+   <!-- uncomment this if you want the SOAP monitor -->
+   <!--
+   <responseFlow>
+     <handler type="java:org.apache.axis.handlers.SOAPMonitorHandler"/>
+   </responseFlow>
+   -->
+ </globalConfiguration>
+
+ <handler type="java:org.apache.axis.handlers.http.URLMapper" name="URLMapper"/>
+ <handler type="java:org.apache.axis.transport.local.LocalResponder" name="LocalResponder"/>
+ <handler type="java:org.apache.axis.handlers.SimpleAuthenticationHandler" name="Authenticate"/>
+
+ <service name="AdminService" provider="java:MSG">
+  <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+  <parameter name="allowedMethods" value="AdminService"/>
+  <parameter name="enableRemoteAdmin" value="false"/>
+  <parameter name="className" value="org.apache.axis.utils.Admin"/>
+ </service>
+
+ <service name="Version" provider="java:RPC">
+  <parameter name="allowedMethods" value="getVersion"/>
+  <parameter name="className" value="org.apache.axis.Version"/>
+ </service>
+
+ <!-- PDM -->
+ <service name="topali-pdm" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.pdm.PDMWebService"/>
+ </service>
+ <!-- PDM2 -->
+ <service name="topali-pdm2" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.pdm2.PDMWebService"/>
+ </service>
+ <!-- HMM -->
+ <service name="topali-hmm" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.hmm.HMMWebService"/>
+ </service>
+ <!-- DSS -->
+ <service name="topali-dss" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.dss.DSSWebService"/>
+ </service>
+ <!-- LRT -->
+ <service name="topali-lrt" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.lrt.LRTWebService"/>
+ </service>
+ <!-- ModelGenerator -->
+ <service name="topali-mg" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.modelgenerator.MGWebService"/>
+ </service>
+  <!-- ModelTest -->
+ <service name="topali-mt" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.modeltest.ModelTestWebService"/>
+ </service>
+ <!-- MrBayes -->
+ <service name="topali-mb" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.mrbayes.MrBayesWebService"/>
+ </service>
+ <!-- CodonW -->
+ <service name="topali-cw" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.codonw.CodonWWebService"/>
+ </service>
+ <!-- PhyML -->
+ <service name="topali-phyml" provider="java:RPC">
+   <parameter name="allowedMethods" value="*"/>
+   <parameter name="className" value="topali.cluster.jobs.phyml.PhymlWebService"/>
+   <parameter name="scope" value="request"/>
+ </service>
+ <!-- RaxML -->
+ <service name="topali-rx" provider="java:RPC">
+   <parameter name="allowedMethods" value="*"/>
+   <parameter name="className" value="topali.cluster.jobs.raxml.RaxmlWebService"/>
+   <parameter name="scope" value="request"/>
+ </service>
+ <!-- FastML -->
+ <service name="topali-fm" provider="java:RPC">
+   <parameter name="allowedMethods" value="*"/>
+   <parameter name="scope" value="request"/>
+   <parameter name="className" value="topali.cluster.jobs.fastml.FastMLWebService"/>
+ </service>
+ <!-- CodeML -->
+ <service name="topali-cml" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="scope" value="request"/>
+  <parameter name="className" value="topali.cluster.jobs.cml.CodeMLWebService"/>
+ </service>
+
+ <transport name="http">
+  <parameter name="qs:list"
+               value="org.apache.axis.transport.http.QSListHandler"/>
+  <parameter name="qs:method"
+               value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <parameter name="qs:wsdl"
+               value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <requestFlow>
+   <handler type="URLMapper"/>
+   <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </requestFlow>
+ </transport>
+
+ <transport name="local">
+  <responseFlow>
+   <handler type="LocalResponder"/>
+  </responseFlow>
+ </transport>
+
+</deployment>
