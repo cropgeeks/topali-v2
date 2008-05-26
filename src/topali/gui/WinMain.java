@@ -94,7 +94,8 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 		project.addChangeListener(this);
 
-		Tracker.log("OPEN");
+		System.out.println(Locale.getDefault());
+		Tracker.log("OPEN", Install4j.VERSION, System.getProperty("os.name"), Locale.getDefault());
 	}
 
 	public Project getProject()
