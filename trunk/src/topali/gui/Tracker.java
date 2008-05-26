@@ -18,15 +18,15 @@ public class Tracker
 		Runnable r = new Runnable()	{
 			public void run()
 			{
-				// Format the URL string to send to the server
-				String uid = Prefs.appId;
-				String address = "http://www.topali.org/topali/tracking.jsp?id=" + uid;
-
-				for (int i = 0; i < msgs.length; i++)
-					address += "&msg" + (i+1) + "=" + msgs[i];
-
 				try
 				{
+					// Format the URL string to send to the server
+					String uid = Prefs.appId;
+					String address = "http://www.topali.org/topali/tracking.jsp?id=" + uid;
+
+					for (int i = 0; i < msgs.length; i++)
+						address += "&msg" + (i+1) + "=" + URLEncoder.encode(msgs[i].toString(), "UTF-8");
+
 					URL url = new URL(address);
 					HttpURLConnection c = (HttpURLConnection) url.openConnection();
 

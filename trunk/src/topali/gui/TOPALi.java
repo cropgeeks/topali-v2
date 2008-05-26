@@ -107,13 +107,13 @@ public class TOPALi extends Applet implements Application
 	{
 		try
 		{
-			if (SysPrefs.isWindows)
-			{
-				// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.put("TextArea.font", UIManager.get("TextField.font"));
 
+			// Use the office look for Windows (but not for Vista)
+			if (SysPrefs.isWindows && !SysPrefs.isWindowsVista)
+			{
 				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
-				// UIManager.setLookAndFeel("org.fife.plaf.OfficeXP.OfficeXPLookAndFeel");
-				// UIManager.setLookAndFeel("org.fife.plaf.VisualStudio2005.VisualStudio2005LookAndFeel");
 
 				UIManager.put("OptionPane.errorIcon", Icons.WIN_ERROR);
 				UIManager.put("OptionPane.informationIcon", Icons.WIN_INFORM);
@@ -122,13 +122,9 @@ public class TOPALi extends Applet implements Application
 
 			}
 			else if (SystemUtils.isMacOS())
-			{
 				handleOSXStupidities();
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			}
-			else
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			log.warn("Cannot set Look and Feel", e);
 		}
