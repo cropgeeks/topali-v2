@@ -14,17 +14,17 @@ public class TrackingLogParser
 
 	final static String logFileName = "\\\\gruffalo\\tomcat\\topali\\public\\tracking.log";
 	final static boolean dnsLookup = true;
-	
+
 	HashSet<String> excludedIps = new HashSet<String>();
 
 	Hashtable<String, User> users = new Hashtable<String, User>();
 
 	Hashtable<String, Location> locations = new Hashtable<String, Location>();
-	
+
 	Hashtable<String, Job> jobs = new Hashtable<String, Job>();
 
 	LinkedList<Download> downloads = new LinkedList<Download>();
-	
+
 	static Hashtable<String, String> lookupHostAdd = new Hashtable<String, String>();
 
 	static Hashtable<String, String> lookupAddHost = new Hashtable<String, String>();
@@ -87,7 +87,7 @@ public class TrackingLogParser
 			System.out.println(l.location + ": " + l.count + " users");
 		}
 		System.out.println();
-		
+
 		System.out.println("Jobs");
 		System.out.println("----");
 		System.out.println("Submitted jobs: " + jobs.size());
@@ -98,7 +98,7 @@ public class TrackingLogParser
 		{
 			System.out.println(s + ": " + job.get(s)+" ("+countJobs(s, Job.COMPLETETED)+", "+countJobs(s, Job.CANCELLED)+")");
 		}
-		
+
 		System.out.println();
 		System.out.println("Jobs per User:");
 		Collection<User> tmp2 = this.users.values();
@@ -108,14 +108,14 @@ public class TrackingLogParser
 		for(int i=0; i<users.length; i++) {
 			System.out.println("User "+users[i].id+": "+users[i].jobs+" ("+users[i].ip+", "+users[i].location+")");
 		}
-		
+
 	}
 
 	private void parse() throws Exception
 	{
 		//2007-09-20 15:49:37 - 143.234.98.21 - 143.234.98.21 - 55150467556878101066028884146549 - OPEN
 		//          0                1                 2                      3                      4
-		
+
 		System.out.print("Parsing log file...");
 
 		BufferedReader r = new BufferedReader(new FileReader(new File(
@@ -129,7 +129,7 @@ public class TrackingLogParser
 				continue;
 
 			if(tmp[3].startsWith("/")) {
-				if(tmp[3].endsWith(".exe")) 
+				if(tmp[3].endsWith(".exe"))
 					downloads.add(new Download(Download.WINDOWS));
 				else if(tmp[3].endsWith("Linux.sh"))
 					downloads.add(new Download(Download.LINUX));
@@ -140,10 +140,10 @@ public class TrackingLogParser
 				else if(tmp[3].endsWith(".jnlp"))
 					downloads.add(new Download(Download.WEBSTART));
 			}
-			
+
 			if (tmp.length < 5)
 				continue;
-			
+
 			else if (tmp[4].equals("OPEN"))
 			{
 				if (!users.containsKey(tmp[3]))
@@ -187,7 +187,7 @@ public class TrackingLogParser
 		}
 		return i;
 	}
-	
+
 	private int countDownloads(int type) {
 		int i = 0;
 		for(Download d : downloads) {
@@ -196,13 +196,63 @@ public class TrackingLogParser
 		}
 		return i;
 	}
-	
+
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		if (args.length > 0 && args[0].equals("mini"))
+		{
+			BufferedReader in = new BufferedReader(new FileReader(
+				new File(logFileName)));
+
+			String str = in.readLine();
+
+			while (str != null)
+			{
+				if (str.indexOf("- OPEN -") != -1)
+					System.out.println(str);
+
+				str = in.readLine();
+			}
+
+			in.close();
+			return;
+		}
+
+		else if (args.length > 0 && args[0].equals("ip"))
+		{
+			Hashtable<String, String> hash = new Hashtable<String, String>();
+
+			BufferedReader in = new BufferedReader(new FileReader(
+				new File(logFileName)));
+
+			String str = in.readLine();
+
+			while (str != null)
+			{
+				int dash1 = str.indexOf("- ") + 2;
+				int dash2 = str.indexOf("- ", dash1);
+
+				String ip = str.substring(dash1, dash2).trim();
+
+				hash.put(ip, ip);
+
+				str = in.readLine();
+			}
+
+			in.close();
+
+			Enumeration<String> keys = hash.keys();
+			while (keys.hasMoreElements())
+				System.out.println(keys.nextElement());
+
+
+			return;
+		}
+
 		TrackingLogParser t = new TrackingLogParser();
 		t.evaluate();
 	}
@@ -245,7 +295,7 @@ public class TrackingLogParser
 		public String ip;
 
 		public String location = "unknown";
-		
+
 		public int jobs = 0;
 
 		public User(String id, String ip)
@@ -261,7 +311,7 @@ public class TrackingLogParser
 					{
 						String[] tmp = host.split("\\.");
 						location = tmp[tmp.length - 1];
-						
+
 						Location l = locations.get(location);
 						if(l==null) {
 							l = new Location();
@@ -276,41 +326,41 @@ public class TrackingLogParser
 			}
 		}
 
-		
+
 		public int compareTo(User o)
 		{
 			if(o.jobs>this.jobs)
 				return 1;
-			else if(o.jobs<this.jobs) 
+			else if(o.jobs<this.jobs)
 				return -1;
 			else
 				return this.id.compareTo(o.id);
 		}
-		
+
 	}
 
 	class Location implements Comparable<Location> {
 		public String location = "unknown";
 		public int count = 0;
-		
+
 		public Location() {
-			
+
 		}
 
-		
+
 		public int compareTo(Location o)
 		{
 			if(o.count>this.count)
 				return 1;
-			else if(o.count<this.count) 
+			else if(o.count<this.count)
 				return -1;
 			else {
 				return location.compareTo(o.location);
 			}
 		}
-		
+
 	}
-	
+
 	class Job
 	{
 		public static final int UNKNOWN = 0;
@@ -333,14 +383,14 @@ public class TrackingLogParser
 		}
 
 	}
-	
+
 	class Download {
 		public static final int WINDOWS = 1;
 		public static final int LINUX = 2;
 		public static final int MAC = 4;
 		public static final int SOLARIS = 8;
 		public static final int WEBSTART = 16;
-		
+
 		public int type;
 
 		public Download(int type)
