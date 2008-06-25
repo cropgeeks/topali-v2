@@ -37,13 +37,6 @@ public class AlignmentHandler
 	{
 		ISeqFile seqFile = null;
 
-		// Putting this last for now because I don't trust ReadSeq on phylip
-		// (PAL is better for it)
-		// Moved it to first again: 30/05/2008
-		seqFile = new FileReadSeq(ss);
-		if (seqFile.readFile(file))
-			return true;
-
 		// Try possible file formats until successfull
 		seqFile = new FileNexus(ss);
 		if (seqFile.readFile(file))
@@ -65,7 +58,11 @@ public class AlignmentHandler
 		if (seqFile.readFile(file))
 			return true;
 
-
+		// Putting this last for now because I don't trust ReadSeq on phylip
+		// (PAL is better for it)
+		seqFile = new FileReadSeq(ss);
+		if (seqFile.readFile(file))
+			return true;
 
 		return false;
 	}

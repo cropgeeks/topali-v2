@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import topali.data.Prefs;
 import topali.gui.dialog.ExportDialog;
 import topali.i18n.Text;
-import topali.logging.GracefulShutdownHandler;
 
 import scri.commons.gui.*;
 
@@ -58,7 +57,7 @@ public class WinMainMenuBar extends JMenuBar
 	JMenuItem mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
 
 	//Phylogeny
-	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsPhyml, mAnlsRaxml;
+	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsMrBayesCDNA, mAnlsPhyml, mAnlsRaxml;
 	public static JMenu mAnlsNJ, mAnlsBayes, mAnlsML;
 
 	//CodonW
@@ -97,7 +96,7 @@ public class WinMainMenuBar extends JMenuBar
 	public static AbstractAction aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
 
 	//Phylogeny
-	public static AbstractAction aAnlsRunMT, aAnlsQuickTree, aAnlsMrBayes, aAnlsPhyml, aAnlsRaxml;
+	public static AbstractAction aAnlsRunMT, aAnlsQuickTree, aAnlsMrBayes, aAnlsMrBayesCDNA, aAnlsPhyml, aAnlsRaxml;
 
 	//CodonW
 	public static AbstractAction aAnlsRunCW;
@@ -131,25 +130,6 @@ public class WinMainMenuBar extends JMenuBar
 		setBorderPainted(false);
 		// setStartupState();
 		setProjectOpenedState();
-
-		//Register a shortcut for showing log messages
-		KeyStroke showLogs = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK);
-		Action aShowLogs = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if(GracefulShutdownHandler.instance!=null)
-					GracefulShutdownHandler.instance.showLogs(false);
-			}
-		};
-		registerKeyboardAction(aShowLogs, showLogs, JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-		KeyStroke provokeError = KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
-		Action aprovokeError = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				String s = null;
-				s.length();
-			}
-		};
-		registerKeyboardAction(aprovokeError, provokeError, JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void createActions()
@@ -479,6 +459,13 @@ public class WinMainMenuBar extends JMenuBar
 			}
 		};
 
+		aAnlsMrBayesCDNA = new AbstractAction(Text.get("aAnlsMrBayesCDNA")) {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsMrBayesCDNA(null);
+			}
+		};
+
 		aAnlsPhyml = new AbstractAction(Text.get("aAnlsPhyml")) {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -789,6 +776,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAnlsRunMT = getItem(aAnlsRunMT, KeyEvent.VK_M, 0, 0);
 		mAnlsQuickTree = getItem(aAnlsQuickTree, KeyEvent.VK_Q, 0, 0);
 		mAnlsMrBayes = getItem(aAnlsMrBayes, KeyEvent.VK_M, 0, 0);
+		mAnlsMrBayesCDNA = getItem(aAnlsMrBayesCDNA, KeyEvent.VK_R, 0, 0);
 		mAnlsPhyml = getItem(aAnlsPhyml, KeyEvent.VK_P, 0, 0);
 		mAnlsRaxml = getItem(aAnlsRaxml, KeyEvent.VK_R, 0, 0);
 		mAnlsNJ = new JMenu(Text.get("mNJ"));
@@ -833,6 +821,7 @@ public class WinMainMenuBar extends JMenuBar
 			mAnlsNJ.add(mAnlsQuickTree);
 		h3.add(mAnlsNJ);
 			mAnlsBayes.add(mAnlsMrBayes);
+			mAnlsBayes.add(mAnlsMrBayesCDNA);
 		h3.add(mAnlsBayes);
 			mAnlsML.add(mAnlsPhyml);
 			mAnlsML.add(mAnlsRaxml);
@@ -1028,11 +1017,9 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRunCodeMLSite.setEnabled(false);
 		aAnlsRunMT.setEnabled(false);
 
-		mAnlsNJ.setEnabled(false);
 		aAnlsQuickTree.setEnabled(false);
-		mAnlsBayes.setEnabled(false);
 		aAnlsMrBayes.setEnabled(false);
-		mAnlsML.setEnabled(false);
+		aAnlsMrBayesCDNA.setEnabled(false);
 		aAnlsPhyml.setEnabled(false);
 		aAnlsRaxml.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);

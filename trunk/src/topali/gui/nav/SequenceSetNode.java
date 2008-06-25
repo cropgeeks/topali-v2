@@ -13,7 +13,7 @@ import topali.data.AlignmentData;
 import topali.gui.*;
 import topali.i18n.Text;
 
-public class SequenceSetNode extends INode 
+public class SequenceSetNode extends INode
 {
 	private String nodeName;
 
@@ -30,25 +30,25 @@ public class SequenceSetNode extends INode
 		alignmentPanel = new AlignmentPanel(data);
 	}
 
-	
+
 	public int getTipsKey()
 	{
 		return WinMainTipsPanel.TIPS_ALN;
 	}
 
-	
+
 	public String getHelpKey()
 	{
 		return "view_alignment";
 	}
 
-	
+
 	public String toString()
 	{
 		return nodeName;
 	}
 
-	
+
 	public JComponent getPanel()
 	{
 		return alignmentPanel;
@@ -60,7 +60,7 @@ public class SequenceSetNode extends INode
 		return alignmentPanel;
 	}
 
-	
+
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
@@ -83,15 +83,13 @@ public class SequenceSetNode extends INode
 		aAnlsRunCodeMLBranch.setEnabled(dna);
 		aAnlsRunCodeMLSite.setEnabled(dna);
 		aAnlsRunMT.setEnabled(true);
-		mAnlsNJ.setEnabled(true);
 		aAnlsQuickTree.setEnabled(true);
-		mAnlsBayes.setEnabled(true);
 		aAnlsMrBayes.setEnabled(true);
-		mAnlsML.setEnabled(true);
+		aAnlsMrBayesCDNA.setEnabled(true);
 		aAnlsPhyml.setEnabled(true);
 		aAnlsRaxml.setEnabled(true);
 		aAnlsRunCW.setEnabled(dna);
-		
+
 		//aAnlsCreateTree.setEnabled(true);
 
 

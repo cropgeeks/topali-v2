@@ -7,16 +7,16 @@ package topali.data;
 
 import topali.data.models.*;
 
-public class SequenceSetProperties 
+public class SequenceSetProperties
 {
 	public static final int TYPE_DNA = 1;
 	public static final int TYPE_RNA = 2;
 	public static final int TYPE_PROTEIN = 4;
 	public static final int TYPE_UNKNOWN = 8;
-	
+
 	// Sequence type
 	private int type = TYPE_UNKNOWN;
-	
+
 	// Transition/transvertion ratio for this alignment
 	private double tRatio = -1;
 
@@ -31,13 +31,13 @@ public class SequenceSetProperties
 
 	// Nucleotide frequencies
 	private double[] freqs = new double[0];
-	
-	private boolean isAligned = false;
-	
+
+	private boolean isAligned = true;
+
 	private Model model = null;
-	
+
 	private boolean needsCalculation = true;
-	
+
 	public SequenceSetProperties()
 	{
 	}
@@ -48,15 +48,15 @@ public class SequenceSetProperties
 		this.isAligned = para.isAligned;
 		this.model = (para.model instanceof DNAModel) ? new DNAModel((DNAModel)para.model) : new ProteinModel((ProteinModel)para.model);
 	}
-	
+
 	public boolean isNucleotides() {
 		return (type==TYPE_DNA || type==TYPE_RNA || type==(TYPE_DNA+TYPE_RNA));
 	}
-	
+
 	public boolean isProtein() {
 		return type==TYPE_PROTEIN;
 	}
-	
+
 	public int getType() {
 		return type;
 	}
@@ -126,7 +126,7 @@ public class SequenceSetProperties
 	    	else if(type==SequenceSetProperties.TYPE_PROTEIN)
 	    		this.model = mm.generateModel("WAG", true, false);
 	    }
-	    
+
 	    return model;
 	}
 
@@ -155,5 +155,5 @@ public class SequenceSetProperties
 		this.needsCalculation = needsCalculation;
 	}
 
-	
+
 }

@@ -23,11 +23,11 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 	private JButton bClose, bClipboard, bSubmit, bHelp;
 
 	private JTextArea text;
-	
+
 	public AnalysisInfoDialog(AlignmentResult aResult) {
 		super(TOPALi.winMain, "Analysis Information", true);
 		this.aResult = aResult;
-		
+
 		add(createControls());
 		getRootPane().setDefaultButton(bClose);
 		Utils.addCloseHandler(this, bClose);
@@ -45,7 +45,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 		bClipboard = new JButton(Text.get("clipboard_1"));
 		bClipboard.addActionListener(this);
-		
+
 		bSubmit = new JButton("Resubmit Job");
 		bSubmit.addActionListener(this);
 
@@ -84,7 +84,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 			Utils.copyToClipboard(text.getText());
 			MsgBox.msg(Text.get("clipboard_2"), MsgBox.INF);
 		}
-		
+
 		else if (e.getSource() == bSubmit)
 			resubmitAnalysis();
 	}
@@ -127,7 +127,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		// Resubmit a LRT job
 		else if (aResult instanceof LRTResult)
 			TOPALi.winMain.menuAnlsRunLRT((LRTResult) aResult);
-		
+
 		else if (aResult instanceof CodeMLResult) {
 			CodeMLResult res = (CodeMLResult) aResult;
 			if(res.type.equals(CodeMLResult.TYPE_SITEMODEL))
@@ -135,27 +135,31 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 			else if(res.type.equals(CodeMLResult.TYPE_BRANCHMODEL))
 				TOPALi.winMain.menuAnlsRunCodeMLBranch(res);
 		}
-		
+
 		else if(aResult instanceof CodonWResult) {
 			CodonWResult res = (CodonWResult) aResult;
 			TOPALi.winMain.menuAnlsRunCW(res);
 		}
-		
+
 		else if(aResult instanceof ModelTestResult) {
 		    ModelTestResult res = (ModelTestResult) aResult;
 		    TOPALi.winMain.menuAnlsRunMT(res);
 		}
-		
+
 		else if(aResult instanceof MBTreeResult) {
 			MBTreeResult res = (MBTreeResult)aResult;
-			TOPALi.winMain.menuAnlsMrBayes(res);
+
+			if (res.partitions.size() > 1)
+				TOPALi.winMain.menuAnlsMrBayesCDNA(res);
+			else
+				TOPALi.winMain.menuAnlsMrBayes(res);
 		}
-		
+
 		else if(aResult instanceof PhymlResult) {
 			PhymlResult res = (PhymlResult)aResult;
 			TOPALi.winMain.menuAnlsPhyml(res);
 		}
-		
+
 		else if(aResult instanceof RaxmlResult) {
 			RaxmlResult res = (RaxmlResult)aResult;
 			TOPALi.winMain.menuAnlsRaxml(res);

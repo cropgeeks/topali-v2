@@ -33,16 +33,21 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel6" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel5" alignment="1" max="32767" attributes="0"/>
-                  <Component id="jPanel1" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jPanel3" max="32767" attributes="1"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="jPanel2" alignment="0" max="32767" attributes="1"/>
+                      <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel5" max="32767" attributes="1"/>
+                  <Component id="jPanel6" alignment="0" min="-2" max="-2" attributes="1"/>
+              </Group>
+              <EmptySpace pref="10" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -50,16 +55,21 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="14" max="32767" attributes="0"/>
+                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel2" min="-2" pref="98" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel3" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel2" min="-2" pref="98" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -90,7 +100,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="p1i" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="p1g" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="p1mod" alignment="0" pref="190" max="32767" attributes="0"/>
+                      <Component id="p1mod" alignment="0" pref="139" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -205,7 +215,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="p2i" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="p2g" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="p2mod" alignment="0" pref="191" max="32767" attributes="0"/>
+                      <Component id="p2mod" alignment="0" pref="140" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -319,7 +329,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="p3mod" pref="190" max="32767" attributes="0"/>
+                      <Component id="p3mod" pref="139" max="32767" attributes="0"/>
                       <Component id="p3i" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="p3g" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -435,10 +445,10 @@
                   </Group>
                   <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="burnin" pref="188" max="32767" attributes="1"/>
-                      <Component id="samFreq" alignment="1" pref="188" max="32767" attributes="1"/>
-                      <Component id="nGen" alignment="1" pref="188" max="32767" attributes="1"/>
-                      <Component id="nRuns" alignment="0" pref="188" max="32767" attributes="1"/>
+                      <Component id="burnin" pref="91" max="32767" attributes="1"/>
+                      <Component id="samFreq" alignment="1" pref="91" max="32767" attributes="1"/>
+                      <Component id="nGen" alignment="1" pref="91" max="32767" attributes="1"/>
+                      <Component id="nRuns" alignment="0" pref="91" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -577,7 +587,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="154" max="32767" attributes="0"/>
+                  <EmptySpace pref="57" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

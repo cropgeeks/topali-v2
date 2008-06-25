@@ -29,7 +29,7 @@ import topali.gui.dialog.jobs.*;
 import topali.gui.dialog.jobs.cml.*;
 import topali.gui.dialog.jobs.hmm.HMMSettingsDialog;
 import topali.gui.dialog.jobs.mt.MTDialog;
-import topali.gui.dialog.jobs.tree.mrbayes.MrBayesDialog;
+import topali.gui.dialog.jobs.tree.mrbayes.*;
 import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.quicktree.QuickTreeDialog;
 import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
@@ -685,10 +685,21 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		}
 	}
 
-	public void menuAnlsMrBayes(TreeResult result) {
+	public void menuAnlsMrBayes(TreeResult result)
+	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 		MrBayesDialog dlg = new MrBayesDialog(this, data, result);
-		dlg.setVisible(true);
+
+		MBTreeResult res = dlg.getResult();
+
+		if(res!=null)
+			submitJob(data, res);
+	}
+
+	public void menuAnlsMrBayesCDNA(TreeResult result)
+	{
+		AlignmentData data = navPanel.getCurrentAlignmentData();
+		MrBayesCDNADialog dlg = new MrBayesCDNADialog(this, data, result);
 
 		MBTreeResult res = dlg.getResult();
 
