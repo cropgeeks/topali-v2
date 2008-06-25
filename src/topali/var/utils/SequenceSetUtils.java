@@ -558,7 +558,7 @@ public class SequenceSetUtils
 		{
 			StringBuffer buffer = seq.getBuffer();
 
-			for (int ch = start; ch <= end; ch++)
+			for (int ch = start; ch <= end && ch < buffer.length(); ch++)
 			{
 				count++;
 

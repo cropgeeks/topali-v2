@@ -27,7 +27,7 @@ import scri.commons.gui.MsgBox;
 public class ImportDataSetDialog extends JDialog implements Runnable
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private AlignmentData data;
 
 	private WinMain winMain;
@@ -46,7 +46,7 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		addWindowListener(new WindowAdapter()
 		{
-			
+
 			public void windowOpened(WindowEvent e)
 			{
 				doLoad();
@@ -64,7 +64,6 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 		pack();
 		setResizable(false);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(winMain);
 	}
 
@@ -129,12 +128,14 @@ public class ImportDataSetDialog extends JDialog implements Runnable
 
 			data = new AlignmentData(name, ss);
 
-			winMain.addNewAlignmentData(data);
-		} catch (AlignmentLoadException e)
+			if (isVisible())
+				winMain.addNewAlignmentData(data);
+		}
+		catch (AlignmentLoadException e)
 		{
 			log.warn("Import failed.\n",e);
 			int code = e.getReason();
-			
+
 			String text = Text.get("ImportDataSetDialog.err0" + code);
 			if(e.getInfo()!=null)
 				text += "\n["+e.getInfo()+"]";

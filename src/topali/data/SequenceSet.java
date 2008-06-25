@@ -37,7 +37,7 @@ public class SequenceSet extends DataObject
 
 	// Various parameters related to this alignment that must be computed
 	private SequenceSetProperties props = null;
-	
+
 	// Runtime only objects (ie, not saved to XML)
 	private NameColouriser nameColouriser;
 
@@ -56,7 +56,7 @@ public class SequenceSet extends DataObject
 			addSequence(new Sequence(ss.getSequence(i)));
 		}
 	}
-	
+
 	public SequenceSet(int id)
 	{
 		super(id);
@@ -66,7 +66,7 @@ public class SequenceSet extends DataObject
 	public SequenceSet(Alignment alignment) throws AlignmentLoadException
 	{
 		this();
-		
+
 		for (int i = 0; i < alignment.getSequenceCount(); i++)
 		{
 			Sequence seq = new Sequence(alignment.getIdentifier(i).getName());
@@ -82,7 +82,7 @@ public class SequenceSet extends DataObject
 	public SequenceSet(File filename) throws AlignmentLoadException
 	{
 		this();
-		
+
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
@@ -96,7 +96,7 @@ public class SequenceSet extends DataObject
 			throws AlignmentLoadException
 	{
 		this();
-		
+
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
@@ -171,12 +171,12 @@ public class SequenceSet extends DataObject
 			DecimalFormat d = new DecimalFormat("00000");
 			sequence.safeName = "SEQ" + d.format(sequences.size());
 		}
-		
+
 		for(PropertyChangeListener li : changeListeners) {
 			li.propertyChange(new PropertyChangeEvent(this, "addSequence", null, sequence));
 		}
 	}
-	
+
 	/* Returns the sequence at the given index position. */
 	public Sequence getSequence(int index)
 	{
@@ -190,7 +190,7 @@ public class SequenceSet extends DataObject
 		}
 		return null;
 	}
-	
+
 	/* Returns the number of sequences in this alignment. */
 	public int getSize()
 	{
@@ -318,11 +318,14 @@ public class SequenceSet extends DataObject
 		// if (resetSelection)
 		props.setType(SequenceSetUtils.determineSeqType(this));
 
+		for (Sequence seq: sequences)
+			System.out.println("ALIGNMENT LOADED: " + seq.getSequence().length());
+
 		if (props.isAligned())
 			calculateOverview();
 
 		/*
-		 * 
+		 *
 		 * nucStart = nStart = 1; nucEnd = nEnd = nMax = seqLength;
 		 *  // Reset transition/transvertion ratio and alpha shape parameter
 		 * tRatio = alpha = -1; // Reset frequencies freqs = null;
@@ -404,7 +407,7 @@ public class SequenceSet extends DataObject
 		else
 			return new SimpleAlignment(ids, seqs, new AminoAcids());
 	}
-	
+
 	public SimpleAlignment getAlignment(int[] indices, Annotation anno,
 			boolean useSafeNames)
 	{
@@ -427,7 +430,7 @@ public class SequenceSet extends DataObject
 		else
 			return new SimpleAlignment(ids, seqs, new AminoAcids());
 	}
-	
+
 	// Returns (or computes and returns) a PAL object that can be used to colour
 	// sequence labels in trees
 	public NameColouriser getNameColouriser(int colorSeed)
@@ -465,7 +468,7 @@ public class SequenceSet extends DataObject
 		}
 		return result;
 	}
-	
+
 	/*
 	 * Scans all sequences and produces a ClustalX-like string that shows
 	 * changes between the strains.
@@ -566,17 +569,17 @@ public class SequenceSet extends DataObject
 		}
 		return false;
 	}
-	
+
 	public boolean isCodons() {
 		if(!props.isNucleotides())
 			return false;
-		
+
 		if(sequences.size()>0)
 			return sequences.get(0).isCodons();
-		
+
 		return false;
 	}
-	
+
 	public void merge(SequenceSet set) {
 		for(Sequence s : set.getSequences()) {
 			boolean found = false;
@@ -592,8 +595,8 @@ public class SequenceSet extends DataObject
 			}
 		}
 	}
-	
-	
+
+
 	public void addChangeListener(PropertyChangeListener listener)
 	{
 		super.addChangeListener(listener);
@@ -601,7 +604,7 @@ public class SequenceSet extends DataObject
 			s.addChangeListener(listener);
 	}
 
-	
+
 	public int hashCode()
 	{
 		final int prime = 31;
@@ -611,8 +614,8 @@ public class SequenceSet extends DataObject
 			result += s.hashCode();
 		return result;
 	}
-	
-	
+
+
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
@@ -630,6 +633,6 @@ public class SequenceSet extends DataObject
 			return false;
 		return true;
 	}
-	
-	
+
+
 }

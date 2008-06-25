@@ -14,27 +14,38 @@ import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
 
-public class MrBayesDialog extends JDialog implements ActionListener
+import scri.commons.gui.*;
+
+public class MrBayesCDNADialog extends JDialog implements ActionListener
 {
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 
-	AdvancedMrBayes advanced;
+	AdvancedCDNAMrBayes advancedCDNA;
 
 	WinMain winMain;
 	AlignmentData data;
 	MBTreeResult result;
 
-	public MrBayesDialog(WinMain winMain, AlignmentData data, TreeResult result) {
-		super(winMain, "MrBayes (Standard DNA) Settings", true);
+	public MrBayesCDNADialog(WinMain winMain, AlignmentData data, TreeResult result) {
+		super(winMain, "MrBayes (Codon Positions) Settings", true);
 
 		this.winMain = winMain;
 		this.data = data;
 		this.result = (MBTreeResult)result;
 
+		boolean div3 = (((data.getActiveRegionE()-data.getActiveRegionS()+1)%3)==0);
+
+		if (div3 == false)
+		{
+			TaskDialog.error("The currently selected alignment region does not appear to be protein coding "
+				+ "(not divisable by three)\nand cannot be used for this analysis type.", "Close");
+			return;
+		}
+
 		init();
 
 		if (result != null)
-		    advanced.initPrevResult((MBTreeResult)result);
+		    advancedCDNA.initPrevResult((MBTreeResult)result);
 
 		pack();
 		setLocationRelativeTo(winMain);
@@ -49,14 +60,14 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "mrbayes");
 		add(bp, BorderLayout.SOUTH);
 
-		advanced = new AdvancedMrBayes(data);
-		add(advanced, BorderLayout.CENTER);
+		advancedCDNA = new AdvancedCDNAMrBayes(data.getSequenceSet());
+		add(advancedCDNA, BorderLayout.CENTER);
 	}
 
 	private void ok(boolean remote)
 	{
-		this.result = advanced.onOK();
-		Prefs.mb_type = 0;
+		this.result = advancedCDNA.onOk();
+		Prefs.mb_type = 1;
 
 		result.isRemote = remote;
 		result.setPartitionStart(data.getActiveRegionS());
@@ -64,8 +75,8 @@ public class MrBayesDialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		result.guiName = "#"+runNum+" Tree (MrBayes)";
-		result.jobName = "MrBayes Tree Estimation";
+		result.guiName = "#"+runNum+" Tree (MrBayes CDNA)";
+		result.jobName = "MrBayes CDNA Tree Estimation";
 
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 
@@ -83,8 +94,7 @@ public class MrBayesDialog extends JDialog implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == bCancel)
-		{
+		if (e.getSource() == bCancel) {
 			this.result = null;
 			setVisible(false);
 		}
@@ -93,6 +103,6 @@ public class MrBayesDialog extends JDialog implements ActionListener
 			ok((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 
 		else if(e.getSource() == bDefault)
-			advanced.setDefaults();
+			advancedCDNA.setDefaults();
 	}
 }
