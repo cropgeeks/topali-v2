@@ -32,7 +32,7 @@ import topali.gui.dialog.jobs.mt.MTDialog;
 import topali.gui.dialog.jobs.tree.mrbayes.*;
 import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.quicktree.QuickTreeDialog;
-import topali.gui.dialog.jobs.tree.raxml.RaxmlDialog;
+import topali.gui.dialog.jobs.tree.raxml.*;
 import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
 import topali.i18n.Text;
@@ -718,14 +718,23 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			submitJob(data, res);
 	}
 
-	public void menuAnlsRaxml(TreeResult result) {
+	public void menuAnlsRaxml(TreeResult result, boolean advanced)
+	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
-		RaxmlDialog dlg = new RaxmlDialog(this, data, result);
-		dlg.setVisible(true);
+		RaxmlResult res = null;
 
-		RaxmlResult res = dlg.getResult();
+		if (advanced == false)
+		{
+			RaxmlDialog dlg = new RaxmlDialog(this, data, result);
+			res = dlg.getResult();
+		}
+		else
+		{
+			RaxmlCDNADialog dlg = new RaxmlCDNADialog(this, data, result);
+			res = dlg.getResult();
+		}
 
-		if(res!=null)
+		if (res != null)
 			submitJob(data, res);
 	}
 

@@ -57,7 +57,7 @@ public class WinMainMenuBar extends JMenuBar
 	JMenuItem mAnlsRunCodeMLSite, mAnlsRunCodeMLBranch;
 
 	//Phylogeny
-	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsMrBayesCDNA, mAnlsPhyml, mAnlsRaxml;
+	JMenuItem mAnlsRunMT, mAnlsQuickTree, mAnlsMrBayes, mAnlsMrBayesCDNA, mAnlsPhyml, mAnlsRaxml, mAnlsRaxmlCDNA;
 	public static JMenu mAnlsNJ, mAnlsBayes, mAnlsML;
 
 	//CodonW
@@ -96,7 +96,7 @@ public class WinMainMenuBar extends JMenuBar
 	public static AbstractAction aAnlsRunCodeMLSite, aAnlsRunCodeMLBranch;
 
 	//Phylogeny
-	public static AbstractAction aAnlsRunMT, aAnlsQuickTree, aAnlsMrBayes, aAnlsMrBayesCDNA, aAnlsPhyml, aAnlsRaxml;
+	public static AbstractAction aAnlsRunMT, aAnlsQuickTree, aAnlsMrBayes, aAnlsMrBayesCDNA, aAnlsPhyml, aAnlsRaxml, aAnlsRaxmlCDNA;
 
 	//CodonW
 	public static AbstractAction aAnlsRunCW;
@@ -476,7 +476,14 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsRaxml = new AbstractAction(Text.get("aAnlsRaxml")) {
 			public void actionPerformed(ActionEvent e)
 			{
-				winMain.menuAnlsRaxml(null);
+				winMain.menuAnlsRaxml(null, false);
+			}
+		};
+
+		aAnlsRaxmlCDNA = new AbstractAction(Text.get("aAnlsRaxmlCDNA")) {
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.menuAnlsRaxml(null, true);
 			}
 		};
 
@@ -774,11 +781,13 @@ public class WinMainMenuBar extends JMenuBar
 
 		//Phylogeny
 		mAnlsRunMT = getItem(aAnlsRunMT, KeyEvent.VK_M, 0, 0);
-		mAnlsQuickTree = getItem(aAnlsQuickTree, KeyEvent.VK_Q, 0, 0);
-		mAnlsMrBayes = getItem(aAnlsMrBayes, KeyEvent.VK_M, 0, 0);
-		mAnlsMrBayesCDNA = getItem(aAnlsMrBayesCDNA, KeyEvent.VK_R, 0, 0);
-		mAnlsPhyml = getItem(aAnlsPhyml, KeyEvent.VK_P, 0, 0);
+		mAnlsQuickTree = getItem(aAnlsQuickTree, KeyEvent.VK_N, 0, 0);
+		mAnlsMrBayes = getItem(aAnlsMrBayes, KeyEvent.VK_B, 0, 0);
+		mAnlsMrBayesCDNA = getItem(aAnlsMrBayesCDNA, KeyEvent.VK_A, 0, 0);
+		mAnlsPhyml = getItem(aAnlsPhyml, KeyEvent.VK_L, 0, 0);
 		mAnlsRaxml = getItem(aAnlsRaxml, KeyEvent.VK_R, 0, 0);
+		mAnlsRaxml.setDisplayedMnemonicIndex(9);
+		mAnlsRaxmlCDNA = getItem(aAnlsRaxmlCDNA, KeyEvent.VK_C, 0, 0);
 		mAnlsNJ = new JMenu(Text.get("mNJ"));
 		mAnlsNJ.setMnemonic(KeyEvent.VK_N);
 		mAnlsBayes = new JMenu(Text.get("mBayes"));
@@ -813,19 +822,32 @@ public class WinMainMenuBar extends JMenuBar
 		h2.add(mAnlsRunCodeMLSite);
 		h2.add(mAnlsRunCodeMLBranch);
 //		mAnls.addSeparator();
-		JMenu h3 = new JMenu(Text.get("mPhylo"));
-		h3.setMnemonic(KeyEvent.VK_P);
-		h3.setIcon(getIcon(Icons.TREE));
-		mAnls.add(h3);
-		h3.add(mAnlsRunMT);
-			mAnlsNJ.add(mAnlsQuickTree);
-		h3.add(mAnlsNJ);
-			mAnlsBayes.add(mAnlsMrBayes);
-			mAnlsBayes.add(mAnlsMrBayesCDNA);
-		h3.add(mAnlsBayes);
-			mAnlsML.add(mAnlsPhyml);
-			mAnlsML.add(mAnlsRaxml);
-		h3.add(mAnlsML);
+
+		// Phylogenetics submenu
+		JMenu mPhylo = new JMenu(Text.get("mPhylo"));
+		mPhylo.setMnemonic(KeyEvent.VK_P);
+		mPhylo.setIcon(getIcon(Icons.TREE));
+		mAnls.add(mPhylo);
+
+		mPhylo.add(mAnlsRunMT);
+		mPhylo.addSeparator();
+//		mAnlsNJ.add(mAnlsQuickTree);
+		mPhylo.add(mAnlsQuickTree);
+		mPhylo.addSeparator();
+//		mAnlsBayes.add(mAnlsMrBayes);
+//		mAnlsBayes.add(mAnlsMrBayesCDNA);
+		mPhylo.add(mAnlsMrBayes);
+		mPhylo.add(mAnlsMrBayesCDNA);
+		mPhylo.addSeparator();
+		mPhylo.add(mAnlsPhyml);
+		mPhylo.add(mAnlsRaxml);
+		mPhylo.add(mAnlsRaxmlCDNA);
+//		mPhylo.add(mAnlsBayes);
+//		mAnlsML.add(mAnlsPhyml);
+//		mAnlsML.add(mAnlsRaxml);
+//		mAnlsML.add(mAnlsRaxmlCDNA);
+//		mPhylo.add(mAnlsML);
+
 		//mAnls.add(mAnlsCreateTree);
 //		mAnls.addSeparator();
 		JMenu h4 = new JMenu(Text.get("mCodon"));
@@ -1022,6 +1044,7 @@ public class WinMainMenuBar extends JMenuBar
 		aAnlsMrBayesCDNA.setEnabled(false);
 		aAnlsPhyml.setEnabled(false);
 		aAnlsRaxml.setEnabled(false);
+		aAnlsRaxmlCDNA.setEnabled(false);
 		aAnlsRunCW.setEnabled(false);
 		aAnlsPartition.setEnabled(false);
 		aAnlsRename.setEnabled(false);

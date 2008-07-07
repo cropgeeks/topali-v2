@@ -26,9 +26,9 @@
               </Group>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="bs" pref="187" max="32767" attributes="2"/>
-                  <Component id="ratehet" alignment="0" pref="187" max="32767" attributes="2"/>
-                  <Component id="model" alignment="0" pref="187" max="32767" attributes="2"/>
+                  <Component id="bs" pref="211" max="32767" attributes="2"/>
+                  <Component id="ratehet" alignment="0" pref="211" max="32767" attributes="2"/>
+                  <Component id="model" alignment="0" pref="211" max="32767" attributes="2"/>
                   <Component id="empfreq" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>

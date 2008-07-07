@@ -162,7 +162,7 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 
 		else if(aResult instanceof RaxmlResult) {
 			RaxmlResult res = (RaxmlResult)aResult;
-			TOPALi.winMain.menuAnlsRaxml(res);
+			TOPALi.winMain.menuAnlsRaxml(res, false);
 		}
 	}
 }

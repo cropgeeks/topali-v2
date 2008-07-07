@@ -110,8 +110,8 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel1)
-                .add(110, 110, 110)
-                .add(model1, 0, 129, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(model1, 0, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -137,8 +137,8 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel2)
-                .add(112, 112, 112)
-                .add(model2, 0, 127, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(model2, 0, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -164,8 +164,8 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel3)
-                .add(111, 111, 111)
-                .add(model3, 0, 128, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(model3, 0, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -194,15 +194,13 @@ public class RaxmlCDNAAdvancedPanel extends javax.swing.JPanel {
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(18, 18, 18)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel5)
-                            .add(jLabel4))
-                        .add(48, 48, 48)
+                            .add(jLabel4)
+                            .add(jLabel5))
+                        .add(14, 14, 14)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                            .add(ratehet, 0, 190, Short.MAX_VALUE))
-                        .add(19, 19, 19)))
+                            .add(ratehet, 0, 217, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

@@ -51,7 +51,7 @@ public class RaxmlBasicPanel extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(bOnemodel)
                     .add(bCodonpos))
-                .addContainerGap(329, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -60,7 +60,7 @@ public class RaxmlBasicPanel extends javax.swing.JPanel {
                 .add(bOnemodel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(bCodonpos)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
