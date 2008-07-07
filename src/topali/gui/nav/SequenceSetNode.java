@@ -88,6 +88,7 @@ public class SequenceSetNode extends INode
 		aAnlsMrBayesCDNA.setEnabled(true);
 		aAnlsPhyml.setEnabled(true);
 		aAnlsRaxml.setEnabled(true);
+		aAnlsRaxmlCDNA.setEnabled(true);
 		aAnlsRunCW.setEnabled(dna);
 
 		//aAnlsCreateTree.setEnabled(true);

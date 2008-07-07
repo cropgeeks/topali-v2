@@ -14,7 +14,7 @@ import topali.data.*;
 import topali.gui.*;
 import topali.var.utils.Utils;
 
-public class RaxmlDialog extends JDialog implements ActionListener
+public class RaxmlCDNADialog extends JDialog implements ActionListener
 {
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 
@@ -23,9 +23,9 @@ public class RaxmlDialog extends JDialog implements ActionListener
 	RaxmlResult result;
 
 	JTabbedPane tabs;
-	RaxmlAdvancedPanel advanced;
+	RaxmlCDNAAdvancedPanel cdnaadvanced;
 
-	public RaxmlDialog(WinMain winMain, AlignmentData data, TreeResult result) {
+	public RaxmlCDNADialog(WinMain winMain, AlignmentData data, TreeResult result) {
 		super(winMain, "RaxML Settings", true);
 		this.winMain = winMain;
 		this.data = data;
@@ -33,7 +33,7 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		init();
 
 		if(result!=null)
-			advanced.initPrevResult((RaxmlResult)result);
+			cdnaadvanced.initPrevResult((RaxmlResult)result);
 
 		pack();
 		setLocationRelativeTo(winMain);
@@ -48,14 +48,14 @@ public class RaxmlDialog extends JDialog implements ActionListener
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "raxml");
 		add(bp, BorderLayout.SOUTH);
 
-		advanced = new RaxmlAdvancedPanel(data);
-		add(advanced, BorderLayout.CENTER);
+		cdnaadvanced = new RaxmlCDNAAdvancedPanel(data);
+		add(cdnaadvanced, BorderLayout.CENTER);
 	}
 
 	private void ok(boolean remote)
 	{
-		this.result = advanced.onOK();
-		Prefs.rax_type = 0;
+		this.result = cdnaadvanced.onOK();
+		Prefs.rax_type = 1;
 
 		result.isRemote = remote;
 		result.setPartitionStart(data.getActiveRegionS());
@@ -92,6 +92,6 @@ public class RaxmlDialog extends JDialog implements ActionListener
 			ok((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
 
 		else if(e.getSource() == bDefault)
-			advanced.setDefaults();
+			cdnaadvanced.setDefaults();
 	}
 }

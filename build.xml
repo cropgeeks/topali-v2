@@ -55,7 +55,7 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile">
+	<target name="jar" depends="clean, compile">
 		<jar jarfile="${lib}/${jarfile}">
 			<fileset dir="${classes}"/>
 			<zipfileset dir="${res}" prefix="res"/>
@@ -147,6 +147,10 @@
 
 	<target name="clean">
 		<delete dir="${build.root}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${topali.jar}"/>
+		</delete>
 	</target>
 	
 	<target name="install4j" depends="jar">

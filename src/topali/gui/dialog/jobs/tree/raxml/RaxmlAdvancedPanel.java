@@ -157,9 +157,9 @@ public class RaxmlAdvancedPanel extends javax.swing.JPanel {
                     .add(jLabel3))
                 .add(20, 20, 20)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, ratehet, 0, 187, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, model, 0, 187, Short.MAX_VALUE)
+                    .add(bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, ratehet, 0, 211, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, model, 0, 211, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, empfreq))
                 .addContainerGap())
         );
