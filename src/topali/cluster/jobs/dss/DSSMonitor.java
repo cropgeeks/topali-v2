@@ -64,7 +64,7 @@ public class DSSMonitor
 			{
 				logger.severe(jobDir.getName() + " - error.txt found for run "
 						+ i);
-				throw new Exception("PDM error.txt (run " + i + ")");
+				throw new Exception("DSS error.txt (run " + i + ")");
 			}
 		}
 
