@@ -241,7 +241,7 @@ public class Prefs extends XMLPreferences
 		gui_seq_font_size = 12;
 		gui_seq_font_bold = false;
 		gui_seq_show_text = true;
-		gui_seq_antialias = true;
+		gui_seq_antialias = false;
 		gui_seq_show_colors = true;
 		gui_graph_smooth = true;
 		gui_seq_dim = true;
