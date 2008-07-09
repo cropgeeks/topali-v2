@@ -1,5 +1,5 @@
 <project name="TOPALi" default="jar" basedir=".">
-
+ 
 	<description>TOPALi v2 Ant Build Script</description>
 
 	<!-- Load in user-specific properties from build.properties -->
