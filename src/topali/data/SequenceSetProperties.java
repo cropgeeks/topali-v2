@@ -35,6 +35,7 @@ public class SequenceSetProperties
 	private boolean isAligned = true;
 
 	private Model model = null;
+	private Model cpModel1, cpModel2, cpModel3;
 
 	private boolean needsCalculation = true;
 
@@ -115,24 +116,61 @@ public class SequenceSetProperties
 		this.kappa = kappa;
 	}
 
+	private Model createModel()
+	{
+		ModelManager mm = ModelManager.getInstance();
+
+	    if(type==SequenceSetProperties.TYPE_RNA)
+	    	return mm.generateModel("HKY", true, false);
+	    else if(type==SequenceSetProperties.TYPE_PROTEIN)
+	    	return mm.generateModel("WAG", true, false);
+
+//	    if(type==SequenceSetProperties.TYPE_DNA)
+	    	return mm.generateModel("HKY", true, false);
+	}
+
 	public Model getModel()
 	{
-	    if(model==null) {
-	    	ModelManager mm = ModelManager.getInstance();
-	    	if(type==SequenceSetProperties.TYPE_DNA)
-	    		this.model = mm.generateModel("HKY", true, false);
-	    	else if(type==SequenceSetProperties.TYPE_RNA)
-	    		this.model = mm.generateModel("HKY", true, false);
-	    	else if(type==SequenceSetProperties.TYPE_PROTEIN)
-	    		this.model = mm.generateModel("WAG", true, false);
-	    }
-
+	    if (model == null) model = createModel();
 	    return model;
 	}
 
 	public void setModel(Model model)
 	{
 		this.model = model;
+	}
+
+	public Model getCpModel1()
+	{
+	    if (cpModel1 == null) cpModel1 = createModel();
+	    return cpModel1;
+	}
+
+	public void setCpModel1(Model cpModel1)
+	{
+		this.cpModel1 = cpModel1;
+	}
+
+	public Model getCpModel2()
+	{
+	    if (cpModel2 == null) cpModel2 = createModel();
+	    return cpModel2;
+	}
+
+	public void setCpModel2(Model cpModel2)
+	{
+		this.cpModel2 = cpModel2;
+	}
+
+	public Model getCpModel3()
+	{
+	    if (cpModel3 == null) cpModel3 = createModel();
+	    return cpModel3;
+	}
+
+	public void setCpModel3(Model cpModel3)
+	{
+		this.cpModel3 = cpModel3;
 	}
 
 	public double getTRatio()

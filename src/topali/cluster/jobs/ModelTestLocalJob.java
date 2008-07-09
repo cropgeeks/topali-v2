@@ -11,24 +11,29 @@ import topali.cluster.*;
 import topali.cluster.jobs.modeltest.*;
 import topali.data.*;
 import topali.gui.TOPALi;
-import topali.var.utils.Utils;
+import topali.var.utils.*;
 
 public class ModelTestLocalJob extends AnalysisJob
 {
 
 	private SequenceSet ss;
 	public File jobDir;
-	
+
 	ModelTestMonitor mon;
-	
+
 	public ModelTestLocalJob(ModelTestResult result, AlignmentData data) {
-		this.result = result;    
+		this.result = result;
 		this.data = data;
-		this.ss = data.getSequenceSet();
+
+		ss = data.getSequenceSet();
+		// Split (3 runs) results need to have different data used
+		if (result.splitType > 0)
+			ss = SequenceSetUtils.getCodonPosSequenceSet(data, result.splitType, ss.getSelectedSequences());
+
 		result.startTime = System.currentTimeMillis();
 		result.jobId = "" + System.currentTimeMillis();
 		result.tmpDir = SysPrefs.tmpDir.getPath();
-		
+
 		if (SysPrefs.isWindows) {
 			result.phymlPath = Utils.getLocalPath() + "phyml_win32.exe";
 			result.treeDistPath = Utils.getLocalPath() + "treedist.exe";
@@ -37,23 +42,23 @@ public class ModelTestLocalJob extends AnalysisJob
 			result.phymlPath = Utils.getLocalPath() + "phyml/phyml_macOSX";
 			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
 		}
-		else { 
+		else {
 			result.phymlPath = Utils.getLocalPath() + "phyml/phyml_linux";
 			result.treeDistPath = Utils.getLocalPath() + "treedist/treedist";
 		}
-		
+
 		jobDir = new File(SysPrefs.tmpDir, result.jobId);
-		
+
 		LocalJobs.addJob(result.jobId);
 	}
-	
-	
+
+
 	public void ws_cancelJob() throws Exception
 	{
 		LocalJobs.cancelJob(result.jobId);
 	}
 
-	
+
 	public void ws_cleanup() throws Exception
 	{
 		if(!TOPALi.debugJobs)
@@ -63,27 +68,27 @@ public class ModelTestLocalJob extends AnalysisJob
 		LocalJobs.delJob(result.jobId);
 	}
 
-	
+
 	public AnalysisResult ws_downloadResult() throws Exception
 	{
 		if(mon==null)
 			mon = new ModelTestMonitor(jobDir);
-		
+
 		result = mon.getResult();
 		result.status = JobStatus.COMPLETING;
 		return result;
 	}
 
-	
+
 	public JobStatus ws_getProgress() throws Exception
 	{
 		if(mon==null)
 			mon = new ModelTestMonitor(jobDir);
-		
+
 		return mon.getPercentageComplete();
 	}
 
-	
+
 	public String ws_submitJob() throws Exception
 	{
 		try

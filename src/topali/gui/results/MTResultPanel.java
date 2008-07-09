@@ -27,23 +27,23 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 	ModelInfoPanel infoPanel;
 
 	Model selModel = null;
-	
+
 	public MTResultPanel(AlignmentData data, ModelTestResult result) {
 		super(data, result);
 		JPanel p1 = new JPanel(new BorderLayout());
-		
+
 		gp = new GradientPanel("Substitution Models for "+result.type);
 		gp.setStyle(GradientPanel.OFFICE2003);
 		p1.add(gp, BorderLayout.NORTH);
-		
+
 		if(SysPrefs.javaVersion<6) {
 			result.sortModels(ModelComparator.BIC);
 		}
-		
+
 		tp = getTablePanel(result);
 		tp.accessTable().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tp.accessTable().getSelectionModel().addListSelectionListener(this);	
-		
+		tp.accessTable().getSelectionModel().addListSelectionListener(this);
+
 		try {
 			if(SysPrefs.javaVersion>5) {
 				//even if this code is never called if java < 6, I can't use TableRowSorter directly
@@ -59,12 +59,12 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				setRowSorter.invoke(tp.accessTable(), sorter);
 				toggleSortOrder.invoke(sorter, 5);
 			}
-			
+
 			p1.add(tp, BorderLayout.CENTER);
-			
+
 			infoPanel = new ModelInfoPanel(data,this);
 			p1.add(infoPanel, BorderLayout.SOUTH);
-			
+
 			addContent(p1, false);
 
 			//pre-select the first entry
@@ -76,14 +76,14 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ModelTestResult getResult() {
 		return (ModelTestResult)this.result;
 	}
-	
+
 	public void modelSetTo(Model mod) {
 		String name = mod.getIGName();
-		
+
 		for(int i=0; i<tp.accessTable().getRowCount(); i++) {
 			String name2 = (String)tp.accessTable().getValueAt(i, 0);
 			if(name.equals(name2)) {
@@ -94,7 +94,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			}
 		}
 	}
-	
+
 	public TablePanel getTablePanel(ModelTestResult result) {
 		Model bestAIC1 = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_AIC1);
 		Model bestAIC2 = ModelUtils.getBestModel(result.models, ModelUtils.CRIT_AIC2);
@@ -116,7 +116,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				bestHLRT4 = ModelUtils.performHLRT4(result.models, 0.01);
 			}
 		}
-		
+
 		Vector<String> colNames = new Vector<String>();
 		colNames.add("Model");
 		colNames.add("K");
@@ -124,7 +124,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		colNames.add("AIC\u2081");
 		colNames.add("AIC\u2082");
 		colNames.add("BIC");
-		
+
 		Vector<String> tips = new Vector<String>();
 		tips.add("<html>Model Name<br>(click to sort)</html>");
 		tips.add("<html>Number of Parameters<br>(click to sort)</html>");
@@ -132,20 +132,20 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		tips.add("<html>Akaike information criterion<br>(R.F. distance: Best vs All)<br>(click to sort)</html>");
 		tips.add("<html>AIC with second order correction<br>(R.F. distance: Best vs All)<br>(click to sort)</html>");
 		tips.add("<html>Bayesian information criterion<br>(R.F. distance: Best vs All)<br>(click to sort)</html>");
-		
+
 		Vector<Vector<Object>> rowData = new Vector<Vector<Object>>(result.models.size());
 		int i = 0;
 		for(Model m : result.models) {
 			Vector<Object> row = new Vector<Object>();
-			
+
 			String name = m.getIGName();
-			
+
 			int df = m.getFreeParameters();
 			if(m.isGamma())
 				df++;
 			if(m.isInv())
 				df++;
-			
+
 			String col1 = Utils.d2.format((m.getLnl()*(-1)));
 			//col1 += " ("+getDistance(bestLRT.getIGName(), m.getIGName(), result)+")";
 			if(data.getSequenceSet().getProps().isNucleotides()) {
@@ -179,7 +179,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 					col1+="<tooltip=\""+tt+"\">";
 				}
 			}
-			
+
 			String col2 = Utils.d2.format(m.getAic1());
 			col2 += " ("+getDistance(bestAIC1.getIGName(), m.getIGName(), result)+")";
 			if(bestAIC1.matches(m)) {
@@ -187,7 +187,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				col2 += "<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">";
 				col2 +="<tooltip=\"Best Model\">";
 			}
-			
+
 			String col3 = Utils.d2.format(m.getAic2());
 			col3 += " ("+getDistance(bestAIC2.getIGName(), m.getIGName(), result)+")";
 			if(bestAIC2.matches(m)) {
@@ -195,16 +195,17 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 				col3 += "<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">";
 				col3 +="<tooltip=\"Best Model\">";
 			}
-			
+
 			String col4 = Utils.d2.format(m.getBic());
 			col4 += " ("+getDistance(bestBIC.getIGName(), m.getIGName(), result)+")";
 			if(bestBIC.matches(m)) {
 				Color c = new Color(240,240,100);
 				col4 += "<color="+c.getRed()+","+c.getGreen()+","+c.getBlue()+">";
 				col4 +="<tooltip=\"Best Model\">";
-				data.getSequenceSet().getProps().setModel(m);
+
+				setModel(m);
 			}
-			
+
 			row.add(name);
 			row.add(""+df);
 			row.add(col1);
@@ -212,18 +213,36 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			row.add(col3);
 			row.add(col4);
 			rowData.add(row);
-			
+
 			i++;
 		}
-		
+
 		TablePanel tp = new TablePanel(rowData, colNames, "table");
 		((CustomTable)tp.accessTable()).setHeaderToolTips(tips);
-		tp.accessTable().getColumnModel().getColumn(1).setMaxWidth(50); 
-		
-		
+		tp.accessTable().getColumnModel().getColumn(1).setMaxWidth(50);
+
+
 		return tp;
 	}
-	
+
+	void setModel(Model m)
+	{
+		ModelTestResult r = (ModelTestResult) result;
+
+		// If it was just a single run of model selection, set a single model
+		if (r.splitType == ModelTestResult.SINGLE_MODEL_RUN)
+			data.getSequenceSet().getProps().setModel(m);
+		// Set the model for the CP region that this result corresponds to
+		else if (r.splitType == ModelTestResult.CP_MODEL_RUN_CP1)
+			data.getSequenceSet().getProps().setCpModel1(m);
+		else if (r.splitType == ModelTestResult.CP_MODEL_RUN_CP2)
+			data.getSequenceSet().getProps().setCpModel2(m);
+		else if (r.splitType == ModelTestResult.CP_MODEL_RUN_CP3)
+			data.getSequenceSet().getProps().setCpModel3(m);
+
+		ProjectState.setDataChanged();
+	}
+
 	private int getDistance(String mod1, String mod2, ModelTestResult result) {
 		for(Distance<String> d : result.rfDistances) {
 			if(d.getObj1().equals(mod1) && d.getObj2().equals(mod2)) {
@@ -232,12 +251,12 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		}
 		return -1;
 	}
-	
-	
+
+
 	public String getAnalysisInfo()
 	{
 		ModelTestResult result = (ModelTestResult)this.result;
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append(result.guiName);
 
@@ -248,7 +267,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 
 		for (String seq : result.selectedSeqs)
 			sb.append("\n  " + data.getSequenceSet().getNameForSafeName(seq));
-		
+
 		sb.append("\n\n");
 		sb.append("Algorithm: Maximum Likelihood (PhyML)\n");
 		sb.append("Application: PhyML-aLRT (Version 2.4.5)\n");
@@ -259,38 +278,38 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		 		"algorithm to estimate large phylogenies by maximum likelihood,\n" +
 		 		"Systematic Biology. 52(5) pp 696-704. ");
 		return sb.toString();
-	} 
+	}
 
-	
+
 	public Printable[] getPrintables()
 	{
 		return new Printable[] {tp.getPrintable()};
 	}
 
-	
+
 	public void setThreshold(double t)
 	{
 		//no threshold to set
 	}
-	
-	
-	
+
+
+
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if(e==null || e.getValueIsAdjusting())
 			return;
-		
+
 		int index = tp.accessTable().getSelectedRow();
 		if(index<0)
 			return;
-		
+
 		String modName = (String) tp.accessTable().getValueAt(index, 0);
 		String[] tmp = modName.split("\\+");
 		tmp[0] = tmp[0].replaceAll("\\<.*\\>", "");
 		boolean gamma = (modName.contains("+G"));
 		boolean inv = (modName.contains("+I"));
 		this.selModel = ModelUtils.getModel(tmp[0], gamma, inv, ((ModelTestResult)result).models);
-		
+
 		infoPanel.setModel(this.selModel);
 	}
 
@@ -300,7 +319,7 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 		public int compare(Object o1, Object o2)
 		{
 			int res = 0;
-			
+
 			try
 			{
 				String s1 = o1.toString();
@@ -314,10 +333,10 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 			{
 				res = o1.toString().compareTo(o2.toString());
 			}
-			
+
 			return res;
 		}
-		
+
 	}
 
 }

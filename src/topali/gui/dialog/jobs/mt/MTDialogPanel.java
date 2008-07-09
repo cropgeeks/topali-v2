@@ -19,31 +19,33 @@ import topali.i18n.Text;
  * @author  dlindn
  */
 public class MTDialogPanel extends javax.swing.JPanel {
-    
-	ModelTestResult res;
 	boolean dna;
-	
+
     /** Creates new form MTDialogPanel */
-    public MTDialogPanel(ModelTestResult res, boolean dna) {
-    	this.res = (res==null) ? new ModelTestResult() : res;
+    public MTDialogPanel(AlignmentData data, ModelTestResult res, boolean dna) {
+//    	this.res = (res==null) ? new ModelTestResult() : res;
+
     	this.dna = dna;
         initComponents();
-        
+
         DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.TYPE_PHYML, ModelTestResult.TYPE_MRBAYES});
         models.setModel(mod);
-        
+
         DefaultComboBoxModel mod2 = new DefaultComboBoxModel(new String[] {ModelTestResult.SAMPLE_SEQLENGTH, ModelTestResult.SAMPLE_ALGNSIZE});
         sampleSize.setModel(mod2);
-        
+
         models.setSelectedItem(Prefs.ms_models);
     	gamma.setSelected(Prefs.ms_gamma);
     	inv.setSelected(Prefs.ms_inv);
     	sampleSize.setSelectedItem(Prefs.ms_samplesize);
-    	
-    	if(res!=null)
-    		initPrevResult(res);
+
+    	 if (data.getSequenceSet().getLength() % 3 != 0 || data.getSequenceSet().getProps().isNucleotides() == false)
+    		checkProteinCoding.setEnabled(false);
+
+ //   	if(res!=null)
+ //   		initPrevResult(res);
     }
-    
+
     private void initPrevResult(ModelTestResult res) {
     	this.models.setSelectedItem(res.type);
     	boolean gamma = false;
@@ -58,14 +60,16 @@ public class MTDialogPanel extends javax.swing.JPanel {
     	this.inv.setSelected(inv);
     	this.sampleSize.setSelectedItem(res.sampleCrit);
     }
-    
-    public ModelTestResult getResult() {
-    	
+
+    public ModelTestResult getResult()
+    {
+		ModelTestResult res = new ModelTestResult();
+
     	List<Model> availModels = null;
 		if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_PHYML)) {
 			availModels = ModelManager.getInstance().listPhymlModels(dna);
 		}
-		else if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_MRBAYES)) { 
+		else if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_MRBAYES)) {
 			availModels = ModelManager.getInstance().listMrBayesModels(dna);
 		}
 		ArrayList<Model> models = new ArrayList<Model>();
@@ -88,20 +92,20 @@ public class MTDialogPanel extends javax.swing.JPanel {
 		res.models = models;
 		res.type = (String)this.models.getSelectedItem();
 		res.sampleCrit = (String)this.sampleSize.getSelectedItem();
-		
+
 		Prefs.ms_gamma = gamma.isSelected();
 		Prefs.ms_inv = inv.isSelected();
 		Prefs.ms_models = (String)this.models.getSelectedItem();
 		Prefs.ms_samplesize = (String)sampleSize.getSelectedItem();
-    	return this.res;
+    	return res;
     }
-    
+
     public void setDefaults() {
     	models.setSelectedIndex(0);
     	gamma.setSelected(true);
     	inv.setSelected(true);
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -119,6 +123,7 @@ public class MTDialogPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        checkProteinCoding = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         sampleSize = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
@@ -139,9 +144,11 @@ public class MTDialogPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Running Model Selection allows you to ensure that the best model parameters");
 
-        jLabel4.setText("for generating phylogentic trees will be fed into the tree generation methods.");
+        jLabel4.setText("for generating phylogenetic trees will be fed into the tree generation methods.");
 
         jLabel6.setText("Tree generation via:  ");
+
+        checkProteinCoding.setText("Run model selection assuming protein-coding DNA (3 analyses)");
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -166,13 +173,14 @@ public class MTDialogPanel extends javax.swing.JPanel {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(inv))
                             .add(gamma)
-                            .add(models, 0, 265, Short.MAX_VALUE))))
+                            .add(models, 0, 270, Short.MAX_VALUE)))
+                    .add(checkProteinCoding))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel4)
@@ -190,7 +198,8 @@ public class MTDialogPanel extends javax.swing.JPanel {
                         .add(gamma)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(inv)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(checkProteinCoding))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("AIC2/BIC calculation:"));
@@ -207,7 +216,7 @@ public class MTDialogPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(sampleSize, 0, 297, Short.MAX_VALUE)
+                .add(sampleSize, 0, 302, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -224,11 +233,11 @@ public class MTDialogPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -237,13 +246,14 @@ public class MTDialogPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JCheckBox checkProteinCoding;
     private javax.swing.JCheckBox gamma;
     private javax.swing.JCheckBox inv;
     private javax.swing.JLabel jLabel1;
@@ -257,5 +267,5 @@ public class MTDialogPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox models;
     private javax.swing.JComboBox sampleSize;
     // End of variables declaration//GEN-END:variables
-    
+
 }

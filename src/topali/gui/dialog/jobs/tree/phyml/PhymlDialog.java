@@ -16,43 +16,42 @@ import topali.var.utils.Utils;
 
 public class PhymlDialog extends JDialog implements ActionListener
 {
-	
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 	AdvancedPhyML advanced;
-	
+
 	WinMain winMain;
 	AlignmentData data;
 	PhymlResult result;
-	
+
 	public PhymlDialog(WinMain winMain, AlignmentData data, TreeResult result) {
 		super(winMain,"PhyML Settings", true);
-		
+
 		this.winMain = winMain;
 		this.data = data;
 		this.result = (PhymlResult)result;
-		
+
 		init();
-		
+
 		pack();
 		setSize(getWidth(),250);;
 		setLocationRelativeTo(winMain);
 		setResizable(false);
 	}
-	
+
 	public PhymlResult getResult() {
 		return this.result;
 	}
-	
+
 	private void init() {
 		this.getContentPane().setLayout(new BorderLayout());
-		
+
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "phyml");
 		this.getContentPane().add(bp, BorderLayout.SOUTH);
 
 		advanced = new AdvancedPhyML(data.getSequenceSet(), result);
 		this.getContentPane().add(new JScrollPane(advanced), BorderLayout.CENTER);
 	}
-	
+
 	private void ok(boolean remote) {
 		result = advanced.onOK();
 		result.isRemote = remote;
@@ -63,7 +62,7 @@ public class PhymlDialog extends JDialog implements ActionListener
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 		result.guiName = "#"+runNum+" Tree (PhyML)";
 		result.jobName = "PhyML Tree Estimation";
-		
+
 		//Path to Phyml
 		if (SysPrefs.isWindows)
 			result.phymlPath = Utils.getLocalPath() + "\\phyml_win32.exe";
@@ -73,14 +72,14 @@ public class PhymlDialog extends JDialog implements ActionListener
 			result.phymlPath = Utils.getLocalPath() + "/phyml/phyml_linux";
 		else
 			result.phymlPath = Utils.getLocalPath() + "/phyml/phyml_sunOS";
-		
+
 		setVisible(false);
 	}
-	
-	
+
+
 	public void actionPerformed(ActionEvent e)
 	{
-		
+
 		if (e.getSource() == bCancel) {
 			this.result = null;
 			setVisible(false);
@@ -88,10 +87,10 @@ public class PhymlDialog extends JDialog implements ActionListener
 
 		else if (e.getSource() == bRun)
 			ok((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
-		
+
 		else if(e.getSource() == bDefault) {
 			advanced.setDefaults();
 		}
-		
+
 	}
 }
