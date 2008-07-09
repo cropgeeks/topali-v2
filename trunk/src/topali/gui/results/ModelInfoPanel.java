@@ -19,7 +19,7 @@ import topali.gui.*;
 import topali.var.utils.Utils;
 
 /**
- * 
+ *
  * @author dlindn
  */
 public class ModelInfoPanel extends JPanel implements MouseListener {
@@ -546,13 +546,14 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void defaultButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_defaultButtonActionPerformed
-	log.info("Set default model to:\n" + model);
-	data.getSequenceSet().getProps().setModel(model);
-	defaultButton.setEnabled(false);
-	mtpanel.modelSetTo(model);
+		log.info("Set default model to:\n" + model);
+
+		mtpanel.setModel(model);
+		defaultButton.setEnabled(false);
+		mtpanel.modelSetTo(model);
     }// GEN-LAST:event_defaultButtonActionPerformed
 
-    
+
     public void mouseClicked(MouseEvent e) {
 	if (e.getSource() == modelDiagram) {
 	    String name = "Modeldiagram: " + model.getName();
@@ -606,22 +607,22 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 	}
     }
 
-    
+
     public void mouseEntered(MouseEvent e) {
 	setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    
+
     public void mouseExited(MouseEvent e) {
 	setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
-    
+
     public void mousePressed(MouseEvent e) {
 
     }
 
-    
+
     public void mouseReleased(MouseEvent e) {
 
     }

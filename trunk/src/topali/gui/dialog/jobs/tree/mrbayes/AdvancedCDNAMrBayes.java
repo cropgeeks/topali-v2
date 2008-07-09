@@ -20,10 +20,10 @@ import topali.var.utils.Utils;
  * @author  dlindn
  */
 public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
-    
+
 	MBTreeResult result;
 	SequenceSet ss;
-	
+
     /** Creates new form AdvancedCDNAMrBayes */
     public AdvancedCDNAMrBayes(SequenceSet ss) {
     	this.result =new MBTreeResult();
@@ -31,113 +31,130 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
         initComponents();
         setDefaults();
     }
-    
+
     public void initPrevResult(MBTreeResult result) {
     	MBPartition p1 = result.partitions.get(0);
     	MBPartition p2 = result.partitions.get(1);
     	MBPartition p3 = result.partitions.get(2);
-    	
+
     	p1mod.setSelectedItem(p1.model.getName());
     	p2mod.setSelectedItem(p2.model.getName());
     	p3mod.setSelectedItem(p3.model.getName());
-    	
+
     	p1g.setSelected(p1.model.isGamma());
     	p2g.setSelected(p2.model.isGamma());
     	p3g.setSelected(p3.model.isGamma());
-    	
+
     	p1i.setSelected(p1.model.isInv());
     	p2i.setSelected(p2.model.isInv());
     	p3i.setSelected(p3.model.isInv());
-    	
+
     	for(String s : result.linkedParameters) {
     		String[] split = s.split(",");
     		if(split[0].equals("pinvar")) {
     			for(int i=1; i<split.length; i++) {
-    				if(split[i].equals("1")) 
+    				if(split[i].equals("1"))
     					pinvar1.setSelected(true);
-    				if(split[i].equals("2")) 
+    				if(split[i].equals("2"))
     					pinvar2.setSelected(true);
-    				if(split[i].equals("3")) 
+    				if(split[i].equals("3"))
     					pinvar3.setSelected(true);
     			}
     		}
     		if(split[0].equals("revmat")) {
     			for(int i=1; i<split.length; i++) {
-    				if(split[i].equals("1")) 
+    				if(split[i].equals("1"))
     					revmat1.setSelected(true);
-    				if(split[i].equals("2")) 
+    				if(split[i].equals("2"))
     					revmat2.setSelected(true);
-    				if(split[i].equals("3")) 
+    				if(split[i].equals("3"))
     					revmat3.setSelected(true);
     			}
     		}
     		if(split[0].equals("shape")) {
     			for(int i=1; i<split.length; i++) {
-    				if(split[i].equals("1")) 
+    				if(split[i].equals("1"))
     					shape1.setSelected(true);
-    				if(split[i].equals("2")) 
+    				if(split[i].equals("2"))
     					shape2.setSelected(true);
-    				if(split[i].equals("3")) 
+    				if(split[i].equals("3"))
     					shape3.setSelected(true);
     			}
     		}
     		if(split[0].equals("statefreq")) {
     			for(int i=1; i<split.length; i++) {
-    				if(split[i].equals("1")) 
+    				if(split[i].equals("1"))
     					statefreq1.setSelected(true);
-    				if(split[i].equals("2")) 
+    				if(split[i].equals("2"))
     					statefreq2.setSelected(true);
-    				if(split[i].equals("3")) 
+    				if(split[i].equals("3"))
     					statefreq3.setSelected(true);
     			}
     		}
     		if(split[0].equals("tratio")) {
     			for(int i=1; i<split.length; i++) {
-    				if(split[i].equals("1")) 
+    				if(split[i].equals("1"))
     					tratio1.setSelected(true);
-    				if(split[i].equals("2")) 
+    				if(split[i].equals("2"))
     					tratio2.setSelected(true);
-    				if(split[i].equals("3")) 
+    				if(split[i].equals("3"))
     					tratio3.setSelected(true);
     			}
     		}
     	}
-    	
+
     	nRuns.setValue(result.nRuns);
     	nGen.setValue(result.nGen);
     	samFreq.setValue(result.sampleFreq);
     	burnin.setValue((int)(result.burnin*100));
     }
-    
+
     public void setDefaults() {
     	List<Model> mlist = ModelManager.getInstance().listMrBayesModels(true);
     	String[] models = new String[mlist.size()];
     	for(int i=0; i<mlist.size(); i++)
     		models[i] = mlist.get(i).getName();
-    	
+
     	p1mod.setModel(new DefaultComboBoxModel(models));
     	p2mod.setModel(new DefaultComboBoxModel(models));
     	p3mod.setModel(new DefaultComboBoxModel(models));
-    	
-    	Model defModel = ss.getProps().getModel();
-    	if(Utils.indexof(models, defModel.getName())==-1) {
+
+    	Model defModel1 = ss.getProps().getCpModel1();
+    	Model defModel2 = ss.getProps().getCpModel2();
+    	Model defModel3 = ss.getProps().getCpModel3();
+
+    	// What is this doing? Initializing the model if it doesn't exist yet?
+    	if (Utils.indexof(models, defModel1.getName()) == -1)
 			if(ss.getProps().isNucleotides())
-				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel.isGamma(), defModel.isInv());
+				defModel1 = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel1.isGamma(), defModel1.isInv());
 			else
-				defModel = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel.isGamma(), defModel.isInv());
-		}
-    	p1mod.setSelectedItem(defModel.getName());
-    	p2mod.setSelectedItem(defModel.getName());
-    	p3mod.setSelectedItem(defModel.getName());
-    	
-    	p1g.setSelected(defModel.isGamma());
-    	p2g.setSelected(defModel.isGamma());
-    	p3g.setSelected(defModel.isGamma());
-    	
-    	p1i.setSelected(defModel.isInv());
-    	p2i.setSelected(defModel.isInv());
-    	p3i.setSelected(defModel.isInv());
-    	
+				defModel1 = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel1.isGamma(), defModel1.isInv());
+
+		if (Utils.indexof(models, defModel2.getName()) == -1)
+			if(ss.getProps().isNucleotides())
+				defModel2 = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel2.isGamma(), defModel2.isInv());
+			else
+				defModel2 = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel2.isGamma(), defModel2.isInv());
+
+		if (Utils.indexof(models, defModel3.getName()) == -1)
+			if(ss.getProps().isNucleotides())
+				defModel3 = ModelManager.getInstance().generateModel(Prefs.mb_default_dnamodel, defModel3.isGamma(), defModel3.isInv());
+			else
+				defModel3 = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, defModel3.isGamma(), defModel3.isInv());
+
+
+    	p1mod.setSelectedItem(defModel1.getName());
+    	p2mod.setSelectedItem(defModel2.getName());
+    	p3mod.setSelectedItem(defModel3.getName());
+
+    	p1g.setSelected(defModel1.isGamma());
+    	p2g.setSelected(defModel2.isGamma());
+    	p3g.setSelected(defModel3.isGamma());
+
+    	p1i.setSelected(defModel1.isInv());
+    	p2i.setSelected(defModel2.isInv());
+    	p3i.setSelected(defModel3.isInv());
+
     	pinvar1.setSelected(false);
     	pinvar2.setSelected(false);
     	pinvar3.setSelected(false);
@@ -153,22 +170,22 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	tratio1.setSelected(false);
     	tratio2.setSelected(false);
     	tratio3.setSelected(false);
-    	
+
     	SpinnerNumberModel mNRuns = new SpinnerNumberModel(Prefs.mb_runs, 1, 5, 1);
 		this.nRuns.setModel(mNRuns);
-		
+
 		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens, 10000, 500000, 10000);
 		this.nGen.setModel(mNGen);
-		
+
 		SpinnerNumberModel mFreq = new SpinnerNumberModel(Prefs.mb_samplefreq, 1, 1000, 1);
 		this.samFreq.setModel(mFreq);
-		
+
 		SpinnerNumberModel mBurn = new SpinnerNumberModel(Prefs.mb_burnin, 1, 99, 1);
 		this.burnin.setModel(mBurn);
     }
-    
+
     public MBTreeResult onOk() {
-    	
+
     	//create partitions
     	MBPartition p1 = new MBPartition("1-.\\3", "p1", ModelManager.getInstance().generateModel((String)p1mod.getSelectedItem(), p1g.isSelected(), p1i.isSelected()));
     	MBPartition p2 = new MBPartition("2-.\\3", "p2", ModelManager.getInstance().generateModel((String)p2mod.getSelectedItem(), p2g.isSelected(), p2i.isSelected()));
@@ -176,8 +193,15 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	result.partitions.add(p1);
     	result.partitions.add(p2);
     	result.partitions.add(p3);
-    	
-    	
+
+    	ss.getProps().setCpModel1(ModelManager.getInstance().generateModel(
+    		(String)p1mod.getSelectedItem(), p1g.isSelected(), p1i.isSelected()));
+    	ss.getProps().setCpModel2(ModelManager.getInstance().generateModel(
+    		(String)p2mod.getSelectedItem(), p2g.isSelected(), p2i.isSelected()));
+    	ss.getProps().setCpModel3(ModelManager.getInstance().generateModel(
+    		(String)p1mod.getSelectedItem(), p3g.isSelected(), p3i.isSelected()));
+
+
     	//create parameter linking
     	String link = "pinvar";
     	String one = null;
@@ -206,7 +230,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     			s += three+",";
     		result.linkedParameters.add(s.substring(0, s.length()-1));
     	}
-    	
+
     	link = "revmat";
     	one = null;
     	two = null;
@@ -234,7 +258,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     			s += three+",";
     		result.linkedParameters.add(s.substring(0, s.length()-1));
     	}
-   	
+
     	link = "shape";
     	one = null;
     	two = null;
@@ -262,7 +286,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     			s += three+",";
     		result.linkedParameters.add(s.substring(0, s.length()-1));
     	}
-    	
+
     	link = "statefreq";
     	one = null;
     	two = null;
@@ -290,7 +314,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     			s += three+",";
     		result.linkedParameters.add(s.substring(0, s.length()-1));
     	}
-    	
+
     	link = "tratio";
     	one = null;
     	two = null;
@@ -318,21 +342,21 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     			s += three+",";
     		result.linkedParameters.add(s.substring(0, s.length()-1));
     	}
-    	
+
     	//set general settings
     	result.nRuns = (Integer) nRuns.getValue();
 		result.burnin = ((Integer)burnin.getValue()).doubleValue()/100d;
 		result.nGen = (Integer)nGen.getValue();
 		result.sampleFreq = (Integer)samFreq.getValue();
-    	
+
 		Prefs.mb_burnin = (Integer)burnin.getValue();
 		Prefs.mb_gens = result.nGen;
 		Prefs.mb_runs = result.nRuns;
 		Prefs.mb_samplefreq = result.sampleFreq;
-		
+
     	return result;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -810,8 +834,8 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner burnin;
     private javax.swing.JLabel jLabel1;
@@ -869,5 +893,5 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     private javax.swing.JCheckBox tratio2;
     private javax.swing.JCheckBox tratio3;
     // End of variables declaration//GEN-END:variables
-    
+
 }

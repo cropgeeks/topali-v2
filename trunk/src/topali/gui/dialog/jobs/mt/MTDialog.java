@@ -20,7 +20,7 @@ public class MTDialog extends JDialog implements ActionListener
 	MTDialogPanel panel;
 	private JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
 
-	ModelTestResult res;
+	ModelTestResult[] results;
 	AlignmentData data;
 	SequenceSet ss;
 
@@ -29,21 +29,20 @@ public class MTDialog extends JDialog implements ActionListener
 
 		this.data = data;
 		this.ss = data.getSequenceSet();
-		this.res = res;
 		init();
 
 		pack();
 		setLocationRelativeTo(winMain);
 	}
 
-	public ModelTestResult getResult() {
-		return this.res;
+	public ModelTestResult[] getResult() {
+		return results;
 	}
 
 	private void init() {
 		this.setLayout(new BorderLayout());
 
-		panel = new MTDialogPanel(this.res, ss.getProps().isNucleotides());
+		panel = new MTDialogPanel(data, null, ss.getProps().isNucleotides());
 		add(panel, BorderLayout.CENTER);
 
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "modelselection");
@@ -53,38 +52,91 @@ public class MTDialog extends JDialog implements ActionListener
 		Utils.addCloseHandler(this, bCancel);
 	}
 
-
-	
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource().equals(bRun)) {
+		// If it's possible to split the alignment into three codon interlaced
+		// regions (eg, 1, 4, 7 in the first region... 2, 5, 8, in the 2nd etc)
+		// then make three identical result objects ready for running three
+		// separate ModelSelection jobs
+
+		// (otherwise just run MS once)
+
+		if (e.getSource().equals(bRun))
+		{
 			boolean remote = (e.getModifiers() & ActionEvent.CTRL_MASK) == 0;
-			this.res = panel.getResult();
-			this.res.isRemote = remote;
-			this.res.selectedSeqs = ss.getSelectedSequenceSafeNames();
-			
-			if(this.res.sampleCrit==ModelTestResult.SAMPLE_SEQLENGTH) {
-				this.res.sampleSize = data.getActiveRegionE()-data.getActiveRegionS()+1;
+
+			// If we need to run MS three times...
+			if (panel.checkProteinCoding.isSelected() && panel.checkProteinCoding.isEnabled())
+			{
+				results = new ModelTestResult[3];
+
+				for (int i = 0; i < results.length; i++)
+				{
+					results[i] = createResult(i, true);
+					results[i].isRemote = remote;
+					results[i].splitType = i+1;
+				}
 			}
-			else if(this.res.sampleCrit==ModelTestResult.SAMPLE_ALGNSIZE) {
-				this.res.sampleSize = (data.getActiveRegionE()-data.getActiveRegionS()+1)*this.res.selectedSeqs.length;
+			// Or just once...
+			else
+			{
+				results = new ModelTestResult[1];
+				results[0] = createResult(0, false);
+				results[0].isRemote = remote;
+				results[0].splitType = ModelTestResult.SINGLE_MODEL_RUN;
 			}
-			
-			int runNum = data.getTracker().getMtRunCount() + 1;
-			data.getTracker().setMtRunCount(runNum);
-			this.res.guiName = "Model Selection " + runNum;
-			this.res.jobName = "Model Selection on " + data.getName() + " ("
-					+ ss.getSelectedSequences().length + "/" + ss.getSize()
-					+ " sequences)";
-			this.setVisible(false);
+
+
+			setVisible(false);
 		}
-		else if(e.getSource().equals(bCancel)) {
-			this.res = null;
+
+		else if(e.getSource().equals(bCancel))
 			this.setVisible(false);
-		}
-		else if(e.getSource().equals(bDefault)) {
+
+		else if(e.getSource().equals(bDefault))
 			panel.setDefaults();
-		}
 	}
 
+	// Creates a ModelTestResult object ready to be sent to the analysis
+	private ModelTestResult createResult(int msRunNum, boolean usePNames)
+	{
+		ModelTestResult	res = panel.getResult();
+
+		res.selectedSeqs = ss.getSelectedSequenceSafeNames();
+
+		if(res.sampleCrit==ModelTestResult.SAMPLE_SEQLENGTH) {
+//				this.res.sampleSize = data.getActiveRegionE()-data.getActiveRegionS()+1;
+			res.sampleSize = data.getSequenceSet().getLength();
+		}
+		else if(res.sampleCrit==ModelTestResult.SAMPLE_ALGNSIZE) {
+//				this.res.sampleSize = (data.getActiveRegionE()-data.getActiveRegionS()+1)*this.res.selectedSeqs.length;
+			res.sampleSize = data.getSequenceSet().getLength() * res.selectedSeqs.length;
+		}
+
+
+		int runNum = data.getTracker().getMtRunCount() + 1;
+
+		// Determine how to name the job...
+		if (usePNames)
+		{
+			res.guiName = "Model Selection " + runNum + " (CP" + (msRunNum+1) + ")";
+			res.jobName = "Model Selection " + "(CP" + (msRunNum+1) + ") on "
+				+ data.getName() + " (" + ss.getSelectedSequences().length
+				+ "/" + ss.getSize() + " sequences)";
+
+			if (msRunNum == 2)
+				data.getTracker().setMtRunCount(runNum);
+		}
+		else
+		{
+			res.guiName = "Model Selection " + runNum;
+			res.jobName = "Model Selection on "
+				+ data.getName() + " (" + ss.getSelectedSequences().length
+				+ "/" + ss.getSize() + " sequences)";
+
+			data.getTracker().setMtRunCount(runNum);
+		}
+
+		return res;
+	}
 }

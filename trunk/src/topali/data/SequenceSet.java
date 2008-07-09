@@ -318,8 +318,8 @@ public class SequenceSet extends DataObject
 		// if (resetSelection)
 		props.setType(SequenceSetUtils.determineSeqType(this));
 
-		for (Sequence seq: sequences)
-			System.out.println("ALIGNMENT LOADED: " + seq.getSequence().length());
+//		for (Sequence seq: sequences)
+//			System.out.println("ALIGNMENT LOADED: " + seq.getSequence().length());
 
 		if (props.isAligned())
 			calculateOverview();

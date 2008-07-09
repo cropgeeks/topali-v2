@@ -607,16 +607,19 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
 
-//		ModelTestDialog dlg = new ModelTestDialog(data, result);
-//		dlg.setVisible(true);
-
 		MTDialog dlg = new MTDialog(this, data, result);
 		dlg.setVisible(true);
 
-		ModelTestResult res = dlg.getResult();
+		ModelTestResult[] res = dlg.getResult();
 
-		if(res!=null)
-			submitJob(data, res);
+		if (res != null)
+		{
+			for (int i = 0; i < res.length; i++)
+			{
+				System.out.println("Model " + i + " has type " + res[i].splitType);
+				submitJob(data, res[i]);
+			}
+		}
 	}
 
 	public void menuAnlsQuickTree() {

@@ -25,7 +25,7 @@
 
 	<!--                                          SEQUENCES/ALIGNMENTS                                 -->
 	<!--                                          ********************                                 -->
-	
+
 	<class name="topali.data.Sequence"
 		extends="topali.data.DataObject">
 		<field name="name" type="string" direct="true">
@@ -51,6 +51,9 @@
 		<field name="isAligned" type="boolean" get-method="isAligned"
 			set-method="isAligned" />
 		<field name="model" type="topali.data.models.Model" />
+		<field name="cpModel1" type="topali.data.models.Model" />
+		<field name="cpModel2" type="topali.data.models.Model" />
+		<field name="cpModel3" type="topali.data.models.Model" />
 		<field name="needsCalculation" type="boolean"
 			get-method="needsCalculation" set-method="needsCalculation" />
 	</class>
@@ -92,7 +95,7 @@
 		<field name="tracker" type="topali.data.ResultsTracker" />
 		<field name="annotations" type="topali.data.annotations.AnnotationList" />
 	</class>
-	
+
 	<class name="topali.data.ResultsTracker">
 		<field name="treeRunCount" type="integer">
 			<bind-xml node="attribute" />
@@ -140,7 +143,7 @@
 			<bind-xml node="attribute" />
 		</field>
 	</class>
-	
+
 	<class name="topali.cluster.JobStatus">
 		<field name="progress" type="float" direct="true" />
 		<field name="status" type="int" direct="true" />
@@ -150,7 +153,7 @@
 
 	<!--                                          SUBSTITUTION MODELS                                  -->
 	<!--                                          *******************                                  -->
-	
+
 	<class name="topali.data.models.Model"
 		extends="topali.data.DataObject">
 		<field name="name" type="string">
@@ -194,15 +197,15 @@
 		<field name="isSpecialMatrix" type="boolean"
 			get-method="isSpecialMatrix" set-method="isSpecialMatrix" />
 	</class>
-	
+
 
 	<!--                                                ANNOTATION                                -->
 	<!--                                                **********                                -->
-	
+
 	<class name="topali.data.annotations.AnnotationList" extends="java.util.ArrayList">
 		<field name="annotations" type="topali.data.annotations.Annotation" collection="arraylist"/>
 	</class>
-	
+
 	<class name="topali.data.annotations.Annotation" extends="topali.data.DataObject">
 		<field name="start" type="int">
 			<bind-xml node="attribute" />
@@ -222,19 +225,19 @@
 	<class name="topali.data.annotations.PartitionAnnotation" extends="topali.data.annotations.Annotation">
 		<field name="model" type="topali.data.models.Model"/>
 	</class>
-	
+
 	<class name="topali.data.annotations.CodingRegionAnnotation" extends="topali.data.annotations.Annotation">
 		<field name="modC1" type="topali.data.models.Model"/>
 		<field name="modC2" type="topali.data.models.Model"/>
 		<field name="modC3" type="topali.data.models.Model"/>
 	</class>
-	
+
 	<class name="topali.data.annotations.SecStructureAnnotation" extends="topali.data.annotations.Annotation">
 		<field name="type" type="char" >
 			<bind-xml node="attribute" />
 		</field>
 	</class>
-	
+
 	<!--                                             RESULTS                                     -->
 	<!-- 							                 *******                                     -->
 
@@ -655,13 +658,16 @@
 	</class>
 
 	<!--  Phylogeny Results -->
-	
+
 	<class name="topali.data.ModelTestResult"
 		extends="topali.data.AlignmentResult">
 		<field name="phymlPath" type="string" direct="true">
 			<bind-xml node="attribute" />
 		</field>
 		<field name="treeDistPath" type="string" direct="true">
+			<bind-xml node="attribute" />
+		</field>
+		<field name="splitType" type="integer" direct="true">
 			<bind-xml node="attribute" />
 		</field>
 		<field name="type" type="string" direct="true" />
@@ -677,7 +683,7 @@
 		<field name="obj2"/>
 		<field name="distance" type="double"/>
 	</class>
-	
+
 	<class name="topali.data.TreeResult"
 		extends="topali.data.AlignmentResult">
 		<field name="partitionStart" type="int">
@@ -760,7 +766,7 @@
 		<field name="model" type="string" direct="true" />
 		<field name="dna" type="boolean" direct="true" />
 	</class>
-	
+
 
 	<!--  Misc Results -->
 
