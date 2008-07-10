@@ -30,8 +30,8 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
     Model model;
     Logger log = Logger.getLogger(this.getClass());
 
-    Hashtable<String, JFrame> modelFrames = new Hashtable<String, JFrame>();
-    Hashtable<String, JFrame> treeFrames = new Hashtable<String, JFrame>();
+    Hashtable<String, JDialog> modelFrames = new Hashtable<String, JDialog>();
+    Hashtable<String, JDialog> treeFrames = new Hashtable<String, JDialog>();
 
     /** Creates new form ModelInfoPanel */
     public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel, ModelTestResult result) {
@@ -575,9 +575,9 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 	    if (model.isGamma())
 		name += "+G";
 
-	    JFrame frame = modelFrames.get(name);
+	    JDialog frame = modelFrames.get(name);
 	    if (frame == null || !frame.isDisplayable()) {
-		frame = new JFrame(name);
+		frame = new JDialog(TOPALi.winMain, name, true);
 		JPanel p = new JPanel(new BorderLayout());
 		p.setBackground(Color.WHITE);
 		p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -605,9 +605,9 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 	    if (model.isGamma())
 		name += "+G";
 
-	    JFrame frame = treeFrames.get(name);
+	    JDialog frame = treeFrames.get(name);
 	    if (frame == null || !frame.isDisplayable()) {
-		frame = new JFrame(name);
+		frame = new JDialog(TOPALi.winMain, name, true);
 		frame.setSize(400, 480);
 		frame.getContentPane().add(new TreeCanvas(treeCanvas));
 		frame.setLocationRelativeTo(TOPALi.winMain);
