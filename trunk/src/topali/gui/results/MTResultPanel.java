@@ -62,15 +62,25 @@ public class MTResultPanel extends ResultPanel implements ListSelectionListener
 
 			p1.add(tp, BorderLayout.CENTER);
 
-			infoPanel = new ModelInfoPanel(data,this);
-			p1.add(infoPanel, BorderLayout.SOUTH);
+			infoPanel = new ModelInfoPanel(data,this, result);
+
+			JScrollPane sp = new JScrollPane(infoPanel);
+			p1.add(sp, BorderLayout.SOUTH);
 
 			addContent(p1, false);
 
 			//pre-select the first entry
 			tp.accessTable().getSelectionModel().setSelectionInterval(0, 0);
 			valueChanged(null);
-			modelSetTo(data.getSequenceSet().getProps().getModel());
+
+			if (((ModelTestResult)result).splitType == ModelTestResult.SINGLE_MODEL_RUN)
+				modelSetTo(data.getSequenceSet().getProps().getModel());
+			else if (((ModelTestResult)result).splitType == ModelTestResult.CP_MODEL_RUN_CP1)
+				modelSetTo(data.getSequenceSet().getProps().getCpModel1());
+			else if (((ModelTestResult)result).splitType == ModelTestResult.CP_MODEL_RUN_CP2)
+				modelSetTo(data.getSequenceSet().getProps().getCpModel2());
+			else if (((ModelTestResult)result).splitType == ModelTestResult.CP_MODEL_RUN_CP3)
+				modelSetTo(data.getSequenceSet().getProps().getCpModel3());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

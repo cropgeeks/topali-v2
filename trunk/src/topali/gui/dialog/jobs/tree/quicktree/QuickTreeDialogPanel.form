@@ -4,7 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_formBundle" type="java.lang.String" value="topali/i18n/i18n"/>
+    <AuxValue name="FormSettings_formBundle" type="java.lang.String" value=""/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
@@ -16,12 +16,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="modelpanel" max="32767" attributes="1"/>
-                  <Component id="runpanel" alignment="0" pref="416" max="32767" attributes="1"/>
-              </Group>
+              <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -30,21 +27,19 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="modelpanel" min="-2" max="-2" attributes="0"/>
+              <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="runpanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="modelpanel">
+    <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="&lt;User Code&gt;">
-              <Connection PropertyName="titleX" code="Text.get(&quot;Model_Settings&quot;)" type="code"/>
+            <TitledBorder title="Settings:">
+              <ResourceString PropertyName="titleX" bundle="" key="QuickTreeDialogPanel.jPanel1.border.title" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -55,48 +50,45 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="estimate" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="tstvlabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="alphalabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="tstvlabel2" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="tstvlabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="alphalabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="bootstrapLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tstvlabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="35" max="32767" attributes="0"/>
-                          <Component id="tstv" min="-2" pref="265" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="bs" pref="86" max="32767" attributes="1"/>
+                              <Component id="alpha" alignment="0" pref="86" max="32767" attributes="1"/>
+                              <Component id="tstv" alignment="0" pref="86" max="32767" attributes="1"/>
+                          </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="1">
-                          <Component id="alphalabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="alphalabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="35" max="32767" attributes="0"/>
-                          <Component id="alpha" min="-2" pref="265" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="estimate" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="estimate" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tstvlabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tstvlabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tstvlabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tstvlabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tstv" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="alphalabel" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="alphalabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="alpha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="alphalabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="alphalabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="alpha" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="bootstrapLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="bs" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -104,60 +96,10 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="tstvlabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;Transition/Transversion_Ratio&quot;)" type="code"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="tstvlabel2">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;ts/tv&quot;)" type="code"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="alphalabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;Rate_Heterogenity&quot;)" type="code"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="alphalabel2">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;alpha&quot;)" type="code"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="tstv">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod0 = new SpinnerNumberModel(Prefs.qt_tstv, 0d, 100d, 0.1d);&#xa;tstv.setModel(mod0);"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="alpha">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod1 = new SpinnerNumberModel(Prefs.qt_alpha, 0.1d, 100d, 0.1d);&#xa;alpha.setModel(mod1);"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="estimate">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;Estimate&quot;)" type="code"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Automatically estimate parameters"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -171,79 +113,42 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="estimateActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="tstvlabel3">
+        <Component class="javax.swing.JLabel" name="tstvlabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="=" noResource="true"/>
+            <Property name="text" type="java.lang.String" value="Transition/transversion ratio: "/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="alphalabel3">
+        <Component class="javax.swing.JLabel" name="alphalabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="=" noResource="true"/>
+            <Property name="text" type="java.lang.String" value="Rate heterogeneity (alpha): "/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="runpanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="&lt;User Code&gt;">
-              <Connection PropertyName="titleX" code="Text.get(&quot;Program_settings&quot;)" type="code"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" max="-2" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="61" max="32767" attributes="0"/>
-                          <Component id="bs" min="-2" pref="263" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bs" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="bootstrapLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;Bootstrap_Runs&quot;)" type="code"/>
-            </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Text.get(&quot;Bootstraps&quot;)" type="code"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Number of bootstrap runs:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSpinner" name="bs">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);&#xa;bs.setModel(mod2);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 500, 10);&#xa;bs.setModel(mod2);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JSpinner" name="alpha">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod1 = new SpinnerNumberModel(Prefs.qt_alpha, 0.1d, 100d, 0.1d);&#xa;alpha.setModel(mod1);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JSpinner" name="tstv">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SpinnerNumberModel mod0 = new SpinnerNumberModel(Prefs.qt_tstv, 0d, 100d, 0.1d);&#xa;tstv.setModel(mod0);"/>
           </AuxValues>
         </Component>
       </SubComponents>

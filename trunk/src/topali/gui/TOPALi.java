@@ -200,6 +200,7 @@ public class TOPALi extends Applet implements Application
 		});
 
 		scri.commons.gui.MsgBox.initialize(winMain, Text.get("title"));
+		scri.commons.gui.TaskDialog.initialize(winMain, Text.get("title"));
 		winMain.setVisible(true);
 	}
 
