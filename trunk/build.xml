@@ -70,6 +70,7 @@
 						commons-httpclient-3.0.jar
 						commons-logging-1.0.4.jar
 						forester.jar
+						i4jruntime.jar
 						jaxrpc.jar
 						jcommon-1.0.0.jar
 						jfreechart-1.0.1.jar
