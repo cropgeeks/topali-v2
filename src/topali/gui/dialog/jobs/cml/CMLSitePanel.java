@@ -106,11 +106,11 @@ public class CMLSitePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         m0set = new javax.swing.JButton();
         m3set = new javax.swing.JButton();
         m0 = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         m1a = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
@@ -124,9 +124,13 @@ public class CMLSitePanel extends javax.swing.JPanel {
         m7set = new javax.swing.JButton();
         m8set = new javax.swing.JButton();
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Simple model:"));
 
-        m0set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        jLabel1.setText("M0 (One Ratio):");
+
+        jLabel2.setText("M3 (Discrete, 3 Categories):");
+
+        m0set.setText("Settings...");
         m0set.setToolTipText("Edit omega start values");
         m0set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,7 +138,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m3set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        m3set.setText("Settings...");
         m3set.setToolTipText("Edit omega start values");
         m3set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,10 +154,6 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setText("M0 (One Ratio)");
-
-        jLabel2.setText("M3 (Discrete, 3 Categories)");
-
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -161,32 +161,34 @@ public class CMLSitePanel extends javax.swing.JPanel {
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(m0)
-                .add(19, 19, 19)
+                .add(18, 18, 18)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1)
-                    .add(jLabel2))
-                .add(48, 48, 48)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(m3set)
-                    .add(m0set))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jLabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 49, Short.MAX_VALUE)
+                        .add(m3set))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 108, Short.MAX_VALUE)
+                        .add(m0set)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(m0)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m0set)
                     .add(jLabel1)
-                    .add(m0set))
+                    .add(m0))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel2)
-                    .add(m3set))
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m3set)
+                    .add(jLabel2))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Medium model:"));
 
         m1a.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m1a.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -196,11 +198,11 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setText("M1a (Nearly Neutral)");
+        jLabel3.setText("M1a (Nearly Neutral):");
 
-        jLabel4.setText("M2a (Positive Selection)");
+        jLabel4.setText("M2a (Positive Selection):");
 
-        m1aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        m1aset.setText("Settings...");
         m1aset.setToolTipText("Edit omega start values");
         m1aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,7 +210,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m2aset.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        m2aset.setText("Settings...");
         m2aset.setToolTipText("Edit omega start values");
         m2aset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,30 +227,37 @@ public class CMLSitePanel extends javax.swing.JPanel {
                 .add(m1a)
                 .add(18, 18, 18)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel3)
-                    .add(jLabel4))
-                .add(67, 67, 67)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(m2aset)
-                    .add(m1aset))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel4)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 67, Short.MAX_VALUE)
+                        .add(m2aset))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 81, Short.MAX_VALUE)
+                        .add(m1aset)))
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(new java.awt.Component[] {m1aset, m2aset}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(m1a)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m1aset)
                     .add(jLabel3)
-                    .add(m1aset))
+                    .add(m1a))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel4)
-                    .add(m2aset, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m2aset)
+                    .add(jLabel4))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1Layout.linkSize(new java.awt.Component[] {m1aset, m2aset}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced model:"));
 
         m7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         m7.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -258,11 +267,11 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel5.setText("M7 (Beta, 10 Categories)");
+        jLabel5.setText("M7 (Beta, 10 Categories):");
 
-        jLabel6.setText("M8 (Beta & w>1, 11 Categories)");
+        jLabel6.setText("M8 (Beta & w>1, 11 Categories):");
 
-        m7set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        m7set.setText("Settings...");
         m7set.setToolTipText("Edit omega start values");
         m7set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,7 +279,7 @@ public class CMLSitePanel extends javax.swing.JPanel {
             }
         });
 
-        m8set.setIcon(new javax.swing.ImageIcon("C:\\Documents\\Java\\TOPALi\\res\\icons\\settings.png")); // NOI18N
+        m8set.setText("Settings...");
         m8set.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m8setActionPerformed(evt);
@@ -282,30 +291,33 @@ public class CMLSitePanel extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(m7)
-                .add(17, 17, 17)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel5)
-                    .add(jLabel6))
-                .add(26, 26, 26)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(m7set)
-                    .add(m8set))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(40, 40, 40)
+                        .add(jLabel6)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 26, Short.MAX_VALUE)
+                        .add(m8set))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(m7)
+                        .add(17, 17, 17)
+                        .add(jLabel5)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 61, Short.MAX_VALUE)
+                        .add(m7set)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(m7)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m7set)
                     .add(jLabel5)
-                    .add(m7set))
+                    .add(m7))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel6)
-                    .add(m8set))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(m8set)
+                    .add(jLabel6))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -313,12 +325,12 @@ public class CMLSitePanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
