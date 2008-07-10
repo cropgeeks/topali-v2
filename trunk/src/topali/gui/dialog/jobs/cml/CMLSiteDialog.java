@@ -20,40 +20,40 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 	WinMain winmain;
 	AlignmentData data;
 	CodeMLResult res;
-	
+
 	CMLSitePanel panel;
-	
+
 	public JButton bRun = new JButton(), bCancel = new JButton(), bDefault = new JButton(), bHelp = new JButton();
-	
+
 	public CMLSiteDialog(WinMain winMain, AlignmentData data, CodeMLResult res) {
-		super(winMain, "Positive Selection - Site Models  (under test)", false);
-		
+		super(winMain, "Positive Selection - Site Models", true);
+
 		this.winmain = winMain;
 		this.data = data;
 		this.res = res;
 		init();
-		
+
 		pack();
 		setLocationRelativeTo(winmain);
 		setResizable(false);
-		
+
 		getRootPane().setDefaultButton(bRun);
 		bRun.requestFocus();
 	}
-	
+
 	private void init() {
 		panel = new CMLSitePanel(res, this);
 
 		this.setLayout(new BorderLayout());
 		add(panel, BorderLayout.CENTER);
-		
+
 		JPanel bp = Utils.getButtonPanel(bRun, bCancel, bDefault, bHelp, this, "cmlsite_settings");
 		getContentPane().add(bp, BorderLayout.SOUTH);
-		
+
 		Utils.addCloseHandler(this, bCancel);
 	}
 
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel)
@@ -62,7 +62,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 		else if (e.getSource() == bRun)
 		{
 			setVisible(false);
-			
+
 			SequenceSet ss = data.getSequenceSet();
 
 			res = panel.getResult();
@@ -74,7 +74,7 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 
 			res.selectedSeqs = ss.getSelectedSequenceSafeNames();
 			res.isRemote = ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0);
-			
+
 			int runNum = data.getTracker().getCodeMLRunCount() + 1;
 			data.getTracker().setCodeMLRunCount(runNum);
 			res.guiName = "PAML Sites " + runNum;
@@ -89,6 +89,6 @@ public class CMLSiteDialog extends JDialog implements ActionListener
 			panel.setDefaults();
 		}
 	}
-	
-	
+
+
 }
