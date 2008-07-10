@@ -16,12 +16,12 @@ import topali.i18n.Text;
  * @author  dlindn
  */
 public class QuickTreeDialogPanel extends javax.swing.JPanel {
-    
+
     /** Creates new form QuickTreeDialogPanel */
     public QuickTreeDialogPanel() {
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -30,45 +30,19 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        modelpanel = new javax.swing.JPanel();
-        tstvlabel = new javax.swing.JLabel();
-        tstvlabel2 = new javax.swing.JLabel();
-        alphalabel = new javax.swing.JLabel();
-        alphalabel2 = new javax.swing.JLabel();
-        tstv = new javax.swing.JSpinner();
-        alpha = new javax.swing.JSpinner();
+        jPanel1 = new javax.swing.JPanel();
         estimate = new javax.swing.JCheckBox();
-        tstvlabel3 = new javax.swing.JLabel();
-        alphalabel3 = new javax.swing.JLabel();
-        runpanel = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        tstvlabel = new javax.swing.JLabel();
+        alphalabel = new javax.swing.JLabel();
+        bootstrapLabel = new javax.swing.JLabel();
         bs = new javax.swing.JSpinner();
+        alpha = new javax.swing.JSpinner();
+        tstv = new javax.swing.JSpinner();
 
-        modelpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Model_Settings")));
-
-        tstvlabel.setText(Text.get("Transition/Transversion_Ratio"));
-        tstvlabel.setEnabled(false);
-
-        tstvlabel2.setText(Text.get("ts/tv"));
-        tstvlabel2.setEnabled(false);
-
-        alphalabel.setText(Text.get("Rate_Heterogenity"));
-        alphalabel.setEnabled(false);
-
-        alphalabel2.setText(Text.get("alpha"));
-        alphalabel2.setEnabled(false);
-
-        tstv.setEnabled(false);
-        SpinnerNumberModel mod0 = new SpinnerNumberModel(Prefs.qt_tstv, 0d, 100d, 0.1d);
-        tstv.setModel(mod0);
-
-        alpha.setEnabled(false);
-        SpinnerNumberModel mod1 = new SpinnerNumberModel(Prefs.qt_alpha, 0.1d, 100d, 0.1d);
-        alpha.setModel(mod1);
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Settings:"));
 
         estimate.setSelected(true);
-        estimate.setText(Text.get("Estimate"));
+        estimate.setText("Automatically estimate parameters");
         estimate.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         estimate.setMargin(new java.awt.Insets(0, 0, 0, 0));
         estimate.addActionListener(new java.awt.event.ActionListener() {
@@ -77,86 +51,61 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
             }
         });
 
-        tstvlabel3.setText("="); // NOI18N
-        tstvlabel3.setEnabled(false);
+        tstvlabel.setText("Transition/transversion ratio: ");
+        tstvlabel.setEnabled(false);
 
-        alphalabel3.setText("="); // NOI18N
-        alphalabel3.setEnabled(false);
+        alphalabel.setText("Rate heterogeneity (alpha): ");
+        alphalabel.setEnabled(false);
 
-        org.jdesktop.layout.GroupLayout modelpanelLayout = new org.jdesktop.layout.GroupLayout(modelpanel);
-        modelpanel.setLayout(modelpanelLayout);
-        modelpanelLayout.setHorizontalGroup(
-            modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(modelpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(estimate)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, tstvlabel)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, alphalabel)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, modelpanelLayout.createSequentialGroup()
-                        .add(tstvlabel2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(tstvlabel3)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 35, Short.MAX_VALUE)
-                        .add(tstv, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, modelpanelLayout.createSequentialGroup()
-                        .add(alphalabel2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(alphalabel3)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 35, Short.MAX_VALUE)
-                        .add(alpha, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        modelpanelLayout.setVerticalGroup(
-            modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(modelpanelLayout.createSequentialGroup()
-                .add(estimate)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tstvlabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(tstvlabel2)
-                    .add(tstvlabel3)
-                    .add(tstv, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(alphalabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(modelpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(alphalabel2)
-                    .add(alphalabel3)
-                    .add(alpha, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        bootstrapLabel.setText("Number of bootstrap runs:");
 
-        runpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Text.get("Program_settings")));
-
-        jLabel5.setText(Text.get("Bootstrap_Runs"));
-
-        jLabel6.setText(Text.get("Bootstraps"));
-
-        SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 1000, 10);
+        SpinnerNumberModel mod2 = new SpinnerNumberModel(Prefs.qt_bootstrap, 0, 500, 10);
         bs.setModel(mod2);
 
-        org.jdesktop.layout.GroupLayout runpanelLayout = new org.jdesktop.layout.GroupLayout(runpanel);
-        runpanel.setLayout(runpanelLayout);
-        runpanelLayout.setHorizontalGroup(
-            runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(runpanelLayout.createSequentialGroup()
-                .add(runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel5)
-                    .add(runpanelLayout.createSequentialGroup()
-                        .add(jLabel6)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 61, Short.MAX_VALUE)
-                        .add(bs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 263, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+        alpha.setEnabled(false);
+        SpinnerNumberModel mod1 = new SpinnerNumberModel(Prefs.qt_alpha, 0.1d, 100d, 0.1d);
+        alpha.setModel(mod1);
+
+        tstv.setEnabled(false);
+        SpinnerNumberModel mod0 = new SpinnerNumberModel(Prefs.qt_tstv, 0d, 100d, 0.1d);
+        tstv.setModel(mod0);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(tstvlabel)
+                            .add(alphalabel)
+                            .add(bootstrapLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(bs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                            .add(alpha, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                            .add(tstv, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)))
+                    .add(estimate))
                 .addContainerGap())
         );
-        runpanelLayout.setVerticalGroup(
-            runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(runpanelLayout.createSequentialGroup()
-                .add(jLabel5)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(estimate)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(runpanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel6)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(tstvlabel)
+                    .add(tstv, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(alphalabel)
+                    .add(alpha, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(bootstrapLabel)
                     .add(bs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -167,61 +116,51 @@ public class QuickTreeDialogPanel extends javax.swing.JPanel {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(modelpanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(runpanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(modelpanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(runpanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void estimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estimateActionPerformed
         if(estimate.isSelected()) {
             tstvlabel.setEnabled(false);
-            tstvlabel2.setEnabled(false);
-            tstvlabel3.setEnabled(false);
+//            tstvlabel2.setEnabled(false);
+//            tstvlabel3.setEnabled(false);
             tstv.setEnabled(false);
             alphalabel.setEnabled(false);
-            alphalabel2.setEnabled(false);
-            alphalabel3.setEnabled(false);
+//            alphalabel2.setEnabled(false);
+//            alphalabel3.setEnabled(false);
             alpha.setEnabled(false);
         }
         else {
             tstvlabel.setEnabled(true);
-            tstvlabel2.setEnabled(true);
-            tstvlabel3.setEnabled(true);
+//            tstvlabel2.setEnabled(true);
+//            tstvlabel3.setEnabled(true);
             tstv.setEnabled(true);
             alphalabel.setEnabled(true);
-            alphalabel2.setEnabled(true);
-            alphalabel3.setEnabled(true);
+//            alphalabel2.setEnabled(true);
+//            alphalabel3.setEnabled(true);
             alpha.setEnabled(true);
         }
     }//GEN-LAST:event_estimateActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JSpinner alpha;
     public javax.swing.JLabel alphalabel;
-    public javax.swing.JLabel alphalabel2;
-    public javax.swing.JLabel alphalabel3;
+    public javax.swing.JLabel bootstrapLabel;
     public javax.swing.JSpinner bs;
     public javax.swing.JCheckBox estimate;
-    public javax.swing.JLabel jLabel5;
-    public javax.swing.JLabel jLabel6;
-    public javax.swing.JPanel modelpanel;
-    public javax.swing.JPanel runpanel;
+    public javax.swing.JPanel jPanel1;
     public javax.swing.JSpinner tstv;
     public javax.swing.JLabel tstvlabel;
-    public javax.swing.JLabel tstvlabel2;
-    public javax.swing.JLabel tstvlabel3;
     // End of variables declaration//GEN-END:variables
-    
+
 }

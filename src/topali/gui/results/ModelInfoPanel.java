@@ -24,6 +24,7 @@ import topali.var.utils.Utils;
  */
 public class ModelInfoPanel extends JPanel implements MouseListener {
 
+	ModelTestResult result;
     MTResultPanel mtpanel;
     AlignmentData data;
     Model model;
@@ -33,9 +34,10 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
     Hashtable<String, JFrame> treeFrames = new Hashtable<String, JFrame>();
 
     /** Creates new form ModelInfoPanel */
-    public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel) {
+    public ModelInfoPanel(AlignmentData data, MTResultPanel mtpanel, ModelTestResult result) {
 	this.data = data;
 	this.mtpanel = mtpanel;
+	this.result = result;
 	initComponents();
 
 	treeCanvas.setColouriser(data.getSequenceSet().getNameColouriser(
@@ -136,8 +138,18 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 	    setTree(model.getTree());
 	}
 	repaint();
-	defaultButton.setEnabled(mod != null
-		&& !data.getSequenceSet().getProps().getModel().matches(mod));
+
+		if (result.splitType == ModelTestResult.SINGLE_MODEL_RUN)
+			defaultButton.setEnabled(mod != null && !data.getSequenceSet().getProps().getModel().matches(mod));
+		else if (result.splitType == ModelTestResult.CP_MODEL_RUN_CP1)
+			defaultButton.setEnabled(mod != null && !data.getSequenceSet().getProps().getCpModel1().matches(mod));
+		else if (result.splitType == ModelTestResult.CP_MODEL_RUN_CP2)
+			defaultButton.setEnabled(mod != null && !data.getSequenceSet().getProps().getCpModel2().matches(mod));
+		else if (result.splitType == ModelTestResult.CP_MODEL_RUN_CP3)
+			defaultButton.setEnabled(mod != null && !data.getSequenceSet().getProps().getCpModel3().matches(mod));
+
+//	defaultButton.setEnabled(mod != null
+//		&& !data.getSequenceSet().getProps().getModel().matches(mod));
     }
 
     private void setModName(String name) {
@@ -309,7 +321,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
         baseFreqGroups.setText("(0000)");
         baseFreqGroups.setToolTipText("A | C | G | T");
 
-        jLabel13.setText("Rate Heterogeneity (\u0393):");
+        jLabel13.setText("Rate Heterogeneity (\\u0393):");
 
         jLabel14.setText("Proportion of Invariant Sites:");
 
@@ -327,7 +339,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
         );
         treeCanvasLayout.setVerticalGroup(
             treeCanvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 177, Short.MAX_VALUE)
+            .add(0, 215, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
@@ -351,7 +363,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
         );
         modelDiagramLayout.setVerticalGroup(
             modelDiagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 155, Short.MAX_VALUE)
+            .add(0, 193, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
@@ -373,7 +385,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 
         jLabel1.setText("Scores:");
 
-        scores.setText("\u2113=; AIC\u2081=; AIC\u2082=; BIC=");
+        scores.setText("\\u2113=; AIC\\u2081=; AIC\\u2082=; BIC=");
         scores.setToolTipText("Model Test Scores");
 
         calcpara.setText("(df=; n=)");
@@ -383,7 +395,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel11.setForeground(new java.awt.Color(0, 0, 160));
-        jLabel11.setText("\u0393");
+        jLabel11.setText("\\u0393");
 
         jLabel7.setText(",");
 
@@ -399,7 +411,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
         );
         rateHetDiagramLayout.setVerticalGroup(
             rateHetDiagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 135, Short.MAX_VALUE)
+            .add(0, 173, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
@@ -508,8 +520,8 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
                 .addContainerGap())
         );
 
-        defaultButton.setText("Select");
-        defaultButton.setToolTipText("Use this model for further analysis");
+        defaultButton.setText("Select as default model for this alignment");
+        defaultButton.setToolTipText("Select to use this model as the default for any further tree generation analyses");
         defaultButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 defaultButtonActionPerformed(evt);
@@ -523,25 +535,26 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                    .add(defaultButton)
+                    .add(layout.createSequentialGroup()
                         .add(modelName)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 835, Short.MAX_VALUE)
-                        .add(defaultButton))
-                    .add(aliases))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(aliases))
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(defaultButton)
+                .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(defaultButton)
-                    .add(modelName))
+                    .add(modelName)
+                    .add(aliases))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(aliases)
-                .add(13, 13, 13)
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
