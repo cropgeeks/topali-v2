@@ -168,8 +168,8 @@ public class RegionDialog extends JDialog implements ActionListener,
 
 	public void doExport()
 	{
-//		new ExportDialog(winMain, alignData, annotations, regionList
-//				.getSelectedIndices());
+		new ExportDialog(
+			winMain, alignData, annotations, regionList.getSelectedIndices());
 	}
 
 	public void exit()

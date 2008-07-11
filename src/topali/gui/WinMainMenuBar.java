@@ -178,7 +178,8 @@ public class WinMainMenuBar extends JMenuBar
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				new ExportDialog(TOPALi.winMain, TOPALi.winMain.navPanel.getCurrentAlignmentData(), null);
+				WinMain.rDialog.doExport();
+//				new ExportDialog(TOPALi.winMain, TOPALi.winMain.navPanel.getCurrentAlignmentData(), null);
 			}
 		};
 

@@ -29,15 +29,18 @@ import scri.commons.gui.*;
 public class ExportDialog extends JDialog implements ActionListener
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private WinMain winMain;
 
 	private AlignmentData data;
-	
+
 	private SequenceSet ss;
 
-	private List<Annotation> annos;
-	
+	private RegionAnnotations annotations;
+
+	// Selected partition indexes (at the time this dialog was opened)
+	private int[] regions = null;
+
 	private JButton bOK, bCancel;
 
 	private JRadioButton rAllSeq, rSelSeq;
@@ -47,15 +50,16 @@ public class ExportDialog extends JDialog implements ActionListener
 	private JRadioButton rDisk, rProject, rTranslate;
 
 	public ExportDialog(WinMain winMain, AlignmentData data,
-			List<Annotation> annos)
+			RegionAnnotations annotations, int[] regions)
 	{
 		super(winMain, "", true);
 
 		this.winMain = winMain;
 		this.data = data;
+		this.regions = regions;
+		this.annotations = annotations;
 		ss = data.getSequenceSet();
-		this.annos = annos;
-		
+
 		add(getControls(), BorderLayout.CENTER);
 		add(getButtons(), BorderLayout.SOUTH);
 		getRootPane().setDefaultButton(bOK);
@@ -106,14 +110,17 @@ public class ExportDialog extends JDialog implements ActionListener
 		rSelPar.setMnemonic(KeyEvent.VK_S);
 		rSelPar.addActionListener(this);
 
-		if (annos==null || annos.size() == 0)
+		if (regions.length == 0)
 			rSelPar.setEnabled(false);
+//		if (annos==null || annos.size() == 0)
+//			rSelPar.setEnabled(false);
 
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(rAllPar);
 		group2.add(rSelPar);
 
-		if (Prefs.gui_export_pars == 2 && (annos!=null && annos.size() > 0))
+		if (Prefs.gui_export_pars == 2 && regions.length > 0)
+//		if (Prefs.gui_export_pars == 2 && (annos!=null && annos.size() > 0))
 			rSelPar.setSelected(true);
 
 		JPanel p2 = new JPanel(new GridLayout(2, 1, 0, 0));
@@ -138,7 +145,7 @@ public class ExportDialog extends JDialog implements ActionListener
 		group3.add(rDisk);
 		group3.add(rProject);
 		group3.add(rTranslate);
-		
+
 		JPanel p3 = new JPanel(new GridLayout(3, 1, 0, 0));
 		p3.setBorder(BorderFactory.createTitledBorder(Text.get("ExportDialog.8")));
 		p3.add(rDisk);
@@ -167,7 +174,7 @@ public class ExportDialog extends JDialog implements ActionListener
 				rTranslate.setEnabled(false);
 		}
 	}
-	
+
 	private JPanel getButtons()
 	{
 		bOK = new JButton(Text.get("ok"));
@@ -195,7 +202,7 @@ public class ExportDialog extends JDialog implements ActionListener
 			if (export())
 				setVisible(false);
 		}
-		
+
 		else if(e.getSource()==rAllPar) {
 			checkRTranslate();
 		}
@@ -210,12 +217,19 @@ public class ExportDialog extends JDialog implements ActionListener
 	{
 		int concatLength = 0;
 
-		if(annos!=null) {
+		for (int r : regions)
+		{
+			RegionAnnotations.Region region = annotations.get(r);
+			concatLength += (region.getE() - region.getS()) + 1;
+		}
+
+/*		if(annos!=null) {
 			for(Annotation anno : annos) {
 				concatLength += anno.getEnd()-anno.getStart()+1;
 			}
 		}
-		
+*/
+
 		return concatLength;
 	}
 
@@ -226,7 +240,8 @@ public class ExportDialog extends JDialog implements ActionListener
 		if (Prefs.gui_export_allseqs == false)
 			seqs = ss.getSelectedSequences();
 
-		if(rTranslate.isSelected()) {
+// TODO: imilne - 2008-07-11
+/*		if(rTranslate.isSelected()) {
 			AlignmentData trans = new AlignmentData();
 			trans.setName(data.getName()+"_translated");
 			SequenceSet transs;
@@ -236,7 +251,7 @@ public class ExportDialog extends JDialog implements ActionListener
 				transs = SequenceSetUtils.translate(ss, null, rSelSeq.isSelected());
 			try {
 				transs.checkValidity();
-				trans.setSequenceSet(transs);			
+				trans.setSequenceSet(transs);
 				winMain.addNewAlignmentData(trans);
 				return true;
 			}
@@ -245,17 +260,18 @@ public class ExportDialog extends JDialog implements ActionListener
 				return false;
 			}
 		}
+*/
 
 		// We recreate the alignment so it only contains the sequences and
 		// regions that
 		// correspond to the user's selection
 		SequenceSet toExport = SequenceSetUtils.getConcatenatedSequenceSet(
-				data, seqs, annos);
+				data, annotations, seqs, regions);
 
 		// Work out a new name for the alignment
 		String name = data.getName() + " (" + toExport.getSize() + "x"
 				+ (toExport.getLength()) + ")";
-		
+
 		// Save to disk...
 		if (Prefs.gui_export_todisk)
 		{

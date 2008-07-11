@@ -24,9 +24,9 @@ import topali.var.utils.Utils;
 public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     AlignmentData data;
     Class<? extends Annotation> annoType;
-    
+
     String select = "Partitions";
-    
+
     /** Creates new form AnnoDialog */
     public CopyOfAnnotationDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -34,28 +34,28 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
         init2();
         pack();
     }
-    
+
     public void init2() {
     	setTitle(Text.get("AnnotationDialog.11"));
         bEdit.setEnabled(false);
         bRemove.setEnabled(false);
         bRemoveAll.setEnabled(false);
-        
+
         annoList.addMouseListener(new MouseAdapter() {
 
-			
+
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				if(e.getClickCount()==2) {
 					bEditActionPerformed(null);
 				}
 			}
-        	
+
         });
-        
+
         annoList.addKeyListener(new KeyAdapter() {
 
-			
+
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_DELETE)
@@ -66,26 +66,26 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
 					bEditActionPerformed(null);
 				}
 			}
-        	
+
         });
-        
+
         Utils.addCloseHandler(this, bClose);
-        
+
         getRootPane().setDefaultButton(bClose);
     }
-    
+
     public void setData(AlignmentData data) {
     	this.data = data;
     	treePreviewPanel.setAlignmentData(data);
     	refresh();
     }
-    
+
     public void refresh() {
     	String[] annoTypes = new String[] {"Partitions", "Coding Regions"};
     	DefaultComboBoxModel combmod = new DefaultComboBoxModel(annoTypes);
     	annoTypeList.setModel(combmod);
-    	
-    	
+
+
     	int index = 0;
     	Class<? extends Annotation> type = null;
     	if(select.equals("Coding Regions")) {
@@ -96,20 +96,20 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     		index = 0;
     		type = PartitionAnnotation.class;
     	}
-    	
+
     	Object[] annos = data.getAnnotations().getAnnotations(type).toArray();
     	DefaultListModel listmod = new DefaultListModel();
     	for(Object obj : annos)
     		listmod.addElement(obj);
     	annoList.setModel(listmod);
-    	
+
     	annoTypeList.setSelectedIndex(index);
-    	
+
     	annoType = type;
-    	
+
     	validate();
     }
-    
+
     public void setSelected(Annotation anno) {
     	Class<? extends Annotation> type = anno.getClass();
     	if(type.equals(PartitionAnnotation.class)) {
@@ -135,7 +135,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     		}
     	}
     }
-    
+
     public void addPartition(int start, int end) {
     	PartitionAnnotation anno = new PartitionAnnotation(start, end);
     	anno.setSeqType(data.getSequenceSet().getProps().getType());
@@ -145,7 +145,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     	data.getAnnotations().add(anno);
     	refresh();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -429,7 +429,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
             dlg.pack();
             dlg.setLocationRelativeTo(this);
             dlg.setVisible(true);
-            
+
             if(!dlg.cancelled) {
                 PartitionAnnotation anno = new PartitionAnnotation(dlg.aStart, dlg.aEnd);
                 anno.setSeqType(dlg.aType);
@@ -463,7 +463,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
 
     private void bEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditActionPerformed
         Annotation anno = (Annotation)annoList.getSelectedValue();
-        
+
         if(anno!=null) {
 	        String type = (String)annoTypeList.getSelectedItem();
 	        if(type.equals("Partitions")) {
@@ -472,7 +472,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
 	            dlg.pack();
 	            dlg.setLocationRelativeTo(this);
 	            dlg.setVisible(true);
-	            
+
 	            if(!dlg.cancelled) {
 	            	anno.setSeqType(dlg.aType);
 	                anno.setStart(dlg.aStart);
@@ -501,7 +501,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
 	            }
 	        }
         }
-        
+
     }//GEN-LAST:event_bEditActionPerformed
 
     private void bRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRemoveActionPerformed
@@ -510,7 +510,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
 	        List<Annotation> annos = data.getAnnotations().getAnnotations(annoType);
 	        Annotation anno = annos.get(index);
 	        data.getAnnotations().remove(anno);
-	        
+
 	        if(annos.size()==1) {
 	        	bRemove.setEnabled(false);
 	        	bRemoveAll.setEnabled(false);
@@ -535,7 +535,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_bRemoveAllActionPerformed
 
     private void bHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHelpActionPerformed
-        
+
     }//GEN-LAST:event_bHelpActionPerformed
 
     private void bCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCloseActionPerformed
@@ -565,9 +565,9 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     	for(int i=0; i<indices.length; i++) {
     		annos.add((Annotation)annoList.getModel().getElementAt(i));
     	}
-    	new ExportDialog(TOPALi.winMain, data, annos);
+//    	new ExportDialog(TOPALi.winMain, data, annos);
     }//GEN-LAST:event_bExportActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
@@ -584,7 +584,7 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList annoList;
     private javax.swing.JComboBox annoTypeList;
@@ -603,5 +603,5 @@ public class CopyOfAnnotationDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private topali.gui.dialog.annotation.TreePreviewPanel treePreviewPanel;
     // End of variables declaration//GEN-END:variables
-    
+
 }
