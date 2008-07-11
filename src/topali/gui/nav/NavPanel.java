@@ -479,6 +479,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 
 			// And update everything based upon it
 			WinMain.ovDialog.setAlignmentPanel(getCurrentAlignmentPanel(data));
+			WinMain.rDialog.setAlignmentData(data);
 			WinMain.annoDialog.setData(data);
 			WinMainTipsPanel.setDisplayedTips(iNode.getTipsKey());
 		} else
@@ -591,7 +592,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 
 	class MyPopupMenuAdapter extends PopupMenuAdapter
 	{
-		
+
 		protected void handlePopup(int x, int y)
 		{
 
@@ -657,7 +658,7 @@ public class NavPanel extends JPanel implements TreeSelectionListener,
 						(AnalysisResult) evt.getOldValue());
 			}
 		}
-		
+
 		else if(evt.getPropertyName().equals("name")) {
 			//AlignmentData name changed
 			repaint();

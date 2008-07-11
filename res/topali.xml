@@ -94,6 +94,7 @@
 			collection="collection" />
 		<field name="tracker" type="topali.data.ResultsTracker" />
 		<field name="annotations" type="topali.data.annotations.AnnotationList" />
+		<field name="topaliAnnotations" type="topali.data.TOPALiAnnotations"/>
 	</class>
 
 	<class name="topali.data.ResultsTracker">
@@ -149,6 +150,50 @@
 		<field name="status" type="int" direct="true" />
 		<field name="text" type="string" direct="true" />
 	</class>
+
+	<!-- AnnotationElement -->
+<class name="topali.data.AnnotationElement">
+  <field name="position" type="int" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="value" type="float" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="displayCharacter" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="secondaryStructure" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+  <field name="description" type="string" direct="true">
+  	<bind-xml node="attribute"/></field>
+</class>
+
+<!-- TOPALiAnnotations -->
+<class name="topali.data.TOPALiAnnotations">
+  <field name="annotations" type="topali.data.AlignmentAnnotations" collection="collection"/>
+</class>
+
+<!-- AlignmentAnnotations -->
+<class name="topali.data.AlignmentAnnotations">
+  <field name="label" type="string">
+  	<bind-xml node="attribute"/></field>
+  <field name="description" type="string">
+  	<bind-xml node="attribute"/></field>
+
+  <field name="annotations" type="topali.data.AnnotationElement" collection="vector"/>
+</class>
+
+<!-- RegionAnnotations -->
+<class name="topali.data.RegionAnnotations" extends="topali.data.AlignmentAnnotations">
+
+</class>
+
+<!-- PartitionAnnotations -->
+<class name="topali.data.PartitionAnnotations" extends="topali.data.RegionAnnotations">
+	<field name="alignmentLength" type="int">
+		<bind-xml node="attribute"/></field>
+</class>
+
+<!-- CDSAnnotation -->
+<class name="topali.data.CDSAnnotations" extends="topali.data.RegionAnnotations">
+</class>
 
 
 	<!--                                          SUBSTITUTION MODELS                                  -->

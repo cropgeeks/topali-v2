@@ -154,7 +154,7 @@ public class ResultPanelToolbar extends JToolBar {
 								ImageIO.write((BufferedImage) exportable, "png", file);
 								filenames.append(file.getPath() + "\n");
 							}
-							
+
 //							else if (ext == SVG) {
 //								String filename = (p.getFriendlyName() != null) ? basefilename + "_" + p.getFriendlyName() : basefilename;
 //								File file = new File(Prefs.gui_dir, filename + ".svg");
@@ -172,24 +172,24 @@ public class ResultPanelToolbar extends JToolBar {
 //								}
 //
 //								JComponent comp = (JComponent)exportable;
-//								
+//
 //								// Get a DOMImplementation.
 //						        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
 //
 //						        // Create an instance of org.w3c.dom.Document.
 //						        String svgNS = "http://www.w3.org/2000/svg";
 //						        Document document = domImpl.createDocument(svgNS, "svg", null);
-//						        
+//
 //						        // Create an instance of the SVG Generator.
 //						        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-//						        
+//
 //						        comp.paintComponents(svgGenerator);
-//						        
+//
 //						        Writer out = new FileWriter(file);
 //						        svgGenerator.stream(out, true);
 //						        out.flush();
 //						        out.close();
-//						        
+//
 //								filenames.append(file.getPath() + "\n");
 //							}
 
@@ -226,7 +226,7 @@ public class ResultPanelToolbar extends JToolBar {
 			}
 		};
 
-		aAddPart = new AbstractAction() {
+/*		aAddPart = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				PartitionAnnotation anno = new PartitionAnnotation(data.getActiveRegionS(), data.getActiveRegionE());
 				Model modss = data.getSequenceSet().getProps().getModel();
@@ -234,11 +234,20 @@ public class ResultPanelToolbar extends JToolBar {
 				anno.setModel(modanno);
 				data.getAnnotations().add(anno);
 				ProjectState.setDataChanged();
-				
+
 				WinMain.annoDialog.refresh();
 				WinMain.annoDialog.setSelected(anno);
 				WinMain.annoDialog.setLocationRelativeTo(TOPALi.winMain);
 				WinMain.annoDialog.setVisible(true);
+			}
+		};
+*/
+
+		aAddPart = new AbstractAction() {
+			public void actionPerformed(ActionEvent e)
+			{
+				WinMain.rDialog.addCurrentRegion(PartitionAnnotations.class);
+				ProjectState.setDataChanged();
 			}
 		};
 

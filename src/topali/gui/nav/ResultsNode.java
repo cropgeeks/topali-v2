@@ -14,7 +14,7 @@ public abstract class ResultsNode extends INode implements IPrintable
 {
 	protected AnalysisResult result;
 	protected ResultPanel panel;
-	
+
 	public ResultsNode(AlignmentData data, AnalysisResult result)
 	{
 		super(data);
@@ -26,15 +26,13 @@ public abstract class ResultsNode extends INode implements IPrintable
 		return result;
 	}
 
-	
 	public void setMenus()
 	{
 		aFileExportDataSet.setEnabled(true);
 
-		//aAnlsCreateTree.setEnabled(true);
+		aAnlsQuickTree.setEnabled(true);
 		aAnlsPartition.setEnabled(true);
 		aAnlsRename.setEnabled(true);
 		aAnlsRemove.setEnabled(true);
-
 	}
 }
