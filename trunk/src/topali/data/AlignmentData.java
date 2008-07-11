@@ -33,9 +33,10 @@ public class AlignmentData extends DataObject
 
 	// A set of alignment annotations (partitions, coding regions, etc)
 	private AnnotationList annotations = new AnnotationList();
+	private TOPALiAnnotations topaliAnnotations = new TOPALiAnnotations();
 
 	// For marking the current selected Region.
-	
+
 	private int activeRegionS, activeRegionE;
 
 	public AlignmentData()
@@ -46,7 +47,7 @@ public class AlignmentData extends DataObject
 	public AlignmentData(int id) {
 		super(id);
 	}
-	
+
 	public AlignmentData(String name, SequenceSet sequenceSet)
 	{
 		this();
@@ -65,8 +66,8 @@ public class AlignmentData extends DataObject
 	public void setName(String name) {
 		String oldName = this.name;
 		this.name = name;
-		
-		for(PropertyChangeListener l : changeListeners) 
+
+		for(PropertyChangeListener l : changeListeners)
 			l.propertyChange(new PropertyChangeEvent(this, "name", oldName, name));
 	}
 
@@ -110,6 +111,16 @@ public class AlignmentData extends DataObject
 		this.annotations = annotations;
 	}
 
+	public void setTopaliAnnotations(TOPALiAnnotations topaliAnnotations)
+	{
+		this.topaliAnnotations = topaliAnnotations;
+	}
+
+	public TOPALiAnnotations getTopaliAnnotations()
+	{
+		return topaliAnnotations;
+	}
+
 	public LinkedList<AnalysisResult> getResults()
 	{
 		return results;
@@ -125,28 +136,28 @@ public class AlignmentData extends DataObject
 		int index = results.indexOf(oldR);
 		results.remove(index);
 		results.add(index, newR);
-		
-		for(PropertyChangeListener l : changeListeners) 
+
+		for(PropertyChangeListener l : changeListeners)
 			l.propertyChange(new PropertyChangeEvent(this, "result", oldR, newR));
 	}
 
 	public void removeResult(AnalysisResult result)
 	{
 		results.remove(result);
-		
+
 		//NavPanel.propertyChange() should be called:
-		for(PropertyChangeListener l : changeListeners) 
+		for(PropertyChangeListener l : changeListeners)
 			l.propertyChange(new PropertyChangeEvent(this, "result", result, null));
 	}
 
 	public void addResult(AnalysisResult result) {
 		results.add(result);
-		
+
 		//NavPanel.propertyChange() should be called:
-		for(PropertyChangeListener l : changeListeners) 
+		for(PropertyChangeListener l : changeListeners)
 			l.propertyChange(new PropertyChangeEvent(this, "result", null, result));
 	}
-	
+
 	public ResultsTracker getTracker()
 	{
 		return tracker;
@@ -173,17 +184,17 @@ public class AlignmentData extends DataObject
 	{
 		int oldS = this.activeRegionS;
 		int oldE = this.activeRegionE;
-		
+
 		if (start == -1 || end == -1)
 		{
 			start = 1;
 			end = sequenceSet.getLength();
 		}
-		
+
 		this.activeRegionS = start;
 		this.activeRegionE = end;
-		
-		for(PropertyChangeListener l : changeListeners) 
+
+		for(PropertyChangeListener l : changeListeners)
 			l.propertyChange(new PropertyChangeEvent(this, "activeRegion", oldS+","+oldE, start+""+end));
 	}
 
@@ -192,16 +203,16 @@ public class AlignmentData extends DataObject
 	{
 		return activeRegionS;
 	}
-	
+
 	public int getActiveRegionE()
 	{
 		return activeRegionE;
 	}
-	
+
 	public void setActiveRegionS(int i) {
 		this.activeRegionS = i;
 	}
-	
+
 	public void setActiveRegionE(int i) {
 		this.activeRegionE = i;
 	}
@@ -209,10 +220,10 @@ public class AlignmentData extends DataObject
 	public boolean isPartitionCodons() {
 		return (activeRegionE-activeRegionS+1)%3==0;
 	}
-	
+
 	public LinkedList<int[]> containsPartitionStopCodons() {
 		LinkedList<int[]> pos = new LinkedList<int[]>();
-		
+
 		int[] index = sequenceSet.getSelectedSequences();
 		for(int i=0; i<index.length; i++) {
 			Sequence seq = sequenceSet.getSequence(index[i]);
@@ -223,11 +234,11 @@ public class AlignmentData extends DataObject
 					pos.add(new int[]{i+1, j});
 			}
 		}
-		
+
 		return pos;
 	}
-	
-	
+
+
 	public int hashCode()
 	{
 		final int prime = 31;
@@ -238,7 +249,7 @@ public class AlignmentData extends DataObject
 		return result;
 	}
 
-	
+
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
@@ -262,12 +273,12 @@ public class AlignmentData extends DataObject
 			return false;
 		return true;
 	}
-	
+
 	public void merge(AlignmentData data ) {
 		this.name = data.name;
-		
+
 		sequenceSet.merge(data.getSequenceSet());
-		
+
 		for(AnalysisResult res : data.getResults()) {
 			boolean found = false;
 			for(AnalysisResult thisRes : results) {

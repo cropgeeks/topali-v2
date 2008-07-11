@@ -466,16 +466,20 @@ public class GraphPanel extends DataVisPanel {
 			JMenuItem addPart = new JMenuItem();
 			addPart.setAction(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					aData.getAnnotations().add(new PartitionAnnotation(aData.getActiveRegionS(), aData.getActiveRegionE()));
+//					aData.getAnnotations().add(new PartitionAnnotation(aData.getActiveRegionS(), aData.getActiveRegionE()));
+
+					WinMain.rDialog.addCurrentRegion(PartitionAnnotations.class);
+					ProjectState.setDataChanged();
 				}
 			});
 			addPart.setText(Text.get("aAlgnAddPartition"));
-			addPart.setMnemonic(KeyEvent.VK_P);
+			addPart.setMnemonic(KeyEvent.VK_A);
 
-			annotate = new JMenu(Text.get("menuAlgnAnnotate"));
-			annotate.setIcon(Icons.ADD_PARTITION);
-			annotate.add(addPart);
-			p.add(annotate);
+//			annotate = new JMenu(Text.get("menuAlgnAnnotate"));
+//			annotate.setIcon(Icons.ADD_PARTITION);
+//			annotate.add(addPart);
+//			p.add(annotate);
+			p.add(addPart);
 
 			add(aAnlsPartition, Icons.AUTO_PARTITION, KeyEvent.VK_P, 0, 0, 0, false);
 			add(aAnlsQuickTree, Icons.CREATE_TREE, KeyEvent.VK_T, KeyEvent.VK_T, WinMainMenuBar.menuShortcut, 9, true);

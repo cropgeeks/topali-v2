@@ -368,7 +368,7 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 			p.addSeparator();
 			p.add(menu);
 			//p.add(annotate);
-			p.add(addPart);
+//			p.add(addPart);
 			p.addSeparator();
 			add(aAlgnFindSeq, Icons.FIND16, KeyEvent.VK_F, KeyEvent.VK_F,
 					WinMainMenuBar.menuShortcut, 0, false);

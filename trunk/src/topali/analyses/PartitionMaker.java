@@ -6,13 +6,11 @@
 package topali.analyses;
 
 import topali.data.*;
-import topali.data.annotations.*;
-import topali.data.models.*;
 
 public class PartitionMaker
 {
-	AlignmentData data;
-	
+	private PartitionAnnotations pAnnotations;
+
 	private int alignmentLength;
 
 	private boolean discard = false;
@@ -21,9 +19,9 @@ public class PartitionMaker
 
 	public PartitionMaker(AlignmentData data)
 	{
-		this.data =data;
-		
-		data.getAnnotations().removeAll(PartitionAnnotation.class);
+		pAnnotations = (PartitionAnnotations) data.getTopaliAnnotations()
+				.getAnnotations(PartitionAnnotations.class);
+		pAnnotations.deleteAll();
 
 		alignmentLength = data.getSequenceSet().getLength();
 	}
@@ -91,14 +89,9 @@ public class PartitionMaker
 		if (discard && length < minLength)
 		{
 			// Do nothing
-		} else {
+		} else
 			// partitions.add(new Partition(start, end));
-			PartitionAnnotation anno = new PartitionAnnotation(start, end);
-			Model modss = data.getSequenceSet().getProps().getModel();
-			Model modanno = ModelManager.getInstance().generateModel(modss.getName(), modss.isGamma(), modss.isInv());
-			anno.setModel(modanno);
-			data.getAnnotations().add(anno);
-		}
+			pAnnotations.addRegion(start, end);
 	}
 
 	public void autoPartitionHMM(float[][] data1, float[][] data2,
@@ -118,7 +111,7 @@ public class PartitionMaker
 		else if (data3[0][1] >= threshold)
 			state = 3;
 
-		//System.out.println("INITIAL STATE=" + state);
+		System.out.println("INITIAL STATE=" + state);
 
 		for (int i = 1; i < data1.length; i++)
 		{
@@ -134,7 +127,8 @@ public class PartitionMaker
 			// Change...
 			if (newState != state)
 			{
-				//System.out.println("CHANGE AT " + data1[i][0] + " : "+ newState);
+				System.out.println("CHANGE AT " + data1[i][0] + " : "
+						+ newState);
 
 				// Is this the start of a partition?
 				if (break1 == -1)
@@ -150,7 +144,7 @@ public class PartitionMaker
 					break2 = (int) data1[i][0];
 					end = break2;// - (int) ((break2-break1) / 2f);
 
-					//System.out.println("ADDING PARTITION");
+					System.out.println("ADDING PARTITION");
 					addPartition(start, end);
 
 					break1 = break2 = -1;

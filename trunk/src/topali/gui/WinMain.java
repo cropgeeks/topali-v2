@@ -33,6 +33,7 @@ import topali.gui.dialog.jobs.tree.mrbayes.*;
 import topali.gui.dialog.jobs.tree.phyml.PhymlDialog;
 import topali.gui.dialog.jobs.tree.quicktree.QuickTreeDialog;
 import topali.gui.dialog.jobs.tree.raxml.*;
+import topali.gui.dialog.region.*;
 import topali.gui.nav.*;
 import topali.gui.tree.TreePane;
 import topali.i18n.Text;
@@ -69,6 +70,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public static JobsPanel jobsPanel;
 
 	public static AnnotationDialog annoDialog;
+	public static RegionDialog rDialog;
 
 	public static OverviewDialog ovDialog;
 
@@ -114,6 +116,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		tips = new WinMainTipsPanel();
 		jobsPanel = new JobsPanel();
 		ovDialog = new OverviewDialog(this);
+		rDialog = new RegionDialog(this);
 		annoDialog = new AnnotationDialog(this, false);
 
 		splits = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -437,10 +440,10 @@ public class WinMain extends JFrame implements PropertyChangeListener
 
 	void menuAlgnShowPartitionDialog()
 	{
-		//rDialog.setVisible(true);
-		WinMain.annoDialog.refresh();
-		WinMain.annoDialog.setLocationRelativeTo(this);
-		WinMain.annoDialog.setVisible(true);
+		rDialog.setVisible(true);
+//		WinMain.annoDialog.refresh();
+//		WinMain.annoDialog.setLocationRelativeTo(this);
+//		WinMain.annoDialog.setVisible(true);
 	}
 
 	/* Removes an alignment from the current project. */
@@ -461,7 +464,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			project.removeDataSet(data);
 
 			// navPanel.removeSelectedNode();
-			// rDialog.setAlignmentData(null);
+			rDialog.setAlignmentData(null);
 			// ovDialog.setAlignmentPanel(null);
 
 			//WinMainMenuBar.aFileSave.setEnabled(true);
@@ -862,6 +865,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	{
 		WinMainMenuBar.setMenusForNavChange();
 		navPanel.clearSelection();
+		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 
 		int location = splits.getDividerLocation();
@@ -1093,6 +1097,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		menubar.setProjectOpenedState();
 		navPanel.clear();
 
+		rDialog.setAlignmentData(null);
 		ovDialog.setAlignmentPanel(null);
 	}
 
@@ -1121,6 +1126,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 			if (evt.getOldValue() != null && evt.getNewValue() == null)
 			{
 				navPanel.removeSelectedNode();
+				rDialog.setAlignmentData(null);
 				ovDialog.setAlignmentPanel(null);
 			}
 		}

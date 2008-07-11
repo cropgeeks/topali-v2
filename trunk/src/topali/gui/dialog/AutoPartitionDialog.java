@@ -180,17 +180,23 @@ public class AutoPartitionDialog extends JDialog implements ActionListener
 	{
 		ProjectState.setDataChanged();
 
-		List<Annotation> list = data.getAnnotations().getAnnotations(PartitionAnnotation.class);
-		int num = list.size();
-		
+		WinMain.rDialog.refreshList();
+		WinMain.rDialog.setVisible(true);
+
+		int num = ((PartitionAnnotations) data.getTopaliAnnotations()
+				.getAnnotations(PartitionAnnotations.class)).countRegions();
+
+//		List<Annotation> list = data.getAnnotations().getAnnotations(PartitionAnnotation.class);
+//		int num = list.size();
+
 		if (num == 1)
 			MsgBox.msg(Text.get("AutoPartitionDialog.msg01"),
 					MsgBox.INF);
 		else
 			MsgBox.msg(Text.get("AutoPartitionDialog.msg02", num), MsgBox.INF);
-		
-		WinMain.annoDialog.refresh();
-		WinMain.annoDialog.setLocationRelativeTo(TOPALi.winMain);
-		WinMain.annoDialog.setVisible(true);
+
+//		WinMain.annoDialog.refresh();
+//		WinMain.annoDialog.setLocationRelativeTo(TOPALi.winMain);
+//		WinMain.annoDialog.setVisible(true);
 	}
 }
