@@ -26,15 +26,21 @@ public class LRTWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			LRTResult result = (LRTResult) Castor.unmarshall(resultXML);
+
 			try
 			{
 				checkJob(ss);
-			} catch (RejectedExecutionException e)
+
+				if (result.runs > 501)
+					throw new RejectedExecutionException("The maximum number of "
+						+ "bootstrap runs for a remote LRT job is limited to 500");
+
+			}
+			catch (RejectedExecutionException e)
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
-			LRTResult result = (LRTResult) Castor.unmarshall(resultXML);
 
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
@@ -54,7 +60,7 @@ public class LRTWebService extends WebService
 		}
 	}
 
-	
+
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
 		try
