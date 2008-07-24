@@ -18,19 +18,19 @@ import topali.var.utils.Utils;
  * @author  dlindn
  */
 public class BranchModelPanel extends javax.swing.JPanel implements WindowListener{
-    
+
 	String h0;
 	public DefaultListModel model = new DefaultListModel();
 	public ATV atv;
-	
+
 	CMLBranchDialog parent;
-	
+
     /** Creates new form BranchModelPanel */
     public BranchModelPanel(CMLBranchDialog parent) {
     	this.parent = parent;
         initComponents();
         hypolist.setModel(model);
-        
+
         if(parent.result!=null) {
         	for(int i=0; i<parent.result.hypos.size(); i++) {
         		if(i==0) {
@@ -46,12 +46,12 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
         	}
         }
     }
-    
+
     public void setH0(String tree) {
     	h0 = tree;
     	model.addElement(tree);
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -66,7 +66,7 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
         remove = new javax.swing.JButton();
         add = new javax.swing.JButton();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Hypothesis"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Hypotheses"));
 
         hypolist.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -146,13 +146,13 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
     	remove.setEnabled(false);
 		parent.bRun.setEnabled(false);
     }
-    
+
     private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
     	int i = hypolist.getSelectedIndex();
     	if(i>0) {
     		model.remove(i);
     	}
-    	
+
     	if(model.getSize()<2) {
     		remove.setEnabled(false);
     		parent.bRun.setEnabled(false);
@@ -163,10 +163,10 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
     	atv = new ATV(h0, parent.data.getName(), parent.winMain, this);
     	atv.start();
 		//SwingUtilities.invokeLater(atv);
-    	
+
     }//GEN-LAST:event_addActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JList hypolist;
@@ -175,19 +175,19 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
     private javax.swing.JButton remove;
     // End of variables declaration//GEN-END:variables
 
-	
+
 	public void windowActivated(WindowEvent e)
-	{	
+	{
 	}
 
-	
+
 	public void windowClosed(WindowEvent e)
-	{	
+	{
 		String tree = atv.getTree();
 		tree = tree.replaceAll("_#", " #");
 		if(!model.contains(tree))
 			model.addElement(tree);
-		
+
 		if(model.getSize()>1) {
     		remove.setEnabled(true);
     		parent.bRun.setEnabled(true);
@@ -195,31 +195,31 @@ public class BranchModelPanel extends javax.swing.JPanel implements WindowListen
 		atv = null;
 	}
 
-	
+
 	public void windowClosing(WindowEvent e)
-	{	
+	{
 	}
 
-	
+
 	public void windowDeactivated(WindowEvent e)
-	{	
+	{
 	}
 
-	
+
 	public void windowDeiconified(WindowEvent e)
-	{	
+	{
 	}
 
-	
+
 	public void windowIconified(WindowEvent e)
-	{	
+	{
 	}
 
-	
+
 	public void windowOpened(WindowEvent e)
 	{
-		
+
 	}
-    
-    
+
+
 }

@@ -31,10 +31,9 @@ public class AnalysisInfoDialog extends JDialog implements ActionListener
 		add(createControls());
 		getRootPane().setDefaultButton(bClose);
 		Utils.addCloseHandler(this, bClose);
-		;
 
 		setSize(500, 375);
-		setResizable(false);
+//		setResizable(false);
 		setLocationRelativeTo(TOPALi.winMain);
 	}
 
