@@ -26,7 +26,7 @@ public class CodeMLJobEntry extends JobsPanelEntry
 	@Override
 	public JComponent getProgressComponent()
 	{
-		progressLabel = new JLabel("Completed models/hypothesis: ",
+		progressLabel = new JLabel("Completed models/hypotheses: ",
 				SwingConstants.LEFT);
 
 		JPanel p = new JPanel(new BorderLayout());
@@ -45,7 +45,7 @@ public class CodeMLJobEntry extends JobsPanelEntry
 		if (status.text == null)
 			return;
 
-		String str = "<html>Completed models/hypothesis:&nbsp;&nbsp; ";
+		String str = "<html>Completed models/hypotheses:&nbsp;&nbsp; ";
 
 		StringTokenizer tok = new StringTokenizer(status.text, " ");
 		while (tok.hasMoreElements())

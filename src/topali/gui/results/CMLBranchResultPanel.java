@@ -74,7 +74,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		CodeMLResult result = (CodeMLResult) super.result;
 
 		JPanel p = new JPanel();
-		JLabel l0 = new JLabel("Hypothesis tested (click to view):");
+		JLabel l0 = new JLabel("Hypotheses tested (click to view):");
 	//	l0.setBackground(Color.WHITE);
 		p.add(l0);
 		p.setBorder(BorderFactory.createTitledBorder(""));
@@ -106,9 +106,9 @@ public class CMLBranchResultPanel extends ResultPanel
 		CodeMLResult result = (CodeMLResult) super.result;
 
 		Vector<String> tt = new Vector<String>();
-		
+
 		Vector<String> names = new Vector<String>();
-		names.add("Hypothesis");
+		names.add("Hypotheses");
 		tt.add(null);
 		int n = 0;
 		for (CMLHypothesis hypo : result.hypos)
@@ -279,7 +279,7 @@ public class CMLBranchResultPanel extends ResultPanel
 		return sb.toString();
 	}
 
-	
+
 	public String getAnalysisInfo()
 	{
 		CodeMLResult res = (CodeMLResult) result;
@@ -290,7 +290,7 @@ public class CMLBranchResultPanel extends ResultPanel
 
 		sb.append("Analysis type: Branch model\n\n");
 
-		sb.append("Hypothesis tested:\n\n");
+		sb.append("Hypotheses tested:\n\n");
 		for (int i = 0; i < res.hypos.size(); i++)
 		{
 			sb.append("Hypothesis H" + i + "\n");
@@ -317,13 +317,13 @@ public class CMLBranchResultPanel extends ResultPanel
 		return sb.toString();
 	}
 
-	
+
 	public void setThreshold(double t)
 	{
 		// There is no threshold to set
 	}
 
-	
+
 	public Printable[] getPrintables()
 	{
 		Printable[] p = new Printable[2];

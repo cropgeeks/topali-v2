@@ -817,7 +817,7 @@ public class WinMainMenuBar extends JMenuBar
 		h1.add(mAnlsRunLRT);
 //		mAnls.addSeparator();
 		JMenu h2 = new JMenu(Text.get("mSelection"));
-		h2.setMnemonic(KeyEvent.VK_L);
+		h2.setMnemonic(KeyEvent.VK_P);
 		h2.setIcon(getIcon(Icons.POSSELECTION));
 		mAnls.add(h2);
 		h2.add(mAnlsRunCodeMLSite);
@@ -826,7 +826,7 @@ public class WinMainMenuBar extends JMenuBar
 
 		// Phylogenetics submenu
 		JMenu mPhylo = new JMenu(Text.get("mPhylo"));
-		mPhylo.setMnemonic(KeyEvent.VK_P);
+		mPhylo.setMnemonic(KeyEvent.VK_G);
 		mPhylo.setIcon(getIcon(Icons.TREE));
 		mAnls.add(mPhylo);
 

@@ -75,8 +75,8 @@ public class MrBayesCDNADialog extends JDialog implements ActionListener
 		int runNum = data.getTracker().getTreeRunCount() + 1;
 		data.getTracker().setTreeRunCount(runNum);
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
-		result.guiName = "#"+runNum+" Tree (MrBayes CDNA)";
-		result.jobName = "MrBayes CDNA Tree Estimation";
+		result.guiName = "#"+runNum+" Tree (MrBayes CP)";
+		result.jobName = "MrBayes Codon Position Model Tree Estimation";
 
 		result.selectedSeqs = data.getSequenceSet().getSelectedSequenceSafeNames();
 
