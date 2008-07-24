@@ -101,7 +101,7 @@ public class SequenceSetProperties
 		return isAligned;
 	}
 
-	public void isAligned(boolean isAligned)
+	public void setIsAligned(boolean isAligned)
 	{
 		this.isAligned = isAligned;
 	}

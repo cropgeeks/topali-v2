@@ -22,30 +22,30 @@ public class MakeNA
 
 	private SequenceSet dna = null, pro = null;
 	private String name;
-	
+
 	private AlignmentData data;
-	
+
 	public MakeNA(File dnaFile, File proFile) throws AlignmentLoadException
-	{	
+	{
 		dna = new SequenceSet(dnaFile, false);
-		pro = new SequenceSet(proFile, false);
+		pro = new SequenceSet(proFile, true);
 		name = createName(dnaFile.getName());
 	}
-	
+
 	public MakeNA(SequenceSet dna, SequenceSet pro, String name) {
 		this.dna = dna;
 		this.pro = pro;
 		this.name = name;
 	}
-	
+
 	public boolean doConversion() {
 		return doConversion(true);
 	}
-	
+
 	public boolean doConversion(boolean showMessages) {
 		return doConversion(showMessages, null);
 	}
-	
+
 	public boolean doConversion(boolean showMessages, AssociationMap<Object> map)
 	{
 		//SequenceSet newSS = new SequenceSet();
@@ -98,9 +98,9 @@ public class MakeNA
 				+ "3x the protein length.\n(DNA length is "
 				+ dnaBuf.length() + ", protein length (minus gaps) is "
 				+ gaplessCount + ")";
-				
+
 				log.warn(msg);
-				
+
 				if(showMessages)
 					MsgBox.msg(msg, MsgBox.ERR);
 				return false;
@@ -131,8 +131,8 @@ public class MakeNA
 			// And add it to the dataset
 			dnaSeq.setSequence(seqBuf.toString());
 			//newSS.addSequence(newSequence);
-			
-			if(map!=null) 
+
+			if(map!=null)
 				//map.put(newSequence, proSeq);
 				map.put(dnaSeq, proSeq);
 		}
@@ -182,9 +182,9 @@ public class MakeNA
 
 		return name;
 	}
-	
+
 	public AlignmentData getAlignmentData() {
 		return this.data;
 	}
-	
+
 }

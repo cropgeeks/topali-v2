@@ -97,6 +97,8 @@ public class SequenceSet extends DataObject
 	{
 		this();
 
+		props.setIsAligned(isAligned);
+
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
