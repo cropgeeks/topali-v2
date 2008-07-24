@@ -20,30 +20,30 @@ import topali.var.utils.Utils;
  * @author  dlindn
  */
 public class AdvancedMrBayes extends javax.swing.JPanel {
-    
+
 	AlignmentData data;
 	SequenceSet ss;
 	MBTreeResult result;
-	
+
     /** Creates new form AdvancedMrBayes */
     public AdvancedMrBayes(AlignmentData data) {
     	this.data = data;
     	this.ss = data.getSequenceSet();
 	this.result = new MBTreeResult();
-		
+
         initComponents();
         initValues();
-        
+
     }
-    
+
     public void initValues() {
 		SequenceSetProperties params = ss.getProps();
-		
+
 		List<Model> mlist = ModelManager.getInstance().listMrBayesModels(ss.getProps().isNucleotides());
 		String[] models = new String[mlist.size()];
 		for(int i=0; i<mlist.size(); i++)
 			models[i] = mlist.get(i).getName();
-		
+
 		ComboBoxModel cm = new DefaultComboBoxModel(models);
 		this.subModel.setModel(cm);
 
@@ -54,65 +54,65 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 			else
 				m = ModelManager.getInstance().generateModel(Prefs.mb_default_proteinmodel, m.isGamma(), m.isInv());
 		}
-		
+
 		this.subModel.setSelectedItem(m.getName());
-		
+
 		this.gamma.setSelected(params.getModel().isGamma());
 		this.inv.setSelected(params.getModel().isInv());
-		
+
 		SpinnerNumberModel mNRuns = new SpinnerNumberModel(Prefs.mb_runs, 1, 5, 1);
 		this.nRuns.setModel(mNRuns);
-		
-		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens, 10000, 500000, 10000);
+
+		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens, 10000, 1000000, 10000);
 		this.nGen.setModel(mNGen);
-		
+
 		SpinnerNumberModel mFreq = new SpinnerNumberModel(Prefs.mb_samplefreq, 1, 1000, 1);
 		this.samFreq.setModel(mFreq);
-		
+
 		SpinnerNumberModel mBurn = new SpinnerNumberModel(Prefs.mb_burnin, 1, 99, 1);
 		this.burnin.setModel(mBurn);
 	}
-    
+
     public void setDefaults() {
     	String model;
     	if(ss.getProps().isNucleotides())
     		model = Prefs.mb_default_dnamodel;
     	else
     		model = Prefs.mb_default_proteinmodel;
-    	
+
     	this.subModel.setSelectedItem(model);
-    	
+
     	this.gamma.setSelected(Prefs.mb_default_model_gamma);
 		this.inv.setSelected(Prefs.mb_default_model_inv);
-		
+
     	SpinnerNumberModel mNRuns = new SpinnerNumberModel(Prefs.mb_runs_default, 1, 5, 1);
 		this.nRuns.setModel(mNRuns);
-		
-		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens_default, 10000, 500000, 10000);
+
+		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens_default, 10000, 1000000, 10000);
 		this.nGen.setModel(mNGen);
-		
+
 		SpinnerNumberModel mFreq = new SpinnerNumberModel(Prefs.mb_samplefreq_default, 1, 1000, 1);
 		this.samFreq.setModel(mFreq);
-		
+
 		SpinnerNumberModel mBurn = new SpinnerNumberModel(Prefs.mb_burnin_default, 1, 99, 1);
 		this.burnin.setModel(mBurn);
     }
-    
+
     public void initPrevResult(MBTreeResult res) {
     	this.nRuns.setValue(res.nRuns);
     	this.nGen.setValue(res.nGen);
     	this.burnin.setValue((int)(res.burnin*100));
     	this.samFreq.setValue(res.sampleFreq);
     }
-    
+
     public MBTreeResult onOK() {
-		
+
 		String name = (String)subModel.getSelectedItem();
 		boolean g = gamma.isSelected();
 		boolean i = inv.isSelected();
-		
+
 		ss.getProps().setModel(ModelManager.getInstance().generateModel(name, g, i));
-		
+
 		int length = data.getActiveRegionE()-data.getActiveRegionS()+1;
 		MBPartition p = new MBPartition("1-"+length, "part", ModelManager.getInstance().generateModel(name, g, i));
 		result.partitions.add(p);
@@ -120,15 +120,15 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
 		result.burnin = ((Integer)burnin.getValue()).doubleValue()/100d;
 		result.nGen = (Integer)nGen.getValue();
 		result.sampleFreq = (Integer)samFreq.getValue();
-		
+
 		Prefs.mb_runs = result.nRuns;
 		Prefs.mb_burnin = (Integer)burnin.getValue();
 		Prefs.mb_gens = result.nGen;
 		Prefs.mb_samplefreq = result.sampleFreq;
-		
+
 		return result;
 	}
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -296,8 +296,8 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner burnin;
     private javax.swing.JCheckBox gamma;
@@ -317,5 +317,5 @@ public class AdvancedMrBayes extends javax.swing.JPanel {
     private javax.swing.JSpinner samFreq;
     private javax.swing.JComboBox subModel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

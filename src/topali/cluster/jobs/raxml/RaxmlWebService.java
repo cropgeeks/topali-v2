@@ -18,23 +18,29 @@ import topali.fileio.Castor;
 public class RaxmlWebService extends WebService
 {
 	RaxmlMonitor monitor;
-	
+
 	public String submit(String alignmentXML, String resultXML) throws AxisFault {
 		try
 		{
 			String jobId = getJobId();
 			File jobDir = new File(getParameter("job-dir"), jobId);
-					
+
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			RaxmlResult result = (RaxmlResult) Castor.unmarshall(resultXML);
+
 			try
 			{
 				checkJob(ss);
-			} catch (RejectedExecutionException e)
+
+				if (result.bootstrap > 101)
+					throw new RejectedExecutionException("The maximum number of "
+						+ "bootstrap runs for a remote RaxML job is limited to 100");
+
+			}
+			catch (RejectedExecutionException e)
 			{
 				throw AxisFault.makeFault(e);
 			}
-			
-			RaxmlResult result = (RaxmlResult) Castor.unmarshall(resultXML);
 
 			if(ClusterUtils.isWindows) {
 				result.raxmlPath = binPath + "\\raxml.exe";
@@ -44,15 +50,15 @@ public class RaxmlWebService extends WebService
 				//phyml's sometimes not executable
 				Runtime.getRuntime().exec("chmod +x " + result.raxmlPath);
 			}
-			
+
 			result.tmpDir = getParameter("tmp-dir");
 			result.jobId = jobId;
-			
+
 			// We put the starting of the job into its own thread so the web
 			// service can return as soon as possible
 			RaxmlInitializer init = new RaxmlInitializer(jobDir, ss, result);
 			init.start();
-			
+
 			accessLog.info("RaxML request from " + jobId);
 			logger.info(jobId + " - RaxML request received");
 			return jobId;
@@ -60,17 +66,17 @@ public class RaxmlWebService extends WebService
 		{
 			logger.log(Level.ERROR, e.getMessage(), e);
 			throw AxisFault.makeFault(e);
-		} 
+		}
 	}
-	
-	
+
+
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
 		try
 		{
 			if(monitor==null)
 				monitor = new RaxmlMonitor(jobDir);
-			
+
 			return monitor.getPercentageComplete();
 		} catch (Exception e)
 		{
@@ -87,7 +93,7 @@ public class RaxmlWebService extends WebService
 				File jobDir = new File(getParameter("job-dir"), jobId);
 				monitor = new RaxmlMonitor(jobDir);
 			}
-			
+
 			RaxmlResult result = monitor.getResult();
 
 			logger.info(jobId + " -  returning result");
@@ -99,7 +105,7 @@ public class RaxmlWebService extends WebService
 			throw AxisFault.makeFault(e);
 		}
 	}
-	
+
 	/*
 	 * Creates the script that each instance of a job running on the cluster
 	 * calls to execute that job. In this case, a java command to run a
@@ -123,5 +129,5 @@ public class RaxmlWebService extends WebService
 		logger.info(jobDir.getName() + " - submitting to cluster");
 		submitJob("raxml.sh", jobDir);
 	}
-	
+
 }

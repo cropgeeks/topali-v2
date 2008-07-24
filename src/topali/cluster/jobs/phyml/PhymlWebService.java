@@ -27,15 +27,21 @@ public class PhymlWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			PhymlResult result = (PhymlResult) Castor.unmarshall(resultXML);
+
 			try
 			{
 				checkJob(ss);
-			} catch (RejectedExecutionException e)
+
+				if (result.bootstrap > 101)
+					throw new RejectedExecutionException("The maximum number of "
+						+ "bootstrap runs for a remote PhyML job is limited to 100");
+
+			}
+			catch (RejectedExecutionException e)
 			{
 				throw AxisFault.makeFault(e);
 			}
-
-			PhymlResult result = (PhymlResult) Castor.unmarshall(resultXML);
 
 			result.phymlPath = binPath + "/src/phyml/phyml_linux";
 			result.tmpDir = getParameter("tmp-dir");
@@ -58,7 +64,7 @@ public class PhymlWebService extends WebService
 		}
 	}
 
-	
+
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
 		try

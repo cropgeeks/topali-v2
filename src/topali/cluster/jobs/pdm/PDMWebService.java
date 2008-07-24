@@ -26,15 +26,20 @@ public class PDMWebService extends WebService
 			File jobDir = new File(getParameter("job-dir"), jobId);
 
 			SequenceSet ss = (SequenceSet) Castor.unmarshall(alignmentXML);
+			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
+
 			try
 			{
 				checkJob(ss);
-			} catch (RejectedExecutionException e)
+
+				if (result.pdm_runs > 101)
+					throw new RejectedExecutionException("The maximum number of "
+						+ "bootstrap runs for a remote PDM job is limited to 100");
+			}
+			catch (RejectedExecutionException e)
 			{
 				throw AxisFault.makeFault(e);
 			}
-
-			PDMResult result = (PDMResult) Castor.unmarshall(resultXML);
 
 			result.bambePath = binPath + "/src/bambe/bambe";
 			result.treeDistPath = binPath + "/src/treedist/treedist";
@@ -59,7 +64,7 @@ public class PDMWebService extends WebService
 		}
 	}
 
-	
+
 	protected JobStatus getPercentageComplete(File jobDir) throws AxisFault
 	{
 		try

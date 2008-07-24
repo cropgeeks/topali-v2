@@ -321,7 +321,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
         baseFreqGroups.setText("(0000)");
         baseFreqGroups.setToolTipText("A | C | G | T");
 
-        jLabel13.setText("Rate Heterogeneity (\\u0393):");
+        jLabel13.setText("Rate Heterogeneity (\u0393):");
 
         jLabel14.setText("Proportion of Invariant Sites:");
 
@@ -385,7 +385,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 
         jLabel1.setText("Scores:");
 
-        scores.setText("\\u2113=; AIC\\u2081=; AIC\\u2082=; BIC=");
+        scores.setText("\\u2113=; AIC\u2081=; AIC\\u2082=; BIC=");
         scores.setToolTipText("Model Test Scores");
 
         calcpara.setText("(df=; n=)");
@@ -395,7 +395,7 @@ public class ModelInfoPanel extends JPanel implements MouseListener {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel11.setForeground(new java.awt.Color(0, 0, 160));
-        jLabel11.setText("\\u0393");
+        jLabel11.setText("\u0393");
 
         jLabel7.setText(",");
 
