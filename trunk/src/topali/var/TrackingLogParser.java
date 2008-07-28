@@ -212,7 +212,7 @@ public class TrackingLogParser
 
 			while (str != null)
 			{
-				if (str.indexOf("- OPEN -") != -1)
+				if (str.indexOf("- OPEN -") != -1 && str.indexOf("DEVELOPMENT") == -1)
 					System.out.println(str);
 
 				str = in.readLine();
