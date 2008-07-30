@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>Analysis Settings</title
+</title>
+
+<body>
+
+<h1>Analysis Settings</h1>
+
+<p>The <b>Analysis Settings</b> dialog contains globally-applied settings that
+relate to various options used by TOPALi while running analyses.</p>
+
+<p><b>Web/Cluster:</b><br>
+<ul>
+<li><b>TOPALi web services</b> - holds the location of the remote TOPALi
+analysis server that jobs will be submitted to.</li>
+<li><b>Check job progress every</b> - specifies the time in seconds between
+status checks of jobs' progress (both local and remote).</li>
+<li><b>Check for updated versions of TOPALi at program startup</b> - if selected,
+will cause TOPALi to connect to the internet and query for newer versions each
+time the program is loaded.</li>
+<li><b>Use a proxy server for all web connections</b> - if selected, ensures
+that all internet requests made by TOPALi are redirected via the specified proxy
+server. If NTLM (domain) authentication is required, it can be used by entering
+the username in the form "DOMAIN\username" into the <b>Username</b> field.
+</ul>
+</p>
+
+<p><b>Local Job Settings:</b><br>
+<ul>
+<li><b>TOPALi temporary working directory</b> - lists how much disk space
+TOPALi has used for running local jobs. The files can be deleted by pressing the
+<b>Clear</b> button.</li>
+<li><b>Maximum number of CPU/Cores to use for local jobs</b> - specifies how
+many concurrent threads will be run together for local jobs. A higher number 
+will result in faster job completion (for analysis jobs that can be run in
+parallel) but will leave little resource for other non TOPALi tasks your PC is
+running.</li>
+</ul>
+Note that neither of the above two settings are available for modification if
+TOPALi is currently running locally submitted jobs.
+</p>
+
+
+</body>
+</html>

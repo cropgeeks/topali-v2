@@ -1,0 +1,171 @@
+<project name="TOPALi" default="jar" basedir=".">
+ 
+	<description>TOPALi v2 Ant Build Script</description>
+
+	<!-- Load in user-specific properties from build.properties -->
+	<!-- To override the filename use, 'ant -Dprops=file.properties' -->
+	<property name="props" value="build.scri-testing.properties"/>
+	<property file="${props}"/>
+
+	<property name="src" location="src"/>
+	<property name="res" location="res"/>
+	<property name="lib" location="lib"/>
+	<property name="binaries"  location="binaries"/>
+	<property name="classes"   location="classes"/>
+	<property name="config"    location="config"/>
+	<property name="lib-devel" location="lib-devel"/>
+
+	<property name="build.root"     location="build"/>
+	<property name="build.classes"  location="${build.root}/classes"/>
+	<property name="build.web-inf"  location="${build.root}/WEB-INF"/>
+	<property name="build.binaries" location="${build.web-inf}/binaries"/>
+	<property name="build.cluster"  location="${build.web-inf}/cluster"/>
+
+	<!-- The two main results from building - TOPALi, and a WAR for Tomcat -->
+	<property name="jarfile" value="topali.jar"/>
+	<property name="build.warfile" location="${build.root}/topali.war"/>
+
+
+	<target name="init">
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${build.web-inf}"/>
+		<mkdir dir="${build.binaries}"/>
+		<mkdir dir="${build.cluster}"/>
+	</target>
+
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+			<exclude name="**/${jarfile}"/>
+		</fileset>
+		<fileset dir="${lib-devel}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<taskdef name="undeploy" classpathref="project.classpath"
+		classname="org.apache.catalina.ant.UndeployTask"/>
+	<taskdef name="deploy"   classpathref="project.classpath"
+		classname="org.apache.catalina.ant.DeployTask"/>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${classes}" source="1.5" target="1.5">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${lib}/${jarfile}">
+			<fileset dir="${classes}"/>
+			<zipfileset dir="${res}" prefix="res"/>
+			<manifest>
+				<attribute name="Main-Class" value="topali.gui.TOPALi"/>
+				<attribute name="Class-Path"
+					value="res
+						axis.jar
+						commons-codec-1.3.jar
+						castor-1.1-cycle-xml.jar
+						commons-discovery-0.2.jar
+						commons-httpclient-3.0.jar
+						commons-logging-1.0.4.jar
+						forester.jar
+						i4jruntime.jar
+						jaxrpc.jar
+						jcommon-1.0.0.jar
+						jfreechart-1.0.1.jar
+						jh.jar
+						log4j-1.2.8.jar
+						office-2.0.jar
+						osxadapter.jar
+						pal.jar
+						saaj.jar
+						scri-commons.jar
+						swing-layout-1.0.3.jar
+						vamsas-client.jar"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="templates">
+		<copy
+			file="${config}/cluster/cluster.properties.template"
+			tofile="${build.cluster}/cluster.properties"
+			overwrite="true">
+			<filterset>
+				<filter token="JAVAPATH" value="${user.java.path}"/>
+				<filter token="JOBDIR" value="${user.job.dir}"/>
+				<filter token="TMPDIR" value="${user.tmp.dir}"/>
+				<filter token="TOPALIDIR" value="${user.topali.dir}"/>
+			</filterset>
+		</copy>
+		<copy
+			file="${config}/server.log4j.properties.template"
+			tofile="${build.classes}/log4j.properties"
+			overwrite="true">
+			<filterset>
+				<filter token="LOGDIR" value="${user.logging.dir}"/>
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="war" depends="clean, jar, templates">
+		<copy file="${config}/web.xml" todir="${build.web-inf}"/>
+		<copy file="${config}/server-config.wsdd" todir="${build.web-inf}"/>
+		<copy todir="${build.cluster}">
+			<fileset dir="${user.cluster.dir}"/>
+		</copy>
+		<copy todir="${build.binaries}">
+			<fileset dir="${binaries}"/>
+		</copy>
+
+		<war destfile="${build.warfile}" update="false" >
+			<lib dir="${lib}"/>
+			<webinf dir="${build.web-inf}"/>
+			<classes dir="${build.classes}"/>
+			<fileset file="www/tracking.jsp"/>
+			<fileset file="www/version.txt"/>
+		</war>
+	</target>
+
+	<target name="clone" depends="war">
+		<unzip src="${build.warfile}" dest="${user.topali.dir}"/>
+	</target>
+
+	<target name="undeploy">
+		<undeploy url="${user.manager.url}"
+			username="${user.manager.username}" password="${user.manager.password}"
+			path="${user.url.path}"/>
+	</target>
+
+	<target name="deploy" depends="war">
+		<deploy url="${user.manager.url}"
+			username="${user.manager.username}" password="${user.manager.password}"
+			path="${user.url.path}" war="${build.warfile}"/>
+	</target>
+
+	<target name="update" depends="undeploy, deploy"></target>
+
+	<target name="clean">
+		<delete dir="${build.root}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${topali.jar}"/>
+		</delete>
+	</target>
+	
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="C:\Java\Apps\install4j\bin\ant.jar"/>
+		
+		<delete>
+			<fileset dir="install" includes="**/*.exe"/>
+			<fileset dir="install" includes="**/*.sh"/>
+			<fileset dir="install" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="install/InstallTOPALi V2.install4j" release="${version}"/>
+	</target>
+
+</project>
