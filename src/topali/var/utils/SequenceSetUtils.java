@@ -731,39 +731,46 @@ public class SequenceSetUtils
 		return result;
 	}
 
-	public static Sequence translate(Sequence seq, List<Annotation> annos) {
+	public static Sequence translate(Sequence seq, int start, int end)
+	{
 		Sequence trans = new Sequence(seq.getName());
 		StringBuffer transBuffer = trans.getBuffer();
-		String seqString = seq.getPartition(annos);
-		for(int i=0; i<seqString.length(); i+=3) {
+		String seqString = seq.getPartition(start, end);
+
+		for(int i=0; i<seqString.length(); i+=3)
+		{
 			String codon = seqString.substring(i, (i+3));
 			codon = codon.replaceAll("T", "U");
+
 			if(codon.equals("---"))
 				transBuffer.append('-');
-			else {
+			else
+			{
 				String aa = geneticCode.get(codon);
+
 				if(aa!=null)
 					transBuffer.append(aa);
 				else
 					transBuffer.append("?");
 			}
 		}
+
 		return trans;
 	}
 
-	public static SequenceSet translate(SequenceSet ss, List<Annotation> annos, boolean justSel) {
+	public static SequenceSet translate(SequenceSet ss, int start, int end, boolean justSel) {
 		SequenceSet trans = new SequenceSet();
 		if(justSel) {
 			int[] selSeqs = ss.getSelectedSequences();
 			for(int i=0; i<selSeqs.length; i++) {
-				Sequence transSeq = translate(ss.getSequence(selSeqs[i]), annos);
+				Sequence transSeq = translate(ss.getSequence(selSeqs[i]), start, end);
 				if(transSeq!=null)
 					trans.addSequence(transSeq);
 			}
 		}
 		else {
 			for(Sequence seq : ss.getSequences()) {
-				Sequence transSeq = translate(seq, annos);
+				Sequence transSeq = translate(seq, start, end);
 				if(transSeq!=null)
 					trans.addSequence(transSeq);
 			}

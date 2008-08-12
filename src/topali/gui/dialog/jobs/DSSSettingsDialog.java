@@ -104,7 +104,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		result.window = Prefs.dss_window;
 		result.treeToolTipWindow = Prefs.dss_window;
 		result.step = Prefs.dss_step;
-		result.type = Prefs.dss_varwindow ? DSSResult.TYPE_VARIABLE : DSSResult.TYPE_FIXED;
+		result.type = Prefs.dss_var_window ? DSSResult.TYPE_VARIABLE : DSSResult.TYPE_FIXED;
 		result.runs = Prefs.dss_runs + 1;
 
 		result.method = Prefs.dss_method;
@@ -176,7 +176,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 
 		BasicPanel()
 		{
-		    int varWindow = Prefs.dss_varwindow ? 1 : 0;
+		    int varWindow = Prefs.dss_var_window ? 1 : 0;
 			slidePanel = new SlidePanel(data, Prefs.dss_window, Prefs.dss_step, varWindow);
 
 			DoeLayout layout = new DoeLayout();
@@ -192,7 +192,7 @@ public class DSSSettingsDialog extends JDialog implements ActionListener
 		{
 			Prefs.dss_window = slidePanel.getWindowSize();
 			Prefs.dss_step = slidePanel.getStepSize();
-			Prefs.dss_varwindow = slidePanel.getVarWinSize();
+			Prefs.dss_var_window = slidePanel.getVarWinSize();
 		}
 	}
 

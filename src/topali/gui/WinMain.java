@@ -695,6 +695,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public void menuAnlsMrBayes(TreeResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
+
 		MrBayesDialog dlg = new MrBayesDialog(this, data, result);
 
 		MBTreeResult res = dlg.getResult();
@@ -706,6 +707,16 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	public void menuAnlsMrBayesCDNA(TreeResult result)
 	{
 		AlignmentData data = navPanel.getCurrentAlignmentData();
+
+		System.out.println("data.getSequenceSet().getProps().isProtein() = " + data.getSequenceSet().getProps().isProtein());
+		System.out.println("data.getSequenceSet().getProps().isDNA() = " + data.getSequenceSet().getProps().isNucleotides());
+
+		if (data.getSequenceSet().getProps().isProtein())
+		{
+			scri.commons.gui.TaskDialog.error("This analysis method is only available for protein-coding DNA.", "Close");
+			return;
+		}
+
 		MrBayesCDNADialog dlg = new MrBayesCDNADialog(this, data, result);
 
 		MBTreeResult res = dlg.getResult();
@@ -737,6 +748,12 @@ public class WinMain extends JFrame implements PropertyChangeListener
 		}
 		else
 		{
+			if (data.getSequenceSet().getProps().isProtein())
+			{
+				scri.commons.gui.TaskDialog.error("This analysis method is only available for protein-coding DNA.", "Close");
+				return;
+			}
+
 			RaxmlCDNADialog dlg = new RaxmlCDNADialog(this, data, result);
 			res = dlg.getResult();
 		}

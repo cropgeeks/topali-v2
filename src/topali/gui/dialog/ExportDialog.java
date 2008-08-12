@@ -166,11 +166,19 @@ public class ExportDialog extends JDialog implements ActionListener
 				rTranslate.setEnabled(true);
 			else
 				rTranslate.setEnabled(false);
+
+			// Extra check so we DON'T (yet) have to deal with a concatenation
+			// AND a translation
+			if (regions.length > 1)
+				rTranslate.setEnabled(false);
 		}
 		else if(rSelPar.isSelected()) {
 			if(ss.getProps().isNucleotides() && countConcatenatedLength()%3==0)
 				rTranslate.setEnabled(true);
 			else
+				rTranslate.setEnabled(false);
+
+			if (regions.length > 1)
 				rTranslate.setEnabled(false);
 		}
 	}
@@ -241,14 +249,22 @@ public class ExportDialog extends JDialog implements ActionListener
 			seqs = ss.getSelectedSequences();
 
 // TODO: imilne - 2008-07-11
-/*		if(rTranslate.isSelected()) {
+		if(rTranslate.isSelected()) {
 			AlignmentData trans = new AlignmentData();
 			trans.setName(data.getName()+"_translated");
 			SequenceSet transs;
-			if(rSelPar.isSelected())
-				transs = SequenceSetUtils.translate(ss, annos, rSelSeq.isSelected());
-			else
-				transs = SequenceSetUtils.translate(ss, null, rSelSeq.isSelected());
+
+//			if(rSelPar.isSelected())
+//				transs = SequenceSetUtils.translate(ss, annos, rSelSeq.isSelected());
+//			else
+//				transs = SequenceSetUtils.translate(ss, null, rSelSeq.isSelected());
+
+			RegionAnnotations.Region region = annotations.get(regions[0]);
+			int start = region.getS();
+			int end = region.getE();
+
+			transs = SequenceSetUtils.translate(ss, start, end, rSelSeq.isSelected());
+
 			try {
 				transs.checkValidity();
 				trans.setSequenceSet(transs);
@@ -260,7 +276,7 @@ public class ExportDialog extends JDialog implements ActionListener
 				return false;
 			}
 		}
-*/
+
 
 		// We recreate the alignment so it only contains the sequences and
 		// regions that
