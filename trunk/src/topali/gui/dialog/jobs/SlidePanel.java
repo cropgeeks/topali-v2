@@ -67,7 +67,7 @@ class SlidePanel extends JPanel
 				.getTextField());
 
 		label3 = new JLabel(Text.get("variable_window_size"));
-		label3.setDisplayedMnemonic(KeyEvent.VK_V);
+		label3.setDisplayedMnemonic(KeyEvent.VK_F);
 		label3.setLabelFor(variable);
 
 		DoeLayout layout = new DoeLayout();
@@ -80,10 +80,12 @@ class SlidePanel extends JPanel
 		layout.add(label2, 0, 1, 0, 1, new Insets(5, 15, 0, 5));
 		layout.add(winSpin, 1, 1, 1, 1, new Insets(5, 5, 0, 5));
 
-		if(varWinSize>=0) {
+		if(varWinSize>=0)
+		{
 		    variable.setSelected(varWinSize==1);
 		    layout.add(label3, 0, 2, 0, 1, new Insets(5, 15, 0, 5));
-		    layout.add(variable, 1, 2, 1, 1, new Insets(5, 5, 0, 5));
+		    layout.add(variable, 1, 2, 0, 1, new Insets(5, 5, 0, 5));
+		    layout.add(new JLabel("(size based on variable positions only)"), 2, 2, 1, 1, new Insets(5, 5, 0, 5));
 		}
 	}
 

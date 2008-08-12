@@ -145,12 +145,12 @@ public class Prefs extends XMLPreferences
 	public static int dss_window, dss_step, dss_runs;
 	public static int dss_power, dss_method, dss_pass_count;
 	public static double dss_gap_threshold;
-	public static boolean dss_varwindow;
+	public static boolean dss_var_window;
 
 	// LRT analysis run settings
 	public static int lrt_window, lrt_step, lrt_runs, lrt_method;
 	public static double lrt_gap_threshold;
-	public static boolean lrt_varwindow;
+	public static boolean lrt_var_window;
 
 	// Quick tree settings
 	public static int qt_bootstrap;
@@ -332,7 +332,7 @@ public class Prefs extends XMLPreferences
 		dss_method = topali.cluster.jobs.dss.analysis.DSS.METHOD_JC;
 		dss_pass_count = topali.cluster.jobs.dss.analysis.DSS.ONE_PASS;
 		dss_gap_threshold = 0.5;
-		dss_varwindow = true;
+		dss_var_window = false;
 	}
 
 	public static void setLRTDefaults()
@@ -342,7 +342,7 @@ public class Prefs extends XMLPreferences
 		lrt_runs = 100;
 		lrt_method = topali.cluster.jobs.lrt.analysis.LRT.METHOD_JC;
 		lrt_gap_threshold = 0.5;
-		lrt_varwindow = true;
+		lrt_var_window = false;
 	}
 
 	public static void setQTDefaults() {

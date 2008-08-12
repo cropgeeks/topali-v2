@@ -98,7 +98,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		result.window = Prefs.lrt_window;
 		result.treeToolTipWindow = Prefs.lrt_window;
 		result.step = Prefs.lrt_step;
-		result.type = Prefs.lrt_varwindow ? LRTResult.TYPE_VARIABLE : LRTResult.TYPE_FIXED;
+		result.type = Prefs.lrt_var_window ? LRTResult.TYPE_VARIABLE : LRTResult.TYPE_FIXED;
 		result.runs = Prefs.lrt_runs + 1;
 
 		result.method = Prefs.lrt_method;
@@ -163,7 +163,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 
 		BasicPanel()
 		{
-		    int varWindow = Prefs.lrt_varwindow ? 1 : 0;
+		    int varWindow = Prefs.lrt_var_window ? 1 : 0;
 			slidePanel = new SlidePanel(data, Prefs.lrt_window, Prefs.lrt_step, varWindow);
 
 			DoeLayout layout = new DoeLayout();
@@ -180,7 +180,7 @@ public class LRTSettingsDialog extends JDialog implements ActionListener
 		{
 			Prefs.lrt_window = slidePanel.getWindowSize();
 			Prefs.lrt_step = slidePanel.getStepSize();
-			Prefs.lrt_varwindow = slidePanel.getVarWinSize();
+			Prefs.lrt_var_window = slidePanel.getVarWinSize();
 		}
 	}
 
