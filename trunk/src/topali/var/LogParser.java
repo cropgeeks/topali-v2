@@ -124,8 +124,8 @@ public class LogParser
 		String ip;
 		String lastDate;
 
-		String country;
-		String countryCode;
+		String country = "---------";
+		String countryCode = "--";
 		int runCount;
 
 		User(String id, String locale, String os, String ip)
@@ -152,8 +152,13 @@ public class LogParser
 			String response = in.readLine();
 			in.close();
 
-			country = response.split("\t")[0];
-			countryCode = response.split("\t")[1];
+			// The database can't always identify a country from an IP...
+			try
+			{
+				country = response.split("\t")[0];
+				countryCode = response.split("\t")[1];
+			}
+			catch (Exception e) {}
 
 			System.out.println("\t" + country);
 		}
