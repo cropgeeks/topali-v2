@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"  ?>
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+            "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+<!--<tocitem text="Help" image="chapter" >-->
+<tocitem text="Introduction" target="intro" image="topic" />
+<tocitem text="TOPALi Overview" target="topali" image="topic" />
+<!--<tocitem text="Quickstart Guide" target="quickstart" image="topic" />-->
+
+<tocitem text="Licensing" target="license" image="topic" />
+<tocitem text="Privacy Policy" target="privacy" image="topic" />
+
+<tocitem text="Projects" target="projects" image="topic" />
+
+<tocitem text="Alignments" target="alignments" image="topic" >
+  <tocitem text="Importing Alignments" target="import_alignment" image="topic" />
+  <tocitem text="cDNA and Guide Protein" target="makena" image="topic" />
+  <tocitem text="Exporting Alignments" target="export_alignment" image="topic" />
+  <tocitem text="Viewing Alignments" target="view_alignment" image="topic" />
+  <tocitem text="Displaying Summary Information" target="summary_info" image="topic" />
+  <tocitem text="Phylogenetic Overviews" target="movie_dialog" image="topic" />
+  <tocitem text="Selecting Sequences" target="select_seqs" image="topic" />
+  <tocitem text="Reordering Sequences" target="reorder_seqs" image="topic" />
+  <tocitem text="Finding Sequences" target="find_sequence" image="topic" />
+  <tocitem text="Renaming Sequences" target="rename_sequence" image="topic" />
+  <tocitem text="View Specific Nucleotides" target="go_to_nucleotide" image="topic" />
+  <tocitem text="Partitioning" target="partitions_dialog" image="topic" />
+  <tocitem text="Auto Partitioning" target="auto_partition" image="topic" />
+  <tocitem text="Alignment Overviews" target="overview_dialog" image="topic" />
+  <tocitem text="Removing Alignments" target="remove_alignment" image="topic" />
+</tocitem>
+
+<tocitem text="Trees" target="trees" image="topic" />
+
+<tocitem text="Analysis Methods">
+  <tocitem text="Running Jobs Locally" target="local_jobs" image="topic" />
+  <tocitem text="Recombination Detection" expand="true">
+  	<tocitem text="The PDM Method" target="pdm_method" image="topic" />
+    <tocitem text="PDM Settings" target="pdm_settings" image="topic" />	
+  	<tocitem text="The HMM Method" target="hmm_method" image="topic" />
+    <tocitem text="HMM Settings" target="hmm_settings" image="topic" />	
+    <tocitem text="The DSS Method" target="dss_method" image="topic" />
+    <tocitem text="DSS Settings" target="dss_settings" image="topic" />
+    <tocitem text="The LRT Method" target="lrt_method" image="topic" />
+    <tocitem text="LRT Settings" target="lrt_settings" image="topic" />		
+  </tocitem>
+  <tocitem text="Positive Selection" expand="true">
+    <tocitem text="PAML/CodeML" target="paml" image="topic" />
+  	<tocitem text="CodeML site model settings" target="cmlsite_settings" image="topic" />
+    <tocitem text="CodeML branch model settings" target="cmlbranch_settings" image="topic" />		
+  </tocitem>
+  <tocitem text="Phylogenetic Trees" expand="true">
+    <tocitem text="Model Selection" target="modelselection" image="topic" />
+    <tocitem text="Tree Estimation" target="estimate_tree" expand="true">
+      <tocitem text="Quick Tree Estimation" target="f84gamma" image="topic" />
+      <tocitem text="Maximum Likelihood (using PhyML)" target="phyml" image="topic" />
+      <tocitem text="Bayesian phylogenetic analysis (using MrBayes)" target="mrbayes" image="topic" />
+      <tocitem text="cDNA bayesian phylogenetic analysis (using MrBayes)" target="cdnabayes" image="topic" />
+    </tocitem>
+  </tocitem>
+  <tocitem text="Coding Regions" expand="true">
+    <tocitem text="Check codon usage" target="codonw" image="topic" />
+  </tocitem>
+  <tocitem text="Ancestral sequence estimation" expand="true">
+    <tocitem text="FastML" target="fastml" image="topic" />
+  </tocitem>
+  <tocitem text="Detailed Job information" target="analysis_info" image="topic" />
+</tocitem>
+
+<tocitem text="Application Settings" >
+  <tocitem text="Display Settings" target="display_settings" image="topic" />
+  <tocitem text="Analysis Settings" target="settings" image="topic" />
+</tocitem>
+
+
+<!--</tocitem>-->
+</toc>

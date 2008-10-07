@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>TOPALi Overview</title
+</title>
+
+<body>
+
+<h1>TOPALi Overview</h1>
+
+<p>TOPALi was primarily designed to run statistical methods that detect likely points
+of recombination in DNA multiple alignments. Over time, it has grown to include the
+ability to carry out additional phylogenetic analyses and currently provides a complete
+environment for viewing and working with alignments and the results generated from them.</p>
+
+<p>TOPALi v2.5 expands upon TOPALi by allowing for the remote execution of many of these
+analyses jobs through the use of web services. High-performance Linux computing clusters
+located at the <b>University of Dundee</b> and the <b>Scottish Crop Research Institute</b> together
+provide over one hundred CPUs that are available for publically submitted jobs. TOPALi v2.5
+further improves upon v1's analyses by allowing the jobs to run in parallel where
+possible, significantly reducing the time required for a job to complete.</p>
+
+<p>TOPALi v2.5 allows the user to import and work with more than one alignment per TOPAli
+project. Each alignment forms the basis of a <i>dataset</i>, with each dataset being
+listed down the left-hand side of TOPALi's main window in an area referred to as the
+<i>Navigation Tree</i>. A dataset provides links for viewing its alignment, any
+phylogenetic trees that have been estimated from the alignment, and any analysis
+results from the various methods within TOPALi that can be run upon an alignment.</p>
+
+<p>Each of the analysis methods can be run in one of two ways, either locally - using
+your own computer's resourses - or remotely, using the resourses of the clusters mentioned
+above. The latter option is generally faster, however there may be times when you wish
+to keep all processing local, perhaps due to privacy issues or the lack of an internet
+connection. Note that when <a href="local_jobs.html">running tasks locally</a>, methods
+that have been designed to run in parallel may still do so if you have two or more CPUs
+in your machine.</p>
+
+<p>Once a job is complete, its results are added to the Navigation Tree, where they can
+be viewed and (usually) interacted with further. TOPALi will remember the settings provided
+for every analysis run - this allows you to run a new task using the parameters from an
+existing result (with modifications if required). This feature exists because many of the
+statistical methods may require some experimentation with before suitable settings for
+your dataset are found.</p>
+
+</body>
+</html>
