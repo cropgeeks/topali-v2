@@ -28,13 +28,24 @@ public class MTDialogPanel extends javax.swing.JPanel {
     	this.dna = dna;
         initComponents();
 
-        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.TYPE_PHYML, ModelTestResult.TYPE_MRBAYES});
+//        DefaultComboBoxModel mod = new DefaultComboBoxModel(new String[] {ModelTestResult.TYPE_PHYML, ModelTestResult.TYPE_MRBAYES});
+
+		DefaultComboBoxModel mod;
+		if (dna)
+			mod = new DefaultComboBoxModel(new String[] {ModelTestResult.TYPE_PHYML, ModelTestResult.TYPE_MRBAYES});
+		else
+			mod = new DefaultComboBoxModel(new String[] { "PhyML or RaxML", "MrBayes" });
         models.setModel(mod);
 
         DefaultComboBoxModel mod2 = new DefaultComboBoxModel(new String[] {ModelTestResult.SAMPLE_SEQLENGTH, ModelTestResult.SAMPLE_ALGNSIZE});
         sampleSize.setModel(mod2);
 
-        models.setSelectedItem(Prefs.ms_models);
+		// DOMINIK - ARGHHHHHHH! NEVER set combo boxes by strings and rely on everything else being set
+		// based on the value of those strings!!! Now when I want to CHANGE those strings, it's going to
+		// screw up loads of other code. ARRRGH!
+		if (Prefs.ms_models == ModelTestResult.TYPE_MRBAYES)
+			models.setSelectedIndex(1);
+//        models.setSelectedItem(Prefs.ms_models);
     	gamma.setSelected(Prefs.ms_gamma);
     	inv.setSelected(Prefs.ms_inv);
     	sampleSize.setSelectedItem(Prefs.ms_samplesize);
@@ -46,8 +57,12 @@ public class MTDialogPanel extends javax.swing.JPanel {
  //   		initPrevResult(res);
     }
 
-    private void initPrevResult(ModelTestResult res) {
-    	this.models.setSelectedItem(res.type);
+    private void initPrevResult(ModelTestResult res)
+    {
+    	if (res.type == ModelTestResult.TYPE_MRBAYES)
+			this.models.setSelectedIndex(1);
+   // 	this.models.setSelectedItem(res.type);
+
     	boolean gamma = false;
     	boolean inv = false;
     	for(Model mod : res.models) {
@@ -66,10 +81,10 @@ public class MTDialogPanel extends javax.swing.JPanel {
 		ModelTestResult res = new ModelTestResult();
 
     	List<Model> availModels = null;
-		if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_PHYML)) {
+		if(this.models.getSelectedIndex() == 0) {
 			availModels = ModelManager.getInstance().listPhymlModels(dna);
 		}
-		else if(this.models.getSelectedItem().equals(ModelTestResult.TYPE_MRBAYES)) {
+		else if(this.models.getSelectedIndex() == 1) {
 			availModels = ModelManager.getInstance().listMrBayesModels(dna);
 		}
 		ArrayList<Model> models = new ArrayList<Model>();
