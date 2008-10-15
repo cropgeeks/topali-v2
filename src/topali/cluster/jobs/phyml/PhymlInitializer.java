@@ -18,7 +18,7 @@ import topali.mod.Filters;
 public class PhymlInitializer extends Thread
 {
 	String CR = System.getProperty("line.separator");
-	
+
 	private SequenceSet ss;
 
 	private PhymlResult result;
@@ -33,7 +33,7 @@ public class PhymlInitializer extends Thread
 		this.result = result;
 	}
 
-	
+
 	public void run()
 	{
 		try
@@ -46,9 +46,9 @@ public class PhymlInitializer extends Thread
 			int[] indices = ss.getIndicesFromNames(result.selectedSeqs);
 			//Store alignment
 			ss.save(new File(jobDir, "seq"), indices, result.getPartitionStart(), result.getPartitionEnd(), Filters.PHY_I, true);
-			
+
 			Model model = result.model;
-			
+
 			//Store run scripts
 			if (ClusterUtils.isWindows){
 				writeDosScripts(model, result.bootstrap, jobDir);
@@ -56,44 +56,44 @@ public class PhymlInitializer extends Thread
 			else {
 				writeUnixScript(model, result.bootstrap, jobDir);
 			}
-			
+
 			if (result.isRemote)
 				PhymlWebService.runScript(jobDir);
 			else
 				new PhymlAnalysis(jobDir).start(LocalJobs.manager);
-			
+
 		} catch (Exception e)
 		{
 			ClusterUtils.writeError(new File(jobDir, "error.txt"), e);
 		}
 	}
-	
+
 	private void writeUnixScript(Model m, int bs, File runDir) throws Exception {
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		"runphyml.sh")));
-		
+
 		out.write(result.phymlPath + " << END1" + CR);
 		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, bs, null));
 		out.write("END1" + CR);
-		
+
 		out.flush();
 		out.close();
 	}
-	
+
 	private void writeDosScripts(Model m, int bs, File runDir) throws Exception {
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		"runphyml.bat")));
-		
-		out.write(result.phymlPath+" < ");
+
+		out.write("\"" + result.phymlPath + "\" < ");
 		out.write("phymlinput" + CR);
-		
+
 		out.flush();
 		out.close();
-		
+
 		out = new BufferedWriter(new FileWriter(new File(runDir, "phymlinput")));
 		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, bs, null));
 		out.flush();
 		out.close();
 	}
-	
+
 }

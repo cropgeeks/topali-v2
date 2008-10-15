@@ -18,7 +18,7 @@ import topali.mod.Filters;
 public class ModelTestInitializer extends Thread
 {
 	String CR = System.getProperty("line.separator");
-	
+
 	private SequenceSet ss;
 
 	private ModelTestResult result;
@@ -33,7 +33,7 @@ public class ModelTestInitializer extends Thread
 		this.result = result;
 	}
 
-	
+
 	public void run()
 	{
 		try
@@ -48,7 +48,7 @@ public class ModelTestInitializer extends Thread
 			for (int i = 1; i <= result.models.size(); i++)
 			{
 				Model model = result.models.get(i-1);
-				
+
 				if (LocalJobs.isRunning(result.jobId) == false)
 					return;
 
@@ -74,7 +74,7 @@ public class ModelTestInitializer extends Thread
 				else {
 					writeUnixScript(model, runDir);
 				}
-				
+
 				if (result.isRemote == false)
 					new ModelTestAnalysis(runDir).start(LocalJobs.manager);
 			}
@@ -91,25 +91,25 @@ public class ModelTestInitializer extends Thread
 	private void writeUnixScript(Model m, File runDir) throws Exception {
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		"runphyml.sh")));
-		
+
 		out.write(result.phymlPath + " << END1" + CR);
 		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, 0, null));
 		out.write("END1" + CR);
-		
+
 		out.flush();
 		out.close();
 	}
-	
+
 	private void writeDosScripts(Model m, File runDir) throws Exception {
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(runDir,
 		"runphyml.bat")));
-		
-		out.write(result.phymlPath+" < ");
+
+		out.write("\"" + result.phymlPath + "\" < ");
 		out.write("phymlinput" + CR);
-		
+
 		out.flush();
 		out.close();
-		
+
 		out = new BufferedWriter(new FileWriter(new File(runDir, "phymlinput")));
 		out.write(PhyMLCmdGenerator.getModelCmd("seq", m, true, true, 0, null));
 		out.flush();
