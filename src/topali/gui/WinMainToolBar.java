@@ -80,7 +80,8 @@ public class WinMainToolBar extends JToolBar
 		});
 		// TOPALiHelp.enableHelpOnButton(bHelpDisplay, "intro");
 
-		add(new JLabel(" "));
+		if (SystemUtils.isMacOS() == false)
+			add(new JLabel(" "));
 
 		add(bFileNewProject);
 		addSeparator(false);
@@ -139,11 +140,16 @@ public class WinMainToolBar extends JToolBar
 		if (tt != null)
 			button.setToolTipText(Text.get("WinMainToolBar." + tt));
 
-		if (SystemUtils.isMacOS() == false)
-			button.setMargin(new Insets(1, 1, 1, 1));
 		button.setIcon(icon);
 		button.setFocusPainted(false);
 		button.setFocusable(false);
+		button.setMargin(new Insets(2, 1, 2, 1));
+
+		if (SystemUtils.isMacOS())
+		{
+			button.putClientProperty("JButton.buttonType", "bevel");
+			button.setMargin(new Insets(-2, -1, -2, -1));
+		}
 
 		return button;
 	}
