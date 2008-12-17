@@ -349,8 +349,8 @@ public class DisplaySettingsDialog extends JDialog implements ActionListener,
 		//layout.add(line, 0, 8, 1, 2, new Insets(0, 1, 0, 5));
 		layout.add(tooltip, 0, 9, 1, 2, new Insets(0, 1, 0, 5));
 		// layout.add(tree, 0, 10, 1, 2, new Insets(0, 1, 5, 5));
-//		layout.add(showVertHighlight, 0, 10, 1, 2, new Insets(0, 1, 0, 5));
-//		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(showVertHighlight, 0, 10, 1, 2, new Insets(0, 1, 0, 5));
+		layout.add(showHorzHighlight, 0, 11, 1, 2, new Insets(0, 1, 0, 5));
 
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.setBorder(BorderFactory.createTitledBorder(Text.get("DisplaySettingsDialog.gui39")));
