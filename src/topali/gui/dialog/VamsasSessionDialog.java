@@ -45,7 +45,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 	 */
 	private void initialize()
 	{
-		this.setSize(237, 243);
+		this.setSize(400, 300);
 		this.setTitle("Select Session");
 		this.setContentPane(getJContentPane());
 		getRootPane().setDefaultButton(bok);
@@ -207,7 +207,7 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 		setVisible(false);
 	}
 
-	
+
 	public void mouseClicked(MouseEvent e)
 	{
 		if(e.getClickCount()>1) {
@@ -215,22 +215,22 @@ public class VamsasSessionDialog extends JDialog implements MouseListener
 		}
 	}
 
-	
+
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
-	
+
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
-	
+
 	public void mousePressed(MouseEvent e)
 	{
 	}
 
-	
+
 	public void mouseReleased(MouseEvent e)
 	{
 	}
