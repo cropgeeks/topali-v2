@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.1.1" transformSequenceNumber="2">
+<install4j version="4.1.5" transformSequenceNumber="2">
   <directoryPresets config="../res/icons" />
-  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.topali.org" version="2.5.08.05.22" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="TOPALi" distributionSourceDir="" applicationId="3364-2252-9671-3538" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="TOPALi" publisher="Biomathematics &amp; Statistics Scotland" publisherWeb="http://www.topali.org" version="2.5.08.12.18" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -1029,7 +1029,7 @@ if (wizardContext != null) {
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2.5" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_06" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="4" mediaFileName="InstallTOPALi" installDir="TOPALi v2.5" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_11" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/windows-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -1039,7 +1039,7 @@ if (wizardContext != null) {
       </exclude>
       <variables />
     </win32>
-    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_06" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux Installer" id="22" mediaFileName="InstallTOPALi_Linux" installDir="TOPALi" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_11_client_only" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/linux-x86-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -1061,7 +1061,7 @@ if (wizardContext != null) {
         <scriptLines />
       </installerScript>
     </unixInstaller>
-    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="solaris-sparc-1.6.0_06" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Unix Installer" id="26" mediaFileName="InstallTOPALi_Solaris" installDir="TOPALi" overridePrincipalLanguage="true" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="solaris-sparc-1.6.0_11" manualJREEntry="false" bundleType="1" jreURL="http://www.bioss.ac.uk/knowledge/install4j/solaris-sparc-1.5.0_06.tar.gz" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />

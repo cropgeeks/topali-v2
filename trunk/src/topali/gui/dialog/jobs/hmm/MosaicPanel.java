@@ -21,7 +21,7 @@ import scri.commons.gui.MsgBox;
 class MosaicPanel extends JPanel implements ActionListener
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private SequenceSet ss;
 
 	private JTable table;
@@ -156,6 +156,7 @@ class MosaicPanel extends JPanel implements ActionListener
 					breakpoints.addElement(new BreakPoint(bp, tp));
 			} catch (Exception e)
 			{
+				e.printStackTrace();
 				log.warn("Problem adding breakpoint "+i+"\n",e);
 				continue;
 			}
@@ -299,6 +300,11 @@ class MosaicPanel extends JPanel implements ActionListener
 				// Can we add it (ie, is it different?)
 				if (currTop == -1 || currTop != newTop || pos == length)
 				{
+					// TODO: (18-Dec-2008) - What to do when identical seqs are
+					// found...what topology do we pick?
+					if (currTop == -1 && newTop == -1)
+						currTop = 1;
+
 					// Special case for the first block (as it isn't defined
 					// until the first TDS region is found)
 					if (currTop == -1)
