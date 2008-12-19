@@ -216,7 +216,7 @@ public class AlignmentPanel extends JPanel implements AdjustmentListener, Proper
 	public void highlight(int seq, int seqRange, int nuc, int nucRange,
 			boolean localCall)
 	{
-		System.out.println("LOCAL: " + localCall);
+//		System.out.println("LOCAL: " + localCall);
 
 		if (localCall)
 		{

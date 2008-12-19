@@ -23,7 +23,7 @@ class RunBarce extends StoppableProcess
 		runCancelMonitor();
 	}
 
-	
+
 	public void run() throws Exception
 	{
 		HMMResult hmmResult = (HMMResult) result;
@@ -40,7 +40,7 @@ class RunBarce extends StoppableProcess
 		// Read output from barce
 		StreamCatcher sc = new BarceCatcher(proc.getInputStream(), false);
 		sc.start();
-		
+
 		// Send barce all its settings!
 
 		// Model settings
@@ -83,7 +83,8 @@ class RunBarce extends StoppableProcess
 
 		// //////////////////////////
 		// if (hmmResult.hmm_use_mosaic)
-		writer.println("j");
+		if (hmmResult.bpArray.length > 1)
+			writer.println("j");
 		// //////////////////////////
 
 		writer.println("x");
@@ -159,7 +160,7 @@ class RunBarce extends StoppableProcess
 			super(in, showOutput);
 		}
 
-		
+
 		public void run()
 		{
 			File pctDir = new File(jobDir, "percent");

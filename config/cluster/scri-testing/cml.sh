@@ -6,4 +6,4 @@
 #$ -t 1-$RUNS
 
 hostname
-$JAVA -Xmx256m -cp $TOPALi $CLASS "$JOB_DIR/run$SGE_TASK_ID"
+$JAVA -Xmx512m -cp $TOPALi $CLASS "$JOB_DIR/run$SGE_TASK_ID"

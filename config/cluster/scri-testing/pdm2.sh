@@ -6,4 +6,4 @@
 #$ -t 1-$RUN_COUNT
 
 hostname
-$JAVA -Xmx256m -cp $TOPALi topali.cluster.jobs.pdm2.PDMAnalysis "$JOB_DIR/nodes/run$SGE_TASK_ID"
+$JAVA -Xmx512m -cp $TOPALi topali.cluster.jobs.pdm2.PDMAnalysis "$JOB_DIR/nodes/run$SGE_TASK_ID"
