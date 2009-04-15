@@ -31,6 +31,9 @@ public class CMLBranchResultPanel extends ResultPanel
 	{
 		super(data, result);
 
+		System.out.println("#####");
+		System.out.println(result.jobName);
+
 		p1 = createTable1();
 		p2 = createTable2();
 
@@ -113,8 +116,9 @@ public class CMLBranchResultPanel extends ResultPanel
 		int n = 0;
 		for (CMLHypothesis hypo : result.hypos)
 		{
-			if (hypo.omegas.length > n)
-				n = hypo.omegas.length;
+			if (hypo.omegas != null)
+				if (hypo.omegas.length > n)
+					n = hypo.omegas.length;
 		}
 		for (int i = 0; i < n; i++) {
 			names.add("\u03C9" + getUnicode(i));
