@@ -141,7 +141,7 @@ public class MakeNA
 		try
 		{
 			//newSS.checkValidity();
-			dna.checkValidity();
+			dna.checkValidity(false);
 		} catch (AlignmentLoadException e)
 		{
 			String msg = Text.get("ImportDataSetDialog.err0"

@@ -9,24 +9,24 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import topali.data.Sequence;
+import topali.data.*;
 import topali.gui.*;
 import uk.ac.vamsas.client.picking.*;
 
 public class VamsasMsgHandler implements IMessageHandler
 {
 	 Logger log = Logger.getLogger(this.getClass());
-	
+
 	private IPickManager manager;
 	ObjectMapper mapper;
-	
+
 	public VamsasMsgHandler(IPickManager manager, VamsasManager vamman)
 	{
 		this.manager = manager;
 		this.mapper = vamman.mapper;
 		manager.registerMessageHandler(this);
 	}
-	
+
 	public void sendMessage(Message message)
 	{
 		if(TOPALi.debugClient)
@@ -38,7 +38,7 @@ public class VamsasMsgHandler implements IMessageHandler
 	{
 		if(TOPALi.debugClient)
 			log.info("Received new message: "+message.getRawMessage());
-		
+
 		Runnable r = new Runnable()
 		{
 			public void run()
@@ -53,7 +53,7 @@ public class VamsasMsgHandler implements IMessageHandler
 	private void processMessage(Message message)
 	{
 		if (message instanceof MouseOverMessage)
-		{	
+		{
 			MouseOverMessage msg = (MouseOverMessage)message;
 			String id = msg.getVorbaID();
 			Object tmp = mapper.getTopaliObject(id);
@@ -61,6 +61,28 @@ public class VamsasMsgHandler implements IMessageHandler
 				Sequence seq = (Sequence)tmp;
 				int pos = msg.getPosition();
 				WinMain.vEvents.processAlignmentPanelMouseOverEvent(seq, pos+1);
+			}
+		}
+
+		else if (message instanceof SelectionMessage)
+		{
+			SelectionMessage msg = (SelectionMessage)message;
+			String[] ids = msg.getVorbaIDs();
+			Object[] objects = new Object[ids.length];
+
+			for (int i = 0; i < ids.length; i++)
+			{
+				objects[i] = mapper.getTopaliObject(ids[i]);
+
+				int a;
+			}
+
+			if (objects.length == 1 && objects[0] != null && objects[0] instanceof SequenceSet)
+			{
+				System.out.println("SS: " + objects[0]);
+			}
+			else
+			{
 			}
 		}
 	}

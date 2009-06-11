@@ -266,7 +266,7 @@ public class ExportDialog extends JDialog implements ActionListener
 			transs = SequenceSetUtils.translate(ss, start, end, rSelSeq.isSelected());
 
 			try {
-				transs.checkValidity();
+				transs.checkValidity(false);
 				trans.setSequenceSet(transs);
 				winMain.addNewAlignmentData(trans);
 				return true;
