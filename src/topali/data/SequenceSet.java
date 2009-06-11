@@ -75,7 +75,7 @@ public class SequenceSet extends DataObject
 			addSequence(seq);
 		}
 
-		checkValidity();
+		checkValidity(false);
 	}
 
 	// Creates a new SequenceSet object by loading it in from disk
@@ -86,7 +86,7 @@ public class SequenceSet extends DataObject
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
-		checkValidity();
+		checkValidity(false);
 	}
 
 	// Creates a new SequenceSet by loading it from disk and (optionally)
@@ -102,7 +102,7 @@ public class SequenceSet extends DataObject
 		AlignmentHandler ah = new AlignmentHandler(this);
 		ah.openAlignment(filename);
 
-		checkValidity();
+		checkValidity(false);
 	}
 
 	/* Returns the length of this alignment. */
@@ -265,7 +265,7 @@ public class SequenceSet extends DataObject
 	}
 
 	/* Performs a number of checks to ensure this sequence set is valid. */
-	public void checkValidity() throws AlignmentLoadException
+	public void checkValidity(boolean isVAMSAS) throws AlignmentLoadException
 	{
 		// 1) Were any sequences even loaded?
 		if (sequences.size() == 0)
@@ -297,20 +297,23 @@ public class SequenceSet extends DataObject
 		}
 
 		// 4) Check for duplicate names
-		ListIterator<Sequence> itor1 = sequences.listIterator(0);
-		for (int i = 0; itor1.hasNext(); i++)
+		if (isVAMSAS == false)
 		{
-			String iName = itor1.next().getName();
-
-			ListIterator<Sequence> itor2 = sequences.listIterator(i + 1);
-			for (int j=i+1; itor2.hasNext(); j++)
+			ListIterator<Sequence> itor1 = sequences.listIterator(0);
+			for (int i = 0; itor1.hasNext(); i++)
 			{
-				String jName = itor2.next().getName();
-				if (iName.equals(jName))
+				String iName = itor1.next().getName();
+
+				ListIterator<Sequence> itor2 = sequences.listIterator(i + 1);
+				for (int j=i+1; itor2.hasNext(); j++)
 				{
-					//System.out.println(jName);
-					String info = "Sequences: "+(i+1)+","+(j+1)+" ("+iName+")";
-					throw new AlignmentLoadException(DUPLICATE_NAMES_FOUND, info);
+					String jName = itor2.next().getName();
+					if (iName.equals(jName))
+					{
+						//System.out.println(jName);
+						String info = "Sequences: "+(i+1)+","+(j+1)+" ("+iName+")";
+						throw new AlignmentLoadException(DUPLICATE_NAMES_FOUND, info);
+					}
 				}
 			}
 		}

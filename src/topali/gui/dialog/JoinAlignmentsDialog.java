@@ -253,7 +253,7 @@ public class JoinAlignmentsDialog extends JDialog implements ActionListener {
 			ss.addSequence(seq);
 		}
 		try {
-			ss.checkValidity();
+			ss.checkValidity(false);
 		}
 		catch (AlignmentLoadException e1) {
 			e1.printStackTrace();

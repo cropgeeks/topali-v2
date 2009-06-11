@@ -55,7 +55,7 @@ public class VamsasDocumentHandler
 	public void read()
 	{
 		Project tmp = new Project();
-		
+
 		for (VAMSAS vamsas : doc.getVamsasRoots())
 			for (DataSet dataset : vamsas.getDataSet())
 				for (Alignment alignment : dataset.getAlignment()) {
@@ -78,7 +78,7 @@ public class VamsasDocumentHandler
 				}
 			}
 		cdnaDatasets.clear();
-		
+
 		this.project.merge(tmp);
 	}
 
@@ -89,7 +89,7 @@ public class VamsasDocumentHandler
 			currentTAlignment = align;
 			writeAlignment();
 		}
-		
+
 		//clean();
 	}
 
@@ -101,7 +101,7 @@ public class VamsasDocumentHandler
 				tobjs.add(res);
 			}
 		}
-		
+
 		for (VAMSAS vamsas : doc.getVamsasRoots())
 			for (DataSet dataset : vamsas.getDataSet())
 				for (Alignment alignment : dataset.getAlignment()) {
@@ -118,7 +118,7 @@ public class VamsasDocumentHandler
 	}
 
 	private AlignmentData readAlignment(Alignment vAlign)
-	{			
+	{
 		int id = readTID(vAlign);
 		AlignmentData tAlign = (id>-1) ? new AlignmentData(id) : new AlignmentData();
 		String alignName = "VAMSAS alignment";
@@ -141,13 +141,13 @@ public class VamsasDocumentHandler
 		}
 		try
 		{
-			ss.checkValidity();
+			ss.checkValidity(true);
 		} catch (AlignmentLoadException e)
 		{
-			log.warn("Alignment '" + tAlign.getName() + "' is not aligned!", e);
+			log.warn("Alignment '" + tAlign.getName() + "' is not valid!", e);
 			return null;
 		}
-		
+
 		tAlign.setSequenceSet(ss);
 
 		if (cdnaSS.getSize() > 0)
@@ -165,9 +165,9 @@ public class VamsasDocumentHandler
 				log.warn("Could not create guided alignment!");
 			cdnaSS = new SequenceSet();
 		}
-		
+
 		readResults(vAlign);
-		
+
 		map.registerObjects(tAlign, vAlign);
 		return tAlign;
 	}
@@ -193,7 +193,7 @@ public class VamsasDocumentHandler
 		Sequence tSeq = (id>-1) ? new Sequence(id) : new Sequence();
 		tSeq.setName(name);
 		tSeq.setSequence(seq);
-		
+
 		// if the sequence is associated with a DatasetSequence, take a note of
 		// that
 		if (refSeq != null)
@@ -202,7 +202,7 @@ public class VamsasDocumentHandler
 		map.registerObjects(tSeq, vSeq);
 		return tSeq;
 	}
-	
+
 	private void readResults(Alignment vAlign) {
 		for(AlignmentAnnotation vAnno : vAlign.getAlignmentAnnotation()) {
 			int tid = readTID(vAnno);
@@ -217,12 +217,12 @@ public class VamsasDocumentHandler
 			}
 		}
 	}
-	
+
 	private void writeAlignment()
 	{
 		//Check if this alignment already exists in the vamsas doc
 		currentVAlignment = (Alignment) map.getVamsasObject(currentTAlignment);
-		
+
 		// create new Alignment
 		if (currentVAlignment == null)
 		{
@@ -248,12 +248,12 @@ public class VamsasDocumentHandler
 
 		// Alignment already exists
 		else
-		{	
+		{
 			int tid = readTID(currentVAlignment);
 			if(tid<0) {
 				currentVAlignment.addProperty(createTIDProp(currentTAlignment));
 			}
-			
+
 			//just modifiy sequences if alignment is not locked
 			if(currentVAlignment.getModifiable()==null)
 			{
@@ -263,7 +263,7 @@ public class VamsasDocumentHandler
 
 			for (AnalysisResult res : currentTAlignment.getResults())
 				writeResult(res);
-			
+
 			map.registerObjects(currentTAlignment, currentVAlignment);
 		}
 	}
@@ -354,7 +354,7 @@ public class VamsasDocumentHandler
 			if(tid<0) {
 				valSeq.addProperty(createTIDProp(seq));
 			}
-			
+
 			log.info("Vamsas sequence already exists. Updating sequence "+valSeq);
 			valSeq.setName(seq.getName());
 		}
@@ -365,12 +365,12 @@ public class VamsasDocumentHandler
 
 		if(res.status!=JobStatus.COMPLETED)
 			return;
-		
+
 		Object tmp = map.getVamsasObject(new Integer(res.getID()));
 		if (tmp == null)
 		{
 			log.info("Creating new vamsas annotation for "+res);
-			
+
 			if(res instanceof TreeResult) {
 				TreeResult tree = (TreeResult) res;
 				Tree vTree = VAMSASUtils.createVamsasTree(tree, currentTAlignment, map);
@@ -378,7 +378,7 @@ public class VamsasDocumentHandler
 				currentVAlignment.addTree(vTree);
 				map.registerObjects(new Integer(res.getID()), vTree);
 			}
-			
+
 			else {
 				LinkedList<AlignmentAnnotation> annos = VAMSASUtils.createAlignmentAnnotation(res, currentTAlignment);
 				for(AlignmentAnnotation anno : annos) {
@@ -386,9 +386,9 @@ public class VamsasDocumentHandler
 					map.registerObjects(new Integer(res.getID()), anno);
 				}
 			}
-			
+
 		}
-		
+
 		//if there are results based on this alignment, lock it
 		if(currentVAlignment.getModifiable()==null)
 			currentVAlignment.setModifiable(VamsasManager.client.getClientUrn());
@@ -571,7 +571,7 @@ public class VamsasDocumentHandler
 		doc.getVamsasRoots()[0].addDataSet(ds);
 		return ds;
 	}
-	
+
 	private Provenance getProvenance(String action)
 	{
 		Provenance p = new Provenance();
@@ -595,7 +595,7 @@ public class VamsasDocumentHandler
 
 		return e;
 	}
-	
+
 	private Property createTIDProp(DataObject tObj) {
 		Property tid = new Property();
 		tid.setName("topaliID");
@@ -603,7 +603,7 @@ public class VamsasDocumentHandler
 		tid.setContent(""+tObj.getID());
 		return tid;
 	}
-	
+
 	private int readTID(Object vObj) {
 		Property prop = null;
 		if(vObj instanceof Alignment) {
@@ -642,7 +642,7 @@ public class VamsasDocumentHandler
 				}
 			}
 		}
-		
+
 		if(prop!=null) {
 			return Integer.parseInt(prop.getContent());
 		}
