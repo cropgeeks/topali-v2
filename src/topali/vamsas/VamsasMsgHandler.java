@@ -52,38 +52,49 @@ public class VamsasMsgHandler implements IMessageHandler
 
 	private void processMessage(Message message)
 	{
-		if (message instanceof MouseOverMessage)
+		try
 		{
-			MouseOverMessage msg = (MouseOverMessage)message;
-			String id = msg.getVorbaID();
-			Object tmp = mapper.getTopaliObject(id);
-			if(tmp!=null && tmp instanceof Sequence) {
-				Sequence seq = (Sequence)tmp;
-				int pos = msg.getPosition();
-				WinMain.vEvents.processAlignmentPanelMouseOverEvent(seq, pos+1);
+			if (message instanceof MouseOverMessage)
+			{
+				MouseOverMessage msg = (MouseOverMessage)message;
+				String id = msg.getVorbaID();
+				Object tmp = mapper.getTopaliObject(id);
+				if(tmp!=null && tmp instanceof Sequence) {
+					Sequence seq = (Sequence)tmp;
+					int pos = msg.getPosition();
+					WinMain.vEvents.processAlignmentPanelMouseOverEvent(seq, pos+1);
+				}
+			}
+
+			else if (message instanceof SelectionMessage)
+			{
+				SelectionMessage msg = (SelectionMessage)message;
+				String[] ids = msg.getVorbaIDs();
+				Object[] objects = new Object[ids.length];
+
+				// Work out what objects were passed in this message
+				for (int i = 0; i < ids.length; i++)
+					objects[i] = mapper.getTopaliObject(ids[i]);
+
+				if (objects.length == 1 && objects[0] != null && objects[0] instanceof SequenceSet)
+				{
+					System.out.println("SS: " + objects[0]);
+				}
+				// Else assume all objects are sequences
+				else
+				{
+					Sequence[] seqs = new Sequence[objects.length];
+					for (int i = 0; i < objects.length; i++)
+						seqs[i] = (Sequence) objects[i];
+
+					WinMain.vEvents.processSelectionEvent(seqs);
+				}
 			}
 		}
-
-		else if (message instanceof SelectionMessage)
+		catch (Exception e)
 		{
-			SelectionMessage msg = (SelectionMessage)message;
-			String[] ids = msg.getVorbaIDs();
-			Object[] objects = new Object[ids.length];
-
-			for (int i = 0; i < ids.length; i++)
-			{
-				objects[i] = mapper.getTopaliObject(ids[i]);
-
-				int a;
-			}
-
-			if (objects.length == 1 && objects[0] != null && objects[0] instanceof SequenceSet)
-			{
-				System.out.println("SS: " + objects[0]);
-			}
-			else
-			{
-			}
+			System.out.println("Exception while processing VAMSAS message:");
+			e.printStackTrace();
 		}
 	}
 }
