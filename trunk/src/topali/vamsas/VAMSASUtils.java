@@ -54,6 +54,7 @@ public class VAMSASUtils
 		return true;
 	}
 
+
 	public static Project loadProject(IClientDocument cDoc) {
 		IClientAppdata data = cDoc.getClientAppdata();
 		if(data==null) {
@@ -87,6 +88,8 @@ public class VAMSASUtils
 		try
 		{
 			u.setMapping(Castor.getMapping());
+			u.setWhitespacePreserve(true);
+			u.setIgnoreExtraElements(true);
 			Project vProject = (Project)u.unmarshal(in);
 			log.info("Got topali project from appdata.");
 			return vProject;

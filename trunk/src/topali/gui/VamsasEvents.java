@@ -8,28 +8,27 @@ public class VamsasEvents
 {
 	private WinMain winMain;
 	private ObjectMapper mapper;
-	
+
 	public VamsasEvents(WinMain winMain, VamsasManager man)
 	{
 		this.winMain = winMain;
 		this.mapper = man.mapper;
 	}
-	
+
 	void sendAlignmentPanelMouseOverEvent(Sequence seq, int pos)
 	{
 		if(mapper==null)
 			return;
-		
+
 		String id = mapper.getVorbaID(seq);
 		if(id!=null) {
 			MouseOverMessage message = new MouseOverMessage(id, pos-1);
 			winMain.vamsas.msgHandler.sendMessage(message);
 		}
 	}
-	
+
 	public void processAlignmentPanelMouseOverEvent(Sequence sequence, int position)
 	{
-		
 		for (AlignmentData data : winMain.getProject().getDatasets())
 		{
 			int i = 0;
@@ -47,5 +46,38 @@ public class VamsasEvents
 				i++;
 			}
 		}
+	}
+
+	public void processSelectionEvent(Sequence[] seqs)
+	{
+		SequenceSet ss = null;
+		int[] indices = new int[seqs.length];
+
+		for (AlignmentData data : winMain.getProject().getDatasets())
+		{
+			ss = data.getSequenceSet();
+
+			int seqIndex = 0;
+			int selIndex = 0;
+
+			// Search for the sequences in this dataset
+			for (Sequence seq : data.getSequenceSet().getSequences())
+			{
+				for (Sequence toSel: seqs)
+				{
+					if (seq.equals(toSel))
+					{
+						indices[selIndex] = seqIndex;
+						selIndex++;
+					}
+				}
+
+				seqIndex++;
+			}
+		}
+
+		// Once we have their indices, set their selection state
+		ss.setSelectedSequences(indices);
+		TOPALi.winMain.menuViewDisplaySettings(true);
 	}
 }
