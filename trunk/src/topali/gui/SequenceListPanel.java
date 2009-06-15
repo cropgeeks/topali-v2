@@ -249,6 +249,9 @@ public class SequenceListPanel extends JPanel implements ListSelectionListener, 
 		// Changes in the list's selection need to be mirrored back in the
 		// SequenceSet object
 		ss.setSelectedSequences(list.getSelectedIndices());
+
+		if (WinMain.vEvents != null)
+			WinMain.vEvents.sendSelectedSequencesEvent(ss);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
