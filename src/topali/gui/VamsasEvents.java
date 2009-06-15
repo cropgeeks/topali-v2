@@ -2,7 +2,7 @@ package topali.gui;
 
 import topali.data.*;
 import topali.vamsas.*;
-import uk.ac.vamsas.client.picking.MouseOverMessage;
+import uk.ac.vamsas.client.picking.*;
 
 public class VamsasEvents
 {
@@ -24,6 +24,35 @@ public class VamsasEvents
 		if(id!=null) {
 			MouseOverMessage message = new MouseOverMessage(id, pos-1);
 			winMain.vamsas.msgHandler.sendMessage(message);
+		}
+	}
+
+	public void sendSelectedSequencesEvent(SequenceSet ss)
+	{
+		if (mapper==null)
+			return;
+
+		try
+		{
+			// Get an array of all the VorbaIDs for the selected sequences
+			int[] selected = ss.getSelectedSequences();
+			String[] ids = new String[selected.length];
+
+			for (int i = 0; i < ids.length; i++)
+				ids[i] = mapper.getVorbaID(ss.getSequence(selected[i]));
+
+			// Now create the message to send
+			SelectionMessage message;
+			if (ids.length == 0)
+				message = new SelectionMessage(null, null, null);
+			else
+				message = new SelectionMessage(null, ids, null);
+
+			winMain.vamsas.msgHandler.sendMessage(message);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 

@@ -22,7 +22,7 @@ import topali.mod.Filters;
 class TreePanelUtils
 {
 	static   Logger log = Logger.getLogger(TreePanelUtils.class);
-	
+
 	static void exportTree(TreePanel panel)
 	{
 		JFileChooser fc = new JFileChooser();
@@ -78,7 +78,7 @@ class TreePanelUtils
 			log.warn(e);
 		}
 	}
-	
+
 //	static void saveSVG(File file, TreePanel panel)
 //	{
 //		try
@@ -89,12 +89,12 @@ class TreePanelUtils
 //	        // Create an instance of org.w3c.dom.Document.
 //	        String svgNS = "http://www.w3.org/2000/svg";
 //	        Document document = domImpl.createDocument(svgNS, "svg", null);
-//	        
+//
 //	        // Create an instance of the SVG Generator.
 //	        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-//	        
+//
 //	        panel.canvas.paint(svgGenerator);
-//	        
+//
 //	        Writer out = new FileWriter(file);
 //	        svgGenerator.stream(out, true);
 //	        out.flush();
@@ -228,11 +228,11 @@ class TreePanelUtils
 		 * groups.size(); i++) { Color c = Utils.getColor(i); Vector group =
 		 * (Vector) groups.elementAt(i); for (int j = 0; j < group.size(); j++)
 		 * nc.addMapping((String)group.elementAt(j), c); }
-		 * 
+		 *
 		 * panel.setNameColouriser(nc);
 		 * WinMainMenuBar.aFileSave.setEnabled(true);
-		 * 
-		 * 
+		 *
+		 *
 		 */
 
 		panel.setClusters(clusters);
@@ -272,6 +272,9 @@ class TreePanelUtils
 			}
 
 			panel.getSequenceSet().setSelectedSequences(indices);
+			if (WinMain.vEvents != null)
+				WinMain.vEvents.sendSelectedSequencesEvent(panel.getSequenceSet());
+
 			((WinMain) TOPALi.winMain).menuViewDisplaySettings(true);
 			//WinMainMenuBar.aFileSave.setEnabled(true);
 			//WinMainMenuBar.aVamCommit.setEnabled(true);
@@ -288,7 +291,7 @@ class TreePanelUtils
 	 * return group; } }
 	 *  // Not found? Then create a new group for it if (create) { Vector
 	 * newGroup = new Vector(); newGroup.addElement(name);
-	 * 
+	 *
 	 * groups.addElement(newGroup); return newGroup; } else return null; }
 	 */
 
