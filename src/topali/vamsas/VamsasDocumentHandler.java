@@ -417,7 +417,7 @@ public class VamsasDocumentHandler
 						// compare the dbref with dnadbref
 						if (compareDBRef(dnadbref, dbref))
 						{
-						  
+
 							if (dnadbref.getMap().length < 1)
 								continue;
 
@@ -448,7 +448,7 @@ public class VamsasDocumentHandler
 							      // 2. construct map from local p to pmap.getMapped() intervals via map.getMapped() to map.getLocal() range.
 							      cDnaSegs = pmap.getMapped().getSeg();
 							      uk.ac.vamsas.objects.utils.MapList remap = uk.ac.vamsas.objects.utils.Range.parsemapType(map);
-							      ArrayList<Seg> vSeg = new ArrayList();
+							      ArrayList<Seg> vSeg = new ArrayList<Seg>();
 							      for (Seg pseg : pmap.getMapped().getSeg()) {
 							        int rng[] = remap.locateInFrom(pseg.getStart(), pseg.getEnd());
 							        if (rng==null)
@@ -465,7 +465,7 @@ public class VamsasDocumentHandler
 							          vSeg.add(nseg);
 							        }
 							      }
-							      // 3. Make the Seg array for the dna sequence 
+							      // 3. Make the Seg array for the dna sequence
 							      vSeg.toArray(cDnaSegs = new Seg[vSeg.size()]);
 							    }
 							  }
