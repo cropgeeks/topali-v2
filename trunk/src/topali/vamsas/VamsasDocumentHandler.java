@@ -417,11 +417,59 @@ public class VamsasDocumentHandler
 						// compare the dbref with dnadbref
 						if (compareDBRef(dnadbref, dbref))
 						{
+						  
 							if (dnadbref.getMap().length < 1)
 								continue;
 
 							Map map = dnadbref.getMap()[0];
-
+							Seg[] cDnaSegs = map.getLocal().getSeg(); // correct if dnadbref is a protein db reference
+							if (dbref.getMapCount()>=1) {
+							  // check to see if we are actually dealing with a dna accession reference
+							  if (map.getLocal().getUnit()==map.getMapped().getUnit())
+							  {
+							    // this is probably a dna-dna mapping.
+							    // look at the protein reference to see if it has a mapping instead
+							    if (dbref.getMapCount()<1)
+							    {
+							      // no map on the protein, either.
+							      continue;
+							    }
+							    Map pmap = dbref.getMap(0);
+							    if (pmap.getLocal().getUnit()==1 && pmap.getMapped().getUnit()==3)
+							    {
+							      int boundp[] = uk.ac.vamsas.objects.utils.Range.getBounds(pmap.getMapped());
+							      int boundd[] = uk.ac.vamsas.objects.utils.Range.getBounds(map.getMapped());
+							      // 1. verify that protein coding region is covered by the coverage of the dna seuqence reference
+							      if (boundp[0]<boundd[0] || boundp[1]>boundd[1])
+							      {
+							        // exon boundaries are not covered by the dna sequence.
+							        continue;
+							      }
+							      // 2. construct map from local p to pmap.getMapped() intervals via map.getMapped() to map.getLocal() range.
+							      cDnaSegs = pmap.getMapped().getSeg();
+							      uk.ac.vamsas.objects.utils.MapList remap = uk.ac.vamsas.objects.utils.Range.parsemapType(map);
+							      ArrayList<Seg> vSeg = new ArrayList();
+							      for (Seg pseg : pmap.getMapped().getSeg()) {
+							        int rng[] = remap.locateInFrom(pseg.getStart(), pseg.getEnd());
+							        if (rng==null)
+							        {
+							          // can't map this range - so we give up
+							          continue;
+							        }
+							        for (int p=0;p<rng.length;p+=2)
+							        {
+							          Seg nseg = new Seg();
+							          nseg.setStart(rng[p]);
+							          nseg.setEnd(rng[p+1]);
+							          nseg.setInclusive(true);
+							          vSeg.add(nseg);
+							        }
+							      }
+							      // 3. Make the Seg array for the dna sequence 
+							      vSeg.toArray(cDnaSegs = new Seg[vSeg.size()]);
+							    }
+							  }
+							}
 							int start;
 							int end;
 							String complSeq = dnaSeq.getSequence().replaceAll(
@@ -435,7 +483,7 @@ public class VamsasDocumentHandler
 							dnaMapping
 									.setProvenance(getProvenance("Protein guided cDNA alignment"));
 
-							for (Seg seg : map.getLocal().getSeg())
+							for (Seg seg : cDnaSegs)
 							{
 								start = seg.getStart() - 1;
 								end = seg.getEnd() - 3;
@@ -517,7 +565,13 @@ public class VamsasDocumentHandler
 								+ dsProtSeq);
 						uk.ac.vamsas.objects.core.Sequence dna = (uk.ac.vamsas.objects.core.Sequence) smap
 								.getLoc();
+						if (smap.getLocal().getSegCount()>1)
+						{
+						  log.warn("Skipping matching sequence mapping which has more than one contig.");
+						  continue;
+						}
 						int s1 = (int) dna.getStart();
+						// TODO: extend to cope with mappings with more than one contig.
 						int s2 = smap.getLocal().getSeg()[0].getStart();
 						// int e1 = (int)dna.getEnd();
 						int e2 = smap.getLocal().getSeg()[0].getEnd();
