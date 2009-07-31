@@ -174,7 +174,7 @@ public class AdvancedCDNAMrBayes extends javax.swing.JPanel {
     	SpinnerNumberModel mNRuns = new SpinnerNumberModel(Prefs.mb_runs, 1, 5, 1);
 		this.nRuns.setModel(mNRuns);
 
-		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens, 10000, 1000000, 10000);
+		SpinnerNumberModel mNGen = new SpinnerNumberModel(Prefs.mb_gens, 10000, 20000000, 10000);
 		this.nGen.setModel(mNGen);
 
 		SpinnerNumberModel mFreq = new SpinnerNumberModel(Prefs.mb_samplefreq, 1, 1000, 1);
