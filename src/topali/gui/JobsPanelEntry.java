@@ -105,7 +105,7 @@ public abstract class JobsPanelEntry extends JPanel implements MouseListener
 		if (job.getResult().isRemote)
 		{
 			if (job.getResult().url.startsWith("http://www.topali.org"))
-				title += "(running on the Scottish Crop Research Institute HPC cluster)";
+				title += "(running at the James Hutton Institute)";
 			else if (job.getResult().url.startsWith("http://compbio.dundee"))
 				title += "(running on the University of Dundee Barton Group HPC cluster)";
 			else

@@ -157,7 +157,7 @@
 	<target name="install4j" depends="jar">
 		<taskdef name="install4j"
 		classname="com.install4j.Install4JTask"
-		classpath="C:\Java\Apps\install4j\bin\ant.jar"/>
+		classpath="C:\Program Files\Install4j\bin\ant.jar"/>
 		
 		<delete>
 			<fileset dir="install" includes="**/*.exe"/>
