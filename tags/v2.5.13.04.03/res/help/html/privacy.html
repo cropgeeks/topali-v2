@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<link rel="stylesheet" href="styles.css" type="text/css">
+<title>TOPALi Privacy Policy</title
+</title>
+
+<body>
+
+<h1>TOPALi Privacy Policy</h1>
+
+<p>Although TOPALi runs on your local PC, its analysis methods are submitted (via web services)
+to remote high-performance compute clusters. This requires that the data you are working on be
+submitted too.</p>
+
+<p>As part of a remote job submission, we also record:
+<ul>
+<li>The IP address of the machine making the connection (so we know (roughly) where in the world TOPALi
+is being used</li>
+<li>The type of job requested (whether PDM, DSS, etc)</li>
+</ul>
+</p>
+
+<p>Your data, once on the remote system, is stored locally during processing. It is fully deleted
+upon successful job completion when TOPALi requests the results be sent back to it. Data from
+a failed job will remain on the system for 3 days (to help us with bug tracking if necessary).
+Data from a successful job where TOPALi has yet to request it be sent back is kept for 30 days.
+</p>
+
+<p>This data is currently sent compressed, but unencrypted over an insecure HTTP connection. If
+you have a strong requirement for data privacy then we suggest you DO NOT run TOPALi's services
+as remote jobs. Use local job submission only.</p>
+
+</body>
+</html>

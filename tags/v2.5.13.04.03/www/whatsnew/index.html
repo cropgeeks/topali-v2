@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+  <title>What's New in TOPALi v2</title>
+
+
+  <link rel="stylesheet" type="text/css" href="../styles.css" />
+
+</head>
+
+
+<div id="header">
+<div style="margin-left: auto; margin-right: auto; width: 40em; text-align: right; position: relative;">
+    <h1>TOPALi v2</h1>
+    <br><span id="subtitle">statistical and evolutionary analysis of multiple sequence alignments</span></div>
+</div>
+<div class="body">
+
+<h1>What's New in TOPALi v2</h1>
+
+<p>TOPALi v2 is an ongoing project, and as such the software is
+updated often. Below is a list
+of new or interesting features that have been added to the application
+in recent days, weeks,
+months...</p>
+
+<p>To get a full overview of the changes between the versions, you can <a href="../svnlog.txt">view
+the full TOPALi version history</a> from the subversion server.</p>
+
+<ul>
+
+  <li><a href="#v219">New since version 2.19</a></li>
+  <li><a href="#v218">New since version 2.18</a></li>
+  <li><a href="#v217">New since version 2.17</a></li>
+  <li><a href="#v216">New since version 2.16</a></li>
+  <li><a href="#v215">New since version 2.15</a></li>
+
+</ul>
+
+<h2><a name="v219"></a>New since version 2.19</h2>
+<br />
+
+<span style="font-weight: bold;">Bug Fixes:</span><br />
+<ul>
+<li>LRT Analysis failed, because estimated ts/tv, alpha values were invalid</li>
+<li>LRT and DSS could fail, if a low gap threshold leaded to ignoring of all sequences<br>
+in a certain window</li>
+<li>After estimating ts/tv,alpha parameters at any point, MrBayes and PhyML job dialogs<br>
+caused a program crash</li>
+<li>Resubmission of MrBayes Jobs was not possible</li>
+</ul>
+<br />
+<br />
+
+<h2><a name="v218"></a>New since version 2.18</h2>
+<br />
+
+<span style="font-weight: bold;">Improved Alignment Display</span><br />
+<ul>
+<li>Prettier: Light color gradients and anti-aliasing</li>
+<li>Faster: By using offscreen buffering the response time (for scrolling, mouse over highlighting, etc.)
+has increased, especially when displaying big alignments. </li>
+</ul>
+<img alt="" src="new_alignment_display.png" />
+<br />
+<br />
+
+<span style="font-weight: bold;">Customizable Graph Display</span><br />
+<p>You can now select the background color, the line color and switch on/off anti-aliasing
+for the the graph display (see 'Display settings' Dialog).</p>
+<img alt="" src="customizable_graph.png" />
+<br />
+<br />
+
+<span style="font-weight: bold;">Quick Tree estimation with Bootstrapping</span><br />
+<p>The quick (rough) tree estimation (Neighbor Joining with F84/WAG) can now also be done
+with bootstrapping.</p>
+<br />
+<br />
+
+<span style="font-weight: bold;">New WebService: <a href="http://icwww.epfl.ch/~stamatak/index-Dateien/Page443.htm" target="_blank">RaxML</a></span><br />
+<p>A fast (parallel) maximum likelihood tree estimation method</p>
+<img alt="" src="raxml.png" />
+<br />
+<br />
+
+<span style="font-weight: bold;">New Model Selection Method</span><br />
+<p>More accurate and faster (parallel) model selection based on PhyML.</p>
+<img alt="" src="modelselection.jpg" /><br />
+<br />
+<br />
+
+<span style="font-weight: bold;">New Phylogeny menu structure</span><br />
+<p>Each tree estimation method now has its own menu entry, grouped by method type.</p>
+<img alt="" src="phylogeny_menu.png" /><br />
+<br />
+<br />
+
+<span style="font-weight: bold;">Improved cDNA handling</span><br />
+<ul>
+  <li>Split alignments into three new alignments according to codon positions</li>
+  <li>Analyse alignments separately</li>
+  <li>Run MrBayes on the joined alignment and define a separate model for each codon position</li>
+</ul>
+<img alt="" src="codon_split_export.png" /><br />
+<br />
+<br />
+
+<span style="font-weight: bold;">Bugfixes:</span><br />
+<ul>
+  <li>Replaced PhyML with PhyML-aLRT (but without using aLRT) because of a bug in PhyML, which prevented to run PhyML with
+  bootstrapping.</li>
+</ul>
+
+<h2><a name="v217"></a>New since version 2.17</h2>
+<br />
+
+<span style="font-weight: bold;">Bugfixes:</span><br />
+<ul>
+  <li>Fixed bug which caused sequence duplication when importing/exporting to VAMSAS sessions</li>
+  <li>Fixed bug which prevented printing of tables.</li>
+</ul>
+
+
+<h2><a name="v216"></a>New since version 2.16</h2>
+
+<span style="font-weight: bold;">Print previews</span><br />
+
+<p>See what you'll get, before hitting the "Print" button.</p>
+
+<img style="width: 469px; height: 260px;" alt="" src="printpreview.jpg" /><br />
+<br />
+
+
+
+<span style="font-weight: bold;">Mouse over highlighting</span><br />
+
+<br />
+The sequence and position is now highlighted, as you move your mouse
+across the alignment. You can highlight regions and select the
+according sequences or add the according position as partition. This
+feature is also used during VAMSAS sessions to synchronize alignment
+views between different application.<br />
+
+<img style="width: 707px; height: 319px;" alt="" src="mouseover.jpg" />
+
+
+
+<span style="font-weight: bold;">Positive Selection
+analysis</span><br />
+<br />
+TOPALi now provides a intuitive interface to CodeML (part of <a href="http://abacus.gene.ucl.ac.uk/software/paml.html" target="_blank">PAML</a>), making positive selection analysis much more convenient.
+
+<br />
+
+<img style="width: 552px; height: 412px;" alt="" src="codeml1.jpg" /><img style="width: 572px; height: 414px;" alt="" src="codeml2.jpg" /><br />
+
+
+
+<span style="font-weight: bold;">New tree estimation
+methods</span><br />
+<br />
+The Jukes-Cantor model for quick tree estimation was replaced with the
+more sophisticated F84+Gamma model. TOPALi also offers different tree
+estimation methods, like Maximum Liklihood (using <a href="http://atgc.lirmm.fr/phyml/" target="_blank">PhyML</a>) or bayesian tree estimation (using <a href="http://mrbayes.csit.fsu.edu/" target="_blank">MrBayes</a>), where also allows further tuning of the tree-creation parameters.<br />
+
+<br />
+
+<img style="width: 346px; height: 209px;" alt="" src="tree1.jpg" />&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<img style="width: 321px; height: 288px;" alt="" src="tree2.jpg" />
+
+
+
+<span style="font-weight: bold;">Nucleotide/Aminoacid
+Substitution Model selection</span>
+
+<br />
+To find out which substitution model your alignment fits best, TOPALi now offers model testing using <a href="http://bioinf.may.ie/software/modelgenerator/" target="_blank">Modelgenerator</a>.<br />
+<br />
+
+<img style="width: 432px; height: 262px;" alt="" src="modelgenerator.jpg" />
+
+<span style="font-weight: bold;"><br />
+Ancestral sequence
+estimation</span><br />
+
+<br />
+In order to estimate ancestral sequences, you can now run <a href="http://www.tau.ac.il/%7Etalp/supplementary/fastml/fastml.2.02.htm" target="_blank">FastML</a>'s ancestral sequence estimation directly from a tree created in TOPALi.<br />
+
+<img style="width: 533px; height: 324px;" alt="" src="ancestral.jpg" /><br />
+
+<br />
+
+<span style="font-weight: bold;">Codon Usage Check</span><br />
+<br />
+For many analyses it is important to check the codon usage beforehand. Therefore you can now launch <a href="http://codonw.sourceforge.net/" target="_blank">CodonW</a> from within TOPALi.<br />
+<br />
+<img style="border: 1px solid ; width: 310px; height: 206px;" alt="" src="codonw.jpg" /><br />
+
+<br />
+
+<span style="font-weight: bold;">VAMSAS support</span><br />
+
+<br />
+TOPALi now mostly supports the <a href="http://www.vamsas.ac.uk/" target="_blank">VAMSAS</a> API, which enables different bioinformatics applications to work together. Currently <a href="http://www.jalview.org/" target="_blank">Jalview</a> and VAMAV support VAMSAS.<br />
+<br />
+
+<img style="width: 478px; height: 196px;" alt="" src="vamsas.jpg" /><br />
+
+<br />
+
+
+<span style="font-weight: bold;">Cluster queue monitoring</span><br />
+<p>
+TOPALi's monitoring of the cluster where your job has been submitted now shows how many jobs
+are in the queue in front of you.
+<p>
+
+<p><img alt="" src="queues.png"/></p>
+
+
+
+
+
+
+<h2><a name="v215"></a>New since version 2.15 and earlier</h2>
+
+<p><b>New and improved graphical user interface</b>
+</p>
+
+<p>TOPALi v2 sports an entirely new graphical user interface that
+has been redesigned from scratch
+to improve upon the original TOPALi's interface. On Windows, the
+interface blends in with Office
+using the Office Look and Feel, while on Unix or Linux the popular
+JGoodies "Looks" is used.</p>
+
+<p>
+<img src="new_interface_office.png" alt="TOPALi screenshot" /><img src="new_interface_looks.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Work with multiple, multiple alignments</b>
+</p>
+
+<p>A TOPALi project can now import and deal with as many
+DNA/Protein alignments as your PC has
+memory for. Each alignment in listed in a new "tree" view down the
+left-hand side of the screen,
+along with all the analysis results that relate to that dataset.</p>
+
+<p><img src="multiple_alignments.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>XML based project structure</b>
+</p>
+
+<p>TOPALi now uses a XML based structure for its project files
+(which are stored compressed),
+allowing for better compatibility with other programs that want to
+share its data.</p>
+
+<p><img src="xml.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Run analysis jobs remotely on high-performance
+computing clusters</b>
+</p>
+
+<p>TOPALi now runs its main analysis jobs on remote HPC clusters,
+which frees up your PC for
+other tasks while you wait on results. You can submit more than one job
+at a time too, and
+they'll queue up for running later if no slots are currently available
+on the cluster. However, you can get the binaries and run jobs locally
+on your PC, too.</p>
+
+<p><img src="jobs.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Monitor analysis jobs while working elsewhere</b>
+</p>
+
+<p>As your analysis jobs run (either locally or remotely) their
+status is continually tracked
+by TOPALi and displayed in the status bar. A coloured icon represents
+overall job status - green
+for OK, blue for communication errors, and red for critical job errors!</p>
+
+<p><img src="status_monitoring.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Integrated JavaHelp user manual</b>
+</p>
+
+<p>The user manual for TOPALi v2 is now integrated into the
+application in JavaHelp format,
+allowing you to easily move between help sections or to print areas of
+interest.</p>
+
+<p><img src="javahelp1.png" alt="TOPALi screenshot" /></p>
+
+<p>All TOPALi dialogs now have access to the help system directly
+from the dialog, which will
+jump you straight to the relevant section of help for that dialog.</p>
+
+<p><img src="javahelp2.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>TOPALi Tips!</b>
+</p>
+
+<p>Each area of the TOPALi interface now comes with tips to help
+you work more effectively with
+it, requiring less visits to the help system to learn to use the
+program.</p>
+
+<p><img src="topali_tips.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Alignment Overviews</b>
+</p>
+
+<p>Using the Alignment Overview feature you can view the entire
+alignment in a floating
+window while still working with a close up area in detail. Scrolling
+around the overview
+automatically moves the main display too.</p>
+
+<p><img src="overview.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Dim unselected sequences</b>
+</p>
+
+<p>By ticking the option in the Display Settings, you can have
+TOPALi dim sequences that
+are not currently selected, making it easier to focus on those that are.</p>
+
+<p><img src="dimseqs.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Floating Tree Tooltips</b>
+</p>
+
+<p>By using floating tree tooltips, you can instantly view a
+phylogenetic tree of the area
+currently under the mouse cursor.</p>
+
+<p><img src="tree_tooltips1.png" alt="TOPALi screenshot" /></p>
+
+<p>Enable the feature (on a per-graph basis) using the toolbar
+button for that graph</p>
+
+<p><img src="tree_tooltips2.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Support for authenticating proxy servers</b>
+</p>
+
+<p>If you are behind a proxy server that controls your access to
+the internet, TOPALi can be
+set to send all its internet requests through this machine. Support for
+proxies that require
+authentication (including NTLM) is included.</p>
+
+<p><img src="proxy.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Drag and drop support</b>
+</p>
+
+<p>On supported systems, you can use standard drag and drop
+operations to load alignments
+or TOPALi projects into the application. TOPALi supports dragging and
+dropping of more
+than one alignment at a time too.</p>
+
+<p><img src="dragdrop.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Combine cDNA and guide protein into an alignment</b>
+</p>
+
+<p>Protein multiple alignment algorithms produce better results
+than do DNA multiple
+alignment algorithms. TOPALi now allows you to create a DNA alignment
+by using the data
+from cDNA and a guide protein alignment when importing a new dataset.</p>
+
+<p><img src="cdna.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Create groups from trees and extract representatives</b>
+</p>
+
+<p>You can use tree similarities to group clusters of sequences
+that are close to
+one another in a phylogenetic tree (similar sequences are coloured the
+same). A guide
+sequence from each group can then be selected in the original dataset.</p>
+
+<p><img src="clustering.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<p><span style="font-weight: bold;">New
+Recombination Method: Likelihood Ratio Test (LRT)</span></p>
+
+<p><span style="font-weight: bold;"></span><img style="width: 632px; height: 374px;" alt="" src="lrt.jpg" /></p>
+
+
+<p>&nbsp;</p>
+
+<p class="trainline"></p>
+
+<p><b>Run multiple jobs in parallel</b>
+</p>
+
+<p>TOPALi now has full support for multi-processor and multi-core machines, so
+if you have 2, 4, or more CPUs at your disposal then TOPALi can run jobs on all
+of them at once, or split a single job so that it runs in parallel across them
+all (and completes faster). You can also limit the total number of CPUs available
+to TOPALi, perhaps to keep a CPU free for non-TOPALi tasks.</p>
+
+<p><img src="parallel.png" alt="TOPALi screenshot" /></p>
+
+<p>&nbsp;</p>
+
+<br />
+
+
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-5735678-1");
+pageTracker._trackPageview();
+</script>
+
+</body>
+</html>
