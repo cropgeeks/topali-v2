@@ -1056,7 +1056,7 @@ public class WinMain extends JFrame implements PropertyChangeListener
 	void menuHelpAbout()
 	{
 		String msg = "<html><b>TOPALi v2.5 </b> ("+Install4j.VERSION+")<br><br>"
-				+ "Copyright &copy 2003-2007 Biomathematics & Statistics Scotland<br><br>"
+				+ "Copyright &copy 2003-2013 Biomathematics & Statistics Scotland<br><br>"
 				+ "Developed by Iain Milne, Dominik Lindner, and Frank Wright<br>"
 				+ "with contributions from Dirk Husmeier, Gráinne McGuire, and Adriano Werhli<br><br>"
 				+ "This software is licensed. Please see accompanying "

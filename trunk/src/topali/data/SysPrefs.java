@@ -13,6 +13,8 @@ public class SysPrefs {
 
 	public static File tmpDir = new File(System.getProperty("java.io.tmpdir"), System.getProperty("user.name") + "-topaliv2");
 
+	public static boolean isWindowsXP = System.getProperty("os.name").startsWith("Windows XP");
+
 	public static boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 
 	public static boolean isWindowsVista = System.getProperty("os.name").startsWith("Windows Vista");

@@ -6,7 +6,7 @@
 package topali.gui;
 
 import java.applet.Applet;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.*;
@@ -27,7 +27,7 @@ import apple.dts.samplecode.osxadapter.*;
 public class TOPALi extends Applet implements Application
 {
 	//enables/disables extensive logging
-	public static final boolean debugClient = true;
+	public static final boolean debugClient = false;
 	public static final boolean debugJobs = false;
 
 	private final String prefsFile = ".topali-2.5.xml";
@@ -111,15 +111,12 @@ public class TOPALi extends Applet implements Application
 			UIManager.put("TextArea.font", UIManager.get("TextField.font"));
 
 			// Use the office look for Windows (but not for Vista)
-			if (SysPrefs.isWindows && !SysPrefs.isWindowsVista)
+			if (SysPrefs.isWindowsXP)
 			{
 				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 
-				UIManager.put("OptionPane.errorIcon", Icons.WIN_ERROR);
-				UIManager.put("OptionPane.informationIcon", Icons.WIN_INFORM);
-				UIManager.put("OptionPane.warningIcon", Icons.WIN_WARN);
-				UIManager.put("OptionPane.questionIcon", Icons.WIN_QUESTION);
-
+				// Gives XP the same (nicer) grey background that Vista uses
+				UIManager.put("Panel.background", new Color(240, 240, 240));
 			}
 			else if (SystemUtils.isMacOS())
 				handleOSXStupidities();
