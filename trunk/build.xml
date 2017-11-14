@@ -49,7 +49,7 @@
 		classname="org.apache.catalina.ant.DeployTask"/>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" debug="true" destdir="${classes}" source="1.5" target="1.5">
+		<javac srcdir="${src}" debug="true" destdir="${classes}" source="1.6" target="1.6">
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
 		</javac>

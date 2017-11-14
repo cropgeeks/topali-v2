@@ -1,0 +1,22 @@
+# Tomcat-related properties for running the manager application
+user.manager.url         = 
+user.manager.username    = 
+user.manager.password    = 
+
+# The URL path that TOPALi will be deployed to
+user.url.path            = /topali
+
+# The directory where log files will be stored
+user.logging.dir         = /jobs/ws-dev1/Topali-Logs
+# The directory where final job results will be stored
+user.job.dir             = /jobs/ws-dev1/Topali-Jobs
+# The directory where TOPALi will be cloned to (in cases where the child nodes
+# can't see the webapps directory)
+user.topali.dir          =
+# The path to Java (must be valid for all child nodes)
+user.java.path           = /gpfs/gjb_lab/software/java/$SGE_ARCH/jdk1.5.0_06/bin/java
+# The directory where temporary job-related files can be stored on each node
+user.tmp.dir             = /tmp
+
+# Directory containing the SGE submission scripts (relative to Ant)
+user.cluster.dir         = config/cluster/dundee
